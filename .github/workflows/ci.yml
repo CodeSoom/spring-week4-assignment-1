@@ -1,0 +1,38 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 15.0.1
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Spring Test
+        run: ./gradlew test jacocoTestCoverageVerification
+      - name: Test install
+        working-directory: tests
+        run: npm ci
+      - name: API Test
+        working-directory: tests
+        run: npm run ci
+      - name: Web install
+        working-directory: web
+        run: npm ci
+      - name: Web test
+        working-directory: web
+        run: npm test
+      - name: Lint
+        working-directory: web
+        run: npm run lint
+      - name: E2E test
+        working-directory: web
+        run: npm run ci:e2e
+        env:
+          HEADLESS: true
