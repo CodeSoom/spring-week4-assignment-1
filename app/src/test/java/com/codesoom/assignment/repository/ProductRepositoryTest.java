@@ -20,7 +20,7 @@ class ProductRepositoryTest {
     private Product product;
 
     @BeforeEach
-    void prepareProduct(){
+    void prepareProduct() {
         // fixture
         product = new Product("장난감", "장난감 메이커", 10000, "url");
         productRepository.save(product);
@@ -62,4 +62,3 @@ class ProductRepositoryTest {
     }
 
 }
-
