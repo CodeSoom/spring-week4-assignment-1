@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFountException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,5 +20,9 @@ public class ProductService {
 
     public Product find(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFountException(id));
+    }
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 }

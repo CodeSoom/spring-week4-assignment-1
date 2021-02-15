@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFountException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -87,11 +87,11 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("findAll()")
-    class Describe_findAll {
+    @DisplayName("find(id)")
+    class Describe_find {
         @Nested
-        @DisplayName("product가 존재한다면")
-        class Context_task_exist {
+        @DisplayName("존재하는 product id가 주어진다면")
+        class Context_exist_product_id {
             Product givenProduct;
 
             @BeforeEach
@@ -111,8 +111,8 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("product가 존재하지 않는다면")
-        class Context_task_not_exist {
+        @DisplayName("존재하지 않는 product id가 주어진다면")
+        class Context_not_exist_product_id {
             @DisplayName("product를 찾을 수 없다는 예외를 던진다")
             @Test
             void it_returns_exception() {
@@ -123,39 +123,44 @@ class ProductServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("findAll()")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("product가 존재한다면")
+        class Context_product_exist {
+            @BeforeEach
+            void setUp() {
+                Product givenProduct = createProduct();
+                given(productRepository.findAll()).willReturn(Collections.singletonList(givenProduct));
+            }
 
-//    @Nested
-//    @DisplayName("findAll()")
-//    class Describe_findAll {
-//        @Nested
-//        @DisplayName("product가 존재한다면")
-//        class Context_task_exist {
-//            @BeforeEach
-//            void setUp() {
-//                createProduct();
-//            }
-//
-//            @Test
-//            @DisplayName("product 리스트를 반환한다")
-//            void it_return_product_list() {
-//                //when
-//                List<Product> list = productRepository.findAll();
-//                //then
-//                assertThat(list).isNotEmpty();
-//            }
-//        }
-//
-//        @Nested
-//        @DisplayName("product가 존재하지 않는다면")
-//        class Context_task_not_exist {
-//            @Test
-//            @DisplayName("빈 리스트를 반환한다")
-//            void it_return_task_id() {
-//                //when
-//                List<Task> tasks = taskService.getTasks();
-//                //then
-//                assertThat(tasks).isEmpty();
-//            }
-//        }
-//    }
+            @Test
+            @DisplayName("product 리스트를 반환한다")
+            void it_return_product_list() {
+                //when
+                List<Product> list = productService.findAll();
+                //then
+                assertThat(list).isNotEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("product가 존재하지 않는다면")
+        class Context_product_not_exist {
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findAll()).willReturn(Collections.emptyList());
+            }
+
+            @Test
+            @DisplayName("빈 리스트를 반환한다")
+            void it_return_empty_list() {
+                //when
+                List<Product> list = productService.findAll();
+                //then
+                assertThat(list).isEmpty();
+            }
+        }
+    }
 }
