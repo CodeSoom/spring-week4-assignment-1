@@ -30,6 +30,11 @@ class ProductServiceTest {
     final Long PRICE = 5000L;
     final String IMAGE_URL = "https://cdn.pixabay.com/photo/2016/10/01/20/54/mouse-1708347_1280.jpg";
 
+    final String UPDATE_NAME = "My Toy";
+    final String UPDATE_MAKER = "My Home";
+    final Long UPDATE_PRICE = 5000L;
+    final String UPDATE_IMAGE_URL = "https://cdn.pixabay.com/photo/2016/10/01/20/54/mouse-1708347_1280.jpg";
+
     @Autowired
     ProductService productService;
     @MockBean
@@ -65,7 +70,7 @@ class ProductServiceTest {
     }
 
     //subject
-    void verifyProduct(Product product) {
+    void verifyFindProduct(Product product) {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
@@ -82,12 +87,12 @@ class ProductServiceTest {
             //when
             Product product = createProduct();
             //then
-            verifyProduct(product);
+            verifyFindProduct(product);
         }
     }
 
     @Nested
-    @DisplayName("find(id)")
+    @DisplayName("find()")
     class Describe_find {
         @Nested
         @DisplayName("존재하는 product id가 주어진다면")
@@ -106,7 +111,7 @@ class ProductServiceTest {
                 //when
                 Product product = productService.find(givenProduct.getId());
                 //then
-                verifyProduct(product);
+                verifyFindProduct(product);
             }
         }
 
@@ -163,4 +168,53 @@ class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("update()")
+    class Describe_update {
+        @Nested
+        @DisplayName("존재하는 product id가 주어진다면")
+        class Context_exist_product_id {
+            Product givenProduct;
+
+            @BeforeEach
+            void setUp() {
+                givenProduct = createProduct();
+                given(productRepository.findById(ID)).willReturn(Optional.of(givenProduct));
+            }
+
+            @DisplayName("수정 product를 반환한다")
+            @Test
+            void it_returns_product() {
+                //given
+                givenProduct.setName(UPDATE_NAME);
+                givenProduct.setMaker(UPDATE_MAKER);
+                givenProduct.setPrice(UPDATE_PRICE);
+                givenProduct.setImageURL(UPDATE_IMAGE_URL);
+                //when
+                Product product = productService.update(ID, givenProduct);
+                //then
+                assertThat(product.getId()).isEqualTo(ID);
+                assertThat(product.getName()).isEqualTo(UPDATE_NAME);
+                assertThat(product.getMaker()).isEqualTo(UPDATE_MAKER);
+                assertThat(product.getPrice()).isEqualTo(UPDATE_PRICE);
+                assertThat(product.getImageURL()).isEqualTo(UPDATE_IMAGE_URL);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 product id가 주어진다면")
+        class Context_not_exist_product_id {
+            @DisplayName("product를 찾을 수 없다는 예외를 던진다")
+            @Test
+            void it_returns_exception() {
+                //given
+                Product givenProduct = createProduct();
+                //when
+                //then
+                assertThrows(ProductNotFountException.class, () -> productService.update(NOT_EXIST_ID, givenProduct));
+            }
+        }
+    }
+    
 }
