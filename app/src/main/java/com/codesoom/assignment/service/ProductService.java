@@ -41,4 +41,11 @@ public class ProductService {
         modelMapper.map(productDto, product);
         return productRepository.save(product);
     }
+
+    public void deleteTask(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException(id);
+        }
+        productRepository.deleteById(id);
+    }
 }
