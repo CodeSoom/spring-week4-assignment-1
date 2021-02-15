@@ -5,8 +5,6 @@ import com.codesoom.assignment.domain.Product;
 import java.util.Objects;
 
 public class ProductDto {
-    private Long id;
-
     private String name;
 
     private String maker;
@@ -19,19 +17,10 @@ public class ProductDto {
     }
 
     public ProductDto(Product product) {
-        this.id = product.getId();
         this.name = product.getName();
         this.maker = product.getMaker();
         this.price = product.getPrice();
         this.img = product.getImg();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -71,8 +60,7 @@ public class ProductDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductDto that = (ProductDto) o;
-        return Objects.equals(getId(), that.getId()) &&
-                Objects.equals(getName(), that.getName()) &&
+        return Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getMaker(), that.getMaker()) &&
                 Objects.equals(getPrice(), that.getPrice()) &&
                 Objects.equals(getImg(), that.getImg());
@@ -80,6 +68,6 @@ public class ProductDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getMaker(), getPrice(), getImg());
+        return Objects.hash(getName(), getMaker(), getPrice(), getImg());
     }
 }

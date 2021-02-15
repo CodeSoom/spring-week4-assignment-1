@@ -7,7 +7,6 @@ import com.codesoom.assignment.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 //TODO        고양이 장난감 목록 얻기 - GET /products - 테스트 미작성, 장난감 등록 후 확인
@@ -40,6 +39,11 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto addProduct(@RequestBody ProductDto productDto) {
         return new ProductDto(productService.addProduct(productDto));
+    }
+
+    @PatchMapping("/{id}")
+    public ProductDto patchProduct(@PathVariable Long id, @RequestBody ProductDto productDto){
+        return new ProductDto(productService.updateProduct(id, productDto));
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
