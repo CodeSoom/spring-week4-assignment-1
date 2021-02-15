@@ -62,7 +62,7 @@ class ProductMockMvcControllerTest {
             @Test
             void It_responds_ok_with_products() throws Exception {
 
-                mockMvc.perform(get("/v1/products"))
+                mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content().string(objectMapper.writeValueAsString(products)));
             }
@@ -75,7 +75,7 @@ class ProductMockMvcControllerTest {
             @DisplayName("200 상태코드, OK 상태와 비어있는 상품 목록 응답한다.")
             @Test
             void It_responds_ok_with_empty_products() throws Exception {
-                mockMvc.perform(get("/v1/products"))
+                mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("[]")));
             }
