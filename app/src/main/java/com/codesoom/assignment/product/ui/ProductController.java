@@ -1,8 +1,7 @@
 package com.codesoom.assignment.product.ui;
 
 import com.codesoom.assignment.product.application.ProductService;
-import com.codesoom.assignment.product.domain.Product;
-import lombok.Getter;
+import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
-    final ProductService productService;
+    private final ProductService productService;
 
     @GetMapping
-    public List<Product> list() {
+    public List<ProductResponseDto> list() {
         return productService.getProducts();
     }
 }

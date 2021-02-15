@@ -1,7 +1,7 @@
 package com.codesoom.assignment.product.ui;
 
 import com.codesoom.assignment.product.application.ProductService;
-import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -20,12 +19,14 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("ProductController 클래스")
 class ProductMockMvcControllerTest {
+    private static final Long Id = 1L;
     private static final String NAME = "snake";
     private static final String MAKER = "cat toy";
     private static final int PRICE = 5000;
@@ -46,13 +47,12 @@ class ProductMockMvcControllerTest {
         @Nested
         @DisplayName("등록된 상품이 있으면")
         class Context_with_products {
-            List<Product> products;
+            List<ProductResponseDto> products;
 
             @BeforeEach
             void setUp() {
-                Product product = new Product(NAME, MAKER, PRICE, IMAGE_URL);
+                ProductResponseDto product = new ProductResponseDto(Id, NAME, MAKER, PRICE, IMAGE_URL);
                 products = Arrays.asList(product);
-                ReflectionTestUtils.setField(product, "id", 1L);
 
                 given(productService.getProducts())
                         .willReturn(products);
