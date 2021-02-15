@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.service.ProductService;
 import org.springframework.http.HttpStatus;
@@ -30,14 +31,15 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
-        return productService.getProduct(id);
+    @ResponseStatus(HttpStatus.OK)
+    public ProductDto getProduct(@PathVariable Long id) {
+        return new ProductDto(productService.getProduct(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product addProduct(@RequestBody @Valid Product product) {
-        return productService.addProduct(product);
+    public ProductDto addProduct(@RequestBody ProductDto productDto) {
+        return new ProductDto(productService.addProduct(productDto));
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
