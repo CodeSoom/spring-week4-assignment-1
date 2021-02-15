@@ -82,6 +82,28 @@ class ProductServiceTest {
     }
 
     @Test
+    void updateProductWithExistingId() {
+        Product newProduct = new Product("새로운 장난감", "새로운 장난감 메이커", 20000, "new url");
+        Product updatedProduct = productService.updateProduct(existingId, newProduct);
+
+        verify(productRepository).findById(existingId);
+
+        assertThat(updatedProduct.getName()).isEqualTo(newProduct.getName());
+        assertThat(updatedProduct.getMaker()).isEqualTo(newProduct.getMaker());
+        assertThat(updatedProduct.getPrice()).isEqualTo(newProduct.getPrice());
+        assertThat(updatedProduct.getImageUrl()).isEqualTo(newProduct.getImageUrl());
+    }
+
+    @Test
+    void updateProductWithNotExistingId() {
+        assertThrows(ProductNotFoundException.class, () -> {
+            productService.updateProduct(notExistingId, product);
+        });
+
+        verify(productRepository).findById(notExistingId);
+    }
+
+    @Test
     void deleteProductWithExistingId() {
         productService.deleteProduct(existingId);
 

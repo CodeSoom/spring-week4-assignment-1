@@ -3,7 +3,6 @@ package com.codesoom.assignment.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter @ToString
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
@@ -32,6 +31,13 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public void update(Product newProduct) {
+        this.name = newProduct.getName();
+        this.maker = newProduct.getMaker();
+        this.price = newProduct.getPrice();
+        this.imageUrl = newProduct.getImageUrl();
     }
 
 }

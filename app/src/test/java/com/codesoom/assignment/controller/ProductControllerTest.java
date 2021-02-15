@@ -19,10 +19,12 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -163,6 +165,57 @@ class ProductControllerTest {
                         .andExpect(jsonPath("price").exists())
                         .andExpect(jsonPath("imageUrl").exists())
                         .andExpect(status().isCreated());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH 요청은")
+    class Describe_PATCH {
+        @Nested
+        @DisplayName("존재하는 상품 id가 주어진다면")
+        class Context_with_an_existing_product_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(existingId), any(Product.class)))
+                        .willReturn(product);
+
+            }
+
+            @Test
+            @DisplayName("수정된 상품과 상태코드 200을 응답한다")
+            void it_responds_the_updated_product_and_status_code_204() throws Exception {
+                mockMvc.perform(patch("/products/{id}", existingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("maker").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imageUrl").exists())
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 상품 id가 주어진다면")
+        class Context_with_not_existing_product_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(notExistingId), any(Product.class)))
+                        .willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("에러메시지와 상태코드 404를 응답한다")
+            void it_responds_the_error_message_and_status_code_404() throws Exception {
+                mockMvc.perform(patch("/products/{id}", notExistingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isNotFound());
             }
         }
     }
