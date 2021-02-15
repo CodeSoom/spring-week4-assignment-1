@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ToyTest {
     private final Long toyId = 1L;
-    private final String toyName = "장난감 뱀";
+    private final String toyName = "장난감 칼";
     private final String toyBrand = "코드숨";
     private final int toyPrice = 5000;
     private final String toyImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
