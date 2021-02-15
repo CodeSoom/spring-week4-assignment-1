@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 
 @SpringBootTest
 @DisplayName("ProductService 클래스")
@@ -183,7 +184,7 @@ class ProductServiceTest {
                 given(productRepository.findById(ID)).willReturn(Optional.of(givenProduct));
             }
 
-            @DisplayName("수정 product를 반환한다")
+            @DisplayName("수정된 product를 반환한다")
             @Test
             void it_returns_product() {
                 //given
@@ -216,5 +217,47 @@ class ProductServiceTest {
             }
         }
     }
-    
+
+
+    @Nested
+    @DisplayName("delete()")
+    class Describe_delete {
+        @Nested
+        @DisplayName("존재하는 product id가 주어진다면")
+        class Context_exist_product_id {
+            Product givenProduct;
+
+            @BeforeEach
+            void setUp() {
+                givenProduct = createProduct();
+            }
+
+            @DisplayName("주어진 id와 일치하는 product를 삭제한")
+            @Test
+            void it_delete_product() {
+                //when
+                productService.delete(ID);
+                doThrow(ProductNotFountException.class).when(productRepository).deleteById(ID);
+                //then
+                assertThrows(ProductNotFountException.class, () -> productService.find(ID));
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 product id가 주어진다면")
+        class Context_not_exist_product_id {
+            @BeforeEach
+            void setUp() {
+                doThrow(ProductNotFountException.class).when(productRepository).deleteById(NOT_EXIST_ID);
+            }
+
+            @DisplayName("product를 찾을 수 없다는 예외를 던진다")
+            @Test
+            void it_returns_exception() {
+                //when
+                //then
+                assertThrows(ProductNotFountException.class, () -> productService.delete(NOT_EXIST_ID));
+            }
+        }
+    }
 }
