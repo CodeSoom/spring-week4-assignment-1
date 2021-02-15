@@ -1,8 +1,10 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFountException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,6 +24,7 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("ProductService 클래스")
 class ProductServiceTest {
     final Long ID = 0L;
+    final Long NOT_EXIST_ID = 100L;
     final String NAME = "My Toy";
     final String MAKER = "My Home";
     final Long PRICE = 5000L;
@@ -36,6 +39,7 @@ class ProductServiceTest {
     void setUp() {
         Mockito.reset(productRepository);
         setUpCreateProduct();
+        setUpFindNotExistProduct();
     }
 
     void setUpCreateProduct() {
@@ -46,6 +50,11 @@ class ProductServiceTest {
         });
     }
 
+    void setUpFindNotExistProduct() {
+        given(productRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
+    }
+
+    //subject
     Product createProduct() {
         Product product = new Product();
         product.setName(NAME);
@@ -53,6 +62,15 @@ class ProductServiceTest {
         product.setPrice(PRICE);
         product.setImageURL(IMAGE_URL);
         return productService.save(product);
+    }
+
+    //subject
+    void verifyProduct(Product product) {
+        assertThat(product.getId()).isEqualTo(ID);
+        assertThat(product.getName()).isEqualTo(NAME);
+        assertThat(product.getMaker()).isEqualTo(MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRICE);
+        assertThat(product.getImageURL()).isEqualTo(IMAGE_URL);
     }
 
     @Nested
@@ -64,13 +82,47 @@ class ProductServiceTest {
             //when
             Product product = createProduct();
             //then
-            assertThat(product.getId()).isEqualTo(ID);
-            assertThat(product.getName()).isEqualTo(NAME);
-            assertThat(product.getMaker()).isEqualTo(MAKER);
-            assertThat(product.getPrice()).isEqualTo(PRICE);
-            assertThat(product.getImageURL()).isEqualTo(IMAGE_URL);
+            verifyProduct(product);
         }
     }
+
+    @Nested
+    @DisplayName("findAll()")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("product가 존재한다면")
+        class Context_task_exist {
+            Product givenProduct;
+
+            @BeforeEach
+            void setUp() {
+                givenProduct = createProduct();
+                given(productRepository.findById(ID)).willReturn(Optional.of(givenProduct));
+            }
+
+            @DisplayName("주어진 id와 일치하는 product를 반환한다")
+            @Test
+            void it_returns_product() {
+                //when
+                Product product = productService.find(givenProduct.getId());
+                //then
+                verifyProduct(product);
+            }
+        }
+
+        @Nested
+        @DisplayName("product가 존재하지 않는다면")
+        class Context_task_not_exist {
+            @DisplayName("product를 찾을 수 없다는 예외를 던진다")
+            @Test
+            void it_returns_exception() {
+                //when
+                //then
+                assertThrows(ProductNotFountException.class, () -> productService.find(NOT_EXIST_ID));
+            }
+        }
+    }
+
 
 //    @Nested
 //    @DisplayName("findAll()")
