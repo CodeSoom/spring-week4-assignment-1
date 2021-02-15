@@ -1,4 +1,4 @@
-package com.codesoom.assignment.product.ui;
+package com.codesoom.assignment.product.application;
 
 import com.codesoom.assignment.product.domain.Product;
 import org.springframework.stereotype.Service;
