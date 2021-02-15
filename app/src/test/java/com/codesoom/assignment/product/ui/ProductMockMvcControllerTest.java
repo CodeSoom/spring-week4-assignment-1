@@ -61,7 +61,6 @@ class ProductMockMvcControllerTest {
             @DisplayName("200 상태 코드, OK 상태와 상품 목록을 응답한다.")
             @Test
             void It_responds_ok_with_products() throws Exception {
-
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content().string(objectMapper.writeValueAsString(products)));
@@ -72,7 +71,7 @@ class ProductMockMvcControllerTest {
         @DisplayName("등록된 상품이 없으면")
         class Context_without_products {
 
-            @DisplayName("200 상태코드, OK 상태와 비어있는 상품 목록 응답한다.")
+            @DisplayName("200 상태코드, OK 상태와 비어있는 상품 목록을 응답한다.")
             @Test
             void It_responds_ok_with_empty_products() throws Exception {
                 mockMvc.perform(get("/products"))
@@ -127,7 +126,6 @@ class ProductMockMvcControllerTest {
                         .andExpect(jsonPath("maker").exists())
                         .andExpect(jsonPath("price").exists())
                         .andExpect(jsonPath("imageUrl").exists());
-
             }
         }
     }
