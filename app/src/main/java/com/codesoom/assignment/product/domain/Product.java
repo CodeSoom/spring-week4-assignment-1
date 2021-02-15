@@ -27,10 +27,14 @@ public class Product {
     private String imageUrl;
 
     public Product(String name, String maker, int price, String imageUrl) {
+        this(null, name, maker, price, imageUrl);
+    }
+
+    public Product(Long id, String name, String maker, int price, String imageUrl) {
+        this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
     }
-
 }

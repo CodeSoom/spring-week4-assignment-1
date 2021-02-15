@@ -4,6 +4,7 @@ import com.codesoom.assignment.product.application.ProductService;
 import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,5 +19,10 @@ public class ProductController {
     @GetMapping
     public List<ProductResponseDto> list() {
         return productService.getProducts();
+    }
+
+    @GetMapping("{id}")
+    public ProductResponseDto detail(@PathVariable Long id) {
+        return productService.getProduct(id);
     }
 }
