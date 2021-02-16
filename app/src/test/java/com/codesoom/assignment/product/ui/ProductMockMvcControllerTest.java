@@ -147,13 +147,14 @@ class ProductMockMvcControllerTest {
     @Nested
     @DisplayName("Patch /products/:id 는")
     class Describe_updateProduct {
-
+        ProductUpdateRequestDto requestDto;
         @Nested
         @DisplayName("갱신되는 상품이 없으면")
         class Context_without_product {
 
             @BeforeEach
             void setUp() {
+                requestDto = new ProductUpdateRequestDto(NAME, MAKER, PRICE, IMAGE_URL);
                 given(productService.updateProduct(eq(NOT_EXIST_ID), any(ProductUpdateRequestDto.class)))
                         .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
@@ -163,7 +164,8 @@ class ProductMockMvcControllerTest {
             void It_responds_not_found() throws Exception {
                 mockMvc.perform(patch("/products/{id}", NOT_EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
                         .andExpect(status().isNotFound());
             }
         }
@@ -171,7 +173,6 @@ class ProductMockMvcControllerTest {
         @Nested
         @DisplayName("갱신되는 상품이 존재하면")
         class Context_with_product {
-            ProductUpdateRequestDto requestDto;
 
             @BeforeEach
             void setUp() {
