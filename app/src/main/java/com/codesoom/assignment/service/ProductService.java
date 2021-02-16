@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Service
 @Transactional
 public class ProductService {
@@ -34,6 +33,7 @@ public class ProductService {
      * id에 해당하는 장난감을 반환합니다.
      *
      * @param id
+     * @throws ProductNotFoundException id에 해당하는 장난감이 없는 경우
      * @return id에 해당하는 Product
      */
     public Product getProduct(Long id) {
@@ -69,9 +69,9 @@ public class ProductService {
 
     /**
      * id에 해당 하는 장난감을 수정합니다.
-     * id에 해당하는 장난감이 없으면 ProductNotFoundException을 던집니다.
      *
      * @param id
+     * @throws ProductNotFoundException id에 해당하는 장난감이 없는 경우
      */
     public void deleteTask(Long id) {
         if (!productRepository.existsById(id)) {

@@ -20,12 +20,12 @@ import java.util.List;
 
 //TODO        고양이 장난감 목록 얻기 - GET /products - 테스트 미작성, 장난감 등록 후 확인
 //TODO        고양이 장난감 상세 조회하기 - GET /products/{id}  - 테스트 미작성, 장난감 등록 후 확인
-//TODO        고양이 장난감 등록하기 - POST /products -테스트미작성, RequestBody Validation 추가예정
+//TODO        고양이 장난감 등록하기 - POST /products -테스트미작성, RequestBody Validation 추가해야하는가?(항상 파라미터가 다 들어온다고 가정해야 하는가?)
 //TODO        고양이 장난감 수정하기 - PATCH /products/{id}   -테스트 미작성
 //TODO        고양이 장난감 삭제하기 - DELETE /products/{id}  -테스트 미작성
 
 /**
- * 고양이 장난감 CURD 컨트롤러 클래스
+ * 고양이 장난감 CURD 컨트롤러.
  */
 @RestController
 @RequestMapping("/products")
@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     /**
-     * 모든 장난감 리스트 반환합니다.
+     * 모든 장난감의 리스트를 반환합니다.
      *
      * @return 모든 Product list
      */
@@ -49,10 +49,10 @@ public class ProductController {
     }
 
     /**
-     * id에 해당하는 장난감 반환합니다.
+     * id에 해당하는 장난감을 반환합니다.
      *
      * @param id
-     * @return id에 해당하는 ProductDto
+     * @return id에 해당하는 상품의 정보
      */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -61,7 +61,7 @@ public class ProductController {
     }
 
     /**
-     * 장난감을 저장합니다.
+     * 장난감을 저장하고 저장된 장난감을 반환합니다.
      *
      * @param productDto
      * @return 저장된 ProductDto
@@ -73,7 +73,7 @@ public class ProductController {
     }
 
     /**
-     * id에 해당 하는 장난감을 수정합니다.
+     * id에 해당하는 장난감을 수정합니다.
      *
      * @param id
      * @param productDto
