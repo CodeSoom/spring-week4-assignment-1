@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+/**
+ * {@code ProductService} 클래스는 {@code Product}에 대한 비즈니스 로직을 처리합니다.
+ *
+ * @see Product
+ */
 @Service
 @Transactional
 public class ProductService {
@@ -17,19 +22,54 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product save(Product product) {
-        return productRepository.save(product);
+    /**
+     * 새로운 product를 생성합니다.
+     *
+     * @param   source
+     *          새로운 product 정보
+     *
+     * @return  생성된 새로운 product
+     */
+    public Product save(Product source) {
+        return productRepository.save(source);
     }
 
+    /**
+     * 주어진 id와 일치하는 product를 찾아 반환합니다.
+     *
+     * @param   id
+     *          찾고자 하는 product id
+     *
+     * @return  id와 일치하는 product
+     *
+     * @throws  ProductNotFountException
+     *          존재하지 않는 id가 주어진 경우
+     */
     public Product find(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFountException(id));
     }
 
+    /**
+     * 모든 product를 반환합니다.
+     */
     public List<Product> findAll() {
         return productRepository.findAll();
     }
 
+    /**
+     * 주어진 id와 일치하는 product를 수정합니다.
+     *
+     * @param   id
+     *          수정하고자 하는 product의 id
+     *
+     * @param   source
+     *          수정하고자 하는 product
+     * @return  수정된 새로운 product
+     *
+     * @throws  ProductNotFountException
+     *          존재하지 않는 id가 주어진 경우
+     */
     public Product update(Long id, Product source) {
         Product product = find(id);
         product.setName(source.getName());
@@ -40,6 +80,15 @@ public class ProductService {
         return save(product);
     }
 
+    /**
+     * 주어진 id와 일치하는 product를 삭제합니다.
+     *
+     * @param   id
+     *          삭제하고자 하는 product의 id
+     *
+     * @throws  ProductNotFountException
+     *          존재하지 않는 id가 주어진 경우
+     */
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ProductNotFountException(id);
@@ -47,6 +96,9 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    /**
+     * 모든 product를 삭제합니다.
+     */
     public void clearData() {
         productRepository.deleteAll();
     }
