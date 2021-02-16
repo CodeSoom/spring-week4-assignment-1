@@ -8,12 +8,9 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 @DataJpaTest
 @DisplayName("ToyRepository클래스의")
@@ -30,9 +27,12 @@ class ToyRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        toyRepository = mock(ToyRepository.class);
-
+        toyRepository.deleteAll();
         toy = new Toy(toyName, toyBrand, toyPrice, toyImageUrl);
+    }
+
+    private void saveToy() {
+        toyRepository.save(toy);
     }
 
     @Nested
@@ -44,7 +44,7 @@ class ToyRepositoryTest {
             @Test
             @DisplayName("비어있는 리스트를 리턴한다.")
             void it_return_empty_list() {
-                assertThat(toyRepository.findAll()).isEmpty();
+                assertThat(toyRepository.findAll().size()).isEqualTo(0);
             }
         }
 
@@ -53,18 +53,13 @@ class ToyRepositoryTest {
         class Context_with_a_toy {
             @BeforeEach
             void setToyList() {
-                List<Toy> toyList = new ArrayList<Toy>();
-                toyList.add(toy);
-
-                given(toyRepository.findAll()).willReturn(toyList);
+                saveToy();
             }
 
             @Test
             @DisplayName("toy 리스트를 리턴한다.")
             void it_return_toy_list() {
                 List<Toy> toyList = toyRepository.findAll();
-
-                verify(toyRepository).findAll();
 
                 assertThat(toyList.size()).isGreaterThanOrEqualTo(1);
             }

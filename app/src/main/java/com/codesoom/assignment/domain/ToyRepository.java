@@ -13,4 +13,6 @@ public interface ToyRepository extends CrudRepository<Toy, Long> {
     Toy save(Toy toy);
 
     void delete(Toy toy);
+
+    void deleteAll();
 }
