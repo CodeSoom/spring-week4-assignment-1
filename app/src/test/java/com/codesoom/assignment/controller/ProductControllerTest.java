@@ -34,14 +34,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("ProductController 클래스")
 class ProductControllerTest {
 
-    private final Long existingId = 1L;
-    private final Long notExistingId = 100L;
+
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private ObjectMapper objectMapper;
+
     @MockBean
     private ProductService productService;
+    
+    private final Long existingId = 1L;
+    private final Long notExistingId = 100L;
+
     private List<Product> products;
     private Product product;
     private ProductRequest productRequest;

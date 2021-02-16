@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.dto.ProductRequest;
+import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 상품과 관련된 HTTP 요청 처리를 담당합니다.
@@ -38,12 +37,10 @@ public class ProductController {
      * 모든 상품을 응답합니다.
      */
     @GetMapping
-    public List<ProductDto> list() {
+    public List<ProductResponse> list() {
         List<Product> products = productService.getProducts();
 
-        return products.stream()
-                .map(ProductDto::new)
-                .collect(Collectors.toList());
+        return ProductResponse.listOf(products);
     }
 
     /**
@@ -53,10 +50,10 @@ public class ProductController {
      * @return 찾은 상품
      */
     @GetMapping("{id}")
-    public ProductDto find(@PathVariable Long id) {
+    public ProductResponse find(@PathVariable Long id) {
         Product foundProduct = productService.getProduct(id);
 
-        return new ProductDto(foundProduct);
+        return ProductResponse.of(foundProduct);
     }
 
     /**
@@ -67,11 +64,11 @@ public class ProductController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto create(@RequestBody ProductRequest productRequest) {
+    public ProductResponse create(@RequestBody ProductRequest productRequest) {
         Product product = productRequest.toProduct();
         Product createdProduct = productService.createProduct(product);
 
-        return new ProductDto(createdProduct);
+        return ProductResponse.of(createdProduct);
     }
 
     /**
@@ -82,11 +79,11 @@ public class ProductController {
      * @return 수정된 상품
      */
     @PatchMapping("{id}")
-    public ProductDto update(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
+    public ProductResponse update(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
         Product product = productRequest.toProduct();
         Product updatedProduct = productService.updateProduct(id, product);
 
-        return new ProductDto(updatedProduct);
+        return ProductResponse.of(updatedProduct);
     }
 
     /**
