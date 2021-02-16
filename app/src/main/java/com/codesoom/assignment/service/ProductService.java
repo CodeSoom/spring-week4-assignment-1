@@ -4,7 +4,6 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +17,14 @@ public class ProductService {
     private final ProductRepository productRepository;
 
 
-    public ProductService(ProductRepository productRepository, ModelMapper modelMapper) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     /**
      * 모든 장난감 리스트를 반환합니다.
      *
-     * @return
+     * @return 모든 Product list
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
@@ -59,7 +58,7 @@ public class ProductService {
      *
      * @param id
      * @param productDto
-     * @return
+     * @return 수정된 Product
      */
     public Product updateProduct(Long id, ProductDto productDto) {
         Product product = productRepository.findById(id).

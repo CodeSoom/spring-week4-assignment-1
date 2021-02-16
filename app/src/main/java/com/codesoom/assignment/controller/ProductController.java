@@ -40,7 +40,7 @@ public class ProductController {
     /**
      * 모든 장난감 리스트 반환합니다.
      *
-     * @return
+     * @return 모든 Product list
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
