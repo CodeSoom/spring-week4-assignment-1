@@ -13,7 +13,7 @@ public class ProductId {
         return id;
     }
 
-    public void setId(Long id) {
+    private void setId(Long id) {
         if (id == null || id < 0) {
             throw new IllegalArgumentException("The id must be provided.");
         }
