@@ -62,8 +62,8 @@ class ProductControllerTest {
         class Context_with_products {
             @BeforeEach
             void setUp() {
-                products.add(product);
-                products.add(product);
+                products.add(new Product("장난감1", "장난감 메이커1", 10000, "url1"));
+                products.add(new Product("장난감2", "장난감 메이커2", 20000, "url2"));
                 given(productService.getProducts()).willReturn(products);
             }
 
