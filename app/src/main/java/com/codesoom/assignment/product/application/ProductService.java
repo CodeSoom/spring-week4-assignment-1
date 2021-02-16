@@ -32,4 +32,9 @@ public class ProductService {
         // TODO : 상품정보를 갱신하기
         return null;
     }
+
+    public Long deleteProduct(long productId) {
+        // TODO : 상품을 삭제하기
+        return null;
+    }
 }
