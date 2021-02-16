@@ -20,31 +20,31 @@ class ToyTest {
     }
 
     @Test
-    void handleId() {
+    void testId() {
         toy.setId(toyId);
         assertThat(toy.getId()).isEqualTo(toyId);
     }
 
     @Test
-    void handleName() {
+    void testName() {
         toy.setName(toyName);
         assertThat(toy.getName()).isEqualTo(toyName);
     }
 
     @Test
-    void handleBrand() {
+    void testBrand() {
         toy.setBrand(toyBrand);
         assertThat(toy.getBrand()).isEqualTo(toyBrand);
     }
 
     @Test
-    void handlePrice() {
+    void testPrice() {
         toy.setPrice(toyPrice);
         assertThat(toy.getPrice()).isEqualTo(toyPrice);
     }
 
     @Test
-    void handleImageUrl() {
+    void testImageUrl() {
         toy.setImageUrl(toyImageUrl);
         assertThat(toy.getImageUrl()).isEqualTo(toyImageUrl);
     }
