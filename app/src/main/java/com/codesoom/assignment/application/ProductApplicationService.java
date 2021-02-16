@@ -9,4 +9,8 @@ public class ProductApplicationService {
     public List<Product> getAllProducts() {
         return new ArrayList<>();
     }
+
+    public Product createProduct(String name, String maker, String price, String imageURL) {
+        return null;
+    }
 }
