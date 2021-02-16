@@ -1,4 +1,4 @@
 package com.codesoom.assignment.dto;
 
-public class ProductRequestDto {
+public class ProductResponseDto {
 }
