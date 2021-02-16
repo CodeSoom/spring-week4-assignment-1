@@ -20,6 +20,14 @@ class ToyTest {
     }
 
     @Test
+    void testConstructor() {
+        assertThat(toy.getName()).isEqualTo(toyName);
+        assertThat(toy.getBrand()).isEqualTo(toyBrand);
+        assertThat(toy.getPrice()).isEqualTo(toyPrice);
+        assertThat(toy.getImageUrl()).isEqualTo(toyImageUrl);
+    }
+
+    @Test
     void testId() {
         toy.setId(toyId);
         assertThat(toy.getId()).isEqualTo(toyId);
