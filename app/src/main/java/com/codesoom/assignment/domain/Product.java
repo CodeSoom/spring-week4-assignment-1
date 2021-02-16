@@ -10,7 +10,6 @@ import javax.persistence.*;
  * 고양이 장남간 가게의 상품 엔티티
  * @Author wenodev
  */
-
 @NoArgsConstructor
 @Getter
 @Table(name = "soom_product")

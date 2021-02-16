@@ -5,11 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 
 // 1. 필요한 변수 작성 : 이름, 메이커, 가격, 이미지
-
 class ProductTest {
 
     private Product product;
