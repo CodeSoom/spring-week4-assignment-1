@@ -67,7 +67,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto create(@RequestBody ProductDto productDto) {
-        Product product = new Product(productDto);
+        Product product = productDto.toProduct();
         Product createdProduct = productService.createProduct(product);
 
         return new ProductDto(createdProduct);
@@ -82,7 +82,7 @@ public class ProductController {
      */
     @PatchMapping("{id}")
     public ProductDto update(@PathVariable Long id, @RequestBody ProductDto productDto) {
-        Product product = new Product(productDto);
+        Product product = productDto.toProduct();
         Product updatedProduct = productService.updateProduct(id, product);
 
         return new ProductDto(updatedProduct);

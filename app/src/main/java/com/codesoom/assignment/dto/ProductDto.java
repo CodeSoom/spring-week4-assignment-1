@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @Builder
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDto {
@@ -27,6 +28,15 @@ public class ProductDto {
         this.maker = product.getMaker();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
+    }
+
+    public Product toProduct() {
+        return Product.builder()
+                .name(name)
+                .maker(maker)
+                .price(price)
+                .imageUrl(imageUrl)
+                .build();
     }
 
 }

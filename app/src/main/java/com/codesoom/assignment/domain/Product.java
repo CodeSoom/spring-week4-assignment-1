@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.ProductDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter @Builder
+@Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "product_id")
     private Long id;
 
@@ -30,13 +31,6 @@ public class Product {
 
     private String imageUrl;
 
-    public Product(ProductDto productDto) {
-        this.name = productDto.getName();
-        this.maker = productDto.getMaker();
-        this.price = productDto.getPrice();
-        this.imageUrl = productDto.getImageUrl();
-    }
-
     public Product update(Product newProduct) {
         this.name = newProduct.getName();
         this.maker = newProduct.getMaker();
@@ -47,3 +41,4 @@ public class Product {
     }
 
 }
+
