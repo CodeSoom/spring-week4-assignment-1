@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.Infra.InMemoryTaskRepository;
 import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.domain.Task;
 import com.codesoom.assignment.domain.TaskRepository;
@@ -9,54 +8,79 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @DisplayName("TaskService 클래스")
 class TaskServiceTest {
     private TaskService taskService;
+    private TaskRepository taskRepository;
+    private List<Task> tasks;
+    private Task beforeTask;
+
     private static final String BEFORE_TASK_TITLE = "before";
     private static final String UPDATE_TASK_TITLE = "updated";
     private static final String CREATE_TASK_TITLE = "created";
 
+    private static final Long EXISTED_ID = 1L;
+    private static final Long NOT_EXISTED_ID = 100L;
+
     @BeforeEach
     void setUp() {
-        TaskRepository taskRepository = new TaskRepository();
-
+        taskRepository = mock(TaskRepository.class);
         taskService = new TaskService(taskRepository);
+        tasks = new ArrayList<>();
 
-        Task beforeTask = new Task(1L, BEFORE_TASK_TITLE);
-        taskService.createTask(beforeTask);
+        beforeTask = new Task(EXISTED_ID, BEFORE_TASK_TITLE);
+        tasks.add(beforeTask);
     }
 
     @Nested
     @DisplayName("getTasks 메소드는")
     class Describe_getTasks {
-        @BeforeEach
-        void prepareOneMoreTask() {
-            Task prepareTask = new Task(2L, BEFORE_TASK_TITLE);
-            taskService.createTask(prepareTask);
-        }
+//        @BeforeEach
+//        void prepareOneMoreTask() {
+//            Task prepareTask = new Task(2L, BEFORE_TASK_TITLE);
+//            taskService.createTask(prepareTask);
+//        }
 
         @Test
         @DisplayName("할 일의 목록을 리턴한다")
         void itReturnsListOfTask() {
-            List<Task> tasks = taskService.getTasks();
-            List<Task> taskList = new ArrayList<>();
-            taskList.add(taskService.getTask(1L));
-            taskList.add(taskService.getTask(2L));
+            given(taskRepository.findAll()).willReturn(tasks);
 
-            assertEquals(tasks, taskList);
+            List<Task> taskList = taskService.getTasks();
+
+            verify(taskRepository).findAll();
+//            List<Task> tasks = taskService.getTasks();
+//            List<Task> taskList = new ArrayList<>();
+//            taskList.add(taskService.getTask(1L));
+//            taskList.add(taskService.getTask(2L));
+
+//            assertEquals(tasks, taskList);
+
         }
 
         @Test
         @DisplayName("현재 가지고 있는 할 일의 갯수만큼 사이즈를 갖는다")
         void itHasSizeForTheNumberOfTask() {
-            int newSize = taskService.getTasks().size();
-            assertThat(newSize).isEqualTo(2);
+            given(taskRepository.findAll()).willReturn(tasks);
+
+            List<Task> taskList = taskService.getTasks();
+
+            verify(taskRepository).findAll();
+            assertThat(taskList).hasSize(1);
+
+            //int newSize = taskService.getTasks().size();
+            //assertThat(newSize).isEqualTo(2);
         }
     }
 
@@ -65,27 +89,35 @@ class TaskServiceTest {
     class Describe_getTask {
         @Nested
         @DisplayName("만약 저장되어 있는 할 일의 id가 주어진다면")
-        class ContextWithValidId {
-            private final Long givenValidId = 1L;
+        class ContextWithExistedId {
+            private final Long givenExistedId = EXISTED_ID;
 
             @Test
             @DisplayName("주어진 id에 해당하는 할 일을 리턴한다")
-            void itReturnsValidTask() {
-                Task task = taskService.getTask(givenValidId);
+            void itReturnsExistedTask() {
+                given(taskRepository.findById(givenExistedId)).willReturn(Optional.of(beforeTask));
+
+                Task task = taskService.getTask(givenExistedId);
+
+                verify(taskRepository).findById(givenExistedId);
                 assertThat(task.getTitle()).isEqualTo(BEFORE_TASK_TITLE);
             }
         }
 
         @Nested
         @DisplayName("만약 저장되어 있지 않은 할 일의 id가 주어진다면")
-        class ContextWithInvalidId {
-            private final Long givenInvalidId = 100L;
+        class ContextWithNotExistedId {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
             @DisplayName("할 일을 찾을 수 없다는 예외를 던진다")
-            void itReturnsErrorMessageException() {
-                assertThatThrownBy(() -> taskService.getTask(givenInvalidId))
+            void itGeneratesTaskNotFoundException() {
+                given(taskRepository.findById(givenNotExistedId)).willReturn(Optional.empty());
+
+                assertThatThrownBy(() -> taskService.getTask(givenNotExistedId))
                         .isInstanceOf(TaskNotFoundException.class);
+
+                verify(taskRepository).findById(givenNotExistedId);
             }
         }
     }
@@ -95,15 +127,17 @@ class TaskServiceTest {
     class Describe_createTask {
         @Test
         @DisplayName("title을 입력받아 새로운 할 일을 생성하고 할 일을 리턴한다")
-        void itReturnsNewTask() {
-            Task newTask = new Task();
-            newTask.setId(2L);
-            newTask.setTitle(CREATE_TASK_TITLE);
-            taskService.createTask(newTask);
+        void itCreatesNewTasksAndReturnsNewTask() {
+            Task source = new Task();
+            source.setTitle(CREATE_TASK_TITLE);
+            //given(taskRepository.save(any(Task.class))).willReturn(source);
+            given(taskRepository.save(any(Task.class))).will(invocation -> {
+                return invocation.getArgument(0);
+            });
 
-            Task createdTask = taskService.getTask(newTask.getId());
+            Task createdTask = taskService.createTask(source);
 
-            assertThat(createdTask.getId()).isEqualTo(2L);
+            verify(taskRepository).save(any(Task.class));
             assertThat(createdTask.getTitle()).isEqualTo(CREATE_TASK_TITLE);
         }
     }

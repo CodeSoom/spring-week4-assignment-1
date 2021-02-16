@@ -1,11 +1,13 @@
 package com.codesoom.assignment.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Task {
     @Id
+    @GeneratedValue
     private Long id;
 
     private String title;
@@ -43,5 +45,13 @@ public class Task {
 
         Task task = (Task)obj;
         return this.id.equals(task.getId()) && this.title.equals(task.getTitle());
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

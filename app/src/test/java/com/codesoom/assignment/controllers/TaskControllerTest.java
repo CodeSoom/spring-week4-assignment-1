@@ -1,29 +1,23 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.Infra.InMemoryTaskRepository;
 import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.application.TaskService;
 import com.codesoom.assignment.domain.Task;
 import com.codesoom.assignment.domain.TaskRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @DisplayName("TaskController 테스트")
 class TaskControllerTest {
+    private TaskRepository taskRepository;
     private TaskService taskService;
     private TaskController taskController;
 
     @BeforeEach
     void setUp() {
-        TaskRepository taskRepository = new TaskRepository();
+        taskRepository = mock(TaskRepository.class);
 
         taskService = new TaskService(taskRepository);
         taskController = new TaskController(taskService);
