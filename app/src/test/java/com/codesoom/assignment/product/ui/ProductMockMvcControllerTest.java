@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -64,7 +65,7 @@ class ProductMockMvcControllerTest {
             @BeforeEach
             void setUp() {
                 ProductResponseDto product = new ProductResponseDto(PRODUCT_ID, NAME, MAKER, PRICE, IMAGE_URL);
-                products = Arrays.asList(product);
+                products = Collections.singletonList(product);
 
                 given(productService.getProducts())
                         .willReturn(products);
