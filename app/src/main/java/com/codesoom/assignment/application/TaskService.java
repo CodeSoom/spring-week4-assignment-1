@@ -40,6 +40,7 @@ public class TaskService {
 
     public Task deleteTask(Long id) {
         Task task = taskRepository.find(id);
+
         return taskRepository.remove(task);
     }
 }
