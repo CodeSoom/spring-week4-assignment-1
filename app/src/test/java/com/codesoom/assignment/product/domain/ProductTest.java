@@ -17,7 +17,12 @@ public class ProductTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product(NAME, MAKER, PRICE, IMAGE_URL);
+        product = Product.builder()
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .imageUrl(IMAGE_URL)
+                .build();
     }
 
     @DisplayName("getName은 상품명을 리턴한다")

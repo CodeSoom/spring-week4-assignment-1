@@ -1,6 +1,7 @@
 package com.codesoom.assignment.product.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,10 +27,7 @@ public class Product {
 
     private String imageUrl;
 
-    public Product(String name, String maker, int price, String imageUrl) {
-        this(null, name, maker, price, imageUrl);
-    }
-
+    @Builder
     public Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;

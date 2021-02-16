@@ -1,7 +1,7 @@
 package com.codesoom.assignment.product.ui.dto;
 
 public class ErrorResponse {
-    private String message;
+    final private String message;
 
     public ErrorResponse(String message) {
         this.message = message;
