@@ -22,7 +22,8 @@ public class ProductService {
     }
 
     public Product find(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFountException(id));
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFountException(id));
     }
 
     public List<Product> findAll() {
