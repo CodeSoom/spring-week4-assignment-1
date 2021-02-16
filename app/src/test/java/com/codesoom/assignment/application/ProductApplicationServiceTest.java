@@ -21,12 +21,12 @@ public class ProductApplicationServiceTest {
     List<Product> createdProductList = new ArrayList<>();
 
     @Given("product를 {int}개 생성했을 때")
-    public void createProduct(int number) {
+    public void createProduct(int count) {
         String name = "고양이 인형";
         String maker = "라스 공방";
         String price = "1000원";
         String imageURL = "https://magical.dev/static/las.jpg";
-        for (int i = 0; i < number; i++) {
+        for (int i = 0; i < count; i++) {
             Product createdProduct = applicationService.createProduct(name, maker, price, imageURL);
             createdProductList.add(createdProduct);
         }
