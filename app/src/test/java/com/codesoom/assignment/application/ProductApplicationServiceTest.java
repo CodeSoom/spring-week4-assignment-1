@@ -6,7 +6,6 @@ import com.codesoom.assignment.domain.ProductRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.jupiter.api.DisplayName;
 
 import java.util.List;
 
