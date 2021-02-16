@@ -40,11 +40,9 @@ public class ProductController {
     public List<ProductDto> list() {
         List<Product> products = productService.getProducts();
 
-        List<ProductDto> ProductDtos = products.stream()
+        return products.stream()
                 .map(ProductDto::new)
                 .collect(Collectors.toList());
-
-        return ProductDtos;
     }
 
     /**
@@ -54,7 +52,7 @@ public class ProductController {
      * @return 찾은 상품
      */
     @GetMapping("{id}")
-    public ProductDto detail(@PathVariable Long id) {
+    public ProductDto find(@PathVariable Long id) {
         Product foundProduct = productService.getProduct(id);
 
         return new ProductDto(foundProduct);
@@ -78,7 +76,7 @@ public class ProductController {
     /**
      * 주어진 id에 해당하는 상품을 찾아 수정하고 수정된 상품을 응답합니다.
      *
-     * @param id      수정하고자 하는 상품의 id
+     * @param id         수정하고자 하는 상품의 id
      * @param productDto 수정하고자 하는 상품
      * @return 수정된 상품
      */
