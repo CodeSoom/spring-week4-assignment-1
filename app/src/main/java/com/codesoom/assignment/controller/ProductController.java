@@ -1,9 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.dto.ProductResponseDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,7 +15,7 @@ public class ProductController {
 
     @GetMapping
     public List<ProductResponseDto> getProducts(){
-
+        return null;
     }
 
 }
