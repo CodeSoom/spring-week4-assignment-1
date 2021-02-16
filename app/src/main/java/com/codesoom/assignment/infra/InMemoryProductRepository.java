@@ -15,7 +15,7 @@ public class InMemoryProductRepository implements ProductRepository {
     private final List<Product> products = new ArrayList<>();
     private Long newId = 0L;
 
-    private Long generateId() {
+    private synchronized Long generateId() {
         newId += 1;
         return newId;
     }
