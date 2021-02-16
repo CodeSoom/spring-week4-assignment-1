@@ -24,7 +24,6 @@ class ProductTest {
         product.setImageUrl(IMAGE_URL);
 
         //then
-        assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
