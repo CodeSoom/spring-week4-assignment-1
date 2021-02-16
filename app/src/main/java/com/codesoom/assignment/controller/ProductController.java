@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 상품과 관련된 HTTP 요청 처리를 담당합니다.
@@ -35,8 +37,14 @@ public class ProductController {
      * 모든 상품을 응답합니다.
      */
     @GetMapping
-    public List<Product> list() {
-        return productService.getProducts();
+    public List<ProductDto> list() {
+        List<Product> products = productService.getProducts();
+
+        List<ProductDto> ProductDtos = products.stream()
+                .map(ProductDto::new)
+                .collect(Collectors.toList());
+
+        return ProductDtos;
     }
 
     /**
@@ -46,32 +54,40 @@ public class ProductController {
      * @return 찾은 상품
      */
     @GetMapping("{id}")
-    public Product detail(@PathVariable Long id) {
-        return productService.getProduct(id);
+    public ProductDto detail(@PathVariable Long id) {
+        Product foundProduct = productService.getProduct(id);
+
+        return new ProductDto(foundProduct);
     }
 
     /**
      * 주어진 상품을 저장한 뒤, 저장된 상품을 응답합니다.
      *
-     * @param product 저장하고자 하는 상품
+     * @param productDto 저장하고자 하는 상품
      * @return 저장된 상품
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public ProductDto create(@RequestBody ProductDto productDto) {
+        Product product = new Product(productDto);
+        Product createdProduct = productService.createProduct(product);
+
+        return new ProductDto(createdProduct);
     }
 
     /**
      * 주어진 id에 해당하는 상품을 찾아 수정하고 수정된 상품을 응답합니다.
      *
-     * @param id 수정하고자 하는 상품의 id
-     * @param product 수정하고자 하는 상품
+     * @param id      수정하고자 하는 상품의 id
+     * @param productDto 수정하고자 하는 상품
      * @return 수정된 상품
      */
     @PatchMapping("{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
+    public ProductDto update(@PathVariable Long id, @RequestBody ProductDto productDto) {
+        Product product = new Product(productDto);
+        Product updatedProduct = productService.updateProduct(id, product);
+
+        return new ProductDto(updatedProduct);
     }
 
     /**

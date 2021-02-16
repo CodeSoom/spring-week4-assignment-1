@@ -1,6 +1,8 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ProductDto;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +33,13 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product(ProductDto productDto) {
+        this.name = productDto.getName();
+        this.maker = productDto.getMaker();
+        this.price = productDto.getPrice();
+        this.imageUrl = productDto.getImageUrl();
     }
 
     public void update(Product newProduct) {

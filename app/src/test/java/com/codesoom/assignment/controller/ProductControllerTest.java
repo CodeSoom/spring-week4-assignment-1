@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,12 +45,20 @@ class ProductControllerTest {
 
     private List<Product> products;
     private Product product;
+    private ProductDto productDto;
 
     private final Long existingId = 1L;
     private final Long notExistingId = 100L;
 
     @BeforeEach
     void setUp() {
+        productDto = ProductDto.builder()
+                .name("장난감")
+                .maker("장난감 메이커")
+                .price(10000)
+                .imageUrl("url")
+                .build();
+
         products = new ArrayList<>();
         product = new Product("장난감", "장난감 메이커", 10000, "url");
     }
@@ -159,7 +168,7 @@ class ProductControllerTest {
                 mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(product)))
+                        .content(objectMapper.writeValueAsString(productDto)))
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("maker").exists())
                         .andExpect(jsonPath("price").exists())
@@ -188,7 +197,7 @@ class ProductControllerTest {
                 mockMvc.perform(patch("/products/{id}", existingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(product)))
+                        .content(objectMapper.writeValueAsString(productDto)))
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("maker").exists())
                         .andExpect(jsonPath("price").exists())
@@ -212,7 +221,7 @@ class ProductControllerTest {
                 mockMvc.perform(patch("/products/{id}", notExistingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(product)))
+                        .content(objectMapper.writeValueAsString(productDto)))
                         .andExpect(jsonPath("name").doesNotExist())
                         .andExpect(jsonPath("message").exists())
                         .andExpect(status().isNotFound());
