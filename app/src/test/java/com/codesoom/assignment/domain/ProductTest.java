@@ -60,4 +60,10 @@ class ProductTest {
         productDto.setImageUrl("new image.jpg");
         assertThat(product.update(productDto).getName()).isEqualTo("로봇 뱀");
     }
+
+    @Test
+    @DisplayName("기본생성자 테스트")
+    void defaultConstruct() {
+        assertThat(new Product()).isInstanceOf(Product.class);
+    }
 }
