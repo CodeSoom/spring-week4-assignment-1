@@ -4,7 +4,6 @@ import com.codesoom.assignment.dto.ProductRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -42,6 +41,13 @@ class ProductControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new ProductRequestDto())))
                 .andExpect(status().isCreated());
+    }
+
+    @Test
+    void testGetProductsById() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(get(BASE_URL + "/" + id))
+                .andExpect(status().isOk());
     }
 
 }
