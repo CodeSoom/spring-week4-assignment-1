@@ -33,4 +33,9 @@ public class ProductController {
         return null;
     }
 
+    @GetMapping("/{id}")
+    public ProductResponseDto getProductsById(@PathVariable Long id){
+        return null;
+    }
+
 }
