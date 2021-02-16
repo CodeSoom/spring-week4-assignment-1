@@ -26,9 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -214,6 +212,46 @@ class ProductMockMvcControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(requestDto)))
                         .andExpect(status().isCreated());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /product/:id 는")
+    class Describe_deleteProduct {
+
+        @Nested
+        @DisplayName("삭제되는 상품이 없으면")
+        class Context_without_product {
+            @BeforeEach
+            void setUp() {
+                given(productService.deleteProudct(NOT_EXIST_ID))
+                        .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+            }
+
+            @DisplayName("404 상태코드와 Not Found 상태를 응답한다.")
+            @Test
+            void It_responds_not_found() throws Exception {
+                mockMvc.perform(delete("/products/{id}", NOT_EXIST_ID))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("삭제되는 상품이 존재하면")
+        class Context_with_product {
+
+            @BeforeEach
+            void setUp() {
+                given(productService.deleteProudct(anyLong())).willReturn(eq(PRODUCT_ID));
+            }
+
+            @DisplayName("204 상태코드와 NO CONTENT 상태를 삭제된 상품 id를 응답한다.")
+            @Test
+            void It_responds_no_content_with_product() throws Exception {
+                mockMvc.perform(delete("/products/{id}", anyLong())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .andExpect(status().isNoContent());
             }
         }
     }
