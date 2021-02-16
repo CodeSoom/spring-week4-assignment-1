@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +47,17 @@ class ProductTest {
     @Test
     @DisplayName("getImg() 테스트")
     void getImg() {
-        assertThat(product.getImg()).isEqualTo(IMG);
+        assertThat(product.getImageUrl()).isEqualTo(IMG);
+    }
+
+    @Test
+    @DisplayName("update() 테스트")
+    void update() {
+        ProductDto productDto = new ProductDto();
+        productDto.setName("로봇 뱀");
+        productDto.setMaker("로봇 컴퍼니");
+        productDto.setPrice(10000);
+        productDto.setImageUrl("new image.jpg");
+        assertThat(product.update(productDto).getName()).isEqualTo("로봇 뱀");
     }
 }
