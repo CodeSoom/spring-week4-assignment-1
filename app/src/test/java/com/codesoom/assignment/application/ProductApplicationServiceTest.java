@@ -53,10 +53,10 @@ public class ProductApplicationServiceTest {
 
     @Given("product를 만드는데 필요한 데이터가 제공되었을 때")
     public void provideProductInformation() {
-        String name = "고양이 인형";
-        String maker = "라스 공방";
-        String price = "1000원";
-        String imageURL = "https://magical.dev/static/las.jpg";
+        name = "고양이 인형";
+        maker = "라스 공방";
+        price = "1000원";
+        imageURL = "https://magical.dev/static/las.jpg";
     }
 
     @When("product를 생성하면")
