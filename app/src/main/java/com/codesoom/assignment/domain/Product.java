@@ -21,7 +21,7 @@ public class Product {
     @Lob
     private String img;
 
-    public Product() {
+    private Product() {
     }
 
     public Product(Long id, String name, String maker, Integer price, String img) {
