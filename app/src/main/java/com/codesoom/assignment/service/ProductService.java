@@ -6,20 +6,20 @@ import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 
 @Service
+@Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
 
-    private final ModelMapper modelMapper;
 
     public ProductService(ProductRepository productRepository, ModelMapper modelMapper) {
         this.productRepository = productRepository;
-        this.modelMapper = modelMapper;
     }
 
     /**
@@ -49,7 +49,7 @@ public class ProductService {
      * @return 추가된 Product
      */
     public Product addProduct(ProductDto productDto) {
-        Product product = modelMapper.map(productDto, Product.class);
+        Product product = new Product(productDto.getId(), productDto.getName(), productDto.getMaker(), productDto.getPrice(), productDto.getImageUrl());
         return productRepository.save(product);
     }
 
@@ -64,7 +64,7 @@ public class ProductService {
     public Product updateProduct(Long id, ProductDto productDto) {
         Product product = productRepository.findById(id).
                 orElseThrow(() -> new ProductNotFoundException(id));
-        modelMapper.map(productDto, product);
+        product.update(productDto);
         return productRepository.save(product);
     }
 

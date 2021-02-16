@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ProductDto;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,17 +21,17 @@ public class Product {
     private Integer price;
 
     @Lob
-    private String img;
+    private String imageUrl;
 
-    private Product() {
+    public Product() {
     }
 
-    public Product(Long id, String name, String maker, Integer price, String img) {
+    public Product(Long id, String name, String maker, Integer price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.img = img;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -48,7 +50,15 @@ public class Product {
         return price;
     }
 
-    public String getImg() {
-        return img;
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public Product update(ProductDto productDto) {
+        this.name = productDto.getName();
+        this.maker = productDto.getMaker();
+        this.price = productDto.getPrice();
+        this.imageUrl = productDto.getImageUrl();
+        return this;
     }
 }

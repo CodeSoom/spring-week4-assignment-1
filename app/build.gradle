@@ -48,7 +48,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
 
     //Model mapper
-    implementation 'org.modelmapper:modelmapper:2.3.8'
+//    implementation 'org.modelmapper:modelmapper:2.3.8'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'

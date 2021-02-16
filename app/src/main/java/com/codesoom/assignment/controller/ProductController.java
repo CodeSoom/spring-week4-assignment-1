@@ -43,6 +43,7 @@ public class ProductController {
      * @return
      */
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Product> getProducts() {
         return productService.getProducts();
     }
@@ -89,6 +90,7 @@ public class ProductController {
      * @param id
      */
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteTask(id);
     }

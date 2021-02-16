@@ -5,22 +5,33 @@ import com.codesoom.assignment.domain.Product;
 import java.util.Objects;
 
 public class ProductDto {
+
+    private Long id;
     private String name;
 
     private String maker;
 
     private Integer price;
 
-    private String img;
+    private String imageUrl;
 
     public ProductDto() {
     }
 
     public ProductDto(Product product) {
+        this.id = product.getId();
         this.name = product.getName();
         this.maker = product.getMaker();
         this.price = product.getPrice();
-        this.img = product.getImg();
+        this.imageUrl = product.getImageUrl();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -47,12 +58,12 @@ public class ProductDto {
         this.price = price;
     }
 
-    public String getImg() {
-        return img;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -67,11 +78,11 @@ public class ProductDto {
         return Objects.equals(getName(), that.getName()) &&
                 Objects.equals(getMaker(), that.getMaker()) &&
                 Objects.equals(getPrice(), that.getPrice()) &&
-                Objects.equals(getImg(), that.getImg());
+                Objects.equals(getImageUrl(), that.getImageUrl());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getMaker(), getPrice(), getImg());
+        return Objects.hash(getName(), getMaker(), getPrice(), getImageUrl());
     }
 }
