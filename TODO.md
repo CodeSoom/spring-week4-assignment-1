@@ -14,3 +14,7 @@
 4. 서비스
 - verify를 사용할땐 given을 같이 사용해야한다.
 - any(SMT.class) 형태를 사용해보자 --> 이후에 바뀔 가능성 있는 방법
+
+## TUE
+1. Many TO One 단방향을 사용하자
+- One TO Many 단방향 사용시 불필요한 SQL이 실행된다.
