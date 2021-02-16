@@ -62,7 +62,6 @@ public class ProductApplicationServiceTest {
     @When("product를 생성하면")
     public void createProduct() {
         createdProduct = applicationService.createProduct(name, maker, price, imageURL);
-        createdProductList.add(createdProduct);
     }
 
     @Then("생성된 product를 찾을 수 있다")
