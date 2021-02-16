@@ -25,23 +25,23 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponseDto> list() {
+    public List<ProductResponseDto> getProducts() {
         return productService.getProducts();
     }
 
     @GetMapping("{id}")
-    public ProductResponseDto detail(@PathVariable Long id) {
+    public ProductResponseDto getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long create(@RequestBody ProductSaveRequestDto requestDto) {
+    public Long createProduct(@RequestBody ProductSaveRequestDto requestDto) {
         return productService.createTask(requestDto);
     }
 
     @PatchMapping("{id}")
-    public Long patch(@PathVariable Long id, @RequestBody ProductUpdateRequestDto requestDto) {
+    public Long updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequestDto requestDto) {
         return productService.updateProduct(id, requestDto);
     }
 
