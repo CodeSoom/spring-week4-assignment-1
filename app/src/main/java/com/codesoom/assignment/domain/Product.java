@@ -16,7 +16,7 @@ public class Product {
 
     private Long price;
 
-    private String imageURL;
+    private String imageUrl;
 
     public Product() { }
 
@@ -36,8 +36,8 @@ public class Product {
         return price;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public void setName(String name) {
@@ -52,7 +52,7 @@ public class Product {
         this.price = price;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

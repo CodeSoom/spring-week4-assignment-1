@@ -24,10 +24,10 @@ class ProductServiceTest {
     final Long PRICE = 5000L;
     final String IMAGE_URL = "https://cdn.pixabay.com/photo/2016/10/01/20/54/mouse-1708347_1280.jpg";
 
-    final String UPDATE_NAME = "My Toy";
-    final String UPDATE_MAKER = "My Home";
-    final Long UPDATE_PRICE = 5000L;
-    final String UPDATE_IMAGE_URL = "https://cdn.pixabay.com/photo/2016/10/01/20/54/mouse-1708347_1280.jpg";
+    final String UPDATE_NAME = "My New Toy";
+    final String UPDATE_MAKER = "My New Home";
+    final Long UPDATE_PRICE = 7000L;
+    final String UPDATE_IMAGE_URL = "https://cdn.pixabay.com/photo/2016/10/01/20/54/mouse-1708347_12801.jpg";
 
     @Autowired
     ProductService productService;
@@ -43,7 +43,7 @@ class ProductServiceTest {
         product.setName(NAME);
         product.setMaker(MAKER);
         product.setPrice(PRICE);
-        product.setImageURL(IMAGE_URL);
+        product.setImageUrl(IMAGE_URL);
         return productService.save(product);
     }
 
@@ -52,7 +52,7 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImageURL()).isEqualTo(IMAGE_URL);
+        assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
     }
 
     @Nested
@@ -157,7 +157,7 @@ class ProductServiceTest {
                 source.setName(UPDATE_NAME);
                 source.setMaker(UPDATE_MAKER);
                 source.setPrice(UPDATE_PRICE);
-                source.setImageURL(UPDATE_IMAGE_URL);
+                source.setImageUrl(UPDATE_IMAGE_URL);
             }
 
             @DisplayName("수정된 product를 반환한다")
@@ -169,7 +169,7 @@ class ProductServiceTest {
                 assertThat(product.getName()).isEqualTo(UPDATE_NAME);
                 assertThat(product.getMaker()).isEqualTo(UPDATE_MAKER);
                 assertThat(product.getPrice()).isEqualTo(UPDATE_PRICE);
-                assertThat(product.getImageURL()).isEqualTo(UPDATE_IMAGE_URL);
+                assertThat(product.getImageUrl()).isEqualTo(UPDATE_IMAGE_URL);
             }
         }
 
@@ -186,7 +186,7 @@ class ProductServiceTest {
                 source.setName(UPDATE_NAME);
                 source.setMaker(UPDATE_MAKER);
                 source.setPrice(UPDATE_PRICE);
-                source.setImageURL(UPDATE_IMAGE_URL);
+                source.setImageUrl(UPDATE_IMAGE_URL);
             }
 
             @DisplayName("product를 찾을 수 없다는 예외를 던진다")

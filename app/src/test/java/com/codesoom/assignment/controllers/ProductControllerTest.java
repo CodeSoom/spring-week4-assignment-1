@@ -28,6 +28,11 @@ class ProductControllerTest {
     final Long PRICE = 5000L;
     final String IMAGE_URL = "https://cdn.pixabay.com/photo/2016/10/01/20/54/mouse-1708347_1280.jpg";
 
+    final String UPDATE_NAME = "My New Toy";
+    final String UPDATE_MAKER = "My New Home";
+    final Long UPDATE_PRICE = 7000L;
+    final String UPDATE_IMAGE_URL = "https://cdn.pixabay.com/photo/2016/10/01/20/54/mouse-1708347_12801.jpg";
+
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -41,7 +46,7 @@ class ProductControllerTest {
         product.setName(NAME);
         product.setMaker(MAKER);
         product.setPrice(PRICE);
-        product.setImageURL(IMAGE_URL);
+        product.setImageUrl(IMAGE_URL);
         return product;
     }
 
@@ -156,6 +161,63 @@ class ProductControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("PATCH /products/{id} 리퀘스트는")
+    class Describe_PATCH_Product {
+        Product updateSource;
+
+        @BeforeEach
+        void setUp() {
+            updateSource = new Product();
+            updateSource.setName(UPDATE_NAME);
+            updateSource.setMaker(UPDATE_MAKER);
+            updateSource.setPrice(UPDATE_PRICE);
+            updateSource.setImageUrl(UPDATE_IMAGE_URL);
+        }
+
+        @Nested
+        @DisplayName("존재하는 product id와 수정한 product를 요청한다면")
+        class Context_exist_id_with_product {
+            Long givenProductId;
+            @BeforeEach
+            void setUp() {
+                Product givenProduct = createAndSaveProduct();
+                givenProductId = givenProduct.getId();
+            }
+
+            @DisplayName("200코드와 수정된 product를 응답한다")
+            @Test
+            void it_returns_200_code_with_product() throws Exception {
+                mockMvc.perform(patch("/products/{id}", givenProductId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateSource)))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name").value(UPDATE_NAME))
+                        .andExpect(jsonPath("$.maker").value(UPDATE_MAKER))
+                        .andExpect(jsonPath("$.price").value(UPDATE_PRICE))
+                        .andExpect(jsonPath("$.imageURL").value(UPDATE_IMAGE_URL));
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 product id와 수정한 product를 요청한다면")
+        class Context_not_exist_id_with_product {
+            Long givenProductId = NOT_EXIST_ID;
+
+            @DisplayName("404코드를 응답한다")
+            @Test
+            void it_responds_not_found() throws Exception {
+                mockMvc.perform(patch("/products/{id}", givenProductId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateSource)))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
 
     @Nested
     @DisplayName("DELETE /products/{id} 리퀘스트는")

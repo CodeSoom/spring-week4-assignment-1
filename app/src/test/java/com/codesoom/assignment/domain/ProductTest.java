@@ -21,13 +21,13 @@ class ProductTest {
         product.setName(NAME);
         product.setMaker(MAKER);
         product.setPrice(PRICE);
-        product.setImageURL(IMAGE_URL);
+        product.setImageUrl(IMAGE_URL);
 
         //then
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImageURL()).isEqualTo(IMAGE_URL);
+        assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
     }
 }

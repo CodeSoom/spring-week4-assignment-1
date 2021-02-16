@@ -75,7 +75,7 @@ public class ProductService {
         product.setName(source.getName());
         product.setMaker(source.getMaker());
         product.setPrice(source.getPrice());
-        product.setImageURL(source.getImageURL());
+        product.setImageUrl(source.getImageUrl());
 
         return save(product);
     }
