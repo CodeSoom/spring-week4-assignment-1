@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public class InMemoryTaskRepository implements TaskRepository {
-    private List<Task> tasks = new ArrayList<>();
+    private final List<Task> tasks = new ArrayList<>();
     private Long newId = 0L;
 
     @Override

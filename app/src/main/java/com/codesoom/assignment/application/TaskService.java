@@ -6,7 +6,6 @@ import com.codesoom.assignment.domain.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,9 +27,7 @@ public class TaskService {
     }
 
     public Task createTask(Task source) {
-        Task task = new Task();
-
-        task.setTitle(source.getTitle());
+        Task task = new Task(source.getTitle());
 
         return taskRepository.save(task);
     }

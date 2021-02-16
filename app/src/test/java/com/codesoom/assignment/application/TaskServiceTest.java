@@ -4,6 +4,7 @@ import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.domain.Task;
 import com.codesoom.assignment.domain.TaskRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -40,8 +41,7 @@ class TaskServiceTest {
     void setUpFixtures() {
         List<Task> tasks = new ArrayList<>();
 
-        Task task = new Task();
-        task.setTitle(TASK_TITLE);
+        Task task = new Task(TASK_TITLE);
 
         tasks.add(task);
 
@@ -61,6 +61,7 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("Task 전체를 조회하며 사이즈를 확인한다.")
     void getTasks() {
         List<Task> tasks = taskService.getTasks();
         verify(taskRepository).findAll();
@@ -72,6 +73,7 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("특정 Task를 조회하여 값을 확인한다.")
     void getTaskWithExistedId() {
         Task task = taskService.getTask(1L);
 
@@ -81,6 +83,7 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("특정 Task를 찾을 수 없다면 예외를 던진다.")
     void getTaskWithInvalidId() {
         assertThatThrownBy(() -> taskService.getTask(100L))
                 .isInstanceOf(TaskNotFoundException.class);
@@ -89,9 +92,9 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("새로운 Task를 생성한다.")
     void createTask() {
-        Task source = new Task();
-        source.setTitle(TASK_TITLE + CREATE_POSTFIX);
+        Task source = new Task(TASK_TITLE + CREATE_POSTFIX);
 
         Task task = taskService.createTask(source);
 
@@ -100,22 +103,11 @@ class TaskServiceTest {
         assertThat(task.getId()).isEqualTo(2L);
         assertThat(task.getTitle()).isEqualTo(TASK_TITLE + CREATE_POSTFIX);
     }
-//
-//    @Test
-//    void deleteTask() {
-//        int oldSize = taskService.getTasks().size();
-//
-//        taskService.deleteTask(1L);
-//
-//        int newSize = taskService.getTasks().size();
-//
-//        assertThat(oldSize - newSize).isEqualTo(1);
-//    }
-//
+
     @Test
+    @DisplayName("특정 Task의 값을 변경한다.")
     void updateTaskWithExistedId() {
-        Task source = new Task();
-        source.setTitle(TASK_TITLE + UPDATE_POSTFIX);
+        Task source = new Task(TASK_TITLE + UPDATE_POSTFIX);
 
         Task task = taskService.updateTask(1L, source);
 
@@ -125,9 +117,9 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("특정 Task를 찾을 수 없다면 예외를 던진다.")
     void updateTaskWithNotExistedId() {
-        Task source = new Task();
-        source.setTitle(TASK_TITLE + UPDATE_POSTFIX);
+        Task source = new Task(TASK_TITLE + UPDATE_POSTFIX);
 
         assertThatThrownBy(() -> taskService.updateTask(100L, source))
                 .isInstanceOf(TaskNotFoundException.class);
@@ -136,6 +128,7 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("특정 Task를 삭제한다.")
     void deleteTaskWithExsitedId() {
         taskService.deleteTask(1L);
 
@@ -144,6 +137,7 @@ class TaskServiceTest {
     }
 
     @Test
+    @DisplayName("특정 Task를 찾을 수 없다면 예외를 던진다.")
     void deleteTaskWithNotExsitedId() {
         assertThatThrownBy(() -> taskService.deleteTask(100L))
                 .isInstanceOf(TaskNotFoundException.class);

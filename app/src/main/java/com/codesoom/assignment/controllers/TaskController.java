@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/tasks")
 @CrossOrigin
 public class TaskController {
-    private TaskService taskService;
+    private final TaskService taskService;
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
@@ -44,7 +44,7 @@ public class TaskController {
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
