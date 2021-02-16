@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.dto.ProductRequest;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,25 +34,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("ProductController 클래스")
 class ProductControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
-    private ProductService productService;
-
-    private List<Product> products;
-    private Product product;
-    private ProductDto productDto;
-
     private final Long existingId = 1L;
     private final Long notExistingId = 100L;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @MockBean
+    private ProductService productService;
+    private List<Product> products;
+    private Product product;
+    private ProductRequest productRequest;
 
     @BeforeEach
     void setUp() {
-        productDto = ProductDto.builder()
+        productRequest = productRequest.builder()
                 .name("장난감")
                 .maker("장난감 메이커")
                 .price(10000)
@@ -182,7 +178,7 @@ class ProductControllerTest {
                 mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productDto)))
+                        .content(objectMapper.writeValueAsString(productRequest)))
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("maker").exists())
                         .andExpect(jsonPath("price").exists())
@@ -211,7 +207,7 @@ class ProductControllerTest {
                 mockMvc.perform(patch("/products/{id}", existingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productDto)))
+                        .content(objectMapper.writeValueAsString(productRequest)))
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("maker").exists())
                         .andExpect(jsonPath("price").exists())
@@ -235,7 +231,7 @@ class ProductControllerTest {
                 mockMvc.perform(patch("/products/{id}", notExistingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(productDto)))
+                        .content(objectMapper.writeValueAsString(productRequest)))
                         .andExpect(jsonPath("name").doesNotExist())
                         .andExpect(jsonPath("message").exists())
                         .andExpect(status().isNotFound());

@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.dto.ProductRequest;
 import com.codesoom.assignment.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,13 +62,13 @@ public class ProductController {
     /**
      * 주어진 상품을 저장한 뒤, 저장된 상품을 응답합니다.
      *
-     * @param productDto 저장하고자 하는 상품
+     * @param productRequest 저장하고자 하는 상품
      * @return 저장된 상품
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto create(@RequestBody ProductDto productDto) {
-        Product product = productDto.toProduct();
+    public ProductDto create(@RequestBody ProductRequest productRequest) {
+        Product product = productRequest.toProduct();
         Product createdProduct = productService.createProduct(product);
 
         return new ProductDto(createdProduct);
@@ -76,13 +77,13 @@ public class ProductController {
     /**
      * 주어진 id에 해당하는 상품을 찾아 수정하고 수정된 상품을 응답합니다.
      *
-     * @param id         수정하고자 하는 상품의 id
-     * @param productDto 수정하고자 하는 상품
+     * @param id             수정하고자 하는 상품의 id
+     * @param productRequest 수정하고자 하는 상품
      * @return 수정된 상품
      */
     @PatchMapping("{id}")
-    public ProductDto update(@PathVariable Long id, @RequestBody ProductDto productDto) {
-        Product product = productDto.toProduct();
+    public ProductDto update(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
+        Product product = productRequest.toProduct();
         Product updatedProduct = productService.updateProduct(id, product);
 
         return new ProductDto(updatedProduct);
