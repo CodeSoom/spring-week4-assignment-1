@@ -1,7 +1,10 @@
 package com.codesoom.assignment.repository;
 
 import com.codesoom.assignment.domain.Product;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,12 +14,14 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("ProductRepository 클래스")
 @DataJpaTest
 class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
 
+    private final Long notExistingId = 100L;
     private Product product;
 
     @BeforeEach
@@ -26,39 +31,121 @@ class ProductRepositoryTest {
         productRepository.save(product);
     }
 
-    @Test
-    void saveProduct() {
-        Product newProduct = new Product("장난감", "장난감 메이커", 10000, "url");
-
-        productRepository.save(newProduct);
-
-        assertThat(productRepository.findAll()).hasSize(2);
+    @AfterEach
+    void clear() {
+        productRepository.deleteAll();
     }
 
-    @Test
-    void findProducts() {
-        Product product1 = new Product("장난감1", "장난감 메이커", 10000, "url");
-        Product product2 = new Product("장난감2", "장난감 메이커", 10000, "url");
-        productRepository.save(product1);
-        productRepository.save(product2);
+    @Nested
+    @DisplayName("findAll")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("저장된 상품이 여러개 있다면")
+        class Context_with_products {
+            @BeforeEach
+            void prepareProducts() {
+                productRepository.deleteAll();
 
-        List<Product> products = productRepository.findAll();
+                Product product1 = new Product("장난감1", "장난감 메이커", 10000, "url");
+                Product product2 = new Product("장난감2", "장난감 메이커", 10000, "url");
+                productRepository.save(product1);
+                productRepository.save(product2);
+            }
 
-        assertThat(products).hasSize(3);
+            @Test
+            @DisplayName("모든 상품 목록을 리턴한다.")
+            void it_returns_all_product_list() {
+                List<Product> products = productRepository.findAll();
+
+                assertThat(products).hasSize(2);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장된 상품이 없다면")
+        class Context_without_products {
+            @BeforeEach
+            void prepareProducts() {
+                productRepository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("비어있는 목록을 리턴한다.")
+            void it_returns_empty_product_list() {
+                List<Product> products = productRepository.findAll();
+
+                assertThat(products).hasSize(0);
+            }
+        }
     }
 
-    @Test
-    void findProduct() {
-        Optional<Product> foundProduct = productRepository.findById(product.getId());
+    @Nested
+    @DisplayName("findById")
+    class Describe_findById {
+        @Nested
+        @DisplayName("존재하는 상품 id가 주어진다면")
+        class Context_with_an_existing_product_id {
+            @Test
+            @DisplayName("값이 존재하는 optional 상품을 리턴한다.")
+            void it_returns_optional_product_with_value() {
+                Optional<Product> foundProduct = productRepository.findById(product.getId());
 
-        assertThat(foundProduct.isPresent()).isTrue();
+                assertThat(foundProduct.isPresent()).isTrue();
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 상품 id가 주어진다면")
+        class Context_with_not_existing_product_id {
+            @Test
+            @DisplayName("비어있는 optional 상품을 리턴한다.")
+            void it_returns_optional_product_with_value() {
+                Optional<Product> foundProduct = productRepository.findById(notExistingId);
+
+                assertThat(foundProduct.isEmpty()).isTrue();
+            }
+        }
     }
 
-    @Test
-    void deleteProduct() {
-        productRepository.delete(product);
+    @Nested
+    @DisplayName("save")
+    class Describe_save {
+        @DisplayName("상품을 저장하고 저장된 상품을 리턴한다.")
+        @Test
+        void it_saves_a_product_and_returns_the_saved_product() {
+            Product newProduct = new Product("new 장난감", "장난감 메이커", 10000, "url");
 
-        assertThat(productRepository.findAll()).hasSize(0);
+            Product savedProduct = productRepository.save(newProduct);
+
+            assertThat(savedProduct).isEqualTo(newProduct);
+        }
     }
 
+    @Nested
+    @DisplayName("delete")
+    class Describe_delete {
+        @Nested
+        @DisplayName("존재하는 상품이 주어진다면")
+        class Context_with_an_existing_product {
+            @Test
+            @DisplayName("상품을 삭제한다.")
+            void it_deletes_the_product() {
+                productRepository.delete(product);
+
+                assertThat(productRepository.findAll()).hasSize(0);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 상품이 주어진다면")
+        class Context_with_not_existing_product {
+            @Test
+            @DisplayName("상품을 삭제하지 않는다.")
+            void it_returns_optional_product_with_value() {
+                productRepository.delete(new Product("존재하지 않는 상품", "메이커", 10000, "url"));
+
+                assertThat(productRepository.findAll()).hasSize(1);
+            }
+        }
+    }
 }
