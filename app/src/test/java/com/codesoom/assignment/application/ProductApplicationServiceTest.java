@@ -20,16 +20,6 @@ public class ProductApplicationServiceTest {
     List<Product> allProduct;
     List<Product> createdProductList = new ArrayList<>();
 
-    @When("모든 product를 가져오는 경우")
-    public void getAllProducts() {
-        allProduct = applicationService.getAllProducts();
-    }
-
-    @Then("빈 리스트가 반환된다")
-    public void returnEmptyList() {
-        assertThat(allProduct).hasSize(0);
-    }
-
     @Given("product를 {int}개 생성했을 때")
     public void createProduct(int number) {
         String name = "고양이 인형";
@@ -40,6 +30,11 @@ public class ProductApplicationServiceTest {
             Product createdProduct = applicationService.createProduct(name, maker, price, imageURL);
             createdProductList.add(createdProduct);
         }
+    }
+
+    @When("모든 product를 가져오는 경우")
+    public void getAllProducts() {
+        allProduct = applicationService.getAllProducts();
     }
 
     @Then("{int}개의 product를 얻어올 수 있다")
