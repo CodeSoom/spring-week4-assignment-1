@@ -12,11 +12,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("ProductApplicationService는")
 public class ProductApplicationServiceTest {
     ProductRepository productRepository = new InMemoryProductRepository();
     ProductApplicationService applicationService = new ProductApplicationService(productRepository);
-    
+
     List<Product> allProduct;
     Product createdProduct;
 
