@@ -1,7 +1,6 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductRequestDto;
 import com.codesoom.assignment.dto.ProductResponseDto;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,16 @@ public class ProductController {
 
     private final ProductService productService;
 
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     /**
      * @return 상품 정보 리스트
      */
     @GetMapping
     public List<ProductResponseDto> getProducts(){
-        return null;
+        return productService.getProducts();
     }
 
     /**
@@ -39,7 +41,6 @@ public class ProductController {
     }
 
     /**
-     *
      * @param id 상품 id
      * @return id 값으로 찾은 상품
      */
