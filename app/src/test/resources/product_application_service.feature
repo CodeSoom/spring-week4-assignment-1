@@ -9,3 +9,8 @@ Feature: ProductApplicationService
     When 모든 product를 가져오는 경우
     Then 1개의 product를 얻어올 수 있다
     And 생성된 product들이 포함되어있다
+
+  Scenario: 새로운 product를 생성한다.
+    Given product를 만드는데 필요한 데이터가 제공되었을 때
+    When product를 생성하면
+    Then 생성된 product를 찾을 수 있다
