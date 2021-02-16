@@ -82,7 +82,7 @@ class ProductControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("name").value(NAME))
                         .andExpect(jsonPath("price").value(PRICE))
-                        .andExpect(jsonPath("imageURL").value(IMAGE_URL))
+                        .andExpect(jsonPath("imageUrl").value(IMAGE_URL))
                         .andExpect(jsonPath("maker").value(MAKER));
             }
         }
@@ -197,7 +197,7 @@ class ProductControllerTest {
                         .andExpect(jsonPath("$.name").value(UPDATE_NAME))
                         .andExpect(jsonPath("$.maker").value(UPDATE_MAKER))
                         .andExpect(jsonPath("$.price").value(UPDATE_PRICE))
-                        .andExpect(jsonPath("$.imageURL").value(UPDATE_IMAGE_URL));
+                        .andExpect(jsonPath("$.imageUrl").value(UPDATE_IMAGE_URL));
             }
         }
 
