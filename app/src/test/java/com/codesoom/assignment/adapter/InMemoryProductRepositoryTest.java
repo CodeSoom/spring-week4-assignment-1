@@ -1,6 +1,7 @@
 package com.codesoom.assignment.adapter;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductId;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,12 @@ class InMemoryProductRepositoryTest {
         String maker = "라스 공방";
         String price = "1000원";
         String imageURL = "https://magical.dev/static/las.jpg";
-        savedProduct = new Product(name, maker, price, imageURL);
+
 
         inMemoryProductRepository = new InMemoryProductRepository();
+
+        ProductId id = inMemoryProductRepository.nextId();
+        savedProduct = new Product(id, name, maker, price, imageURL);
         inMemoryProductRepository.save(savedProduct);
     }
 

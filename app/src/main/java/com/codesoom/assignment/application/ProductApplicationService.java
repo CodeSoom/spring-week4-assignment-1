@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductId;
 import com.codesoom.assignment.domain.ProductRepository;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class ProductApplicationService {
     }
 
     public Product createProduct(String name, String maker, String price, String imageURL) {
-        Product newProduct = new Product(name, maker, price, imageURL);
+        ProductId id = productRepository.nextId();
+        Product newProduct = new Product(id, name, maker, price, imageURL);
         productRepository.save(newProduct);
         return newProduct;
     }

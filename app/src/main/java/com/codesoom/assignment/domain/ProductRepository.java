@@ -10,5 +10,5 @@ public interface ProductRepository {
 
     List<Product> findAll();
 
-    Long nextId();
+    ProductId nextId();
 }

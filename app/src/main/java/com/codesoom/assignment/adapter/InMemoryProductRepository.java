@@ -1,6 +1,7 @@
 package com.codesoom.assignment.adapter;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductId;
 import com.codesoom.assignment.domain.ProductRepository;
 
 import java.util.ArrayList;
@@ -14,8 +15,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void save(Product product) {
-        product.setId(nextId());
-        inMemoryMap.put(product.getId(), product);
+        inMemoryMap.put(product.productId().id(), product);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public Long nextId() {
-        return lastId++;
+    public ProductId nextId() {
+        return new ProductId(lastId++);
     }
 }
