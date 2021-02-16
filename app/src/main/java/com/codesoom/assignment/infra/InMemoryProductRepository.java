@@ -28,7 +28,7 @@ public class InMemoryProductRepository implements ProductRepository {
     @Override
     public Optional<Product> findById(Long id) {
         return products.stream()
-                .filter(products -> products.getId().equals(id))
+                .filter(product -> product.getId().equals(id))
                 .findFirst();
     }
 
