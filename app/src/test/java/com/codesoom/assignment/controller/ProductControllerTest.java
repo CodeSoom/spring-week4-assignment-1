@@ -60,7 +60,13 @@ class ProductControllerTest {
                 .build();
 
         products = new ArrayList<>();
-        product = new Product("장난감", "장난감 메이커", 10000, "url");
+
+        product = Product.builder()
+                .name("장난감")
+                .maker("장난감 메이커")
+                .price(10000)
+                .imageUrl("url")
+                .build();
     }
 
     @Nested
@@ -71,8 +77,16 @@ class ProductControllerTest {
         class Context_with_products {
             @BeforeEach
             void setUp() {
-                products.add(new Product("장난감1", "장난감 메이커1", 10000, "url1"));
-                products.add(new Product("장난감2", "장난감 메이커2", 20000, "url2"));
+                Product product1 = Product.builder()
+                        .name("장난감1")
+                        .build();
+                Product product2 = Product.builder()
+                        .name("장난감2")
+                        .build();
+
+                products.add(product1);
+                products.add(product2);
+
                 given(productService.getProducts()).willReturn(products);
             }
 

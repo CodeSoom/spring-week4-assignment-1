@@ -31,7 +31,12 @@ class ProductServiceTest {
     void setUp() {
         productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository);
-        product = new Product("장난감", "장난감 메이커", 10000, "url");
+        product = Product.builder()
+                .name("장난감")
+                .maker("장난감 메이커")
+                .price(10000)
+                .imageUrl("url")
+                .build();
 
         List<Product> products = new ArrayList<>();
         products.add(product);
@@ -85,7 +90,13 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 수정하면 수정된 상품을 리턴한다.")
     void updateProductWithExistingId() {
-        Product newProduct = new Product("새로운 장난감", "새로운 장난감 메이커", 20000, "new url");
+        Product newProduct = Product.builder()
+                .name("new 장난감")
+                .maker("new 장난감 메이커")
+                .price(20000)
+                .imageUrl("new url")
+                .build();
+
         Product updatedProduct = productService.updateProduct(existingId, newProduct);
 
         verify(productRepository).findById(existingId);

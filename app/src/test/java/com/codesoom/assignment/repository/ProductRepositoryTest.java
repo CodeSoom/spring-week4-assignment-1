@@ -27,7 +27,12 @@ class ProductRepositoryTest {
     @BeforeEach
     void prepareProduct() {
         // fixture
-        product = new Product("장난감", "장난감 메이커", 10000, "url");
+        product = Product.builder()
+                .name("장난감")
+                .maker("장난감 메이커")
+                .price(10000)
+                .imageUrl("url")
+                .build();
         productRepository.save(product);
     }
 
@@ -46,8 +51,13 @@ class ProductRepositoryTest {
             void prepareProducts() {
                 productRepository.deleteAll();
 
-                Product product1 = new Product("장난감1", "장난감 메이커", 10000, "url");
-                Product product2 = new Product("장난감2", "장난감 메이커", 10000, "url");
+                Product product1 = Product.builder()
+                        .name("장난감1")
+                        .build();
+                Product product2 = Product.builder()
+                        .name("장난감2")
+                        .build();
+
                 productRepository.save(product1);
                 productRepository.save(product2);
             }
@@ -113,7 +123,12 @@ class ProductRepositoryTest {
         @DisplayName("상품을 저장하고 저장된 상품을 리턴한다.")
         @Test
         void it_saves_a_product_and_returns_the_saved_product() {
-            Product newProduct = new Product("new 장난감", "장난감 메이커", 10000, "url");
+            Product newProduct = Product.builder()
+                    .name("new 장난감")
+                    .maker("new 장난감 메이커")
+                    .price(20000)
+                    .imageUrl("new url")
+                    .build();
 
             Product savedProduct = productRepository.save(newProduct);
 
@@ -142,7 +157,11 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("상품을 삭제하지 않는다.")
             void it_returns_optional_product_with_value() {
-                productRepository.delete(new Product("존재하지 않는 상품", "메이커", 10000, "url"));
+                Product notExistingProduct = Product.builder()
+                        .name("존재하지 않는 장난감")
+                        .build();
+
+                productRepository.delete(notExistingProduct);
 
                 assertThat(productRepository.findAll()).hasSize(1);
             }
