@@ -24,7 +24,7 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        TaskRepository taskRepository = new InMemoryTaskRepository();
+        TaskRepository taskRepository = new TaskRepository();
 
         taskService = new TaskService(taskRepository);
 

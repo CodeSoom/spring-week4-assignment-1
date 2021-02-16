@@ -8,6 +8,9 @@ import com.codesoom.assignment.domain.TaskRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,7 +23,8 @@ class TaskControllerTest {
 
     @BeforeEach
     void setUp() {
-        TaskRepository taskRepository = new InMemoryTaskRepository();
+        TaskRepository taskRepository = new TaskRepository();
+
         taskService = new TaskService(taskRepository);
         taskController = new TaskController(taskService);
 
