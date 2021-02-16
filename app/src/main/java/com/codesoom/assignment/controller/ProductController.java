@@ -15,10 +15,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
+/**
+ * 상품과 관련된 HTTP 요청 처리를 담당합니다.
+ *
+ * @see Product
+ * @see ProductService
+ */
+
 @RestController
 @RequestMapping("/products")
 @CrossOrigin
 public class ProductController {
+
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -31,7 +39,7 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public Product detail(@PathVariable Long id) {
+    public Product listById(@PathVariable Long id) {
         return productService.getProduct(id);
     }
 
