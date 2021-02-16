@@ -67,9 +67,7 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("존재하지 않는 상품 id가 주어졌으므로 상품을 수정할 수 없습니다. 문제의 id = " + id));
 
-        product.update(newProduct);
-
-        return product;
+        return product.update(newProduct);
     }
 
     /**

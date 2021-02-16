@@ -37,11 +37,13 @@ public class Product {
         this.imageUrl = productDto.getImageUrl();
     }
 
-    public void update(Product newProduct) {
+    public Product update(Product newProduct) {
         this.name = newProduct.getName();
         this.maker = newProduct.getMaker();
         this.price = newProduct.getPrice();
         this.imageUrl = newProduct.getImageUrl();
+
+        return this;
     }
 
 }
