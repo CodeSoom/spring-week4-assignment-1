@@ -3,6 +3,7 @@ package com.codesoom.assignment.product.ui;
 import com.codesoom.assignment.product.application.ProductNotFoundException;
 import com.codesoom.assignment.product.application.ProductService;
 import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
+import com.codesoom.assignment.product.ui.dto.ProductSaveDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -20,7 +22,10 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -130,4 +135,23 @@ class ProductMockMvcControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("POST /products는")
+    class Describe_create {
+        ProductSaveDto productSaveDto;
+
+        @BeforeEach
+        void setUp() {
+            productSaveDto = new ProductSaveDto(NAME, MAKER, PRICE, IMAGE_URL);
+        }
+
+        @Test
+        @DisplayName("201 상태코드, Created 상태를 응답한다.")
+        void It_responds_created() throws Exception {
+            mockMvc.perform(post("/products")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(productSaveDto))
+            ).andExpect(status().isCreated());
+        }
+    }
 }
