@@ -18,3 +18,4 @@
 ## TUE
 1. Many TO One 단방향을 사용하자
 - One TO Many 단방향 사용시 불필요한 SQL이 실행된다.
+2. Product entity 만들기
