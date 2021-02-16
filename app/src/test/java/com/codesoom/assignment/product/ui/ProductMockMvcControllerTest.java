@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("ProductController 클래스")
 class ProductMockMvcControllerTest {
     private static final Long PRODUCT_ID = 1L;
-    private static final Long NOT_EXIST_ID = 100L;
+    private static final Long NOT_EXIST_ID = -1L;
 
     private static final String NAME = "snake";
     private static final String MAKER = "cat toy";
