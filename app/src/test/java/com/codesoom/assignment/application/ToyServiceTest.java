@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
 import org.junit.jupiter.api.*;
@@ -7,8 +8,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -16,6 +19,7 @@ import static org.mockito.Mockito.verify;
 @DataJpaTest
 @DisplayName("ToyService의")
 class ToyServiceTest {
+    private final Long givenSavedToyId = 1L;
     private final Long givenUnsavedToyId = 100L;
     private final String givenToyName = "장난감 칼";
     private final String givenToyBrand = "코드숨";
@@ -32,6 +36,15 @@ class ToyServiceTest {
         toyService = new ToyService(toyRepository);
 
         toy = new Toy(givenToyName, givenToyBrand, givenToyPrice, givenToyImageUrl);
+        toy.setId(givenSavedToyId);
+    }
+
+    private void assertToy(Toy toy) {
+        assertThat(toy.getClass()).isEqualTo(Toy.class);
+        assertThat(toy.getName()).isEqualTo(givenToyName);
+        assertThat(toy.getBrand()).isEqualTo(givenToyBrand);
+        assertThat(toy.getPrice()).isEqualTo(givenToyPrice);
+        assertThat(toy.getImageUrl()).isEqualTo(givenToyImageUrl);
     }
 
     @Nested
@@ -75,12 +88,51 @@ class ToyServiceTest {
         }
     }
 
-    @Test
-    void getToys() {
-    }
+    @Nested
+    @DisplayName("getToy 메소드는")
+    class Describe_getToy {
+        private Long givenId;
 
-    @Test
-    void getToy() {
+        @Nested
+        @DisplayName("저장된 toy의 id를 가지고 있다면")
+        class Context_with_saved_id {
+            private Toy found;
+
+            @BeforeEach
+            void setSavedId() {
+                givenId = givenSavedToyId;
+
+                given(toyRepository.findById(givenId)).willReturn(Optional.of(toy));
+            }
+
+            @Test
+            @DisplayName("toy를 리턴한다.")
+            void it_return_toy() {
+                found = toyService.getToy(givenId);
+
+                verify(toyRepository).findById(givenId);
+
+                assertToy(found);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 toy의 id를 가지고 있다면")
+        class Context_with_unsaved_id {
+            @BeforeEach
+            void setUnsavedId() {
+                givenId = givenUnsavedToyId;
+            }
+
+            @Test
+            @DisplayName("toy를 찾을 수 없다는 exception을 던진다.")
+            void it_throw_exception() {
+                assertThatThrownBy(
+                        () -> toyService.getToy(givenId),
+                        "toy를 찾을 수 없다는 예외를 던져야 합니다."
+                ).isInstanceOf(ToyNotFoundException.class);
+            }
+        }
     }
 
     @Test

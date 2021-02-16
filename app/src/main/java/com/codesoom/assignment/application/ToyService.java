@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,8 @@ public class ToyService {
         return toyRepository.findAll();
     }
 
-    public Toy getToy() {
-        return null;
+    public Toy getToy(Long id) {
+        return toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
     }
 
     public Toy createToy() {
