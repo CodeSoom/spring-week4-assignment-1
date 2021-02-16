@@ -17,4 +17,8 @@ public class ProductService {
         return null;
     }
 
+    public ProductResponseDto getProductsById(Long id) {
+        return null;
+    }
+    
 }
