@@ -16,7 +16,7 @@ class ToyTest {
 
     @BeforeEach
     void setToy() {
-        toy = new Toy();
+        toy = new Toy(toyName, toyBrand, toyPrice, toyImageUrl);
     }
 
     @Test

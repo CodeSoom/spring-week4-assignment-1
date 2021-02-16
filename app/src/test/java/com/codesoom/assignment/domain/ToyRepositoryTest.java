@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+@DataJpaTest
 @DisplayName("ToyRepository클래스의")
 class ToyRepositoryTest {
     private final Long toyId = 1L;
@@ -21,6 +24,7 @@ class ToyRepositoryTest {
     private final int toyPrice = 5000;
     private final String toyImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
 
+    @Autowired
     private ToyRepository toyRepository;
     private Toy toy;
 
@@ -28,8 +32,7 @@ class ToyRepositoryTest {
     void setUp() {
         toyRepository = mock(ToyRepository.class);
 
-        toy = new Toy();
-        toy.setName(toyName);
+        toy = new Toy(toyName, toyBrand, toyPrice, toyImageUrl);
     }
 
     @Nested
