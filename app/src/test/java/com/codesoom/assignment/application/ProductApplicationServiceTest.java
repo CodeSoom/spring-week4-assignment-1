@@ -1,6 +1,8 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.adapter.InMemoryProductRepository;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,7 +14,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ProductApplicationService는")
 public class ProductApplicationServiceTest {
-    ProductApplicationService applicationService = new ProductApplicationService();
+    ProductRepository productRepository = new InMemoryProductRepository();
+    ProductApplicationService applicationService = new ProductApplicationService(productRepository);
+    
     List<Product> allProduct;
     Product createdProduct;
 
