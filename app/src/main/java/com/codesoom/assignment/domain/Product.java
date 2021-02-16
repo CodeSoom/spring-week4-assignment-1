@@ -21,6 +21,17 @@ public class Product {
     @Lob
     private String img;
 
+    public Product() {
+    }
+
+    public Product(Long id, String name, String maker, Integer price, String img) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.img = img;
+    }
+
     public Long getId() {
         return id;
     }
