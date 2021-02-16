@@ -23,9 +23,6 @@ configurations {
     runtimeClasspath {
         extendsFrom developmentOnly
     }
-    cucumberRuntime {
-        extendsFrom testImplementation
-    }
 }
 
 repositories {
@@ -44,6 +41,7 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     testImplementation 'io.cucumber:cucumber-java:6.8.1'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:6.10.0'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:29.0-jre'
@@ -85,17 +83,6 @@ tasks.named('test') {
     useJUnitPlatform()
 
     finalizedBy jacocoTestReport
-}
-
-task cucumber() {
-    dependsOn assemble, testClasses
-    doLast {
-        javaexec {
-            main = "io.cucumber.core.cli.Main"
-            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
-            args = ['--plugin', 'pretty', '--glue', 'gradle.cucumber', 'src/test/resources']
-        }
-    }
 }
 
 jacoco {
