@@ -14,8 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -120,7 +119,7 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("GET /products 리퀘스트는")
+    @DisplayName("GET /products/{id} 리퀘스트는")
     class Describe_GET_Product {
         @Nested
         @DisplayName("존재하는 product id를 요청한다면")
@@ -153,6 +152,46 @@ class ProductControllerTest {
             @Test
             void it_returns_200_code_and_product() throws Exception {
                 mockMvc.perform(get("/products/" + givenProductId))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products/{id} 리퀘스트는")
+    class Describe_DELETE_Product {
+        @Nested
+        @DisplayName("존재하는 product id를 요청한다면")
+        class Context_exist_id {
+            Long givenProductId;
+
+            @BeforeEach
+            void setUp() {
+                Product givenProduct = createAndSaveProduct();
+                givenProductId = givenProduct.getId();
+            }
+
+            @DisplayName("204코드를 응답한다")
+            @Test
+            void it_responds_204() throws Exception {
+                mockMvc.perform(delete("/products/{id}", givenProductId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 product id를 요청한다면")
+        class Context_not_exist_id {
+            Long givenProductId = NOT_EXIST_ID;
+
+            @Test
+            @DisplayName("404코드를 응답한다")
+            void it_responds_not_found() throws Exception {
+                mockMvc.perform(delete("/products/{id}", givenProductId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
             }
         }
