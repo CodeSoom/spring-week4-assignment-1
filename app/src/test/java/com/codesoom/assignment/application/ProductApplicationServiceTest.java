@@ -3,10 +3,12 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.adapter.InMemoryProductRepository;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,35 +18,37 @@ public class ProductApplicationServiceTest {
     ProductApplicationService applicationService = new ProductApplicationService(productRepository);
 
     List<Product> allProduct;
-    Product createdProduct;
-
-    @Given("product를 생성하지 않았을 떄")
-    public void product를_생성하지_않았을_떄() {
-        // pass
-    }
+    List<Product> createdProductList = new ArrayList<>();
 
     @When("모든 product를 가져오는 경우")
-    public void 모든_product를_가져오는_경우() {
+    public void getAllProducts() {
         allProduct = applicationService.getAllProducts();
     }
 
     @Then("빈 리스트가 반환된다")
-    public void 빈_리스트가_반환된다() {
+    public void returnEmptyList() {
         assertThat(allProduct).hasSize(0);
     }
 
-    @Given("product를 1개 생성했을 때")
-    public void product를_1개_생성했을_때() {
+    @Given("product를 {int}개 생성했을 때")
+    public void createProduct(int number) {
         String name = "고양이 인형";
         String maker = "라스 공방";
         String price = "1000원";
         String imageURL = "https://magical.dev/static/las.jpg";
-
-        createdProduct = applicationService.createProduct(name, maker, price, imageURL);
+        for (int i = 0; i < number; i++) {
+            Product createdProduct = applicationService.createProduct(name, maker, price, imageURL);
+            createdProductList.add(createdProduct);
+        }
     }
 
-    @Then("이미 생성된 1개의 product를 얻어올 수 있다")
-    public void 이미_생성된_1개의_product를_얻어올_수_있다() {
-        assertThat(allProduct).hasSize(1).contains(createdProduct);
+    @Then("{int}개의 product를 얻어올 수 있다")
+    public void sameSizeAsCreatedProducts(int count) {
+        assertThat(allProduct).hasSize(count);
+    }
+
+    @And("생성된 product들이 포함되어있다")
+    public void containsCreatedProducts() {
+        assertThat(allProduct).contains(createdProductList.toArray(allProduct.toArray(new Product[0])));
     }
 }
