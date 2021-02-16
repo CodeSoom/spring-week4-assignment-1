@@ -4,6 +4,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -33,8 +34,10 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
+        // Mockito를 사용하여 Mock Object 생성
         productRepository = mock(ProductRepository.class);
 
+        // 생성자를 이용하여 Mock Object 주입
         productService = new ProductService(productRepository);
 
         setUpFixtures();
@@ -44,9 +47,7 @@ class ProductServiceTest {
     void setUpFixtures() {
         List<Product> products = new ArrayList<>();
 
-        Product product = new Product();
-        product.setName(PRODUCT_NAME);
-
+        Product product = new Product(VALID_ID, PRODUCT_NAME, "testMaker", 1000, "testUrl");
         products.add(product);
 
         given(productRepository.findAll()).willReturn(products);
@@ -64,28 +65,32 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("모든 상품을 조회한다.")
     void getProducts() {
-
         List<Product> products = productService.getProducts();
 
+        // productService.findAll을 수행했는지 검증
         verify(productRepository).findAll();
 
         assertThat(products).hasSize(1);
 
         Product product = products.get(0);
         assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+        assertThat(product.getId()).isEqualTo(VALID_ID);
     }
 
     @Test
+    @DisplayName("상품목록에 있는 id를 조회하면, 그 id에 해당하는 상품을 리턴한다.")
     void getProductWithExistedId() {
         Product product = productService.getProduct(VALID_ID);
 
-        assertThat(product.getName()).isEqualTo((PRODUCT_NAME));
-
         verify(productRepository).findById(VALID_ID);
+
+        assertThat(product.getName()).isEqualTo((PRODUCT_NAME));
     }
 
     @Test
+    @DisplayName("상품목록에 없는 id를 조회하면, 예외를 던진다.")
     void getProductWithInvalidId() {
         assertThatThrownBy(() -> productService.getProduct(INVALID_ID))
                 .isInstanceOf(ProductNotFoundException.class);
@@ -94,8 +99,8 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("상품을 생성한다.")
     void createProduct() {
-
         Product source = new Product();
         source.setName(PRODUCT_NAME + CREATE_POSTFIX);
 
@@ -108,6 +113,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("상품목록에 있는 id에 해당하는 상품을 수정하면, 수정된 상품을 리턴한다.")
     void updateProductWithExistedId() {
         Product source = new Product();
         source.setName(PRODUCT_NAME+UPDATE_POSTFIX);
@@ -120,6 +126,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("상품목록에 없는 id에 해당하는 상품을 수정하려고 하면, 예외를 던진다.")
     void updateProductWithNotExistedId() {
         Product source = new Product();
         source.setName(PRODUCT_NAME+UPDATE_POSTFIX);
@@ -131,6 +138,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("상품목록에 있는 id에 해당하는 상품을 삭제한다.")
     void deleteProductWithExistedId() {
         productService.deleteProduct(VALID_ID);
 
@@ -139,6 +147,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("상품목록에 없는 id에 해당하는 상품을 삭제하려고 하면, 예외를 던진다.")
     void deleteProductWithNotExistedId() {
         assertThatThrownBy(() -> productService.deleteProduct(INVALID_ID))
                 .isInstanceOf(ProductNotFoundException.class);
