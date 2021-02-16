@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 public class TaskService {
     private TaskRepository taskRepository;
-    private Long newId = 0L;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
@@ -27,7 +26,6 @@ public class TaskService {
 
     public Task createTask(Task source) {
         Task task = new Task();
-        task.setId(generateId());
         task.setTitle(source.getTitle());
 
         return taskRepository.save(source);
@@ -43,10 +41,5 @@ public class TaskService {
     public Task deleteTask(Long id) {
         Task task = taskRepository.find(id);
         return taskRepository.remove(task);
-    }
-
-    private Long generateId() {
-        newId += 1;
-        return newId;
     }
 }

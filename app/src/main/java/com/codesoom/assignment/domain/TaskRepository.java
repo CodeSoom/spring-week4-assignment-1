@@ -10,6 +10,7 @@ import java.util.List;
 public class TaskRepository {
 
     private List<Task> tasks = new ArrayList<>();
+    private Long newId = 0L;
 
     public List<Task> findAll() {
         return tasks;
@@ -23,6 +24,7 @@ public class TaskRepository {
     }
 
     public Task save(Task task) {
+        task.setId(generateId());
         tasks.add(task);
         return task;
     }
@@ -30,5 +32,10 @@ public class TaskRepository {
     public Task remove(Task task) {
         tasks.remove(task);
         return task;
+    }
+
+    private Long generateId() {
+        newId += 1;
+        return newId;
     }
 }
