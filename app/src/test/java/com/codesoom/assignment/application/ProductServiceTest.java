@@ -174,7 +174,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("존재하지 않는 product id가 주어진다면")
+        @DisplayName("존재하지 않는 product id와 수정한 product가 주어진다면")
         class Context_not_exist_product_id {
             Long givenProductId;
             Product source;
