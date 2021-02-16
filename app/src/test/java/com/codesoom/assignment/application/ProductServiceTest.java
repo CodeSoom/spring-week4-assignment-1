@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ActiveProfiles("test")
 @DisplayName("ProductService 클래스")
 class ProductServiceTest {
-    final Long ID = 0L;
     final Long NOT_EXIST_ID = 100L;
     final String NAME = "My Toy";
     final String MAKER = "My Home";
@@ -32,11 +31,10 @@ class ProductServiceTest {
 
     @Autowired
     ProductService productService;
-    @MockBean
-    ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
+        productService.clearData();
     }
 
     //subject
@@ -51,7 +49,6 @@ class ProductServiceTest {
 
     //subject
     void verifyFindProduct(Product product) {
-        assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
@@ -83,12 +80,10 @@ class ProductServiceTest {
         class Context_exist_product_id {
             Long givenProductId;
 
-
             @BeforeEach
             void setUp() {
-                givenProductId = ID;
                 Product givenProduct = createProduct();
-                given(productRepository.findById(ID)).willReturn(Optional.of(givenProduct));
+                givenProductId = givenProduct.getId();
             }
 
             @DisplayName("주어진 id와 일치하는 product를 반환한다")
@@ -102,10 +97,12 @@ class ProductServiceTest {
         @Nested
         @DisplayName("존재하지 않는 product id가 주어진다면")
         class Context_not_exist_product_id {
+            Long givenProductId = NOT_EXIST_ID;
+
             @DisplayName("product를 찾을 수 없다는 예외를 던진다")
             @Test
             void it_returns_exception() {
-                assertThrows(ProductNotFountException.class, () -> productService.find(NOT_EXIST_ID));
+                assertThrows(ProductNotFountException.class, () -> productService.find(givenProductId));
             }
         }
     }
@@ -118,8 +115,7 @@ class ProductServiceTest {
         class Context_product_exist {
             @BeforeEach
             void setUp() {
-                Product givenProduct = createProduct();
-                given(productRepository.findAll()).willReturn(Collections.singletonList(givenProduct));
+                createProduct();
             }
 
             @Test
@@ -133,10 +129,6 @@ class ProductServiceTest {
         @Nested
         @DisplayName("product가 존재하지 않는다면")
         class Context_product_not_exist {
-            @BeforeEach
-            void setUp() {
-                given(productRepository.findAll()).willReturn(Collections.emptyList());
-            }
 
             @Test
             @DisplayName("빈 리스트를 반환한다")
@@ -151,27 +143,29 @@ class ProductServiceTest {
     @DisplayName("update()")
     class Describe_update {
         @Nested
-        @DisplayName("존재하는 product id가 주어진다면")
+        @DisplayName("존재하는 product id와 수정한 product가 주어진다면")
         class Context_exist_product_id {
-            Product givenProduct;
+            Long givenProductId;
+            Product source;
 
             @BeforeEach
             void setUp() {
-                givenProduct = createProduct();
-                given(productRepository.findById(ID)).willReturn(Optional.of(givenProduct));
+                Product givenProduct = createProduct();
+                givenProductId = givenProduct.getId();
+
+                source = new Product();
+                source.setName(UPDATE_NAME);
+                source.setMaker(UPDATE_MAKER);
+                source.setPrice(UPDATE_PRICE);
+                source.setImageURL(UPDATE_IMAGE_URL);
             }
 
             @DisplayName("수정된 product를 반환한다")
             @Test
             void it_returns_product() {
-                givenProduct.setName(UPDATE_NAME);
-                givenProduct.setMaker(UPDATE_MAKER);
-                givenProduct.setPrice(UPDATE_PRICE);
-                givenProduct.setImageURL(UPDATE_IMAGE_URL);
+                Product product = productService.update(givenProductId, source);
 
-                Product product = productService.update(ID, givenProduct);
-
-                assertThat(product.getId()).isEqualTo(ID);
+                assertThat(product.getId()).isEqualTo(givenProductId);
                 assertThat(product.getName()).isEqualTo(UPDATE_NAME);
                 assertThat(product.getMaker()).isEqualTo(UPDATE_MAKER);
                 assertThat(product.getPrice()).isEqualTo(UPDATE_PRICE);
@@ -182,11 +176,23 @@ class ProductServiceTest {
         @Nested
         @DisplayName("존재하지 않는 product id가 주어진다면")
         class Context_not_exist_product_id {
+            Long givenProductId;
+            Product source;
+
+            @BeforeEach
+            void setUp() {
+                givenProductId = NOT_EXIST_ID;
+                source = new Product();
+                source.setName(UPDATE_NAME);
+                source.setMaker(UPDATE_MAKER);
+                source.setPrice(UPDATE_PRICE);
+                source.setImageURL(UPDATE_IMAGE_URL);
+            }
+
             @DisplayName("product를 찾을 수 없다는 예외를 던진다")
             @Test
             void it_returns_exception() {
-                Product givenProduct = createProduct();
-                assertThrows(ProductNotFountException.class, () -> productService.update(NOT_EXIST_ID, givenProduct));
+                assertThrows(ProductNotFountException.class, () -> productService.update(NOT_EXIST_ID, source));
             }
         }
     }
@@ -198,36 +204,31 @@ class ProductServiceTest {
         @Nested
         @DisplayName("존재하는 product id가 주어진다면")
         class Context_exist_product_id {
-            Product givenProduct;
+            Long givenProductId;
 
             @BeforeEach
             void setUp() {
-                givenProduct = createProduct();
+                Product givenProduct = createProduct();
+                givenProductId = givenProduct.getId();
             }
 
             @DisplayName("주어진 id와 일치하는 product를 삭제한다")
             @Test
             void it_delete_product() {
-                //when
-                productService.delete(ID);
-                doThrow(ProductNotFountException.class).when(productRepository).deleteById(ID);
-                //then
-                assertThrows(ProductNotFountException.class, () -> productService.find(ID));
+                productService.delete(givenProductId);
+                assertThrows(ProductNotFountException.class, () -> productService.find(givenProductId));
             }
         }
 
         @Nested
         @DisplayName("존재하지 않는 product id가 주어진다면")
         class Context_not_exist_product_id {
-            @BeforeEach
-            void setUp() {
-                doThrow(ProductNotFountException.class).when(productRepository).deleteById(NOT_EXIST_ID);
-            }
+            Long givenProductId = NOT_EXIST_ID;
 
             @DisplayName("product를 찾을 수 없다는 예외를 던진다")
             @Test
             void it_returns_exception() {
-                assertThrows(ProductNotFountException.class, () -> productService.delete(NOT_EXIST_ID));
+                assertThrows(ProductNotFountException.class, () -> productService.delete(givenProductId));
             }
         }
     }
