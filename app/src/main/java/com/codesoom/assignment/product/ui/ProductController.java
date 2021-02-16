@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 사용자 요청을 처리하여 상품정보를 보여준다.
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
