@@ -37,21 +37,6 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        Mockito.reset(productRepository);
-        setUpCreateProduct();
-        setUpFindNotExistProduct();
-    }
-
-    void setUpCreateProduct() {
-        given(productRepository.save(any(Product.class))).will(invocation -> {
-            Product product = invocation.getArgument(0);
-            product.setId(ID);
-            return product;
-        });
-    }
-
-    void setUpFindNotExistProduct() {
-        given(productRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
     }
 
     //subject

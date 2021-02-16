@@ -55,8 +55,4 @@ public class Product {
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

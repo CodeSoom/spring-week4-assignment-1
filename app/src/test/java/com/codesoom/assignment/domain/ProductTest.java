@@ -17,7 +17,6 @@ class ProductTest {
     @Test
     void create() {
         Product product = new Product();
-        product.setId(ID);
         product.setName(NAME);
         product.setMaker(MAKER);
         product.setPrice(PRICE);
