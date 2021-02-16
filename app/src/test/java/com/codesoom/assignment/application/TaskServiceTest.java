@@ -1,7 +1,9 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.Infra.InMemoryTaskRepository;
 import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.domain.Task;
+import com.codesoom.assignment.domain.TaskRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -22,7 +24,9 @@ class TaskServiceTest {
 
     @BeforeEach
     void setUp() {
-        taskService = new TaskService();
+        TaskRepository taskRepository = new InMemoryTaskRepository();
+
+        taskService = new TaskService(taskRepository);
 
         Task beforeTask = new Task(1L, BEFORE_TASK_TITLE);
         taskService.createTask(beforeTask);

@@ -1,8 +1,10 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.Infra.InMemoryTaskRepository;
 import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.application.TaskService;
 import com.codesoom.assignment.domain.Task;
+import com.codesoom.assignment.domain.TaskRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,7 +20,8 @@ class TaskControllerTest {
 
     @BeforeEach
     void setUp() {
-        taskService = new TaskService();
+        TaskRepository taskRepository = new InMemoryTaskRepository();
+        taskService = new TaskService(taskRepository);
         taskController = new TaskController(taskService);
 
         Task createTask = new Task();

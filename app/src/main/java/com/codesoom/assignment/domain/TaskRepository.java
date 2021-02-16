@@ -2,12 +2,12 @@ package com.codesoom.assignment.domain;
 
 import java.util.List;
 
-public abstract class TaskRepository {
-    public abstract List<Task> findAll();
+public interface TaskRepository {
+    List<Task> findAll();
 
-    public abstract Task find(Long id);
+    Task find(Long id);
 
-    public abstract Task save(Task task);
+    Task save(Task task);
 
-    public abstract Task remove(Task task);
+    Task remove(Task task);
 }

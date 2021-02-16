@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class InMemoryTaskRepository extends TaskRepository {
+public class InMemoryTaskRepository implements TaskRepository {
     private List<Task> tasks = new ArrayList<>();
     private Long newId = 0L;
 
@@ -18,10 +18,12 @@ public class InMemoryTaskRepository extends TaskRepository {
         return newId;
     }
 
+    @Override
     public List<Task> findAll() {
         return tasks;
     }
 
+    @Override
     public Task find(Long id) {
         return tasks.stream()
                 .filter(task -> task.getId().equals(id))
@@ -29,12 +31,14 @@ public class InMemoryTaskRepository extends TaskRepository {
                 .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
+    @Override
     public Task save(Task task) {
         task.setId(generateId());
         tasks.add(task);
         return task;
     }
 
+    @Override
     public Task remove(Task task) {
         tasks.remove(task);
         return task;
