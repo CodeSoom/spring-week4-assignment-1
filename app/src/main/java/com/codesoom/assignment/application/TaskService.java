@@ -21,6 +21,12 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    /**
+     * task 조회 반환
+     *
+     * @param id 고유번호
+     * @return 조회된 Task
+     */
     public Task getTask(Long id) {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
@@ -32,6 +38,13 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    /**
+     * Task 수정 반환
+     *
+     * @param id 고유번호
+     * @param source 수정 할 값
+     * @return 수정완료된 Task
+     */
     public Task updateTask(Long id, Task source) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));

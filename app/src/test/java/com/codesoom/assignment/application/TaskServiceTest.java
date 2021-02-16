@@ -55,13 +55,12 @@ class TaskServiceTest {
     void setUpSaveTask() {
         given(taskRepository.save(any(Task.class))).will(invocation -> {
            Task task = invocation.getArgument(0);
-           task.setId(2L);
            return task;
         });
     }
 
     @Test
-    @DisplayName("Task 전체를 조회하며 사이즈를 확인한다.")
+    @DisplayName("Task List를 가져와 값을 비교한다.")
     void getTasks() {
         List<Task> tasks = taskService.getTasks();
         verify(taskRepository).findAll();
@@ -100,7 +99,6 @@ class TaskServiceTest {
 
         verify(taskRepository).save(any(Task.class));
 
-        assertThat(task.getId()).isEqualTo(2L);
         assertThat(task.getTitle()).isEqualTo(TASK_TITLE + CREATE_POSTFIX);
     }
 
