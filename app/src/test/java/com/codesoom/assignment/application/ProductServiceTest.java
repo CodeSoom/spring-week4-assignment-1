@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 class ProductServiceTest {
 
     private static final String PRODUCT_NAME = "test";
-    private static final String UPDATE_POSTFIX = "new";
+    private static final String UPDATE_POSTFIX = "fish toy";
 
     private ProductService productService;
 
@@ -162,6 +162,9 @@ class ProductServiceTest {
                 product.setName(UPDATE_POSTFIX + "!!!");
 
                 productService.createProduct(product);
+
+                given(productRepository.findById(1L))
+                        .willReturn(ofNullable(product));
             }
 
             @Test
@@ -172,6 +175,7 @@ class ProductServiceTest {
                 verify(productRepository).findById(1L);
 
                 assertThat(product.getName()).isEqualTo(UPDATE_POSTFIX + "!!!");
+//                assertThat(productRepository.findById(1L)).isEqualTo(updatedProduct.getId());
             }
         }
 
