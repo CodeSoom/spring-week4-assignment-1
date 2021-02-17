@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.ProductId;
 import com.codesoom.assignment.domain.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductApplicationService {
     ProductRepository productRepository;
@@ -22,5 +23,10 @@ public class ProductApplicationService {
         Product newProduct = new Product(id, name, maker, price, imageURL);
         productRepository.save(newProduct);
         return newProduct;
+    }
+
+    public void deleteProduct(Long id) {
+        Optional<Product> product = productRepository.find(id);
+        productRepository.remove(product.get());
     }
 }

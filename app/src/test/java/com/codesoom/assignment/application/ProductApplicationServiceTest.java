@@ -71,7 +71,7 @@ public class ProductApplicationServiceTest {
 
     @When("생성된 product를 삭제하면")
     public void deleteProduct() {
-        applicationService.deleteProduct(createdProduct.productId().id());
+        applicationService.deleteProduct(createdProductList.get(0).productId().id());
     }
 
     @Then("생성된 product를 찾을 수 없다")

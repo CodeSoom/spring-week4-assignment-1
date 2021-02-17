@@ -19,6 +19,11 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
+    public void remove(Product product) {
+        inMemoryMap.remove(product.productId().id());
+    }
+
+    @Override
     public Optional<Product> find(Long id) {
         Product product = inMemoryMap.get(id);
         if (product == null) {

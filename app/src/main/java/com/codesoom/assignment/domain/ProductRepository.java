@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface ProductRepository {
     void save(Product product);
+    void remove(Product product);
 
     Optional<Product> find(Long id);
 
