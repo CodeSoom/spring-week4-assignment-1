@@ -28,6 +28,7 @@ class ProductServiceTest {
 
     private Product product;
     private ProductRequest productRequest;
+    private List<Product> products;
 
     private final Long existingId = 1L;
     private final Long notExistingId = 100L;
@@ -52,20 +53,15 @@ class ProductServiceTest {
                 .imageUrl("url")
                 .build();
 
-        List<Product> products = new ArrayList<>();
-        products.add(product);
-
-        given(productRepository.save(any(Product.class)))
-                .will(invocation -> invocation.<Product>getArgument(0));
-
-        given(productRepository.findAll()).willReturn(products);
-        given(productRepository.findById(existingId)).willReturn(Optional.of(product));
-        given(productRepository.findById(notExistingId)).willReturn(Optional.empty());
+        products = new ArrayList<>();
     }
 
     @Test
     @DisplayName("상품을 생성한다.")
     void createProduct() {
+        given(productRepository.save(any(Product.class)))
+                .will(invocation -> invocation.<Product>getArgument(0));
+
         productService.createProduct(productRequest);
 
         verify(productRepository).save(any(Product.class));
@@ -74,16 +70,39 @@ class ProductServiceTest {
     @Test
     @DisplayName("모든 상품을 조회한다.")
     void getProducts() {
+        Product product1 = Product.builder()
+                .id(1L)
+                .name("장난감1")
+                .maker("장난감 메이커1")
+                .price(10000)
+                .imageUrl("url1")
+                .build();
+
+        Product product2 = Product.builder()
+                .id(2L)
+                .name("장난감2")
+                .maker("장난감 메이커2")
+                .price(20000)
+                .imageUrl("url2")
+                .build();
+
+        products.add(product1);
+        products.add(product2);
+
+        given(productRepository.findAll()).willReturn(products);
+
         List<ProductResponse> products = productService.getProducts();
 
         verify(productRepository).findAll();
 
-        assertThat(products).hasSize(1);
+        assertThat(products).hasSize(2);
     }
 
     @Test
     @DisplayName("존재하는 id로 상품을 조회하면 id에 해당하는 상품을 리턴한다.")
     void getProductWithExistingId() {
+        given(productRepository.findById(existingId)).willReturn(Optional.of(product));
+
         productService.getProduct(existingId);
 
         verify(productRepository).findById(existingId);
@@ -92,6 +111,8 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하지 않는 id로 상품을 조회하면 '상품을 찾을 수 없다' 는 예외가 발생한다.")
     void getProductWithNotExistingId() {
+        given(productRepository.findById(notExistingId)).willReturn(Optional.empty());
+
         assertThrows(ProductNotFoundException.class, () -> productService.getProduct(notExistingId));
 
         verify(productRepository).findById(notExistingId);
@@ -100,6 +121,8 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 수정하면 수정된 상품을 리턴한다.")
     void updateProductWithExistingId() {
+        given(productRepository.findById(existingId)).willReturn(Optional.of(product));
+
         ProductRequest updateRequest = ProductRequest.builder()
                 .name("new 장난감")
                 .maker("new 장난감 메이커")
@@ -108,6 +131,7 @@ class ProductServiceTest {
                 .build();
 
         ProductResponse updatedProduct = productService.updateProduct(existingId, updateRequest);
+
 
         verify(productRepository).findById(existingId);
 
@@ -130,6 +154,8 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 삭제하면 상품을 삭제한다.")
     void deleteProductWithExistingId() {
+        given(productRepository.findById(existingId)).willReturn(Optional.of(product));
+
         productService.deleteProduct(existingId);
 
         verify(productRepository).findById(existingId);
