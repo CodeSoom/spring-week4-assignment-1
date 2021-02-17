@@ -13,7 +13,7 @@ public class ProductService {
         return null;
     }
 
-    public ProductResponseDto saveProducts(ProductRequestDto responseDto) {
+    public ProductResponseDto saveProduct(ProductRequestDto responseDto) {
         return null;
     }
 

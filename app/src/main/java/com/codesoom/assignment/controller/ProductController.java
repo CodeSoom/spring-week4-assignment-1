@@ -36,8 +36,8 @@ public class ProductController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ProductResponseDto saveProducts(@RequestBody ProductRequestDto responseDto){
-        return productService.saveProducts(responseDto);
+    public ProductResponseDto saveProduct(@RequestBody ProductRequestDto responseDto){
+        return productService.saveProduct(responseDto);
     }
 
     /**
