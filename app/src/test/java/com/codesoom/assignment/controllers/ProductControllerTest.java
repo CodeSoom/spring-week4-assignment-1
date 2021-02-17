@@ -30,10 +30,10 @@ public class ProductControllerTest {
     @DisplayName("list 메서드는")
     class Describe_list {
         @Nested
-        @DisplayName("고양이 장난감의 목록이 존재하면")
+        @DisplayName("고양이 장난감의 목록이 존재하지 않으면")
         class Context_WithoutProducts {
             @Test
-            @DisplayName("비어 있지 않는 장난감 목록을 반환한다")
+            @DisplayName("비어 있는 장난감 목록을 반환한다")
             void itReturnsWithSomeProducts() {
                 List<Product> products = productController.list();
                 assertThat(products).isEmpty();

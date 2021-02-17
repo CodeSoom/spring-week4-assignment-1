@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,15 +27,37 @@ class ProductControllerWebMvcTest {
     @MockBean
     private ProductService productService;
 
+    @BeforeEach
+    void setUp() {
+
+    }
+
     @Nested
     @DisplayName("list 메서드는")
     class Describe_list {
-
         @Test
         @DisplayName("OK를 리턴한다")
         void itReturnsOKHttpStatus() throws Exception {
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk());
         }
+    }
+
+    @Nested
+    @DisplayName("detail 메서드는")
+    class Describe_detail {
+        @Nested
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        class Context_WithExistedId {
+            private final Long givenExistedId = 1L;
+
+            @Test
+            @DisplayName("OK를 리턴한다")
+            void itReturnsOKHttpStatus() throws Exception {
+                mockMvc.perform(get("/products"+ givenExistedId))
+                        .andExpect(status().isOk());
+            }
+        }
+
     }
 }
