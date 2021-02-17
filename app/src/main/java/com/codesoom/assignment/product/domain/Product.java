@@ -45,10 +45,11 @@ public class Product {
                 .build();
     }
 
-    public void update(String name, String maker, int price, String imageUrl) {
+    public Product update(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+        return this;
     }
 }

@@ -39,12 +39,12 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Long createProduct(@RequestBody ProductSaveRequestDto requestDto) {
+    public ProductResponseDto createProduct(@RequestBody ProductSaveRequestDto requestDto) {
         return productService.createProduct(requestDto);
     }
 
     @PatchMapping("/{id}")
-    public Long updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequestDto requestDto) {
+    public ProductResponseDto updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequestDto requestDto) {
         return productService.updateProduct(id, requestDto);
     }
 

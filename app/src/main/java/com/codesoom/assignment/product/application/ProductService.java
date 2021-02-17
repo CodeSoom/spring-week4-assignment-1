@@ -43,9 +43,9 @@ public class ProductService {
     }
 
     @Transactional
-    public Long createProduct(ProductSaveRequestDto requestDto) {
+    public ProductResponseDto createProduct(ProductSaveRequestDto requestDto) {
         Product saveProduct = productRepository.save(requestDto.toEntity());
-        return saveProduct.getId();
+        return new ProductResponseDto(saveProduct);
     }
 
     /**
@@ -53,14 +53,14 @@ public class ProductService {
      *
      * @param productId  등록된 상품 id
      * @param requestDto 갱신할 상품 정보
-     * @return 갱신된 상품 id
+     * @return 갱신된 상품 정보
      */
     @Transactional
-    public Long updateProduct(long productId, ProductUpdateRequestDto requestDto) {
+    public ProductResponseDto updateProduct(long productId, ProductUpdateRequestDto requestDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
-        product.update(requestDto.getName(), requestDto.getMaker(), requestDto.getPrice(), requestDto.getImageUrl());
-        return product.getId();
+        Product updateProduct = product.update(requestDto.getName(), requestDto.getMaker(), requestDto.getPrice(), requestDto.getImageUrl());
+        return new ProductResponseDto(updateProduct);
     }
 
     /**

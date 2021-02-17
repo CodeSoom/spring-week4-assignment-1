@@ -21,14 +21,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -146,6 +142,7 @@ class ProductMockMvcControllerTest {
     @DisplayName("Patch /products/{id} 는")
     class Describe_updateProduct {
         ProductUpdateRequestDto requestDto;
+
         @Nested
         @DisplayName("갱신되는 상품이 없으면")
         class Context_without_product {
@@ -175,14 +172,15 @@ class ProductMockMvcControllerTest {
             @BeforeEach
             void setUp() {
                 requestDto = new ProductUpdateRequestDto(NAME, MAKER, PRICE, IMAGE_URL);
+                ProductResponseDto product = new ProductResponseDto(PRODUCT_ID, NAME, MAKER, PRICE, IMAGE_URL);
                 given(productService.updateProduct(anyLong(), any(ProductUpdateRequestDto.class)))
-                        .willReturn(eq(PRODUCT_ID));
+                        .willReturn(product);
             }
 
             @DisplayName("200 상태코드, OK 상태와 갱신된 상품 id을 응답한다.")
             @Test
             void It_responds_product_id() throws Exception {
-                mockMvc.perform(patch("/products/{id}", anyLong())
+                mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(requestDto)))
                         .andExpect(status().isOk());
@@ -194,14 +192,16 @@ class ProductMockMvcControllerTest {
     @DisplayName("POST /products는")
     class Describe_createProduct {
         ProductSaveRequestDto requestDto;
+
         @Nested
         @DisplayName("등록할 상품이 주어지면")
         class Context_with_product {
             @BeforeEach
             void setUp() {
                 requestDto = new ProductSaveRequestDto(NAME, MAKER, PRICE, IMAGE_URL);
+                ProductResponseDto product = new ProductResponseDto(PRODUCT_ID, NAME, MAKER, PRICE, IMAGE_URL);
                 given(productService.createProduct(any(ProductSaveRequestDto.class)))
-                        .willReturn(eq(PRODUCT_ID));
+                        .willReturn(product);
             }
 
             @DisplayName("201 상태코드, Created 상태를 응답한다.")

@@ -120,21 +120,20 @@ public class ProductServiceTest {
     void updateProductWithValidId() {
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(product1));
-        ProductUpdateRequestDto expect = ProductUpdateRequestDto.builder()
+        ProductUpdateRequestDto expected = ProductUpdateRequestDto.builder()
                 .name("NEW NAME")
                 .maker("NEW MAKER")
                 .price(1000)
                 .imageUrl("NEW IMAGE")
                 .build();
 
-        Long savedId = productService.updateProduct(anyLong(), expect);
-        Product actual = productRepository.findById(savedId).orElse(null);
+        ProductResponseDto actual = productService.updateProduct(anyLong(), expected);
 
         assertAll(
-                () -> assertThat(actual.getName()).isEqualTo(expect.getName()),
-                () -> assertThat(actual.getMaker()).isEqualTo(expect.getMaker()),
-                () -> assertThat(actual.getPrice()).isEqualTo(expect.getPrice()),
-                () -> assertThat(actual.getImageUrl()).isEqualTo(expect.getImageUrl())
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getMaker()).isEqualTo(expected.getMaker()),
+                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
+                () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl())
         );
     }
 
@@ -178,15 +177,20 @@ public class ProductServiceTest {
         given(productRepository.save(any(Product.class)))
                 .willReturn(product1);
 
-        ProductSaveRequestDto requestDto = ProductSaveRequestDto.builder()
-                .name("NEW NAME")
-                .maker("NEW MAKER")
-                .price(1000)
-                .imageUrl("NEW IMAGE")
+        ProductSaveRequestDto expected = ProductSaveRequestDto.builder()
+                .name(PRODUCT1_NAME)
+                .maker(PRODUCT1_MAKER)
+                .price(PRODUCT1_PRICE)
+                .imageUrl(PRODUCT1_IMAGE)
                 .build();
 
-        Long saved = productService.createProduct(requestDto);
+        ProductResponseDto actual = productService.createProduct(expected);
 
-        assertThat(saved).isNotNull();
+        assertAll(
+                () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
+                () -> assertThat(actual.getMaker()).isEqualTo(expected.getMaker()),
+                () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
+                () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl())
+        );
     }
 }
