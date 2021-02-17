@@ -3,6 +3,7 @@ package com.codesoom.assignment.product.application;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.infra.ProductRepository;
 import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
+import com.codesoom.assignment.product.ui.dto.ProductSaveRequestDto;
 import com.codesoom.assignment.product.ui.dto.ProductUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -168,5 +169,20 @@ public class ProductServiceTest {
                 .isThrownBy(() -> productService.deleteProduct(NOT_EXIST_ID));
 
         verify(productRepository, never()).deleteById(NOT_EXIST_ID);
+    }
+
+    @Test
+    @DisplayName("createProduct 메서드는 상품을 새로 등록할 수 있다.")
+    void createProduct() {
+        ProductSaveRequestDto requestDto = ProductSaveRequestDto.builder()
+                .name("NEW NAME")
+                .maker("NEW MAKER")
+                .price(1000)
+                .imageUrl("NEW IMAGE")
+                .build();
+        
+        Long saved = productService.createProduct(requestDto);
+
+        assertThat(saved).isNotNull();
     }
 }

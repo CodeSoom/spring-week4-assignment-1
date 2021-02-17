@@ -1,5 +1,6 @@
 package com.codesoom.assignment.product.ui.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,7 @@ public class ProductSaveRequestDto {
      * @param price 상품가격
      * @param imageUrl 상품이미지
      */
+    @Builder
     public ProductSaveRequestDto(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;

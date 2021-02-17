@@ -40,7 +40,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long createProduct(@RequestBody ProductSaveRequestDto requestDto) {
-        return productService.createTask(requestDto);
+        return productService.createProduct(requestDto);
     }
 
     @PatchMapping("{id}")

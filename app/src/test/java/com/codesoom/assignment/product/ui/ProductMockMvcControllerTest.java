@@ -200,7 +200,7 @@ class ProductMockMvcControllerTest {
             @BeforeEach
             void setUp() {
                 requestDto = new ProductSaveRequestDto(NAME, MAKER, PRICE, IMAGE_URL);
-                given(productService.createTask(any(ProductSaveRequestDto.class)))
+                given(productService.createProduct(any(ProductSaveRequestDto.class)))
                         .willReturn(eq(PRODUCT_ID));
             }
 

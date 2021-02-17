@@ -43,8 +43,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Long createTask(ProductSaveRequestDto requestDto) {
-        // TODO : 상품을 등록하기
+    public Long createProduct(ProductSaveRequestDto requestDto) {
         return null;
     }
 
