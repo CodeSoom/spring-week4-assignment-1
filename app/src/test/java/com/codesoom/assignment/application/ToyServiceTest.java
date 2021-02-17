@@ -26,6 +26,8 @@ class ToyServiceTest {
     private final String givenToyBrand = "코드숨";
     private final int givenToyPrice = 5000;
     private final String givenToyImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
+    private final String givenUpdatePostfixText = "+";
+    private final int givenUpdatePostfixNumber = 1;
 
     private ToyService toyService;
     private ToyRepository toyRepository;
@@ -137,7 +139,7 @@ class ToyServiceTest {
     }
 
     @Nested
-    @DisplayName("createTask 메소드는")
+    @DisplayName("createToy 메소드는")
     class Describe_createToy {
         private Toy created;
 
@@ -156,8 +158,66 @@ class ToyServiceTest {
         }
     }
 
-    @Test
-    void updateToy() {
+    @Nested
+    @DisplayName("updateToy 메소드는")
+    class Describe_updateToy {
+        private Long givenId;
+        private Toy modifying;
+
+        @BeforeEach
+        void setModifiedToy() {
+            modifying = new Toy(
+                    givenToyName + givenUpdatePostfixText,
+                    givenToyBrand + givenUpdatePostfixText,
+                    givenToyPrice + givenUpdatePostfixNumber,
+                    givenToyImageUrl + givenUpdatePostfixText
+            );
+        }
+
+        @Nested
+        @DisplayName("저장된 taks의 id를 가지고 있다면")
+        class Context_with_saved_id {
+            private Toy modified;
+
+            @BeforeEach
+            void setSavedId() {
+                givenId = givenSavedToyId;
+
+                given(toyRepository.findById(any(Long.class))).willReturn(Optional.of(toy));
+                given(toyRepository.save(any(Toy.class))).will(invocation -> {
+                    return invocation.getArgument(0);
+                });
+            }
+
+            @Test
+            @DisplayName("수정된 toy를 리턴한다.")
+            void it_return_modified_toy() {
+                modified = toyService.updateToy(modifying);
+
+                verify(toyRepository).findById(givenId);
+                verify(toyRepository).save(any(Toy.class));
+
+                assertToy(modified);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 id를 가지고 있다면")
+        class Context_with_unsaved_id {
+            @BeforeEach
+            void setUnsavedId() {
+                givenId = givenUnsavedToyId;
+            }
+
+            @Test
+            @DisplayName("task를 찾을 수 없다는 exception을 던진다.")
+            void it_throw_exception() {
+                assertThatThrownBy(
+                        () -> toyService.updateToy(givenId),
+                        "toy를 찾을 수 없다는 예외를 던져야 합니다."
+                ).isInstanceOf(ToyNotFoundException.class);
+            }
+        }
     }
 
     @Test
