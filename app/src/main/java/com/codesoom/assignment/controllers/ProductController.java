@@ -8,15 +8,14 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
+@CrossOrigin
 public class ProductController {
 
     private final ProductService productService;
@@ -32,9 +31,16 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public Product findOne(@PathVariable Long id) {
-        return productService.findOne();
+    public Product findById(@PathVariable Long id) {
+        return productService.findById(id);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product save(Product product) {
+        return productService.save(product);
+    }
+
 
 
 }

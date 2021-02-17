@@ -60,7 +60,7 @@ class TaskServiceTest {
     }
 
     @Test
-    @DisplayName("Task List를 가져와 값을 비교한다.")
+    @DisplayName("Task 전체 List를 가져와 사이즈와 값이 동일한지 확인한다.")
     void getTasks() {
         List<Task> tasks = taskService.getTasks();
         verify(taskRepository).findAll();
