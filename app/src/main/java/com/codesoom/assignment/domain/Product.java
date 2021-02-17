@@ -2,6 +2,7 @@ package com.codesoom.assignment.domain;
 
 import com.codesoom.assignment.dto.ProductDto;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.persistence.Lob;
 @Entity
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Product {
 
     @Id

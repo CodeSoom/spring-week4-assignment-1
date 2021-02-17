@@ -26,7 +26,7 @@ import java.util.List;
 //TODO        고양이 장난감 삭제하기 - DELETE /products/{id}  -테스트 미작성
 
 /**
- * 고양이 장난감 CURD 컨트롤러.
+ * 장난감 CURD 컨트롤러.
  */
 @RestController
 @RequestMapping("/products")
@@ -90,7 +90,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
-        productService.deleteTask(id);
+        productService.deleteProduct(id);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

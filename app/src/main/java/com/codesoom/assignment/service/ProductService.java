@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
+
     private final ProductRepository productRepository;
 
     /**
@@ -54,6 +55,7 @@ public class ProductService {
                 .build());
     }
 
+
     /**
      * id에 해당하는 장난감을 수정합니다.
      * id에 해당하는 장난감이 없으면 ProductNotFoundException을 던집니다.
@@ -75,7 +77,7 @@ public class ProductService {
      * @param id
      * @throws ProductNotFoundException id에 해당하는 장난감이 없는 경우
      */
-    public void deleteTask(Long id) {
+    public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException(id);
         }

@@ -64,7 +64,7 @@ class ProductControllerTest {
     @DisplayName("Get /products 요청")
     class Describe_getProducts {
         @Nested
-        @DisplayName("저장된 장난감이 있으면")
+        @DisplayName("서비스에 장난감이 있으면")
         class Context_exist_product {
             @BeforeEach
             void setUp() {
@@ -124,7 +124,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("id가 존재하지 않는 장난감이면")
+        @DisplayName("주어진 id로 찾을수 없는 장난감이면")
         class Context_does_not_exist_id {
             @BeforeEach
             void setUp() {
@@ -251,7 +251,7 @@ class ProductControllerTest {
         class Context_does_not_exist_id {
             @BeforeEach
             void setUp() {
-                willThrow(new ProductNotFoundException(NOT_EXIST_ID)).given(productService).deleteTask(NOT_EXIST_ID);
+                willThrow(new ProductNotFoundException(NOT_EXIST_ID)).given(productService).deleteProduct(NOT_EXIST_ID);
             }
 
             @Test
