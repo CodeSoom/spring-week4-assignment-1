@@ -22,6 +22,7 @@ class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     private final Long notExistingId = 100L;
+
     private Product product;
 
     @BeforeEach
@@ -33,6 +34,7 @@ class ProductRepositoryTest {
                 .price(10000)
                 .imageUrl("url")
                 .build();
+
         productRepository.save(product);
     }
 
@@ -53,9 +55,16 @@ class ProductRepositoryTest {
 
                 Product product1 = Product.builder()
                         .name("장난감1")
+                        .maker("장난감 메이커1")
+                        .price(10000)
+                        .imageUrl("url1")
                         .build();
+
                 Product product2 = Product.builder()
                         .name("장난감2")
+                        .maker("장난감 메이커2")
+                        .price(20000)
+                        .imageUrl("url2")
                         .build();
 
                 productRepository.save(product1);
