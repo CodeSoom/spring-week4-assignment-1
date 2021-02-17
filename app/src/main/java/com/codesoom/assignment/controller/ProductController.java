@@ -38,9 +38,7 @@ public class ProductController {
      */
     @GetMapping
     public List<ProductResponse> list() {
-        List<Product> products = productService.getProducts();
-
-        return ProductResponse.listOf(products);
+        return productService.getProducts();
     }
 
     /**
@@ -51,9 +49,7 @@ public class ProductController {
      */
     @GetMapping("{id}")
     public ProductResponse find(@PathVariable Long id) {
-        Product foundProduct = productService.getProduct(id);
-
-        return ProductResponse.of(foundProduct);
+        return productService.getProduct(id);
     }
 
     /**
@@ -65,10 +61,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse create(@RequestBody ProductRequest productRequest) {
-        Product product = productRequest.toProduct();
-        Product createdProduct = productService.createProduct(product);
-
-        return ProductResponse.of(createdProduct);
+        return productService.createProduct(productRequest);
     }
 
     /**
@@ -80,10 +73,7 @@ public class ProductController {
      */
     @PatchMapping("{id}")
     public ProductResponse update(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
-        Product product = productRequest.toProduct();
-        Product updatedProduct = productService.updateProduct(id, product);
-
-        return ProductResponse.of(updatedProduct);
+        return productService.updateProduct(id, productRequest);
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductRequest;
+import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 상품과 관련된 비즈니스 로직을 담당합니다.
@@ -26,8 +27,10 @@ public class ProductService {
     /**
      * 모든 상품을 리턴합니다.
      */
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getProducts() {
+        List<Product> products = productRepository.findAll();
+
+        return ProductResponse.listOf(products);
     }
 
     /**
@@ -37,22 +40,24 @@ public class ProductService {
      * @return 주어진 id에 해당하는 상품
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 떄 발생하는 예외
      */
-    public Product getProduct(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-
-        return product.orElseThrow(() ->
+    public ProductResponse getProduct(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("존재하지 않는 상품 id가 주어졌으므로 상품을 찾을 수 없습니다. 문제의 id = " + id));
+
+        return ProductResponse.of(product);
     }
 
     /**
      * 주어진 상품을 저장한 뒤, 저장된 상품을 리턴합니다.
      *
-     * @param product 저장 하고자 하는 상품
-     * @return 저장 된 상품
+     * @param productRequest 저장 하고자 하는 상품
+     * @return 저장된 상품
      */
     @Transactional
-    public Product createProduct(Product product) {
-        return productRepository.save(product);
+    public ProductResponse createProduct(ProductRequest productRequest) {
+        Product savedProduct = productRepository.save(productRequest.toProduct());
+
+        return ProductResponse.of(savedProduct);
     }
 
     /**
@@ -61,13 +66,16 @@ public class ProductService {
      * @param id 수정하고자 하는 상품의 id
      * @return 수정된 상품
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 떄 발생하는 예외
+     * @parm productRequest 수정 하고자 하는 상품
      */
     @Transactional
-    public Product updateProduct(Long id, Product newProduct) {
+    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("존재하지 않는 상품 id가 주어졌으므로 상품을 수정할 수 없습니다. 문제의 id = " + id));
 
-        return product.update(newProduct);
+        Product updatedProduct = product.update(productRequest.toProduct());
+
+        return ProductResponse.of(updatedProduct);
     }
 
     /**

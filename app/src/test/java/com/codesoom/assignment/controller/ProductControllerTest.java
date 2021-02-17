@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductRequest;
+import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,13 +43,13 @@ class ProductControllerTest {
 
     @MockBean
     private ProductService productService;
-    
+
     private final Long existingId = 1L;
     private final Long notExistingId = 100L;
 
-    private List<Product> products;
-    private Product product;
+    private List<ProductResponse> products;
     private ProductRequest productRequest;
+    private ProductResponse productResponse;
 
     @BeforeEach
     void setUp() {
@@ -62,7 +62,8 @@ class ProductControllerTest {
 
         products = new ArrayList<>();
 
-        product = Product.builder()
+        productResponse = ProductResponse.builder()
+                .id(1L)
                 .name("장난감")
                 .maker("장난감 메이커")
                 .price(10000)
@@ -78,15 +79,24 @@ class ProductControllerTest {
         class Context_with_products {
             @BeforeEach
             void setUp() {
-                Product product1 = Product.builder()
+                ProductResponse productResponse1 = ProductResponse.builder()
+                        .id(1L)
                         .name("장난감1")
-                        .build();
-                Product product2 = Product.builder()
-                        .name("장난감2")
+                        .maker("장난감 메이커1")
+                        .price(10000)
+                        .imageUrl("url1")
                         .build();
 
-                products.add(product1);
-                products.add(product2);
+                ProductResponse productResponse2 = ProductResponse.builder()
+                        .id(2L)
+                        .name("장난감2")
+                        .maker("장난감 메이커2")
+                        .price(20000)
+                        .imageUrl("url2")
+                        .build();
+
+                products.add(productResponse1);
+                products.add(productResponse2);
 
                 given(productService.getProducts()).willReturn(products);
             }
@@ -126,7 +136,7 @@ class ProductControllerTest {
         class Context_with_an_existing_product_id {
             @BeforeEach
             void setUp() {
-                given(productService.getProduct(existingId)).willReturn(product);
+                given(productService.getProduct(existingId)).willReturn(productResponse);
             }
 
             @Test
@@ -173,8 +183,8 @@ class ProductControllerTest {
         class Context_with_product {
             @BeforeEach
             void setUp() {
-                given(productService.createProduct(any(Product.class)))
-                        .willReturn(product);
+                given(productService.createProduct(any(ProductRequest.class)))
+                        .willReturn(productResponse);
             }
 
             @Test
@@ -201,8 +211,8 @@ class ProductControllerTest {
         class Context_with_an_existing_product_id {
             @BeforeEach
             void setUp() {
-                given(productService.updateProduct(eq(existingId), any(Product.class)))
-                        .willReturn(product);
+                given(productService.updateProduct(eq(existingId), any(ProductRequest.class)))
+                        .willReturn(productResponse);
 
             }
 
@@ -226,7 +236,7 @@ class ProductControllerTest {
         class Context_with_not_existing_product_id {
             @BeforeEach
             void setUp() {
-                given(productService.updateProduct(eq(notExistingId), any(Product.class)))
+                given(productService.updateProduct(eq(notExistingId), any(ProductRequest.class)))
                         .willThrow(new ProductNotFoundException());
             }
 

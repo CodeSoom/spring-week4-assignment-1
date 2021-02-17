@@ -1,6 +1,8 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductRequest;
+import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -22,7 +25,9 @@ class ProductServiceTest {
 
     private ProductRepository productRepository;
     private ProductService productService;
+
     private Product product;
+    private ProductRequest productRequest;
 
     private final Long existingId = 1L;
     private final Long notExistingId = 100L;
@@ -31,7 +36,16 @@ class ProductServiceTest {
     void setUp() {
         productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository);
+
         product = Product.builder()
+                .id(1L)
+                .name("장난감")
+                .maker("장난감 메이커")
+                .price(10000)
+                .imageUrl("url")
+                .build();
+
+        productRequest = ProductRequest.builder()
                 .name("장난감")
                 .maker("장난감 메이커")
                 .price(10000)
@@ -52,17 +66,15 @@ class ProductServiceTest {
     @Test
     @DisplayName("상품을 생성한다.")
     void createProduct() {
-        Product addedProduct = productService.createProduct(product);
+        productService.createProduct(productRequest);
 
-        verify(productRepository).save(product);
-
-        assertThat(addedProduct).isEqualTo(product);
+        verify(productRepository).save(any(Product.class));
     }
 
     @Test
     @DisplayName("모든 상품을 조회한다.")
     void getProducts() {
-        List<Product> products = productService.getProducts();
+        List<ProductResponse> products = productService.getProducts();
 
         verify(productRepository).findAll();
 
@@ -72,11 +84,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 조회하면 id에 해당하는 상품을 리턴한다.")
     void getProductWithExistingId() {
-        Product foundProduct = productService.getProduct(existingId);
+        productService.getProduct(existingId);
 
         verify(productRepository).findById(existingId);
-
-        assertThat(foundProduct).isEqualTo(product);
     }
 
     @Test
@@ -90,27 +100,29 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 수정하면 수정된 상품을 리턴한다.")
     void updateProductWithExistingId() {
-        Product newProduct = Product.builder()
+        ProductRequest updateRequest = ProductRequest.builder()
                 .name("new 장난감")
                 .maker("new 장난감 메이커")
                 .price(20000)
                 .imageUrl("new url")
                 .build();
 
-        Product updatedProduct = productService.updateProduct(existingId, newProduct);
+        ProductResponse updatedProduct = productService.updateProduct(existingId, updateRequest);
 
         verify(productRepository).findById(existingId);
 
-        assertThat(updatedProduct.getName()).isEqualTo(newProduct.getName());
-        assertThat(updatedProduct.getMaker()).isEqualTo(newProduct.getMaker());
-        assertThat(updatedProduct.getPrice()).isEqualTo(newProduct.getPrice());
-        assertThat(updatedProduct.getImageUrl()).isEqualTo(newProduct.getImageUrl());
+        assertAll(
+                () -> assertThat(updatedProduct.getName()).isEqualTo(updateRequest.getName()),
+                () -> assertThat(updatedProduct.getMaker()).isEqualTo(updateRequest.getMaker()),
+                () -> assertThat(updatedProduct.getPrice()).isEqualTo(updateRequest.getPrice()),
+                () -> assertThat(updatedProduct.getImageUrl()).isEqualTo(updateRequest.getImageUrl())
+        );
     }
 
     @Test
     @DisplayName("존재하지 않는 id로 상품을 수정하면 '상품을 찾을 수 없다' 는 예외가 발생한다.")
     void updateProductWithNotExistingId() {
-        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(notExistingId, product));
+        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(notExistingId, productRequest));
 
         verify(productRepository).findById(notExistingId);
     }
