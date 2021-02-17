@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -34,8 +35,9 @@ public class ProductService {
      * @return 등록된 상품
      */
     public ProductResponseDto getProduct(Long productId) {
-        // TODO : 응답용 상품을 리턴
-        return null;
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        return new ProductResponseDto(product);
     }
 
     public Long createTask(ProductSaveRequestDto requestDto) {

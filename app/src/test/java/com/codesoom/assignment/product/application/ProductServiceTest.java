@@ -87,10 +87,11 @@ public class ProductServiceTest {
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(product1));
 
-        ProductResponseDto expect = productService.getProduct(anyLong());
+        ProductResponseDto actual = productService.getProduct(anyLong());
 
         assertAll(
-                () -> assertThat(expect).isEqualTo(responseDto1)
+                () -> assertThat(actual).isEqualTo(responseDto1),
+                () -> assertThat(actual.getId()).isEqualTo(PRODUCT1_ID)
         );
     }
 }
