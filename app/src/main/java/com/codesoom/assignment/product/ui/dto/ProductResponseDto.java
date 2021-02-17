@@ -3,6 +3,9 @@ package com.codesoom.assignment.product.ui.dto;
 import com.codesoom.assignment.product.domain.Product;
 import lombok.Data;
 
+/**
+ * 상품의 정보를 담은 응답 DTO.
+ */
 @Data
 public class ProductResponseDto {
 
@@ -16,6 +19,14 @@ public class ProductResponseDto {
 
     private String imageUrl;
 
+    /**
+     * 상품정보 응답 생성자.
+     * @param id 상품 식별자
+     * @param name 상품명
+     * @param maker 상품제조사
+     * @param price 상품가격
+     * @param imageUrl 상품이미지
+     */
     public ProductResponseDto(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
@@ -24,6 +35,10 @@ public class ProductResponseDto {
         this.imageUrl = imageUrl;
     }
 
+    /**
+     * 상품 정보를 응답 DTO로 변경하는 생성자
+     * @param product 상품 entity
+     */
     public ProductResponseDto(Product product) {
         this.id = product.getId();
         this.name = product.getName();

@@ -17,12 +17,7 @@ public class ProductTest {
 
     @BeforeEach
     void setUp() {
-        product = Product.builder()
-                .name(NAME)
-                .maker(MAKER)
-                .price(PRICE)
-                .imageUrl(IMAGE_URL)
-                .build();
+        product = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
     }
 
     @DisplayName("getName은 상품명을 리턴한다")
@@ -37,7 +32,7 @@ public class ProductTest {
         assertThat(product.getMaker()).isEqualTo(MAKER);
     }
 
-    @DisplayName("getPrice 상품 가격을 리턴한다")
+    @DisplayName("getPrice는 상품 가격을 리턴한다")
     @Test
     void getPrice() {
         assertThat(product.getPrice()).isEqualTo(PRICE);

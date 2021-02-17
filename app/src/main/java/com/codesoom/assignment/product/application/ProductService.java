@@ -9,11 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * 사용자 요청을 받아 상품 정보을 다룬다.
+ * 상품 정보을 다룬다.
  */
 @Service
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     /**
-     * 등록된 모든 상품들을 가져온다.
+     * 등록된 모든 상품 목록을 가져온다.
      */
     public List<ProductResponseDto> getProducts() {
         return productRepository.findAll().stream()

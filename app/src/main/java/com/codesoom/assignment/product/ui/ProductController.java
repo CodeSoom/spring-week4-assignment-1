@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 사용자 요청을 처리하여 상품정보를 보여준다.
+ * 상품에 대한 사용자 요청을 처리한다.
  */
 @RestController
 @RequiredArgsConstructor

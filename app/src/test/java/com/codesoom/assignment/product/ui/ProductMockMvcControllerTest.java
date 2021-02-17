@@ -92,7 +92,7 @@ class ProductMockMvcControllerTest {
     }
 
     @Nested
-    @DisplayName("GET /products/:id 는")
+    @DisplayName("GET /products/{id} 는")
     class Describe_getProduct {
 
         @Nested
@@ -143,7 +143,7 @@ class ProductMockMvcControllerTest {
     }
 
     @Nested
-    @DisplayName("Patch /products/:id 는")
+    @DisplayName("Patch /products/{id} 는")
     class Describe_updateProduct {
         ProductUpdateRequestDto requestDto;
         @Nested
@@ -216,7 +216,7 @@ class ProductMockMvcControllerTest {
     }
 
     @Nested
-    @DisplayName("DELETE /product/:id 는")
+    @DisplayName("DELETE /product/{id} 는")
     class Describe_deleteProduct {
 
         @Nested

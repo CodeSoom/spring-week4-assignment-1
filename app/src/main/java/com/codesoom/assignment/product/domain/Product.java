@@ -28,11 +28,20 @@ public class Product {
     private String imageUrl;
 
     @Builder
-    public Product(Long id, String name, String maker, int price, String imageUrl) {
+    private Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public static Product of(String name, String maker, int price, String imageUrl) {
+        return Product.builder()
+                .name(name)
+                .maker(maker)
+                .price(price)
+                .imageUrl(imageUrl)
+                .build();
     }
 }

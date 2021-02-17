@@ -74,7 +74,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("등록된 상품 목록을 리턴한다")
+    @DisplayName("getProducts 메서드는 등록된 상품 목록을 리턴한다")
     void getProducts() {
         given(productRepository.findAll()).willReturn(products);
 
@@ -84,7 +84,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("등록된 상품 id에 해당하는 상품을 리턴한다")
+    @DisplayName("getProducts 메서드는 등록된 상품 id에 해당하는 상품을 리턴한다")
     void getProductWithValidId() {
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(product1));
@@ -98,7 +98,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("등록되지 않은 상품 id로 상품 조회시 예외발생")
+    @DisplayName("getProducts 등록되지 않은 상품 id로 상품 조회시 예외발생한다.")
     void getProductWithInValidId() {
         given(productRepository.findById(anyLong()))
                 .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
