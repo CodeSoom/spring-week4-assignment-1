@@ -55,6 +55,7 @@ class ProductServiceTest {
         assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
     }
 
+
     @Nested
     @DisplayName("create()")
     class Describe_create {
@@ -79,10 +80,11 @@ class ProductServiceTest {
         @DisplayName("존재하는 product id가 주어진다면")
         class Context_exist_product_id {
             Long givenProductId;
+            Product givenProduct;
 
             @BeforeEach
             void setUp() {
-                Product givenProduct = createProduct();
+                givenProduct = createProduct();
                 givenProductId = givenProduct.getId();
             }
 
@@ -90,6 +92,8 @@ class ProductServiceTest {
             @Test
             void it_returns_product() {
                 Product product = productService.find(givenProductId);
+
+                assertThat(product).isEqualTo(givenProduct);
                 verifyFindProduct(product);
             }
         }
@@ -119,7 +123,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("product 리스트를 반환한다")
+            @DisplayName("product 가 포함된 리스트를 반환한다")
             void it_return_product_list() {
                 List<Product> list = productService.findAll();
                 assertThat(list).isNotEmpty();
