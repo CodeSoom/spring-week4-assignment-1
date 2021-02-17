@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -24,6 +25,7 @@ import static org.mockito.BDDMockito.given;
 public class ProductServiceTest {
     private static final Long PRODUCT1_ID = 1L;
     private static final Long PRODUCT2_ID = 2L;
+    private static final Long NOT_EXIST_ID = -1L;
     private static final String PRODUCT1_NAME = "product1";
     private static final String PRODUCT2_NAME = "product2";
     private static final String PRODUCT1_MAKER = "maker1";
@@ -93,5 +95,15 @@ public class ProductServiceTest {
                 () -> assertThat(actual).isEqualTo(responseDto1),
                 () -> assertThat(actual.getId()).isEqualTo(PRODUCT1_ID)
         );
+    }
+
+    @Test
+    @DisplayName("등록되지 않은 상품 id로 상품 조회시 예외발생")
+    void getProductWithInValidId() {
+        given(productRepository.findById(anyLong()))
+                .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+
+        assertThatExceptionOfType(ProductNotFoundException.class)
+                .isThrownBy(() ->productService.getProduct(anyLong()));
     }
 }
