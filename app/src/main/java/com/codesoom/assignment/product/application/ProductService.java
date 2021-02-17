@@ -1,9 +1,10 @@
 package com.codesoom.assignment.product.application;
 
-import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.infra.ProductRepository;
 import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
 import com.codesoom.assignment.product.ui.dto.ProductSaveRequestDto;
 import com.codesoom.assignment.product.ui.dto.ProductUpdateRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,10 @@ import java.util.List;
  * 사용자 요청을 받아 상품 정보을 다룬다.
  */
 @Service
+@RequiredArgsConstructor
 public class ProductService {
+    private final ProductRepository productRepository;
+
     public List<ProductResponseDto> getProducts() {
         // TODO : 응답용 상품 목록을 리턴
         return null;

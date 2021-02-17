@@ -1,5 +1,6 @@
 package com.codesoom.assignment.product.ui.dto;
 
+import com.codesoom.assignment.product.domain.Product;
 import lombok.Data;
 
 @Data
@@ -21,5 +22,13 @@ public class ProductResponseDto {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public ProductResponseDto(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
     }
 }
