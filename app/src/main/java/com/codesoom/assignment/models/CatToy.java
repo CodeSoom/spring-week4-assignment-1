@@ -1,5 +1,9 @@
 package com.codesoom.assignment.models;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CatToy implements Toy {
     private final long id;
     private final String name;
@@ -7,12 +11,13 @@ public class CatToy implements Toy {
     private final double price;
     private final String imageURL;
 
+    @JsonCreator
     public CatToy(
-            long id,
-            String name,
-            String brand,
-            double price,
-            String imageURL
+            @JsonProperty("id") long id,
+            @JsonProperty("name") String name,
+            @JsonProperty("brand") String brand,
+            @JsonProperty("price") double price,
+            @JsonProperty("imageURL") String imageURL
     ) {
         this.id = id;
         this.name = name;
@@ -22,26 +27,31 @@ public class CatToy implements Toy {
     }
 
     @Override
+    @JsonGetter
     public long id() {
         return this.id;
     }
 
     @Override
+    @JsonGetter
     public String name() {
         return this.name;
     }
 
     @Override
+    @JsonGetter
     public String brand() {
         return this.brand;
     }
 
     @Override
+    @JsonGetter
     public double price() {
         return this.price;
     }
 
     @Override
+    @JsonGetter
     public String imageURL() {
         return this.imageURL;
     }
