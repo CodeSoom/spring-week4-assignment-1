@@ -52,7 +52,7 @@ public class ProductService {
      * @return 저장된 상품
      */
     public Product createProduct(Product source) {
-        Product product = new Product(source.getName(), source.getMaker(), source.getPrice(), source.getImgUrl());
+        Product product = new Product(source.getName(), source.getMaker(), source.getPrice(), source.getImageUrl());
 
         return productRepository.save(product);
     }
@@ -72,7 +72,7 @@ public class ProductService {
         product.setName(source.getName());
         product.setMaker(source.getMaker());
         product.setPrice(source.getPrice());
-        product.setImgUrl(source.getImgUrl());
+        product.setImageUrl(source.getImageUrl());
 
         return product;
     }

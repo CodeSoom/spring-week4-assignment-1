@@ -13,24 +13,24 @@ public class Product {
     private String name;
     private String maker;
     private int price;
-    private String imgUrl;
+    private String imageUrl;
 
     public Product() {
     }
 
-    public Product(String name, String maker, int price, String imgUrl) {
+    public Product(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imgUrl = imgUrl;
+        this.imageUrl = imageUrl;
     }
 
-    public Product(Long id, String name, String maker, int price, String imgUrl) {
+    public Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imgUrl = imgUrl;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -65,11 +65,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
