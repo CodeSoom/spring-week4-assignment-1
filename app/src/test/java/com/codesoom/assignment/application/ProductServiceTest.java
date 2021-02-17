@@ -44,7 +44,7 @@ class ProductServiceTest {
         product.setMaker(MAKER);
         product.setPrice(PRICE);
         product.setImageUrl(IMAGE_URL);
-        return productService.save(product);
+        return productService.create(product);
     }
 
     //subject
@@ -63,13 +63,22 @@ class ProductServiceTest {
 
         @BeforeEach
         void setUp() {
-            givenProduct = createProduct();
+            givenProduct = new Product();
+            givenProduct.setName(NAME);
+            givenProduct.setMaker(MAKER);
+            givenProduct.setPrice(PRICE);
+            givenProduct.setImageUrl(IMAGE_URL);
         }
 
         @DisplayName("생성된 product를 반환한다")
         @Test
         void it_returns_created_product() {
-            verifyFindProduct(givenProduct);
+            Product product = productService.create(givenProduct);
+
+            assertThat(product.getName()).isEqualTo(givenProduct.getName());
+            assertThat(product.getMaker()).isEqualTo(givenProduct.getMaker());
+            assertThat(product.getPrice()).isEqualTo(givenProduct.getPrice());
+            assertThat(product.getImageUrl()).isEqualTo(givenProduct.getImageUrl());
         }
     }
 

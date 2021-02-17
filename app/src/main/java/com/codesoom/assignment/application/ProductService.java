@@ -28,7 +28,7 @@ public class ProductService {
      * @param   source 새로운 product 정보
      * @return  생성된 새로운 product
      */
-    public Product save(Product source) {
+    public Product create(Product source) {
         return productRepository.save(source);
     }
 
@@ -66,7 +66,7 @@ public class ProductService {
         product.setPrice(source.getPrice());
         product.setImageUrl(source.getImageUrl());
 
-        return save(product);
+        return create(product);
     }
 
     /**

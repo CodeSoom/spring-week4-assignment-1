@@ -52,7 +52,7 @@ class ProductControllerTest {
 
     Product createAndSaveProduct() {
         Product product = createProduct();
-        return productService.save(product);
+        return productService.create(product);
     }
 
     @BeforeEach
