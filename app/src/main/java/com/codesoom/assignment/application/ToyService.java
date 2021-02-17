@@ -23,8 +23,8 @@ public class ToyService {
         return toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
     }
 
-    public Toy createToy() {
-        return null;
+    public Toy createToy(Toy toy) {
+        return toyRepository.save(toy);
     }
 
     public Toy updateToy() {

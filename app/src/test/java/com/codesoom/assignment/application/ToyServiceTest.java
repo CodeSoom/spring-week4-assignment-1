@@ -139,36 +139,20 @@ class ToyServiceTest {
     @Nested
     @DisplayName("createTask 메소드는")
     class Describe_createToy {
-        private int size;
         private Toy created;
 
-        @Nested
-        @DisplayName("toy를 추가하고,")
-        class It_create_toy {
-            @BeforeEach
-            void createToy() {
-                size = toyService.getToys().size();
+        @Test
+        @DisplayName("추가된 toy를 리턴한다.")
+        void it_return_created_toy() {
+            given(toyRepository.save(any(Toy.class))).will(invocation -> {
+                return invocation.getArgument(0);
+            });
 
-                given(toyRepository.save(any(Toy.class))).will(invocation -> {
-                    return invocation.getArgument(0);
-                });
+            created = toyService.createToy(toy);
 
-                created = toyService.createToy(toy);
+            verify(toyRepository).save(any(Toy.class));
 
-                verify(toyRepository).save(any(Toy.class));
-            }
-
-            @Test
-            @DisplayName("추가된 toy를 리턴한다.")
-            void it_return_created_toy() {
-                assertToy(created);
-            }
-
-            @Test
-            @DisplayName("task 리스트의 크기를 1 증가시킨다.")
-            void it_count_up_toy_list_size() {
-                assertThat(toyService.getToys().size()).isEqualTo(size + 1);
-            }
+            assertToy(created);
         }
     }
 
