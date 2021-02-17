@@ -37,6 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ProductControllerTest {
 
+    private final long ID = 1L;
+    private final long NOT_EXIST_ID = 100L;
+
     @Autowired
     MockMvc mockMvc;
 
@@ -48,10 +51,12 @@ class ProductControllerTest {
 
     private List<Product> productList;
     private Product product;
+    private Product product2;
 
     @BeforeEach
     void setUp() {
-        product = new Product(1L, "장난감 뱀", "장난감 컴퍼니", 10000, "뱀.jpg");
+        product = new Product(ID, "장난감 뱀", "장난감 컴퍼니", 10000, "뱀.jpg");
+        product2 = new Product(2L, "장난감 곰", "장난감 컴퍼니", 20000, "곰.jpg");
     }
 
 
@@ -64,9 +69,7 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 productList = new ArrayList<>();
-                Product product1 = new Product(1L, "장난감 뱀", "장난감 컴퍼니", 10000, "뱀.jpg");
-                Product product2 = new Product(2L, "장난감 곰", "장난감 컴퍼니", 20000, "곰.jpg");
-                productList.add(product1);
+                productList.add(product);
                 productList.add(product2);
                 given(productService.getProducts()).willReturn(productList);
             }
@@ -105,13 +108,13 @@ class ProductControllerTest {
         class Context_exist_id {
             @BeforeEach
             void setUp() {
-                given(productService.getProduct(1L)).willReturn(product);
+                given(productService.getProduct(ID)).willReturn(product);
             }
 
             @Test
             @DisplayName("해당하는 장난감을 응답한다")
             void it_return_empty_list() throws Exception {
-                mockMvc.perform(get("/products/{id}", 1L)
+                mockMvc.perform(get("/products/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(status().isOk())
@@ -125,17 +128,17 @@ class ProductControllerTest {
         class Context_does_not_exist_id {
             @BeforeEach
             void setUp() {
-                given(productService.getProduct(100L)).willThrow(new ProductNotFoundException(100L));
+                given(productService.getProduct(NOT_EXIST_ID)).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
 
             @Test
             @DisplayName("응답코드는 404이며 id가 존재하지 않는다는 메세지를 응답한다.")
             void it_return_not_found() throws Exception {
-                mockMvc.perform(get("/products/{id}", 100L)
+                mockMvc.perform(get("/products/{id}", NOT_EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(status().isNotFound())
-                        .andExpect(content().string("There is no product number " + 100L));
+                        .andExpect(content().string("There is no product number " + NOT_EXIST_ID));
             }
         }
     }
@@ -182,25 +185,26 @@ class ProductControllerTest {
     @DisplayName("Patch /products/{id} 요청")
     class Describe_patchProduct {
         Product change;
+
         @Nested
         @DisplayName("id와 ProductDto가 있으면")
         class Context_exist_id_and_productDto {
             @BeforeEach
             void setUp() {
-                change = new Product(1L,"바뀐 장난감","다른 회사",500,"바뀐이미지.jpg");
-                given(productService.updateProduct(eq(1L), any(ProductDto.class))).willReturn(change);
+                change = new Product(ID, "바뀐 장난감", "다른 회사", 500, "바뀐이미지.jpg");
+                given(productService.updateProduct(eq(ID), any(ProductDto.class))).willReturn(change);
             }
 
             @Test
             @DisplayName("응답코드는 200이며 변경된 장난감을 응답한다.")
             void it_return_changed_product() throws Exception {
-                mockMvc.perform(patch("/products/{id}",1L)
+                mockMvc.perform(patch("/products/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(change))
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("바뀐 장난감"));
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("name").value("바뀐 장난감"));
             }
         }
 
@@ -209,18 +213,19 @@ class ProductControllerTest {
         class Context_does_not_exist_id {
             @BeforeEach
             void setUp() {
-                change = new Product(1L,"바뀐 장난감","다른 회사",500,"바뀐이미지.jpg");
-                given(productService.updateProduct(eq(100L), any(ProductDto.class))).willThrow(new ProductNotFoundException(100L));
+                change = new Product(ID, "바뀐 장난감", "다른 회사", 500, "바뀐이미지.jpg");
+                given(productService.updateProduct(eq(NOT_EXIST_ID), any(ProductDto.class))).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
+
             @Test
             @DisplayName("응답코드는 404이며 에러메세지를 응답한다.")
             void it_return_not_foud() throws Exception {
-                mockMvc.perform(patch("/products/{id}", 100L)
+                mockMvc.perform(patch("/products/{id}", NOT_EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(change)))
                         .andDo(print())
                         .andExpect(status().isNotFound())
-                        .andExpect(content().string("There is no product number " + 100L));
+                        .andExpect(content().string("There is no product number " + NOT_EXIST_ID));
             }
         }
     }
@@ -234,7 +239,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("응답코드 204를 응답한다.")
             void it_return_no_content() throws Exception {
-                mockMvc.perform(delete("/products/{id}", 1L)
+                mockMvc.perform(delete("/products/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(status().isNoContent());
@@ -246,16 +251,17 @@ class ProductControllerTest {
         class Context_does_not_exist_id {
             @BeforeEach
             void setUp() {
-                willThrow(new ProductNotFoundException(100L)).given(productService).deleteTask(100L);
+                willThrow(new ProductNotFoundException(NOT_EXIST_ID)).given(productService).deleteTask(NOT_EXIST_ID);
             }
+
             @Test
             @DisplayName("응답코드는 404이며 id가 존재하지 않는다는 메세지를 응답한다.")
             void it_return_not_found() throws Exception {
-                mockMvc.perform(delete("/products/{id}", 100L)
+                mockMvc.perform(delete("/products/{id}", NOT_EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(status().isNotFound())
-                        .andExpect(content().string("There is no product number " + 100L));
+                        .andExpect(content().string("There is no product number " + NOT_EXIST_ID));
             }
         }
     }
