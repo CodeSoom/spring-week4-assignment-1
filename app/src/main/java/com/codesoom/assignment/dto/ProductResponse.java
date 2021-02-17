@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductResponse {
 
     private Long id;
