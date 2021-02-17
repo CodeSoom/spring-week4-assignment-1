@@ -33,10 +33,27 @@ public class ProductControllerTest {
         @DisplayName("고양이 장난감의 목록이 존재하지 않으면")
         class Context_WithoutProducts {
             @Test
-            @DisplayName("비어 있는 장난감 목록을 반환한다")
+            @DisplayName("비어 있는 장난감 목록을 리턴한다")
             void itReturnsWithSomeProducts() {
                 List<Product> products = productController.list();
                 assertThat(products).isEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("detail 메서드는")
+    class Describe_detail {
+        @Nested
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        class Context_WithExistedId {
+            private final Long givenExistedId = 1L;
+
+            @Test
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 리턴한다")
+            void itReturnsExistedProduct () {
+                Product product = productController.detail(givenExistedId);
+                
             }
         }
     }
