@@ -62,6 +62,11 @@ public class ProductService {
         return product.getId();
     }
 
+    /**
+     * 등록된 상품을 삭제한다
+     * @param productId 등록된 상품 id
+     * @return 삭제된 상품 id
+     */
     @Transactional
     public Long deleteProduct(long productId) {
         Product product = productRepository.findById(productId)

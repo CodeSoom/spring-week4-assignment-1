@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductService 클래스")
@@ -155,5 +156,17 @@ public class ProductServiceTest {
         productService.deleteProduct(anyLong());
 
         verify(productRepository).deleteById(anyLong());
+    }
+
+    @Test
+    @DisplayName("deleteProduct 메서드는 등록되지 상품 id로 상품을 삭제시 예외가 발생한다")
+    void deleteProductWithInValidId() {
+        given(productRepository.findById(NOT_EXIST_ID))
+                .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+
+        assertThatExceptionOfType(ProductNotFoundException.class)
+                .isThrownBy(() -> productService.deleteProduct(NOT_EXIST_ID));
+
+        verify(productRepository, never()).deleteById(NOT_EXIST_ID);
     }
 }
