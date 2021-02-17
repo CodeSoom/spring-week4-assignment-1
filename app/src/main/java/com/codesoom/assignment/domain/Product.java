@@ -8,13 +8,15 @@ import javax.persistence.Id;
 //  ** RDB의 Entity와 다름
 // 2. JPA의 Entity 역할도 같이 함
 @Entity
-public class Task {
+public class Product {
     // Identifier - Unique Key
     @Id
     @GeneratedValue
     private Long id;
 
-    private String title;
+    private String name;
+
+    private Long price;
 
     public Long getId() {
         return id;
@@ -24,11 +26,19 @@ public class Task {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 }
