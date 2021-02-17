@@ -1,5 +1,7 @@
 package com.codesoom.assignment.repository;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,16 @@ class ProductRepositoryTest {
     @BeforeEach
     void setUp() {
         product = new Product();
+
+        product.setName("야광볼");
+        product.setPrice(10000L);
+        product.setImage("/Users/admin/static/image.jpg");
     }
 
     @Test
     void saveTest() {
         productRepository.save(product);
+        assertThat(product.getId()).isEqualTo(1L);
     }
 
     @Test
