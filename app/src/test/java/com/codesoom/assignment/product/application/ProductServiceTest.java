@@ -145,4 +145,15 @@ public class ProductServiceTest {
         assertThatExceptionOfType(ProductNotFoundException.class)
                 .isThrownBy(() -> productService.updateProduct(NOT_EXIST_ID, requestDto));
     }
+
+    @Test
+    @DisplayName("deleteProduct 메서드는 등록된 상품 id에 해당하는 상품을 삭제한다")
+    void deleteProductWithValidId() {
+        given(productRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(product1));
+
+        productService.deleteProduct(anyLong());
+
+        verify(productRepository).deleteById(anyLong());
+    }
 }
