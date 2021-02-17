@@ -31,11 +31,11 @@ public class Product {
 
     private String imageUrl;
 
-    public Product update(Product newProduct) {
-        this.name = newProduct.getName();
-        this.maker = newProduct.getMaker();
-        this.price = newProduct.getPrice();
-        this.imageUrl = newProduct.getImageUrl();
+    public Product update(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
 
         return this;
     }
