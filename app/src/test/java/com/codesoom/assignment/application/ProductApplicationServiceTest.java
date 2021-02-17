@@ -68,4 +68,15 @@ public class ProductApplicationServiceTest {
     public void findCreatedProduct() {
         assertThat(applicationService.getAllProducts()).contains(createdProduct);
     }
+
+    @When("생성된 product를 삭제하면")
+    public void deleteProduct() {
+        applicationService.deleteProduct(createdProduct.productId().id());
+    }
+
+    @Then("생성된 product를 찾을 수 없다")
+    public void canNotFountProduct() {
+        assertThat(applicationService.getAllProducts()).doesNotContain(createdProduct);
+    }
+
 }
