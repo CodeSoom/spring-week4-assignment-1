@@ -36,7 +36,7 @@ public class ProductControllerTest {
             @DisplayName("비어 있지 않는 장난감 목록을 반환한다")
             void itReturnsWithSomeProducts() {
                 List<Product> products = productController.list();
-                assertThat(products).isNull();
+                assertThat(products).isEmpty();
             }
         }
     }
