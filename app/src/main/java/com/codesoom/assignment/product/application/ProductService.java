@@ -48,19 +48,25 @@ public class ProductService {
         return null;
     }
 
+    /**
+     * 등록된 상품의 정보를 갱신한다.
+     * @param productId 등록된 상품 id
+     * @param requestDto 갱신할 상품 정보
+     * @return 갱신된 상품 id
+     */
     @Transactional
     public Long updateProduct(long productId, ProductUpdateRequestDto requestDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
-
         product.update(requestDto.getName(), requestDto.getMaker(), requestDto.getPrice(), requestDto.getImageUrl());
-
         return product.getId();
     }
 
     @Transactional
     public Long deleteProduct(long productId) {
-        // TODO : 상품을 삭제하기
-        return null;
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        productRepository.deleteById(productId);
+        return product.getId();
     }
 }
