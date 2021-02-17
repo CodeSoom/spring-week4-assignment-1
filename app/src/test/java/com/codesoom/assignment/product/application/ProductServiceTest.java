@@ -3,6 +3,7 @@ package com.codesoom.assignment.product.application;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.infra.ProductRepository;
 import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
+import com.codesoom.assignment.product.ui.dto.ProductUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductService 클래스")
 @ExtendWith(MockitoExtension.class)
@@ -81,10 +83,11 @@ public class ProductServiceTest {
         List<ProductResponseDto> products = productService.getProducts();
 
         assertThat(products).containsExactly(responseDto1, responseDto2);
+        verify(productRepository).findAll();
     }
 
     @Test
-    @DisplayName("getProducts 메서드는 등록된 상품 id에 해당하는 상품을 리턴한다")
+    @DisplayName("getProduct 메서드는 등록된 상품 id에 해당하는 상품을 리턴한다")
     void getProductWithValidId() {
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(product1));
@@ -95,15 +98,36 @@ public class ProductServiceTest {
                 () -> assertThat(actual).isEqualTo(responseDto1),
                 () -> assertThat(actual.getId()).isEqualTo(PRODUCT1_ID)
         );
+        verify(productRepository).findById(anyLong());
     }
 
     @Test
-    @DisplayName("getProducts 등록되지 않은 상품 id로 상품 조회시 예외발생한다.")
+    @DisplayName("getProduct 메서드는 등록되지 않은 상품 id로 상품 조회시 예외발생한다.")
     void getProductWithInValidId() {
-        given(productRepository.findById(anyLong()))
+        given(productRepository.findById(NOT_EXIST_ID))
                 .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
 
         assertThatExceptionOfType(ProductNotFoundException.class)
-                .isThrownBy(() ->productService.getProduct(anyLong()));
+                .isThrownBy(() -> productService.getProduct(NOT_EXIST_ID));
+        verify(productRepository).findById(NOT_EXIST_ID);
+    }
+
+    @Test
+    @DisplayName("updateProduct 메서드는 등록된 id로 상품 갱신할 수 있다")
+    void updateProductWithValidId() {
+        given(productRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(product1));
+
+        ProductUpdateRequestDto expect = ProductUpdateRequestDto.builder()
+                .name("NEW NAME")
+                .maker("NEW MAKER")
+                .price(1000)
+                .imageUrl("NEW IMAGE")
+                .build();
+
+        Long savedId = productService.updateProduct(anyLong(), expect);
+        Product actual = productRepository.findById(savedId).orElse(null);
+
+        assertThat(actual.getName()).isEqualTo(expect.getName());
     }
 }
