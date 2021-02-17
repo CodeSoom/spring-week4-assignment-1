@@ -19,18 +19,16 @@ import static org.mockito.Mockito.verify;
 
 class TaskControllerTest {
 
-    private Taskcontroller controller;
+    private TaskController controller;
     private TaskService taskService;
 
     private static final Long ORIGINAL_ID = 1L;
     private static final String ORIGINAL_TITLE = "test";
     private static final String POST_FIX = "???";
-
-
     @BeforeEach
     void setUp() {
         taskService = mock(TaskService.class);
-        controller = new Taskcontroller(taskService);
+        controller = new TaskController(taskService);
 
         List<Task> tasks = new ArrayList<>();
         Task task = new Task();

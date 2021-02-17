@@ -9,10 +9,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
-public class Taskcontroller {
+public class TaskController {
     private TaskService taskService;
 
-    public Taskcontroller(TaskService taskService) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 

@@ -55,7 +55,6 @@ public class TaskControllerWebTest {
 
     @Test
     void list() throws Exception {
-
         mockMvc.perform(get("/tasks"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Test Task")));
@@ -78,6 +77,7 @@ public class TaskControllerWebTest {
         .content("{\"title\":\"Renamed Task\"}")
         )
                 .andExpect(status().isCreated());
+
         verify(taskService).createTask(any(Task.class));
     }
 
@@ -88,6 +88,7 @@ public class TaskControllerWebTest {
                 .content("{\"title\":\"Renamed Task\"}")
         )
                 .andExpect(status().isOk());
+        
         verify(taskService).updateTask(eq(1L), any(Task.class));
     }
 
