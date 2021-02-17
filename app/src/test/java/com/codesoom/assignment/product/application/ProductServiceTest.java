@@ -40,6 +40,9 @@ public class ProductServiceTest {
     private Product product1;
     private Product product2;
 
+    private ProductResponseDto responseDto1;
+    private ProductResponseDto responseDto2;
+
     @BeforeEach
     void setUp() {
         productService = new ProductService(productRepository);
@@ -61,6 +64,8 @@ public class ProductServiceTest {
                 .build();
 
         products = Arrays.asList(product1, product2);
+        responseDto1 = new ProductResponseDto(product1);
+        responseDto2 = new ProductResponseDto(product2);
     }
 
     @Test
@@ -70,6 +75,6 @@ public class ProductServiceTest {
 
         List<ProductResponseDto> products = productService.getProducts();
 
-        assertThat(products).containsExactly(new ProductResponseDto(product1), new ProductResponseDto(product2));
+        assertThat(products).containsExactly(responseDto1, responseDto2);
     }
 }
