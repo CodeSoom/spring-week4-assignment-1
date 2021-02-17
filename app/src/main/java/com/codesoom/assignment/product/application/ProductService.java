@@ -7,6 +7,7 @@ import com.codesoom.assignment.product.ui.dto.ProductSaveRequestDto;
 import com.codesoom.assignment.product.ui.dto.ProductUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 /**
  * 상품 정보을 다룬다.
  */
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -30,6 +32,7 @@ public class ProductService {
 
     /**
      * 등록된 상품 id를 가진 상품을 리턴한다.
+     *
      * @param productId 등록된 상품 id
      * @return 등록된 상품
      */
@@ -39,16 +42,23 @@ public class ProductService {
         return new ProductResponseDto(product);
     }
 
+    @Transactional
     public Long createTask(ProductSaveRequestDto requestDto) {
         // TODO : 상품을 등록하기
         return null;
     }
 
+    @Transactional
     public Long updateProduct(long productId, ProductUpdateRequestDto requestDto) {
-        // TODO : 상품정보를 갱신하기
-        return null;
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+
+        product.update(requestDto.getName(), requestDto.getMaker(), requestDto.getPrice(), requestDto.getImageUrl());
+
+        return product.getId();
     }
 
+    @Transactional
     public Long deleteProduct(long productId) {
         // TODO : 상품을 삭제하기
         return null;

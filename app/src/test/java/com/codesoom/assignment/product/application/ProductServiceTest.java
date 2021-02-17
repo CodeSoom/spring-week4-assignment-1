@@ -117,7 +117,6 @@ public class ProductServiceTest {
     void updateProductWithValidId() {
         given(productRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(product1));
-
         ProductUpdateRequestDto expect = ProductUpdateRequestDto.builder()
                 .name("NEW NAME")
                 .maker("NEW MAKER")
@@ -128,6 +127,11 @@ public class ProductServiceTest {
         Long savedId = productService.updateProduct(anyLong(), expect);
         Product actual = productRepository.findById(savedId).orElse(null);
 
-        assertThat(actual.getName()).isEqualTo(expect.getName());
+        assertAll(
+                () -> assertThat(actual.getName()).isEqualTo(expect.getName()),
+                () -> assertThat(actual.getMaker()).isEqualTo(expect.getMaker()),
+                () -> assertThat(actual.getPrice()).isEqualTo(expect.getPrice()),
+                () -> assertThat(actual.getImageUrl()).isEqualTo(expect.getImageUrl())
+        );
     }
 }

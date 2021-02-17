@@ -44,4 +44,11 @@ public class Product {
                 .imageUrl(imageUrl)
                 .build();
     }
+
+    public void update(String name, String maker, int price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 }
