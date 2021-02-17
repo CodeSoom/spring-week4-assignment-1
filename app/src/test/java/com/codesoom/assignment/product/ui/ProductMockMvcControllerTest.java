@@ -183,7 +183,12 @@ class ProductMockMvcControllerTest {
                 mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(requestDto)))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("maker").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imageUrl").exists());
             }
         }
     }
@@ -210,7 +215,12 @@ class ProductMockMvcControllerTest {
                 mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(requestDto)))
-                        .andExpect(status().isCreated());
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("maker").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imageUrl").exists());
             }
         }
     }

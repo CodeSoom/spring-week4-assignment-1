@@ -74,8 +74,8 @@ public class ProductServiceTest {
                 .build();
 
         products = Arrays.asList(product1, product2);
-        responseDto1 = new ProductResponseDto(product1);
-        responseDto2 = new ProductResponseDto(product2);
+        responseDto1 = ProductResponseDto.of(product1);
+        responseDto2 = ProductResponseDto.of(product2);
     }
 
     @Test

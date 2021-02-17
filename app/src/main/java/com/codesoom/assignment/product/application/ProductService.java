@@ -26,7 +26,7 @@ public class ProductService {
      */
     public List<ProductResponseDto> getProducts() {
         return productRepository.findAll().stream()
-                .map(ProductResponseDto::new)
+                .map(ProductResponseDto::of)
                 .collect(Collectors.toList());
     }
 
@@ -39,13 +39,13 @@ public class ProductService {
     public ProductResponseDto getProduct(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
-        return new ProductResponseDto(product);
+        return ProductResponseDto.of(product);
     }
 
     @Transactional
     public ProductResponseDto createProduct(ProductSaveRequestDto requestDto) {
         Product saveProduct = productRepository.save(requestDto.toEntity());
-        return new ProductResponseDto(saveProduct);
+        return ProductResponseDto.of(saveProduct);
     }
 
     /**
@@ -60,7 +60,7 @@ public class ProductService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
         Product updateProduct = product.update(requestDto.getName(), requestDto.getMaker(), requestDto.getPrice(), requestDto.getImageUrl());
-        return new ProductResponseDto(updateProduct);
+        return ProductResponseDto.of(updateProduct);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.codesoom.assignment.product.ui.dto;
 
 import com.codesoom.assignment.product.domain.Product;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -28,6 +29,7 @@ public class ProductResponseDto {
      * @param price    상품가격
      * @param imageUrl 상품이미지
      */
+    @Builder
     public ProductResponseDto(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
@@ -37,15 +39,17 @@ public class ProductResponseDto {
     }
 
     /**
-     * 상품 정보를 응답 DTO로 변경하는 생성자
+     * 상품 정보를 응답 DTO로 변경하는 정적 팩토리 메서드.
      *
      * @param product 상품 entity
      */
-    public ProductResponseDto(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.maker = product.getMaker();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
+    public static ProductResponseDto of(Product product) {
+        return ProductResponseDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .maker(product.getMaker())
+                .price(product.getPrice())
+                .imageUrl(product.getImageUrl())
+                .build();
     }
 }
