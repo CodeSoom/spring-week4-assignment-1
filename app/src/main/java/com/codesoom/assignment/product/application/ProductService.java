@@ -19,12 +19,20 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
 
+    /**
+     * 등록된 모든 상품들을 가져온다.
+     */
     public List<ProductResponseDto> getProducts() {
         return productRepository.findAll().stream()
                 .map(ProductResponseDto::new)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 등록된 상품 id를 가진 상품을 리턴한다.
+     * @param productId 등록된 상품 id
+     * @return 등록된 상품
+     */
     public ProductResponseDto getProduct(Long productId) {
         // TODO : 응답용 상품을 리턴
         return null;
