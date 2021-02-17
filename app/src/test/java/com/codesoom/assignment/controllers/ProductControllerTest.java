@@ -53,7 +53,6 @@ public class ProductControllerTest {
             @DisplayName("주어진 id에 해당하는 고양이 장난감을 리턴한다")
             void itReturnsExistedProduct () {
                 Product product = productController.detail(givenExistedId);
-                
             }
         }
     }
