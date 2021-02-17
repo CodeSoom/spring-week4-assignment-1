@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,6 +41,22 @@ class ProductServiceTest {
             List<Product> products = productRepository.findAll();
 
             verify(productRepository).findAll();
+        }
+    }
+
+    @Nested
+    @DisplayName("getProduct 메서드는")
+    class Describe_getProduct {
+        @Nested
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        class Context_WithExistedId {
+            private final Long givenExistedId = 1L;
+
+            @Test
+            @DisplayName("주어진 id에 해당하는 고양이 장난감이 주어진다")
+            void itReturnsWithExistedProduct() {
+                Optional<Product> product = productRepository.findById(givenExistedId);
+            }
         }
     }
 }
