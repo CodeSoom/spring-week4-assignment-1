@@ -31,10 +31,10 @@ class ProductTest {
     @DisplayName("변수값 확인")
     @Test
     void testProduct(){
-        assertThat(name).isEqualTo(product.getName());
-        assertThat(maker).isEqualTo(product.getMaker());
-        assertThat(name).isEqualTo(product.getName());
-        assertThat(imgName).isEqualTo(product.getImgName());
+        assertThat(product.getName()).isEqualTo(name);
+        assertThat(product.getMaker()).isEqualTo(maker);
+        assertThat(product.getPrice()).isEqualTo(price);
+        assertThat(product.getImgName()).isEqualTo(imgName);
     }
 
 }
