@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("ProductController 클래스")
 class ProductControllerTest {
 
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -218,7 +217,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("수정된 상품과 상태코드 200을 응답한다")
-            void it_responds_the_updated_product_and_status_code_204() throws Exception {
+            void it_responds_the_updated_product_and_status_code_200() throws Exception {
                 mockMvc.perform(patch("/products/{id}", existingId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
