@@ -42,7 +42,15 @@ class ToyServiceTest {
         toy.setId(givenSavedToyId);
     }
 
-    private void assertToy(Toy toy) {
+    private void assertCreatedToy(Toy toy) {
+        assertThat(toy.getClass()).isEqualTo(Toy.class);
+        assertThat(toy.getName()).isEqualTo(givenToyName);
+        assertThat(toy.getBrand()).isEqualTo(givenToyBrand);
+        assertThat(toy.getPrice()).isEqualTo(givenToyPrice);
+        assertThat(toy.getImageUrl()).isEqualTo(givenToyImageUrl);
+    }
+
+    private void assertModifiedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
         assertThat(toy.getName()).isEqualTo(givenToyName);
         assertThat(toy.getBrand()).isEqualTo(givenToyBrand);
@@ -115,7 +123,7 @@ class ToyServiceTest {
 
                 verify(toyRepository).findById(givenId);
 
-                assertToy(found);
+                assertCreatedToy(found);
             }
         }
 
@@ -146,7 +154,7 @@ class ToyServiceTest {
         @Test
         @DisplayName("추가된 toy를 리턴한다.")
         void it_return_created_toy() {
-            given(toyRepository.save(any(Toy.class))).will(invocation -> {
+            given(toyRepository.save(toy)).will(invocation -> {
                 return invocation.getArgument(0);
             });
 
@@ -154,7 +162,7 @@ class ToyServiceTest {
 
             verify(toyRepository).save(any(Toy.class));
 
-            assertToy(created);
+            assertCreatedToy(created);
         }
     }
 
@@ -172,10 +180,11 @@ class ToyServiceTest {
                     givenToyPrice + givenUpdatePostfixNumber,
                     givenToyImageUrl + givenUpdatePostfixText
             );
+            modifying.setId(givenSavedToyId);
         }
 
         @Nested
-        @DisplayName("저장된 taks의 id를 가지고 있다면")
+        @DisplayName("저장된 toy의 id를 가지고 있다면")
         class Context_with_saved_id {
             private Toy modified;
 
@@ -183,10 +192,7 @@ class ToyServiceTest {
             void setSavedId() {
                 givenId = givenSavedToyId;
 
-                given(toyRepository.findById(any(Long.class))).willReturn(Optional.of(toy));
-                given(toyRepository.save(any(Toy.class))).will(invocation -> {
-                    return invocation.getArgument(0);
-                });
+                given(toyRepository.findById(givenId)).willReturn(Optional.of(toy));
             }
 
             @Test
@@ -195,9 +201,8 @@ class ToyServiceTest {
                 modified = toyService.updateToy(modifying);
 
                 verify(toyRepository).findById(givenId);
-                verify(toyRepository).save(any(Toy.class));
 
-                assertToy(modified);
+                assertModifiedToy(modified);
             }
         }
 
@@ -207,13 +212,16 @@ class ToyServiceTest {
             @BeforeEach
             void setUnsavedId() {
                 givenId = givenUnsavedToyId;
+                modifying.setId(givenId);
+
+                given(toyRepository.findById(givenId)).willThrow(ToyNotFoundException.class);
             }
 
             @Test
-            @DisplayName("task를 찾을 수 없다는 exception을 던진다.")
+            @DisplayName("toy를 찾을 수 없다는 exception을 던진다.")
             void it_throw_exception() {
                 assertThatThrownBy(
-                        () -> toyService.updateToy(givenId),
+                        () -> toyService.updateToy(modifying),
                         "toy를 찾을 수 없다는 예외를 던져야 합니다."
                 ).isInstanceOf(ToyNotFoundException.class);
             }

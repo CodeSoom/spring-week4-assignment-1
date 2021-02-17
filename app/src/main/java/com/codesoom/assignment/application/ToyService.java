@@ -6,6 +6,7 @@ import com.codesoom.assignment.domain.ToyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ToyService {
@@ -27,8 +28,14 @@ public class ToyService {
         return toyRepository.save(toy);
     }
 
-    public Toy updateToy() {
-        return null;
+    public Toy updateToy(Toy toy) {
+        final Long id = toy.getId();
+        Toy foundToy = toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
+        foundToy.setName(toy.getName());
+        foundToy.setBrand(toy.getBrand());
+        foundToy.setPrice(toy.getPrice());
+        foundToy.setImageUrl(toy.getImageUrl());
+        return foundToy;
     }
 
     public void deleteToy() {
