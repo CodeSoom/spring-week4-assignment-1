@@ -19,6 +19,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -174,13 +175,16 @@ public class ProductServiceTest {
     @Test
     @DisplayName("createProduct 메서드는 상품을 새로 등록할 수 있다.")
     void createProduct() {
+        given(productRepository.save(any(Product.class)))
+                .willReturn(product1);
+
         ProductSaveRequestDto requestDto = ProductSaveRequestDto.builder()
                 .name("NEW NAME")
                 .maker("NEW MAKER")
                 .price(1000)
                 .imageUrl("NEW IMAGE")
                 .build();
-        
+
         Long saved = productService.createProduct(requestDto);
 
         assertThat(saved).isNotNull();

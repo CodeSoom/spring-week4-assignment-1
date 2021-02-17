@@ -20,9 +20,10 @@ public class ProductUpdateRequestDto {
 
     /**
      * 상품 갱신정보 생성자.
-     * @param name 상품명
-     * @param maker 상품제조사
-     * @param price 상품가격
+     *
+     * @param name     상품명
+     * @param maker    상품제조사
+     * @param price    상품가격
      * @param imageUrl 상품이미지
      */
     @Builder
@@ -32,6 +33,4 @@ public class ProductUpdateRequestDto {
         this.price = price;
         this.imageUrl = imageUrl;
     }
-
-
 }

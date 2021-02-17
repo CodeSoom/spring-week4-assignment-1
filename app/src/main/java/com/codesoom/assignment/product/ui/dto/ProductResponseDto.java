@@ -21,10 +21,11 @@ public class ProductResponseDto {
 
     /**
      * 상품정보 응답 생성자.
-     * @param id 상품 식별자
-     * @param name 상품명
-     * @param maker 상품제조사
-     * @param price 상품가격
+     *
+     * @param id       상품 식별자
+     * @param name     상품명
+     * @param maker    상품제조사
+     * @param price    상품가격
      * @param imageUrl 상품이미지
      */
     public ProductResponseDto(Long id, String name, String maker, int price, String imageUrl) {
@@ -37,6 +38,7 @@ public class ProductResponseDto {
 
     /**
      * 상품 정보를 응답 DTO로 변경하는 생성자
+     *
      * @param product 상품 entity
      */
     public ProductResponseDto(Product product) {

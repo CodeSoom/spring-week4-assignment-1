@@ -44,12 +44,14 @@ public class ProductService {
 
     @Transactional
     public Long createProduct(ProductSaveRequestDto requestDto) {
-        return null;
+        Product saveProduct = productRepository.save(requestDto.toEntity());
+        return saveProduct.getId();
     }
 
     /**
      * 등록된 상품의 정보를 갱신한다.
-     * @param productId 등록된 상품 id
+     *
+     * @param productId  등록된 상품 id
      * @param requestDto 갱신할 상품 정보
      * @return 갱신된 상품 id
      */
@@ -63,6 +65,7 @@ public class ProductService {
 
     /**
      * 등록된 상품을 삭제한다
+     *
      * @param productId 등록된 상품 id
      * @return 삭제된 상품 id
      */
