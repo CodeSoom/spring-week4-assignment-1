@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,14 +12,10 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
-
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     /**
      * 모든 장난감 리스트를 반환합니다.
@@ -33,8 +30,8 @@ public class ProductService {
      * id에 해당하는 장난감을 반환합니다.
      *
      * @param id
-     * @throws ProductNotFoundException id에 해당하는 장난감이 없는 경우
      * @return id에 해당하는 Product
+     * @throws ProductNotFoundException id에 해당하는 장난감이 없는 경우
      */
     public Product getProduct(Long id) {
         return productRepository.findById(id).
@@ -48,8 +45,13 @@ public class ProductService {
      * @return 추가된 Product
      */
     public Product addProduct(ProductDto productDto) {
-        Product product = new Product(productDto.getId(), productDto.getName(), productDto.getMaker(), productDto.getPrice(), productDto.getImageUrl());
-        return productRepository.save(product);
+        return productRepository.save(Product.builder()
+                .id(productDto.getId())
+                .name(productDto.getName())
+                .maker(productDto.getMaker())
+                .price(productDto.getPrice())
+                .imageUrl(productDto.getImageUrl())
+                .build());
     }
 
     /**

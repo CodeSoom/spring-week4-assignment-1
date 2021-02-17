@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,13 +30,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
 
     /**
      * 모든 장난감의 리스트를 반환합니다.
