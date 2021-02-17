@@ -102,7 +102,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("getProduct 메서드는 등록되지 않은 상품 id로 상품 조회시 예외발생한다.")
+    @DisplayName("getProduct 메서드는 등록되지 않은 상품 id로 상품 조회시 예외가 발생한다.")
     void getProductWithInValidId() {
         given(productRepository.findById(NOT_EXIST_ID))
                 .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
@@ -133,5 +133,16 @@ public class ProductServiceTest {
                 () -> assertThat(actual.getPrice()).isEqualTo(expect.getPrice()),
                 () -> assertThat(actual.getImageUrl()).isEqualTo(expect.getImageUrl())
         );
+    }
+
+    @Test
+    @DisplayName("updateProduct 메서드는 등록되지 않은 상품 id로 상품 갱신시 예외가 발생한다.")
+    void updateProductWithInValidId() {
+        given(productRepository.findById(NOT_EXIST_ID))
+                .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+        ProductUpdateRequestDto requestDto = ProductUpdateRequestDto.builder().build();
+
+        assertThatExceptionOfType(ProductNotFoundException.class)
+                .isThrownBy(() -> productService.updateProduct(NOT_EXIST_ID, requestDto));
     }
 }
