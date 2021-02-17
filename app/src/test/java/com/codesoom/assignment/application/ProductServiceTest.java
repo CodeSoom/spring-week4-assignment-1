@@ -208,6 +208,9 @@ class ProductServiceTest {
                 product = new Product();
 
                 productService.createProduct(product);
+
+                given(productRepository.findById(1L))
+                        .willReturn(ofNullable(product));
             }
 
             @Test
@@ -218,7 +221,7 @@ class ProductServiceTest {
                 verify(productRepository).findById(1L);
                 verify(productRepository).delete(any(Product.class));
 
-//                assertThat(taskService.getTasks()).isNotIn(1L);
+                assertThat(productRepository.findAll()).isNotIn(1L);
             }
         }
 
