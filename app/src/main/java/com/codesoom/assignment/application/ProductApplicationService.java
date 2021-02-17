@@ -21,13 +21,15 @@ public class ProductApplicationService {
     }
 
     /**
-     * @return 생성된 모든 product들을 반환합니다.
+     * 생성된 모든 product들을 반환합니다.
      */
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     /**
+     * product를 생성합니다.
+     * 
      * @param name 생성될 product의 이름
      * @param maker 생성될 product의 제조회사
      * @param price 생성될 product의 가격
@@ -42,6 +44,8 @@ public class ProductApplicationService {
     }
 
     /**
+     * product를 삭제합니다.
+     *
      * @param id 삭제할 product의 id
      */
     public void deleteProduct(Long id) {
