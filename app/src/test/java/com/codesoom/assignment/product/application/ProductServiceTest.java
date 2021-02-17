@@ -12,8 +12,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("ProductService 클래스")
@@ -76,5 +79,18 @@ public class ProductServiceTest {
         List<ProductResponseDto> products = productService.getProducts();
 
         assertThat(products).containsExactly(responseDto1, responseDto2);
+    }
+
+    @Test
+    @DisplayName("등록된 상품 id에 해당하는 상품을 리턴한다")
+    void getProductWithValidId() {
+        given(productRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(product1));
+
+        ProductResponseDto expect = productService.getProduct(anyLong());
+
+        assertAll(
+                () -> assertThat(expect).isEqualTo(responseDto1)
+        );
     }
 }
