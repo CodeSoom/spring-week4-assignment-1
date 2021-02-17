@@ -27,7 +27,7 @@ public class Product {
     private String maker;
 
     @Column
-    private int price;
+    private Integer price;
 
     @Column
     private String imgName;
