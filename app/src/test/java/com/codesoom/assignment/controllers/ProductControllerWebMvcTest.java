@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -121,7 +122,7 @@ class ProductControllerWebMvcTest {
             }
 
             @Test
-            @DisplayName("새로운 고양이 장난감을 생성하고 생성된 고양이 장난감을 리턴한다")
+            @DisplayName("새로운 고양이 장난감을 생성하고 생성된 고양이 장난감과 Created를 리턴한다")
             void itCreatesProductAndReturnsCreatedProduct() throws Exception {
                 Product createdProduct = makeNewProduct();
 
@@ -129,6 +130,8 @@ class ProductControllerWebMvcTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"prcie\":100, \"image\":\"createdImage\""))
                         .andExpect(status().isCreated());
+
+                verify(productService).createProduct(any());
             }
         }
 
