@@ -92,8 +92,8 @@ class ToyRepositoryTest {
         }
 
         @Nested
-        @DisplayName("저장되지 않은 toy의 id를 가지고 있다면")
-        class Context_with_unsaved_id {
+        @DisplayName("저장되지 않은 toy를 찾으려고하면")
+        class Context_when_find_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
                 givenId = givenUnsavedToyId;
@@ -162,8 +162,8 @@ class ToyRepositoryTest {
         }
 
         @Nested
-        @DisplayName("저장되지 않은 toy의 id를 가지고 있다면")
-        class Context_with_unsaved_id {
+        @DisplayName("저장되지 않은 toy를 지우려고하면")
+        class Context_when_delete_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
                 givenId = givenUnsavedToyId;
