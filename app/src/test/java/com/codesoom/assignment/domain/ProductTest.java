@@ -27,4 +27,10 @@ class ProductTest {
     void getName() {
         assertThat(product.getName()).isEqualTo(NAME);
     }
+
+    @Test
+    @DisplayName("getMaker 메소드는 메이커를 반환한다")
+    void getMaker() {
+        assertThat(product.getMaker()).isEqualTo(MAKER);
+    }
 }
