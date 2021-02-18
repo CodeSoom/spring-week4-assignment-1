@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 상품 정보를 표현하는 Domain 클래스.
+ */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -32,6 +35,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    /**
+     * 주어진 product의 정보로 수정합니다.
+     *
+     * @param source 수정하고자 하는 product
+     */
     public void update(Product source) {
         this.name = source.getName();
         this.maker = source.getMaker();
