@@ -6,7 +6,6 @@ import com.codesoom.assignment.domain.ToyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ToyService {
@@ -35,6 +34,7 @@ public class ToyService {
         foundToy.setBrand(toy.getBrand());
         foundToy.setPrice(toy.getPrice());
         foundToy.setImageUrl(toy.getImageUrl());
+
         return foundToy;
     }
 

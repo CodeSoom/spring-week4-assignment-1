@@ -52,10 +52,10 @@ class ToyServiceTest {
 
     private void assertModifiedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
-        assertThat(toy.getName()).isEqualTo(givenToyName);
-        assertThat(toy.getBrand()).isEqualTo(givenToyBrand);
-        assertThat(toy.getPrice()).isEqualTo(givenToyPrice);
-        assertThat(toy.getImageUrl()).isEqualTo(givenToyImageUrl);
+        assertThat(toy.getName()).isEqualTo(givenToyName + givenUpdatePostfixText);
+        assertThat(toy.getBrand()).isEqualTo(givenToyBrand + givenUpdatePostfixText);
+        assertThat(toy.getPrice()).isEqualTo(givenToyPrice + givenUpdatePostfixNumber);
+        assertThat(toy.getImageUrl()).isEqualTo(givenToyImageUrl + givenUpdatePostfixText);
     }
 
     @Nested
@@ -201,7 +201,7 @@ class ToyServiceTest {
                 modified = toyService.updateToy(modifying);
 
                 verify(toyRepository).findById(givenId);
-
+                System.out.println(modified.getName());
                 assertModifiedToy(modified);
             }
         }
