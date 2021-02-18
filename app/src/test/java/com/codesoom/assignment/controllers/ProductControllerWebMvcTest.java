@@ -192,7 +192,7 @@ class ProductControllerWebMvcTest {
             void itDeleteProductAndReturnsNO_CONTENTHttpStatus() throws Exception {
 
                 mockMvc.perform(delete("/products/" + givenExistedId))
-                        .andExpect(status().isNoContent())
+                        .andExpect(status().isNoContent());
             }
         }
     }
