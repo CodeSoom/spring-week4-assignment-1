@@ -21,6 +21,9 @@ public class ProductRequest {
 
     private String imageUrl;
 
+    /**
+     * 상품 요청 Dto를 상품 엔터티로 변환하고, 상품 엔터티를 리턴합니다.
+     */
     public Product toProduct() {
         return Product.builder()
                 .name(name)
