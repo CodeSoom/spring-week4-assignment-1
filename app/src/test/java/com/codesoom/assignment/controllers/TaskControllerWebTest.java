@@ -88,7 +88,7 @@ public class TaskControllerWebTest {
                 .content("{\"title\":\"Renamed Task\"}")
         )
                 .andExpect(status().isOk());
-        
+
         verify(taskService).updateTask(eq(1L), any(Task.class));
     }
 

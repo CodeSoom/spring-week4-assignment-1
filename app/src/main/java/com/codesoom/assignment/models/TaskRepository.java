@@ -6,40 +6,15 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-public class TaskRepository {
-    private final List<Task> tasks = new ArrayList<>();
-    private Long newId = 0L;
 
-    public List<Task> findAll() {
-        return tasks;
-    }
+public abstract class TaskRepository {
 
-    public Task find(Long id) {
-        return tasks.stream()
-                .filter(task -> task.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new TaskNotFoundException(id));
-    }
+    public abstract List<Task> findAll();
 
-    public Task save(Task task) {
-        task.setId(generateID());
+    public abstract Task find(Long id);
 
-        tasks.add(task);
+    public abstract Task save(Task task);
 
-        return task;
-    }
-
-    public Task remove(Task task) {
-        tasks.remove(task);
-
-        return task;
-    }
-
-    private Long generateID() {
-        newId += 1;
-
-        return newId;
-    }
+    public abstract Task remove(Task task);
 
 }
