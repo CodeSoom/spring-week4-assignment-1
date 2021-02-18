@@ -37,6 +37,9 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         product.setName(source.getName());
+        product.setMaker(source.getMaker());
+        product.setPrice(source.getPrice());
+        product.setImage(source.getImage());
 
         return product;
     }
