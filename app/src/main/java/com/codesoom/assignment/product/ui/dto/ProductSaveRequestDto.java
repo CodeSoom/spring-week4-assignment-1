@@ -2,7 +2,6 @@ package com.codesoom.assignment.product.ui.dto;
 
 import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
