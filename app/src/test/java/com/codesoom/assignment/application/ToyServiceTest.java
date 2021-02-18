@@ -15,8 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @DataJpaTest
 @DisplayName("ToyService의")
@@ -237,8 +236,6 @@ class ToyServiceTest {
         @Nested
         @DisplayName("저장된 toy의 id를 가지고 있다면")
         class Context_with_saved_id {
-            private int size;
-
             @BeforeEach
             void setSavedId() {
                 givenId = givenSavedToyId;
@@ -259,10 +256,12 @@ class ToyServiceTest {
             @BeforeEach
             void setUnsavedId() {
                 givenId = givenUnsavedToyId;
+
+                doThrow(ToyNotFoundException.class).when(toyRepository).deleteById(givenId);
             }
 
             @Test
-            @DisplayName("데이터 접근 결과가 비어있다는 예외를 던집니다.")
+            @DisplayName("toy를 찾을 수 없다는 예외를 던집니다.")
             void it_throw_exception() {
                 assertThatThrownBy(
                         () -> toyService.deleteToy(givenId),

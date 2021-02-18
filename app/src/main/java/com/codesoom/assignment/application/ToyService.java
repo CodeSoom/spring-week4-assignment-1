@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,7 +39,11 @@ public class ToyService {
         return foundToy;
     }
 
-    public void deleteToy() {
-
+    public void deleteToy(Long id) {
+        try {
+            toyRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ToyNotFoundException(id);
+        }
     }
 }
