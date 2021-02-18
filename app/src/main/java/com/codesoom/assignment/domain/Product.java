@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,6 +28,10 @@ public class Product {
 
     private String image;
 
+    public Product() {
+    }
+
+    @Builder
     public Product(Long id, String name, String maker, Integer price, String image) {
         this.id = id;
         this.name = name;
