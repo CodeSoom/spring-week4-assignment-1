@@ -12,6 +12,7 @@ import java.util.List;
 @Transactional
 public class ProductService {
     private ProductRepository productRepository;
+
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -28,6 +29,9 @@ public class ProductService {
     public Product createProduct(Product source) {
         Product product = new Product();
         product.setName(source.getName());
+        product.setMaker(source.getMaker());
+        product.setPrice(source.getPrice());
+        product.setImage(source.getImage());
 
         return productRepository.save(product);
     }
