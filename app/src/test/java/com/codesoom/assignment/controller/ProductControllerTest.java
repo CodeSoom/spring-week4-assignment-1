@@ -38,13 +38,13 @@ class ProductControllerTest {
     }
 
     @Test
-    void testGetProducts() throws Exception {
+    void testGetAllProduct() throws Exception {
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void testSaveProducts() throws Exception {
+    void testSaveProduct() throws Exception {
         mockMvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new ProductRequestDto())))
@@ -52,7 +52,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void testGetProductsById() throws Exception {
+    void testGetProduct() throws Exception {
         mockMvc.perform(get(BASE_URL + "/" + id))
                 .andExpect(status().isOk());
     }
