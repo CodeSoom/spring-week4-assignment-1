@@ -26,34 +26,4 @@ class ToyTest {
         assertThat(toy.getPrice()).isEqualTo(toyPrice);
         assertThat(toy.getImageUrl()).isEqualTo(toyImageUrl);
     }
-
-    @Test
-    void testId() {
-        toy.setId(toyId);
-        assertThat(toy.getId()).isEqualTo(toyId);
-    }
-
-    @Test
-    void testName() {
-        toy.setName(toyName);
-        assertThat(toy.getName()).isEqualTo(toyName);
-    }
-
-    @Test
-    void testBrand() {
-        toy.setBrand(toyBrand);
-        assertThat(toy.getBrand()).isEqualTo(toyBrand);
-    }
-
-    @Test
-    void testPrice() {
-        toy.setPrice(toyPrice);
-        assertThat(toy.getPrice()).isEqualTo(toyPrice);
-    }
-
-    @Test
-    void testImageUrl() {
-        toy.setImageUrl(toyImageUrl);
-        assertThat(toy.getImageUrl()).isEqualTo(toyImageUrl);
-    }
 }
