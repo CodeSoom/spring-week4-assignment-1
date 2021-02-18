@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    public List<ProductResponseDto> getProducts() {
+    public List<ProductResponseDto> getAllProduct() {
         return null;
     }
 
@@ -17,7 +17,7 @@ public class ProductService {
         return null;
     }
 
-    public ProductResponseDto getProductsById(Long id) {
+    public ProductResponseDto getProduct(Long id) {
         return null;
     }
 

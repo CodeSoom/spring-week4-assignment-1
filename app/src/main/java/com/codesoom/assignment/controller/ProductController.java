@@ -28,7 +28,7 @@ public class ProductController {
      */
     @GetMapping
     public List<ProductResponseDto> getAllProduct(){
-        return productService.getProducts();
+        return productService.getAllProduct();
     }
 
     /**
@@ -49,7 +49,7 @@ public class ProductController {
      */
     @GetMapping("/{id}")
     public ProductResponseDto getProduct(@PathVariable Long id){
-        return productService.getProductsById(id);
+        return productService.getProduct(id);
     }
 
     /**
