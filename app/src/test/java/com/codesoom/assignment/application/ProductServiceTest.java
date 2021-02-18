@@ -49,8 +49,6 @@ class ProductServiceTest {
                 List<Product> products = new ArrayList<>();
 
                 product = new Product();
-                productService.createProduct(product);
-
                 products.add(product);
 
                 given(productRepository.findAll()).willReturn(products);
@@ -142,8 +140,6 @@ class ProductServiceTest {
                     .will(invocation -> invocation.<Product>getArgument(0));
 
             verify(productRepository).save(any(Product.class));
-
-//            assertThat(taskRepository.findAll()).contains(createdTask);
         }
     }
 
@@ -175,7 +171,6 @@ class ProductServiceTest {
                 verify(productRepository).findById(1L);
 
                 assertThat(product.getName()).isEqualTo(UPDATE_POSTFIX + "!!!");
-//                assertThat(productRepository.findById(1L)).isEqualTo(updatedProduct.getId());
             }
         }
 
