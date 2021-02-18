@@ -18,6 +18,18 @@ public class Product {
 
     private String image;
 
+    public Product() {
+
+    }
+
+    public Product(Long id, String name, String maker, int price, String image) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.image = image;
+    }
+
     public Long getId() {
         return id;
     }
@@ -56,5 +68,16 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", maker='" + maker + '\'' +
+                ", price=" + price +
+                ", image='" + image + '\'' +
+                '}';
     }
 }
