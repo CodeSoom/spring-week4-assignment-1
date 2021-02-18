@@ -21,10 +21,10 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -82,12 +82,12 @@ class ProductControllerWebMvcTest {
 
             @Test
             @DisplayName("주어진 id에 해당하는 고양이 장난감과 OK를 리턴한다")
-            void itReturnsOKHttpStatus() throws Exception {
+            void itReturnsProductAndOKHttpStatus() throws Exception {
                 given(productService.getProduct(givenExistedId)).willReturn(setupProduct);
 
                 mockMvc.perform(get("/products/"+ givenExistedId))
                         .andDo(print())
-                        .andExpect(jsonPath("$.id").value(EXISTED_ID))
+                        .andExpect(jsonPath("$.id").value(givenExistedId))
                         .andExpect(jsonPath("$.name").value(SETUP_PRODUCT_NAME))
                         .andExpect(jsonPath("$.maker").value(SETUP_PRODUCT_MAKER))
                         .andExpect(jsonPath("$.image").value(SETUP_PRODUCT_IMAGE))
@@ -117,24 +117,66 @@ class ProductControllerWebMvcTest {
                 image = "createdImage";
             }
 
-            Product makeNewProduct() {
+            Product createProduct() {
                 return new Product(CREATE_ID, name, maker, price, image);
             }
 
             @Test
             @DisplayName("새로운 고양이 장난감을 생성하고 생성된 고양이 장난감과 Created를 리턴한다")
-            void itCreatesProductAndReturnsCreatedProduct() throws Exception {
-                Product createdProduct = makeNewProduct();
+            void itCreatesProductAndReturnsCreatedProductAndCreatedHttpStatus() throws Exception {
+                Product createdProduct = createProduct();
+                given(productService.createProduct(any(Product.class))).willReturn(createdProduct);
 
                 mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"price\":100, \"image\":\"createdImage\""))
+                        .content("{\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"price\":100, \"image\":\"createdImage\"}"))
+                        .andDo(print())
                         .andExpect(status().isCreated());
 
                 verify(productService).createProduct(any());
             }
         }
+    }
 
+    @Nested
+    @DisplayName("update 메서드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("만약 저징되어 있는 고양이 장난감의 id와 업데이트 될 name, maker, price, image가 주어진다면")
+        class Context_WithExistedIdAndNameAndMakerAndPriceAndImage {
+            private final Long givenExistedId = EXISTED_ID;
+            private String name;
+            private String maker;
+            private int price;
+            private String image;
+
+            @BeforeEach
+            void prepareUpdateProduct() {
+                name = "updatedTask";
+                maker = "updatedMaker";
+                price = 300;
+                image = "updatedImage";
+            }
+
+            Product updateProduct() {
+                return new Product(givenExistedId, name, maker, price, image);
+            }
+
+            @Test
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 업데이트하고 수정된 고양이 장난감과 OK를 리턴한다")
+            void itUpdatesProductAndReturnsUpdatedProductAndOKHttpStatus() throws Exception {
+                Product updatedProduct = updateProduct();
+                given(productService.updateProduct(eq(givenExistedId), any(Product.class))).willReturn(updatedProduct);
+
+                mockMvc.perform(patch("/products/" + givenExistedId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"updatedName\" , \"maker\":\"updatedMaker\", \"price\":300, \"image\":\"updatedImage\"}"))
+                        .andDo(print())
+                        .andExpect(status().isOk());
+
+                verify(productService).updateProduct(eq(givenExistedId), any(Product.class));
+            }
+        }
     }
 
 }

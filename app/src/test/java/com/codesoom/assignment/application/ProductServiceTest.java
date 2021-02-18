@@ -169,7 +169,6 @@ class ProductServiceTest {
 
                 verify(productRepository).findById(givenExistedId);
             }
-
         }
     }
 }
