@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +44,7 @@ class ProductControllerWebMvcTest {
     private final String SETUP_PRODUCT_IMAGE = "setupImage";
 
     private final Long EXISTED_ID = 1L;
+    private final Long CREATE_ID = 2L;
     private final Long NOT_EXISTED_ID = 100L;
 
     private List<Product> products;
@@ -80,7 +82,6 @@ class ProductControllerWebMvcTest {
             @Test
             @DisplayName("주어진 id에 해당하는 고양이 장난감과 OK를 리턴한다")
             void itReturnsOKHttpStatus() throws Exception {
-                System.out.println(setupProduct);
                 given(productService.getProduct(givenExistedId)).willReturn(setupProduct);
 
                 mockMvc.perform(get("/products/"+ givenExistedId))
@@ -95,4 +96,42 @@ class ProductControllerWebMvcTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("create 메서드는")
+    class Describe_create {
+        @Nested
+        @DisplayName("만약 name, maker, price, image가 주어진다면")
+        class Context_WithNameAndMakerAndPriceAndImage {
+            private String name;
+            private String maker;
+            private int price;
+            private String image;
+
+            @BeforeEach
+            void setUpCreateProduct() {
+                name = "createdName";
+                maker = "createdMaker";
+                price = 200;
+                image = "createdImage";
+            }
+
+            Product makeNewProduct() {
+                return new Product(CREATE_ID, name, maker, price, image);
+            }
+
+            @Test
+            @DisplayName("새로운 고양이 장난감을 생성하고 생성된 고양이 장난감을 리턴한다")
+            void itCreatesProductAndReturnsCreatedProduct() throws Exception {
+                Product createdProduct = makeNewProduct();
+
+                mockMvc.perform(post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"prcie\":100, \"image\":\"createdImage\""))
+                        .andExpect(status().isCreated());
+            }
+        }
+
+    }
+
 }
