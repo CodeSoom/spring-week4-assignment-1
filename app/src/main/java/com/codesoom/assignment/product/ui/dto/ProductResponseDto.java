@@ -2,14 +2,14 @@ package com.codesoom.assignment.product.ui.dto;
 
 import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import java.util.Objects;
 
 /**
  * 상품의 정보를 담은 응답 DTO.
  */
 @Getter
-@EqualsAndHashCode(of = "id")
 public class ProductResponseDto {
 
     private Long id;
@@ -53,5 +53,22 @@ public class ProductResponseDto {
                 .price(product.getPrice())
                 .imageUrl(product.getImageUrl())
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProductResponseDto)) {
+            return false;
+        }
+        ProductResponseDto dto = (ProductResponseDto) o;
+        return getId().equals(dto.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
