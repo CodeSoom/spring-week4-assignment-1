@@ -69,7 +69,7 @@ class ProductServiceTest {
         class Context_does_not_exist_product {
             @BeforeEach
             void setUp() {
-                given(productRepository.findAll()).willReturn(new ArrayList<>());
+                given(productRepository.findAll()).willReturn(List.of());
             }
 
             @Test

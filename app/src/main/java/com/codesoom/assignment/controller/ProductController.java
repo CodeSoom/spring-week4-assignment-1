@@ -26,7 +26,7 @@ import java.util.List;
 //TODO        고양이 장난감 삭제하기 - DELETE /products/{id}  -테스트 미작성
 
 /**
- * 장난감 CURD 컨트롤러.
+ * 상품 정보와 관련된 HTTP 요청을 처리합니다.
  */
 @RestController
 @RequestMapping("/products")
@@ -36,9 +36,9 @@ public class ProductController {
     private final ProductService productService;
 
     /**
-     * 모든 장난감의 리스트를 반환합니다.
+     * 모든 상품의 리스트를 반환합니다.
      *
-     * @return 모든 Product list
+     * @return 모든 상품의 list
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -47,10 +47,10 @@ public class ProductController {
     }
 
     /**
-     * id에 해당하는 장난감을 반환합니다.
+     * id에 해당하는 상품을 반환합니다.
      *
-     * @param id
-     * @return id에 해당하는 상품의 정보
+     * @param id 조회할 상품의 id
+     * @return 조회한 상품의 정보
      */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -59,10 +59,10 @@ public class ProductController {
     }
 
     /**
-     * 장난감을 저장하고 저장된 장난감을 반환합니다.
+     * 상품을 저장하고 저장된 상품을 반환합니다.
      *
-     * @param productDto
-     * @return 저장된 ProductDto
+     * @param productDto 저장할 상품의 정보
+     * @return 저장된 상품의 정보
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -71,11 +71,11 @@ public class ProductController {
     }
 
     /**
-     * id에 해당하는 장난감을 수정합니다.
+     * id에 해당하는 상품을 수정합니다.
      *
-     * @param id
-     * @param productDto
-     * @return 수정된 ProductDto
+     * @param id 수정할 상품의 id
+     * @param productDto 수정할 상품의 정보
+     * @return 수정된 상품의 정보
      */
     @PatchMapping("/{id}")
     public ProductDto patchProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
@@ -83,9 +83,9 @@ public class ProductController {
     }
 
     /**
-     * id에 해당 하는 장난감을 삭제합니다.
+     * id에 해당 하는 상품을 삭제합니다.
      *
-     * @param id
+     * @param id 삭제할 상품의 id
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

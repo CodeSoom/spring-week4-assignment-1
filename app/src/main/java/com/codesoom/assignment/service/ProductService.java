@@ -15,35 +15,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
-
     private final ProductRepository productRepository;
 
     /**
-     * 모든 장난감 리스트를 반환합니다.
+     * 모든 상품 리스트를 반환합니다.
      *
-     * @return 모든 Product list
+     * @return 모든 상품들의 list
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
     /**
-     * id에 해당하는 장난감을 반환합니다.
+     * id에 해당하는 상품을 반환합니다.
      *
-     * @param id
+     * @param id 조회할 상품의 id
      * @return id에 해당하는 Product
-     * @throws ProductNotFoundException id에 해당하는 장난감이 없는 경우
+     * @throws ProductNotFoundException id에 해당하는 상품이 없는 경우
      */
-    public Product getProduct(Long id) {
+    public Product getProduct(Long id) throws ProductNotFoundException {
         return productRepository.findById(id).
                 orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     /**
-     * 장난감을 저장합니다.
+     * 상품을 저장합니다.
      *
-     * @param productDto
-     * @return 추가된 Product
+     * @param productDto 저장할 상품의 정보
+     * @return 저장된 product
      */
     public Product addProduct(ProductDto productDto) {
         return productRepository.save(Product.builder()
@@ -55,16 +54,15 @@ public class ProductService {
                 .build());
     }
 
-
     /**
      * id에 해당하는 장난감을 수정합니다.
-     * id에 해당하는 장난감이 없으면 ProductNotFoundException을 던집니다.
      *
-     * @param id
-     * @param productDto
+     * @param id         수정할 상품의 id
+     * @param productDto 수정할 상품의 정보
      * @return 수정된 Product
+     * @throws ProductNotFoundException id에 해당하는 상품이 없는 경우
      */
-    public Product updateProduct(Long id, ProductDto productDto) {
+    public Product updateProduct(Long id, ProductDto productDto) throws ProductNotFoundException {
         Product product = productRepository.findById(id).
                 orElseThrow(() -> new ProductNotFoundException(id));
         product.update(productDto);
@@ -72,12 +70,12 @@ public class ProductService {
     }
 
     /**
-     * id에 해당 하는 장난감을 수정합니다.
+     * id에 해당하는 상품을 수정합니다.
      *
-     * @param id
-     * @throws ProductNotFoundException id에 해당하는 장난감이 없는 경우
+     * @param id 삭제할 상품의 id
+     * @throws ProductNotFoundException id에 해당하는 상품이 없는 경우
      */
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id) throws ProductNotFoundException {
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException(id);
         }

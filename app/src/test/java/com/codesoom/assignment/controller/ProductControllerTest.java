@@ -64,7 +64,7 @@ class ProductControllerTest {
     @DisplayName("Get /products 요청")
     class Describe_getProducts {
         @Nested
-        @DisplayName("서비스에 장난감이 있으면")
+        @DisplayName("서비스에 상품이 1개 이상 있으면")
         class Context_exist_product {
             @BeforeEach
             void setUp() {
@@ -75,7 +75,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("장난감 list를 응답한다")
+            @DisplayName("상품 list를 응답한다")
             void it_return_empty_list() throws Exception {
                 mockMvc.perform(get("/products")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -86,7 +86,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("저장된 장난감이 없으면")
+        @DisplayName("저장된 상품이 없으면")
         class Context_does_not_exist_product {
             @Test
             @DisplayName("빈 list를 응답한다")
@@ -104,7 +104,7 @@ class ProductControllerTest {
     @DisplayName("Get /products/{id} 요청")
     class Describe_getProduct {
         @Nested
-        @DisplayName("id가 존재하는 장난감이면")
+        @DisplayName("id가 존재하는 상품이면")
         class Context_exist_id {
             @BeforeEach
             void setUp() {
@@ -112,7 +112,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("해당하는 장난감을 응답한다")
+            @DisplayName("해당하는 상품을 응답한다")
             void it_return_empty_list() throws Exception {
                 mockMvc.perform(get("/products/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -124,11 +124,12 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("주어진 id로 찾을수 없는 장난감이면")
+        @DisplayName("주어진 id로 찾을수 없는 상품이면")
         class Context_does_not_exist_id {
             @BeforeEach
             void setUp() {
-                given(productService.getProduct(NOT_EXIST_ID)).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+                given(productService.getProduct(NOT_EXIST_ID))
+                        .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
 
             @Test
@@ -147,7 +148,7 @@ class ProductControllerTest {
     @DisplayName("Post /products 요청")
     class Describe_addProduct {
         @Nested
-        @DisplayName("장난감이 있으면")
+        @DisplayName("상품이 있으면")
         class Context_exist_product {
             @BeforeEach
             void setUp() {
@@ -155,7 +156,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("응답코드 201이며 저장된 장난감을 응답한다")
+            @DisplayName("응답코드 201이며 저장된 상품을 응답한다")
             void it_return_product() throws Exception {
                 mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -168,7 +169,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("장난감이 없으면")
+        @DisplayName("상품이 없으면")
         class Context_does_not_exist_product {
             @Test
             @DisplayName("bad request를 응답한다")
@@ -196,7 +197,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("응답코드는 200이며 변경된 장난감을 응답한다.")
+            @DisplayName("응답코드는 200이며 변경된 상품을 응답한다.")
             void it_return_changed_product() throws Exception {
                 mockMvc.perform(patch("/products/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -214,7 +215,8 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 change = new Product(ID, "바뀐 장난감", "다른 회사", 500, "바뀐이미지.jpg");
-                given(productService.updateProduct(eq(NOT_EXIST_ID), any(ProductDto.class))).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+                given(productService.updateProduct(eq(NOT_EXIST_ID), any(ProductDto.class)))
+                        .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
 
             @Test
@@ -234,7 +236,7 @@ class ProductControllerTest {
     @DisplayName("Delete /products/{id} 요청")
     class Describe_deleteProduct {
         @Nested
-        @DisplayName("id가 존재하는 장난감이면")
+        @DisplayName("id가 존재하는 상품이면")
         class Context_exist_id {
             @Test
             @DisplayName("응답코드 204를 응답한다.")
@@ -247,7 +249,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("id가 존재하지 않는 장난감이면")
+        @DisplayName("id가 존재하지 않는 상품이면")
         class Context_does_not_exist_id {
             @BeforeEach
             void setUp() {
