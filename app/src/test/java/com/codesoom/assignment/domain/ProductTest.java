@@ -3,7 +3,7 @@ package com.codesoom.assignment.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
     private static Long ID = 1L;
@@ -23,26 +23,8 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("getName 메소드는 장난감 이름을 반환한다")
     void getName() {
-
-    }
-
-    @Test
-    @DisplayName("")
-    void getMaker() {
-
-    }
-
-    @Test
-    @DisplayName("")
-    void getPrice() {
-
-    }
-
-    @Test
-    @DisplayName("")
-    void getImage() {
-
+        assertThat(product.getName()).isEqualTo(NAME);
     }
 }
