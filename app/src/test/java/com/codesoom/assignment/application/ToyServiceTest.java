@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,7 +229,46 @@ class ToyServiceTest {
         }
     }
 
-    @Test
-    void deleteToy() {
+    @Nested
+    @DisplayName("deleteToy 메소드는")
+    class Describe_deleteToy {
+        private Long givenId;
+
+        @Nested
+        @DisplayName("저장된 toy의 id를 가지고 있다면")
+        class Context_with_saved_id {
+            private int size;
+
+            @BeforeEach
+            void setSavedId() {
+                givenId = givenSavedToyId;
+            }
+
+            @Test
+            @DisplayName("toy를 삭제한다.")
+            void it_delete_toy() {
+                toyService.deleteToy(givenId);
+
+                verify(toyRepository).deleteById(any(Long.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 toy를 지우려고하면")
+        class Context_when_delete_unsaved_toy {
+            @BeforeEach
+            void setUnsavedId() {
+                givenId = givenUnsavedToyId;
+            }
+
+            @Test
+            @DisplayName("데이터 접근 결과가 비어있다는 예외를 던집니다.")
+            void it_throw_exception() {
+                assertThatThrownBy(
+                        () -> toyService.deleteToy(givenId),
+                        "toy를 찾을 수 없다는 예외를 던져야 합니다."
+                ).isInstanceOf(ToyNotFoundException.class);
+            }
+        }
     }
 }
