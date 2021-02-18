@@ -8,11 +8,16 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.request.ProductRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 상품 API Controller
+ *
+ */
 @RestController
 @RequestMapping("/products")
 @CrossOrigin
@@ -24,23 +29,24 @@ public class ProductController {
         this.productService = productService;
     }
 
-
     @GetMapping
     public List<Product> findAll() {
         return productService.findAll();
     }
 
     @GetMapping("{id}")
-    public Product findById(@PathVariable Long id) {
-        return productService.findById(id);
+    public Product find(@PathVariable Long id) {
+        return productService.find(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product save(Product product) {
-        return productService.save(product);
+    public Product create(@RequestBody ProductRequest request) {
+        return productService.create(request);
     }
 
-
-
+    @PatchMapping("{id}")
+    public Product update(@PathVariable Long id, @RequestBody ProductRequest request) {
+        return productService.update(id, request.toEntity());
+    }
 }

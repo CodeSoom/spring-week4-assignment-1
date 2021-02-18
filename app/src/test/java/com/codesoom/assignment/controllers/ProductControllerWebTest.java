@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.request.ProductRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -52,10 +53,12 @@ public class ProductControllerWebTest {
 
         given(productService.findAll()).willReturn(products);
 
-        given(productService.findById(1L)).willReturn(product);
+        given(productService.find(1L)).willReturn(product);
 
-        given(productService.findById(100L))
+        given(productService.find(100L))
                 .willThrow(new ProductNotFoundException(100L));
+
+//        given(productService.create(product)).willReturn(product);
 
     }
 
@@ -74,7 +77,7 @@ public class ProductControllerWebTest {
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk());
 
-        verify(productService).findById(1L);
+        verify(productService).find(1L);
     }
 
     @Test
@@ -83,20 +86,21 @@ public class ProductControllerWebTest {
         mockMvc.perform(get("/products/100"))
                 .andExpect(status().isNotFound());
 
-        verify(productService).findById(100L);
+        verify(productService).find(100L);
     }
 
     @Test
     @DisplayName("새로운 제품을 추가하고 추가된 목록과 HttpStatus 201를 응답받는다.")
     void create() throws Exception {
-//        "name" : "코돌쓰" "maker" : "apple"
+//        "name" : "코돌쓰" "maker" : "백석동" "price" : 50000 "image" : "kodolth.png"
         mockMvc.perform(
                 post("/products")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\" : \"코돌쓰\" \"maker\" : \"apple\"}")
+                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON)
+                        .content("{\"name\" : \"코돌쓰\"}")
         )
                 .andExpect(status().isCreated());
 
-        verify(productService).save(any(Product.class));
+        verify(productService).create(any(ProductRequest.class));
     }
 }

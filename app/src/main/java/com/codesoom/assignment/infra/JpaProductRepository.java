@@ -2,6 +2,7 @@ package com.codesoom.assignment.infra;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.request.ProductRequest;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
 
@@ -16,5 +17,5 @@ public interface JpaProductRepository
 
     Optional<Product> findById(Long id);
 
-    Product save(Product product);
+    Product save(ProductRequest request);
 }
