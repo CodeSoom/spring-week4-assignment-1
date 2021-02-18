@@ -26,6 +26,12 @@ public class ProductResponse {
 
     private String imageUrl;
 
+    /**
+     * 상품 엔터티를 상품 응답 Dto로 변환하고, 상품 응답 Dto를 리턴합니다.
+     *
+     * @param product 변환하고자 하는 상품 엔터티
+     * @return 변환된 상품 응답 Dto
+     */
     public static ProductResponse of(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
