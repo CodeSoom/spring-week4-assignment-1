@@ -40,7 +40,7 @@ public class ProductService {
      * @return 주어진 id에 해당하는 상품
      * @throws ProductNotFoundException 주어진 id가 상품 목록에 없는 경우
      */
-    public Product getProduct(Long id) {
+    public Product getProduct(Long id) throws ProductNotFoundException{
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
@@ -83,7 +83,7 @@ public class ProductService {
      * @param id 삭제하려는 상품에 해당하는 id
      * @throws ProductNotFoundException 주어진 id가 상품 목록에 없는 경우
      */
-    public Product deleteProduct(Long id) {
+    public Product deleteProduct(Long id) throws ProductNotFoundException{
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 

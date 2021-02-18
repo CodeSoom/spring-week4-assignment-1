@@ -3,8 +3,11 @@ package com.codesoom.assignment.infra;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import org.springframework.data.annotation.Id;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,12 +16,6 @@ import java.util.Optional;
 public class InMemoryProductRepository implements ProductRepository {
 
     private final List<Product> products = new ArrayList<>();
-    private Long newId = 0L;
-
-    private synchronized Long generateId() {
-        newId += 1;
-        return newId;
-    }
 
     @Override
     public List<Product> findAll() {
@@ -34,7 +31,7 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Product save(Product product) {
-        product.setId(generateId());
+//        product.setId(generateId());
         products.add(product);
         return product;
     }
