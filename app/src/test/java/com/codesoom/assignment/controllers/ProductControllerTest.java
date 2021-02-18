@@ -42,12 +42,12 @@ class ProductControllerTest {
 
     //subject
     Product createProduct() {
-        Product product = new Product();
-        product.setName(NAME);
-        product.setMaker(MAKER);
-        product.setPrice(PRICE);
-        product.setImageUrl(IMAGE_URL);
-        return product;
+        return Product.builder()
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .imageUrl(IMAGE_URL)
+                .build();
     }
 
     Product createAndSaveProduct() {
@@ -67,6 +67,7 @@ class ProductControllerTest {
         @DisplayName("product가 주어진다면")
         class Context_with_product {
             Product givenProduct;
+
             @BeforeEach
             void setUp() {
                 givenProduct = createProduct();
@@ -169,17 +170,19 @@ class ProductControllerTest {
 
         @BeforeEach
         void setUp() {
-            updateSource = new Product();
-            updateSource.setName(UPDATE_NAME);
-            updateSource.setMaker(UPDATE_MAKER);
-            updateSource.setPrice(UPDATE_PRICE);
-            updateSource.setImageUrl(UPDATE_IMAGE_URL);
+            updateSource = Product.builder()
+                    .name(UPDATE_NAME)
+                    .maker(UPDATE_MAKER)
+                    .price(UPDATE_PRICE)
+                    .imageUrl(UPDATE_IMAGE_URL)
+                    .build();
         }
 
         @Nested
         @DisplayName("존재하는 product id와 수정한 product를 요청한다면")
         class Context_exist_id_with_product {
             Long givenProductId;
+
             @BeforeEach
             void setUp() {
                 Product givenProduct = createAndSaveProduct();

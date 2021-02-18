@@ -25,8 +25,8 @@ public class ProductService {
     /**
      * 새로운 product를 생성하여 반환합니다.
      *
-     * @param   source 새로운 product 정보
-     * @return  생성된 새로운 product
+     * @param source 새로운 product 정보
+     * @return 생성된 새로운 product
      */
     public Product create(Product source) {
         return productRepository.save(source);
@@ -35,9 +35,9 @@ public class ProductService {
     /**
      * 주어진 id와 일치하는 product를 찾아 반환합니다.
      *
-     * @param   id 찾고자 하는 product id
-     * @return  id와 일치하는 product
-     * @throws  ProductNotFountException 존재하지 않는 id가 주어진 경우
+     * @param id 찾고자 하는 product id
+     * @return id와 일치하는 product
+     * @throws ProductNotFountException 존재하지 않는 id가 주어진 경우
      */
     public Product find(Long id) {
         return productRepository.findById(id)
@@ -54,26 +54,22 @@ public class ProductService {
     /**
      * 주어진 id와 일치하는 product를 수정하여 반한합니다.
      *
-     * @param   id 수정하고자 하는 product의 id
-     * @param   source 수정하고자 하는 product
-     * @return  수정된 새로운 product
-     * @throws  ProductNotFountException 존재하지 않는 id가 주어진 경우
+     * @param id     수정하고자 하는 product의 id
+     * @param source 수정하고자 하는 product
+     * @return 수정된 새로운 product
+     * @throws ProductNotFountException 존재하지 않는 id가 주어진 경우
      */
     public Product update(Long id, Product source) {
         Product product = find(id);
-        product.setName(source.getName());
-        product.setMaker(source.getMaker());
-        product.setPrice(source.getPrice());
-        product.setImageUrl(source.getImageUrl());
-
+        product.update(source);
         return create(product);
     }
 
     /**
      * 주어진 id와 일치하는 product를 삭제합니다.
      *
-     * @param   id 삭제하고자 하는 product의 id
-     * @throws  ProductNotFountException 존재하지 않는 id가 주어진 경우
+     * @param id 삭제하고자 하는 product의 id
+     * @throws ProductNotFountException 존재하지 않는 id가 주어진 경우
      */
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {

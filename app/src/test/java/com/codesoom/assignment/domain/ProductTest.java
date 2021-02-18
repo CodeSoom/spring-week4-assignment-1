@@ -16,11 +16,12 @@ class ProductTest {
     @DisplayName("Product가 정상적으로 생성되고 값이 세팅되었는지 확인합니다")
     @Test
     void productCreateTest() {
-        Product product = new Product();
-        product.setName(NAME);
-        product.setMaker(MAKER);
-        product.setPrice(PRICE);
-        product.setImageUrl(IMAGE_URL);
+        Product product = Product.builder()
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .imageUrl(IMAGE_URL)
+                .build();
 
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);

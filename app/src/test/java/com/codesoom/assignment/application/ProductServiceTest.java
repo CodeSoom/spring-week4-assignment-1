@@ -39,11 +39,12 @@ class ProductServiceTest {
 
     //subject
     Product createProduct() {
-        Product product = new Product();
-        product.setName(NAME);
-        product.setMaker(MAKER);
-        product.setPrice(PRICE);
-        product.setImageUrl(IMAGE_URL);
+        Product product = Product.builder()
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .imageUrl(IMAGE_URL)
+                .build();
         return productService.create(product);
     }
 
@@ -70,11 +71,12 @@ class ProductServiceTest {
 
         @BeforeEach
         void setUp() {
-            givenProduct = new Product();
-            givenProduct.setName(NAME);
-            givenProduct.setMaker(MAKER);
-            givenProduct.setPrice(PRICE);
-            givenProduct.setImageUrl(IMAGE_URL);
+            givenProduct = Product.builder()
+                    .name(NAME)
+                    .maker(MAKER)
+                    .price(PRICE)
+                    .imageUrl(IMAGE_URL)
+                    .build();
         }
 
         Product subject() {
@@ -172,11 +174,12 @@ class ProductServiceTest {
                 Product givenProduct = createProduct();
                 givenProductId = givenProduct.getId();
 
-                source = new Product();
-                source.setName(UPDATE_NAME);
-                source.setMaker(UPDATE_MAKER);
-                source.setPrice(UPDATE_PRICE);
-                source.setImageUrl(UPDATE_IMAGE_URL);
+                source = Product.builder()
+                        .name(UPDATE_NAME)
+                        .maker(UPDATE_MAKER)
+                        .price(UPDATE_PRICE)
+                        .imageUrl(UPDATE_IMAGE_URL)
+                        .build();
             }
 
             @DisplayName("수정된 product를 반환한다")
@@ -198,11 +201,12 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 givenProductId = NOT_EXIST_ID;
-                source = new Product();
-                source.setName(UPDATE_NAME);
-                source.setMaker(UPDATE_MAKER);
-                source.setPrice(UPDATE_PRICE);
-                source.setImageUrl(UPDATE_IMAGE_URL);
+                source = Product.builder()
+                        .name(UPDATE_NAME)
+                        .maker(UPDATE_MAKER)
+                        .price(UPDATE_PRICE)
+                        .imageUrl(UPDATE_IMAGE_URL)
+                        .build();
             }
 
             @DisplayName("product를 찾을 수 없다는 예외를 던진다")
