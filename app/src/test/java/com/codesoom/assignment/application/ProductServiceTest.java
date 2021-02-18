@@ -90,7 +90,7 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("create 메서드는")
+    @DisplayName("createProduct 메서드는")
     class Describe_class {
         @Nested
         @DisplayName("만약 name, maker, price, image가 주어진다면")
@@ -131,7 +131,7 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("update 메서드는")
+    @DisplayName("updateProduct 메서드는")
     class Describe_update {
         @Nested
         @DisplayName("만약 저징되어 있는 고양이 장난감의 id와 업데이트 될 name, maker, price, image가 주어진다면")
@@ -168,6 +168,22 @@ class ProductServiceTest {
                 Assertions.assertEquals(updatedProduct.getImage(), image, "업데이트하여 리턴 된 고양이 장난감은 image값이 udpatedImage이어야 한다");
 
                 verify(productRepository).findById(givenExistedId);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteProduct 메서드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        class Context_WithExistedId {
+            private final Long givenExistedId = EXISTED_ID;
+
+            @Test
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제한다")
+            void itDeletesProduct() {
+                productService.deleteProduct(givenExistedId);
             }
         }
     }
