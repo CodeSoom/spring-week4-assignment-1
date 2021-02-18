@@ -108,17 +108,17 @@ class ProductServiceTest {
                 image = "createdImage";
             }
 
-            Product makeNewProduct() {
+            Product createProduct() {
                 return new Product(CREATED_ID, name, maker, price, image);
             }
 
             @Test
             @DisplayName("새로운 장난감 고양이를 생성하고 생성된 장난감 고양이를 리턴한다")
             void itCreatesProductAndReturnsCreatedProduct() {
-                Product newProduct = makeNewProduct();
-                given(productRepository.save(any(Product.class))).willReturn(newProduct);
+                Product createSource = createProduct();
+                given(productRepository.save(any(Product.class))).willReturn(createSource);
 
-                Product createdProduct = productService.createProduct(newProduct);
+                Product createdProduct = productService.createProduct(createSource);
                 Assertions.assertEquals(createdProduct.getId(), CREATED_ID, "생성하여 리턴 된 고양이 장난감은 id값이 2L이어야 한다");
                 Assertions.assertEquals(createdProduct.getName(), name, "생성하여 리턴 된 고양이 장난감은 name값이 createdName이어야 한다");
                 Assertions.assertEquals(createdProduct.getMaker(), maker, "생성하여 리턴 된 고양이 장난감은 maker값이 createdMaker이어야 한다");
@@ -127,6 +127,41 @@ class ProductServiceTest {
 
                 verify(productRepository).save(any(Product.class));
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("update 메서드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("만약 저징되어 있는 고양이 장난감의 id와 업데이트 될 name, maker, price, image가 주어진다면")
+        class Context_WithExistedIdAndNameAndMakerAndPriceAndImage {
+            private final Long givenExistedId = EXISTED_ID;
+            private String name;
+            private String maker;
+            private int price;
+            private String image;
+
+            @BeforeEach
+            void setUpUpdateProduct() {
+                name = "updatedName";
+                maker = "updatedMaker";
+                price = 300;
+                image = "updatedImage";
+            }
+
+            Product updateProduct() {
+                return new Product(givenExistedId, name, maker, price, image);
+            }
+
+            @Test
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 업데이트하고 수정된 고양이 장난감을 리턴한다")
+            void itUpdatesProductAndReturnsUpdatedProduct() {
+                Product updateSource = updateProduct();
+
+                Product updatedProduct = productService.updateProduct(givenExistedId, updateSource);
+            }
+
         }
     }
 }
