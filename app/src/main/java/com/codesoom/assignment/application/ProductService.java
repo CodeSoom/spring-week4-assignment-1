@@ -65,7 +65,7 @@ public class ProductService {
      * @return 수정된 상품
      * @throws ProductNotFoundException 주어진 id가 상품 목록에 없는 경우
      */
-    public Product updateProduct(Long id, Product source) {
+    public Product updateProduct(Long id, Product source) throws ProductNotFoundException{
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 

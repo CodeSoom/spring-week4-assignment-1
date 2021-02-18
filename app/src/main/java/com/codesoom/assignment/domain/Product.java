@@ -25,7 +25,7 @@ public class Product {
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
     }
-    
+
     public Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
