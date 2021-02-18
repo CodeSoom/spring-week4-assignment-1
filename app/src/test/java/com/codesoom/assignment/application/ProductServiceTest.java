@@ -154,7 +154,10 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 product = new Product();
-                product.setName(UPDATE_POSTFIX + "!!!");
+                product.setName("물고기 장난감");
+                product.setMaker("애옹이네 장난감");
+                product.setPrice(5000);
+                product.setImage("https://bit.ly/2M4YXkw");
 
                 given(productRepository.findById(1L))
                         .willReturn(ofNullable(product));
@@ -167,7 +170,10 @@ class ProductServiceTest {
 
                 verify(productRepository).findById(1L);
 
-                assertThat(product.getName()).isEqualTo(UPDATE_POSTFIX + "!!!");
+                assertThat(product.getName()).isEqualTo("물고기 장난감");
+                assertThat(product.getMaker()).isEqualTo("애옹이네 장난감");
+                assertThat(product.getPrice()).isEqualTo(5000);
+                assertThat(product.getImage()).isEqualTo("https://bit.ly/2M4YXkw");
             }
         }
 
