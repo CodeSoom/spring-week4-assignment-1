@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class InMemoryTaskRepository implements TaskRepository {
@@ -19,11 +20,10 @@ public class InMemoryTaskRepository implements TaskRepository {
     }
 
     @Override
-    public Task find(Long id) {
+    public Optional<Task> findById(Long id) {
         return tasks.stream()
                 .filter(task -> task.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new TaskNotFoundException(id));
+                .findFirst();
     }
 
     @Override
@@ -36,10 +36,9 @@ public class InMemoryTaskRepository implements TaskRepository {
     }
 
     @Override
-    public Task remove(Task task) {
+    public void delete(Task task) {
         tasks.remove(task);
 
-        return task;
     }
 
     private Long generateID() {

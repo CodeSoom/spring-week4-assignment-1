@@ -1,16 +1,14 @@
-package com.codesoom.assignment.models;
+package com.codesoom.assignment.infra;
 
-import com.codesoom.assignment.TaskNotFoundException;
+import com.codesoom.assignment.models.Task;
+import com.codesoom.assignment.models.TaskRepository;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-public interface TaskRepository{
-
+public interface JpaTaskRepository
+        extends TaskRepository, CrudRepository<Task, Long> {
     List<Task> findAll();
 
     Optional<Task> findById(Long id);

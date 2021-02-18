@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.models.Task;
 import com.codesoom.assignment.models.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,8 @@ public class TaskService {
     }
 
     public Task getTask(Long id) {
-        return taskRepository.find(id);
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
     public Task createTask(Task source) {
@@ -30,16 +32,21 @@ public class TaskService {
     }
 
     public Task updateTask(Long id, Task source) {
-        Task task = taskRepository.find(id);
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+
         task.setTitle(source.getTitle());
 
         return task;
     }
 
     public Task deleteTask(Long id) {
-        Task task =  taskRepository.find(id);
+        Task task =  taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
 
-        return taskRepository.remove(task);
+       taskRepository.delete(task);
+
+       return task;
     }
 
 
