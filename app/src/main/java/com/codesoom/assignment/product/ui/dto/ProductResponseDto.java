@@ -3,11 +3,14 @@ package com.codesoom.assignment.product.ui.dto;
 import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * 상품의 정보를 담은 응답 DTO.
  */
-@Data
+@Getter
+@EqualsAndHashCode(of = "id")
 public class ProductResponseDto {
 
     private Long id;

@@ -3,12 +3,13 @@ package com.codesoom.assignment.product.ui.dto;
 import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
  * 상품의 등록정보를 담은 요청 DTO.
  */
-@Data
+@Getter
 @NoArgsConstructor
 public class ProductSaveRequestDto {
     private String name;
