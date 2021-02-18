@@ -27,7 +27,7 @@ public class ProductController {
      * @return 상품 정보 리스트
      */
     @GetMapping
-    public List<ProductResponseDto> getProducts(){
+    public List<ProductResponseDto> getAllProduct(){
         return productService.getProducts();
     }
 
@@ -48,7 +48,7 @@ public class ProductController {
      * @return id 값으로 찾은 상품
      */
     @GetMapping("/{id}")
-    public ProductResponseDto getProductsById(@PathVariable Long id){
+    public ProductResponseDto getProduct(@PathVariable Long id){
         return productService.getProductsById(id);
     }
 
