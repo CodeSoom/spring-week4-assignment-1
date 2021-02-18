@@ -46,7 +46,8 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ProductResponseDto updateProduct(@PathVariable Long id, @RequestBody ProductUpdateRequestDto requestDto) {
+    public ProductResponseDto updateProduct(@PathVariable Long id,
+                                            @RequestBody ProductUpdateRequestDto requestDto) {
         return productService.updateProduct(id, requestDto);
     }
 
