@@ -183,7 +183,11 @@ class ProductServiceTest {
             @Test
             @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제한다")
             void itDeletesProduct() {
+                given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
+
                 productService.deleteProduct(givenExistedId);
+
+                verify(productRepository).delete(setupProduct);
             }
         }
     }
