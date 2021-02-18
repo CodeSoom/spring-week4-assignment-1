@@ -212,7 +212,6 @@ class ProductControllerTest {
             void setUp() {
                 given(productService.updateProduct(eq(existingId), any(ProductRequest.class)))
                         .willReturn(productResponse);
-
             }
 
             @Test
