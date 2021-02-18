@@ -60,7 +60,6 @@ class ProductServiceTest {
 
                 verify(productRepository).findAll();
 
-                assertThat(products).isNotEmpty();
                 assertThat(products).hasSize(1);
             }
         }
