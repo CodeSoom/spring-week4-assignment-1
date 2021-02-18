@@ -12,6 +12,7 @@ public class ProductTest {
     private static final String MAKER = "애옹이네 장난감";
     private static final int PRICE = 5000;
     private static final String IMAGE_URL = "https://http.cat/599";
+    private static final String PRODUCT_BUILDER_TO_STRING = "Product.ProductBuilder(id=null, name=null, maker=null, price=0, imageUrl=null)";
 
     private Product product;
 
@@ -42,5 +43,11 @@ public class ProductTest {
     @Test
     void getImageUrl() {
         assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
+    }
+
+    @DisplayName("product builder의 toString을 리턴한다")
+    @Test
+    void productToString() {
+        assertThat(product.builder().toString()).isEqualTo(PRODUCT_BUILDER_TO_STRING);
     }
 }
