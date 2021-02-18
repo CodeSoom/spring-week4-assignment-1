@@ -56,26 +56,7 @@ public class ProductServiceTest {
     @BeforeEach
     void setUp() {
         productService = new ProductService(productRepository);
-
-        product1 = Product.builder()
-                .id(PRODUCT1_ID)
-                .name(PRODUCT1_NAME)
-                .maker(PRODUCT1_MAKER)
-                .price(PRODUCT1_PRICE)
-                .imageUrl(PRODUCT1_IMAGE)
-                .build();
-
-        product2 = Product.builder()
-                .id(PRODUCT2_ID)
-                .name(PRODUCT2_NAME)
-                .maker(PRODUCT2_MAKER)
-                .price(PRODUCT2_PRICE)
-                .imageUrl(PRODUCT2_IMAGE)
-                .build();
-
-        products = Arrays.asList(product1, product2);
-        responseDto1 = ProductResponseDto.of(product1);
-        responseDto2 = ProductResponseDto.of(product2);
+        setUpFixtures();
     }
 
     @Test
@@ -184,5 +165,27 @@ public class ProductServiceTest {
                 () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
                 () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl())
         );
+    }
+
+    void setUpFixtures() {
+        product1 = Product.builder()
+                .id(PRODUCT1_ID)
+                .name(PRODUCT1_NAME)
+                .maker(PRODUCT1_MAKER)
+                .price(PRODUCT1_PRICE)
+                .imageUrl(PRODUCT1_IMAGE)
+                .build();
+
+        product2 = Product.builder()
+                .id(PRODUCT2_ID)
+                .name(PRODUCT2_NAME)
+                .maker(PRODUCT2_MAKER)
+                .price(PRODUCT2_PRICE)
+                .imageUrl(PRODUCT2_IMAGE)
+                .build();
+
+        products = Arrays.asList(product1, product2);
+        responseDto1 = ProductResponseDto.of(product1);
+        responseDto2 = ProductResponseDto.of(product2);
     }
 }
