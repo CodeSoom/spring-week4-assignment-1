@@ -22,7 +22,6 @@ import static org.mockito.Mockito.verify;
 class ProductServiceTest {
 
     private static final String PRODUCT_NAME = "test";
-    private static final String UPDATE_POSTFIX = "fish toy";
 
     private ProductService productService;
 
