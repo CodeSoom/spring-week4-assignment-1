@@ -63,6 +63,12 @@ public class ProductController {
         return productService.updateProduct(id, request);
     }
 
+    /**
+     * 상품 제거
+     * @param id 상품 id
+     * @return 삭제된 상품정보
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public ProductResponseDto deleteProduct(@PathVariable Long id){
         return productService.deleteProduct(id);

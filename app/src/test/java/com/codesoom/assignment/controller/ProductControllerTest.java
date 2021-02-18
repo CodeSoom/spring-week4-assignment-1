@@ -68,7 +68,7 @@ class ProductControllerTest {
     @Test
     void testDeleteProduct() throws Exception {
         mockMvc.perform(delete(BASE_URL + "/" + id))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
 }
