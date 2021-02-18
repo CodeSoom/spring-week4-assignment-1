@@ -56,6 +56,7 @@ class ProductServiceTest {
             given(productRepository.findAll()).willReturn(new ArrayList<>());
 
             List<Product> products = productRepository.findAll();
+            Assertions.assertEquals(products.size() , 1, "조회하여 리턴 된 고양이 장난감 목록은 size가 1이어야 한다");
 
             verify(productRepository).findAll();
         }
@@ -75,13 +76,13 @@ class ProductServiceTest {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
                 Product detailProduct = productService.getProduct(givenExistedId);
-
-                verify(productRepository).findById(givenExistedId);
                 Assertions.assertEquals(detailProduct.getId(), EXISTED_ID, "조회하여 리턴 된 고양이 장난감은 id값이 1L이어야 한다");
                 Assertions.assertEquals(detailProduct.getName(), SETUP_PRODUCT_NAME, "조회하여 리턴 된 고양이 장난감은 name값이 setupName이어야 한다");
                 Assertions.assertEquals(detailProduct.getMaker(), SETUP_PRODUCT_MAKER, "조회하여 리턴 된 고양이 장난감은 maker값이 setupMaker이어야 한다");
                 Assertions.assertEquals(detailProduct.getPrice(), SETUP_PRODUCT_PRICE, "조회하여 리턴 된 고양이 장난감은 price값이 100이어야 한다");
                 Assertions.assertEquals(detailProduct.getImage(), SETUP_PRODUCT_IMAGE, "조회하여 리턴 된 고양이 장난감은 image값이 setupImage이어야 한다");
+
+                verify(productRepository).findById(givenExistedId);
             }
         }
     }
