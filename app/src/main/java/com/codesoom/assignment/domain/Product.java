@@ -23,7 +23,15 @@ public class Product {
 
     private String maker;
 
-    private int price;
+    private Integer price;
 
     private String image;
+
+    public Product(Long id, String name, String maker, Integer price, String image) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.image = image;
+    }
 }
