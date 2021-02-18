@@ -11,7 +11,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -60,6 +63,13 @@ class ProductControllerTest {
         mockMvc.perform(put(BASE_URL+ "/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new ProductRequestDto())))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeleteProduct() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(delete(BASE_URL + "/" + id))
                 .andExpect(status().isOk());
     }
 
