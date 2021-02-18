@@ -94,8 +94,6 @@ class ProductServiceTest {
                 product = new Product();
                 product.setName(PRODUCT_NAME);
 
-                productService.createProduct(product);
-
                 given(productRepository.findById(1L))
                         .willReturn(ofNullable(product));
             }
@@ -129,11 +127,12 @@ class ProductServiceTest {
     @Nested
     @DisplayName("createProduct 메소드는")
     class Describe_createProduct {
+        Product product;
 
         @Test
         @DisplayName("새로운 장난감을 등록한다")
         void it_returns_product() {
-            Product product = new Product();
+            product = new Product();
             Product createdProduct = productService.createProduct(product);
 
             given(productRepository.save(any(Product.class)))
@@ -157,14 +156,12 @@ class ProductServiceTest {
                 product = new Product();
                 product.setName(UPDATE_POSTFIX + "!!!");
 
-                productService.createProduct(product);
-
                 given(productRepository.findById(1L))
                         .willReturn(ofNullable(product));
             }
 
             @Test
-            @DisplayName("해당 ID를 갖는 장난감의 이름을 변경하고 반환한다")
+            @DisplayName("해당 ID를 갖는 장난감의 정보를 수정하고 반환한다")
             void it_returns_updated_product() {
                 Product updatedProduct = productService.updateProduct(1L, product);
 
@@ -201,8 +198,6 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 product = new Product();
-
-                productService.createProduct(product);
 
                 given(productRepository.findById(1L))
                         .willReturn(ofNullable(product));
