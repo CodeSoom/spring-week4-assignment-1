@@ -11,8 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -52,6 +51,13 @@ class ProductControllerTest {
     void testGetProductsById() throws Exception {
         Long id = 1L;
         mockMvc.perform(get(BASE_URL + "/" + id))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testUpdateProduct() throws Exception {
+        Long id = 1L;
+        mockMvc.perform(put(BASE_URL+ "/" + id))
                 .andExpect(status().isOk());
     }
 

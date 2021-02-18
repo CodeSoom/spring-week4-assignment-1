@@ -31,13 +31,13 @@ public class ProductController {
     }
 
     /**
-     * @param responseDto 등록할 상품 정보
+     * @param request 등록할 상품 정보
      * @return 등혹한 상품 정보
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ProductResponseDto saveProduct(@RequestBody ProductRequestDto responseDto){
-        return productService.saveProduct(responseDto);
+    public ProductResponseDto saveProduct(@RequestBody ProductRequestDto request){
+        return productService.saveProduct(request);
     }
 
     /**
@@ -48,5 +48,5 @@ public class ProductController {
     public ProductResponseDto getProductsById(@PathVariable Long id){
         return productService.getProductsById(id);
     }
-
+    
 }
