@@ -28,6 +28,7 @@ class ProductControllerTest {
     private ProductService productService;
 
     private final String BASE_URL = "/products";
+    Long id = 1L;
 
     private ObjectMapper objectMapper;
 
@@ -52,14 +53,12 @@ class ProductControllerTest {
 
     @Test
     void testGetProductsById() throws Exception {
-        Long id = 1L;
         mockMvc.perform(get(BASE_URL + "/" + id))
                 .andExpect(status().isOk());
     }
 
     @Test
     void testUpdateProduct() throws Exception {
-        Long id = 1L;
         mockMvc.perform(put(BASE_URL+ "/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new ProductRequestDto())))
@@ -68,7 +67,6 @@ class ProductControllerTest {
 
     @Test
     void testDeleteProduct() throws Exception {
-        Long id = 1L;
         mockMvc.perform(delete(BASE_URL + "/" + id))
                 .andExpect(status().isOk());
     }
