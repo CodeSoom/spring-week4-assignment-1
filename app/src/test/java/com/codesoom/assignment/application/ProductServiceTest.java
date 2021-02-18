@@ -181,11 +181,16 @@ class ProductServiceTest {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제한다")
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제하고 삭제 한 고양이 장난감을 리턴한다")
             void itDeletesProduct() {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
-                productService.deleteProduct(givenExistedId);
+                Product deletedProduct = productService.deleteProduct(givenExistedId);
+                Assertions.assertEquals(deletedProduct.getId(), givenExistedId, "삭제되어 리턴 된 고양이 장난감은 id값이 1L이어야 한다");
+                Assertions.assertEquals(deletedProduct.getName(), SETUP_PRODUCT_NAME, "삭제되어 리턴 된 고양이 장난감은 name값이 setupName이어야 한다");
+                Assertions.assertEquals(deletedProduct.getMaker(), SETUP_PRODUCT_MAKER, "삭제되어 리턴 된 고양이 장난감은 maker값이 setupMaker이어야 한다");
+                Assertions.assertEquals(deletedProduct.getPrice(), SETUP_PRODUCT_PRICE, "삭제되어 리턴 된 고양이 장난감은 price값이 100이어야 한다");
+                Assertions.assertEquals(deletedProduct.getImage(), SETUP_PRODUCT_IMAGE, "삭제되어 리턴 된 고양이 장난감은 image값이 setupImage이어야 한다");
 
                 verify(productRepository).delete(setupProduct);
             }
