@@ -43,10 +43,12 @@ public class ProductService {
         return product;
     }
     @DeleteMapping("{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public Product deleteProduct(@PathVariable Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.delete(product);
+
+        return product;
     }
 }

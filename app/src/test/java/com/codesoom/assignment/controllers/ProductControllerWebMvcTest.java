@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
@@ -188,13 +189,16 @@ class ProductControllerWebMvcTest {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제하고 NO_CONTENT를 리턴한다")
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제하고 삭제된 고양이 장난감과 NO_CONTENT를 리턴한다")
             void itDeleteProductAndReturnsNO_CONTENTHttpStatus() throws Exception {
+                Product deletedProduct = setupProduct;
+                given(productService.getProduct(givenExistedId)).willReturn(setupProduct);
 
                 mockMvc.perform(delete("/products/" + givenExistedId))
                         .andExpect(status().isNoContent());
+
+                verify(productService).deleteProduct(givenExistedId);
             }
         }
     }
-
 }

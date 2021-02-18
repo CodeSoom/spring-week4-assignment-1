@@ -40,6 +40,6 @@ public class ProductController {
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Product delete(@PathVariable Long id) {
-        return null;
+        return productService.deleteProduct(id);
     }
 }
