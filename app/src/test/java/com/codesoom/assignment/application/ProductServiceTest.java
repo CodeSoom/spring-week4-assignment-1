@@ -115,11 +115,17 @@ class ProductServiceTest {
             @Test
             @DisplayName("새로운 장난감 고양이를 생성하고 생성된 장난감 고양이를 리턴한다")
             void itCreatesProductAndReturnsCreatedProduct() {
-                Product createProduct = makeNewProduct();
+                Product newProduct = makeNewProduct();
+                given(productRepository.save(any(Product.class))).willReturn(newProduct);
 
-                Product createdProduct = productService.createProduct(createProduct);
+                Product createdProduct = productService.createProduct(newProduct);
+                Assertions.assertEquals(createdProduct.getId(), CREATED_ID, "생성하여 리턴 된 고양이 장난감은 id값이 2L이어야 한다");
+                Assertions.assertEquals(createdProduct.getName(), name, "생성하여 리턴 된 고양이 장난감은 name값이 createdName이어야 한다");
+                Assertions.assertEquals(createdProduct.getMaker(), maker, "생성하여 리턴 된 고양이 장난감은 maker값이 createdMaker이어야 한다");
+                Assertions.assertEquals(createdProduct.getPrice(), price, "생성하여 리턴 된 고양이 장난감은 price값이 200이어야 한다");
+                Assertions.assertEquals(createdProduct.getImage(), image, "생성하여 리턴 된 고양이 장난감은 image값이 createdImage이어야 한다");
 
-                verify(productRepository).save(any());
+                verify(productRepository).save(any(Product.class));
             }
         }
     }
