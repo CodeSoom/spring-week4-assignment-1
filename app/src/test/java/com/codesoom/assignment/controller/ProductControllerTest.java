@@ -57,7 +57,9 @@ class ProductControllerTest {
     @Test
     void testUpdateProduct() throws Exception {
         Long id = 1L;
-        mockMvc.perform(put(BASE_URL+ "/" + id))
+        mockMvc.perform(put(BASE_URL+ "/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new ProductRequestDto())))
                 .andExpect(status().isOk());
     }
 

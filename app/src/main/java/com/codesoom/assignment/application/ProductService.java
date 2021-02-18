@@ -21,4 +21,7 @@ public class ProductService {
         return null;
     }
 
+    public ProductResponseDto updateProduct(Long id, ProductRequestDto request) {
+        return null;
+    }
 }

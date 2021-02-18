@@ -23,6 +23,7 @@ public class ProductController {
     }
 
     /**
+     * 전체 상품 조회
      * @return 상품 정보 리스트
      */
     @GetMapping
@@ -31,6 +32,7 @@ public class ProductController {
     }
 
     /**
+     * 상품 저장
      * @param request 등록할 상품 정보
      * @return 등혹한 상품 정보
      */
@@ -41,6 +43,7 @@ public class ProductController {
     }
 
     /**
+     * 상품 1개 조회
      * @param id 상품 id
      * @return id 값으로 찾은 상품
      */
@@ -48,5 +51,16 @@ public class ProductController {
     public ProductResponseDto getProductsById(@PathVariable Long id){
         return productService.getProductsById(id);
     }
-    
+
+    /**
+     * 상품 수정
+     * @param id 상품 id
+     * @param request 수정하고 싶은 상품 정보
+     * @return
+     */
+    @PutMapping("/{id}")
+    public ProductResponseDto updateProduct(@PathVariable Long id, @RequestBody ProductRequestDto request){
+        return productService.updateProduct(id, request);
+    }
+
 }
