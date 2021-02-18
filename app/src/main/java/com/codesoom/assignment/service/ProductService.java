@@ -61,7 +61,7 @@ public class ProductService {
     }
 
     /**
-     * 주어진 id에 해당하는 상품을 찾아 수정후 수정된 상품을 리턴합니다.
+     * 주어진 id에 해당하는 상품을 찾아 수정하고, 수정된 상품을 리턴합니다.
      *
      * @param id 수정하고자 하는 상품의 id
      * @param productRequest 수정하고자 하는 상품
