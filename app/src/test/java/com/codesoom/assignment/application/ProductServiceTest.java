@@ -53,9 +53,10 @@ class ProductServiceTest {
             private final Long givenExistedId = 1L;
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감이 주어진다")
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 리턴한다")
             void itReturnsWithExistedProduct() {
                 Optional<Product> product = productRepository.findById(givenExistedId);
+                //assertThat(Optional.of(product).getName()).isEqualTo();
             }
         }
     }
