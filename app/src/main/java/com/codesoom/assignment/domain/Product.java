@@ -31,6 +31,12 @@ public class Product {
 
     private String imageUrl;
 
+    /**
+     * 상품을 수정하고, 수정된 상품을 리턴합니다.
+     *
+     * @param product 수정하고자 하는 상품
+     * @return 수정된 상품
+     */
     public Product update(Product product) {
         this.name = product.getName();
         this.maker = product.getMaker();
