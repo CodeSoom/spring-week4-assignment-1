@@ -26,7 +26,8 @@ class ProductServiceTest {
     private ProductRepository productRepository;
     private ProductService productService;
 
-    private Product product;
+    private Product product1;
+    private Product product2;
     private ProductRequest productRequest;
     private List<Product> products;
 
@@ -38,12 +39,20 @@ class ProductServiceTest {
         productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository);
 
-        product = Product.builder()
+        product1 = Product.builder()
                 .id(1L)
-                .name("장난감")
-                .maker("장난감 메이커")
+                .name("장난감1")
+                .maker("장난감 메이커1")
                 .price(10000)
-                .imageUrl("url")
+                .imageUrl("url1")
+                .build();
+
+        product2 = Product.builder()
+                .id(2L)
+                .name("장난감2")
+                .maker("장난감 메이커2")
+                .price(20000)
+                .imageUrl("url2")
                 .build();
 
         productRequest = ProductRequest.builder()
@@ -70,22 +79,6 @@ class ProductServiceTest {
     @Test
     @DisplayName("모든 상품을 조회한다.")
     void getProducts() {
-        Product product1 = Product.builder()
-                .id(1L)
-                .name("장난감1")
-                .maker("장난감 메이커1")
-                .price(10000)
-                .imageUrl("url1")
-                .build();
-
-        Product product2 = Product.builder()
-                .id(2L)
-                .name("장난감2")
-                .maker("장난감 메이커2")
-                .price(20000)
-                .imageUrl("url2")
-                .build();
-
         products.add(product1);
         products.add(product2);
 
@@ -101,7 +94,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 조회하면 id에 해당하는 상품을 리턴한다.")
     void getProductWithExistingId() {
-        given(productRepository.findById(existingId)).willReturn(Optional.of(product));
+        given(productRepository.findById(existingId)).willReturn(Optional.of(product1));
 
         productService.getProduct(existingId);
 
@@ -121,7 +114,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 수정하면 수정된 상품을 리턴한다.")
     void updateProductWithExistingId() {
-        given(productRepository.findById(existingId)).willReturn(Optional.of(product));
+        given(productRepository.findById(existingId)).willReturn(Optional.of(product1));
 
         ProductRequest updateRequest = ProductRequest.builder()
                 .name("new 장난감")
@@ -154,7 +147,7 @@ class ProductServiceTest {
     @Test
     @DisplayName("존재하는 id로 상품을 삭제하면 상품을 삭제한다.")
     void deleteProductWithExistingId() {
-        given(productRepository.findById(existingId)).willReturn(Optional.of(product));
+        given(productRepository.findById(existingId)).willReturn(Optional.of(product1));
 
         productService.deleteProduct(existingId);
 
