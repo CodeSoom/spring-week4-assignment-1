@@ -48,7 +48,8 @@ class ProductControllerTest {
 
     private List<ProductResponse> products;
     private ProductRequest productRequest;
-    private ProductResponse productResponse;
+    private ProductResponse productResponse1;
+    private ProductResponse productResponse2;
 
     @BeforeEach
     void setUp() {
@@ -61,12 +62,20 @@ class ProductControllerTest {
 
         products = new ArrayList<>();
 
-        productResponse = ProductResponse.builder()
+        productResponse1 = ProductResponse.builder()
                 .id(1L)
-                .name("장난감")
-                .maker("장난감 메이커")
+                .name("장난감1")
+                .maker("장난감 메이커1")
                 .price(10000)
-                .imageUrl("url")
+                .imageUrl("url1")
+                .build();
+
+        productResponse2 = ProductResponse.builder()
+                .id(2L)
+                .name("장난감2")
+                .maker("장난감 메이커2")
+                .price(20000)
+                .imageUrl("url2")
                 .build();
     }
 
@@ -78,22 +87,6 @@ class ProductControllerTest {
         class Context_with_products {
             @BeforeEach
             void setUp() {
-                ProductResponse productResponse1 = ProductResponse.builder()
-                        .id(1L)
-                        .name("장난감1")
-                        .maker("장난감 메이커1")
-                        .price(10000)
-                        .imageUrl("url1")
-                        .build();
-
-                ProductResponse productResponse2 = ProductResponse.builder()
-                        .id(2L)
-                        .name("장난감2")
-                        .maker("장난감 메이커2")
-                        .price(20000)
-                        .imageUrl("url2")
-                        .build();
-
                 products.add(productResponse1);
                 products.add(productResponse2);
 
@@ -135,7 +128,7 @@ class ProductControllerTest {
         class Context_with_an_existing_product_id {
             @BeforeEach
             void setUp() {
-                given(productService.getProduct(existingId)).willReturn(productResponse);
+                given(productService.getProduct(existingId)).willReturn(productResponse1);
             }
 
             @Test
@@ -183,7 +176,7 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 given(productService.createProduct(any(ProductRequest.class)))
-                        .willReturn(productResponse);
+                        .willReturn(productResponse1);
             }
 
             @Test
@@ -211,7 +204,7 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 given(productService.updateProduct(eq(existingId), any(ProductRequest.class)))
-                        .willReturn(productResponse);
+                        .willReturn(productResponse1);
             }
 
             @Test
