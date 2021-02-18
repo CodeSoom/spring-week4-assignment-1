@@ -31,14 +31,14 @@ class InMemoryProductRepositoryTest {
 
     @Test
     void findSavedProduct() {
-        Optional<Product> foundProduct = inMemoryProductRepository.find(1L);
+        Optional<Product> foundProduct = inMemoryProductRepository.find(savedProduct.productId().id());
         assertThat(foundProduct).isNotEmpty();
         assertThat(foundProduct.get()).isEqualTo(savedProduct);
     }
 
     @Test
     void findNotSavedProduct() {
-        Optional<Product> foundProduct = inMemoryProductRepository.find(-1L);
+        Optional<Product> foundProduct = inMemoryProductRepository.find(inMemoryProductRepository.nextId().id());
         assertThat(foundProduct).isEmpty();
     }
 
