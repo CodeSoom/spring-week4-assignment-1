@@ -161,6 +161,13 @@ class ProductServiceTest {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
                 Product updatedProduct = productService.updateProduct(givenExistedId, updateSource);
+                Assertions.assertEquals(updatedProduct.getId(), givenExistedId, "업데이트하여 리턴 된 고양이 장난감은 id값이 1L이어야 한다");
+                Assertions.assertEquals(updatedProduct.getName(), name, "업데이트하여 리턴 된 고양이 장난감은 name값이 updatedName이어야 한다");
+                Assertions.assertEquals(updatedProduct.getMaker(), maker, "업데이트하여 리턴 된 고양이 장난감은 maker값이 updatedMaker이어야 한다");
+                Assertions.assertEquals(updatedProduct.getPrice(), price, "업데이트하여 리턴 된 고양이 장난감은 price값이 300이어야 한다");
+                Assertions.assertEquals(updatedProduct.getImage(), image, "업데이트하여 리턴 된 고양이 장난감은 image값이 udpatedImage이어야 한다");
+
+                verify(productRepository).findById(givenExistedId);
             }
 
         }
