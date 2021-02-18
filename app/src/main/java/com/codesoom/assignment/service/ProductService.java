@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 상품과 관련된 비즈니스 로직을 담당합니다.
@@ -30,7 +31,9 @@ public class ProductService {
     public List<ProductResponse> getProducts() {
         List<Product> products = productRepository.findAll();
 
-        return ProductResponse.listOf(products);
+        return products.stream()
+                .map(ProductResponse::of)
+                .collect(Collectors.toList());
     }
 
     /**

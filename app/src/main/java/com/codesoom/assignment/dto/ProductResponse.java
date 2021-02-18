@@ -7,9 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -41,11 +38,5 @@ public class ProductResponse {
                 .imageUrl(product.getImageUrl())
                 .build();
     }
-
-    public static List<ProductResponse> listOf(List<Product> products) {
-        return products.stream()
-                .map(ProductResponse::of)
-                .collect(Collectors.toList());
-    }
-
+    
 }
