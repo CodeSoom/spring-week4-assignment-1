@@ -9,4 +9,6 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     List<Product> findAll();
 
     Optional<Product> findById(Long id);
+
+    Product save(Product product);
 }

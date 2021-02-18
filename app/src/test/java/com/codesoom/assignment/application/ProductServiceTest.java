@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -26,6 +27,7 @@ class ProductServiceTest {
     private final String SETUP_PRODUCT_IMAGE = "setupImage";
 
     private final Long EXISTED_ID = 1L;
+    private final Long CREATED_ID = 2L;
     private final Long NOT_EXISTED_ID = 100L;
 
     private List<Product> products;
@@ -83,6 +85,41 @@ class ProductServiceTest {
                 Assertions.assertEquals(detailProduct.getImage(), SETUP_PRODUCT_IMAGE, "조회하여 리턴 된 고양이 장난감은 image값이 setupImage이어야 한다");
 
                 verify(productRepository).findById(givenExistedId);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("create 메서드는")
+    class Describe_class {
+        @Nested
+        @DisplayName("만약 name, maker, price, image가 주어진다면")
+        class Content_WithNameAndMakerAndPriceAndImage {
+            private String name;
+            private String maker;
+            private int price;
+            private String image;
+
+            @BeforeEach
+            void setUpCreateProduct() {
+                name = "createdName";
+                maker = "createMaker";
+                price = 200;
+                image = "createdImage";
+            }
+
+            Product makeNewProduct() {
+                return new Product(CREATED_ID, name, maker, price, image);
+            }
+
+            @Test
+            @DisplayName("새로운 장난감 고양이를 생성하고 생성된 장난감 고양이를 리턴한다")
+            void itCreatesProductAndReturnsCreatedProduct() {
+                Product createProduct = makeNewProduct();
+
+                Product createdProduct = productService.createProduct(createProduct);
+
+                verify(productRepository).save(any());
             }
         }
     }

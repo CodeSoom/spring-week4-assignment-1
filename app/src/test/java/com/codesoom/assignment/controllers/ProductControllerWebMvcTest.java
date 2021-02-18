@@ -128,7 +128,7 @@ class ProductControllerWebMvcTest {
 
                 mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"prcie\":100, \"image\":\"createdImage\""))
+                        .content("\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"price\":100, \"image\":\"createdImage\""))
                         .andExpect(status().isCreated());
 
                 verify(productService).createProduct(any());
