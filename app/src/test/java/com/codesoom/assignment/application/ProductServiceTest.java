@@ -32,6 +32,22 @@ class ProductServiceTest {
         productRepository = mock(ProductRepository.class);
 
         productService = new ProductService(productRepository);
+
+        List<Product> products = new ArrayList<>();
+
+        Product product = new Product();
+        product.setName(PRODUCT_NAME);
+
+        given(productRepository.findAll()).willReturn(products);
+
+        given(productRepository.findById(1L))
+                .willReturn(ofNullable(product));
+
+        given(productRepository.save(any(Product.class)))
+                .will(invocation -> invocation.<Product>getArgument(0));
+
+        given(productRepository.findById(1L))
+                .willReturn(ofNullable(product));
     }
 
     @Nested
@@ -45,18 +61,15 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                List<Product> products = new ArrayList<>();
-
                 product = new Product();
-                products.add(product);
-
-                given(productRepository.findAll()).willReturn(products);
             }
 
             @Test
             @DisplayName("장난감 목록을 반환한다 ")
             void it_returns_list() {
                 List<Product> products = productService.getProducts();
+
+                products.add(product);
 
                 verify(productRepository).findAll();
 
@@ -90,10 +103,6 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 product = new Product();
-                product.setName(PRODUCT_NAME);
-
-                given(productRepository.findById(1L))
-                        .willReturn(ofNullable(product));
             }
 
             @Test
@@ -131,10 +140,8 @@ class ProductServiceTest {
         @DisplayName("새로운 장난감을 등록한다")
         void it_returns_product() {
             product = new Product();
-            Product createdProduct = productService.createProduct(product);
 
-            given(productRepository.save(any(Product.class)))
-                    .will(invocation -> invocation.<Product>getArgument(0));
+            productService.createProduct(product);
 
             verify(productRepository).save(any(Product.class));
         }
@@ -164,7 +171,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 ID를 갖는 장난감의 정보를 수정하고 반환한다")
             void it_returns_updated_product() {
-                Product updatedProduct = productService.updateProduct(1L, product);
+                productService.updateProduct(1L, product);
 
                 verify(productRepository).findById(1L);
 
@@ -202,9 +209,6 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 product = new Product();
-
-                given(productRepository.findById(1L))
-                        .willReturn(ofNullable(product));
             }
 
             @Test
