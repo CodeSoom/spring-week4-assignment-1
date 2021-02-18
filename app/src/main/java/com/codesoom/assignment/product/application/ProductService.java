@@ -46,6 +46,7 @@ public class ProductService {
 
     /**
      * 상품을 등록하고, 등록된 정보를 리턴한다.
+     *
      * @param requestDto 등록할 상품 정보
      * @return 등록된 상품정보
      */
@@ -67,7 +68,12 @@ public class ProductService {
                                             ProductUpdateRequestDto requestDto) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
-        Product updateProduct = product.update(requestDto.getName(), requestDto.getMaker(), requestDto.getPrice(), requestDto.getImageUrl());
+
+        Product updateProduct = product.update(
+                requestDto.getName(),
+                requestDto.getMaker(),
+                requestDto.getPrice(),
+                requestDto.getImageUrl());
         return ProductResponseDto.of(updateProduct);
     }
 
