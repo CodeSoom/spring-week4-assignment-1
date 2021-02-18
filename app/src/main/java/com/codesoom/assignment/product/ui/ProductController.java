@@ -6,6 +6,7 @@ import com.codesoom.assignment.product.ui.dto.ProductSaveRequestDto;
 import com.codesoom.assignment.product.ui.dto.ProductUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +23,7 @@ import java.util.List;
  * 상품에 대한 사용자 요청을 처리한다.
  */
 @RestController
+@CrossOrigin
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {

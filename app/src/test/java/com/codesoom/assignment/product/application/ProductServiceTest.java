@@ -107,9 +107,6 @@ public class ProductServiceTest {
     @Test
     @DisplayName("getProduct 메서드는 등록되지 않은 상품 id로 상품 조회시 예외가 발생한다.")
     void getProductWithInValidId() {
-        given(productRepository.findById(NOT_EXIST_ID))
-                .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
-
         assertThatExceptionOfType(ProductNotFoundException.class)
                 .isThrownBy(() -> productService.getProduct(NOT_EXIST_ID));
         verify(productRepository).findById(NOT_EXIST_ID);
@@ -140,8 +137,6 @@ public class ProductServiceTest {
     @Test
     @DisplayName("updateProduct 메서드는 등록되지 않은 상품 id로 상품 갱신시 예외가 발생한다.")
     void updateProductWithInValidId() {
-        given(productRepository.findById(NOT_EXIST_ID))
-                .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
         ProductUpdateRequestDto requestDto = ProductUpdateRequestDto.builder().build();
 
         assertThatExceptionOfType(ProductNotFoundException.class)
@@ -162,9 +157,6 @@ public class ProductServiceTest {
     @Test
     @DisplayName("deleteProduct 메서드는 등록되지 상품 id로 상품을 삭제시 예외가 발생한다")
     void deleteProductWithInValidId() {
-        given(productRepository.findById(NOT_EXIST_ID))
-                .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
-
         assertThatExceptionOfType(ProductNotFoundException.class)
                 .isThrownBy(() -> productService.deleteProduct(NOT_EXIST_ID));
 
