@@ -55,6 +55,13 @@ class ProductServiceTest {
         assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
     }
 
+    void verifyProducts(Product source, Product expected) {
+        assertThat(source.getName()).isEqualTo(expected.getName());
+        assertThat(source.getMaker()).isEqualTo(expected.getMaker());
+        assertThat(source.getPrice()).isEqualTo(expected.getPrice());
+        assertThat(source.getImageUrl()).isEqualTo(expected.getImageUrl());
+    }
+
 
     @Nested
     @DisplayName("create()")
@@ -70,15 +77,16 @@ class ProductServiceTest {
             givenProduct.setImageUrl(IMAGE_URL);
         }
 
+        Product subject() {
+            return productService.create(givenProduct);
+        }
+
         @DisplayName("생성된 product를 반환한다")
         @Test
         void it_returns_created_product() {
-            Product product = productService.create(givenProduct);
+            Product product = subject();
 
-            assertThat(product.getName()).isEqualTo(givenProduct.getName());
-            assertThat(product.getMaker()).isEqualTo(givenProduct.getMaker());
-            assertThat(product.getPrice()).isEqualTo(givenProduct.getPrice());
-            assertThat(product.getImageUrl()).isEqualTo(givenProduct.getImageUrl());
+            verifyProducts(product, givenProduct);
         }
     }
 
@@ -101,8 +109,6 @@ class ProductServiceTest {
             @Test
             void it_returns_product() {
                 Product product = productService.find(givenProductId);
-
-                assertThat(product).isEqualTo(givenProduct);
                 verifyFindProduct(product);
             }
         }
@@ -179,10 +185,7 @@ class ProductServiceTest {
                 Product product = productService.update(givenProductId, source);
 
                 assertThat(product.getId()).isEqualTo(givenProductId);
-                assertThat(product.getName()).isEqualTo(UPDATE_NAME);
-                assertThat(product.getMaker()).isEqualTo(UPDATE_MAKER);
-                assertThat(product.getPrice()).isEqualTo(UPDATE_PRICE);
-                assertThat(product.getImageUrl()).isEqualTo(UPDATE_IMAGE_URL);
+                verifyProducts(product, source);
             }
         }
 
