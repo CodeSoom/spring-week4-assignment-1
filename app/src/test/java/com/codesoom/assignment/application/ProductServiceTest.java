@@ -112,7 +112,7 @@ class ProductServiceTest {
         class Context_with_invalid_id {
 
             @Test
-            @DisplayName("해당 장난감을 찾을 수 없다는 경고 메시지를 반환한다")
+            @DisplayName("해당 장난감을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.getProduct(100L))
                         .isInstanceOf(ProductNotFoundException.class);
@@ -180,7 +180,7 @@ class ProductServiceTest {
         class Context_with_invalid_id {
 
             @Test
-            @DisplayName("수정할 장난감을 찾을 수 없다는 경고 메시지를 반환한다")
+            @DisplayName("수정할 장난감을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.updateProduct(100L, product))
                         .isInstanceOf(ProductNotFoundException.class);
@@ -224,7 +224,7 @@ class ProductServiceTest {
         class Context_without_invalid_id {
 
             @Test
-            @DisplayName("삭제할 장난감을 찾을 수 없다는 경고 메시지를 반환한다")
+            @DisplayName("삭제할 장난감을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.deleteProduct(100L))
                         .isInstanceOf(ProductNotFoundException.class);
