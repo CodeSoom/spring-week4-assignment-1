@@ -179,4 +179,22 @@ class ProductControllerWebMvcTest {
         }
     }
 
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        class Context_WithExistedId {
+            private final Long givenExistedId = EXISTED_ID;
+
+            @Test
+            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제하고 NO_CONTENT를 리턴한다")
+            void itDeleteProductAndReturnsNO_CONTENTHttpStatus() throws Exception {
+
+                mockMvc.perform(delete("/products/" + givenExistedId))
+                        .andExpect(status().isNoContent())
+            }
+        }
+    }
+
 }
