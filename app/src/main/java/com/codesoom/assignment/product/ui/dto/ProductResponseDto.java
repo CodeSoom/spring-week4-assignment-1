@@ -7,28 +7,32 @@ import lombok.Getter;
 import java.util.Objects;
 
 /**
- * 상품의 정보를 담은 응답 DTO.
+ * 상품의 응답 정보.
  */
 @Getter
 public class ProductResponseDto {
-
+    /** 상품 식별자 */
     private Long id;
 
+    /** 상품명 */
     private String name;
 
+    /** 상품제조사 */
     private String maker;
 
+    /** 상품가격 */
     private int price;
 
+    /** 상품 이미지 */
     private String imageUrl;
 
     /**
      * 상품정보 응답 생성자.
      *
-     * @param id       상품 식별자
-     * @param name     상품명
-     * @param maker    상품제조사
-     * @param price    상품가격
+     * @param id 상품 식별자
+     * @param name 상품명
+     * @param maker 상품제조사
+     * @param price 상품가격
      * @param imageUrl 상품이미지
      */
     @Builder
@@ -41,7 +45,7 @@ public class ProductResponseDto {
     }
 
     /**
-     * 상품 정보를 응답 DTO로 변경하는 정적 팩토리 메서드.
+     * 상품 정보로 응답용 상품 정보 DTO를 생성해 리턴합니다.
      *
      * @param product 상품 entity
      */
@@ -55,6 +59,9 @@ public class ProductResponseDto {
                 .build();
     }
 
+    /**
+     *  Product가 동일 객체인지 비교합니다.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -67,6 +74,9 @@ public class ProductResponseDto {
         return getId().equals(dto.getId());
     }
 
+    /**
+     * 상품 객체의 해쉬 정보를 리턴합니다.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(getId());

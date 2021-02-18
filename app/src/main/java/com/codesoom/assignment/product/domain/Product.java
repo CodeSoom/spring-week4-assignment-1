@@ -14,17 +14,21 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
-
+    /** 상품 식별자 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /** 상품명 */
     private String name;
 
+    /** 상품제조사 */
     private String maker;
 
+    /** 상품가격 */
     private int price;
 
+    /** 상품이미지 */
     private String imageUrl;
 
     @Builder
@@ -45,6 +49,14 @@ public class Product {
                 .build();
     }
 
+    /**
+     * 상품의 정보를 갱신하고 상품을 리턴합니다.
+     * @param name 상품명
+     * @param maker 상품제조사
+     * @param price 상품가격
+     * @param imageUrl 상품이미지
+     * @return 갱신된 상품 정보
+     */
     public Product update(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
