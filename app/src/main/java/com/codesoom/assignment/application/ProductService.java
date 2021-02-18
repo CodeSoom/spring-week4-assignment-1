@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * 상품(Product)과 관련된 비즈니스 로직을 담당합니다.
+ * 상품과 관련된 비즈니스 로직을 담당합니다.
  *
  * @see Product
  * @see ProductRepository
@@ -52,7 +52,7 @@ public class ProductService {
      * @return 저장된 상품
      */
     public Product createProduct(Product source) {
-        Product product = new Product(source.getName(), source.getMaker(), source.getPrice(), source.getImageUrl());
+        Product product = new Product(source);
 
         return productRepository.save(product);
     }

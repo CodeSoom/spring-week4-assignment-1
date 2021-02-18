@@ -18,13 +18,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String maker, int price, String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public Product(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
     }
-
+    
     public Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
