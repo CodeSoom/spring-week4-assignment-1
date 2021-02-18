@@ -11,7 +11,8 @@ class ProductSaveRequestDtoTest {
     private static final String PRODUCT1_MAKER = "maker1";
     private static final String PRODUCT1_IMAGE = "https://http.cat/599";
     private static final int PRODUCT1_PRICE = 10_000;
-    private static final String DTO_STRING = "ProductSaveRequestDto.ProductSaveRequestDtoBuilder(name=null, maker=null, price=0, imageUrl=null)";
+    private static final String DTO_STRING = "ProductSaveRequestDto.ProductSaveRequestDtoBuilder" +
+            "(name=null, maker=null, price=0, imageUrl=null)";
 
     @DisplayName("상품 dto를 상품 entity로 리턴한다 ")
     @Test
