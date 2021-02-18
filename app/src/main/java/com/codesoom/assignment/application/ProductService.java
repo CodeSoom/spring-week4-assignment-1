@@ -24,4 +24,9 @@ public class ProductService {
     public ProductResponseDto updateProduct(Long id, ProductRequestDto request) {
         return null;
     }
+
+    public ProductResponseDto deleteProduct(Long id) {
+        return null;
+    }
+
 }

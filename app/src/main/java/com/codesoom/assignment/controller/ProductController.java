@@ -63,4 +63,9 @@ public class ProductController {
         return productService.updateProduct(id, request);
     }
 
+    @DeleteMapping("/{id}")
+    public ProductResponseDto deleteProduct(@PathVariable Long id){
+        return productService.deleteProduct(id);
+    }
+
 }
