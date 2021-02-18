@@ -101,7 +101,7 @@ class ProductServiceTest {
             private String image;
 
             @BeforeEach
-            void setUpCreateProduct() {
+            void prepareCreateProduct() {
                 name = "createdName";
                 maker = "createMaker";
                 price = 200;
@@ -143,7 +143,7 @@ class ProductServiceTest {
             private String image;
 
             @BeforeEach
-            void setUpUpdateProduct() {
+            void prepareUpdateProduct() {
                 name = "updatedName";
                 maker = "updatedMaker";
                 price = 300;
@@ -158,6 +158,7 @@ class ProductServiceTest {
             @DisplayName("주어진 id에 해당하는 고양이 장난감을 업데이트하고 수정된 고양이 장난감을 리턴한다")
             void itUpdatesProductAndReturnsUpdatedProduct() {
                 Product updateSource = updateProduct();
+                given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
                 Product updatedProduct = productService.updateProduct(givenExistedId, updateSource);
             }
