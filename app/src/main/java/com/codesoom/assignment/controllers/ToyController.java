@@ -24,7 +24,7 @@ public class ToyController {
 
     @GetMapping("{id}")
     public Toy detail(@PathVariable Long id) {
-        return null;
+        return toyService.getToy(id);
     }
 
     @PostMapping

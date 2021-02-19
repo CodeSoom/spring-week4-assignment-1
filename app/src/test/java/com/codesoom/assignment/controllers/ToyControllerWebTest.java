@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.application.ToyService;
 import com.codesoom.assignment.domain.Toy;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +55,13 @@ class ToyControllerWebTest {
     private String taskJsonString;
 
     @BeforeEach
-    void setUp() {
-        toyList = new ArrayList<Toy>();
-
+    void setUp() throws IOException {
         toy = new Toy(givenName, givenBrand, givenPrice, givenImageUrl);
         toy.setId(givenSavedId);
+
+        outputStream = new ByteArrayOutputStream();
+        objectMapper.writeValue(outputStream, toy);
+        taskJsonString = outputStream.toString();
     }
 
     @Nested
@@ -103,6 +107,55 @@ class ToyControllerWebTest {
                 mockMvc.perform(requestBuilder)
                         .andExpect(status().isOk())
                         .andExpect(content().json(taskJsonString));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /product/{id} 요청은")
+    class Describe_get_product_id_request {
+        private String stringFormat = "/products/%d";
+        private Long givenId;
+
+        @Nested
+        @DisplayName("저장된 toy의 id라면")
+        class Context_with_saved_toy_id {
+            @BeforeEach
+            void setRequest() {
+                givenId = givenSavedId;
+                uriTemplate = String.format(stringFormat, givenId);
+                requestBuilder = get(uriTemplate);
+            }
+
+            @Test
+            @DisplayName("200 OK와 저장된 task를 응답한다.")
+            void it_respond_200_ok_and_saved_toy() throws Exception {
+                given(toyService.getToy(givenId)).willReturn(toy);
+
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isOk())
+                        .andExpect(content().json(taskJsonString));
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 toy의 id라면")
+        class Context_with_unsaved_toy_id {
+            @BeforeEach
+            void setRequest() {
+                givenId = givenUnsavedId;
+                uriTemplate = String.format(stringFormat, givenId);
+                requestBuilder = get(uriTemplate);
+            }
+
+            @Test
+            @DisplayName("404 Not Found를 응답한다.")
+            void it_respond_404_not_found() throws Exception {
+                given(toyService.getToy(givenId))
+                        .willThrow(new ToyNotFoundException(givenUnsavedId));
+
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isNotFound());
             }
         }
     }
