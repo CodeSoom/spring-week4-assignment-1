@@ -1,16 +1,12 @@
 package com.codesoom.assignment.application;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.codesoom.assignment.domain.Product;
-// TODO 테스트
-// 1.
 class ProductServiceTest {
 
     private ProductService productService;
