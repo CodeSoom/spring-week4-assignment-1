@@ -65,17 +65,5 @@ public class ProductRequest {
     public Product getProduct() {
         return product;
     }
-
-    //    /**
-    //     * 상품 요청서를 사용해 상품 엔터티를 생성해 리턴합니다.
-    //     */
-    //    public Product toProduct() {
-    //        return Product.builder()
-    //                .name(product.getName())
-    //                .maker(product.getMaker())
-    //                .price(product.getPrice())
-    //                .imageUrl(product.getImageUrl())
-    //                .build();
-    //    }
-
+    
 }
