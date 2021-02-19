@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/products")
 @CrossOrigin
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
 
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -34,12 +34,8 @@ public class ProductController {
     }
 
     @PutMapping("{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
-    }
-
     @PatchMapping("{id}")
-    public Product patch(@PathVariable Long id, @RequestBody Product product) {
+    public Product updatepatch(@PathVariable Long id, @RequestBody Product product) {
         return productService.updateProduct(id, product);
     }
 
