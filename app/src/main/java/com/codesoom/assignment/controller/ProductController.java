@@ -17,11 +17,7 @@ import java.util.List;
 
 /**
  * 상품과 관련된 HTTP 요청 처리를 담당합니다.
- *
- * @see Product
- * @see ProductService
  */
-
 @RestController
 @RequestMapping("/products")
 @CrossOrigin

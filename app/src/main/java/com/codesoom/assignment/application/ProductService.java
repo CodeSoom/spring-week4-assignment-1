@@ -52,8 +52,6 @@ public class ProductService {
      * @return 저장된 상품
      */
     public Product createProduct(Product source) {
-//        Product product = new Product(source);
-
         return productRepository.save(source);
     }
 
