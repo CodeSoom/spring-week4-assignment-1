@@ -29,7 +29,7 @@ public class ProductService {
         List<Product> products = productRepository.findAll();
 
         return products.stream()
-                .map(ProductResponse::of)
+                .map(ProductResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +44,7 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("존재하지 않는 상품 id가 주어졌으므로 상품을 찾을 수 없습니다. 문제의 id = " + id));
 
-        return ProductResponse.of(product);
+        return new ProductResponse(product);
     }
 
     /**
@@ -57,7 +57,7 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest productRequest) {
         Product savedProduct = productRepository.save(productRequest.toProduct());
 
-        return ProductResponse.of(savedProduct);
+        return new ProductResponse(savedProduct);
     }
 
     /**
@@ -76,7 +76,7 @@ public class ProductService {
 
         Product updatedProduct = product.update(productRequest.toProduct());
 
-        return ProductResponse.of(updatedProduct);
+        return new ProductResponse(updatedProduct);
     }
 
     /**

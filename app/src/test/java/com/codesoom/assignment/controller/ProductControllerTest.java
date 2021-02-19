@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductRequest;
 import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.exception.ProductNotFoundException;
@@ -62,21 +63,25 @@ class ProductControllerTest {
 
         products = new ArrayList<>();
 
-        productResponse1 = ProductResponse.builder()
-                .id(1L)
-                .name("장난감1")
-                .maker("장난감 메이커1")
-                .price(10000)
-                .imageUrl("url1")
-                .build();
+        productResponse1 = new ProductResponse(
+                Product.builder()
+                        .id(1L)
+                        .name("장난감1")
+                        .maker("장난감 메이커1")
+                        .price(10000)
+                        .imageUrl("url1")
+                        .build()
+        );
 
-        productResponse2 = ProductResponse.builder()
-                .id(2L)
-                .name("장난감2")
-                .maker("장난감 메이커2")
-                .price(20000)
-                .imageUrl("url2")
-                .build();
+        productResponse2 = new ProductResponse(
+                Product.builder()
+                        .id(2L)
+                        .name("장난감2")
+                        .maker("장난감 메이커2")
+                        .price(20000)
+                        .imageUrl("url2")
+                        .build()
+        );
     }
 
     @Nested
