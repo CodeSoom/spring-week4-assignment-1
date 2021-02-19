@@ -13,16 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -83,6 +84,26 @@ class ProductControllerTest {
                         .andExpect(content().string(objectMapper.writeValueAsString(products)));
             }
         }
-    }
 
+        @Nested
+        @DisplayName("상품목록에 저장된 데이터가 없으면")
+        class Context_with_no_product {
+            @BeforeEach
+            void setUp() {
+                given(productService.getProducts()).willReturn(products);
+            }
+
+            @Test
+            @DisplayName("200 코드와 비어있는 목록을 리턴한다.")
+            void it_respond_200_and_empty_array() throws Exception {
+                mockMvc.perform(get("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$", hasSize(0)))
+                        .andExpect(content().string("[]"));
+            }
+        }
+    }
+    
 }
