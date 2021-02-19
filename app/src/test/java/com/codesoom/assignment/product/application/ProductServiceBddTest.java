@@ -106,7 +106,7 @@ public class ProductServiceBddTest {
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(ProductNotFoundException.class)
-                        .isThrownBy(() -> productService.deleteProduct(givenId));
+                        .isThrownBy(() -> productService.getProduct(givenId));
             }
         }
     }
