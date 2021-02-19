@@ -68,7 +68,8 @@ public class ProductController {
      * @return 수정된 상품
      */
     @PatchMapping("{id}")
-    public ProductResponse update(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
+    public ProductResponse update(@PathVariable Long id,
+                                  @RequestBody ProductRequest productRequest) {
         return productService.updateProduct(id, productRequest);
     }
 
