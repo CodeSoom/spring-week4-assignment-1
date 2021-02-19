@@ -14,6 +14,7 @@ Feature: ProductApplicationService
     Given product를 만드는데 필요한 데이터가 제공되었을 때
     When product를 생성하면
     Then 생성된 product를 찾을 수 있다
+    And 생성된 product만 가져올 수 있다
 
   Scenario: 생성된 product를 삭제한다.
     Given product를 1개 생성했을 때

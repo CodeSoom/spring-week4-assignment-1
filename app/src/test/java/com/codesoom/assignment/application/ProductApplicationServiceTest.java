@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -79,4 +80,10 @@ public class ProductApplicationServiceTest {
         assertThat(applicationService.getAllProducts()).doesNotContain(createdProduct);
     }
 
+    @And("생성된 product만 가져올 수 있다")
+    public void getSpecificProduct() {
+        Optional<Product> product = applicationService.getProduct(createdProduct.productId().id());
+        assertThat(product).isNotEmpty();
+        assertThat(product.get()).isEqualTo(createdProduct);
+    }
 }
