@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +22,12 @@ import static org.mockito.Mockito.verify;
 
 class ProductServiceTest {
 
-    private static final String PRODUCT_NAME = "test";
+    private static final String NAME = "뱀 장난감";
+
+    private static final String UPDATE_NAME = "물고기 장난감";
+    private static final String UPDATE_MAKER = "애옹이네 장난감";
+    private static final Integer UPDATE_PRICE = 5000;
+    private static final String UPDATE_IMAGE = "https://bit.ly/2M4YXkw";
 
     private ProductService productService;
 
@@ -36,18 +42,25 @@ class ProductServiceTest {
         List<Product> products = new ArrayList<>();
 
         Product product = new Product();
-        product.setName(PRODUCT_NAME);
+        product.setName(NAME);
 
         given(productRepository.findAll()).willReturn(products);
 
         given(productRepository.findById(1L))
-                .willReturn(ofNullable(product));
+                .willReturn(Optional.of(product));
 
         given(productRepository.save(any(Product.class)))
                 .will(invocation -> invocation.<Product>getArgument(0));
 
         given(productRepository.findById(1L))
-                .willReturn(ofNullable(product));
+                .willReturn(Optional.of(product));
+    }
+
+    void updateTest(Product update) {
+        assertThat(update.getName()).isEqualTo(UPDATE_NAME);
+        assertThat(update.getMaker()).isEqualTo(UPDATE_MAKER);
+        assertThat(update.getPrice()).isEqualTo(UPDATE_PRICE);
+        assertThat(update.getImage()).isEqualTo(UPDATE_IMAGE);
     }
 
     @Nested
@@ -100,20 +113,14 @@ class ProductServiceTest {
         @DisplayName("등록된 장난감의 ID가 주어진다면")
         class Context_with_valid_id {
 
-            @BeforeEach
-            void setUp() {
-                product = new Product();
-            }
-
             @Test
             @DisplayName("해당 ID를 갖는 장난감을 반환한다")
             void it_returns_product() {
-                Product product = productService.getProduct(1L);
+                product = productService.getProduct(1L);
 
                 verify(productRepository).findById(1L);
 
-                assertThat(product.getName()).isEqualTo("test");
-            }
+                assertThat(product.getName()).isEqualTo(NAME);            }
         }
 
         @Nested
@@ -150,7 +157,7 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메소드는")
     class Describe_updateProduct {
-        Product product;
+        Product update;
 
         @Nested
         @DisplayName("등록된 장난감의 ID가 주어진다면")
@@ -158,27 +165,25 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                product = new Product();
-                product.setName("물고기 장난감");
-                product.setMaker("애옹이네 장난감");
-                product.setPrice(5000);
-                product.setImage("https://bit.ly/2M4YXkw");
+                update = Product.builder()
+                        .name(UPDATE_NAME)
+                        .maker(UPDATE_MAKER)
+                        .price(UPDATE_PRICE)
+                        .image(UPDATE_IMAGE)
+                        .build();
 
                 given(productRepository.findById(1L))
-                        .willReturn(ofNullable(product));
+                        .willReturn(ofNullable(update));
             }
 
             @Test
             @DisplayName("해당 ID를 갖는 장난감의 정보를 수정하고 반환한다")
             void it_returns_updated_product() {
-                productService.updateProduct(1L, product);
+                productService.updateProduct(1L, update);
 
                 verify(productRepository).findById(1L);
 
-                assertThat(product.getName()).isEqualTo("물고기 장난감");
-                assertThat(product.getMaker()).isEqualTo("애옹이네 장난감");
-                assertThat(product.getPrice()).isEqualTo(5000);
-                assertThat(product.getImage()).isEqualTo("https://bit.ly/2M4YXkw");
+                updateTest(update);
             }
         }
 
@@ -189,7 +194,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("수정할 장난감을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
-                assertThatThrownBy(() -> productService.updateProduct(100L, product))
+                assertThatThrownBy(() -> productService.updateProduct(100L, update))
                         .isInstanceOf(ProductNotFoundException.class);
 
                 verify(productRepository).findById(100L);

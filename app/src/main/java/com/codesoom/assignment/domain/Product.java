@@ -32,8 +32,7 @@ public class Product {
     }
 
     @Builder
-    public Product(Long id, String name, String maker, Integer price, String image) {
-        this.id = id;
+    public Product(String name, String maker, Integer price, String image) {
         this.name = name;
         this.maker = maker;
         this.price = price;
