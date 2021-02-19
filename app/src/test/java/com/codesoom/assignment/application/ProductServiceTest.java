@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -120,7 +119,8 @@ class ProductServiceTest {
 
                 verify(productRepository).findById(1L);
 
-                assertThat(product.getName()).isEqualTo(NAME);            }
+                assertThat(product.getName()).isEqualTo(NAME);
+            }
         }
 
         @Nested
@@ -173,7 +173,7 @@ class ProductServiceTest {
                         .build();
 
                 given(productRepository.findById(1L))
-                        .willReturn(ofNullable(update));
+                        .willReturn(Optional.of(update));
             }
 
             @Test
