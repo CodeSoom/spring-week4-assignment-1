@@ -16,15 +16,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -51,9 +55,19 @@ class ProductControllerTest {
     private final String PRODUCT_MAKER = "toy maker";
     private final int PRODUCT_PRICE = 3000;
     private final String PRODUCT_IMAGE_URL = "img url";
+    private final Long UPDATED_PRODUCT_ID = 1004L;
+    private final String UPDATED_PRODUCT_NAME = "updated cat toy";
+    private final String UPDATED_PRODUCT_MAKEER = "updated toy maker";
+    private final int UPDATED_PRODUCT_PRICE = 4000;
+    private final String UPDATED_PRODUCT_IMAGE_URL = "update imge url";
 
     private List<Product> products;
     private Product product;
+
+    Product updatedProduct() {
+        Product updatedProduct = new Product(UPDATED_PRODUCT_ID, UPDATED_PRODUCT_NAME, UPDATED_PRODUCT_MAKEER, UPDATED_PRODUCT_PRICE, UPDATED_PRODUCT_IMAGE_URL);
+        return updatedProduct;
+    }
 
     @BeforeEach
     void setUp() {
@@ -224,6 +238,44 @@ class ProductControllerTest {
             void it_throws_product_not_found_exception() throws Exception {
                 mockMvc.perform(delete("/products/{id}", NOT_EXISTING_PRODUCT_ID))
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products {id}")
+    class Describe_put_request {
+        Product updateProduct;
+
+        @Nested
+        @DisplayName("상품목록에 해당하는 id가 있으면")
+        class Context_cotains_target_id {
+            @BeforeEach
+            void setUp() {
+                products.add(product);
+
+                updateProduct = new Product(updatedProduct());
+
+                given(productService.updateProduct(eq(PRODUCT_ID),any(Product.class))).willReturn(updateProduct);
+            }
+
+            @Test
+            @DisplayName("200 코드와 수정된 상품을 리턴한다.")
+            void it_respond_200_and_updated_product() throws Exception {
+
+                MvcResult mvcResult = mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateProduct)))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+                Product updateProduct = objectMapper.readValue(mvcResult.getRequest().getContentAsString(), Product.class);
+                assertThat(updateProduct.getId()).isEqualTo(UPDATED_PRODUCT_ID);
+                assertThat(updateProduct.getName()).isEqualTo(UPDATED_PRODUCT_NAME);
+                assertThat(updateProduct.getMaker()).isEqualTo(UPDATED_PRODUCT_MAKEER);
+                assertThat(updateProduct.getPrice()).isEqualTo(UPDATED_PRODUCT_PRICE);
+                assertThat(updateProduct.getImageUrl()).isEqualTo(UPDATED_PRODUCT_IMAGE_URL);
             }
         }
     }
