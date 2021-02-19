@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +12,9 @@ import javax.persistence.Id;
 // 1. Entity (domain)
 //  ** RDB의 Entity와 다름
 // 2. JPA의 Entity 역할도 같이 함
-@Getter
-@Setter
+@Getter @Setter
+@Builder
+@AllArgsConstructor
 @Entity
 public class Product {
     // Identifier - Unique Key
@@ -29,13 +31,5 @@ public class Product {
     private String image;
 
     public Product() {
-    }
-
-    @Builder
-    public Product(String name, String maker, Integer price, String image) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.image = image;
     }
 }
