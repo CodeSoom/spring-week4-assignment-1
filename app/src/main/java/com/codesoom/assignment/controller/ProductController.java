@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductRequest;
 import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.service.ProductService;
@@ -21,9 +20,6 @@ import java.util.List;
 
 /**
  * 상품과 관련된 HTTP 요청 처리를 담당합니다.
- *
- * @see ProductService
- * @see Product
  */
 @RestController
 @RequestMapping("/products")
@@ -44,7 +40,7 @@ public class ProductController {
     /**
      * 주어진 id에 해당하는 상품을 찾아 응답합니다.
      *
-     * @param id 찾고자 하는 상품의 id
+     * @param id 찾고자 하는 상품의 식별자
      * @return 찾은 상품
      */
     @GetMapping("{id}")
@@ -67,7 +63,7 @@ public class ProductController {
     /**
      * 주어진 id에 해당하는 상품을 찾아 수정하고, 수정된 상품을 응답합니다.
      *
-     * @param id 수정하고자 하는 상품의 id
+     * @param id 수정하고자 하는 상품의 식별자
      * @param productRequest 수정하고자 하는 상품
      * @return 수정된 상품
      */
@@ -79,7 +75,7 @@ public class ProductController {
     /**
      * 주어진 id에 해당하는 상품을 찾아 삭제합니다.
      *
-     * @param id 삭제하고자 하는 상품의 id
+     * @param id 삭제하고자 하는 상품의 식별자
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
