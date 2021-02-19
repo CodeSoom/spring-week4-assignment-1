@@ -96,7 +96,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 코드와 저장 되어있는 상품 목록을 응답한다.")
-            void it_respond_200_and_all_products() throws Exception {
+            void it_responds_200_and_all_products() throws Exception {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content().string(objectMapper.writeValueAsString(products)));
@@ -113,7 +113,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 코드와 비어있는 목록을 리턴한다.")
-            void it_respond_200_and_empty_array() throws Exception {
+            void it_responds_200_and_empty_array() throws Exception {
                 mockMvc.perform(get("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -139,7 +139,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 코드와 id에 일치하는 상품을 응답한다.")
-            void it_respond_200_and_target_product() throws Exception {
+            void it_responds_200_and_target_product() throws Exception {
                 mockMvc.perform(get("/products/{id}", PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -162,7 +162,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("404 코드를 응답한다.")
-            void it_respond_404() throws Exception {
+            void it_responds_404() throws Exception {
                 mockMvc.perform(get("/products/{id}", NOT_EXISTING_PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -188,7 +188,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("201 코드와 생성된 상품을 리턴한다.")
-            void it_respond_201_and_new_product() throws Exception{
+            void it_responds_201_and_new_product() throws Exception{
                 mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
@@ -217,7 +217,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("id에 해당하는 상품을 삭제하고, 그 후 대상 id를 조회하면 예외를 던진다.")
-            void it_respond_delete_product() throws Exception {
+            void it_responds_delete_product() throws Exception {
                 mockMvc.perform(delete("/products/{id}", PRODUCT_ID));
                 mockMvc.perform(get("/products/{id}", PRODUCT_ID))
                         .andExpect(status().isNotFound());
@@ -261,7 +261,7 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 코드와 수정된 상품을 리턴한다.")
-            void it_respond_200_and_updated_product() throws Exception {
+            void it_responds_200_and_updated_product() throws Exception {
 
                 MvcResult mvcResult = mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
