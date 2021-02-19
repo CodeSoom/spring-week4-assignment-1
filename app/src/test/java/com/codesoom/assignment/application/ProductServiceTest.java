@@ -246,6 +246,7 @@ class ProductServiceTest {
         class Context_WithNotExistedId {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
+            @Test
             @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 던진다")
             void itDeletesProductAndReturnsDeletedProduct() {
                 given(productRepository.findById(givenNotExistedId))
