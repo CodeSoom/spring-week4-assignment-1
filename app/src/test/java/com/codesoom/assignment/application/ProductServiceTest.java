@@ -16,7 +16,6 @@ class ProductServiceTest {
         productService = mock(ProductService.class);
 
         product = new Product();
-        product.setId(1L);
         product.setName("탱탱볼");
         product.setPrice(5000L);
         product.setImage("/Users/static/image.jpg");

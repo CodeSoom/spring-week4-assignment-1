@@ -19,7 +19,6 @@ class ProductTest {
 
     @Test
     void create() {
-        product.setId(1L);
         product.setName("탱탱볼");
         product.setPrice(5000L);
         product.setImage("/Users/admin/Document/static/image.jpg");
