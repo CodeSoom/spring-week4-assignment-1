@@ -137,6 +137,8 @@ class ProductRepositoryTest {
                 assertThat(deleteProduct)
                         .as("삭제되지 않은 고양이 장난감 객체는 null이 아니다")
                         .isNotNull();
+                
+                int oldSize = productRepository.findAll().size();
 
                 productRepository.delete(deleteProduct);
 
@@ -144,6 +146,10 @@ class ProductRepositoryTest {
                 assertThat(deletedProduct)
                         .as("삭제된 고양이 장난감 객체는 null이다")
                         .isNull();
+
+                assertThat(productRepository.findAll().size())
+                        .as("고양이 장난감 객체를 삭제하면 전체 목록 사이즈가 1 감소한다")
+                        .isEqualTo(oldSize -1 );
             }
         }
     }
