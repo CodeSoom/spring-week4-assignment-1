@@ -54,12 +54,11 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        productRequest = productRequest.builder()
-                .name("장난감")
-                .maker("장난감 메이커")
-                .price(10000)
-                .imageUrl("url")
-                .build();
+        productRequest = new ProductRequest();
+        productRequest.setName("장난감");
+        productRequest.setMaker("장난감 메이커");
+        productRequest.setPrice(10000);
+        productRequest.setImageUrl("url");
 
         products = new ArrayList<>();
 
