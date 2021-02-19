@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -27,18 +27,11 @@ public class ProductService {
     }
 
     public Product createProduct(Product source) {
-        Product product = new Product();
-        product.setName(source.getName());
-        product.setMaker(source.getMaker());
-        product.setPrice(source.getPrice());
-        product.setImage(source.getImage());
-
-        return productRepository.save(product);
+        return productRepository.save(source);
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = getProduct(id);
 
         product.setName(source.getName());
         product.setMaker(source.getMaker());
@@ -49,8 +42,7 @@ public class ProductService {
     }
 
     public Product deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = getProduct(id);
 
         productRepository.delete(product);
 
