@@ -90,7 +90,8 @@ class ProductControllerTest {
                 products.add(productResponse1);
                 products.add(productResponse2);
 
-                given(productService.getProducts()).willReturn(products);
+                given(productService.getProducts())
+                        .willReturn(products);
             }
 
             @Test
@@ -109,7 +110,8 @@ class ProductControllerTest {
         class Context_without_products {
             @BeforeEach
             void setUp() {
-                given(productService.getProducts()).willReturn(new ArrayList<>());
+                given(productService.getProducts())
+                        .willReturn(List.of());
             }
 
             @Test
@@ -128,7 +130,8 @@ class ProductControllerTest {
         class Context_with_an_existing_product_id {
             @BeforeEach
             void setUp() {
-                given(productService.getProduct(existingId)).willReturn(productResponse1);
+                given(productService.getProduct(existingId))
+                        .willReturn(productResponse1);
             }
 
             @Test

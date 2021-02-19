@@ -1,7 +1,6 @@
 package com.codesoom.assignment.domain;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,6 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
@@ -30,6 +27,15 @@ public class Product {
     private int price;
 
     private String imageUrl;
+
+    @Builder
+    private Product(Long id, String name, String maker, int price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     /**
      * 상품을 수정하고, 수정된 상품을 리턴합니다.
