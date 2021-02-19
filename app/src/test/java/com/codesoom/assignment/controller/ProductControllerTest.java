@@ -21,8 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -154,5 +157,75 @@ class ProductControllerTest {
             }
         }
     }
-    
+
+    @Nested
+    @DisplayName("POST /products 요청은")
+    class Describe_post_request {
+
+        @Nested
+        @DisplayName("새로운 상품을 추가하면")
+        class Context_add_new_product {
+            @BeforeEach
+            void setUp() {
+                product = new Product(2L, "newName", "newMaker", 9999, "newImageUrl");
+                products.add(product);
+                given(productService.createProduct(any(Product.class))).willReturn(product);
+            }
+
+            @Test
+            @DisplayName("201 코드와 생성된 상품을 리턴한다.")
+            void it_respond_201_and_new_product() throws Exception{
+                mockMvc.perform(post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(product)))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("id").value(2L))
+                        .andExpect(jsonPath("name").value("newName"))
+                        .andExpect(jsonPath("maker").value("newMaker"))
+                        .andExpect(jsonPath("price").value(9999))
+                        .andExpect(jsonPath("imageUrl").value("newImageUrl"));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products {id} 요청은")
+    class Describe_delete_request {
+
+        @Nested
+        @DisplayName("상품목록에 해당하는 id가 있으면")
+        class Context_contains_target_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.getProduct(PRODUCT_ID))
+                        .willThrow(new ProductNotFoundException(PRODUCT_ID));
+            }
+
+            @Test
+            @DisplayName("id에 해당하는 상품을 삭제하고, 그 후 대상 id를 조회하면 예외를 던진다.")
+            void it_respond_delete_product() throws Exception {
+                mockMvc.perform(delete("/products/{id}", PRODUCT_ID));
+                mockMvc.perform(get("/products/{id}", PRODUCT_ID))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("상품목록에 해당하는 id가 없으면")
+        class Context_not_contains_target_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.deleteProduct(NOT_EXISTING_PRODUCT_ID))
+                        .willThrow(new ProductNotFoundException(NOT_EXISTING_PRODUCT_ID));
+            }
+
+            @Test
+            @DisplayName("예외를 던진다.")
+            void it_throws_product_not_found_exception() throws Exception {
+                mockMvc.perform(delete("/products/{id}", NOT_EXISTING_PRODUCT_ID))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
 }
