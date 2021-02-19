@@ -38,7 +38,7 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public ProductId nextId() {
+    public synchronized ProductId nextId() {
         return new ProductId(lastId++);
     }
 }
