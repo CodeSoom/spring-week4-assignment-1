@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 
 /**
  * 상품과 관련된 비즈니스 로직을 담당합니다.
- *
- * @see ProductRepository
- * @see Product
  */
 @Service
 @RequiredArgsConstructor
@@ -39,7 +36,7 @@ public class ProductService {
     /**
      * 주어진 id에 해당하는 상품을 찾아 리턴합니다.
      *
-     * @param id 찾고자 하는 상품의 id
+     * @param id 찾고자 하는 상품의 식별자
      * @return 주어진 id에 해당하는 상품
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 경우
      */
@@ -66,7 +63,7 @@ public class ProductService {
     /**
      * 주어진 id에 해당하는 상품을 찾아 수정하고, 수정된 상품을 리턴합니다.
      *
-     * @param id 수정하고자 하는 상품의 id
+     * @param id 수정하고자 하는 상품의 식별자
      * @param productRequest 수정하고자 하는 상품
      * @return 수정된 상품
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 경우
@@ -84,7 +81,7 @@ public class ProductService {
     /**
      * 주어진 id에 해당하는 상품을 찾아 삭제합니다.
      *
-     * @param id 삭제하고자 하는 상품의 id
+     * @param id 삭제하고자 하는 상품의 식별자
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 경우
      */
     @Transactional
