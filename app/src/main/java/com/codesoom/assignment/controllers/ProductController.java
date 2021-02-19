@@ -54,7 +54,7 @@ public class ProductController {
     /**
      * 주어진 id에 해당하는 product를 찾아 응답합니다.
      *
-     * @param id product id
+     * @param id 찾고자 하는 product의 식별자
      * @return id와 일치하는 product
      */
     @GetMapping(path = "{id}")
@@ -65,7 +65,7 @@ public class ProductController {
     /**
      * 주어진 id에 해당하는 product를 수정한 후 수정된 product를 응답합니다.
      *
-     * @param id product id
+     * @param id     수정하고자 하는 product의 식별자
      * @param source 수정하고자 하는 product
      * @return 수정된 product
      */
@@ -76,7 +76,8 @@ public class ProductController {
 
     /**
      * 주어진 id에 해당하는 product를 삭제합니다.
-     * @param id product id
+     *
+     * @param id 삭제하고자 하는 product의 식별자
      */
     @DeleteMapping(path = "{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

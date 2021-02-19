@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * 상품을 관리하는 Repository 클래스이빈다.
+ * 상품을 관리하는 Repository 클래스.
  *
  * @See Product
  */

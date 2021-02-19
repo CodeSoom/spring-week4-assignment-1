@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * 상품 정보를 표현하는 Domain 클래스.
+ * 상품 정보.
  */
 @Entity
 @NoArgsConstructor
