@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ProductApplicationService는 product에 대한 use case들을 담당합니다.
+ * product에 대한 use case들을 담당합니다.
  */
 public class ProductApplicationService {
     ProductRepository productRepository;
