@@ -22,7 +22,7 @@ public class ProductRequest {
     private String imageUrl;
 
     /**
-     * 상품 요청 Dto를 상품 엔터티로 변환하고, 상품 엔터티를 리턴합니다.
+     * 상품 요청서를 사용해 상품 엔터티를 생성해 리턴합니다.
      */
     public Product toProduct() {
         return Product.builder()
