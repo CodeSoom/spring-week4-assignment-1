@@ -52,12 +52,13 @@ class ProductServiceTest {
         productService = new ProductService(productRepository);
 
         products = new ArrayList<>();
-        setupProduct = new Product();
-        setupProduct.setId(EXISTED_ID);
-        setupProduct.setName(SETUP_PRODUCT_NAME);
-        setupProduct.setMaker(SETUP_PRODUCT_MAKER);
-        setupProduct.setPrice(SETUP_PRODUCT_PRICE);
-        setupProduct.setImage(SETUP_PRODUCT_IMAGE);
+        setupProduct = Product.builder()
+                .id(EXISTED_ID)
+                .name(SETUP_PRODUCT_NAME)
+                .maker(SETUP_PRODUCT_MAKER)
+                .price(SETUP_PRODUCT_PRICE)
+                .image(SETUP_PRODUCT_IMAGE)
+                .build();
 
         products.add(setupProduct);
     }
@@ -65,13 +66,32 @@ class ProductServiceTest {
     @Nested
     @DisplayName("getProducts 메서드는")
     class Describe_getProducts {
+        private final Product mockProduct = Product.builder()
+                .id(CREATED_ID)
+                .name(CREATED_PRODUCT_NAME)
+                .maker(CREATED_PRODUCT_MAKER)
+                .price(CREATED_PRODUCT_PRICE)
+                .image(CREATED_PRODUCT_IMAGE)
+                .build();
+
+        @BeforeEach
+        void setUp() {
+            productService.createProduct(mockProduct);
+            products.add(mockProduct);
+        }
+
         @Test
         @DisplayName("고양이 장난감 목록을 리턴한다")
         void itReturnsListOfProducts() {
             given(productRepository.findAll()).willReturn(products);
 
             List<Product> list = productRepository.findAll();
+
+            System.out.println(list);
             assertThat(list.size()).isEqualTo(products.size());
+
+            assertThat(list.get(0)).isEqualTo(setupProduct);
+            assertThat(list.get(1)).isEqualTo(mockProduct);
 
             verify(productRepository).findAll();
         }
@@ -248,7 +268,7 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 던진다")
-            void itDeletesProductAndReturnsDeletedProduct() {
+            void itThrowsProductNotFoundException() {
                 given(productRepository.findById(givenNotExistedId))
                         .willThrow(ProductNotFoundException.class);
 

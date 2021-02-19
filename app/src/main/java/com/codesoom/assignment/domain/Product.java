@@ -1,6 +1,7 @@
 package com.codesoom.assignment.domain;
 
 import lombok.*;
+import org.springframework.scheduling.config.Task;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode()
 public class Product {
     @Id
     @GeneratedValue

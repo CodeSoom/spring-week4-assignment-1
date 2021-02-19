@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import org.hamcrest.core.StringContains;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,8 +30,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @WebMvcTest(ProductController.class)
@@ -79,8 +80,12 @@ class ProductControllerWebMvcTest {
         @Test
         @DisplayName("전체 고양이 장난감 목록과 OK를 리턴한다")
         void itReturnsOKHttpStatus() throws Exception {
+            given(productService.getProducts()).willReturn(products);
+
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk());
+
+            verify(productService).getProducts();
         }
     }
 
@@ -115,14 +120,15 @@ class ProductControllerWebMvcTest {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("고양이 장난감을 찾을 수 없다는 예외와 NOT_FOUND를 리턴한다")
-            void itReturnsProductAndOKHttpStatus() throws Exception {
+            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 발생시키고 에러 메세지와 NOT_FOUND를 리턴한다")
+            void itThrowsProductNotFoundExceptionAndReturnsErrorResponseAndNOT_FOUNDHttpStatus() throws Exception {
                 given(productService.getProduct(givenNotExistedId))
                         .willThrow(ProductNotFoundException.class);
 
                 mockMvc.perform(get("/products/"+ givenNotExistedId))
                         .andDo(print())
-                        .andExpect(status().isNotFound());
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().string(containsString("Product Not Found")));
 
                 verify(productService).getProduct(givenNotExistedId);
             }
@@ -236,13 +242,16 @@ class ProductControllerWebMvcTest {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("고양이 장난감을 찾을 수 없다는 예외와 NOT_FOUND를 리턴한다")
-            void itDeleteProductAndReturnsNO_CONTENTHttpStatus() throws Exception {
-                given(productService.deleteProduct(givenNotExistedId)).willReturn(setupProduct);
+            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 발생시키고 에러 메세지와 NOT_FOUND를 리턴한다")
+            void itThrowsProductNotFoundExceptionAndReturnsErrorResponseAndNOT_FOUNDHttpStatus() throws Exception {
+                given(productService.deleteProduct(givenNotExistedId))
+                        .willThrow(ProductNotFoundException.class);
 
                 mockMvc.perform(delete("/products/" + givenNotExistedId))
                         .andDo(print())
-                        .andExpect(status().isNotFound());
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().string(containsString("Product Not Found")));
+
 
                 verify(productService).deleteProduct(givenNotExistedId);
             }
