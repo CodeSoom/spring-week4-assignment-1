@@ -65,7 +65,7 @@ public class ProductService {
      */
     @Transactional
     public ProductResponseDto updateProduct(Long productId,
-                                            ProductUpdateRequestDto requestDto) {
+                                            ProductUpdateRequestDto requestDto) throws ProductNotFoundException {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
 
@@ -84,7 +84,7 @@ public class ProductService {
      * @return 삭제된 상품 id
      */
     @Transactional
-    public Long deleteProduct(Long productId) {
+    public Long deleteProduct(Long productId) throws ProductNotFoundException {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException(productId));
         productRepository.deleteById(productId);
