@@ -21,10 +21,17 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -149,7 +156,12 @@ class ProductMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = new ProductUpdateRequestDto(NAME, MAKER, PRICE, IMAGE_URL);
+                requestDto = ProductUpdateRequestDto.builder()
+                        .name(NAME)
+                        .maker(MAKER)
+                        .price(PRICE)
+                        .imageUrl(IMAGE_URL)
+                        .build();
                 given(productService.updateProduct(eq(NOT_EXIST_ID), any(ProductUpdateRequestDto.class)))
                         .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
