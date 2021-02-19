@@ -229,5 +229,23 @@ class ProductControllerWebMvcTest {
                 verify(productService).deleteProduct(givenExistedId);
             }
         }
+
+        @Nested
+        @DisplayName("만약 저장되어 있지 않은 고양이 장난감의 아이디가 주어진다면")
+        class Context_WithNotExistedId {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
+
+            @Test
+            @DisplayName("고양이 장난감을 찾을 수 없다는 예외와 NOT_FOUND를 리턴한다")
+            void itDeleteProductAndReturnsNO_CONTENTHttpStatus() throws Exception {
+                given(productService.deleteProduct(givenNotExistedId)).willReturn(setupProduct);
+
+                mockMvc.perform(delete("/products/" + givenNotExistedId))
+                        .andDo(print())
+                        .andExpect(status().isNotFound());
+
+                verify(productService).deleteProduct(givenNotExistedId);
+            }
+        }
     }
 }

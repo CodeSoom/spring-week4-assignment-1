@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.*;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -96,6 +98,24 @@ class ProductServiceTest {
                 assertThat(detailProduct.getImage()).isEqualTo(SETUP_PRODUCT_IMAGE);
 
                 verify(productRepository).findById(givenExistedId);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 저장되어 있지 않는 고양이 장난감의 아이디가 주어진다면")
+        class Context_WithNotExistedId {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
+
+            @Test
+            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 던진다")
+            void itThrowsProductNotFoundException() {
+                given(productRepository.findById(givenNotExistedId))
+                        .willThrow(ProductNotFoundException.class);
+
+                assertThatThrownBy(() -> productService.getProduct(givenNotExistedId))
+                        .isInstanceOf(ProductNotFoundException.class);
+
+                verify(productRepository).findById(givenNotExistedId);
             }
         }
     }
@@ -218,6 +238,23 @@ class ProductServiceTest {
                         .isEqualTo(SETUP_PRODUCT_IMAGE);
 
                 verify(productRepository).delete(setupProduct);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 저장되어 있지 않은 고양이 장난감의 아이디가 주어진다면")
+        class Context_WithNotExistedId {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
+
+            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 던진다")
+            void itDeletesProductAndReturnsDeletedProduct() {
+                given(productRepository.findById(givenNotExistedId))
+                        .willThrow(ProductNotFoundException.class);
+
+                assertThatThrownBy(() -> productService.deleteProduct(givenNotExistedId))
+                        .isInstanceOf(ProductNotFoundException.class);
+
+                verify(productRepository).findById(givenNotExistedId);
             }
         }
     }
