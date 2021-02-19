@@ -1,7 +1,9 @@
 package com.codesoom.assignment.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
     @Id
@@ -24,25 +27,6 @@ public class Product {
     private int price;
 
     private String imageUrl;
-
-    public Product() {
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setMaker(String maker) {
-        this.maker = maker;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
 
     @Builder
     private Product(Long id, String name, String maker, int price, String imageUrl) {

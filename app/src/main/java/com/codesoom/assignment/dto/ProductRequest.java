@@ -7,23 +7,43 @@ public class ProductRequest {
     private Product product;
 
     public ProductRequest() {
-        this.product = new Product();
+        product = Product.builder().build();
     }
 
     public void setName(String name) {
-        product.setName(name);
+        product = product.builder()
+                .name(name)
+                .maker(product.getMaker())
+                .price(product.getPrice())
+                .imageUrl(product.getImageUrl())
+                .build();
     }
 
     public void setMaker(String maker) {
-        product.setMaker(maker);
+        product = product.builder()
+                .name(product.getName())
+                .maker(maker)
+                .price(product.getPrice())
+                .imageUrl(product.getImageUrl())
+                .build();
     }
 
     public void setPrice(int price) {
-        product.setPrice(price);
+        product = product.builder()
+                .name(product.getName())
+                .maker(product.getMaker())
+                .price(price)
+                .imageUrl(product.getImageUrl())
+                .build();
     }
 
     public void setImageUrl(String imageUrl) {
-        product.setImageUrl(imageUrl);
+        product = product.builder()
+                .name(product.getName())
+                .maker(product.getMaker())
+                .price(product.getPrice())
+                .imageUrl(imageUrl)
+                .build();
     }
 
     public String getName() {
