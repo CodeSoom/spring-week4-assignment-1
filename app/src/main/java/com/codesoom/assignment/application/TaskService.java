@@ -22,16 +22,22 @@ public class TaskService {
     }
 
     /**
-     * task 조회 반환
+     * 요청한 id에 해당하는 Task를 찾아 리턴합니다.
      *
-     * @param id 고유번호
-     * @return 조회된 Task
+     * @param id 검색하고자 하는 Task id
+     * @return 요청한 id에 해당하는 Task 반환
      */
     public Task getTask(Long id) {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
+    /**
+     * 입력한 Task 값을 저장하고, 저장된 Task값을 리턴합니다.
+     *
+     * @param source 입력한 Task 값
+     * @return 저장된 Task 값
+     */
     public Task createTask(Task source) {
         Task task = new Task(source.getTitle());
 
@@ -39,11 +45,11 @@ public class TaskService {
     }
 
     /**
-     * Task 수정 반환
+     * 요청한 id에 해당하는 Task를 찾아 값을 변경한 후 리턴합니다.
      *
-     * @param id 고유번호
+     * @param id 검색하고자 하는 Task id
      * @param source 수정 할 값
-     * @return 수정완료된 Task
+     * @return 수정완료된 Task 값 반환
      */
     public Task updateTask(Long id, Task source) {
         Task task = taskRepository.findById(id)
@@ -54,6 +60,12 @@ public class TaskService {
         return task;
     }
 
+    /**
+     * 요청한 id에 해당하는 Task를 찾아 삭제하고 값을 리턴합니다.
+     *
+     * @param id 삭제하고자 하는 Task id
+     * @return 삭제된 Task 값
+     */
     public Task deleteTask(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));

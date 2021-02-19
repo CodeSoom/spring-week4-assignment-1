@@ -18,4 +18,6 @@ public interface JpaProductRepository
     Optional<Product> findById(Long id);
 
     Product save(ProductRequest request);
+
+    void delete(Product product);
 }

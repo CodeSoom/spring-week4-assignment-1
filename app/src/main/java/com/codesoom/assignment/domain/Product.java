@@ -1,9 +1,8 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import com.codesoom.assignment.dto.request.ProductRequest;
 import lombok.Builder;
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -12,9 +11,7 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class Product {
 
     @Id
@@ -25,11 +22,19 @@ public class Product {
     private int price;
     private String image;
 
-    public Product update(Product source) {
-        this.name = source.getName();
-        this.maker = source.getMaker();
-        this.price = source.getPrice();
-        this.image = source.getImage();
+    @Builder
+    public Product(String name, String maker, int price, String image) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.image = image;
+    }
+
+    public Product update(ProductRequest request) {
+        this.name = request.getName();
+        this.maker = request.getMaker();
+        this.price = request.getPrice();
+        this.image = request.getImage();
         return this;
     }
 

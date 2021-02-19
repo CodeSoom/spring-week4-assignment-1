@@ -40,22 +40,22 @@ class ProductControllerTest {
                                     .build();
         products.add(product);
 
-        given(productService.findAll()).willReturn(products);
+        given(productService.getProducts()).willReturn(products);
 
-        given(productService.find(1L)).willReturn(product);
+        given(productService.getProduct(1L)).willReturn(product);
 
-        given(productService.find(100L))
+        given(productService.getProduct(100L))
                 .willThrow(new ProductNotFoundException(100L));
     }
 
     @Test
     @DisplayName("제품 목록 전체를 조회하고 목록이 비어있는지 확인한다.")
     void findAllWithoutProducts() {
-        given(productService.findAll()).willReturn(new ArrayList<>()); // 비어있는 객체를 return해줌
+        given(productService.getProducts()).willReturn(new ArrayList<>()); // 비어있는 객체를 return해줌
 
         assertThat(productController.findAll()).isEmpty();
 
-        verify(productService).findAll();
+        verify(productService).getProducts();
     }
 
     @Test
@@ -63,7 +63,7 @@ class ProductControllerTest {
     void findAllWithSomeProducts() {
         assertThat(productController.findAll()).isNotEmpty();
 
-        verify(productService).findAll();
+        verify(productService).getProducts();
     }
 
     @Test
@@ -82,7 +82,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("특정 제품 목록을 조회하고 존재하지 않으면 예외를 던진다.")
     void findOneWithNotExistedId() {
-        assertThatThrownBy(() -> productService.find(100L))
+        assertThatThrownBy(() -> productService.getProduct(100L))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 

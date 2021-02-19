@@ -16,4 +16,6 @@ public interface ProductRepository
     Optional<Product> findById(Long id);
 
     Product save(ProductRequest request);
+
+    void delete(Product product);
 }
