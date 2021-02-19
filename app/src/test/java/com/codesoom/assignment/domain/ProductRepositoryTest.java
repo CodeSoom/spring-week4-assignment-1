@@ -1,10 +1,7 @@
 package com.codesoom.assignment.domain;
 
 import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
@@ -32,6 +29,8 @@ class ProductRepositoryTest {
 
     private Product setUpProduct;
 
+    private final Long EXISTED_ID = 1L;
+
     @BeforeEach
     void setUp() {
         setUpProduct = Product.builder()
@@ -43,13 +42,18 @@ class ProductRepositoryTest {
     }
 
     @Nested
+    @DisplayName("findAll 메서드는")
+    class Describe_findAll {
+        @Test
+        @DisplayName("저장되어 있는 고양이 장난감 전체 목록을 리턴한다")
+        void itReturnsAllOfProducts() {
+            List<Product> lists = productRepository.findAll();
+        };
+    }
+
+    @Nested
     @DisplayName("findById 메서드는")
     class Describe_findById {
-        @BeforeEach
-        void setUp() {
-            productRepository.save(setUpProduct);
-        }
-
         @Nested
         @DisplayName("만약 저장되어 있는 고양이 장난감 아이디가 주어진다면")
         class Context_WithExistedId {
@@ -57,8 +61,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                List<Product> list = productRepository.findAll();
-                givenExistedId = list.get(list.size()-1).getId();
+                givenExistedId = productRepository.save(setUpProduct).getId();
             }
 
             @Test
@@ -78,7 +81,7 @@ class ProductRepositoryTest {
     @DisplayName("save 메서드는")
     class Describe_save {
         @Nested
-        @DisplayName("만약 장난감 고양이 객체가 주어진다면")
+        @DisplayName("만약 고양이 장난감 객체가 주어진다면")
         class Context_WithProduct {
             private final Product givenProduct = Product.builder()
                     .name(CREATE_PRODUCT_NAME)
@@ -91,14 +94,21 @@ class ProductRepositoryTest {
             @DisplayName("주어진 객체를 저장하고 저장된 객체를 리턴한다")
             void itSavesObjectAndReturnsSavedObject() {
                 assertThat(givenProduct.getId())
-                        .as("저장되지 않은 장난감 고양이 객체는 아이디가 null 이다")
+                        .as("저장되지 않은 고양이 장난감 객체는 아이디가 null 이다")
                         .isNull();
+
+                int oldSize = productRepository.findAll().size();
 
                 Product savedProduct = productRepository.save(givenProduct);
 
                 assertThat(savedProduct.getId())
-                        .as("저장되어 있는 장난감 고양이 객체는 아이디가 null이 아니다")
+                        .as("저장되어 있는 고양이 장난감 객체는 아이디가 null이 아니다")
                         .isNotNull();
+
+                assertThat(productRepository.findAll().size())
+                        .as("고양이 장난감 객체를 저장하면 전체 목록 사이즈가 1 증가한다")
+                        .isEqualTo(oldSize + 1);
+
                 assertThat(savedProduct.getName()).isEqualTo(CREATE_PRODUCT_NAME);
                 assertThat(savedProduct.getMaker()).isEqualTo(CREATE_PRODUCT_MAKER);
                 assertThat(savedProduct.getPrice()).isEqualTo(CREATE_PRODUCT_PRICE);
@@ -110,11 +120,6 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("delete 메서드는")
     class Describe_delete {
-        @BeforeEach
-        void setUp() {
-            productRepository.save(setUpProduct);
-        }
-
         @Nested
         @DisplayName("만약 저장되어 있는 고양이 장난감 아이디가 주어진다면")
         class Context_WithExistedId {
@@ -122,15 +127,12 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                List<Product> list = productRepository.findAll();
-                givenExistedId = list.get(list.size()-1).getId();
+                givenExistedId = productRepository.save(setUpProduct).getId();
             }
 
             @Test
             @DisplayName("주어진 아이디에 해당하는 고양이 장난감 객체를 삭제한다")
             void itDeleteObject() {
-                System.out.println(givenExistedId);
-                System.out.println(givenExistedId);
                 Product deleteProduct = productRepository.findById(givenExistedId).get();
                 assertThat(deleteProduct)
                         .as("삭제되지 않은 고양이 장난감 객체는 null이 아니다")
