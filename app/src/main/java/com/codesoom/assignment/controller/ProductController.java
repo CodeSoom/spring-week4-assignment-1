@@ -3,11 +3,12 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.application.ProductApplicationService;
 import com.codesoom.assignment.domain.Product;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,5 +26,11 @@ public class ProductController {
         return allProductList.stream()
             .map(ProductDTO::from)
             .collect(Collectors.toList());
+    }
+
+    @GetMapping("{id}")
+    public ProductDTO getSpecificProduct(@PathVariable Long id) {
+        Optional<Product> product = this.applicationService.getProduct(id);
+        return ProductDTO.from(product.get());
     }
 }

@@ -42,6 +42,5 @@ public class ProductControllerTest {
 
         assertThat(product).isNotNull();
         assertThat(product.id).isEqualTo(createdProduct.productId().id());
-
     }
 }

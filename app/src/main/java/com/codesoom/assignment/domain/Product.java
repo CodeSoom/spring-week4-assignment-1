@@ -28,4 +28,20 @@ public class Product {
         Product product = (Product) o;
         return id.equals(product.id);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
 }
