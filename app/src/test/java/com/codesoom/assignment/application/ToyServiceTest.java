@@ -201,7 +201,7 @@ class ToyServiceTest {
                 modified = toyService.updateToy(modifying);
 
                 verify(toyRepository).findById(givenId);
-                System.out.println(modified.getName());
+                
                 assertModifiedToy(modified);
             }
         }
@@ -257,7 +257,7 @@ class ToyServiceTest {
             void setUnsavedId() {
                 givenId = givenUnsavedToyId;
 
-                doThrow(ToyNotFoundException.class).when(toyRepository).deleteById(givenId);
+                doThrow(EmptyResultDataAccessException.class).when(toyRepository).deleteById(givenId);
             }
 
             @Test

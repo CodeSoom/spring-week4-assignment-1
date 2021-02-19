@@ -30,7 +30,7 @@ public class ToyService {
 
     public Toy updateToy(Toy toy) {
         final Long id = toy.getId();
-        Toy foundToy = toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
+        Toy foundToy = getToy(id);
         foundToy.setName(toy.getName());
         foundToy.setBrand(toy.getBrand());
         foundToy.setPrice(toy.getPrice());
