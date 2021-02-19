@@ -40,7 +40,7 @@ public class ProductService {
      * @return 주어진 id에 해당하는 상품
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 경우
      */
-    public ProductResponse getProduct(Long id) {
+    public ProductResponse getProduct(Long id) throws ProductNotFoundException {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("존재하지 않는 상품 id가 주어졌으므로 상품을 찾을 수 없습니다. 문제의 id = " + id));
 
@@ -69,7 +69,8 @@ public class ProductService {
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 경우
      */
     @Transactional
-    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
+    public ProductResponse updateProduct(Long id, ProductRequest productRequest)
+            throws ProductNotFoundException {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("존재하지 않는 상품 id가 주어졌으므로 상품을 수정할 수 없습니다. 문제의 id = " + id));
 
@@ -85,7 +86,7 @@ public class ProductService {
      * @throws ProductNotFoundException 주어진 id에 해당하는 상품을 찾지 못했을 경우
      */
     @Transactional
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id) throws ProductNotFoundException {
         Product product = productRepository.findById(id).orElseThrow(() ->
                 new ProductNotFoundException("존재하지 않는 상품 id가 주어졌으므로 상품을 삭제할 수 없습니다. 문제의 id = " + id));
 
