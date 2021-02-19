@@ -52,4 +52,14 @@ public class ProductApplicationService {
         Optional<Product> product = productRepository.find(id);
         productRepository.remove(product.get());
     }
+
+    /**
+     * 생성된 product를 가져옵니다.
+     *
+     * @param id 가져오려는 product의 id
+     * @return 생성된 product을 반환합니다. 만약 product를 가져올 수 없으면 null을 반환합니다.
+     */
+    public Optional<Product> getProduct(Long id) {
+        return productRepository.find(id);
+    }
 }
