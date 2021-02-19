@@ -10,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * 상품 정보.
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
