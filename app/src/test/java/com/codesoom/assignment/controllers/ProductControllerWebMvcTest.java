@@ -77,12 +77,12 @@ class ProductControllerWebMvcTest {
     @DisplayName("detail 메서드는")
     class Describe_detail {
         @Nested
-        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감과 OK를 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 고양이 장난감과 OK를 리턴한다")
             void itReturnsProductAndOKHttpStatus() throws Exception {
                 given(productService.getProduct(givenExistedId)).willReturn(setupProduct);
 
@@ -103,7 +103,7 @@ class ProductControllerWebMvcTest {
     @DisplayName("create 메서드는")
     class Describe_create {
         @Nested
-        @DisplayName("만약 name, maker, price, image가 주어진다면")
+        @DisplayName("만약 이름, 메이커, 가격, 이미지가 주어진다면")
         class Context_WithNameAndMakerAndPriceAndImage {
             private String name;
             private String maker;
@@ -143,7 +143,7 @@ class ProductControllerWebMvcTest {
     @DisplayName("update 메서드는")
     class Describe_update {
         @Nested
-        @DisplayName("만약 저징되어 있는 고양이 장난감의 id와 업데이트 될 name, maker, price, image가 주어진다면")
+        @DisplayName("만약 저징되어 있는 고양이 장난감의 아이디와 업데이트 될 이름, 메이커, 가격, 이미지가 주어진다면")
         class Context_WithExistedIdAndNameAndMakerAndPriceAndImage {
             private final Long givenExistedId = EXISTED_ID;
             private String name;
@@ -184,17 +184,18 @@ class ProductControllerWebMvcTest {
     @DisplayName("delete 메서드는")
     class Describe_delete {
         @Nested
-        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제하고 삭제된 고양이 장난감과 NO_CONTENT를 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 고양이 장난감을 삭제하고 삭제된 고양이 장난감과 NO_CONTENT를 리턴한다")
             void itDeleteProductAndReturnsNO_CONTENTHttpStatus() throws Exception {
                 Product deletedProduct = setupProduct;
                 given(productService.getProduct(givenExistedId)).willReturn(setupProduct);
 
                 mockMvc.perform(delete("/products/" + givenExistedId))
+                        .andDo(print())
                         .andExpect(status().isNoContent());
 
                 verify(productService).deleteProduct(givenExistedId);
