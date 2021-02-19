@@ -30,20 +30,4 @@ public class ProductResponse {
         return product.getImageUrl();
     }
 
-    //    /**
-    //     * 상품 엔터티로 상품 응답서를 생성해 리턴합니다.
-    //     *
-    //     * @param product 상품 엔터티
-    //     * @return 생성된 상품 응답서
-    //     */
-    //    public static ProductResponse of(Product product) {
-    //        return ProductResponse.builder()
-    //                .id(product.getId())
-    //                .name(product.getName())
-    //                .maker(product.getMaker())
-    //                .price(product.getPrice())
-    //                .imageUrl(product.getImageUrl())
-    //                .build();
-    //    }
-
 }
