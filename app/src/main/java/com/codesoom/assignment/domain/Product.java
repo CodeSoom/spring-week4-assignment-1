@@ -22,7 +22,9 @@ public class Product {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Product)) return false;
+        if (!(o instanceof Product)) {
+            return false;
+        }
         Product product = (Product) o;
         return id.equals(product.id);
     }

@@ -20,7 +20,9 @@ public class ProductId {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (this == o) {
+            return true;
+        }
         ProductId productId = (ProductId) o;
         return id.equals(productId.id);
     }
