@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +21,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WebAppConfiguration
 @DisplayName("InMemoryProductRepository 클래스")
 class InMemoryProductRepositoryTest {
+
+    @Autowired // Spring이 자동으로 new를 해주는 것
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private InMemoryProductRepository inMemoryProductRepository = new InMemoryProductRepository();
@@ -163,4 +172,5 @@ class InMemoryProductRepositoryTest {
             }
         }
     }
+
 }
