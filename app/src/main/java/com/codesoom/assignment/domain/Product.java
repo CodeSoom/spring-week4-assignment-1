@@ -12,13 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 /**
- * 상품 엔티티
- * Equals()와 Hashcode()를 생성할때 명시적으로 id를 포함시켜 동등성 비교를 id로 한다.
+ * 상품 엔티티.
  */
 @Entity
 @Getter
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id")   //Equals()와 Hashcode()를 생성할때 명시적으로 id를 포함시켜 동등성 비교를 id로 한다.
 public class Product {
 
     @Id
@@ -26,12 +25,12 @@ public class Product {
     private Long id;
 
     /**
-     * 상품명
+     * 상품명.
      */
     private String name;
 
     /**
-     * 상품의 브랜드
+     * 상품의 브랜드.
      */
     private String maker;
 
