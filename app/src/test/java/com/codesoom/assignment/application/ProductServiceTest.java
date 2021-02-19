@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -25,6 +26,16 @@ class ProductServiceTest {
     private final String SETUP_PRODUCT_MAKER = "setupMaker";
     private final int SETUP_PRODUCT_PRICE = 100;
     private final String SETUP_PRODUCT_IMAGE = "setupImage";
+
+    private final String CREATED_PRODUCT_NAME = "createdName";
+    private final String CREATED_PRODUCT_MAKER = "createdMaker";
+    private final int CREATED_PRODUCT_PRICE = 200;
+    private final String CREATED_PRODUCT_IMAGE = "createdImage";
+
+    private final String UPDATED_PRODUCT_NAME = "updatedName";
+    private final String UPDATED_PRODUCT_MAKER = "updatedMaker";
+    private final int UPDATED_PRODUCT_PRICE = 300;
+    private final String UPDATED_PRODUCT_IMAGE = "updatedImage";
 
     private final Long EXISTED_ID = 1L;
     private final Long CREATED_ID = 2L;
@@ -57,8 +68,8 @@ class ProductServiceTest {
         void itReturnsListOfProducts() {
             given(productRepository.findAll()).willReturn(new ArrayList<>());
 
-            List<Product> products = productRepository.findAll();
-            Assertions.assertEquals(products.size() , 1, "조회하여 리턴 된 고양이 장난감 목록은 size가 1이어야 한다");
+            List<Product> list = productRepository.findAll();
+            Assertions.assertEquals(1 , list.size(), "조회하여 리턴 된 고양이 장난감 목록은 size가 1이어야 한다");
 
             verify(productRepository).findAll();
         }
@@ -68,12 +79,12 @@ class ProductServiceTest {
     @DisplayName("getProduct 메서드는")
     class Describe_getProduct {
         @Nested
-        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감을 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 고양이 장난감을 리턴한다")
             void itReturnsWithExistedProduct() {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
@@ -93,23 +104,15 @@ class ProductServiceTest {
     @DisplayName("createProduct 메서드는")
     class Describe_class {
         @Nested
-        @DisplayName("만약 name, maker, price, image가 주어진다면")
+        @DisplayName("만약 이름, 메이커, 가격, 이미지가 주어진다면")
         class Content_WithNameAndMakerAndPriceAndImage {
-            private String name;
-            private String maker;
-            private int price;
-            private String image;
-
-            @BeforeEach
-            void prepareCreateProduct() {
-                name = "createdName";
-                maker = "createMaker";
-                price = 200;
-                image = "createdImage";
-            }
+            private String givenName = CREATED_PRODUCT_NAME;
+            private String givenMaker = CREATED_PRODUCT_MAKER;
+            private int givenPrice = CREATED_PRODUCT_PRICE;
+            private String givenImage = CREATED_PRODUCT_IMAGE;
 
             Product createProduct() {
-                return new Product(CREATED_ID, name, maker, price, image);
+                return new Product(CREATED_ID, givenName, givenMaker, givenPrice, givenImage);
             }
 
             @Test
@@ -119,11 +122,21 @@ class ProductServiceTest {
                 given(productRepository.save(any(Product.class))).willReturn(createSource);
 
                 Product createdProduct = productService.createProduct(createSource);
-                Assertions.assertEquals(createdProduct.getId(), CREATED_ID, "생성하여 리턴 된 고양이 장난감은 id값이 2L이어야 한다");
-                Assertions.assertEquals(createdProduct.getName(), name, "생성하여 리턴 된 고양이 장난감은 name값이 createdName이어야 한다");
-                Assertions.assertEquals(createdProduct.getMaker(), maker, "생성하여 리턴 된 고양이 장난감은 maker값이 createdMaker이어야 한다");
-                Assertions.assertEquals(createdProduct.getPrice(), price, "생성하여 리턴 된 고양이 장난감은 price값이 200이어야 한다");
-                Assertions.assertEquals(createdProduct.getImage(), image, "생성하여 리턴 된 고양이 장난감은 image값이 createdImage이어야 한다");
+                assertThat(createdProduct.getId())
+                        .as("생성하여 리턴 된 고양이 장난감의 아이디는 %f 이어야 한다", CREATED_ID)
+                        .isEqualTo(CREATED_ID);
+                assertThat(createdProduct.getName())
+                        .as("생성하여 리턴 된 고양이 장난감의 이름은 %s 이어야 한다", givenName)
+                        .isEqualTo(givenName);
+                assertThat(createdProduct.getMaker())
+                        .as("생성하여 리턴 된 고양이 장난감의 메이커는 %s 이어야 한다", givenMaker)
+                        .isEqualTo(givenMaker);
+                assertThat(createdProduct.getPrice())
+                        .as("생성하여 리턴 된 고양이 장난감의 가격은 %d 이어야 한다", givenPrice)
+                        .isEqualTo(givenPrice);
+                assertThat(createdProduct.getImage())
+                        .as("생성하여 리턴 된 고양이 장난감의 이미지는 %s 이어야 한다", givenImage)
+                        .isEqualTo(givenImage);
 
                 verify(productRepository).save(any(Product.class));
             }
@@ -134,38 +147,40 @@ class ProductServiceTest {
     @DisplayName("updateProduct 메서드는")
     class Describe_update {
         @Nested
-        @DisplayName("만약 저징되어 있는 고양이 장난감의 id와 업데이트 될 name, maker, price, image가 주어진다면")
+        @DisplayName("만약 저징되어 있는 고양이 장난감의 아이디와 업데이트 될 이름, 메이커, 가격, 이미지가 주어진다면")
         class Context_WithExistedIdAndNameAndMakerAndPriceAndImage {
             private final Long givenExistedId = EXISTED_ID;
-            private String name;
-            private String maker;
-            private int price;
-            private String image;
-
-            @BeforeEach
-            void prepareUpdateProduct() {
-                name = "updatedName";
-                maker = "updatedMaker";
-                price = 300;
-                image = "updatedImage";
-            }
+            private String givenName = UPDATED_PRODUCT_NAME;
+            private String givenMaker = UPDATED_PRODUCT_MAKER;
+            private int givenPrice = UPDATED_PRODUCT_PRICE;
+            private String givenImage = UPDATED_PRODUCT_IMAGE;
 
             Product updateProduct() {
-                return new Product(givenExistedId, name, maker, price, image);
+                return new Product(givenExistedId, givenName, givenMaker, givenPrice, givenImage);
             }
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감을 업데이트하고 수정된 고양이 장난감을 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 고양이 장난감을 업데이트하고 업데이트 된 고양이 장난감을 리턴한다")
             void itUpdatesProductAndReturnsUpdatedProduct() {
                 Product updateSource = updateProduct();
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
                 Product updatedProduct = productService.updateProduct(givenExistedId, updateSource);
-                Assertions.assertEquals(updatedProduct.getId(), givenExistedId, "업데이트하여 리턴 된 고양이 장난감은 id값이 1L이어야 한다");
-                Assertions.assertEquals(updatedProduct.getName(), name, "업데이트하여 리턴 된 고양이 장난감은 name값이 updatedName이어야 한다");
-                Assertions.assertEquals(updatedProduct.getMaker(), maker, "업데이트하여 리턴 된 고양이 장난감은 maker값이 updatedMaker이어야 한다");
-                Assertions.assertEquals(updatedProduct.getPrice(), price, "업데이트하여 리턴 된 고양이 장난감은 price값이 300이어야 한다");
-                Assertions.assertEquals(updatedProduct.getImage(), image, "업데이트하여 리턴 된 고양이 장난감은 image값이 udpatedImage이어야 한다");
+                assertThat(updatedProduct.getId())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 아이디는 %f 이어야 한다", EXISTED_ID)
+                        .isEqualTo(EXISTED_ID);
+                assertThat(updatedProduct.getName())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 이름은 %s 이어야 한다", givenName)
+                        .isEqualTo(givenName);
+                assertThat(updatedProduct.getMaker())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 메이커는 %s 이어야 한다", givenMaker)
+                        .isEqualTo(givenMaker);
+                assertThat(updatedProduct.getPrice())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 가격은 %d 이어야 한다", givenPrice)
+                        .isEqualTo(givenPrice);
+                assertThat(updatedProduct.getImage())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 이미지는 %s 이어야 한다", givenImage)
+                        .isEqualTo(givenImage);
 
                 verify(productRepository).findById(givenExistedId);
             }
@@ -176,21 +191,31 @@ class ProductServiceTest {
     @DisplayName("deleteProduct 메서드는")
     class Describe_delete {
         @Nested
-        @DisplayName("만약 저장되어 있는 고양이 장난감의 id가 주어진다면")
+        @DisplayName("만약 저장되어 있는 고양이 장난감의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 id에 해당하는 고양이 장난감을 삭제하고 삭제 한 고양이 장난감을 리턴한다")
-            void itDeletesProduct() {
+            @DisplayName("주어진 아이디에 해당하는 고양이 장난감을 삭제하고 삭제 한 고양이 장난감을 리턴한다")
+            void itDeletesProductAndReturnsDeletedProduct() {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
                 Product deletedProduct = productService.deleteProduct(givenExistedId);
-                Assertions.assertEquals(deletedProduct.getId(), givenExistedId, "삭제되어 리턴 된 고양이 장난감은 id값이 1L이어야 한다");
-                Assertions.assertEquals(deletedProduct.getName(), SETUP_PRODUCT_NAME, "삭제되어 리턴 된 고양이 장난감은 name값이 setupName이어야 한다");
-                Assertions.assertEquals(deletedProduct.getMaker(), SETUP_PRODUCT_MAKER, "삭제되어 리턴 된 고양이 장난감은 maker값이 setupMaker이어야 한다");
-                Assertions.assertEquals(deletedProduct.getPrice(), SETUP_PRODUCT_PRICE, "삭제되어 리턴 된 고양이 장난감은 price값이 100이어야 한다");
-                Assertions.assertEquals(deletedProduct.getImage(), SETUP_PRODUCT_IMAGE, "삭제되어 리턴 된 고양이 장난감은 image값이 setupImage이어야 한다");
+                assertThat(deletedProduct.getId())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 아이디는 %f 이어야 한다", EXISTED_ID)
+                        .isEqualTo(EXISTED_ID);
+                assertThat(deletedProduct.getName())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 이름은 %s 이어야 한다", SETUP_PRODUCT_NAME)
+                        .isEqualTo(SETUP_PRODUCT_NAME);
+                assertThat(deletedProduct.getMaker())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 메이커는 %s 이어야 한다", SETUP_PRODUCT_MAKER)
+                        .isEqualTo(SETUP_PRODUCT_MAKER);
+                assertThat(deletedProduct.getPrice())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 가격은 %d 이어야 한다", SETUP_PRODUCT_PRICE)
+                        .isEqualTo(SETUP_PRODUCT_PRICE);
+                assertThat(deletedProduct.getImage())
+                        .as("업데이트하여 리턴 된 고양이 장난감의 이미지는 %s 이어야 한다", SETUP_PRODUCT_IMAGE)
+                        .isEqualTo(SETUP_PRODUCT_IMAGE);
 
                 verify(productRepository).delete(setupProduct);
             }

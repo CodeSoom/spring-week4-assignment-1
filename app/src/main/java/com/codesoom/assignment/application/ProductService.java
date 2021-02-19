@@ -42,7 +42,7 @@ public class ProductService {
 
         return product;
     }
-    @DeleteMapping("{id}")
+
     public Product deleteProduct(@PathVariable Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
