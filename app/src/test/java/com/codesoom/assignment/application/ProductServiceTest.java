@@ -66,34 +66,53 @@ class ProductServiceTest {
     @Nested
     @DisplayName("getProducts 메서드는")
     class Describe_getProducts {
-        private final Product mockProduct = Product.builder()
-                .id(CREATED_ID)
-                .name(CREATED_PRODUCT_NAME)
-                .maker(CREATED_PRODUCT_MAKER)
-                .price(CREATED_PRODUCT_PRICE)
-                .image(CREATED_PRODUCT_IMAGE)
-                .build();
+        @Nested
+        @DisplayName("만약 고양이 장난감 목록이 존재한다면")
+        class Context_HasListOfProducts {
+            private final Product mockProduct = Product.builder()
+                    .id(CREATED_ID)
+                    .name(CREATED_PRODUCT_NAME)
+                    .maker(CREATED_PRODUCT_MAKER)
+                    .price(CREATED_PRODUCT_PRICE)
+                    .image(CREATED_PRODUCT_IMAGE)
+                    .build();
 
-        @BeforeEach
-        void setUp() {
-            productService.createProduct(mockProduct);
-            products.add(mockProduct);
+            @BeforeEach
+            void setUp() {
+                productService.createProduct(mockProduct);
+                products.add(mockProduct);
+            }
+
+            @Test
+            @DisplayName("저장되어 있는 고양이 장난감 목록을 리턴한다")
+            void itReturnsListOfProducts() {
+                given(productRepository.findAll()).willReturn(products);
+
+                List<Product> list = productRepository.findAll();
+
+                assertThat(list.size()).isEqualTo(products.size());
+
+                assertThat(list.get(0)).isEqualTo(setupProduct);
+                assertThat(list.get(1)).isEqualTo(mockProduct);
+
+                verify(productRepository).findAll();
+            }
         }
 
-        @Test
-        @DisplayName("고양이 장난감 목록을 리턴한다")
-        void itReturnsListOfProducts() {
-            given(productRepository.findAll()).willReturn(products);
+        @Nested
+        @DisplayName("만약 고양이 목록이 존재하지 않는다면")
+        class Context_HasNotListOfProduct {
+            @Test
+            @DisplayName("비어있는 고양이 장난감 목록을 리턴한다")
+            void itReturnsEmptyListOfProducts() {
+                given(productRepository.findAll()).willReturn(new ArrayList<>());
 
-            List<Product> list = productRepository.findAll();
+                List<Product> list = productRepository.findAll();
 
-            System.out.println(list);
-            assertThat(list.size()).isEqualTo(products.size());
+                assertThat(list).isEmpty();
 
-            assertThat(list.get(0)).isEqualTo(setupProduct);
-            assertThat(list.get(1)).isEqualTo(mockProduct);
-
-            verify(productRepository).findAll();
+                verify(productRepository).findAll();
+            }
         }
     }
 
