@@ -11,19 +11,19 @@ import java.util.Objects;
  */
 @Getter
 public class ProductResponseDto {
-    /** 상품 식별자 */
+    /** 상품 식별자. */
     private Long id;
 
-    /** 상품명 */
+    /** 상품명. */
     private String name;
 
-    /** 상품제조사 */
+    /** 상품제조사. */
     private String maker;
 
-    /** 상품가격 */
+    /** 상품가격. */
     private int price;
 
-    /** 상품 이미지 */
+    /** 상품 이미지. */
     private String imageUrl;
 
     /**
@@ -45,7 +45,7 @@ public class ProductResponseDto {
     }
 
     /**
-     * 상품 정보로 응답용 상품 정보 DTO를 생성해 리턴합니다.
+     * 상품 정보로 응답용 상품 정보 명세서를 생성해 리턴합니다.
      *
      * @param product 상품 entity
      */
@@ -60,7 +60,7 @@ public class ProductResponseDto {
     }
 
     /**
-     *  Product가 동일 객체인지 비교합니다.
+     *  Product가 동등한 객체라면 true를 리턴하고, 그렇지 않다면 false를 리턴합니다.
      */
     @Override
     public boolean equals(Object o) {

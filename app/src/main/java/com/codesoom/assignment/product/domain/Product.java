@@ -17,21 +17,21 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
-    /** 상품 식별자 */
+    /** 상품 식별자. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** 상품명 */
+    /** 상품명. */
     private String name;
 
-    /** 상품제조사 */
+    /** 상품제조사. */
     private String maker;
 
-    /** 상품가격 */
+    /** 상품가격. */
     private int price;
 
-    /** 상품이미지 */
+    /** 상품이미지. */
     private String imageUrl;
 
     @Builder
