@@ -6,64 +6,56 @@ public class ProductRequest {
 
     private Product product;
 
+    private Product.ProductBuilder productBuilder;
+
     public ProductRequest() {
-        product = Product.builder().build();
+        productBuilder = Product.builder();
     }
 
     public void setName(String name) {
-        product = product.builder()
-                .name(name)
-                .maker(product.getMaker())
-                .price(product.getPrice())
-                .imageUrl(product.getImageUrl())
-                .build();
+        productBuilder.name(name);
     }
 
     public void setMaker(String maker) {
-        product = product.builder()
-                .name(product.getName())
-                .maker(maker)
-                .price(product.getPrice())
-                .imageUrl(product.getImageUrl())
-                .build();
+        productBuilder.maker(maker);
     }
 
     public void setPrice(int price) {
-        product = product.builder()
-                .name(product.getName())
-                .maker(product.getMaker())
-                .price(price)
-                .imageUrl(product.getImageUrl())
-                .build();
+        productBuilder.price(price);
     }
 
     public void setImageUrl(String imageUrl) {
-        product = product.builder()
-                .name(product.getName())
-                .maker(product.getMaker())
-                .price(product.getPrice())
-                .imageUrl(imageUrl)
-                .build();
+        productBuilder.imageUrl(imageUrl);
     }
 
     public String getName() {
-        return product.getName();
+        return buildProduct().getName();
     }
 
     public String getMaker() {
-        return product.getMaker();
+        return buildProduct().getMaker();
     }
 
     public int getPrice() {
-        return product.getPrice();
+        return buildProduct().getPrice();
     }
 
     public String getImageUrl() {
-        return product.getImageUrl();
+        return buildProduct().getImageUrl();
     }
 
     public Product getProduct() {
+        return buildProduct();
+    }
+
+    private Product buildProduct() {
+        if (product != null) {
+            return product;
+        }
+
+        product = productBuilder.build();
+
         return product;
     }
-    
+
 }

@@ -123,7 +123,6 @@ class ProductServiceTest {
 
         ProductResponse updatedProduct = productService.updateProduct(existingId, updateRequest);
 
-
         verify(productRepository).findById(existingId);
 
         assertAll(
