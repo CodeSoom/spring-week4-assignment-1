@@ -14,11 +14,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 @DisplayName("ToyRepository클래스의")
 class ToyRepositoryTest {
-    private final Long givenUnsavedToyId = 100L;
-    private final String givenToyName = "장난감 칼";
-    private final String givenToyBrand = "코드숨";
-    private final int givenToyPrice = 5000;
-    private final String givenToyImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
+    private final Long givenUnsavedId = 100L;
+    private final String givenName = "장난감 칼";
+    private final String givenBrand = "코드숨";
+    private final int givenPrice = 5000;
+    private final String givenImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
 
     @Autowired
     private ToyRepository toyRepository;
@@ -26,16 +26,16 @@ class ToyRepositoryTest {
 
     private void assertToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
-        assertThat(toy.getName()).isEqualTo(givenToyName);
-        assertThat(toy.getBrand()).isEqualTo(givenToyBrand);
-        assertThat(toy.getPrice()).isEqualTo(givenToyPrice);
-        assertThat(toy.getImageUrl()).isEqualTo(givenToyImageUrl);
+        assertThat(toy.getName()).isEqualTo(givenName);
+        assertThat(toy.getBrand()).isEqualTo(givenBrand);
+        assertThat(toy.getPrice()).isEqualTo(givenPrice);
+        assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl);
     }
 
     @BeforeEach
     void setUp() {
         toyRepository.deleteAll();
-        toy = new Toy(givenToyName, givenToyBrand, givenToyPrice, givenToyImageUrl);
+        toy = new Toy(givenName, givenBrand, givenPrice, givenImageUrl);
     }
 
     @Nested
@@ -96,7 +96,7 @@ class ToyRepositoryTest {
         class Context_when_find_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedToyId;
+                givenId = givenUnsavedId;
             }
 
             @Test
@@ -166,7 +166,7 @@ class ToyRepositoryTest {
         class Context_when_delete_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedToyId;
+                givenId = givenUnsavedId;
             }
 
             @Test

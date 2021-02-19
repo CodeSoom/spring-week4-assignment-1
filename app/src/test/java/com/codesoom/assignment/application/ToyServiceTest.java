@@ -20,12 +20,12 @@ import static org.mockito.Mockito.*;
 @DataJpaTest
 @DisplayName("ToyService의")
 class ToyServiceTest {
-    private final Long givenSavedToyId = 1L;
-    private final Long givenUnsavedToyId = 100L;
-    private final String givenToyName = "장난감 칼";
-    private final String givenToyBrand = "코드숨";
-    private final int givenToyPrice = 5000;
-    private final String givenToyImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
+    private final Long givenSavedId = 1L;
+    private final Long givenUnsavedId = 100L;
+    private final String givenName = "장난감 칼";
+    private final String givenBrand = "코드숨";
+    private final int givenPrice = 5000;
+    private final String givenImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
     private final String givenUpdatePostfixText = "+";
     private final int givenUpdatePostfixNumber = 1;
 
@@ -38,24 +38,24 @@ class ToyServiceTest {
         toyRepository = mock(ToyRepository.class);
         toyService = new ToyService(toyRepository);
 
-        toy = new Toy(givenToyName, givenToyBrand, givenToyPrice, givenToyImageUrl);
-        toy.setId(givenSavedToyId);
+        toy = new Toy(givenName, givenBrand, givenPrice, givenImageUrl);
+        toy.setId(givenSavedId);
     }
 
     private void assertCreatedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
-        assertThat(toy.getName()).isEqualTo(givenToyName);
-        assertThat(toy.getBrand()).isEqualTo(givenToyBrand);
-        assertThat(toy.getPrice()).isEqualTo(givenToyPrice);
-        assertThat(toy.getImageUrl()).isEqualTo(givenToyImageUrl);
+        assertThat(toy.getName()).isEqualTo(givenName);
+        assertThat(toy.getBrand()).isEqualTo(givenBrand);
+        assertThat(toy.getPrice()).isEqualTo(givenPrice);
+        assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl);
     }
 
     private void assertModifiedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
-        assertThat(toy.getName()).isEqualTo(givenToyName + givenUpdatePostfixText);
-        assertThat(toy.getBrand()).isEqualTo(givenToyBrand + givenUpdatePostfixText);
-        assertThat(toy.getPrice()).isEqualTo(givenToyPrice + givenUpdatePostfixNumber);
-        assertThat(toy.getImageUrl()).isEqualTo(givenToyImageUrl + givenUpdatePostfixText);
+        assertThat(toy.getName()).isEqualTo(givenName + givenUpdatePostfixText);
+        assertThat(toy.getBrand()).isEqualTo(givenBrand + givenUpdatePostfixText);
+        assertThat(toy.getPrice()).isEqualTo(givenPrice + givenUpdatePostfixNumber);
+        assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl + givenUpdatePostfixText);
     }
 
     @Nested
@@ -111,7 +111,7 @@ class ToyServiceTest {
 
             @BeforeEach
             void setSavedId() {
-                givenId = givenSavedToyId;
+                givenId = givenSavedId;
 
                 given(toyRepository.findById(givenId)).willReturn(Optional.of(toy));
             }
@@ -132,7 +132,7 @@ class ToyServiceTest {
         class Context_when_find_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedToyId;
+                givenId = givenUnsavedId;
             }
 
             @Test
@@ -175,12 +175,12 @@ class ToyServiceTest {
         @BeforeEach
         void setModifiedToy() {
             modifying = new Toy(
-                    givenToyName + givenUpdatePostfixText,
-                    givenToyBrand + givenUpdatePostfixText,
-                    givenToyPrice + givenUpdatePostfixNumber,
-                    givenToyImageUrl + givenUpdatePostfixText
+                    givenName + givenUpdatePostfixText,
+                    givenBrand + givenUpdatePostfixText,
+                    givenPrice + givenUpdatePostfixNumber,
+                    givenImageUrl + givenUpdatePostfixText
             );
-            modifying.setId(givenSavedToyId);
+            modifying.setId(givenSavedId);
         }
 
         @Nested
@@ -190,7 +190,7 @@ class ToyServiceTest {
 
             @BeforeEach
             void setSavedId() {
-                givenId = givenSavedToyId;
+                givenId = givenSavedId;
 
                 given(toyRepository.findById(givenId)).willReturn(Optional.of(toy));
             }
@@ -211,7 +211,7 @@ class ToyServiceTest {
         class Context_when_update_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedToyId;
+                givenId = givenUnsavedId;
                 modifying.setId(givenId);
 
                 given(toyRepository.findById(givenId)).willThrow(ToyNotFoundException.class);
@@ -238,7 +238,7 @@ class ToyServiceTest {
         class Context_with_saved_id {
             @BeforeEach
             void setSavedId() {
-                givenId = givenSavedToyId;
+                givenId = givenSavedId;
             }
 
             @Test
@@ -255,7 +255,7 @@ class ToyServiceTest {
         class Context_when_delete_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedToyId;
+                givenId = givenUnsavedId;
 
                 doThrow(EmptyResultDataAccessException.class).when(toyRepository).deleteById(givenId);
             }
