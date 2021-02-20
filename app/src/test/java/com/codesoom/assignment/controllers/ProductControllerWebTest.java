@@ -17,6 +17,12 @@ public class ProductControllerWebTest {
     private MockMvc mockMvc;
 
     @Test
+    void getProductListTest() throws Exception {
+        mockMvc.perform(get("/products"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
     void createProductTest() throws Exception {
         mockMvc.perform(post("/products"))
             .andExpect(status().isCreated());
