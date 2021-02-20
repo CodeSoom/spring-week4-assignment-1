@@ -93,4 +93,16 @@ class ProductControllerTest {
         productController.createProduct(product);
         verify(productService).createProduct(product);
     }
+
+    @DisplayName("장난감을 업데이트 했을 때의 테스트")
+    void updateProductTest() {
+        Product product = new Product();
+        product.setName("로봇트");
+        product.setBrand("namco");
+        product.setPrice(5000L);
+        product.setImage("robot.png");
+
+        productController.updateProduct(product);
+        verify(productService).updateProduct(product);
+    }
 }
