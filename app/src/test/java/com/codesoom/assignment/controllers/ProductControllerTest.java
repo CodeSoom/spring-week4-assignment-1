@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,6 +61,40 @@ class ProductControllerTest {
 
         products.add(product1);
         products.add(product2);
+    }
+
+    @Nested
+    @DisplayName("POST /product 요청은")
+    class Describe_POST_product {
+        @Nested
+        @DisplayName("상품이 주어지면")
+        class Context_with_product {
+            @BeforeEach
+            void setUp() {
+                Product productResponse = Product.builder()
+                        .id(1L)
+                        .name("name 1")
+                        .image("imageURL 1")
+                        .maker("brand 1")
+                        .price(100)
+                        .build();
+                given(productService.createProduct(any(Product.class)))
+                        .willReturn(productResponse);
+            }
+
+            @DisplayName("201 코드와 생성된 상품을 응답한다")
+            @Test
+            void it_returns_201_with_created_product() throws Exception {
+                mockMvc.perform(post("/product")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("maker").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imageUrl").exists())
+                        .andExpect(status().isCreated());
+            }
+        }
     }
 
     @Nested
