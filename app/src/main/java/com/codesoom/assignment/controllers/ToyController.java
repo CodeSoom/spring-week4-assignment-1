@@ -30,7 +30,7 @@ public class ToyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Toy create(@RequestBody Toy toy) {
-        return null;
+        return toyService.createToy(toy);
     }
 
     @PatchMapping("{id}")
