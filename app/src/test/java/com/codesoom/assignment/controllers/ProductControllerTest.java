@@ -103,15 +103,15 @@ class ProductControllerTest {
         product.setPrice(5000L);
         product.setImage("robot.png");
 
-        productController.updateProduct(product);
-        verify(productService).updateProduct(product);
+        productController.updateProduct(product.getId(), product);
+        verify(productService).updateProduct(product.getId(), product);
     }
 
     @DisplayName("장난감을 삭제 헸을 때의 테스트")
     @Test
     void deleteProductTest() {
         Product product = new Product();
-        productController.deleteProduct(product);
-        verify(productService).deleteProduct(product);
+        productController.deleteProduct(product.getId());
+        verify(productService).deleteProduct(product.getId());
     }
 }
