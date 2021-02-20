@@ -20,37 +20,68 @@ class CatToyTest {
     private final String modifiedBrand = "cat company";
 
     @Test
-    @DisplayName("id 메소드는 id를 리턴한다.")
+    @DisplayName("id 메서드는 id를 리턴한다.")
     void id() {
         assertThat(givenCatToy.id()).isEqualTo(givenID);
     }
 
     @Test
-    @DisplayName("name 메소드는 name 을 리턴한다.")
+    @DisplayName("name 메서드는 name 을 리턴한다.")
     void name() {
         assertThat(givenCatToy.name()).isEqualTo(givenName);
     }
 
     @Test
-    @DisplayName("brand 메소드는 brand 를 리턴한다.")
+    @DisplayName("brand 메서드는 brand 를 리턴한다.")
     void brand() {
         assertThat(givenCatToy.brand()).isEqualTo(givenBrand);
     }
 
     @Test
-    @DisplayName("price 메소드는 price 를 리턴한다.")
+    @DisplayName("price 메서드는 price 를 리턴한다.")
     void price() {
         assertThat(givenCatToy.price()).isEqualTo(givenPrice);
     }
 
     @Test
-    @DisplayName("imageURL 메소드는 imageURL 을 리턴한다.")
+    @DisplayName("imageURL 메서드는 imageURL 을 리턴한다.")
     void imageURL() {
         assertThat(givenCatToy.imageURL()).isEqualTo(givenImageURL);
     }
 
+    @Nested
+    @DisplayName("modify 메서드는")
+    class Describe_modify {
+        @Nested
+        @DisplayName("객체가 주어졌을 때")
+        class Context_given_object {
+            @Test
+            @DisplayName("주어진 객체의 값으로 멤버변수의 값을 변경한다.")
+            void It_modify_members_value() {
+                givenCatToy.modify(
+                        new CatToy(givenID, givenName, modifiedBrand, givenPrice, givenImageURL)
+                );
+
+                assertThat(givenCatToy.brand()).isEqualTo(modifiedBrand);
+            }
+        }
+
+        @Nested
+        @DisplayName("변수가 주어졌을 때")
+        class Context_given_variables {
+            @Test
+            @DisplayName("주어진 변수들의 값으로 멤버변수의 값을 변경한다.")
+            void It_modify_members_value() {
+                givenCatToy.modify(
+                        givenName, modifiedBrand, givenPrice, givenImageURL
+                );
+
+                assertThat(givenCatToy.brand()).isEqualTo(modifiedBrand);
+            }
+        }
+    }
     @Test
-    @DisplayName("modify 메소드는 멤버변수의 값을 변경한다.")
+    @DisplayName("modify 메서드는 멤버변수의 값을 변경한다.")
     void modify() {
         givenCatToy.modify(
                 givenName, modifiedBrand, givenPrice, givenImageURL

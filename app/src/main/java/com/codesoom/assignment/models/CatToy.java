@@ -42,4 +42,12 @@ public class CatToy implements Toy {
         this.price = price;
         this.imageURL = imageURL;
     }
+
+    @Override
+    public void modify(Toy toy) {
+        this.name = toy.name();
+        this.brand = toy.brand();
+        this.price = toy.price();
+        this.imageURL = toy.imageURL();
+    }
 }

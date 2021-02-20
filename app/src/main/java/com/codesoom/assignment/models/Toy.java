@@ -14,4 +14,6 @@ public interface Toy {
     void modify(
             String name, String brand, Double price, String imageURL
     );
+
+    void modify(Toy toy);
 }
