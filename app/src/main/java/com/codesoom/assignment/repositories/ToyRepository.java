@@ -33,8 +33,11 @@ public interface ToyRepository extends CrudRepository<Toy, Long> {
 
         @Override
         public Optional<Toy> findById(Long id) {
+            if (toys.size() < id + 1) {
+                return Optional.empty();
+            }
             final Toy toy = toys.get(id.intValue());
-            return Optional.ofNullable(toy);
+            return Optional.of(toy);
         }
 
         @Override
