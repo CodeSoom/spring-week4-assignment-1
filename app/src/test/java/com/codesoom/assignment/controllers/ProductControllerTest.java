@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.exception.ProductNonExistException;
 
 class ProductControllerTest {
 
@@ -78,6 +80,8 @@ class ProductControllerTest {
     @DisplayName("존재하지 않는 장난감 ID를 호출하였을 떄, 장난감이 존재하지 않는 예외를 호출하는 것을 보장하는 테스트")
     @Test
     void getProductWithInValidIdTest() {
-        given(productService.getProduct(100L)).willThrow(productNonExistException.class);
+        given(productService.getProduct(100L)).willThrow(ProductNonExistException.class);
+
+        assertThatThrownBy(() -> productController.getProduct(100L)).isInstanceOf(ProductNonExistException.class);
     }
 }
