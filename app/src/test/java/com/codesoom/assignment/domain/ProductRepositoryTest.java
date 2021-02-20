@@ -37,14 +37,14 @@ class ProductRepositoryTest {
                         .name("product 1")
                         .maker("maker 1")
                         .price(100)
-                        .image("imageUrl 1")
+                        .imageUrl("imageUrl 1")
                         .build();
 
                 Product product2 = Product.builder()
                         .name("product 2")
                         .maker("maker 2")
                         .price(200)
-                        .image("imageUrl 2")
+                        .imageUrl("imageUrl 2")
                         .build();
 
                 productRepository.save(product1);
@@ -85,7 +85,7 @@ class ProductRepositoryTest {
                     .name("product")
                     .maker("maker")
                     .price(100)
-                    .image("imageUrl")
+                    .imageUrl("imageUrl")
                     .build();
 
             Product savedProduct = productRepository.save(product);

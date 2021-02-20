@@ -19,14 +19,14 @@ public class Product {
     private String name;
     private String maker;
     private double price;
-    private String image;
+    private String imageUrl;
 
     @Builder
-    public Product(Long id, String name, String maker, double price, String image) {
+    public Product(Long id, String name, String maker, double price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 }

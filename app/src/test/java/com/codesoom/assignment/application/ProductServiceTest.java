@@ -32,14 +32,14 @@ class ProductServiceTest {
         product1 = Product.builder()
                 .id(1L)
                 .name("name 1")
-                .image("imageURL 1")
+                .imageUrl("imageURL 1")
                 .maker("brand 1")
                 .price(100)
                 .build();
         Product product2 = Product.builder()
                 .id(2L)
                 .name("name 2")
-                .image("imageURL 2")
+                .imageUrl("imageURL 2")
                 .maker("brand 2")
                 .price(200)
                 .build();
