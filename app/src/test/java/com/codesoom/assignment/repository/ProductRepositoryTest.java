@@ -21,19 +21,11 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    private final Long notExistingId = 100L;
-
     private Product product;
 
     @BeforeEach
     void prepareProduct() {
-        // fixture
-        product = Product.builder()
-                .name("장난감")
-                .maker("장난감 메이커")
-                .price(10000)
-                .imageUrl("url")
-                .build();
+        product = createProduct("product");
 
         productRepository.save(product);
     }
@@ -53,19 +45,8 @@ class ProductRepositoryTest {
             void prepareProducts() {
                 productRepository.deleteAll();
 
-                Product product1 = Product.builder()
-                        .name("장난감1")
-                        .maker("장난감 메이커1")
-                        .price(10000)
-                        .imageUrl("url1")
-                        .build();
-
-                Product product2 = Product.builder()
-                        .name("장난감2")
-                        .maker("장난감 메이커2")
-                        .price(20000)
-                        .imageUrl("url2")
-                        .build();
+                Product product1 = createProduct("product1");
+                Product product2 = createProduct("product2");
 
                 productRepository.save(product1);
                 productRepository.save(product2);
@@ -104,10 +85,17 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("존재하는 상품 id가 주어진다면")
         class Context_with_an_existing_product_id {
+            private Long existingId;
+
+            @BeforeEach
+            void prepareExistingId() {
+                existingId = product.getId();
+            }
+
             @Test
             @DisplayName("값이 존재하는 optional 상품을 리턴한다.")
             void it_returns_optional_product_with_value() {
-                Optional<Product> foundProduct = productRepository.findById(product.getId());
+                Optional<Product> foundProduct = productRepository.findById(existingId);
 
                 assertThat(foundProduct.isPresent()).isTrue();
             }
@@ -116,6 +104,8 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("존재하지 않는 상품 id가 주어진다면")
         class Context_with_not_existing_product_id {
+            private final Long notExistingId = 100L;
+
             @Test
             @DisplayName("비어있는 optional 상품을 리턴한다.")
             void it_returns_optional_product_with_value() {
@@ -132,12 +122,7 @@ class ProductRepositoryTest {
         @DisplayName("상품을 저장하고 저장된 상품을 리턴한다.")
         @Test
         void it_saves_a_product_and_returns_the_saved_product() {
-            Product newProduct = Product.builder()
-                    .name("new 장난감")
-                    .maker("new 장난감 메이커")
-                    .price(20000)
-                    .imageUrl("new url")
-                    .build();
+            Product newProduct = createProduct("new product");
 
             Product savedProduct = productRepository.save(newProduct);
 
@@ -166,9 +151,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("상품을 삭제하지 않는다.")
             void it_returns_optional_product_with_value() {
-                Product notExistingProduct = Product.builder()
-                        .name("존재하지 않는 장난감")
-                        .build();
+                Product notExistingProduct = createProduct("not existing product");
 
                 productRepository.delete(notExistingProduct);
 
@@ -176,4 +159,14 @@ class ProductRepositoryTest {
             }
         }
     }
+
+    private Product createProduct(String name) {
+        return Product.builder()
+                .name(name)
+                .maker("장난감 메이커")
+                .price(10000)
+                .imageUrl("url")
+                .build();
+    }
+
 }
