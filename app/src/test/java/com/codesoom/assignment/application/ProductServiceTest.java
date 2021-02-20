@@ -27,17 +27,17 @@ class ProductServiceTest {
     private final String SETUP_PRODUCT_NAME = "setupName";
     private final String SETUP_PRODUCT_MAKER = "setupMaker";
     private final int SETUP_PRODUCT_PRICE = 100;
-    private final String SETUP_PRODUCT_IMAGE = "setupImage";
+    private final String SETUP_PRODUCT_IMAGEURL = "setupImage";
 
     private final String CREATED_PRODUCT_NAME = "createdName";
     private final String CREATED_PRODUCT_MAKER = "createdMaker";
     private final int CREATED_PRODUCT_PRICE = 200;
-    private final String CREATED_PRODUCT_IMAGE = "createdImage";
+    private final String CREATED_PRODUCT_IMAGEURL = "createdImage";
 
     private final String UPDATED_PRODUCT_NAME = "updatedName";
     private final String UPDATED_PRODUCT_MAKER = "updatedMaker";
     private final int UPDATED_PRODUCT_PRICE = 300;
-    private final String UPDATED_PRODUCT_IMAGE = "updatedImage";
+    private final String UPDATED_PRODUCT_IMAGEURL = "updatedImage";
 
     private final Long EXISTED_ID = 1L;
     private final Long CREATED_ID = 2L;
@@ -57,7 +57,7 @@ class ProductServiceTest {
                 .name(SETUP_PRODUCT_NAME)
                 .maker(SETUP_PRODUCT_MAKER)
                 .price(SETUP_PRODUCT_PRICE)
-                .image(SETUP_PRODUCT_IMAGE)
+                .imageUrl(SETUP_PRODUCT_IMAGEURL)
                 .build();
 
         products.add(setupProduct);
@@ -74,7 +74,7 @@ class ProductServiceTest {
                     .name(CREATED_PRODUCT_NAME)
                     .maker(CREATED_PRODUCT_MAKER)
                     .price(CREATED_PRODUCT_PRICE)
-                    .image(CREATED_PRODUCT_IMAGE)
+                    .imageUrl(CREATED_PRODUCT_IMAGEURL)
                     .build();
 
             @BeforeEach
@@ -163,14 +163,14 @@ class ProductServiceTest {
     class Describe_class {
         @Nested
         @DisplayName("만약 이름, 메이커, 가격, 이미지가 주어진다면")
-        class Content_WithNameAndMakerAndPriceAndImage {
+        class Content_WithNameAndMakerAndPriceAndImageUrl {
             private String givenName = CREATED_PRODUCT_NAME;
             private String givenMaker = CREATED_PRODUCT_MAKER;
             private int givenPrice = CREATED_PRODUCT_PRICE;
-            private String givenImage = CREATED_PRODUCT_IMAGE;
+            private String givenImageUrl = CREATED_PRODUCT_IMAGEURL;
 
             Product createProduct() {
-                return new Product(CREATED_ID, givenName, givenMaker, givenPrice, givenImage);
+                return new Product(CREATED_ID, givenName, givenMaker, givenPrice, givenImageUrl);
             }
 
             @Test
@@ -192,9 +192,9 @@ class ProductServiceTest {
                 assertThat(createdProduct.getPrice())
                         .as("객체의 가격은 %d 이어야 한다", givenPrice)
                         .isEqualTo(givenPrice);
-                assertThat(createdProduct.getImage())
-                        .as("객체의 이미지는 %s 이어야 한다", givenImage)
-                        .isEqualTo(givenImage);
+                assertThat(createdProduct.getImageUrl())
+                        .as("객체의 이미지는 %s 이어야 한다", givenImageUrl)
+                        .isEqualTo(givenImageUrl);
 
                 verify(productRepository).save(any(Product.class));
             }
@@ -206,15 +206,15 @@ class ProductServiceTest {
     class Describe_update {
         @Nested
         @DisplayName("만약 저징되어 있는 고양이 장난감의 아이디와 업데이트 될 이름, 메이커, 가격, 이미지가 주어진다면")
-        class Context_WithExistedIdAndNameAndMakerAndPriceAndImage {
+        class Context_WithExistedIdAndNameAndMakerAndPriceAndImageUrl {
             private final Long givenExistedId = EXISTED_ID;
             private String givenName = UPDATED_PRODUCT_NAME;
             private String givenMaker = UPDATED_PRODUCT_MAKER;
             private int givenPrice = UPDATED_PRODUCT_PRICE;
-            private String givenImage = UPDATED_PRODUCT_IMAGE;
+            private String givenImageUrl = UPDATED_PRODUCT_IMAGEURL;
 
             Product updateProduct() {
-                return new Product(givenExistedId, givenName, givenMaker, givenPrice, givenImage);
+                return new Product(givenExistedId, givenName, givenMaker, givenPrice, givenImageUrl);
             }
 
             @Test
@@ -236,9 +236,9 @@ class ProductServiceTest {
                 assertThat(updatedProduct.getPrice())
                         .as("객체의 가격은 %d 이어야 한다", givenPrice)
                         .isEqualTo(givenPrice);
-                assertThat(updatedProduct.getImage())
-                        .as("객체의 이미지는 %s 이어야 한다", givenImage)
-                        .isEqualTo(givenImage);
+                assertThat(updatedProduct.getImageUrl())
+                        .as("객체의 이미지는 %s 이어야 한다", givenImageUrl)
+                        .isEqualTo(givenImageUrl);
 
                 verify(productRepository).findById(givenExistedId);
             }
@@ -271,9 +271,9 @@ class ProductServiceTest {
                 assertThat(deletedProduct.getPrice())
                         .as("객체의 가격은 %d 이어야 한다", SETUP_PRODUCT_PRICE)
                         .isEqualTo(SETUP_PRODUCT_PRICE);
-                assertThat(deletedProduct.getImage())
-                        .as("객체의 이미지는 %s 이어야 한다", SETUP_PRODUCT_IMAGE)
-                        .isEqualTo(SETUP_PRODUCT_IMAGE);
+                assertThat(deletedProduct.getImageUrl())
+                        .as("객체의 이미지는 %s 이어야 한다", SETUP_PRODUCT_IMAGEURL)
+                        .isEqualTo(SETUP_PRODUCT_IMAGEURL);
 
                 verify(productRepository).delete(setupProduct);
             }

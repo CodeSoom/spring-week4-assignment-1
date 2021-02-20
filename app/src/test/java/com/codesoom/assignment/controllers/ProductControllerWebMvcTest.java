@@ -45,17 +45,17 @@ class ProductControllerWebMvcTest {
     private final String SETUP_PRODUCT_NAME = "setupName";
     private final String SETUP_PRODUCT_MAKER = "setupMaker";
     private final int SETUP_PRODUCT_PRICE = 100;
-    private final String SETUP_PRODUCT_IMAGE = "setupImage";
+    private final String SETUP_PRODUCT_IMAGEURL = "setupImage";
 
     private final String CREATED_PRODUCT_NAME = "createdName";
     private final String CREATED_PRODUCT_MAKER = "createdMaker";
     private final int CREATED_PRODUCT_PRICE = 200;
-    private final String CREATED_PRODUCT_IMAGE = "createdImage";
+    private final String CREATED_PRODUCT_IMAGEURL = "createdImage";
 
     private final String UPDATED_PRODUCT_NAME = "updatedName";
     private final String UPDATED_PRODUCT_MAKER = "updatedMaker";
     private final int UPDATED_PRODUCT_PRICE = 300;
-    private final String UPDATED_PRODUCT_IMAGE = "updatedImage";
+    private final String UPDATED_PRODUCT_IMAGEURL = "updatedImage";
 
     private final Long EXISTED_ID = 1L;
     private final Long CREATED_ID = 2L;
@@ -69,7 +69,7 @@ class ProductControllerWebMvcTest {
         products = new ArrayList<>();
 
         setupProduct = new Product(EXISTED_ID, SETUP_PRODUCT_NAME, SETUP_PRODUCT_MAKER,
-                SETUP_PRODUCT_PRICE, SETUP_PRODUCT_IMAGE);
+                SETUP_PRODUCT_PRICE, SETUP_PRODUCT_IMAGEURL);
 
         products.add(setupProduct);
     }
@@ -82,7 +82,7 @@ class ProductControllerWebMvcTest {
                 .name(CREATED_PRODUCT_NAME)
                 .maker(CREATED_PRODUCT_MAKER)
                 .price(CREATED_PRODUCT_PRICE)
-                .image(CREATED_PRODUCT_IMAGE)
+                .imageUrl(CREATED_PRODUCT_IMAGEURL)
                 .build();
 
         @BeforeEach
@@ -123,7 +123,7 @@ class ProductControllerWebMvcTest {
                         .andExpect(jsonPath("$.id").value(givenExistedId))
                         .andExpect(jsonPath("$.name").value(SETUP_PRODUCT_NAME))
                         .andExpect(jsonPath("$.maker").value(SETUP_PRODUCT_MAKER))
-                        .andExpect(jsonPath("$.image").value(SETUP_PRODUCT_IMAGE))
+                        .andExpect(jsonPath("$.imageUrl").value(SETUP_PRODUCT_IMAGEURL))
                         .andExpect(status().isOk());
 
                 verify(productService).getProduct(givenExistedId);
@@ -160,7 +160,7 @@ class ProductControllerWebMvcTest {
             private final String givenName = CREATED_PRODUCT_NAME;
             private final String givenMaker = CREATED_PRODUCT_MAKER;
             private final int givenPrice = CREATED_PRODUCT_PRICE;
-            private final String givenImage = CREATED_PRODUCT_IMAGE;
+            private final String givenImage = CREATED_PRODUCT_IMAGEURL;
 
             Product createProduct() {
                 return new Product(CREATED_ID, givenName, givenMaker, givenPrice, givenImage);
@@ -180,7 +180,7 @@ class ProductControllerWebMvcTest {
                         .andExpect(jsonPath("$.name").value(givenName))
                         .andExpect(jsonPath("$.maker").value(givenMaker))
                         .andExpect(jsonPath("$.price").value(givenPrice))
-                        .andExpect(jsonPath("$.image").value(givenImage))
+                        .andExpect(jsonPath("$.imageUrl").value(givenImage))
                         .andExpect(status().isCreated());
 
                 verify(productService).createProduct(any());
@@ -198,7 +198,7 @@ class ProductControllerWebMvcTest {
             private final String givenName = UPDATED_PRODUCT_NAME;
             private final String givenMaker = UPDATED_PRODUCT_MAKER;
             private final int givenPrice = UPDATED_PRODUCT_PRICE;
-            private final String givenImage = UPDATED_PRODUCT_IMAGE;
+            private final String givenImage = UPDATED_PRODUCT_IMAGEURL;
 
             Product updateProduct() {
                 return new Product(givenExistedId, givenName, givenMaker, givenPrice, givenImage);
@@ -218,7 +218,7 @@ class ProductControllerWebMvcTest {
                         .andExpect(jsonPath("$.name").value(givenName))
                         .andExpect(jsonPath("$.maker").value(givenMaker))
                         .andExpect(jsonPath("$.price").value(givenPrice))
-                        .andExpect(jsonPath("$.image").value(givenImage))
+                        .andExpect(jsonPath("$.imageUrl").value(givenImage))
                         .andExpect(status().isOk());
 
                 verify(productService).updateProduct(eq(givenExistedId), any(Product.class));
@@ -245,7 +245,7 @@ class ProductControllerWebMvcTest {
                         .andExpect(jsonPath("$.name").value(SETUP_PRODUCT_NAME))
                         .andExpect(jsonPath("$.maker").value(SETUP_PRODUCT_MAKER))
                         .andExpect(jsonPath("$.price").value(SETUP_PRODUCT_PRICE))
-                        .andExpect(jsonPath("$.image").value(SETUP_PRODUCT_IMAGE))
+                        .andExpect(jsonPath("$.imageUrl").value(SETUP_PRODUCT_IMAGEURL))
                         .andExpect(status().isNoContent());
 
                 verify(productService).deleteProduct(givenExistedId);

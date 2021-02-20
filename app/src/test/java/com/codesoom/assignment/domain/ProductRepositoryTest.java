@@ -20,12 +20,12 @@ class ProductRepositoryTest {
     private final String SETUP_PRODUCT_NAME = "setupName";
     private final String SETUP_PRODUCT_MAKER = "setupMaker";
     private final int SETUP_PRODUCT_PRICE = 100;
-    private final String SETUP_PRODUCT_IMAGE = "setupImage";
+    private final String SETUP_PRODUCT_IMAGEURL = "setupImage";
 
     private final String CREATE_PRODUCT_NAME = "createName";
     private final String CREATE_PRODUCT_MAKER = "createMaker";
     private final int CREATE_PRODUCT_PRICE = 200;
-    private final String CREATE_PRODUCT_IMAGE = "createImage";
+    private final String CREATE_PRODUCT_IMAGEURL = "createImage";
 
     private Product setUpProduct;
 
@@ -37,7 +37,7 @@ class ProductRepositoryTest {
                 .name(SETUP_PRODUCT_NAME)
                 .maker(SETUP_PRODUCT_MAKER)
                 .price(SETUP_PRODUCT_PRICE)
-                .image(SETUP_PRODUCT_IMAGE)
+                .imageUrl(SETUP_PRODUCT_IMAGEURL)
                 .build();
     }
 
@@ -72,7 +72,7 @@ class ProductRepositoryTest {
                 assertThat(product.getName()).isEqualTo(SETUP_PRODUCT_NAME);
                 assertThat(product.getMaker()).isEqualTo(SETUP_PRODUCT_MAKER);
                 assertThat(product.getPrice()).isEqualTo(SETUP_PRODUCT_PRICE);
-                assertThat(product.getImage()).isEqualTo(SETUP_PRODUCT_IMAGE);
+                assertThat(product.getImageUrl()).isEqualTo(SETUP_PRODUCT_IMAGEURL);
             }
         }
     }
@@ -87,7 +87,7 @@ class ProductRepositoryTest {
                     .name(CREATE_PRODUCT_NAME)
                     .maker(CREATE_PRODUCT_MAKER)
                     .price(CREATE_PRODUCT_PRICE)
-                    .image(CREATE_PRODUCT_IMAGE)
+                    .imageUrl(CREATE_PRODUCT_IMAGEURL)
                     .build();
 
             @Test
@@ -112,7 +112,7 @@ class ProductRepositoryTest {
                 assertThat(savedProduct.getName()).isEqualTo(CREATE_PRODUCT_NAME);
                 assertThat(savedProduct.getMaker()).isEqualTo(CREATE_PRODUCT_MAKER);
                 assertThat(savedProduct.getPrice()).isEqualTo(CREATE_PRODUCT_PRICE);
-                assertThat(savedProduct.getImage()).isEqualTo(CREATE_PRODUCT_IMAGE);
+                assertThat(savedProduct.getImageUrl()).isEqualTo(CREATE_PRODUCT_IMAGEURL);
             }
         }
     }

@@ -13,7 +13,7 @@ class ProductTest {
     private final String NAME = "setupName";
     private final String MAKER = "setupMaker";
     private final int PRICE = 100;
-    private final String IMAGE = "setupImage";
+    private final String IMAGEURL = "setupImage";
 
     @BeforeEach
     void setUp() {
@@ -22,7 +22,7 @@ class ProductTest {
                 .name(NAME)
                 .maker(MAKER)
                 .price(PRICE)
-                .image(IMAGE)
+                .imageUrl(IMAGEURL)
                 .build();
     }
 
@@ -53,7 +53,7 @@ class ProductTest {
     @Test
     @DisplayName("이미지를 리턴한다")
     void getImage() {
-        assertThat(product.getImage()).isEqualTo(IMAGE);
+        assertThat(product.getImageUrl()).isEqualTo(IMAGEURL);
     }
 
     @Test
@@ -70,7 +70,7 @@ class ProductTest {
                 .name(NAME)
                 .maker(MAKER)
                 .price(PRICE)
-                .image(IMAGE)
+                .imageUrl(IMAGEURL)
                 .build()).isInstanceOf(Product.class);
     }
 }
