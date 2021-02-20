@@ -58,7 +58,7 @@ class ProductControllerWebMvcTest {
     private final String UPDATED_PRODUCT_IMAGE = "updatedImage";
 
     private final Long EXISTED_ID = 1L;
-    private final Long CREATE_ID = 2L;
+    private final Long CREATED_ID = 2L;
     private final Long NOT_EXISTED_ID = 100L;
 
     private List<Product> products;
@@ -77,12 +77,28 @@ class ProductControllerWebMvcTest {
     @Nested
     @DisplayName("list 메서드는")
     class Describe_list {
+        private final Product mockProduct = Product.builder()
+                .id(CREATED_ID)
+                .name(CREATED_PRODUCT_NAME)
+                .maker(CREATED_PRODUCT_MAKER)
+                .price(CREATED_PRODUCT_PRICE)
+                .image(CREATED_PRODUCT_IMAGE)
+                .build();
+
+        @BeforeEach
+        void setUp() {
+            productService.createProduct(mockProduct);
+            products.add(mockProduct);
+        }
+
         @Test
         @DisplayName("전체 고양이 장난감 목록과 OK를 리턴한다")
-        void itReturnsOKHttpStatus() throws Exception {
+        void itReturnsProductsAndOKHttpStatus() throws Exception {
             given(productService.getProducts()).willReturn(products);
 
             mockMvc.perform(get("/products"))
+                    .andExpect(content().string(containsString(SETUP_PRODUCT_NAME)))
+                    .andExpect(content().string(containsString(CREATED_PRODUCT_NAME)))
                     .andExpect(status().isOk());
 
             verify(productService).getProducts();
@@ -147,7 +163,7 @@ class ProductControllerWebMvcTest {
             private final String givenImage = CREATED_PRODUCT_IMAGE;
 
             Product createProduct() {
-                return new Product(CREATE_ID, givenName, givenMaker, givenPrice, givenImage);
+                return new Product(CREATED_ID, givenName, givenMaker, givenPrice, givenImage);
             }
 
             @Test
@@ -160,7 +176,7 @@ class ProductControllerWebMvcTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"price\":100, \"image\":\"createdImage\"}"))
                         .andDo(print())
-                        .andExpect(jsonPath("$.id").value(CREATE_ID))
+                        .andExpect(jsonPath("$.id").value(CREATED_ID))
                         .andExpect(jsonPath("$.name").value(givenName))
                         .andExpect(jsonPath("$.maker").value(givenMaker))
                         .andExpect(jsonPath("$.price").value(givenPrice))

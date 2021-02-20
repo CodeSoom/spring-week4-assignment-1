@@ -33,8 +33,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = getProduct(id);
         product.setName(source.getName());
         product.setMaker(source.getMaker());
         product.setPrice(source.getPrice());
@@ -44,8 +43,7 @@ public class ProductService {
     }
 
     public Product deleteProduct(@PathVariable Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = getProduct(id);
 
         productRepository.delete(product);
 
