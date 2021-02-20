@@ -227,7 +227,7 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("저장되지 않은 toy의 id를 가지고 있다")
+        @DisplayName("저장되지 않은 toy의 id를 가지고 있다면")
         class Context_with_unsaved_toy_id {
             @BeforeEach
             void setRequest() throws IOException {

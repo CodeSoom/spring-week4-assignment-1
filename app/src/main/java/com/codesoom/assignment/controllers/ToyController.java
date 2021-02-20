@@ -35,7 +35,8 @@ public class ToyController {
 
     @PatchMapping("{id}")
     public Toy patch(@PathVariable Long id, @RequestBody Toy toy) {
-        return null;
+        toy.setId(id);
+        return toyService.updateToy(toy);
     }
 
     @DeleteMapping("{id}")
