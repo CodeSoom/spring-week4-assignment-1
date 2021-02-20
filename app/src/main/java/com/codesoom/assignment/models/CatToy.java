@@ -32,17 +32,4 @@ public class CatToy implements Toy {
         this.price = price;
         this.imageURL = imageURL;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CatToy) {
-            CatToy toy = (CatToy) obj;
-            return this.id().equals(toy.id())
-                    && this.name().equals(toy.name())
-                    && this.brand().equals(toy.brand())
-                    && this.price().equals(toy.price())
-                    && this.imageURL().equals(toy.imageURL());
-        }
-        return false;
-    }
 }
