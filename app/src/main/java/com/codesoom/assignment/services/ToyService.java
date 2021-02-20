@@ -7,11 +7,11 @@ import java.util.List;
 public interface ToyService {
     List<Toy> find();
 
-    Toy find(long id);
+    Toy find(Long id);
 
     void insert(Toy toy);
 
-    void modify(long id, Toy toy);
+    void modify(Long id, Toy toy);
 
-    void delete(long id);
+    void delete(Long id);
 }
