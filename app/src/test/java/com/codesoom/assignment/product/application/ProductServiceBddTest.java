@@ -3,6 +3,7 @@ package com.codesoom.assignment.product.application;
 import com.codesoom.assignment.product.infra.ProductRepository;
 import com.codesoom.assignment.product.ui.dto.ProductResponseDto;
 import com.codesoom.assignment.product.ui.dto.ProductSaveRequestDto;
+import com.codesoom.assignment.product.ui.dto.ProductUpdateRequestDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,12 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @Transactional
 @DisplayName("ProductService 클래스")
 public class ProductServiceBddTest {
-    private static final Long PRODUCT1_ID = 1L;
     private static final Long NOT_EXIST_ID = -1L;
     private static final String PRODUCT1_NAME = "product1";
     private static final String PRODUCT1_MAKER = "maker1";
     private static final String PRODUCT1_IMAGE = "https://http.cat/599";
     private static final int PRODUCT1_PRICE = 10_000;
+
+    private static final String UPDATE_NAME = "product2";
+    private static final String UPDATE_MAKER = "maker2";
+    private static final String UPDATE_IMAGE = "https://http.cat/600";
+    private static final int UPDATE_PRICE = 20_000;
 
     @Autowired
     ProductService productService;
@@ -116,7 +121,15 @@ public class ProductServiceBddTest {
             @DisplayName("등록된 상품 id로 찾고자하는 상품을 리턴한다")
             @Test
             void It_return_product() {
-                assertThat(productService.getProduct(givenId)).isEqualTo(savedResponseDto());
+                ProductResponseDto actual = productService.getProduct(givenId);
+
+                assertAll(
+                        () -> assertThat(actual.getId()).isEqualTo(givenId),
+                        () -> assertThat(actual.getImageUrl()).isEqualTo(PRODUCT1_IMAGE),
+                        () -> assertThat(actual.getMaker()).isEqualTo(PRODUCT1_MAKER),
+                        () -> assertThat(actual.getName()).isEqualTo(PRODUCT1_NAME),
+                        () -> assertThat(actual.getPrice()).isEqualTo(PRODUCT1_PRICE)
+                );
             }
         }
 
@@ -129,11 +142,105 @@ public class ProductServiceBddTest {
                 givenId = NOT_EXIST_ID;
             }
 
-            @DisplayName("예외가 발생한다.")
+            @DisplayName("존재하지 않는 상품 예외가 발생한다.")
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(ProductNotFoundException.class)
                         .isThrownBy(() -> productService.getProduct(givenId));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("updateProduct 메서드는")
+    class Describe_updateProduct {
+        Long givenId;
+        ProductUpdateRequestDto updateRequestDto;
+
+        @Nested
+        @DisplayName("등록된 상품 id가 존재하면")
+        class Context_with_exist_product_id {
+
+            @BeforeEach
+            void setUp() {
+                ProductSaveRequestDto requestDto = saveRequestDto();
+                ProductResponseDto savedProduct = productService.createProduct(requestDto);
+                givenId = savedProduct.getId();
+                updateRequestDto = updateRequestDto();
+            }
+
+            @DisplayName("수정된 상품을 리턴한다")
+            @Test
+            void It_return_updated_product() {
+                ProductResponseDto actual = productService.updateProduct(givenId, updateRequestDto);
+
+                assertAll(
+                        () -> assertThat(actual.getImageUrl()).isEqualTo(UPDATE_IMAGE),
+                        () -> assertThat(actual.getMaker()).isEqualTo(UPDATE_MAKER),
+                        () -> assertThat(actual.getName()).isEqualTo(UPDATE_NAME),
+                        () -> assertThat(actual.getPrice()).isEqualTo(UPDATE_PRICE)
+                );
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 상품 id가 존재하지 않으면")
+        class Context_without_products {
+
+            @BeforeEach
+            void setUp() {
+                givenId = NOT_EXIST_ID;
+                updateRequestDto = updateRequestDto();
+            }
+
+            @DisplayName("존재하지 않는 상품 예외가 발생한다.")
+            @Test
+            void It_throws_exception() {
+                assertThatExceptionOfType(ProductNotFoundException.class)
+                        .isThrownBy(() -> productService.updateProduct(givenId, updateRequestDto));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteProduct 메서드는")
+    class Describe_deleteProduct {
+        Long givenId;
+
+        @Nested
+        @DisplayName("등록된 상품 id가 존재하면")
+        class Context_with_exist_product_id {
+
+            @BeforeEach
+            void setUp() {
+                ProductSaveRequestDto requestDto = saveRequestDto();
+                ProductResponseDto savedProduct = productService.createProduct(requestDto);
+                givenId = savedProduct.getId();
+            }
+
+            @DisplayName("등록된 상품을 삭제한다")
+            @Test
+            void It_return_updated_product() {
+                productService.deleteProduct(givenId);
+
+                assertThat(productService.getProducts()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 상품 id가 존재하지 않으면")
+        class Context_without_products {
+
+            @BeforeEach
+            void setUp() {
+                givenId = NOT_EXIST_ID;
+            }
+
+            @DisplayName("존재하지 않는 상품 예외가 발생한다.")
+            @Test
+            void It_throws_exception() {
+                assertThatExceptionOfType(ProductNotFoundException.class)
+                        .isThrownBy(() -> productService.deleteProduct(givenId));
             }
         }
     }
@@ -147,13 +254,12 @@ public class ProductServiceBddTest {
                 .build();
     }
 
-    private ProductResponseDto savedResponseDto() {
-        return ProductResponseDto.builder()
-                .id(PRODUCT1_ID)
-                .name(PRODUCT1_NAME)
-                .maker(PRODUCT1_MAKER)
-                .price(PRODUCT1_PRICE)
-                .imageUrl(PRODUCT1_IMAGE)
+    private ProductUpdateRequestDto updateRequestDto() {
+        return ProductUpdateRequestDto.builder()
+                .name(UPDATE_NAME)
+                .maker(UPDATE_MAKER)
+                .price(UPDATE_PRICE)
+                .imageUrl(UPDATE_IMAGE)
                 .build();
     }
 }
