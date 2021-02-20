@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -52,7 +51,7 @@ class ToyControllerWebTest {
 
     private OutputStream outputStream;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private String taskJsonString;
+    private String toyJsonString;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -61,7 +60,7 @@ class ToyControllerWebTest {
 
         outputStream = new ByteArrayOutputStream();
         objectMapper.writeValue(outputStream, toy);
-        taskJsonString = outputStream.toString();
+        toyJsonString = outputStream.toString();
     }
 
     @Nested
@@ -102,11 +101,11 @@ class ToyControllerWebTest {
             void it_responds_200_ok_and_not_empty_list() throws Exception {
                 outputStream = new ByteArrayOutputStream();
                 objectMapper.writeValue(outputStream, toyList);
-                taskJsonString = outputStream.toString();
+                toyJsonString = outputStream.toString();
 
                 mockMvc.perform(requestBuilder)
                         .andExpect(status().isOk())
-                        .andExpect(content().json(taskJsonString));
+                        .andExpect(content().json(toyJsonString));
             }
         }
     }
@@ -134,7 +133,7 @@ class ToyControllerWebTest {
 
                 mockMvc.perform(requestBuilder)
                         .andExpect(status().isOk())
-                        .andExpect(content().json(taskJsonString));
+                        .andExpect(content().json(toyJsonString));
             }
         }
 
