@@ -13,6 +13,12 @@ public class Product {
         this.price = price;
     }
 
+    public Product(String name, String maker, Integer price) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+    }
+
     public Long getId() {
         return id;
     }
