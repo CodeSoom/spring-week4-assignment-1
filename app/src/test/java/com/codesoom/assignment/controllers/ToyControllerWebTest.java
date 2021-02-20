@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 
@@ -21,14 +22,16 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("요청을 받은 ToyController 클래스는")
+@DisplayName("ToyController 클래스가 받은 요청 중")
 class ToyControllerWebTest {
     private final Long givenSavedId = 1L;
     private final Long givenUnsavedId = 100L;
@@ -156,6 +159,27 @@ class ToyControllerWebTest {
                 mockMvc.perform(requestBuilder)
                         .andExpect(status().isNotFound());
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /products 요청은")
+    class Describe_post_toys_request {
+        @BeforeEach
+        void setRequest() throws IOException {
+            requestBuilder = post("/products")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toyJsonString);
+        }
+
+        @Test
+        @DisplayName("toy를 추가하고, 201 Created와 추가된 toy를 응답한다.")
+        void it_add_toy_and_respond_201_created_and_added_toy() throws Exception {
+            given(toyService.createToy(any(Toy.class))).willReturn(toy);
+
+            mockMvc.perform(requestBuilder)
+                    .andExpect(status().isCreated())
+                    .andExpect(content().json(toyJsonString));
         }
     }
 }
