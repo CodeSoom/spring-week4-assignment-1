@@ -5,6 +5,7 @@ public class Product {
     private String name;
     private String maker;
     private Integer price;
+    private String imageUrl;
 
     public Product(Long id, String name, String maker, Integer price) {
         this.id = id;
@@ -31,7 +32,11 @@ public class Product {
         return maker;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
