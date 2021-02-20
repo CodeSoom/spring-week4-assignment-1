@@ -28,6 +28,12 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
+    }
+
     @GetMapping
     public List<Product> getProducts() {
         return productService.getProducts();
@@ -36,12 +42,6 @@ public class ProductController {
     @GetMapping("{id}")
     public Product getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
     }
 
     @PutMapping("{id}")
