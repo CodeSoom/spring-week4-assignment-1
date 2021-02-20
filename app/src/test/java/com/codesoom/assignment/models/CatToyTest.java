@@ -17,6 +17,7 @@ class CatToyTest {
     private final Toy givenCatToy = new CatToy(
             givenID, givenName, givenBrand, givenPrice, givenImageURL
     );
+    private final String modifiedBrand = "cat company";
 
     @Test
     @DisplayName("id 메소드는 id를 리턴한다.")
@@ -46,5 +47,15 @@ class CatToyTest {
     @DisplayName("imageURL 메소드는 imageURL 을 리턴한다.")
     void imageURL() {
         assertThat(givenCatToy.imageURL()).isEqualTo(givenImageURL);
+    }
+
+    @Test
+    @DisplayName("modify 메소드는 멤버변수의 값을 변경한다.")
+    void modify() {
+        givenCatToy.modify(
+                givenName, modifiedBrand, givenPrice, givenImageURL
+        );
+
+        assertThat(givenCatToy.brand()).isEqualTo(modifiedBrand);
     }
 }

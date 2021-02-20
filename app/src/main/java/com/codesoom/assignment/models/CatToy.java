@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Accessors(fluent = true)
 @Getter
 public class CatToy implements Toy {
@@ -27,6 +27,16 @@ public class CatToy implements Toy {
             Long id, String name, String brand, Double price, String imageURL
     ) {
         this.id = id;
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.imageURL = imageURL;
+    }
+
+    @Override
+    public void modify(
+            String name, String brand, Double price, String imageURL
+    ) {
         this.name = name;
         this.brand = brand;
         this.price = price;
