@@ -40,7 +40,6 @@ class InMemoryProductRepositoryTest {
     private final String FIRST_PRODUCT_NAME = "name1";
     private final String SECOND_PRODUCT_NAME = "name2";
     private final Long FIRST_PRODUCT_ID = 1L;
-    private final Long NOT_EXISTING_ID = 999L;
     private int existingProductSize;
 
     @BeforeEach
@@ -100,11 +99,11 @@ class InMemoryProductRepositoryTest {
     class Describe_findById {
 
         @Nested
-        @DisplayName("상품목록에 존재하는 id로 조회하면")
+        @DisplayName("등록된 상품의 id가 주어지면")
         class Context_contains_target_id {
 
             @Test
-            @DisplayName("id에 해당하는 상품을 리턴한다.")
+            @DisplayName("그 id에 해당하는 상품을 리턴한다.")
             void it_returns_product() throws JsonProcessingException {
                 Optional<Product> foundProduct = inMemoryProductRepository.findById(firstProduct.getId());
 
@@ -113,8 +112,9 @@ class InMemoryProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("상품목록에 존재하지 않는 id로 조회하면")
+        @DisplayName("등록되지 않은 상품의 id가 주어지면")
         class Context_not_contains_target_id {
+            private final Long NOT_EXISTING_ID = 999L;
 
             @Test
             @DisplayName("비어있는 optional을 리턴한다.")
@@ -145,11 +145,11 @@ class InMemoryProductRepositoryTest {
     @DisplayName("delete()는")
     class Dedsicribe_delete {
         @Nested
-        @DisplayName("상품목록에 존재하지 않는 id로 조회하면")
+        @DisplayName("등록된 상품의 id가 주어지면")
         class Context_contains_target_id {
 
             @Test
-            @DisplayName("상품을 삭제한다.")
+            @DisplayName("그 id에 해당하는 상품을 삭제한다.")
             void it_deletes_target_project () {
                 inMemoryProductRepository.delete(firstProduct);
 
@@ -158,8 +158,9 @@ class InMemoryProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("상품목록에 존재하지 않는 id로 조회하면")
+        @DisplayName("등록되지 않은 상품의 id가 주어지면")
         class Context_not_contains_target_id {
+            private final Long NOT_EXISTING_ID = 999L;
 
             @Test
             @DisplayName("상품을 삭제하지 않는다.")

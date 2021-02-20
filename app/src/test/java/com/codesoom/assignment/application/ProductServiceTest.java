@@ -61,7 +61,6 @@ class ProductServiceTest {
     void setUpSaveProduct() {
         given(productRepository.save(any(Product.class))).will(invocation -> {
             Product product = invocation.getArgument(0);
-            product.setId(2L);
             return product;
         });
     }
@@ -110,7 +109,6 @@ class ProductServiceTest {
 
         verify(productRepository).save(any(Product.class));
 
-        assertThat(product.getId()).isEqualTo(2L);
         assertThat(product.getName()).isEqualTo(PRODUCT_NAME + CREATE_POSTFIX);
     }
 

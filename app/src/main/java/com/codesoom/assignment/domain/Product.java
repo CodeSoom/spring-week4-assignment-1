@@ -12,7 +12,6 @@ public class Product {
 
     @Id
     @GeneratedValue
-    @Setter
     @Getter
     private Long id;
 

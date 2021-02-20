@@ -67,14 +67,26 @@ class ProductControllerTest {
     private Product product;
 
     Product updatedProduct() {
-        Product updatedProduct = new Product(UPDATED_PRODUCT_ID, UPDATED_PRODUCT_NAME, UPDATED_PRODUCT_MAKEER, UPDATED_PRODUCT_PRICE, UPDATED_PRODUCT_IMAGE_URL);
+        Product updatedProduct = new Product(
+                UPDATED_PRODUCT_ID,
+                UPDATED_PRODUCT_NAME,
+                UPDATED_PRODUCT_MAKEER,
+                UPDATED_PRODUCT_PRICE,
+                UPDATED_PRODUCT_IMAGE_URL
+        );
         return updatedProduct;
     }
 
     @BeforeEach
     void setUp() {
         products = new ArrayList<>();
-        product = new Product(PRODUCT_ID, PRODUCT_NAME, PRODUCT_MAKER, PRODUCT_PRICE, PRODUCT_IMAGE_URL);
+        product = new Product(
+                PRODUCT_ID,
+                PRODUCT_NAME,
+                PRODUCT_MAKER,
+                PRODUCT_PRICE,
+                PRODUCT_IMAGE_URL
+        );
     }
 
     @AfterEach
@@ -131,7 +143,7 @@ class ProductControllerTest {
     class Describe_get_request_with_id{
 
         @Nested
-        @DisplayName("상품목록에 존재하는 id로 조회하면")
+        @DisplayName("등록된 상품의 id가 주어지면")
         class Context_contains_target_id {
             @BeforeEach
             void setUp() {
@@ -154,7 +166,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("상품목록에 존재하지 않는 id로 조회하면")
+        @DisplayName("등록되지 않은 상품의 id가 주어지면")
         class Context_not_contains_target_id {
             @BeforeEach
             void setUp() {
@@ -209,7 +221,7 @@ class ProductControllerTest {
     class Describe_delete_request {
 
         @Nested
-        @DisplayName("상품목록에 해당하는 id가 있으면")
+        @DisplayName("등록된 상품의 id가 주어지면")
         class Context_contains_target_id {
             @BeforeEach
             void setUp() {
@@ -227,7 +239,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("상품목록에 해당하는 id가 없으면")
+        @DisplayName("등록되지 않은 상품의 id가 주어지면")
         class Context_not_contains_target_id {
             @BeforeEach
             void setUp() {
@@ -250,7 +262,7 @@ class ProductControllerTest {
         Product updateProduct;
 
         @Nested
-        @DisplayName("상품목록에 해당하는 id가 있으면")
+        @DisplayName("등록된 상품의 id가 주어지면")
         class Context_cotains_target_id {
             @BeforeEach
             void setUp() {
@@ -258,7 +270,8 @@ class ProductControllerTest {
 
                 updateProduct = new Product(updatedProduct());
 
-                given(productService.updateProduct(eq(PRODUCT_ID),any(Product.class))).willReturn(updateProduct);
+                given(productService.updateProduct(eq(PRODUCT_ID),any(Product.class)))
+                        .willReturn(updateProduct);
             }
 
             @Test
