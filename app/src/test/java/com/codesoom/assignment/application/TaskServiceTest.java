@@ -122,20 +122,19 @@ class TaskServiceTest {
         verify(taskRepository).findById(100L);
     }
 
-//    @Test
-//    void deleteTaskWithValidId() {
-//        int oldSize = taskService.getTasks().size();
-//
-//        taskService.deleteTask(1L);
-//
-//        int newSize = taskService.getTasks().size();
-//
-//        assertThat(oldSize - newSize).isEqualTo(1);
-//    }
-//
-//    @Test
-//    void deleteTaskWithInvalidId() {
-//        assertThatThrownBy(() -> taskService.deleteTask(100L))
-//                .isInstanceOf(TaskNotFoundException.class);
-//    }
+    @Test
+    void deleteTaskWithValidId() {
+        taskService.deleteTask(1L);
+
+        verify(taskRepository).findById(1L);
+        verify(taskRepository).delete(any(Task.class));
+    }
+
+    @Test
+    void deleteTaskWithInvalidId() {
+        assertThatThrownBy(() -> taskService.deleteTask(100L))
+                .isInstanceOf(TaskNotFoundException.class);
+
+        verify(taskRepository).findById(100L);
+    }
 }
