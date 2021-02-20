@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,13 +20,13 @@ public class Toy {
     @GeneratedValue
     private Long id;
     private String name;
-    private String brand;
+    private String maker;
     private int price;
     private String imageUrl;
 
-    public Toy(String name, String brand, int price, String imageUrl) {
+    public Toy(String name, String maker, int price, String imageUrl) {
         this.name = name;
-        this.brand = brand;
+        this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
     }

@@ -27,7 +27,7 @@ class ToyRepositoryTest {
     private void assertToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
         assertThat(toy.getName()).isEqualTo(givenName);
-        assertThat(toy.getBrand()).isEqualTo(givenBrand);
+        assertThat(toy.getMaker()).isEqualTo(givenBrand);
         assertThat(toy.getPrice()).isEqualTo(givenPrice);
         assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl);
     }

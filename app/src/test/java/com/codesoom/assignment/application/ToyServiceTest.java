@@ -45,7 +45,7 @@ class ToyServiceTest {
     private void assertCreatedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
         assertThat(toy.getName()).isEqualTo(givenName);
-        assertThat(toy.getBrand()).isEqualTo(givenBrand);
+        assertThat(toy.getMaker()).isEqualTo(givenBrand);
         assertThat(toy.getPrice()).isEqualTo(givenPrice);
         assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl);
     }
@@ -53,7 +53,7 @@ class ToyServiceTest {
     private void assertModifiedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
         assertThat(toy.getName()).isEqualTo(givenName + givenUpdatePostfixText);
-        assertThat(toy.getBrand()).isEqualTo(givenBrand + givenUpdatePostfixText);
+        assertThat(toy.getMaker()).isEqualTo(givenBrand + givenUpdatePostfixText);
         assertThat(toy.getPrice()).isEqualTo(givenPrice + givenUpdatePostfixNumber);
         assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl + givenUpdatePostfixText);
     }

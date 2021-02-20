@@ -32,7 +32,7 @@ public class ToyService {
         final Long id = toy.getId();
         Toy foundToy = getToy(id);
         foundToy.setName(toy.getName());
-        foundToy.setBrand(toy.getBrand());
+        foundToy.setMaker(toy.getMaker());
         foundToy.setPrice(toy.getPrice());
         foundToy.setImageUrl(toy.getImageUrl());
 
