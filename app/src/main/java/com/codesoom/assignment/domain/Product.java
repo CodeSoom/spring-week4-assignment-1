@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.request.ProductRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,18 +29,18 @@ public class Product {
         this.image = image;
     }
 
-    public Product update(ProductRequest request) {
-        this.name = request.getName();
-        this.maker = request.getMaker();
-        this.price = request.getPrice();
-        this.image = request.getImage();
-        return this;
-    }
+    /**
+     * 상품을 수정하고, 수정된 상품을 리턴합니다.
+     *
+     * @param product 수정하고자 하는 상품 값
+     * @return 수정된 상품
+     */
+    public Product update(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.image = product.getImage();
 
-    @Override
-    public String toString() {
-        return String.format(
-                "{ id = %s, name = %s, maker = %s, price = %d, image = %s}"
-                , id, name, maker, price, image);
+        return this;
     }
 }

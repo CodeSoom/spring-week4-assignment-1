@@ -1,15 +1,11 @@
 package com.codesoom.assignment.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AccessLevel;
 
-@Builder
+
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 public class ProductResponse {
 
     private Long id;
@@ -17,6 +13,5 @@ public class ProductResponse {
     private String maker;
     private int price;
     private String image;
-
 
 }

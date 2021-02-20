@@ -48,16 +48,16 @@ public class ProductService {
     }
 
     /**
-     * 요청한 id에 해당하는 상품을 찾아 값을 변경한 후 리턴합니다.
+     * 요청한 id에 해당하는 상품을 찾아 업데이트하고 리턴합니다.
      *
      * @param id 검색하고자 하는 상품 id
      * @param request 변경하고자 하는 상품 값
-     * @return 변경된 상품 값 반환
+     * @return 변경된 상품
      */
     public Product updateProduct(Long id, ProductRequest request) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
-        product.update(request);
+        product.update(request.toEntity());
 
         return productRepository.save(product);
     }
