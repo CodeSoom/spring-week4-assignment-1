@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -19,6 +20,7 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductRepository productRepository;
     private List<Product> products;
+    private Product product1;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +29,7 @@ class ProductServiceTest {
         productService = new ProductService(productRepository);
 
         products = new ArrayList<>();
-        Product product1 = Product.builder()
+        product1 = Product.builder()
                 .id(1L)
                 .name("name 1")
                 .image("imageURL 1")
@@ -57,6 +59,17 @@ class ProductServiceTest {
         verify(productRepository).findAll();
 
         assertThat(products).hasSize(2);
+    }
+
+    @Test
+    @DisplayName("새로운 상품을 생성한다")
+    void createProduct() {
+        given(productRepository.save(any(Product.class)))
+                .will(invocation -> invocation.<Product>getArgument(0));
+
+        productService.createProduct(product1);
+
+        verify(productRepository).save(any(Product.class));
     }
 
 
