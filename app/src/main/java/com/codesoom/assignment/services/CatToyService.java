@@ -23,7 +23,7 @@ public class CatToyService implements ToyService {
     }
 
     @Override
-    public Toy find(Long id) {
+    public Toy find(Long id) throws ToyNotFoundException {
         return toyRepository
                 .findById(id)
                 .orElseThrow(() -> new ToyNotFoundException(id));
@@ -35,12 +35,12 @@ public class CatToyService implements ToyService {
     }
 
     @Override
-    public void modify(Long id, Toy toy) {
+    public void modify(Long id, Toy toy) throws ToyNotFoundException {
         this.find(id).modify(toy);
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ToyNotFoundException {
         this.find(id);
 
         toyRepository.deleteById(id);
