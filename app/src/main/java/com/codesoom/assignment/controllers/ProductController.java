@@ -20,4 +20,8 @@ public class ProductController {
     public Product getProduct(Long id) {
         return productService.getProduct(id);
     }
+
+    public Product createProduct(Product product) {
+        return productService.createProduct(product);
+    }
 }
