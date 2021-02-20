@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +11,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+    private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
     @GetMapping
     List<Product> list() {
-        Product product = new Product(1L, "오뎅꼬치", "야옹아멍멍해봐", 3000);
-
-        return List.of(product);
+        return productService.getProducts();
     }
 }
