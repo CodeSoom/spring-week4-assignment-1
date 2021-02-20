@@ -14,18 +14,12 @@ class CatToyDTOTest {
     private final String givenMaker = "dog";
     private final double givenPrice = 1000;
     private final String givenImageUrl = "https://cat.toy/cat-nip.png";
-    private final CatToyDTO givenCatToyDTO = new CatToyDTO.builder()
-            .name(givenName)
-            .maker(givenMaker)
-            .price(givenPrice)
-            .imageUrl(givenImageUrl)
-            .build();
+    private final CatToyDTO givenCatToyDTO = new CatToyDTO(
+            givenName, givenMaker, givenPrice, givenImageUrl
+    );
     private final String givenCatToyDTOJson = String.format(
             "{\"name\":\"%s\",\"maker\":\"%s\",\"price\":%.1f,\"imageUrl\":\"%s\"}",
-            givenName,
-            givenMaker,
-            givenPrice,
-            givenImageUrl
+            givenName, givenMaker, givenPrice, givenImageUrl
     );
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -51,15 +45,10 @@ class CatToyDTOTest {
     }
 
     @Test
-    void stringToJson() throws JsonProcessingException {
+    void stringToCatToyDTO() throws JsonProcessingException {
         CatToyDTO catToyDTO = objectMapper.readValue(givenCatToyDTOJson, CatToyDTO.class);
 
-        assertThat(catToyDTO).isEqualTo(new CatToyDTO(givenName, givenMaker, givenPrice, givenImageUrl));
-    }
-
-    @Test
-    void toStringTest() throws JsonProcessingException {
-        assertThat(objectMapper.writeValueAsString(givenCatToyDTO)).isEqualTo(givenCatToyDTOJson);
+        assertThat(catToyDTO).isEqualTo(givenCatToyDTO);
     }
 
     @Nested
@@ -80,12 +69,9 @@ class CatToyDTOTest {
         @Nested
         @DisplayName("비교 대상과 name 이 다를 때")
         class Context_when_compare_is_not_equals_name {
-            private final CatToyDTO givenCompare = new CatToyDTO.builder()
-                    .name("compare target")
-                    .maker(givenMaker)
-                    .price(givenPrice)
-                    .imageUrl(givenImageUrl)
-                    .build();
+            private final CatToyDTO givenCompare = new CatToyDTO(
+                    "compare target", givenMaker, givenPrice, givenImageUrl
+            );
 
             @Test
             @DisplayName("false 를 리턴한다.")
@@ -97,12 +83,9 @@ class CatToyDTOTest {
         @Nested
         @DisplayName("비교 대상과 maker 가 다를 때")
         class Context_when_compare_is_not_equals_maker {
-            private final CatToyDTO givenCompare = new CatToyDTO.builder()
-                    .name(givenName)
-                    .maker("compare target")
-                    .price(givenPrice)
-                    .imageUrl(givenImageUrl)
-                    .build();
+            private final CatToyDTO givenCompare = new CatToyDTO(
+                    givenName, "compare target", givenPrice, givenImageUrl
+            );
 
             @Test
             @DisplayName("false 를 리턴한다.")
@@ -114,12 +97,9 @@ class CatToyDTOTest {
         @Nested
         @DisplayName("비교 대상과 price 가 다를 때")
         class Context_when_compare_is_not_equals_price {
-            private final CatToyDTO givenCompare = new CatToyDTO.builder()
-                    .name(givenName)
-                    .maker(givenMaker)
-                    .price(2000d)
-                    .imageUrl(givenImageUrl)
-                    .build();
+            private final CatToyDTO givenCompare = new CatToyDTO(
+                    givenName, givenMaker, 2000d, givenImageUrl
+            );
 
             @Test
             @DisplayName("false 를 리턴한다.")
@@ -131,12 +111,9 @@ class CatToyDTOTest {
         @Nested
         @DisplayName("비교 대상과 imageUrl 이 다를 때")
         class Context_when_compare_is_not_equals_imageUrl {
-            private final CatToyDTO givenCompare = new CatToyDTO.builder()
-                    .name(givenName)
-                    .maker(givenMaker)
-                    .price(givenPrice)
-                    .imageUrl("compare target")
-                    .build();
+            private final CatToyDTO givenCompare = new CatToyDTO(
+                    givenName, givenMaker, givenPrice, "compare target"
+            );
 
             @Test
             @DisplayName("false 를 리턴한다.")
@@ -144,10 +121,5 @@ class CatToyDTOTest {
                 assertThat(givenCatToyDTO).isNotEqualTo(givenCompare);
             }
         }
-    }
-
-    @Test
-    void buildToString() {
-        assertThat(new CatToyDTO.builder().toString()).isEqualTo("CatToyDTO.builder(name=null, maker=null, price=null, imageUrl=null)");
     }
 }

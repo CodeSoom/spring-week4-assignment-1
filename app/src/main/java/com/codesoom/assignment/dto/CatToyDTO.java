@@ -5,14 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.jackson.Jacksonized;
 
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Accessors(fluent = true)
-@AllArgsConstructor
 @Getter
-@Jacksonized
-@Builder(builderClassName = "builder", builderMethodName = "")
 public class CatToyDTO {
     @JsonProperty("name")
     String name;
@@ -25,6 +21,19 @@ public class CatToyDTO {
 
     @JsonProperty("imageUrl")
     String imageUrl;
+
+    @JsonCreator
+    public CatToyDTO(
+            @JsonProperty("name") String name,
+            @JsonProperty("maker") String maker,
+            @JsonProperty("price") Double price,
+            @JsonProperty("imageUrl") String imageUrl
+    ) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     @Override
     public boolean equals(Object obj) {
