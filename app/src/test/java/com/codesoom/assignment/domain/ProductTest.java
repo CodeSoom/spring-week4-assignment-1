@@ -12,6 +12,7 @@ class ProductTest {
         assertThat(product.getName()).isEqualTo("오뎅꼬치");
         assertThat(product.getMaker()).isEqualTo("야옹아멍멍해봐");
         assertThat(product.getPrice()).isEqualTo(3000);
+        assertThat(product.getImageUrl()).isNull();
     }
 
     @Test
@@ -22,5 +23,6 @@ class ProductTest {
         assertThat(product.getName()).isEqualTo("오뎅꼬치");
         assertThat(product.getMaker()).isEqualTo("야옹아멍멍해봐");
         assertThat(product.getPrice()).isEqualTo(3000);
+        assertThat(product.getImageUrl()).isNull();
     }
 }
