@@ -1,7 +1,6 @@
 package com.codesoom.assignment.domain;
 
 import lombok.*;
-import org.springframework.scheduling.config.Task;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +24,7 @@ public class Product {
 
     private int price;
 
-    private String image;
+    private String imageUrl;
 
     @Override
     public String toString() {
@@ -34,7 +33,7 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", maker='" + maker + '\'' +
                 ", price=" + price +
-                ", image='" + image + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

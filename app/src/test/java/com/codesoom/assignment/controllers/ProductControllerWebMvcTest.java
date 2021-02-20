@@ -92,7 +92,7 @@ class ProductControllerWebMvcTest {
         }
 
         @Test
-        @DisplayName("전체 고양이 장난감 목록과 OK를 리턴한다")
+        @DisplayName("전체 고양이 장난감 목록과 OK를 리턴하며 목록의 내용 중 이름이 일치하는지 확인한다")
         void itReturnsProductsAndOKHttpStatus() throws Exception {
             given(productService.getProducts()).willReturn(products);
 
