@@ -24,4 +24,7 @@ public class ProductService {
         return null;
     }
 
+    public Product getProduct(Long id) {
+        return null;
+    }
 }

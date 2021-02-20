@@ -16,4 +16,8 @@ public class ProductController {
     public List<Product> getProducts() {
         return productService.getProducts();
     }
+
+    public Product getProduct(Long id) {
+        return productService.getProduct(id);
+    }
 }
