@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 @Transactional
@@ -35,6 +36,32 @@ public class ProductServiceBddTest {
     @AfterEach
     public void cleanup() {
         productRepository.deleteAll();
+    }
+
+    @Nested
+    @DisplayName("createProduct 메서드는")
+    class Describe_createProduct {
+        ProductSaveRequestDto requestDto;
+
+        @BeforeEach
+        void setUp() {
+            requestDto = saveRequestDto();
+        }
+
+        @DisplayName("새로운 상품이 추가되고, 상품 정보를 리턴한다")
+        @Test
+        void it_returns_product() {
+            ProductResponseDto actual = productService.createProduct(requestDto);
+
+            assertAll(
+                    () -> assertThat(productService.getProducts()).isNotEmpty(),
+                    () -> assertThat(actual.getId()).isNotNull(),
+                    () -> assertThat(actual.getImageUrl()).isEqualTo(PRODUCT1_IMAGE),
+                    () -> assertThat(actual.getMaker()).isEqualTo(PRODUCT1_MAKER),
+                    () -> assertThat(actual.getName()).isEqualTo(PRODUCT1_NAME),
+                    () -> assertThat(actual.getPrice()).isEqualTo(PRODUCT1_PRICE)
+            );
+        }
     }
 
     @Nested
@@ -102,7 +129,7 @@ public class ProductServiceBddTest {
                 givenId = NOT_EXIST_ID;
             }
 
-            @DisplayName("예외를 발생시킨다.")
+            @DisplayName("예외가 발생한다.")
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(ProductNotFoundException.class)
