@@ -17,7 +17,7 @@ import javax.persistence.Id;
 public class CatToy implements Toy {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    final Long id;
     String name;
     String brand;
     Double price;
