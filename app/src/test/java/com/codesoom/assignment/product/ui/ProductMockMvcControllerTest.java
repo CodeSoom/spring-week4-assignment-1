@@ -151,7 +151,7 @@ class ProductMockMvcControllerTest {
         ProductUpdateRequestDto requestDto;
 
         @Nested
-        @DisplayName("갱신되는 상품이 없으면")
+        @DisplayName("갱신대상인 상품이 없으면")
         class Context_without_product {
 
             @BeforeEach
@@ -178,7 +178,7 @@ class ProductMockMvcControllerTest {
         }
 
         @Nested
-        @DisplayName("갱신되는 상품이 존재하면")
+        @DisplayName("갱신대상인 상품이 존재하면")
         class Context_with_product {
 
             @BeforeEach
@@ -242,7 +242,7 @@ class ProductMockMvcControllerTest {
     class Describe_deleteProduct {
 
         @Nested
-        @DisplayName("삭제되는 상품이 없으면")
+        @DisplayName("삭제 대상인 상품이 없으면")
         class Context_without_product {
             @BeforeEach
             void setUp() {
@@ -259,7 +259,7 @@ class ProductMockMvcControllerTest {
         }
 
         @Nested
-        @DisplayName("삭제되는 상품이 존재하면")
+        @DisplayName("삭제 대상인 상품이 존재하면")
         class Context_with_product {
 
             @BeforeEach

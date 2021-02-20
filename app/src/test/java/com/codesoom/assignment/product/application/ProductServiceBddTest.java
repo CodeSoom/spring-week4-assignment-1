@@ -142,7 +142,7 @@ public class ProductServiceBddTest {
                 givenId = NOT_EXIST_ID;
             }
 
-            @DisplayName("존재하지 않는 상품 예외가 발생한다.")
+            @DisplayName("예외를 던진다.")
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(ProductNotFoundException.class)
@@ -193,7 +193,7 @@ public class ProductServiceBddTest {
                 updateRequestDto = updateRequestDto();
             }
 
-            @DisplayName("존재하지 않는 상품 예외가 발생한다.")
+            @DisplayName("예외를 던진다.")
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(ProductNotFoundException.class)
@@ -218,7 +218,7 @@ public class ProductServiceBddTest {
                 givenId = savedProduct.getId();
             }
 
-            @DisplayName("등록된 상품을 삭제한다")
+            @DisplayName("삭제 대상인 상품을 삭제한다")
             @Test
             void It_return_updated_product() {
                 productService.deleteProduct(givenId);
@@ -236,7 +236,7 @@ public class ProductServiceBddTest {
                 givenId = NOT_EXIST_ID;
             }
 
-            @DisplayName("존재하지 않는 상품 예외가 발생한다.")
+            @DisplayName("예외를 던진다.")
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(ProductNotFoundException.class)
