@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -24,6 +25,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -115,8 +118,8 @@ class ToyControllerWebTest {
     }
 
     @Nested
-    @DisplayName("GET /product/{id} 요청은")
-    class Describe_get_product_id_request {
+    @DisplayName("GET /products/{id} 요청은")
+    class Describe_get_products_id_request {
         private String stringFormat = "/products/%d";
         private Long givenId;
 
@@ -165,7 +168,7 @@ class ToyControllerWebTest {
 
     @Nested
     @DisplayName("POST /products 요청은")
-    class Describe_post_toys_request {
+    class Describe_post_products_request {
         @BeforeEach
         void setRequest() {
             requestBuilder = post("/products")
@@ -186,7 +189,7 @@ class ToyControllerWebTest {
 
     @Nested
     @DisplayName("PATCH /products/{id} 요청은")
-    class Describe_patch_task_id_request {
+    class Describe_patch_products_id_request {
         private String stringFormat = "/products/%d";
         private Long givenId;
 
@@ -251,6 +254,55 @@ class ToyControllerWebTest {
 
                 given(toyService.updateToy(any(Toy.class)))
                         .willThrow(new ToyNotFoundException(givenId));
+            }
+
+            @Test
+            @DisplayName("404 Not Found를 응답한다.")
+            void it_respond_404_not_found() throws Exception {
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products/:id 요청은")
+    class Context_delete_products_id_request {
+        private String stringFormat = "/products/%d";
+        private Long givenId;
+
+        @Nested
+        @DisplayName("저장된 toy의 id를 가지고 있다면")
+        class Context_with_saved_toy_id {
+            @BeforeEach
+            void setRequest() {
+                givenId = givenSavedId;
+
+                uriTemplate = String.format(stringFormat, givenId);
+                requestBuilder = delete(uriTemplate);
+            }
+
+            @Test
+            @DisplayName("204 No Content를 응답한다.")
+            void it_respond_204_no_content() throws Exception {
+                verify(toyService).deleteToy(any(Long.class));
+
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 toy의 id를 가지고 있다면")
+        class Context_with_unsaved_toy_id {
+            @BeforeEach
+            void setRequest() {
+                givenId = givenUnsavedId;
+
+                uriTemplate = String.format(stringFormat, givenId);
+                requestBuilder = delete(uriTemplate);
+
+                doThrow(ToyNotFoundException.class).when(toyService).deleteToy(givenId);
             }
 
             @Test
