@@ -1,9 +1,9 @@
 package com.codesoom.assignment.models;
 
 public interface Toy {
-    long id();
+    Long id();
     String name();
     String brand();
-    double price();
+    Double price();
     String imageURL();
 }

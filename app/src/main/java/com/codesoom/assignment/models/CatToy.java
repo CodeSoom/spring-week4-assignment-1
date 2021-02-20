@@ -12,18 +12,18 @@ import javax.persistence.Id;
 public class CatToy implements Toy {
     @Id
     @GeneratedValue
-    private final long id;
+    private final Long id;
     private final String name;
     private final String brand;
-    private final double price;
+    private final Double price;
     private final String imageURL;
 
     @JsonCreator
     public CatToy(
-            @JsonProperty("id") long id,
+            @JsonProperty("id") Long id,
             @JsonProperty("name") String name,
             @JsonProperty("brand") String brand,
-            @JsonProperty("price") double price,
+            @JsonProperty("price") Double price,
             @JsonProperty("imageURL") String imageURL
     ) {
         this.id = id;
@@ -35,7 +35,7 @@ public class CatToy implements Toy {
 
     @Override
     @JsonGetter
-    public long id() {
+    public Long id() {
         return this.id;
     }
 
@@ -53,7 +53,7 @@ public class CatToy implements Toy {
 
     @Override
     @JsonGetter
-    public double price() {
+    public Double price() {
         return this.price;
     }
 
@@ -67,10 +67,10 @@ public class CatToy implements Toy {
     public boolean equals(Object obj) {
         if (obj instanceof CatToy) {
             CatToy toy = (CatToy) obj;
-            return this.id() == toy.id()
+            return this.id().equals(toy.id())
                     && this.name().equals(toy.name())
                     && this.brand().equals(toy.brand())
-                    && this.price() == toy.price()
+                    && this.price().equals(toy.price())
                     && this.imageURL().equals(toy.imageURL());
         }
         return false;
