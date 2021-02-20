@@ -95,6 +95,7 @@ class ProductControllerTest {
     }
 
     @DisplayName("장난감을 업데이트 했을 때의 테스트")
+    @Test
     void updateProductTest() {
         Product product = new Product();
         product.setName("로봇트");
@@ -104,5 +105,13 @@ class ProductControllerTest {
 
         productController.updateProduct(product);
         verify(productService).updateProduct(product);
+    }
+
+    @DisplayName("장난감을 삭제 헸을 때의 테스트")
+    @Test
+    void deleteProductTest() {
+        Product product = new Product();
+        productController.deleteProduct(product);
+        verify(productService).deleteProduct(product);
     }
 }
