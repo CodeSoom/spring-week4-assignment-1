@@ -10,11 +10,6 @@ import java.util.List;
 
 /**
  * 상품과 관련된 비즈니스 로직을 담당합니다.
- *
- * @see Product
- * @see ProductRepository
- * @see com.codesoom.assignment.infra.InMemoryProductRepository
- * @see com.codesoom.assignment.infra.JpaProductRepository
  */
 @Service
 @Transactional
@@ -36,7 +31,7 @@ public class ProductService {
     /**
      * 주어진 id에 해당하는 상품을 리턴합니다.
      *
-     * @param id 찾는 상품에 해당하는 id
+     * @param id 상품의 식별자
      * @return 주어진 id에 해당하는 상품
      * @throws ProductNotFoundException 주어진 id가 상품 목록에 없는 경우
      */
@@ -58,7 +53,7 @@ public class ProductService {
     /**
      * 주어진 id에 해당하는 상품을 찾은 후 수정합니다.
      *
-     * @param id 수정하려는 상품에 해당하는 id
+     * @param id 상품의 식별자
      * @param source 수정하려는 상품
      * @return 수정된 상품
      * @throws ProductNotFoundException 주어진 id가 상품 목록에 없는 경우
@@ -78,7 +73,7 @@ public class ProductService {
     /**
      * 주어진 id에 해당하는 상품을 찾아 삭제합니다.
      *
-     * @param id 삭제하려는 상품에 해당하는 id
+     * @param id 상품의 식별자
      * @throws ProductNotFoundException 주어진 id가 상품 목록에 없는 경우
      */
     public Product deleteProduct(Long id) throws ProductNotFoundException{
