@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,12 +30,15 @@ class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
-    @Test
-    void list() throws Exception {
+    @BeforeEach
+    void setUp() {
         Product product = new Product(1L, "오뎅꼬치", "야옹아멍멍해봐", 3000);
 
         given(productService.getProducts()).willReturn(List.of(product));
+    }
 
+    @Test
+    void list() throws Exception {
         mockMvc.perform(
                 get("/products")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
