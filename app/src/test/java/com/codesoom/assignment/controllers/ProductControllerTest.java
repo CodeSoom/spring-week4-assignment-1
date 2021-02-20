@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,5 +84,13 @@ class ProductControllerTest {
         given(productService.getProduct(100L)).willThrow(ProductNonExistException.class);
 
         assertThatThrownBy(() -> productController.getProduct(100L)).isInstanceOf(ProductNonExistException.class);
+    }
+
+    @DisplayName("장난감을 등록하였을 때의 테스트")
+    @Test
+    void createProductTest() {
+        Product product = new Product();
+        productController.createProduct(product);
+        verify(productService).createProduct(product);
     }
 }
