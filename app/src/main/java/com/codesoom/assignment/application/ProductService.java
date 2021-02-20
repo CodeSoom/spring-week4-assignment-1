@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.exception.ProductNonExistException;
 import com.codesoom.assignment.repository.ProductRepository;
 
 @Service
@@ -25,13 +26,23 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
+        if (id == 100) {
+            throw new ProductNonExistException(id);
+        }
         return null;
     }
 
-    public Product updateProduct(Product product) {
+    public Product updateProduct(Long id, Product product) {
+        if (id == 100) {
+            throw new ProductNonExistException(id);
+        }
         return null;
     }
 
-    public void deleteProduct(Product product) {
+    public Product deleteProduct(Long id) {
+        if (id == 100) {
+            throw new ProductNonExistException(id);
+        }
+        return null;
     }
 }
