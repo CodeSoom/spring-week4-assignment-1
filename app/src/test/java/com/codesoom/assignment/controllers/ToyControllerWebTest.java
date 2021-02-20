@@ -24,8 +24,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,6 +38,8 @@ class ToyControllerWebTest {
     private final String givenBrand = "코드숨";
     private final int givenPrice = 5000;
     private final String givenImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
+    private final String givenUpdatePostfixText = "+";
+    private final int givenUpdatePostfixNumber = 1;
 
     @Autowired
     private MockMvc mockMvc;
@@ -166,7 +167,7 @@ class ToyControllerWebTest {
     @DisplayName("POST /products 요청은")
     class Describe_post_toys_request {
         @BeforeEach
-        void setRequest() throws IOException {
+        void setRequest() {
             requestBuilder = post("/products")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toyJsonString);
@@ -180,6 +181,84 @@ class ToyControllerWebTest {
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isCreated())
                     .andExpect(content().json(toyJsonString));
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products/{id} 요청은")
+    class Describe_patch_task_id_request {
+        private String stringFormat = "/products/%d";
+        private Long givenId;
+
+        @Nested
+        @DisplayName("저장된 toy의 id를 가지고 있다면")
+        class Context_with_saved_toy_id {
+            @BeforeEach
+            void setRequest() throws IOException {
+                givenId = givenSavedId;
+
+                toy = new Toy(
+                        givenName + givenUpdatePostfixText,
+                        givenBrand + givenUpdatePostfixText,
+                        givenPrice + givenUpdatePostfixNumber,
+                        givenImageUrl + givenUpdatePostfixText
+                );
+                toy.setId(givenSavedId);
+
+                outputStream = new ByteArrayOutputStream();
+                objectMapper.writeValue(outputStream, toy);
+                toyJsonString = outputStream.toString();
+
+                uriTemplate = String.format(stringFormat, givenId);
+                requestBuilder = patch(uriTemplate)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toyJsonString);
+            }
+
+            @Test
+            @DisplayName("toy를 수정하고, 200 Ok와 수정된 toy를 응답한다.")
+            void it_modify_toy_and_respond_200_ok_and_modified_toy() throws Exception {
+                given(toyService.updateToy(any(Toy.class))).willReturn(toy);
+
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isOk())
+                        .andExpect(content().json(toyJsonString));
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 toy의 id를 가지고 있다")
+        class Context_with_unsaved_toy_id {
+            @BeforeEach
+            void setRequest() throws IOException {
+                givenId = givenUnsavedId;
+                toy = new Toy(
+                        givenName + givenUpdatePostfixText,
+                        givenBrand + givenUpdatePostfixText,
+                        givenPrice + givenUpdatePostfixNumber,
+                        givenImageUrl + givenUpdatePostfixText
+                );
+                toy.setId(givenSavedId);
+
+                outputStream = new ByteArrayOutputStream();
+                objectMapper.writeValue(outputStream, toy);
+                toyJsonString = outputStream.toString();
+
+                uriTemplate = String.format(stringFormat, givenId);
+                requestBuilder = patch(uriTemplate)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toyJsonString);
+
+                given(toyService.updateToy(any(Toy.class)))
+                        .willThrow(new ToyNotFoundException(givenId));
+            }
+
+            @Test
+            @DisplayName("404 Not Found를 응답한다.")
+            void it_respond_404_not_found() throws Exception {
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isNotFound());
+            }
         }
     }
 }
