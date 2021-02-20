@@ -1,66 +1,36 @@
 package com.codesoom.assignment.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+@Accessors(fluent = true)
+@Getter
 public class CatToy implements Toy {
     @Id
-    @GeneratedValue
-    private final Long id;
-    private final String name;
-    private final String brand;
-    private final Double price;
-    private final String imageURL;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
+    String name;
+    String brand;
+    Double price;
+    String imageURL;
 
-    @JsonCreator
     public CatToy(
-            @JsonProperty("id") Long id,
-            @JsonProperty("name") String name,
-            @JsonProperty("brand") String brand,
-            @JsonProperty("price") Double price,
-            @JsonProperty("imageURL") String imageURL
+            Long id, String name, String brand, Double price, String imageURL
     ) {
         this.id = id;
         this.name = name;
         this.brand = brand;
         this.price = price;
         this.imageURL = imageURL;
-    }
-
-    @Override
-    @JsonGetter
-    public Long id() {
-        return this.id;
-    }
-
-    @Override
-    @JsonGetter
-    public String name() {
-        return this.name;
-    }
-
-    @Override
-    @JsonGetter
-    public String brand() {
-        return this.brand;
-    }
-
-    @Override
-    @JsonGetter
-    public Double price() {
-        return this.price;
-    }
-
-    @Override
-    @JsonGetter
-    public String imageURL() {
-        return this.imageURL;
     }
 
     @Override
