@@ -6,7 +6,7 @@ public class Product {
     private String maker;
     private Integer price;
 
-    public Product(Long id, String name, String maker, int price) {
+    public Product(Long id, String name, String maker, Integer price) {
         this.id = id;
         this.name = name;
         this.maker = maker;
