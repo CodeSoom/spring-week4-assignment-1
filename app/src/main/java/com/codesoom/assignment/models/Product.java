@@ -7,6 +7,7 @@ public class Product {
 
     private Long id;
 
+
     private String maker;
 
     private Integer price;
@@ -29,13 +30,18 @@ public class Product {
         this.price = price;
     }
 
-//    public ProductWithoutId(String name, String maker, Integer price, String imageUrl) {
-//        this.name = name;
-//        this.id = id;
-//        this.maker = maker;
-//        this.price = price;
-//        this.imageUrl = imageUrl;
-//    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
     public String getName() {
         return name;
