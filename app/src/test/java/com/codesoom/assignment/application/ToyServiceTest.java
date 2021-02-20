@@ -84,8 +84,7 @@ class ToyServiceTest {
             private List<Toy> givenToyList;
             @BeforeEach
             void setSavedToy() {
-                givenToyList = new ArrayList<Toy>();
-                givenToyList.add(toy);
+                givenToyList = List.of(toy);
 
                 given(toyRepository.findAll()).willReturn(givenToyList);
             }

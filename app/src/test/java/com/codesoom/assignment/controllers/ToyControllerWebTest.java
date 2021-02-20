@@ -97,8 +97,7 @@ class ToyControllerWebTest {
         class Context_with_toy {
             @BeforeEach
             void setSavedToy() {
-                toyList = new ArrayList<Toy>();
-                toyList.add(toy);
+                toyList = List.of(toy);
 
                 given(toyService.getToys()).willReturn(toyList);
             }
