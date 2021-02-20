@@ -73,4 +73,25 @@ class ProductRepositoryTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("save")
+    class Describe_save {
+
+        @DisplayName("상품을 저장하고 저장된 상품을 id와 리턴한다")
+        @Test
+        void it_saves_product_and_returns_with_id() {
+            Product product = Product.builder()
+                    .name("product")
+                    .maker("maker")
+                    .price(100)
+                    .image("imageUrl")
+                    .build();
+
+            Product savedProduct = productRepository.save(product);
+
+            assertThat(savedProduct).isEqualTo(product);
+            assertThat(savedProduct.getId()).isNotNull();
+        }
+    }
 }
