@@ -28,4 +28,8 @@ public class ProductController {
     public Product updateProduct(Product product) {
         return productService.updateProduct(product);
     }
+
+    public void deleteProduct(Product product) {
+        productService.deleteProduct(product);
+    }
 }

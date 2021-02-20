@@ -31,4 +31,7 @@ public class ProductService {
     public Product updateProduct(Product product) {
         return null;
     }
+
+    public void deleteProduct(Product product) {
+    }
 }
