@@ -1,13 +1,31 @@
 package com.codesoom.assignment.domain;
 
 public class Product {
-    private final String name;
+    private Long id;
+    private String name;
+    private String maker;
+    private Integer price;
 
-    public Product(String name) {
+    public Product(Long id, String name, String maker, int price) {
+        this.id = id;
         this.name = name;
+        this.maker = maker;
+        this.price = price;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public int getPrice() {
+        return price;
     }
 }
