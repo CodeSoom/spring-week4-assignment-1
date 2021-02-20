@@ -8,17 +8,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter
-@Setter
 public class Product {
 
     @Id
     @GeneratedValue
+    @Setter
+    @Getter
     private Long id;
 
+    @Setter
+    @Getter
     private String name;
+    @Setter
+    @Getter
     private String maker;
+    @Setter
+    @Getter
     private int price;
+    @Setter
+    @Getter
     private String imageUrl;
 
     public Product() {
