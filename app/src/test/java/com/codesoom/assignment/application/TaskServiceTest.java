@@ -22,6 +22,7 @@ class TaskServiceTest {
     private TaskService taskService;
     private static final String TASK_TITLE = "test";
     private static final String POST_FIX = "???";
+    private static final String CREATE_POST_FIX = "!!!";
 
     private TaskRepository taskRepository;
 
@@ -30,6 +31,12 @@ class TaskServiceTest {
         taskRepository = mock(TaskRepository.class);
         taskService = new TaskService(taskRepository);
 
+        setUpFixtures();
+        setUpSaveTask();
+    }
+
+
+    void setUpFixtures() {
         List<Task> tasks = new ArrayList<>();
 
         Task task = new Task();
@@ -41,6 +48,15 @@ class TaskServiceTest {
 
         given(taskRepository.findById(1L)).willReturn(Optional.of(task));
         given(taskRepository.findById(100L)).willReturn(Optional.empty());
+    }
+
+
+    void setUpSaveTask() {
+        given(taskRepository.save(any(Task.class))).will(invocation -> {
+            Task task = invocation.getArgument(0);
+            task.setId(2L);
+            return task;
+        });
     }
 
 
@@ -74,32 +90,38 @@ class TaskServiceTest {
 
     @Test
     void createTask() {
-        Task task = new Task();
-        task.setTitle(TASK_TITLE);
+        Task source = new Task();
+        source.setTitle(TASK_TITLE + CREATE_POST_FIX);
 
-        taskService.createTask(task);
+        Task task = taskService.createTask(source);
 
         verify(taskRepository).save(any(Task.class));
+
+        assertThat(task.getId()).isEqualTo(2L);
+        assertThat(task.getTitle()).isEqualTo(TASK_TITLE + CREATE_POST_FIX);
     }
 
-//    @Test
-//    void updateTaskWithValidId() {
-//       Task source = new Task();
-//       source.setTitle(TASK_TITLE + POST_FIX);
-//
-//       taskService.updateTask(1L, source);
-//
-//       Task task = taskService.getTask(1L);
-//       assertThat(task.getTitle()).isEqualTo(TASK_TITLE + POST_FIX);
-//    }
-//
-//    @Test
-//    void updateTaskWithInvalidId() {
-//        Task source = new Task();
-//        assertThatThrownBy(() -> taskService.updateTask(100L, source))
-//                .isInstanceOf(TaskNotFoundException.class);
-//    }
-//
+    @Test
+    void updateTaskWithValidId() {
+       Task source = new Task();
+       source.setTitle(TASK_TITLE + POST_FIX);
+
+       Task task = taskService.updateTask(1L, source);
+
+       verify(taskRepository).findById(1L);
+
+       assertThat(task.getTitle()).isEqualTo(TASK_TITLE + POST_FIX);
+    }
+
+    @Test
+    void updateTaskWithInvalidId() {
+        Task source = new Task();
+        assertThatThrownBy(() -> taskService.updateTask(100L, source))
+                .isInstanceOf(TaskNotFoundException.class);
+
+        verify(taskRepository).findById(100L);
+    }
+
 //    @Test
 //    void deleteTaskWithValidId() {
 //        int oldSize = taskService.getTasks().size();
