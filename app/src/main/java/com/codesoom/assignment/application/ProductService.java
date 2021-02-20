@@ -27,4 +27,8 @@ public class ProductService {
     public Product getProduct(Long id) {
         return null;
     }
+
+    public Product updateProduct(Product product) {
+        return null;
+    }
 }

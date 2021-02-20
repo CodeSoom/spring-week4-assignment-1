@@ -24,4 +24,8 @@ public class ProductController {
     public Product createProduct(Product product) {
         return productService.createProduct(product);
     }
+
+    public Product updateProduct(Product product) {
+        return productService.updateProduct(product);
+    }
 }
