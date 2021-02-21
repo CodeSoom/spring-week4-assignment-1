@@ -25,7 +25,9 @@ public class ProductApplicationServiceTest {
     Product createdProduct;
 
     String name;
+    String newName;
     String maker;
+    String newMaker;
     String price;
     String imageURL;
 
@@ -95,5 +97,21 @@ public class ProductApplicationServiceTest {
             ProductNotFoundException.class,
             () -> applicationService.deleteProduct(productRepository.nextId().id())
         );
+    }
+
+    @When("생성된 product를 변경하면")
+    public void updateCreatedProduct() {
+        newMaker = "라스 공장";
+        newName = "라스 동화책";
+        applicationService.updateProduct(createdProduct.productId().id());
+    }
+
+    @When("변경된 product는 변경된 값을 갖고있다")
+    public void productHasUpdatedVariables() {
+        Optional<Product> updatedProduct = applicationService.getProduct(createdProduct.productId().id());
+
+        assertThat(updatedProduct).isNotEmpty();
+        assertThat(updatedProduct.get().getName()).isEqualTo(newName);
+        assertThat(updatedProduct.get().getMaker()).isEqualTo(newMaker);
     }
 }

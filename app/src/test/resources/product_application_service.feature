@@ -24,3 +24,8 @@ Feature: ProductApplicationService
   Scenario: 생성되지 않은 product를 삭제한다.
     Given product를 0개 생성했을 때
     When 생성되지않은 product를 삭제하면 에러가 발생한다
+
+  Scenario: 생성된 product를 변경한다.
+    Given product를 1개 생성했을 때
+    When 생성된 product를 변경하면
+    When 변경된 product는 변경된 값을 갖고있다

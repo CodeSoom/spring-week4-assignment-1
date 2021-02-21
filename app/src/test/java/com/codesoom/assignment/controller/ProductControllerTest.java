@@ -100,7 +100,7 @@ public class ProductControllerTest {
         ProductDTO product = new ProductDTO(null, name, maker, price, imageURL);
         ProductDTO createdProduct = controller.createProduct(product);
 
-        updatedProduct = controller.updateProduct(createdProduct.id, product);
+        ProductDTO updatedProduct = controller.updateProduct(createdProduct.id, product);
 
         assertThat(updatedProduct).isNotEmpty();
         assertThat(updatedProduct.id).isEqualTo(createdProduct.id);
