@@ -1,17 +1,30 @@
-## Mac OS x
-.DS_*
+# Ignore Gradle project-specific cache directory
+.gradle
+**/build/
+!src/**/build/
+caches
+daemon
+native
+notifications
+out
 
-## IntelliJ
-.idea
+# Ignore Gradle build output directory
+build
 
-## VS Code
+# VS Code
 .vscode
 
-## CodeceptJS
-output
+# Intellij IDEA
+.idea
 
-## Node.js
-node_modules
+# macOS
+.DS_Store
 
-## Jest
-coverage
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# class File
+*.class
