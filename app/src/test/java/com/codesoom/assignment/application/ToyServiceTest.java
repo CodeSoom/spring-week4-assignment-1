@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
+import com.codesoom.assignment.fixture.Given;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,42 +21,34 @@ import static org.mockito.Mockito.*;
 @DataJpaTest
 @DisplayName("ToyService의")
 class ToyServiceTest {
-    private final Long givenSavedId = 1L;
-    private final Long givenUnsavedId = 100L;
-    private final String givenName = "장난감 칼";
-    private final String givenBrand = "코드숨";
-    private final int givenPrice = 5000;
-    private final String givenImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
-    private final String givenUpdatePostfixText = "+";
-    private final int givenUpdatePostfixNumber = 1;
-
     private ToyService toyService;
     private ToyRepository toyRepository;
     private Toy toy;
+
+    private Given given = new Given();
 
     @BeforeEach
     void setUp() {
         toyRepository = mock(ToyRepository.class);
         toyService = new ToyService(toyRepository);
 
-        toy = new Toy(givenName, givenBrand, givenPrice, givenImageUrl);
-        toy.setId(givenSavedId);
+        toy = given.newToy();
     }
 
     private void assertCreatedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
-        assertThat(toy.getName()).isEqualTo(givenName);
-        assertThat(toy.getMaker()).isEqualTo(givenBrand);
-        assertThat(toy.getPrice()).isEqualTo(givenPrice);
-        assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl);
+        assertThat(toy.getName()).isEqualTo(given.name);
+        assertThat(toy.getMaker()).isEqualTo(given.maker);
+        assertThat(toy.getPrice()).isEqualTo(given.price);
+        assertThat(toy.getImageUrl()).isEqualTo(given.imageUrl);
     }
 
     private void assertModifiedToy(Toy toy) {
         assertThat(toy.getClass()).isEqualTo(Toy.class);
-        assertThat(toy.getName()).isEqualTo(givenName + givenUpdatePostfixText);
-        assertThat(toy.getMaker()).isEqualTo(givenBrand + givenUpdatePostfixText);
-        assertThat(toy.getPrice()).isEqualTo(givenPrice + givenUpdatePostfixNumber);
-        assertThat(toy.getImageUrl()).isEqualTo(givenImageUrl + givenUpdatePostfixText);
+        assertThat(toy.getName()).isEqualTo(given.name + given.updatePostfixText);
+        assertThat(toy.getMaker()).isEqualTo(given.maker + given.updatePostfixText);
+        assertThat(toy.getPrice()).isEqualTo(given.price + given.updatePostfixNumber);
+        assertThat(toy.getImageUrl()).isEqualTo(given.imageUrl + given.updatePostfixText);
     }
 
     @Nested
@@ -110,7 +103,7 @@ class ToyServiceTest {
 
             @BeforeEach
             void setSavedId() {
-                givenId = givenSavedId;
+                givenId = given.savedId;
 
                 given(toyRepository.findById(givenId)).willReturn(Optional.of(toy));
             }
@@ -131,7 +124,7 @@ class ToyServiceTest {
         class Context_when_find_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedId;
+                givenId = given.unsavedId;
             }
 
             @Test
@@ -171,17 +164,6 @@ class ToyServiceTest {
         private Long givenId;
         private Toy modifying;
 
-        @BeforeEach
-        void setModifiedToy() {
-            modifying = new Toy(
-                    givenName + givenUpdatePostfixText,
-                    givenBrand + givenUpdatePostfixText,
-                    givenPrice + givenUpdatePostfixNumber,
-                    givenImageUrl + givenUpdatePostfixText
-            );
-            modifying.setId(givenSavedId);
-        }
-
         @Nested
         @DisplayName("저장된 toy의 id를 가지고 있다면")
         class Context_with_saved_id {
@@ -189,9 +171,10 @@ class ToyServiceTest {
 
             @BeforeEach
             void setSavedId() {
-                givenId = givenSavedId;
+                givenId = given.savedId;
+                modifying = given.modifiedToy(givenId);
 
-                given(toyRepository.findById(givenId)).willReturn(Optional.of(toy));
+                given(toyRepository.findById(givenId)).willReturn(Optional.of(modifying));
             }
 
             @Test
@@ -210,8 +193,8 @@ class ToyServiceTest {
         class Context_when_update_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedId;
-                modifying.setId(givenId);
+                givenId = given.unsavedId;
+                modifying = given.modifiedToy(givenId);
 
                 given(toyRepository.findById(givenId)).willThrow(ToyNotFoundException.class);
             }
@@ -237,7 +220,7 @@ class ToyServiceTest {
         class Context_with_saved_id {
             @BeforeEach
             void setSavedId() {
-                givenId = givenSavedId;
+                givenId = given.savedId;
             }
 
             @Test
@@ -254,7 +237,7 @@ class ToyServiceTest {
         class Context_when_delete_unsaved_toy {
             @BeforeEach
             void setUnsavedId() {
-                givenId = givenUnsavedId;
+                givenId = given.unsavedId;
 
                 doThrow(EmptyResultDataAccessException.class).when(toyRepository).deleteById(givenId);
             }

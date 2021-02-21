@@ -30,4 +30,12 @@ public class Toy {
         this.price = price;
         this.imageUrl = imageUrl;
     }
+
+    public Toy(Long id, String name, String maker, int price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 }

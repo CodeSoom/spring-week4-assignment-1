@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.application.ToyService;
 import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.fixture.Given;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,15 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayName("ToyController 클래스가 받은 요청 중")
 class ToyControllerWebTest {
-    private final Long givenSavedId = 1L;
-    private final Long givenUnsavedId = 100L;
-    private final String givenName = "장난감 칼";
-    private final String givenBrand = "코드숨";
-    private final int givenPrice = 5000;
-    private final String givenImageUrl = "https://cdn.shopify.com/s/files/1/0940/6942/products/DSC0243_800x.jpg";
-    private final String givenUpdatePostfixText = "+";
-    private final int givenUpdatePostfixNumber = 1;
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -60,10 +52,11 @@ class ToyControllerWebTest {
     private ObjectMapper objectMapper = new ObjectMapper();
     private String toyJsonString;
 
+    private Given given = new Given();
+
     @BeforeEach
     void setUp() throws IOException {
-        toy = new Toy(givenName, givenBrand, givenPrice, givenImageUrl);
-        toy.setId(givenSavedId);
+        toy = given.newToy();
 
         outputStream = new ByteArrayOutputStream();
         objectMapper.writeValue(outputStream, toy);
@@ -127,7 +120,7 @@ class ToyControllerWebTest {
         class Context_with_saved_toy_id {
             @BeforeEach
             void setRequest() {
-                givenId = givenSavedId;
+                givenId = given.savedId;
                 uriTemplate = String.format(stringFormat, givenId);
                 requestBuilder = get(uriTemplate);
             }
@@ -148,7 +141,7 @@ class ToyControllerWebTest {
         class Context_with_unsaved_toy_id {
             @BeforeEach
             void setRequest() {
-                givenId = givenUnsavedId;
+                givenId = given.unsavedId;
                 uriTemplate = String.format(stringFormat, givenId);
                 requestBuilder = get(uriTemplate);
             }
@@ -157,7 +150,7 @@ class ToyControllerWebTest {
             @DisplayName("404 Not Found를 응답한다.")
             void it_respond_404_not_found() throws Exception {
                 given(toyService.getToy(givenId))
-                        .willThrow(new ToyNotFoundException(givenUnsavedId));
+                        .willThrow(new ToyNotFoundException(givenId));
 
                 mockMvc.perform(requestBuilder)
                         .andExpect(status().isNotFound());
@@ -197,15 +190,9 @@ class ToyControllerWebTest {
         class Context_with_saved_toy_id {
             @BeforeEach
             void setRequest() throws IOException {
-                givenId = givenSavedId;
+                givenId = given.savedId;
 
-                toy = new Toy(
-                        givenName + givenUpdatePostfixText,
-                        givenBrand + givenUpdatePostfixText,
-                        givenPrice + givenUpdatePostfixNumber,
-                        givenImageUrl + givenUpdatePostfixText
-                );
-                toy.setId(givenSavedId);
+                toy = given.modifiedToy(givenId);
 
                 outputStream = new ByteArrayOutputStream();
                 objectMapper.writeValue(outputStream, toy);
@@ -233,14 +220,8 @@ class ToyControllerWebTest {
         class Context_with_unsaved_toy_id {
             @BeforeEach
             void setRequest() throws IOException {
-                givenId = givenUnsavedId;
-                toy = new Toy(
-                        givenName + givenUpdatePostfixText,
-                        givenBrand + givenUpdatePostfixText,
-                        givenPrice + givenUpdatePostfixNumber,
-                        givenImageUrl + givenUpdatePostfixText
-                );
-                toy.setId(givenSavedId);
+                givenId = given.unsavedId;
+                toy = given.modifiedToy(givenId);
 
                 outputStream = new ByteArrayOutputStream();
                 objectMapper.writeValue(outputStream, toy);
@@ -275,7 +256,7 @@ class ToyControllerWebTest {
         class Context_with_saved_toy_id {
             @BeforeEach
             void setRequest() {
-                givenId = givenSavedId;
+                givenId = given.savedId;
 
                 uriTemplate = String.format(stringFormat, givenId);
                 requestBuilder = delete(uriTemplate);
@@ -296,7 +277,7 @@ class ToyControllerWebTest {
         class Context_with_unsaved_toy_id {
             @BeforeEach
             void setRequest() {
-                givenId = givenUnsavedId;
+                givenId = given.unsavedId;
 
                 uriTemplate = String.format(stringFormat, givenId);
                 requestBuilder = delete(uriTemplate);
