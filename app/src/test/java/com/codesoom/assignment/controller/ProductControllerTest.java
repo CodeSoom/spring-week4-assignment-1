@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProductControllerTest {
@@ -66,5 +67,19 @@ public class ProductControllerTest {
 
         assertThat(createdProduct).isNotNull();
         assertThat(createdProduct.name).isEqualTo(name);
+    }
+
+    @Test
+    void deleteProduct() {
+        String name = "고양이 인형";
+        String maker = "라스 공방";
+        String price = "1000원";
+        String imageURL = "https://magical.dev/static/las.jpg";
+        ProductDTO product = new ProductDTO(null, name, maker, price, imageURL);
+        ProductDTO createdProduct = controller.createProduct(product);
+
+        assertDoesNotThrow(
+            () -> controller.deleteProduct(createdProduct.id)
+        );
     }
 }
