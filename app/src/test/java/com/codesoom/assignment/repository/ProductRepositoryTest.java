@@ -106,6 +106,12 @@ class ProductRepositoryTest {
         class Context_with_not_existing_product_id {
             private final Long notExistingId = 100L;
 
+            @BeforeEach
+            void prepareNotExistingId() {
+                productRepository.findById(notExistingId)
+                        .ifPresent(product -> productRepository.delete(product));
+            }
+
             @Test
             @DisplayName("비어있는 optional 상품을 리턴한다.")
             void it_returns_optional_product_with_value() {
