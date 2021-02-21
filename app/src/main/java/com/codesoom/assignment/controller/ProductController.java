@@ -27,9 +27,12 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductDTO getSpecificProduct(@PathVariable Long id) {
-        Optional<Product> product = this.applicationService.getProduct(id);
-        return ProductDTO.from(product.get());
+    public ProductDTO getSpecificProduct(@PathVariable Long id) throws ProductNotFoundException {
+        Product product = this.applicationService.getProduct(id).orElseThrow(
+                () -> new ProductNotFoundException(id)
+        );
+
+        return ProductDTO.from(product);
     }
 
     @PostMapping
