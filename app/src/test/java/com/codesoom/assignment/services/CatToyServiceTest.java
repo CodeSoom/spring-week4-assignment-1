@@ -16,8 +16,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("CatToyService 클래스")
 class CatToyServiceTest {
-    private final Toy givenToy1 = new CatToy(0L, "캣닢", "(주)고양이컴퍼니", 1000D, "https://cat.toy/cat-nip.png");
-    private final Toy givenToy2 = new CatToy(1L, "캣타워", "(주)고양이컴퍼니", 10000D, "https://cat.toy/cat-tower.png");
+    private final Toy givenToy1 = new CatToy(0L, "cat nip", "cat company. co", 1000D, "https://cat.toy/cat-nip.png");
+    private final Toy givenToy2 = new CatToy(1L, "cat tower", "cat company. co", 10000D, "https://cat.toy/cat-tower.png");
 
     private ToyRepository toyRepository;
     private ToyService catToyService;
