@@ -43,4 +43,16 @@ public class ProductControllerTest {
         assertThat(product).isNotNull();
         assertThat(product.id).isEqualTo(createdProduct.productId().id());
     }
+
+    @Test
+    void createProduct() {
+        String name = "고양이 인형";
+        String maker = "라스 공방";
+        String price = "1000원";
+        String imageURL = "https://magical.dev/static/las.jpg";
+
+        ProductDTO product = controller.createProduct(name, maker, price, imageURL);
+
+        assertThat(product).isNotNull();
+    }
 }
