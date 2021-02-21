@@ -50,9 +50,10 @@ public class ProductControllerTest {
         String maker = "라스 공방";
         String price = "1000원";
         String imageURL = "https://magical.dev/static/las.jpg";
+        ProductDTO product = new ProductDTO(null, name, maker, price, imageURL);
 
-        ProductDTO product = controller.createProduct(name, maker, price, imageURL);
+        ProductDTO createdProduct = controller.createProduct(product);
 
-        assertThat(product).isNotNull();
+        assertThat(createdProduct).isNotNull();
     }
 }
