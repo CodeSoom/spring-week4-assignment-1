@@ -121,4 +121,22 @@ public class ProductApplicationServiceTest {
         assertThat(updatedProduct.get().getPrice()).isEqualTo(newPrice);
         assertThat(updatedProduct.get().getImageURL()).isEqualTo(newImageURL);
     }
+
+    @When("생성되지 않은 product를 변경하면 에러가 발생한다")
+    public void updateNotCreatedProduct() throws ProductNotFoundException {
+        newMaker = "라스 공장";
+        newName = "라스 동화책";
+        newPrice = "2000";
+        newImageURL = "https://magical.dev/statics/las.jpg";
+        Assertions.assertThrows(
+            ProductNotFoundException.class,
+            () -> applicationService.updateProduct(
+                productRepository.nextId().id(),
+                newName,
+                newMaker,
+                newPrice,
+                newImageURL
+            )
+        );
+    }
 }
