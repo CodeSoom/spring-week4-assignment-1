@@ -6,6 +6,8 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
@@ -55,5 +57,6 @@ public class ProductControllerTest {
         ProductDTO createdProduct = controller.createProduct(product);
 
         assertThat(createdProduct).isNotNull();
+        assertThat(createdProduct.name).isEqualTo(name);
     }
 }

@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductApplicationService;
 import com.codesoom.assignment.domain.Product;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,8 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDTO createProduct(ProductDTO product) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductDTO createProduct(@RequestBody ProductDTO product) {
         Product createdProduct = applicationService.createProduct(product.name, product.maker, product.price, product.imageURL);
         return ProductDTO.from(createdProduct);
     }
