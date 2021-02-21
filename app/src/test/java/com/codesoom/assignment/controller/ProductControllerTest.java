@@ -90,4 +90,19 @@ public class ProductControllerTest {
             () -> controller.deleteProduct(repository.nextId().id())
         );
     }
+
+    @Test
+    void updateProduct() {
+        String name = "고양이 인형";
+        String maker = "라스 공방";
+        String price = "1000";
+        String imageURL = "https://magical.dev/static/las.jpg";
+        ProductDTO product = new ProductDTO(null, name, maker, price, imageURL);
+        ProductDTO createdProduct = controller.createProduct(product);
+
+        updatedProduct = controller.updateProduct(createdProduct.id, product);
+
+        assertThat(updatedProduct).isNotEmpty();
+        assertThat(updatedProduct.id).isEqualTo(createdProduct.id);
+    }
 }
