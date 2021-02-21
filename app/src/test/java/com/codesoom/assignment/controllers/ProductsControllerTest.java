@@ -4,7 +4,7 @@ import com.codesoom.assignment.dto.CatToyDTO;
 import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
-import com.codesoom.assignment.repositories.ToyRepository;
+import com.codesoom.assignment.repositories.CatToyRepository;
 import com.codesoom.assignment.services.CatToyService;
 import com.codesoom.assignment.services.ToyService;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +23,8 @@ class ProductsControllerTest {
 
     @BeforeEach
     void setup() {
-        final ToyRepository toyRepository = new ToyRepository.Fake();
-        this.catToyService = new CatToyService(toyRepository);
+        final CatToyRepository catToyRepository = new CatToyRepository.Fake();
+        this.catToyService = new CatToyService(catToyRepository);
         this.productsController = new ProductsController(catToyService);
     }
 

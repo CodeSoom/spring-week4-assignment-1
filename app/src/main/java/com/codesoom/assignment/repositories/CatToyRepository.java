@@ -1,7 +1,6 @@
 package com.codesoom.assignment.repositories;
 
 import com.codesoom.assignment.models.CatToy;
-import com.codesoom.assignment.models.Toy;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,43 +9,43 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ToyRepository extends CrudRepository<Toy, Long> {
+public interface CatToyRepository extends CrudRepository<CatToy, Long> {
     @Override
-    List<Toy> findAll();
+    List<CatToy> findAll();
 
     @Override
-    Optional<Toy> findById(Long id);
+    Optional<CatToy> findById(Long id);
 
     @Override
-    Toy save(Toy toy);
+    <S extends CatToy> S save(S toy);
 
     @Override
     void deleteById(Long id);
 
-    final class Fake implements ToyRepository {
-        private final List<Toy> toys = new ArrayList<>();
+    final class Fake implements CatToyRepository {
+        private final List<CatToy> toys = new ArrayList<>();
 
         @Override
-        public List<Toy> findAll() {
+        public List<CatToy> findAll() {
             return toys;
         }
 
         @Override
-        public Optional<Toy> findById(Long id) {
+        public Optional<CatToy> findById(Long id) {
             if (toys.size() < id + 1) {
                 return Optional.empty();
             }
-            final Toy toy = toys.get(id.intValue());
+            final CatToy toy = toys.get(id.intValue());
             return Optional.of(toy);
         }
 
         @Override
-        public Toy save(Toy toy) {
+        public <S extends CatToy> S save(S toy) {
             final Long id = Integer.toUnsignedLong(toys.size());
-            final Toy newToy = new CatToy(id, toy.name(), toy.brand(), toy.price(), toy.imageURL());
+            final CatToy newToy = new CatToy(id, toy.name(), toy.brand(), toy.price(), toy.imageURL());
 
             toys.add(newToy);
-            return newToy;
+            return (S) newToy;
         }
 
         @Override
@@ -54,7 +53,7 @@ public interface ToyRepository extends CrudRepository<Toy, Long> {
             toys.remove(id.intValue());
         }
 
-        public Iterable<Toy> findAllById(Iterable<Long> longs) {
+        public Iterable<CatToy> findAllById(Iterable<Long> longs) {
             return null;
         }
 
@@ -66,14 +65,14 @@ public interface ToyRepository extends CrudRepository<Toy, Long> {
             return 0;
         }
 
-        public <S extends Toy> Iterable<S> saveAll(Iterable<S> entities) {
+        public <S extends CatToy> Iterable<S> saveAll(Iterable<S> entities) {
             return null;
         }
 
-        public void delete(Toy entity) {
+        public void delete(CatToy entity) {
         }
 
-        public void deleteAll(Iterable<? extends Toy> entities) {
+        public void deleteAll(Iterable<? extends CatToy> entities) {
         }
 
         public void deleteAll() {

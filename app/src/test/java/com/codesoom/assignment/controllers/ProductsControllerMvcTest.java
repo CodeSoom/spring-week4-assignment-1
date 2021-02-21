@@ -4,7 +4,7 @@ import com.codesoom.assignment.dto.CatToyDTO;
 import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
-import com.codesoom.assignment.repositories.ToyRepository;
+import com.codesoom.assignment.repositories.CatToyRepository;
 import com.codesoom.assignment.services.ToyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ class ProductsControllerMvcTest {
     private ToyService catToyService;
 
     @MockBean
-    private ToyRepository toyRepository;
+    private CatToyRepository catToyRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

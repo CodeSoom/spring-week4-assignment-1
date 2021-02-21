@@ -3,7 +3,7 @@ package com.codesoom.assignment.services;
 import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
-import com.codesoom.assignment.repositories.ToyRepository;
+import com.codesoom.assignment.repositories.CatToyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,13 +19,13 @@ class CatToyServiceTest {
     private final Toy givenToy1 = new CatToy(0L, "cat nip", "cat company. co", 1000D, "https://cat.toy/cat-nip.png");
     private final Toy givenToy2 = new CatToy(1L, "cat tower", "cat company. co", 10000D, "https://cat.toy/cat-tower.png");
 
-    private ToyRepository toyRepository;
+    private CatToyRepository catToyRepository;
     private ToyService catToyService;
 
     @BeforeEach
     void setup() {
-        toyRepository = new ToyRepository.Fake();
-        catToyService = new CatToyService(toyRepository);
+        catToyRepository = new CatToyRepository.Fake();
+        catToyService = new CatToyService(catToyRepository);
     }
 
     @Nested
@@ -36,8 +36,8 @@ class CatToyServiceTest {
         class Context_without_given_id {
             @BeforeEach
             void setup() {
-                toyRepository.save(givenToy1);
-                toyRepository.save(givenToy2);
+                catToyRepository.save((CatToy) givenToy1);
+                catToyRepository.save((CatToy) givenToy2);
             }
 
             @Test
@@ -70,7 +70,7 @@ class CatToyServiceTest {
             class Context_when_exist_given_id {
                 @BeforeEach
                 void setup() {
-                    toyRepository.save(givenToy1);
+                    catToyRepository.save((CatToy) givenToy1);
                 }
 
                 @Test
@@ -114,7 +114,7 @@ class CatToyServiceTest {
         class Context_when_exist_given_id {
             @BeforeEach
             void setup() {
-                toyRepository.save(givenToy1);
+                catToyRepository.save((CatToy) givenToy1);
             }
 
             private final Toy modifiedCatToy = new CatToy(givenToy1.id(), "마따따비 막대", givenToy1.brand(), givenToy1.price(), givenToy1.imageURL());
@@ -150,7 +150,7 @@ class CatToyServiceTest {
         class Context_when_exist_given_id {
             @BeforeEach
             void setup() {
-                toyRepository.save(givenToy1);
+                catToyRepository.save((CatToy) givenToy1);
             }
 
             @Test
