@@ -36,8 +36,6 @@ class ProductsControllerMvcTest {
     @MockBean
     private ToyService catToyService;
 
-    private ProductsController productsController;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final Toy givenToy1 = new CatToy(0L, "cat nip", "cat company. co", 1000D, "https://cat.toy/cat-nip.png");
@@ -107,7 +105,7 @@ class ProductsControllerMvcTest {
     }
 
     @Nested
-    @DisplayName("createProduct 메서드는")
+    @DisplayName("[POST] /products 요청은")
     class Describe_createProduct {
         @Test
         @DisplayName("주어진 장난감을 저장한다.")
@@ -121,7 +119,7 @@ class ProductsControllerMvcTest {
     }
 
     @Nested
-    @DisplayName("updateProduct 메서드는")
+    @DisplayName("[PATCH] /products/{id} 요청은")
     class Describe_updateProduct {
         private final Toy modifiedToy1 = new CatToy(givenToy1.id(), "mattattabi stick", givenToy1.brand(), 2000D, "https://cat.toy/maddaddabi-stick.png");
 
@@ -149,7 +147,7 @@ class ProductsControllerMvcTest {
         class Context_when_exist_toy_id {
             @BeforeEach
             void setup() {
-                Mockito.doNothing().when(catToyService);
+                Mockito.doNothing().when(catToyService).modify(any(Long.class), any(Toy.class));
             }
 
             @Test
@@ -165,14 +163,21 @@ class ProductsControllerMvcTest {
     }
 
     @Nested
-    @DisplayName("deleteProduct 메서드는")
+    @DisplayName("[DELETE] /products/{id} 요청은")
     class Describe_deleteProduct {
         @Nested
         @DisplayName("주어진 id의 장난감을 찾을 수 없을 때")
         class Context_when_not_exist_toy_id {
+            @BeforeEach
+            void setup() {
+                Mockito.doThrow(ToyNotFoundException.class).when(catToyService).delete(any(Long.class));
+            }
+
             @Test
             @DisplayName("status not found 를 응답한다.")
-            void It_throws_toy_not_found_exception() {
+            void It_throws_toy_not_found_exception() throws Exception {
+                mockMvc.perform(delete("/products/{id}", givenToy1.id()))
+                        .andExpect(status().isNotFound());
             }
         }
 
@@ -181,12 +186,14 @@ class ProductsControllerMvcTest {
         class Context_when_exist_toy_id {
             @BeforeEach
             void setup() {
-                catToyService.insert(givenToy1);
+                Mockito.doNothing().when(catToyService).delete(any(Long.class));
             }
 
             @Test
-            @DisplayName("주어진 id의 장난감을 삭제한다.")
-            void It_delete_given_id_toy() {
+            @DisplayName("status no content 를 응답한다.")
+            void It_respond_status_no_content() throws Exception {
+                mockMvc.perform(delete("/products/{id}", givenToy1.id()))
+                        .andExpect(status().isNoContent());
             }
         }
     }
