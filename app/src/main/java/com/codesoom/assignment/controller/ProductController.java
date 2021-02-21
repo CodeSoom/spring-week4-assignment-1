@@ -43,9 +43,9 @@ public class ProductController {
         return ProductDTO.from(createdProduct);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(Long id) {
+    public void deleteProduct(@PathVariable Long id) {
         applicationService.deleteProduct(id);
     }
 }
