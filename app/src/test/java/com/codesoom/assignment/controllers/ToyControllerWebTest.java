@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -57,9 +55,12 @@ class ToyControllerWebTest {
     @BeforeEach
     void setUp() throws IOException {
         toy = given.newToy();
+        setToyJsonString(toy);
+    }
 
+    private void setToyJsonString(Object value) throws IOException {
         outputStream = new ByteArrayOutputStream();
-        objectMapper.writeValue(outputStream, toy);
+        objectMapper.writeValue(outputStream, value);
         toyJsonString = outputStream.toString();
     }
 
@@ -89,8 +90,9 @@ class ToyControllerWebTest {
         @DisplayName("저장된 toy가 있다면,")
         class Context_with_toy {
             @BeforeEach
-            void setSavedToy() {
+            void setSavedToy() throws IOException {
                 toyList = List.of(toy);
+                setToyJsonString(toyList);
 
                 given(toyService.getToys()).willReturn(toyList);
             }
@@ -98,10 +100,6 @@ class ToyControllerWebTest {
             @Test
             @DisplayName("200 Ok와 비어있지 않은 toy리스트를 응답한다.")
             void it_responds_200_ok_and_not_empty_list() throws Exception {
-                outputStream = new ByteArrayOutputStream();
-                objectMapper.writeValue(outputStream, toyList);
-                toyJsonString = outputStream.toString();
-
                 mockMvc.perform(requestBuilder)
                         .andExpect(status().isOk())
                         .andExpect(content().json(toyJsonString));
@@ -191,12 +189,8 @@ class ToyControllerWebTest {
             @BeforeEach
             void setRequest() throws IOException {
                 givenId = given.savedId;
-
                 toy = given.modifiedToy(givenId);
-
-                outputStream = new ByteArrayOutputStream();
-                objectMapper.writeValue(outputStream, toy);
-                toyJsonString = outputStream.toString();
+                setToyJsonString(toy);
 
                 uriTemplate = String.format(stringFormat, givenId);
                 requestBuilder = patch(uriTemplate)
@@ -222,10 +216,7 @@ class ToyControllerWebTest {
             void setRequest() throws IOException {
                 givenId = given.unsavedId;
                 toy = given.modifiedToy(givenId);
-
-                outputStream = new ByteArrayOutputStream();
-                objectMapper.writeValue(outputStream, toy);
-                toyJsonString = outputStream.toString();
+                setToyJsonString(toy);
 
                 uriTemplate = String.format(stringFormat, givenId);
                 requestBuilder = patch(uriTemplate)

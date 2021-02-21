@@ -1,6 +1,7 @@
 package com.codesoom.assignment.fixture;
 
 import com.codesoom.assignment.domain.Toy;
+import org.springframework.test.web.servlet.RequestBuilder;
 
 public class Given {
     public final Long savedId = 1L;
