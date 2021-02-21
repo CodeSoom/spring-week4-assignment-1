@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,5 +42,9 @@ public class CatToyDTO {
         this.maker = toy.brand();
         this.price = toy.price();
         this.imageUrl = toy.imageURL();
+    }
+
+    public Toy toEntity() {
+        return new CatToy(null, this.name, this.maker, this.price, this.imageUrl);
     }
 }

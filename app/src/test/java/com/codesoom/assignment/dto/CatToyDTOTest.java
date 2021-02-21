@@ -63,4 +63,14 @@ class CatToyDTOTest {
         assertThat(catToyDTO.price()).isEqualTo(givenCatToy.price());
         assertThat(catToyDTO.imageUrl()).isEqualTo(givenCatToy.imageURL());
     }
+
+    @Test
+    void toEntity() {
+        Toy toy = givenCatToyDTO.toEntity();
+
+        assertThat(givenCatToyDTO.name()).isEqualTo(toy.name());
+        assertThat(givenCatToyDTO.maker()).isEqualTo(toy.brand());
+        assertThat(givenCatToyDTO.price()).isEqualTo(toy.price());
+        assertThat(givenCatToyDTO.imageUrl()).isEqualTo(toy.imageURL());
+    }
 }
