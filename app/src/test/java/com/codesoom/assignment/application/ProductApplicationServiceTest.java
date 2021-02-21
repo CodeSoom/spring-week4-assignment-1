@@ -25,11 +25,14 @@ public class ProductApplicationServiceTest {
     Product createdProduct;
 
     String name;
-    String newName;
     String maker;
-    String newMaker;
     String price;
     String imageURL;
+
+    String newName;
+    String newMaker;
+    String newPrice;
+    String newImageURL;
 
     @Given("product를 {int}개 생성했을 때")
     public void createProduct(int count) {
@@ -100,10 +103,12 @@ public class ProductApplicationServiceTest {
     }
 
     @When("생성된 product를 변경하면")
-    public void updateCreatedProduct() {
+    public void updateCreatedProduct() throws ProductNotFoundException {
         newMaker = "라스 공장";
         newName = "라스 동화책";
-        applicationService.updateProduct(createdProduct.productId().id());
+        newPrice = "2000";
+        newImageURL = "https://magical.dev/statics/las.jpg";
+        applicationService.updateProduct(createdProduct.productId().id(), newName, newMaker, newPrice, newImageURL);
     }
 
     @When("변경된 product는 변경된 값을 갖고있다")
@@ -113,5 +118,7 @@ public class ProductApplicationServiceTest {
         assertThat(updatedProduct).isNotEmpty();
         assertThat(updatedProduct.get().getName()).isEqualTo(newName);
         assertThat(updatedProduct.get().getMaker()).isEqualTo(newMaker);
+        assertThat(updatedProduct.get().getPrice()).isEqualTo(newPrice);
+        assertThat(updatedProduct.get().getImageURL()).isEqualTo(newImageURL);
     }
 }

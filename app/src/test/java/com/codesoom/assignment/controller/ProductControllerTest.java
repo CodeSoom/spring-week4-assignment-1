@@ -92,7 +92,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void updateProduct() {
+    void updateProduct() throws ProductNotFoundException {
         String name = "고양이 인형";
         String maker = "라스 공방";
         String price = "1000";
@@ -102,7 +102,6 @@ public class ProductControllerTest {
 
         ProductDTO updatedProduct = controller.updateProduct(createdProduct.id, product);
 
-        assertThat(updatedProduct).isNotEmpty();
         assertThat(updatedProduct.id).isEqualTo(createdProduct.id);
     }
 }

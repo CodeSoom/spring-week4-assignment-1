@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductApplicationService;
 import com.codesoom.assignment.domain.Product;
-import org.checkerframework.dataflow.qual.Deterministic;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +51,18 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
         applicationService.deleteProduct(id);
+    }
+
+    @PatchMapping("/{id}")
+    public ProductDTO updateProduct(@PathVariable Long id, @RequestBody ProductDTO product) throws ProductNotFoundException {
+        applicationService.updateProduct(
+            id,
+            product.name,
+            product.maker,
+            Integer.toString(product.price),
+            product.imageURL
+        );
+        Optional<Product> updatedProduct = applicationService.getProduct(id);
+        return ProductDTO.from(updatedProduct.get());
     }
 }

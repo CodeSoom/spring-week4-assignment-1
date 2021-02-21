@@ -44,4 +44,11 @@ public class Product {
     public String getImageURL() {
         return imageURL;
     }
+
+    public void updateInformation(String newName, String newMaker, String newPrice, String newImageURL) {
+        this.name = newName;
+        this.maker = newMaker;
+        this.price = newPrice;
+        this.imageURL = newImageURL;
+    }
 }

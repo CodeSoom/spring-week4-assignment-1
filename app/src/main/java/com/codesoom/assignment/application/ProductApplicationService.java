@@ -32,10 +32,10 @@ public class ProductApplicationService {
 
     /**
      * product를 생성합니다.
-     * 
-     * @param name 생성될 product의 이름
-     * @param maker 생성될 product의 제조회사
-     * @param price 생성될 product의 가격
+     *
+     * @param name     생성될 product의 이름
+     * @param maker    생성될 product의 제조회사
+     * @param price    생성될 product의 가격
      * @param imageURL 생성될 product의 이미지 주소
      * @return 생성된 product을 반환합니다.
      */
@@ -67,5 +67,13 @@ public class ProductApplicationService {
      */
     public Optional<Product> getProduct(Long id) {
         return productRepository.find(id);
+    }
+
+    public void updateProduct(Long id, String newName, String newMaker, String newPrice, String newImageURL) throws ProductNotFoundException {
+        Optional<Product> product = productRepository.find(id);
+        if (product.isEmpty()) {
+            throw new ProductNotFoundException(id);
+        }
+        product.get().updateInformation(newName, newMaker, newPrice, newImageURL);
     }
 }
