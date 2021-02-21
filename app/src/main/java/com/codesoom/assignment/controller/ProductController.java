@@ -28,7 +28,6 @@ public class ProductController {
             .collect(Collectors.toList());
     }
 
-    @GetMapping("{id}")
     public ProductDTO getSpecificProduct(@PathVariable Long id) {
         Optional<Product> product = this.applicationService.getProduct(id);
         return ProductDTO.from(product.get());

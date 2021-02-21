@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductId;
 import com.codesoom.assignment.domain.ProductRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import java.util.Optional;
 /**
  * product에 대한 use case들을 담당합니다.
  */
+@Service
 public class ProductApplicationService {
     ProductRepository productRepository;
 
