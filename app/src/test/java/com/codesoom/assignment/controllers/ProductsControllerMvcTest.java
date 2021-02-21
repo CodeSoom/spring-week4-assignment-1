@@ -5,6 +5,7 @@ import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
 import com.codesoom.assignment.services.ToyService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -91,12 +94,16 @@ class ProductsControllerMvcTest {
         class Context_when_exist_toy_id {
             @BeforeEach
             void setup() {
-                catToyService.insert(givenToy1);
+                given(catToyService.find(givenToy1.id()))
+                        .willReturn(givenToy1);
             }
 
             @Test
-            @DisplayName("장난감을 리턴한다.")
-            void It_returns_toy() {
+            @DisplayName("장난감을 응답한다.")
+            void It_respond_toy() throws Exception {
+                mockMvc.perform(get("/products/{id}", givenToy1.id()))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(objectMapper.writeValueAsString(givenToyDTO1)));
             }
         }
     }
@@ -106,7 +113,12 @@ class ProductsControllerMvcTest {
     class Describe_createProduct {
         @Test
         @DisplayName("주어진 장난감을 저장한다.")
-        void It_save_given_toy() {
+        void It_save_given_toy() throws Exception {
+            mockMvc.perform(
+                    post("/products")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(givenToy1))
+            ).andExpect(status().isCreated());
         }
     }
 

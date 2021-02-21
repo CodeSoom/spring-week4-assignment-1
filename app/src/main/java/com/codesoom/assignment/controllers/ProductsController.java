@@ -36,7 +36,9 @@ public class ProductsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@RequestBody Toy toy) {
+    public void createProduct(@RequestBody CatToyDTO toyDTO) {
+        Toy toy = toyDTO.toEntity();
+
         toyService.insert(toy);
     }
 
