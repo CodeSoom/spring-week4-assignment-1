@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductApplicationService;
 import com.codesoom.assignment.domain.Product;
+import org.checkerframework.dataflow.qual.Deterministic;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,8 @@ public class ProductController {
         return ProductDTO.from(createdProduct);
     }
 
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(Long id) {
         applicationService.deleteProduct(id);
     }
