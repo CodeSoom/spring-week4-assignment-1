@@ -18,26 +18,26 @@ public class ProductService {
     }
 
     /**
-     * 장난감을 생성해 반환합니다.
+     * 새로운 상품을 생성해 반환합니다.
      * @param product
-     * @return 장난감
+     * @return 상품
      */
     public Product createProduct(Product product) {
         return productRepository.save(product);
     }
 
     /**
-     * 장난감 목록을 반환합니다.
-     * @return 장난감 목록
+     * 상품 목록을 반환합니다.
+     * @return 상품 목록
      */
     public List<Product> getProducts() {
         return null;
     }
 
     /**
-     * 특정한 장난감을 반환합니다.
+     * 특정 상품을 반환합니다.
      * @param id
-     * @return 장난감
+     * @return 상품
      */
     public Product getProduct(Long id) {
         if (id == 100) {
@@ -47,10 +47,10 @@ public class ProductService {
     }
 
     /**
-     * 특정한 장난감을 업데이트 하여 반환합니다.
+     * 특정한 상품을 업데이트 하여 반환합니다.
      * @param id
      * @param product
-     * @return 수정된 장난감
+     * @return 수정된 상품
      */
     public Product updateProduct(Long id, Product product) {
         if (id == 100) {
@@ -60,9 +60,9 @@ public class ProductService {
     }
 
     /**
-     * 특정한 장난감을 지우고 반환합니다.
+     * 특정한 상품을 지우고 반환합니다.
      * @param id
-     * @return 지워진 장난
+     * @return 삭제된 상품
      */
     public Product deleteProduct(Long id) {
         if (id == 100) {
