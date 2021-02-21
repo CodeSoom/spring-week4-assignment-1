@@ -2,6 +2,7 @@ package com.codesoom.assignment.models;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
@@ -14,10 +15,11 @@ import javax.persistence.Id;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Accessors(fluent = true)
 @Getter
+@NoArgsConstructor
 public class CatToy implements Toy {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    final Long id;
+    Long id;
     String name;
     String brand;
     Double price;
