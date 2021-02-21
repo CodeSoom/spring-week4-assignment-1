@@ -18,7 +18,7 @@ public class ProductService {
     }
 
     /**
-     * 장난감을 생성하고 반환하는 메서드
+     * 장난감을 생성해 반환합니다.
      * @param product
      * @return 장난감
      */
@@ -27,7 +27,7 @@ public class ProductService {
     }
 
     /**
-     * 장난감 목록을 반환하는 메서드
+     * 장난감 목록을 반환합니다.
      * @return 장난감 목록
      */
     public List<Product> getProducts() {
@@ -35,7 +35,7 @@ public class ProductService {
     }
 
     /**
-     * 특정한 장난감을 반환하는 메서드
+     * 특정한 장난감을 반환합니다.
      * @param id
      * @return 장난감
      */
@@ -47,7 +47,7 @@ public class ProductService {
     }
 
     /**
-     * 특정한 장난감을 업데이트 하는 메서드
+     * 특정한 장난감을 업데이트 하여 반환합니다.
      * @param id
      * @param product
      * @return 수정된 장난감
@@ -60,7 +60,7 @@ public class ProductService {
     }
 
     /**
-     * 특정한 장난감을 지우는 메서드
+     * 특정한 장난감을 지우고 반환합니다.
      * @param id
      * @return 지워진 장난
      */
