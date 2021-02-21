@@ -35,11 +35,14 @@ public class ProductControllerWebTest {
 
     @BeforeEach
     void setUp() {
-
         List<Product> products = new ArrayList<>();
 
         Product product = new Product();
         product.setName("Test Product");
+
+        Product updated = new Product();
+        updated.setName("Renamed Product");
+
         products.add(product);
 
         given(productService.getProducts()).willReturn(products);
@@ -48,6 +51,9 @@ public class ProductControllerWebTest {
 
         given(productService.getProduct(100L))
                 .willThrow(new ProductNotFoundException(100L));
+
+        given(productService.updateProduct(eq(1L), any(Product.class)))
+                .willReturn(updated);
 
         given(productService.updateProduct(eq(100L), any(Product.class)))
                 .willThrow(new ProductNotFoundException(100L));
@@ -67,7 +73,7 @@ public class ProductControllerWebTest {
 
     @Test
     void detailWithValidId() throws Exception {
-        mockMvc.perform(get("/products/"))
+        mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Test Product")));
 
@@ -101,7 +107,8 @@ public class ProductControllerWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\": \"Renamed Product\"}")
         )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Renamed Product")));
 
         verify(productService).updateProduct(eq(1L), any(Product.class));
     }
