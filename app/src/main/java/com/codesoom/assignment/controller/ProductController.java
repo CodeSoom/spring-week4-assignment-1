@@ -50,7 +50,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
         applicationService.deleteProduct(id);
     }
 }

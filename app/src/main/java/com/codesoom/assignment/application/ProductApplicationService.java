@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.controller.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductId;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -50,8 +51,11 @@ public class ProductApplicationService {
      *
      * @param id 삭제할 product의 id
      */
-    public void deleteProduct(Long id) {
+    public void deleteProduct(Long id) throws ProductNotFoundException {
         Optional<Product> product = productRepository.find(id);
+        if (product.isEmpty()) {
+            throw new ProductNotFoundException(id);
+        }
         productRepository.remove(product.get());
     }
 
