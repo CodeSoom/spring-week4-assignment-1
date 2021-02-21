@@ -23,12 +23,21 @@ public class Product {
         return id;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public void setName(String name) { this.name = name; }
-    public String getBrand() { return this.brand; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public void setBrand(String brand) { this.brand = brand; }
+    public String getBrand() {
+        return this.brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
     public Long getPrice() {
         return price;
