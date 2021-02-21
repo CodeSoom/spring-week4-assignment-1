@@ -10,14 +10,16 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ProductControllerTest {
     private ProductController controller;
     private ProductApplicationService service;
+    private ProductRepository repository;
 
     @BeforeEach
     void initController() {
-        ProductRepository repository = new InMemoryProductRepository();
+        repository = new InMemoryProductRepository();
         service = new ProductApplicationService(repository);
         controller = new ProductController(service);
     }
@@ -30,7 +32,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void getSpecificProduct() {
+    void getSpecificProduct() throws ProductNotFoundException {
         String name = "고양이 인형";
         String maker = "라스 공방";
         String price = "1000원";
@@ -42,6 +44,14 @@ public class ProductControllerTest {
 
         assertThat(product).isNotNull();
         assertThat(product.id).isEqualTo(createdProduct.productId().id());
+    }
+
+    @Test
+    void getNotExistProduct() {
+        assertThrows(
+            ProductNotFoundException.class,
+            () -> controller.getSpecificProduct(repository.nextId().id())
+        );
     }
 
     @Test
