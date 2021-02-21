@@ -41,4 +41,8 @@ public class ProductController {
         Product createdProduct = applicationService.createProduct(product.name, product.maker, product.price, product.imageURL);
         return ProductDTO.from(createdProduct);
     }
+
+    public void deleteProduct(Long id) {
+        applicationService.deleteProduct(id);
+    }
 }
