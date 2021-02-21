@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,16 +67,22 @@ class ProductsControllerMvcTest {
     }
 
     @Nested
-    @DisplayName("getProduct 메서드는")
+    @DisplayName("[GET] /products/{id} 요청은")
     class Describe_getProduct {
         @Nested
         @DisplayName("주어진 id의 장난감을 찾을 수 없을 때")
         class Context_when_not_exist_toy_id {
+            @BeforeEach
+            void setup() {
+                given(catToyService.find(any(Long.class)))
+                        .willThrow(ToyNotFoundException.class);
+            }
+
             @Test
-            @DisplayName("장난감이 없다는 예외를 던진다.")
-            void It_throws_toy_not_found_exception() {
-                assertThatThrownBy(() -> productsController.getProduct(givenToy1.id()))
-                        .isInstanceOf(ToyNotFoundException.class);
+            @DisplayName("status not found 를 응답한다.")
+            void It_respond_status_nod_found() throws Exception {
+                mockMvc.perform(get("/products/{id}", givenToy1.id()))
+                        .andExpect(status().isNotFound());
             }
         }
 

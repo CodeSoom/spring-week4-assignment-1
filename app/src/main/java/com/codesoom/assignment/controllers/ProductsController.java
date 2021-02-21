@@ -28,8 +28,10 @@ public class ProductsController {
     }
 
     @GetMapping("{id}")
-    public Toy getProduct(@PathVariable Long id) throws ToyNotFoundException {
-        return toyService.find(id);
+    public CatToyDTO getProduct(@PathVariable Long id) throws ToyNotFoundException {
+        Toy toy = toyService.find(id);
+
+        return new CatToyDTO(toy);
     }
 
     @PostMapping
