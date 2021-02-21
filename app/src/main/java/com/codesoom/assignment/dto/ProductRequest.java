@@ -6,56 +6,44 @@ public class ProductRequest {
 
     private Product product;
 
-    private Product.ProductBuilder productBuilder;
-
     public ProductRequest() {
-        productBuilder = Product.builder();
+        product = new Product();
     }
 
     public void setName(String name) {
-        productBuilder.name(name);
+        product.setName(name);
     }
 
     public void setMaker(String maker) {
-        productBuilder.maker(maker);
+        product.setMaker(maker);
     }
 
     public void setPrice(int price) {
-        productBuilder.price(price);
+        product.setPrice(price);
     }
 
     public void setImageUrl(String imageUrl) {
-        productBuilder.imageUrl(imageUrl);
+        product.setImageUrl(imageUrl);
     }
 
     public String getName() {
-        return buildProduct().getName();
+        return product.getName();
     }
 
     public String getMaker() {
-        return buildProduct().getMaker();
+        return product.getMaker();
     }
 
     public int getPrice() {
-        return buildProduct().getPrice();
+        return product.getPrice();
     }
 
     public String getImageUrl() {
-        return buildProduct().getImageUrl();
+        return product.getImageUrl();
     }
 
     public Product getProduct() {
-        return buildProduct();
-    }
-
-    private Product buildProduct() {
-        if (product != null) {
-            return product;
-        }
-
-        product = productBuilder.build();
-
         return product;
     }
-
+    
 }
