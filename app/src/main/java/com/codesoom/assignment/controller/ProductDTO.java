@@ -7,7 +7,7 @@ public class ProductDTO {
     public Long id;
     public String name;
     public String maker;
-    public String price;
+    public int price;
     public String imageURL;
 
     public ProductDTO(
@@ -15,12 +15,12 @@ public class ProductDTO {
         @JsonProperty("name") String name,
         @JsonProperty("maker") String maker,
         @JsonProperty("price") String price,
-        @JsonProperty("image_url") String imageURL
+        @JsonProperty("imageUrl") String imageURL
     ){
         this.id = id;
         this.name = name;
         this.maker = maker;
-        this.price = price;
+        this.price = Integer.parseInt(price);
         this.imageURL = imageURL;
     }
 

@@ -39,7 +39,12 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO createProduct(@RequestBody ProductDTO product) {
-        Product createdProduct = applicationService.createProduct(product.name, product.maker, product.price, product.imageURL);
+        Product createdProduct = applicationService.createProduct(
+            product.name,
+            product.maker,
+            Integer.toString(product.price),
+            product.imageURL
+        );
         return ProductDTO.from(createdProduct);
     }
 
