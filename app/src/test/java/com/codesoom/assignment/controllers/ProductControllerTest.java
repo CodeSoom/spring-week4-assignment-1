@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.models.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,10 @@ class ProductControllerTest {
         Product product = new Product  (1L, "티셔츠", "나이키", 40000);
 
         given(productService.getProducts()).willReturn(List.of(product));
+
+        given(productService.getProduct(1L)).willReturn(product);
+
+        given(productService.getProduct(1000L)).willThrow(TaskNotFoundException.class);
     }
     @Test
     void list() throws Exception {
@@ -45,13 +50,18 @@ class ProductControllerTest {
     }
 
     @Test
-    void detail() throws Exception {
-        mockMvc.perform(get("/prodcuts/1")
+    void detailWithValidId() throws Exception {
+        mockMvc.perform(get("/products/1")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("티셔츠")));
+    }
 
+    @Test
+    void detailWithInvalidId() throws Exception {
+        mockMvc.perform(get("/products/1000"))
+                .andExpect(status().isNotFound());
     }
 
 
