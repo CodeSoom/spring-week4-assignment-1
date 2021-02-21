@@ -5,12 +5,12 @@ import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
 import com.codesoom.assignment.services.ToyService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,9 +23,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -130,9 +128,19 @@ class ProductsControllerMvcTest {
         @Nested
         @DisplayName("주어진 id의 장난감을 찾을 수 없을 때")
         class Context_when_not_exist_toy_id {
+            @BeforeEach
+            void setup() {
+                Mockito.doThrow(ToyNotFoundException.class).when(catToyService).modify(any(Long.class), any(Toy.class));
+            }
+
             @Test
-            @DisplayName("장난감이 없다는 예외를 던진다.")
-            void It_throws_toy_not_found_exception() {
+            @DisplayName("status not found 를 응답한다.")
+            void It_respond_status_nod_found() throws Exception {
+                mockMvc.perform(
+                        patch("/products/{id}", givenToy1.id())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(givenToy1))
+                ).andExpect(status().isNotFound());
             }
         }
 
@@ -141,12 +149,17 @@ class ProductsControllerMvcTest {
         class Context_when_exist_toy_id {
             @BeforeEach
             void setup() {
-                catToyService.insert(givenToy1);
+                Mockito.doNothing().when(catToyService);
             }
 
             @Test
-            @DisplayName("장난감의 정보를 변경한다.")
-            void It_returns_toy() {
+            @DisplayName("status ok를 응답한다.")
+            void It_respond_status_ok() throws Exception {
+                mockMvc.perform(
+                        patch("/products/{id}", givenToy1.id())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(givenToy1))
+                ).andExpect(status().isOk());
             }
         }
     }
@@ -158,7 +171,7 @@ class ProductsControllerMvcTest {
         @DisplayName("주어진 id의 장난감을 찾을 수 없을 때")
         class Context_when_not_exist_toy_id {
             @Test
-            @DisplayName("장난감이 없다는 예외를 던진다.")
+            @DisplayName("status not found 를 응답한다.")
             void It_throws_toy_not_found_exception() {
             }
         }

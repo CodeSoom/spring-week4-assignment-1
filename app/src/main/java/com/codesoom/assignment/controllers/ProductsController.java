@@ -43,7 +43,9 @@ public class ProductsController {
     }
 
     @PatchMapping("{id}")
-    public void updateProduct(@PathVariable Long id, @RequestBody Toy toy) throws ToyNotFoundException {
+    public void updateProduct(@PathVariable Long id, @RequestBody CatToyDTO toyDTO) throws ToyNotFoundException {
+        Toy toy = toyDTO.toEntity();
+
         toyService.modify(id, toy);
     }
 
