@@ -10,4 +10,8 @@ public class ProductService {
     public List<Product> getProducts() {
         return null;
     }
+
+    public Product getProduct(Long id) {
+        return null;
+    }
 }

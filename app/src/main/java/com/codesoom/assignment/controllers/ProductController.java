@@ -2,9 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.models.Product;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +20,10 @@ public class ProductController{
     @GetMapping
     public List<Product> list() {
         return productService.getProducts();
-//        Product product = new Product(1L, "티셔츠", "나이키", 40000);
-//        return List.of(product);
+    }
+
+    @GetMapping("{id}")
+    public Product detail(@PathVariable Long id) {
+        return productService.getProduct(id);
     }
 }

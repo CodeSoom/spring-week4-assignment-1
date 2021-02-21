@@ -32,18 +32,28 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
         Product product = new Product  (1L, "티셔츠", "나이키", 40000);
-        
+
         given(productService.getProducts()).willReturn(List.of(product));
     }
     @Test
     void list() throws Exception {
-
         mockMvc.perform(get("/products")
                  .accept(MediaType.APPLICATION_JSON_UTF8)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("티셔츠")));
     }
+
+    @Test
+    void detail() throws Exception {
+        mockMvc.perform(get("/prodcuts/1")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("티셔츠")));
+
+    }
+
 
 
 
