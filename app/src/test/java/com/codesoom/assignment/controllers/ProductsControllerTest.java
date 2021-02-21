@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.dto.CatToyDTO;
 import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
@@ -30,6 +31,16 @@ class ProductsControllerTest {
     private final Toy givenToy1 = new CatToy(0L, "cat nip", "cat company. co", 1000D, "https://cat.toy/cat-nip.png");
     private final Toy givenToy2 = new CatToy(1L, "cat tower", "cat company. co", 10000D, "https://cat.toy/cat-tower.png");
 
+    private final CatToyDTO givenToyDTO1 = new CatToyDTO(givenToy1);
+    private final CatToyDTO givenToyDTO2 = new CatToyDTO(givenToy2);
+
+    private boolean equalsDTOAndEntity(CatToyDTO toyDTO, Toy toy) {
+        return toyDTO.name().equals(toy.name())
+                && toyDTO.maker().equals(toy.brand())
+                && toyDTO.price().equals(toy.price())
+                && toyDTO.imageUrl().equals(toy.imageURL());
+    }
+
     @Nested
     @DisplayName("getAllProducts 메서드는")
     class Describe_getAllProducts {
@@ -42,7 +53,7 @@ class ProductsControllerTest {
         @Test
         @DisplayName("모든 장난감들을 리턴한다.")
         void It_returns_all_toys() {
-            List<Toy> toys = productsController.getAllProducts();
+            List<CatToyDTO> toys = productsController.getAllProducts();
 
             assertThat(toys).hasSize(2);
         }
@@ -73,9 +84,9 @@ class ProductsControllerTest {
             @Test
             @DisplayName("장난감을 리턴한다.")
             void It_returns_toy() {
-                Toy toy = productsController.getProduct(givenToy1.id());
+                CatToyDTO toyDTO = productsController.getProduct(givenToy1.id());
 
-                assertThat(toy.id()).isEqualTo(givenToy1.id());
+                assertThat(equalsDTOAndEntity(toyDTO, givenToy1)).isTrue();
             }
         }
     }
@@ -89,10 +100,10 @@ class ProductsControllerTest {
             assertThatThrownBy(() -> productsController.getProduct(givenToy1.id()))
                     .isInstanceOf(ToyNotFoundException.class);
 
-            productsController.createProduct(givenToy1);
-            Toy toy = productsController.getProduct(givenToy1.id());
+            productsController.createProduct(givenToyDTO1);
+            CatToyDTO toyDTO = productsController.getProduct(givenToy1.id());
 
-            assertThat(toy.id()).isEqualTo(givenToy1.id());
+            assertThat(equalsDTOAndEntity(toyDTO, givenToy1)).isTrue();
         }
     }
 
@@ -100,6 +111,7 @@ class ProductsControllerTest {
     @DisplayName("updateProduct 메서드는")
     class Describe_updateProduct {
         private final Toy modifiedToy1 = new CatToy(givenToy1.id(), "mattattabi stick", givenToy1.brand(), 2000D, "https://cat.toy/maddaddabi-stick.png");
+        private final CatToyDTO modifiedToyDTO1 = new CatToyDTO(modifiedToy1);
 
         @Nested
         @DisplayName("주어진 id의 장난감을 찾을 수 없을 때")
@@ -107,7 +119,7 @@ class ProductsControllerTest {
             @Test
             @DisplayName("장난감이 없다는 예외를 던진다.")
             void It_throws_toy_not_found_exception() {
-                assertThatThrownBy(() -> productsController.updateProduct(givenToy1.id(), modifiedToy1))
+                assertThatThrownBy(() -> productsController.updateProduct(givenToy1.id(), modifiedToyDTO1))
                         .isInstanceOf(ToyNotFoundException.class);
             }
         }
@@ -123,13 +135,11 @@ class ProductsControllerTest {
             @Test
             @DisplayName("장난감의 정보를 변경한다.")
             void It_returns_toy() {
-                productsController.updateProduct(givenToy1.id(), modifiedToy1);
+                productsController.updateProduct(givenToy1.id(), modifiedToyDTO1);
 
-                Toy toy = productsController.getProduct(givenToy1.id());
+                CatToyDTO toyDTO = productsController.getProduct(givenToy1.id());
 
-                assertThat(toy.name()).isEqualTo(modifiedToy1.name());
-                assertThat(toy.price()).isEqualTo(modifiedToy1.price());
-                assertThat(toy.imageURL()).isEqualTo(modifiedToy1.imageURL());
+                assertThat(equalsDTOAndEntity(toyDTO, modifiedToy1)).isTrue();
             }
         }
     }
