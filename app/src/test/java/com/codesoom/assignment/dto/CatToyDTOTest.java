@@ -1,5 +1,7 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.models.CatToy;
+import com.codesoom.assignment.models.Toy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -51,75 +53,14 @@ class CatToyDTOTest {
         assertThat(catToyDTO).isEqualTo(givenCatToyDTO);
     }
 
-    @Nested
-    @DisplayName("equals 메서드는")
-    class Describe_equals {
-        @Nested
-        @DisplayName("비교 대상이 CatToyDTO 클래스가 아닐 때")
-        class Context_when_compare_is_not_CatToyDTO {
-            private final String givenCompare = "compare target";
+    @Test
+    void constructorGivenToy() {
+        Toy givenCatToy = new CatToy(0L, givenName, givenMaker, givenPrice, givenImageUrl);
+        CatToyDTO catToyDTO = new CatToyDTO(givenCatToy);
 
-            @Test
-            @DisplayName("false 를 리턴한다.")
-            void It_returns_false() {
-                assertThat(givenCatToyDTO).isNotEqualTo(givenCompare);
-            }
-        }
-
-        @Nested
-        @DisplayName("비교 대상과 name 이 다를 때")
-        class Context_when_compare_is_not_equals_name {
-            private final CatToyDTO givenCompare = new CatToyDTO(
-                    "compare target", givenMaker, givenPrice, givenImageUrl
-            );
-
-            @Test
-            @DisplayName("false 를 리턴한다.")
-            void It_returns_false() {
-                assertThat(givenCatToyDTO).isNotEqualTo(givenCompare);
-            }
-        }
-
-        @Nested
-        @DisplayName("비교 대상과 maker 가 다를 때")
-        class Context_when_compare_is_not_equals_maker {
-            private final CatToyDTO givenCompare = new CatToyDTO(
-                    givenName, "compare target", givenPrice, givenImageUrl
-            );
-
-            @Test
-            @DisplayName("false 를 리턴한다.")
-            void It_returns_false() {
-                assertThat(givenCatToyDTO).isNotEqualTo(givenCompare);
-            }
-        }
-
-        @Nested
-        @DisplayName("비교 대상과 price 가 다를 때")
-        class Context_when_compare_is_not_equals_price {
-            private final CatToyDTO givenCompare = new CatToyDTO(
-                    givenName, givenMaker, 2000d, givenImageUrl
-            );
-
-            @Test
-            @DisplayName("false 를 리턴한다.")
-            void It_returns_false() {
-                assertThat(givenCatToyDTO).isNotEqualTo(givenCompare);
-            }
-        }
-
-        @Nested
-        @DisplayName("비교 대상과 imageUrl 이 다를 때")
-        class Context_when_compare_is_not_equals_imageUrl {
-            private final CatToyDTO givenCompare = new CatToyDTO(
-                    givenName, givenMaker, givenPrice, "compare target"
-            );
-
-            @Test
-            @DisplayName("false 를 리턴한다.")
-            void It_returns_false() {
-                assertThat(givenCatToyDTO).isNotEqualTo(givenCompare);
-            }
-        }
+        assertThat(catToyDTO.name()).isEqualTo(givenCatToy.name());
+        assertThat(catToyDTO.maker()).isEqualTo(givenCatToy.brand());
+        assertThat(catToyDTO.price()).isEqualTo(givenCatToy.price());
+        assertThat(catToyDTO.imageUrl()).isEqualTo(givenCatToy.imageURL());
     }
 }

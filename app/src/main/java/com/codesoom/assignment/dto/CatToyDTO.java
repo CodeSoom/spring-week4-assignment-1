@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.models.Toy;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -35,15 +36,10 @@ public class CatToyDTO {
         this.imageUrl = imageUrl;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CatToyDTO) {
-            CatToyDTO dto = (CatToyDTO) obj;
-            return this.name().equals(dto.name())
-                    && this.maker().equals(dto.maker())
-                    && this.price().equals(dto.price())
-                    && this.imageUrl().equals(dto.imageUrl());
-        }
-        return false;
+    public CatToyDTO(Toy toy) {
+        this.name = toy.name();
+        this.maker = toy.brand();
+        this.price = toy.price();
+        this.imageUrl = toy.imageURL();
     }
 }
