@@ -39,7 +39,7 @@ public class ProductApplicationServiceTest {
         provideProductInformation();
 
         for (int i = 0; i < count; i++) {
-            Product createdProduct = applicationService.createProduct(name, maker, price, imageURL);
+            createdProduct = applicationService.createProduct(name, maker, price, imageURL);
             createdProductList.add(createdProduct);
         }
     }
