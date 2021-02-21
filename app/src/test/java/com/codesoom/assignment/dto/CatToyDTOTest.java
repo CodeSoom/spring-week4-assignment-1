@@ -50,7 +50,10 @@ class CatToyDTOTest {
     void stringToCatToyDTO() throws JsonProcessingException {
         CatToyDTO catToyDTO = objectMapper.readValue(givenCatToyDTOJson, CatToyDTO.class);
 
-        assertThat(catToyDTO).isEqualTo(givenCatToyDTO);
+        assertThat(catToyDTO.name()).isEqualTo(givenCatToyDTO.name());
+        assertThat(catToyDTO.maker()).isEqualTo(givenCatToyDTO.maker());
+        assertThat(catToyDTO.price()).isEqualTo(givenCatToyDTO.price());
+        assertThat(catToyDTO.imageUrl()).isEqualTo(givenCatToyDTO.imageUrl());
     }
 
     @Test
