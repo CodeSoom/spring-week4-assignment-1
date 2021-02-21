@@ -28,7 +28,7 @@ class ProductControllerTest {
         productController = new ProductController(productService);
     }
 
-    @DisplayName("장난감 리스트에 장난감이 아무것도 없을 때, 비어있는 것을 보장하는 테스트입니다.")
+    @DisplayName("상품 서비스에 아무것도 없을 때, 컨트롤러의 상품 조회 메서드는 비어있는 리스트를 반환합니다.")
     @Test
     void getProductListFromEmptyListTest() {
         List<Product> productList = new ArrayList<>();
@@ -36,7 +36,7 @@ class ProductControllerTest {
         assertThat(productController.getProducts()).isEmpty();
     }
 
-    @DisplayName("장난감 리스트에 장난감이 있을 때, 비어있지 않는 것을 보장하는 테스트입니다.")
+    @DisplayName("상품 서비스 리스트에 상품이 있을 때, 컨트롤러의 상품 조회 메서드는 비어있지 않은 리스트를 반환합니다.")
     @Test
     void getProductListFromSomeListTest() {
         List<Product> productList = new ArrayList<>();
@@ -53,7 +53,7 @@ class ProductControllerTest {
         assertThat(productController.getProducts()).isNotEmpty();
     }
 
-    @DisplayName("존재하는 장난감 ID를 호출하였을 떄, 유효한 장난감을 반환하는 것을 보장하는 테스트")
+    @DisplayName("상품 서비스에 등록되어 있는 특정 상품을 호출하였을 때, 컨트롤러의 상품 조회 메서드는 특정한 상품을 반환합니다.")
     @Test
     void getProductWithValidIdTest() {
         Product product1 = new Product();
@@ -78,7 +78,7 @@ class ProductControllerTest {
         assertThat(productController.getProduct(1L).getImage()).isEqualTo("rubber_ball.png");
     }
 
-    @DisplayName("존재하지 않는 장난감 ID를 호출하였을 떄, 장난감이 존재하지 않는 예외를 호출하는 것을 보장하는 테스트")
+    @DisplayName("상품 서비스에 존재하지 않는 특정 상품을 호출하였을 때, 컨트롤러의 상품 조회 메서드는 예외를 호출합니다.")
     @Test
     void getProductWithInValidIdTest() {
         given(productService.getProduct(100L)).willThrow(ProductNonExistException.class);
@@ -86,7 +86,7 @@ class ProductControllerTest {
         assertThatThrownBy(() -> productController.getProduct(100L)).isInstanceOf(ProductNonExistException.class);
     }
 
-    @DisplayName("장난감을 등록하였을 때의 테스트")
+    @DisplayName("상품 서비스에 새로운 상품을 등록하였을 때, 컨트롤러의 상품 생성 메서드는 생성한 상품을 빈환합니다.")
     @Test
     void createProductTest() {
         Product product = new Product();
@@ -94,7 +94,7 @@ class ProductControllerTest {
         verify(productService).createProduct(product);
     }
 
-    @DisplayName("장난감을 업데이트 했을 때의 테스트")
+    @DisplayName("상품 서비스에 존재하는 상품을 수정하였을 떄, 컨트롤러의 수정 메서드는 수정한 상품을 반환합니다.")
     @Test
     void updateProductTest() {
         Product product = new Product();
@@ -107,7 +107,7 @@ class ProductControllerTest {
         verify(productService).updateProduct(product.getId(), product);
     }
 
-    @DisplayName("장난감을 삭제 헸을 때의 테스트")
+    @DisplayName("상품 서비스에 존재하는 상품을 삭제하였을 때, 컨트롤러의 삭제 메서드는 삭제한 상품을 반환합니다.")
     @Test
     void deleteProductTest() {
         Product product = new Product();
