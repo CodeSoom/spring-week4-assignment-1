@@ -165,6 +165,7 @@ public class ProductServiceTest {
                 () -> assertThat(actual.getPrice()).isEqualTo(expected.getPrice()),
                 () -> assertThat(actual.getImageUrl()).isEqualTo(expected.getImageUrl())
         );
+        verify(productRepository).save(any(Product.class));
     }
 
     void setUpFixtures() {
