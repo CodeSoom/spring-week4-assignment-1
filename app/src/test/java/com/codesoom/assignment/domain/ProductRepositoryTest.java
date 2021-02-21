@@ -4,6 +4,7 @@ import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,6 @@ class ProductRepositoryTest {
 
     private Product setUpProduct;
 
-    private final Long EXISTED_ID = 1L;
 
     @BeforeEach
     void setUp() {
@@ -44,11 +44,23 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("findAll 메서드는")
     class Describe_findAll {
+        private Long givenExistedId;
+
+        @BeforeEach
+        void setup() {
+            givenExistedId = productRepository.save(setUpProduct).getId();
+        }
+
         @Test
         @DisplayName("저장되어 있는 고양이 장난감 전체 목록을 리턴한다")
         void itReturnsAllOfProducts() {
-            List<Product> lists = productRepository.findAll();
-        };
+            List<Product> products = productRepository.findAll();
+            Product product = products.get(products.size()-1);
+
+            assertThat(product.getId())
+                    .as("목록의 마지막 객체는 아이디가 %f 이어야 한다", givenExistedId)
+                    .isEqualTo(givenExistedId);
+        }
     }
 
     @Nested
@@ -69,10 +81,6 @@ class ProductRepositoryTest {
             void itReturnsProduct() {
                 Product product = productRepository.findById(givenExistedId).get();
                 assertThat(product.getId()).isEqualTo(givenExistedId);
-                assertThat(product.getName()).isEqualTo(SETUP_PRODUCT_NAME);
-                assertThat(product.getMaker()).isEqualTo(SETUP_PRODUCT_MAKER);
-                assertThat(product.getPrice()).isEqualTo(SETUP_PRODUCT_PRICE);
-                assertThat(product.getImageUrl()).isEqualTo(SETUP_PRODUCT_IMAGEURL);
             }
         }
     }

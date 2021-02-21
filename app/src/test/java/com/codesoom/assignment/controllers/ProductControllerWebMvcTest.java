@@ -117,7 +117,7 @@ class ProductControllerWebMvcTest {
             @DisplayName("주어진 아이디에 해당하는 고양이 장난감과 OK를 리턴한다")
             void itReturnsProductAndOKHttpStatus() throws Exception {
                 given(productService.getProduct(givenExistedId)).willReturn(setupProduct);
-
+                System.out.println(setupProduct+"===");
                 mockMvc.perform(get("/products/"+ givenExistedId))
                         .andDo(print())
                         .andExpect(jsonPath("$.id").value(givenExistedId))
@@ -136,7 +136,7 @@ class ProductControllerWebMvcTest {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 발생시키고 에러 메세지와 NOT_FOUND를 리턴한다")
+            @DisplayName("고양이 장난감을 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
             void itThrowsProductNotFoundExceptionAndReturnsErrorResponseAndNOT_FOUNDHttpStatus() throws Exception {
                 given(productService.getProduct(givenNotExistedId))
                         .willThrow(ProductNotFoundException.class);
@@ -155,19 +155,14 @@ class ProductControllerWebMvcTest {
     @DisplayName("create 메서드는")
     class Describe_create {
         @Nested
-        @DisplayName("만약 이름, 메이커, 가격, 이미지가 주어진다면")
+        @DisplayName("만약 고양이 장난감 객체가 주어진다면")
         class Context_WithNameAndMakerAndPriceAndImage {
-            private final String givenName = CREATED_PRODUCT_NAME;
-            private final String givenMaker = CREATED_PRODUCT_MAKER;
-            private final int givenPrice = CREATED_PRODUCT_PRICE;
-            private final String givenImage = CREATED_PRODUCT_IMAGEURL;
-
             Product createProduct() {
-                return new Product(CREATED_ID, givenName, givenMaker, givenPrice, givenImage);
+                return new Product(CREATED_ID, CREATED_PRODUCT_NAME, CREATED_PRODUCT_MAKER, CREATED_PRODUCT_PRICE, CREATED_PRODUCT_IMAGEURL);
             }
 
             @Test
-            @DisplayName("새로운 고양이 장난감을 생성하고 생성된 고양이 장난감과 Created를 리턴한다")
+            @DisplayName("객체를 저장하고 저장된 객체와 Created를 리턴한다")
             void itCreatesProductAndReturnsCreatedProductAndCreatedHttpStatus() throws Exception {
                 Product createdProduct = createProduct();
                 given(productService.createProduct(any(Product.class))).willReturn(createdProduct);
@@ -177,10 +172,10 @@ class ProductControllerWebMvcTest {
                         .content("{\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"price\":100, \"image\":\"createdImage\"}"))
                         .andDo(print())
                         .andExpect(jsonPath("$.id").value(CREATED_ID))
-                        .andExpect(jsonPath("$.name").value(givenName))
-                        .andExpect(jsonPath("$.maker").value(givenMaker))
-                        .andExpect(jsonPath("$.price").value(givenPrice))
-                        .andExpect(jsonPath("$.imageUrl").value(givenImage))
+                        .andExpect(jsonPath("$.name").value(CREATED_PRODUCT_NAME))
+                        .andExpect(jsonPath("$.maker").value(CREATED_PRODUCT_MAKER))
+                        .andExpect(jsonPath("$.price").value(CREATED_PRODUCT_PRICE))
+                        .andExpect(jsonPath("$.imageUrl").value(CREATED_PRODUCT_IMAGEURL))
                         .andExpect(status().isCreated());
 
                 verify(productService).createProduct(any());
@@ -258,7 +253,7 @@ class ProductControllerWebMvcTest {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 발생시키고 에러 메세지와 NOT_FOUND를 리턴한다")
+            @DisplayName("고양이 장난감을 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
             void itThrowsProductNotFoundExceptionAndReturnsErrorResponseAndNOT_FOUNDHttpStatus() throws Exception {
                 given(productService.deleteProduct(givenNotExistedId))
                         .willThrow(ProductNotFoundException.class);
