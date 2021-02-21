@@ -1,12 +1,14 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.adapter.InMemoryProductRepository;
+import com.codesoom.assignment.controller.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +73,7 @@ public class ProductApplicationServiceTest {
     }
 
     @When("생성된 product를 삭제하면")
-    public void deleteProduct() {
+    public void deleteProduct() throws ProductNotFoundException {
         applicationService.deleteProduct(createdProductList.get(0).productId().id());
     }
 
@@ -85,5 +87,13 @@ public class ProductApplicationServiceTest {
         Optional<Product> product = applicationService.getProduct(createdProduct.productId().id());
         assertThat(product).isNotEmpty();
         assertThat(product.get()).isEqualTo(createdProduct);
+    }
+
+    @When("생성되지않은 product를 삭제하면 에러가 발생한다")
+    public void deleteNotCreatedProduct() {
+        Assertions.assertThrows(
+            ProductNotFoundException.class,
+            () -> applicationService.deleteProduct(productRepository.nextId().id())
+        );
     }
 }

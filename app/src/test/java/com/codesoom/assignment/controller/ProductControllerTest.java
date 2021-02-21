@@ -36,7 +36,7 @@ public class ProductControllerTest {
     void getSpecificProduct() throws ProductNotFoundException {
         String name = "고양이 인형";
         String maker = "라스 공방";
-        String price = "1000원";
+        String price = "1000";
         String imageURL = "https://magical.dev/static/las.jpg";
 
         Product createdProduct = service.createProduct(name, maker, price, imageURL);
@@ -59,7 +59,7 @@ public class ProductControllerTest {
     void createProduct() {
         String name = "고양이 인형";
         String maker = "라스 공방";
-        String price = "1000원";
+        String price = "1000";
         String imageURL = "https://magical.dev/static/las.jpg";
         ProductDTO product = new ProductDTO(null, name, maker, price, imageURL);
 
@@ -73,7 +73,7 @@ public class ProductControllerTest {
     void deleteProduct() {
         String name = "고양이 인형";
         String maker = "라스 공방";
-        String price = "1000원";
+        String price = "1000";
         String imageURL = "https://magical.dev/static/las.jpg";
         ProductDTO product = new ProductDTO(null, name, maker, price, imageURL);
         ProductDTO createdProduct = controller.createProduct(product);
