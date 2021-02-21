@@ -4,6 +4,7 @@ import com.codesoom.assignment.dto.CatToyDTO;
 import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import com.codesoom.assignment.models.CatToy;
 import com.codesoom.assignment.models.Toy;
+import com.codesoom.assignment.repositories.ToyRepository;
 import com.codesoom.assignment.services.ToyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,7 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 @DisplayName("ProductsController 테스트")
 class ProductsControllerMvcTest {
     @Autowired
@@ -35,6 +38,9 @@ class ProductsControllerMvcTest {
 
     @MockBean
     private ToyService catToyService;
+
+    @MockBean
+    private ToyRepository toyRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
