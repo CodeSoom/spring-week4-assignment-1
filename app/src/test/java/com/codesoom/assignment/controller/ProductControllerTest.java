@@ -82,4 +82,12 @@ public class ProductControllerTest {
             () -> controller.deleteProduct(createdProduct.id)
         );
     }
+
+    @Test
+    void deleteNotCreatedProduct() {
+        assertThrows(
+            ProductNotFoundException.class,
+            () -> controller.deleteProduct(repository.nextId().id())
+        );
+    }
 }
