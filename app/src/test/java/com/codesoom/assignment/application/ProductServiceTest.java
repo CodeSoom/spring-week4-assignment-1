@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -49,17 +50,48 @@ class ProductServiceTest {
 
     }
 
-    @Test
-    @DisplayName("모든 상품을 조회한다")
-    void getProducts() {
-        given(productRepository.findAll()).willReturn(products);
+    @Nested
+    @DisplayName("getProducts는")
+    class Describe_getProducts {
 
-        List<Product> products = productService.getProducts();
+        @Nested
+        @DisplayName("저장되어 있는 상품이 있을 경우")
+        class Context_with_products {
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findAll()).willReturn(products);
+            }
 
-        verify(productRepository).findAll();
+            @Test
+            @DisplayName("모든 상품을 리턴한다")
+            void getProducts() {
+                List<Product> products = productService.getProducts();
 
-        assertThat(products).hasSize(2);
+                verify(productRepository).findAll();
+                assertThat(products).hasSize(2);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있는 상품이  경우")
+        class Context_without_products {
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findAll()).willReturn(new ArrayList<>());
+            }
+
+            @Test
+            @DisplayName("빈 목록을 리턴한다")
+            void getProducts() {
+                List<Product> products = productService.getProducts();
+
+                verify(productRepository).findAll();
+                assertThat(products).isEmpty();
+            }
+        }
     }
+
+
 
     @Test
     @DisplayName("새로운 상품을 생성한다")
@@ -71,8 +103,4 @@ class ProductServiceTest {
 
         verify(productRepository).save(any(Product.class));
     }
-
-
-
-
 }

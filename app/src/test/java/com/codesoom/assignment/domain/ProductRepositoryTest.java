@@ -22,6 +22,8 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    private int PRODUCTS_SIZE;
+
     @Nested
     @DisplayName("findAll")
     class Describe_findAll {
@@ -52,7 +54,7 @@ class ProductRepositoryTest {
             void it_returns_all_products() {
 
                 List<Product> products = productRepository.findAll();
-                assertThat(products).hasSize(2);
+                assertThat(products).hasSize(PRODUCTS_SIZE);
             }
         }
     }
@@ -128,5 +130,8 @@ class ProductRepositoryTest {
 
         productRepository.save(product1);
         productRepository.save(product2);
+
+        List<Product> products = productRepository.findAll();
+        PRODUCTS_SIZE = products.size();
     }
 }

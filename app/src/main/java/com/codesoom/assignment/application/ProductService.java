@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 상품에 대한 서비스 로직을 처리합니다.
+ */
 @Service
 public class ProductService {
 

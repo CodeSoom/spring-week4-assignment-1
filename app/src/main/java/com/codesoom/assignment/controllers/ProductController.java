@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 상품에 대한 클라이언트의 요청을 처리합니다.
+ */
 @RestController
 @RequestMapping("/products")
 @CrossOrigin

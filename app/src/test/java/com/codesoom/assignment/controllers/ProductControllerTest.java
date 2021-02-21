@@ -76,7 +76,7 @@ class ProductControllerTest {
     @DisplayName("POST /products 요청은")
     class Describe_POST_product {
         @Nested
-        @DisplayName("상품이 주어지면")
+        @DisplayName("생성할 상품의 정보가 주어지면")
         class Context_with_product {
             @BeforeEach
             void setUp() {
@@ -137,7 +137,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(productService.getProducts()).willReturn(products);
+                given(productService.getProducts()).willReturn(new ArrayList<>());
             }
 
             @DisplayName("200코드와 빈 목록을 응답한다")
