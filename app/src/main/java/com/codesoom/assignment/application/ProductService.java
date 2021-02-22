@@ -1,14 +1,15 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.models.Product;
 import com.codesoom.assignment.models.ProductRepository;
-import com.codesoom.assignment.models.Task;
+import org.springframework.stereotype.Service;
 
-import java.awt.print.PrinterException;
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Service
+@Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
@@ -38,11 +39,16 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         product.change(source);
-        
+
         return product;
     }
 
     public Product deleteProduct(long id) {
-        return null;
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        productRepository.delete(product);
+
+        return product;
     }
 }

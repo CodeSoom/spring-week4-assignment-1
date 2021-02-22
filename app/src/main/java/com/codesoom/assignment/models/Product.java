@@ -1,8 +1,13 @@
 package com.codesoom.assignment.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Product {
-
-
+    @Id
+    @GeneratedValue
     private String name;
 
     private Long id;

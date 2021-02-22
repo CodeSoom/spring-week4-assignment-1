@@ -90,7 +90,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void updateProduct() {
+    void updateProductWithValidId() {
         Product source = new Product("바지", "나이", 40000);
         Product product = productService.updateProduct(1L, source);
 
@@ -99,6 +99,23 @@ class ProductServiceTest {
     }
 
     @Test
-    void deleteProduct() {
+    void updateProductWithInvalidId() {
+        Product source = new Product("바지", "나이", 40000);
+
+        assertThatThrownBy(() -> productService.updateProduct(1000L, source))
+                .isInstanceOf(ProductNotFoundException.class);
+    }
+
+    @Test
+    void deleteProductWithValidId() {
+        Product product = productService.deleteProduct(1L);
+
+        verify(productRepository).delete(any(Product.class));
+    }
+
+    @Test
+    void deleteProductWithInvalidId() {
+        assertThatThrownBy(() -> productService.deleteProduct(1000L))
+                .isInstanceOf(ProductNotFoundException.class);
     }
 }
