@@ -51,4 +51,9 @@ public class Product {
         return id;
     }
 
+    public void change(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
+    }
 }
