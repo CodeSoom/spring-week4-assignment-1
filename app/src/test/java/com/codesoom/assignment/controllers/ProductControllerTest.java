@@ -57,6 +57,12 @@ class ProductControllerTest {
                             source.getPrice()
             );
         });
+
+        given(productService.updateProduct(eq(1000L), any(Product.class)))
+                .willThrow(new ProductNotFoundException(1000L));
+
+        given(productService.deleteProduct(eq(1000L)))
+                .willThrow(new ProductNotFoundException(1000L));
     }
 
     @Test
@@ -98,7 +104,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateWithValidId() throws Exception {
         mockMvc.perform(patch("/products/1")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .content("{\"name\":\"티셔츠\", \"maker\":\"아디다스\", \"price\":\"40000\"}")
@@ -110,5 +116,27 @@ class ProductControllerTest {
         verify(productService).updateProduct(eq(1L), any(Product.class));
     }
 
+    @Test
+    void updateWithInvalidId() throws Exception {
+        mockMvc.perform(patch("/products/1000")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"티셔츠\", \"maker\":\"아디다스\", \"price\":\"40000\"}")
+        )
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void destroyWithValidId() throws Exception {
+        mockMvc.perform(delete("/products/1"))
+                .andExpect(status().isOk());
+
+        verify(productService).deleteProduct(1L);
+    }
+
+    @Test
+    void destroyWithInvalidId() throws Exception {
+        mockMvc.perform(delete("/products/1000"))
+                .andExpect(status().isNotFound());
+    }
 
 }

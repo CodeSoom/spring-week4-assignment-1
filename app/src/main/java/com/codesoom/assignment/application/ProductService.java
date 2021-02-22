@@ -22,4 +22,8 @@ public class ProductService {
     public Product updateProduct( Long id, Product source) {
         return null;
     }
+
+    public Product deleteProduct(long id) {
+        return null;
+    }
 }
