@@ -14,4 +14,12 @@ public class ProductService {
     public Product getProduct(Long id) {
         return null;
     }
+
+    public Product createProduct(Product product) {
+        return null;
+    }
+
+    public Product updateProduct( Long id, Product source) {
+        return null;
+    }
 }
