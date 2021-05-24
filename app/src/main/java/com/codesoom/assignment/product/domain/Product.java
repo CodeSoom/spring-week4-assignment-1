@@ -1,7 +1,5 @@
 package com.codesoom.assignment.product.domain;
 
-import org.springframework.data.domain.AbstractAggregateRoot;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "PRODUCTS")
-public class Product extends AbstractAggregateRoot<Product> {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PRODUCT_ID")
