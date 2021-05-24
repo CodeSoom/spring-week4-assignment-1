@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
@@ -54,6 +56,57 @@ public class ProductServiceTest {
                 assertEquals(maker, createdProduct.getMaker());
                 assertEquals(price, createdProduct.getPrice());
                 assertNull(createdProduct.getImage());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("get 메서드는")
+    class Describe_get {
+
+        @Nested
+        @DisplayName("만약 등록되어 있는 상품의 유효한 식별자가 주어진다면")
+        class Context_with_valid_id {
+            private final Long validProductId = 1L;
+            private final String name = "cat1";
+            private final String maker = "codesoom";
+            private final Long price = 33_000L;
+
+            @BeforeEach
+            void mocking() {
+                final Product product = new Product(name, maker, price);
+
+                given(productRepository.findById(validProductId))
+                        .willReturn(Optional.ofNullable(product));
+            }
+
+            @Test
+            @DisplayName("해당하는 상품을 반환한다")
+            void It_returns_the_product() {
+                // when
+                Product testProduct = productService.get(validProductId);
+
+                // then
+                assertEquals(name, testProduct.getName());
+                assertEquals(maker, testProduct.getMaker());
+                assertEquals(price, testProduct.getPrice());
+                assertNull(testProduct.getImage());
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 등록되어 있지 않는 상품의 식별자가 주어진다면")
+        class Context_with_invalid_id {
+            private final Long invalidProductId = 100L;
+
+            @Test
+            @DisplayName("null을 반환한다")
+            void It_returns_null() {
+                // when
+                Product testProduct = productService.get(invalidProductId);
+
+                // then
+                assertNull(testProduct);
             }
         }
     }
