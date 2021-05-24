@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
 
 @Entity
@@ -25,9 +24,8 @@ public class Product {
     @Column(name = "PRICE")
     private Long price;
 
-    @Lob
-    @Column(name = "IMAGE", columnDefinition = "BLOB")
-    private Byte[] image;
+    @Column(name = "IMAGE_URL", columnDefinition = "CLOB")
+    private String imageUrl;
 
     public Product() {
     }
@@ -37,12 +35,12 @@ public class Product {
     }
 
     public Product(Long id, String name, String maker, Long price,
-                   Byte[] image) {
+                   String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -61,7 +59,7 @@ public class Product {
         return price;
     }
 
-    public Byte[] getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

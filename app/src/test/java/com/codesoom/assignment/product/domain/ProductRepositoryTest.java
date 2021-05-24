@@ -39,7 +39,7 @@ class ProductRepositoryTest {
                 assertEquals(name, createdProduct.getName());
                 assertEquals(maker, createdProduct.getMaker());
                 assertEquals(price, createdProduct.getPrice());
-                assertNull(createdProduct.getImage());
+                assertNull(createdProduct.getImageUrl());
             }
         }
     }

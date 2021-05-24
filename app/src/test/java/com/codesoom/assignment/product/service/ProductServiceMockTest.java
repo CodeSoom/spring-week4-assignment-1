@@ -63,7 +63,7 @@ public class ProductServiceMockTest {
                 assertEquals(name, createdProduct.getName());
                 assertEquals(maker, createdProduct.getMaker());
                 assertEquals(price, createdProduct.getPrice());
-                assertNull(createdProduct.getImage());
+                assertNull(createdProduct.getImageUrl());
             }
         }
     }
@@ -98,7 +98,7 @@ public class ProductServiceMockTest {
                 assertThat(name).isEqualTo(testProduct.getName());
                 assertThat(maker).isEqualTo(testProduct.getMaker());
                 assertThat(price).isEqualTo(testProduct.getPrice());
-                assertNull(testProduct.getImage());
+                assertNull(testProduct.getImageUrl());
             }
         }
 
