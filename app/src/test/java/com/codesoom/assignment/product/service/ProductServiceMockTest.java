@@ -1,7 +1,9 @@
 package com.codesoom.assignment.product.service;
 
+import com.codesoom.assignment.error.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
+import org.assertj.core.api.ThrowableAssert;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
@@ -91,9 +95,9 @@ public class ProductServiceMockTest {
                 Product testProduct = productService.get(validProductId);
 
                 // then
-                assertEquals(name, testProduct.getName());
-                assertEquals(maker, testProduct.getMaker());
-                assertEquals(price, testProduct.getPrice());
+                assertThat(name).isEqualTo(testProduct.getName());
+                assertThat(maker).isEqualTo(testProduct.getMaker());
+                assertThat(price).isEqualTo(testProduct.getPrice());
                 assertNull(testProduct.getImage());
             }
         }
@@ -104,13 +108,15 @@ public class ProductServiceMockTest {
             private final Long invalidProductId = 100L;
 
             @Test
-            @DisplayName("null을 반환한다")
+            @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
             void It_returns_null() {
                 // when
-                Product testProduct = productService.get(invalidProductId);
+                ThrowableAssert.ThrowingCallable throwable =
+                        () -> productService.get(invalidProductId);
 
                 // then
-                assertNull(testProduct);
+                assertThatThrownBy(throwable)
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
@@ -143,28 +149,32 @@ public class ProductServiceMockTest {
             @DisplayName("상품이 2개 담긴 리스트를 반환한다")
             void It_returns_empty_list() {
                 // when
-                List<Product> testProductList = productService.list();
+                final List<Product> testProductList = productService.list();
 
                 // then
-                assertEquals(totalProductCount, testProductList.size());
+                assertThat(totalProductCount)
+                        .isEqualTo(testProductList.size());
                 MatcherAssert.assertThat(testProductList.get(0)
                                                         .getName(),
                                          CoreMatchers.containsString("cat"));
-                assertEquals(maker, testProductList.get(0)
-                                                   .getMaker());
-                assertEquals(price, testProductList.get(0)
-                                                   .getPrice());
+                assertThat(maker)
+                        .isEqualTo(testProductList.get(0)
+                                                  .getMaker());
+                assertThat(price)
+                        .isEqualTo(testProductList.get(0)
+                                                  .getPrice());
             }
         }
 
         @Nested
         @DisplayName("만약 등록되어 있는 상품이 없다면")
         class Context_with_empty_product {
+            private final List<Product> products = new ArrayList<>();
 
             @BeforeEach
             void mocking() {
                 given(productRepository.findAll())
-                        .willReturn(null);
+                        .willReturn(products);
             }
 
             @Test
@@ -174,8 +184,9 @@ public class ProductServiceMockTest {
                 List<Product> testProductList = productService.list();
 
                 // then
-                assertNull(testProductList);
+                assertThat(testProductList).isEqualTo(products);
             }
         }
     }
+
 }
