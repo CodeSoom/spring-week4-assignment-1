@@ -5,6 +5,8 @@ import com.codesoom.assignment.product.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class ProductService {
@@ -21,5 +23,9 @@ public class ProductService {
     public Product get(Long id) {
         return productRepository.findById(id)
                                 .orElse(null);
+    }
+
+    public List<Product> list() {
+        return productRepository.findAll();
     }
 }

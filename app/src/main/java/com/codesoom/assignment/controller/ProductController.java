@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,5 +34,10 @@ public class ProductController {
     public Product getProduct(@PathVariable Long id) {
         return Optional.ofNullable(productService.get(id))
                        .orElseThrow(ProductNotFoundException::new);
+    }
+
+    @GetMapping
+    public List<Product> listProduct() {
+        return productService.list();
     }
 }

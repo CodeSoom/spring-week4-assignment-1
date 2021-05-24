@@ -15,7 +15,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -36,73 +40,6 @@ public class ProductControllerMockTest {
 
     @MockBean
     ProductService productService;
-
-    @Nested
-    @DisplayName("getProduct 메서드는")
-    class Describe_getProduct {
-
-        @Nested
-        @DisplayName("만약 '/products' 경로로 등록되어 있는 상품 식별자와 함께 GET 요청된다면")
-        class Context_GET_products_with_valid_product_id {
-            private final Long validProductId = 1L;
-            private final String name = "cat1";
-            private final String maker = "codesoom";
-            private final Long price = 33_000L;
-            private final Product product = new Product(name, maker, price);
-            private final MockHttpServletRequestBuilder requestBuilder =
-                    get("/products/" + validProductId)
-                            .contentType(MediaType.APPLICATION_JSON);
-
-            @BeforeEach
-            void mocking() {
-                given(productService.get(validProductId))
-                        .willReturn(product);
-            }
-
-            @Test
-            @DisplayName("주어진 식별자의 상품을 반환한다")
-            void It_returns_one_product_by_id() throws Exception {
-                // when
-                mockMvc.perform(requestBuilder)
-                       // then
-                       .andExpect(status().isOk())
-                       .andExpect(jsonPath("$.name", containsString(name)))
-                       .andExpect(jsonPath("$.maker",
-                                           containsString(maker)))
-                       .andExpect(jsonPath("$.price", is(price.intValue())));
-
-                verify(productService).get(validProductId);
-            }
-        }
-
-        @Nested
-        @DisplayName("만약 '/products' 경로로 등록되어 있지 않는 상품 식별자와 함께 GET 요청된다면")
-        class Context_GET_products_with_invalid_product_id {
-            private final Long invalidProductId = 2L;
-            private final MockHttpServletRequestBuilder requestBuilder =
-                    get("/products/" + invalidProductId);
-            private final String productNotFoundMessage = "Product Not Found";
-
-            @BeforeEach
-            void mocking() {
-                given(productService.get(invalidProductId))
-                        .willThrow(new ProductNotFoundException());
-            }
-
-            @Test
-            @DisplayName("주어진 식별자의 상품을 반환한다")
-            void It_returns_one_product_by_id() throws Exception {
-                // when
-                mockMvc.perform(requestBuilder)
-                       // then
-                       .andExpect(status().isNotFound())
-                       .andExpect(jsonPath("$.message",
-                                           containsString(productNotFoundMessage)));
-
-                verify(productService).get(invalidProductId);
-            }
-        }
-    }
 
     @Nested
     @DisplayName("createProduct 메서드는")
@@ -142,4 +79,121 @@ public class ProductControllerMockTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("getProduct 메서드는")
+    class Describe_getProduct {
+
+        @Nested
+        @DisplayName("만약 '/products/{id}' 경로로 등록되어 있는 상품 식별자와 함께 GET 요청된다면")
+        class Context_GET_products_with_valid_product_id {
+            private final Long validProductId = 1L;
+            private final String name = "cat1";
+            private final String maker = "codesoom";
+            private final Long price = 33_000L;
+            private final Product product = new Product(name, maker, price);
+            private final MockHttpServletRequestBuilder requestBuilder =
+                    get("/products/" + validProductId)
+                            .contentType(MediaType.APPLICATION_JSON);
+
+            @BeforeEach
+            void mocking() {
+                given(productService.get(validProductId))
+                        .willReturn(product);
+            }
+
+            @Test
+            @DisplayName("주어진 식별자의 상품을 반환한다")
+            void It_returns_one_product_by_id() throws Exception {
+                // when
+                mockMvc.perform(requestBuilder)
+                       // then
+                       .andExpect(status().isOk())
+                       .andExpect(jsonPath("$.name", containsString(name)))
+                       .andExpect(jsonPath("$.maker",
+                                           containsString(maker)))
+                       .andExpect(jsonPath("$.price", is(price.intValue())));
+
+                verify(productService).get(validProductId);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 '/products/{id}' 경로로 등록되어 있지 않는 상품 식별자와 함께 GET 요청된다면")
+        class Context_GET_products_with_invalid_product_id {
+            private final Long invalidProductId = 2L;
+            private final MockHttpServletRequestBuilder requestBuilder =
+                    get("/products/" + invalidProductId);
+            private final String productNotFoundMessage = "Product Not Found";
+
+            @BeforeEach
+            void mocking() {
+                given(productService.get(invalidProductId))
+                        .willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("주어진 식별자의 상품을 반환한다")
+            void It_returns_one_product_by_id() throws Exception {
+                // when
+                mockMvc.perform(requestBuilder)
+                       // then
+                       .andExpect(status().isNotFound())
+                       .andExpect(jsonPath("$.message",
+                                           containsString(productNotFoundMessage)));
+
+                verify(productService).get(invalidProductId);
+            }
+        }
+    }
+
+
+    @Nested
+    @DisplayName("listProduct 메서드는")
+    class Describe_listProduct {
+
+        @Nested
+        @DisplayName("만약 '/products' 경로로 GET 요청된다면")
+        class Context_GET_products {
+            final int totalProductCount = 2;
+            final String name = "cat";
+            final String maker = "codesoom";
+            final Long price = 33_000L;
+            private final MockHttpServletRequestBuilder requestBuilder =
+                    get("/products")
+                            .contentType(MediaType.APPLICATION_JSON);
+
+            @BeforeEach
+            void mocking() {
+                final List<Product> products = new ArrayList<>();
+                for (int index = 1; index <= totalProductCount; index++) {
+                    final Product product = new Product(name, maker,
+                                                        price);
+                    products.add(product);
+                }
+
+                given(productService.list())
+                        .willReturn(products);
+            }
+
+            @Test
+            @DisplayName("등록되어 있는 상품 목록을 반환한다")
+            void It_returns_one_product_by_id() throws Exception {
+                // when
+                mockMvc.perform(requestBuilder)
+                       // then
+                       .andExpect(status().isOk())
+                       .andExpect(jsonPath("$[*]",
+                                           hasSize(totalProductCount)))
+                       .andExpect(jsonPath("$[0].name",
+                                           is(name)))
+                       .andExpect(jsonPath("$[0].maker",
+                                           containsString(maker)))
+                       .andExpect(jsonPath("$[0].price", is(price.intValue())));
+
+                verify(productService).list();
+            }
+        }
+    }
+
 }

@@ -2,6 +2,8 @@ package com.codesoom.assignment.product.service;
 
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +23,7 @@ import static org.mockito.BDDMockito.given;
 
 @DisplayName("ProductService 클래스의")
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+public class ProductServiceMockTest {
 
     @InjectMocks
     ProductService productService;
@@ -107,6 +111,70 @@ public class ProductServiceTest {
 
                 // then
                 assertNull(testProduct);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("list 메서드는")
+    class Describe_list {
+
+        @Nested
+        @DisplayName("만약 등록되어 있는 상품이 2개 있다면")
+        class Context_with_one_product {
+            private final List<Product> products = new ArrayList<>();
+            private final int totalProductCount = 2;
+            private final String name = "cat";
+            private final String maker = "codesoom";
+            private final Long price = 33_000L;
+
+            @BeforeEach
+            void mocking() {
+                for (int index = 1; index <= totalProductCount; index++) {
+                    Product product = new Product(name, maker, price);
+                    products.add(product);
+                }
+
+                given(productRepository.findAll())
+                        .willReturn(products);
+            }
+
+            @Test
+            @DisplayName("상품이 2개 담긴 리스트를 반환한다")
+            void It_returns_empty_list() {
+                // when
+                List<Product> testProductList = productService.list();
+
+                // then
+                assertEquals(totalProductCount, testProductList.size());
+                MatcherAssert.assertThat(testProductList.get(0)
+                                                        .getName(),
+                                         CoreMatchers.containsString("cat"));
+                assertEquals(maker, testProductList.get(0)
+                                                   .getMaker());
+                assertEquals(price, testProductList.get(0)
+                                                   .getPrice());
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 등록되어 있는 상품이 없다면")
+        class Context_with_empty_product {
+
+            @BeforeEach
+            void mocking() {
+                given(productRepository.findAll())
+                        .willReturn(null);
+            }
+
+            @Test
+            @DisplayName("빈 리스트를 반환한다")
+            void It_returns_empty_list() {
+                // when
+                List<Product> testProductList = productService.list();
+
+                // then
+                assertNull(testProductList);
             }
         }
     }
