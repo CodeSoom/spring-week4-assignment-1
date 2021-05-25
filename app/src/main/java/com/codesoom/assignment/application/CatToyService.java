@@ -38,8 +38,7 @@ public class CatToyService {
     public CatToy updateToy(Long id, CatToy source) {
         CatToy toy = toyRepo.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
-        toy = toyRepo.updateToy(source, toy);
-        return toy;
+        return toyRepo.updateToy(source, toy);
     }
 
     public void deleteToy(Long id) {

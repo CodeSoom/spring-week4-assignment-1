@@ -25,6 +25,9 @@ class TaskServiceTest {
     private TaskRepository taskRepository;
     private List<Task> tasks;
 
+    static final Long notRegisteredId = 100L;
+    static final Long registeredId = 1L;
+
     @BeforeEach
     void setUp() {
         taskRepository = mock(TaskRepository.class);
@@ -32,9 +35,9 @@ class TaskServiceTest {
         tasks = new ArrayList<>();
     }
 
-    Task createTestTask(String source) {
+    Task createTestTask(String title) {
         Task task = new Task();
-        task.setTitle(source);
+        task.setTitle(title);
         taskService.createTask(task);
 
         return task;
@@ -45,7 +48,25 @@ class TaskServiceTest {
     class Describe_getTasks {
 
         @Nested
-        @DisplayName("등록된 객체가 없다면")
+        @DisplayName("등록된 할 일이 1개 이상 존재한다면")
+        class Context_with_anything {
+            @BeforeEach
+            void registerTask() {
+                Task task = createTestTask("test");
+                tasks.add(task);
+
+                given(taskRepository.findAll()).willReturn(tasks);
+            }
+
+            @Test
+            @DisplayName("전체 할 일의 list를 리턴한다.")
+            void it_return_every_task() {
+                assertThat(taskService.getTasks()).hasSize(1);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 할 일이 없다면")
          class Context_with_nothing {
             @BeforeEach
             void setUp() {
@@ -59,24 +80,6 @@ class TaskServiceTest {
                 verify(taskRepository).findAll();
             }
         }
-
-        @Nested
-        @DisplayName("등록된 객체가 1개 이상 존재한다면")
-        class Context_with_anything {
-            @BeforeEach
-            void registerTask() {
-                Task task = createTestTask("test");
-                tasks.add(task);
-
-                given(taskRepository.findAll()).willReturn(tasks);
-            }
-
-            @Test
-            @DisplayName("전체 객체의 list를 리턴한다.")
-            void it_return_every_task() {
-                assertThat(taskService.getTasks()).hasSize(1);
-            }
-        }
     }
 
     @Nested
@@ -84,10 +87,29 @@ class TaskServiceTest {
     class Describe_getTask {
 
         @Nested
+        @DisplayName("등록된 ID값이 주어지면")
+        class Context_with_registered_ID {
+
+            @BeforeEach
+            void registerTask() {
+                Task task = createTestTask("test");
+                given(taskRepository.findById(registeredId))
+                        .willReturn(Optional.of(task));
+            }
+
+            @Test
+            @DisplayName("해당 ID의 할 일을 리턴한다.")
+            void it_return_task() {
+                assertThat(taskService.getTask(registeredId).getTitle())
+                        .isEqualTo(TASK_TITLE);
+
+                verify(taskRepository).findById(registeredId);
+            }
+        }
+
+        @Nested
         @DisplayName("등록되지 않은 ID값이 주어지면")
         class Context_with_not_registered_ID {
-
-            Long notRegisteredId = 100L;
 
             @Test
             @DisplayName("TaskNotFound 예외를 던집니다.")
@@ -96,28 +118,6 @@ class TaskServiceTest {
                         .isInstanceOf(TaskNotFoundException.class);
 
                 verify(taskRepository).findById(notRegisteredId);
-            }
-        }
-
-        @Nested
-        @DisplayName("등록된 ID값이 주어지면")
-        class Context_with_registered_ID {
-            Long registeredId1 = 1L;
-
-            @BeforeEach
-            void registerTask() {
-                Task task = createTestTask("test");
-                given(taskRepository.findById(registeredId1))
-                        .willReturn(Optional.of(task));
-            }
-
-            @Test
-            @DisplayName("해당 ID의 객체를 리턴한다.")
-            void it_return_task() {
-                assertThat(taskService.getTask(registeredId1).getTitle())
-                        .isEqualTo(TASK_TITLE);
-
-                verify(taskRepository).findById(registeredId1);
             }
         }
     }
@@ -137,20 +137,17 @@ class TaskServiceTest {
         }
 
         @Nested
-        @DisplayName("객체에 들어갈 Title을 받으면")
+        @DisplayName("할 일에 들어갈 내용을 받으면")
         class Context_with_some_title {
             Task task = new Task();
 
-            @BeforeEach
-            void setUp() {
+            @Test
+            @DisplayName("할 일을 생성하고, 생성한 할 일을 리턴한다.")
+            void it_create_task() {
                 Task source = new Task();
                 source.setTitle(TASK_TITLE);
                 task = taskService.createTask(source);
-            }
 
-            @Test
-            @DisplayName("객체를 생성하고, 생성한 객체를 리턴한다.")
-            void it_create_task() {
                 verify(taskRepository).save(any(Task.class));
 
                 assertThat(task.getId()).isEqualTo(1L);
@@ -171,25 +168,9 @@ class TaskServiceTest {
         }
 
         @Nested
-        @DisplayName("등록되지 않은 ID값이 주어지면")
-        class Context_with_not_registered_ID {
-            Long notRegisteredId = 100L;
-
-            @Test
-            @DisplayName("TaskNotFound 예외를 던집니다.")
-            void it_throw_TaskNotFoundException() {
-                assertThatThrownBy(() -> taskService.updateTask(notRegisteredId, task))
-                        .isInstanceOf(TaskNotFoundException.class);
-
-                verify(taskRepository).findById(notRegisteredId);
-            }
-        }
-
-        @Nested
-        @DisplayName("등록된 ID값과 변경할 title이 주어지면")
+        @DisplayName("등록된 ID값과 변경할 내용이 주어지면")
         class Context_with_registered_ID {
             String updateText = "New Test1";
-            Long registeredId = 1L;
 
             @BeforeEach
             void setUp() {
@@ -199,11 +180,25 @@ class TaskServiceTest {
             }
 
             @Test
-            @DisplayName("title을 변경하고, 변경된 객체를 리턴한다")
+            @DisplayName("내용을 변경하고, 변경된 할 일을 리턴한다")
             void it_update_task() {
                 assertThat(taskService.getTask(registeredId).getTitle()).isEqualTo("New Test1");
 
                 verify(taskRepository, times(2)).findById(registeredId);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 ID값이 주어지면")
+        class Context_with_not_registered_ID {
+
+            @Test
+            @DisplayName("TaskNotFound 예외를 던집니다.")
+            void it_throw_TaskNotFoundException() {
+                assertThatThrownBy(() -> taskService.updateTask(notRegisteredId, task))
+                        .isInstanceOf(TaskNotFoundException.class);
+
+                verify(taskRepository).findById(notRegisteredId);
             }
         }
     }
@@ -220,6 +215,22 @@ class TaskServiceTest {
         }
 
         @Nested
+        @DisplayName("등록된 ID값이 주어지면")
+        class Context_with_registered_ID {
+
+            @Test
+            @DisplayName("해당 할 일을 삭제한다.")
+            void it_delete_task() {
+                Task task = taskService.deleteTask(registeredId);
+
+                assertThat(taskService.getTasks()).isEmpty();
+
+                verify(taskRepository).findById(registeredId);
+                verify(taskRepository).delete(task);
+            }
+        }
+
+        @Nested
         @DisplayName("등록되지 ID값이 주어지면")
         class Context_with_not_registered_ID {
             Long notRegisteredId = 100L;
@@ -231,23 +242,6 @@ class TaskServiceTest {
                         .isInstanceOf(TaskNotFoundException.class);
 
                 verify(taskRepository).findById(notRegisteredId);
-            }
-        }
-
-        @Nested
-        @DisplayName("등록된 ID값이 주어지면")
-        class Context_with_registered_ID {
-            Long registeredId = 1L;
-
-            @Test
-            @DisplayName("해당 객체를 삭제한다.")
-            void it_delete_task() {
-                Task task = taskService.deleteTask(registeredId);
-
-                assertThat(taskService.getTasks()).isEmpty();
-
-                verify(taskRepository).findById(registeredId);
-                verify(taskRepository).delete(task);
             }
         }
     }
