@@ -5,6 +5,7 @@ package com.codesoom.assignment.domain;
 // 동일성을 알기 위해 하나의 identifier 를 사용 (unique key)
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 // 1. Entity (Domain 관점에서)
@@ -15,7 +16,7 @@ public class Task {
 
     // Identifier - Unique key
      @Id
-//     @GeneratedValue
+     @GeneratedValue
     private Long id;
 
     private String title;

@@ -5,9 +5,11 @@ import com.codesoom.assignment.domain.Task;
 import com.codesoom.assignment.domain.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class TaskService {
     // 의존관계가 있으니 아래 생성자를 만들어 주입해준다.
     private final TaskRepository taskRepository;
@@ -34,7 +36,6 @@ public class TaskService {
     }
 
     public Task updateTask(Long id, Task source) {
-//        Task task = getTask(id); // 상위의 메소드에 의존하지 않고, repository에 의존하도록 바꾼다.
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));;
         task.setTitle(source.getTitle());
@@ -43,7 +44,6 @@ public class TaskService {
     }
 
     public Task deleteTask(Long id) {
-//        Task task = getTask(id); // update와 마찬가지
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
         taskRepository.delete(task);
