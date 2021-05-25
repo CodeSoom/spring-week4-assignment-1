@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tasks")
-@CrossOrigin
+//@CrossOrigin
 public class TaskController {
 
     private TaskService taskService;
