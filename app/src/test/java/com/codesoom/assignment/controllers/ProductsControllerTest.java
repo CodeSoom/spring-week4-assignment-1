@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ProductsController의")
-class ProductsControllerTest {
+class ProductControllerTest {
 
-    private ProductsController productsController;
+    private ProductController productController;
 
     @BeforeEach
     void setUp() {
-        productsController = new ProductsController();
+        productController = new ProductController();
     }
 
     @Nested
@@ -28,7 +28,7 @@ class ProductsControllerTest {
             @Test
             @DisplayName("비어있는 상품 리스트를 반환한다")
             public void it_returns_empty_list() {
-                assertThat(productsController.list())
+                assertThat(productController.list())
                         .isEmpty();
             }
         }
@@ -40,7 +40,7 @@ class ProductsControllerTest {
             @Test
             @DisplayName("상품 리스트를 반환한다")
             public void it_returns_empty_list() {
-                assertThat(productsController.list())
+                assertThat(productController.list())
                         .isNotEmpty();
             }
         }
