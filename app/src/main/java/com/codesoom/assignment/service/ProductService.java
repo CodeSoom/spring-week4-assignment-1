@@ -61,8 +61,7 @@ public class ProductService {
 
         findProduct.update(product);
 
-        return productRepository.findById(id)
-                .orElseThrow(ProductNotFoundException::new);
+        return findProduct;
     }
 
     /**

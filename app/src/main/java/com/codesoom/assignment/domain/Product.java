@@ -1,12 +1,18 @@
 package com.codesoom.assignment.domain;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +33,9 @@ public class Product {
         this.maker = product.getMaker();
         this.price = product.getPrice();
         this.imgUrl = product.getImgUrl();
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
