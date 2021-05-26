@@ -1,11 +1,11 @@
 package com.codesoom.assignment.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository {
     List<Product> findAll();
-    Product find(Long id);
+    Optional<Product> findById(Long id);
     Product save(Product product);
-    Product update(Long id, Product product);
-    Product remove(Long id);
+    void deleteById(Long id);
 }

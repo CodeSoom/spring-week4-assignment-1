@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
@@ -25,11 +26,11 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public Product find(Long id) {
-        return products.stream()
+    public Optional<Product> findById(Long id) {
+        return Optional.ofNullable(products.stream()
                 .filter(product -> product.getId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ProductNotFoundException(id)));
     }
 
     @Override
@@ -40,16 +41,8 @@ public class InMemoryProductRepository implements ProductRepository {
     }
 
     @Override
-    public Product update(Long id, Product product) {
-        Product targetProduct = find(id);
-        targetProduct.updateBy(product);
-        return targetProduct;
-    }
-
-    @Override
-    public Product remove(Long id) {
-        Product product = find(id);
+    public void deleteById(Long id) {
+        Optional<Product> product = findById(id);
         products.remove(product);
-        return product;
     }
 }
