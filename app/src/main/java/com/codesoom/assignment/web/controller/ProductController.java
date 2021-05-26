@@ -28,7 +28,7 @@ public class ProductController {
      * @return 고양이 장난감 목록
      */
     @GetMapping
-    public List<Product> toys() {
+    public List<Product> products() {
         return productService.fetchProducts();
     }
 
