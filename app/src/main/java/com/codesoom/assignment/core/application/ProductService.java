@@ -3,7 +3,9 @@ package com.codesoom.assignment.core.application;
 import com.codesoom.assignment.core.domain.Product;
 import com.codesoom.assignment.core.domain.ProductRepository;
 import com.codesoom.assignment.core.infra.JpaToyRepository;
+import com.codesoom.assignment.web.exception.InvalidProductException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -24,6 +26,20 @@ public class ProductService {
      */
     public List<Product> fetchProducts() {
         return productRepository.findAll();
+    }
+
+    /**
+     * 고양이 장난감을 등록합니다.
+     * @param product
+     * @return
+     */
+    public Product saveProduct(Product product) {
+        if (StringUtils.isEmpty(product.getName()) ||
+            StringUtils.isEmpty(product.getBrand()) ||
+            StringUtils.isEmpty(product.getPrice())) {
+            throw new InvalidProductException();
+        }
+        return productRepository.save(product);
     }
 
 }

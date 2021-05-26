@@ -2,6 +2,7 @@ package com.codesoom.assignment.web.controller;
 
 import com.codesoom.assignment.core.application.ProductService;
 import com.codesoom.assignment.core.domain.Product;
+import com.codesoom.assignment.web.exception.InvalidProductException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,7 +104,7 @@ class ProductControllerWebTest {
                 Product newProduct = makeValidProduct(NAME, BRAND, PRICE);
                 content = objectMapper.writeValueAsString(newProduct);
 
-                given(productService.saveProduct()).willReturn(newProduct);
+                given(productService.saveProduct(any(Product.class))).willReturn(newProduct);
             }
 
             @Test
@@ -136,7 +137,7 @@ class ProductControllerWebTest {
             @Test
             @DisplayName("Bad Request 에러 코드를 반환한다")
             void list() throws Exception {
-                mockMvc.perform(get("/products")
+                mockMvc.perform(post("/products")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -144,7 +145,6 @@ class ProductControllerWebTest {
             }
         }
     }
-
 
     public Product makeValidProduct(String name, String brand, Integer price) {
         return Product.builder()

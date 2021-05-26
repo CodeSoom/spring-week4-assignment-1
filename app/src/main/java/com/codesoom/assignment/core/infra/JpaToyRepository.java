@@ -17,4 +17,7 @@ public interface JpaToyRepository
     @Override
     public List<Product> findAll();
 
+    @Override
+    public Product save(Product product);
+
 }
