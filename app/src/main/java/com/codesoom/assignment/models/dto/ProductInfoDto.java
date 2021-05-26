@@ -3,11 +3,9 @@ package com.codesoom.assignment.models.dto;
 import com.codesoom.assignment.models.domain.Product;
 
 /**
- * 상품
+ * 상품 정보
  */
-public class ProductDto {
-
-    private Long id;
+public class ProductInfoDto {
 
     private String name;
 
@@ -17,22 +15,13 @@ public class ProductDto {
 
     private String imageUrl;
 
-    public ProductDto() { }
+    public ProductInfoDto() { }
 
-    public ProductDto(Product p) {
-        this.id = p.getId();
+    public ProductInfoDto(Product p) {
         this.name = p.getName();
         this.maker = p.getMaker();
         this.price = p.getPrice();
         this.imageUrl = p.getImgUrl();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
