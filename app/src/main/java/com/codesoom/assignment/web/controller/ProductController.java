@@ -1,7 +1,7 @@
 package com.codesoom.assignment.web.controller;
 
-import com.codesoom.assignment.core.application.ToyService;
-import com.codesoom.assignment.core.domain.Toy;
+import com.codesoom.assignment.core.application.ProductService;
+import com.codesoom.assignment.core.domain.Product;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +14,13 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/toys")
-public class ToyController {
+@RequestMapping("/products")
+public class ProductController {
 
-    private final ToyService toyService;
+    private final ProductService productService;
 
-    public ToyController(ToyService toyService) {
-        this.toyService = toyService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     /**
@@ -28,8 +28,8 @@ public class ToyController {
      * @return 고양이 장난감 목록
      */
     @GetMapping
-    public List<Toy> toys() {
-        return toyService.toys();
+    public List<Product> toys() {
+        return productService.toys();
     }
 
 }

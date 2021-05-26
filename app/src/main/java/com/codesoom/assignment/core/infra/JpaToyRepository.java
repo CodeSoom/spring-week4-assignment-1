@@ -1,7 +1,7 @@
 package com.codesoom.assignment.core.infra;
 
-import com.codesoom.assignment.core.domain.Toy;
-import com.codesoom.assignment.core.domain.ToyRepository;
+import com.codesoom.assignment.core.domain.Product;
+import com.codesoom.assignment.core.domain.ProductRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +12,9 @@ import java.util.List;
  */
 @Repository
 public interface JpaToyRepository
-        extends ToyRepository, CrudRepository<Toy, Long> {
+        extends ProductRepository, CrudRepository<Product, Long> {
 
     @Override
-    public List<Toy> findAll();
+    public List<Product> findAll();
 
 }

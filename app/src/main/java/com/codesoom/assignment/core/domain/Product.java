@@ -12,7 +12,7 @@ import javax.persistence.Id;
  */
 @Entity
 @Getter @Setter
-public class Toy {
+public class Product {
     @Id
     @GeneratedValue
     private Long id;

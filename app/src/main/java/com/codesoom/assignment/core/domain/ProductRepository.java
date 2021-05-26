@@ -2,8 +2,8 @@ package com.codesoom.assignment.core.domain;
 
 import java.util.List;
 
-public interface ToyRepository {
+public interface ProductRepository {
 
-    public List<Toy> findAll();
+    public List<Product> findAll();
 
 }
