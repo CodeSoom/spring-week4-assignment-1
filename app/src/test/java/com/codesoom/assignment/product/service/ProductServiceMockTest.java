@@ -1,6 +1,7 @@
 package com.codesoom.assignment.product.service;
 
 import com.codesoom.assignment.error.exception.ProductNotFoundException;
+import com.codesoom.assignment.product.ProductFixtures;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +20,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("ProductService 클래스의")
@@ -41,10 +40,7 @@ public class ProductServiceMockTest {
         @Nested
         @DisplayName("만약 상품이 주어진다면")
         class Context_with_one_product {
-            private final String name = "cat1";
-            private final String maker = "codesoom";
-            private final Long price = 33_000L;
-            private Product product = new Product(name, maker, price);
+            private final Product product = ProductFixtures.laser();
 
             @BeforeEach
             void mocking() {
@@ -59,10 +55,11 @@ public class ProductServiceMockTest {
                 Product createdProduct = productService.create(product);
 
                 // then
-                assertEquals(name, createdProduct.getName());
-                assertEquals(maker, createdProduct.getMaker());
-                assertEquals(price, createdProduct.getPrice());
-                assertNull(createdProduct.getImageUrl());
+                // FIXME: 생성됐다는 것을 검증
+                assertThat(product.getName()).isEqualTo(createdProduct.getName());
+                assertThat(product.getMaker()).isEqualTo(createdProduct.getMaker());
+                assertThat(product.getPrice()).isEqualTo(createdProduct.getPrice());
+                assertThat(product.getImageUrl()).isEqualTo(createdProduct.getImageUrl());
             }
         }
     }
@@ -74,16 +71,11 @@ public class ProductServiceMockTest {
         @Nested
         @DisplayName("만약 등록되어 있는 상품의 유효한 식별자가 주어진다면")
         class Context_with_valid_id {
-            private final Long validProductId = 1L;
-            private final String name = "cat1";
-            private final String maker = "codesoom";
-            private final Long price = 33_000L;
+            private final Product product = ProductFixtures.laser();
 
             @BeforeEach
             void mocking() {
-                final Product product = new Product(name, maker, price);
-
-                given(productRepository.findById(validProductId))
+                given(productRepository.findById(product.getId()))
                         .willReturn(Optional.ofNullable(product));
             }
 
@@ -91,13 +83,13 @@ public class ProductServiceMockTest {
             @DisplayName("해당하는 상품을 반환한다")
             void It_returns_the_product() {
                 // when
-                Product testProduct = productService.get(validProductId);
+                Product testProduct = productService.get(product.getId());
 
                 // then
-                assertThat(name).isEqualTo(testProduct.getName());
-                assertThat(maker).isEqualTo(testProduct.getMaker());
-                assertThat(price).isEqualTo(testProduct.getPrice());
-                assertNull(testProduct.getImageUrl());
+                assertThat(product.getName()).isEqualTo(testProduct.getName());
+                assertThat(product.getMaker()).isEqualTo(testProduct.getMaker());
+                assertThat(product.getPrice()).isEqualTo(testProduct.getPrice());
+                assertThat(product.getImageUrl()).isEqualTo(testProduct.getImageUrl());
             }
         }
 
@@ -123,15 +115,12 @@ public class ProductServiceMockTest {
         @DisplayName("만약 등록되어 있는 상품이 2개 있다면")
         class Context_with_one_product {
             private final List<Product> products = new ArrayList<>();
+            private final Product product = ProductFixtures.laser();
             private final int totalProductCount = 2;
-            private final String name = "cat";
-            private final String maker = "codesoom";
-            private final Long price = 33_000L;
 
             @BeforeEach
             void mocking() {
                 for (int index = 1; index <= totalProductCount; index++) {
-                    Product product = new Product(name + index, maker, price);
                     products.add(product);
                 }
 
@@ -149,11 +138,13 @@ public class ProductServiceMockTest {
                 assertThat(testProductList.size())
                         .isEqualTo(totalProductCount);
                 assertThat(testProductList.get(0)
-                                          .getName()).contains(name);
+                                          .getName()).contains(product.getName());
                 assertThat(testProductList.get(0)
-                                          .getMaker()).isEqualTo(maker);
+                                          .getMaker()).isEqualTo(product.getMaker());
                 assertThat(testProductList.get(0)
-                                          .getPrice()).isEqualTo(price);
+                                          .getPrice()).isEqualTo(product.getPrice());
+                assertThat(testProductList.get(0)
+                                          .getImageUrl()).isEqualTo(product.getImageUrl());
             }
         }
 

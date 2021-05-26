@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.error.exception.ProductNotFoundException;
+import com.codesoom.assignment.product.ProductFixtures;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,14 +51,11 @@ public class ProductControllerMockTest {
         @Nested
         @DisplayName("만약 '/products' 경로로 상품 데이터와 함께 POST 요청된다면")
         class Context_POST_products_with_one_product {
-            private final String name = "cat1";
-            private final String maker = "codesoom";
-            private final Long price = 33_000L;
-            private final Product product = new Product(name, maker, price);
+            private final Product product = ProductFixtures.laser();
             private final MockHttpServletRequestBuilder requestBuilder =
                     post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"name\":\"" + name + "\"}");
+                            .content("{\"name\":\"" + product.getName() + "\"}");
 
             @BeforeEach
             void mocking() {
@@ -72,10 +70,13 @@ public class ProductControllerMockTest {
                 mockMvc.perform(requestBuilder)
                        // then
                        .andExpect(status().isCreated())
-                       .andExpect(jsonPath("$.name", containsString(name)))
+                       .andExpect(jsonPath("$.name",
+                                           containsString(product.getName())))
                        .andExpect(jsonPath("$.maker",
-                                           containsString(maker)))
-                       .andExpect(jsonPath("$.price", is(price.intValue())));
+                                           containsString(product.getMaker())))
+                       .andExpect(jsonPath("$.price",
+                                           is(product.getPrice()
+                                                     .intValue())));
 
                 verify(productService).create(any(Product.class));
             }
@@ -89,18 +90,14 @@ public class ProductControllerMockTest {
         @Nested
         @DisplayName("만약 '/products/{id}' 경로로 등록되어 있는 상품 식별자와 함께 GET 요청된다면")
         class Context_GET_products_with_valid_product_id {
-            private final Long validProductId = 1L;
-            private final String name = "cat1";
-            private final String maker = "codesoom";
-            private final Long price = 33_000L;
-            private final Product product = new Product(name, maker, price);
+            private final Product product = ProductFixtures.laser();
             private final MockHttpServletRequestBuilder requestBuilder =
-                    get("/products/" + validProductId)
+                    get("/products/" + product.getId())
                             .contentType(MediaType.APPLICATION_JSON);
 
             @BeforeEach
             void mocking() {
-                given(productService.get(validProductId))
+                given(productService.get(product.getId()))
                         .willReturn(product);
             }
 
@@ -111,12 +108,14 @@ public class ProductControllerMockTest {
                 mockMvc.perform(requestBuilder)
                        // then
                        .andExpect(status().isOk())
-                       .andExpect(jsonPath("$.name", containsString(name)))
+                       .andExpect(jsonPath("$.name", containsString(product.getName())))
                        .andExpect(jsonPath("$.maker",
-                                           containsString(maker)))
-                       .andExpect(jsonPath("$.price", is(price.intValue())));
+                                           containsString(product.getMaker())))
+                       .andExpect(jsonPath("$.price",
+                                           is(product.getPrice()
+                                                     .intValue())));
 
-                verify(productService).get(validProductId);
+                verify(productService).get(product.getId());
             }
         }
 
@@ -158,19 +157,15 @@ public class ProductControllerMockTest {
         @DisplayName("만약 '/products' 경로로 GET 요청된다면")
         class Context_GET_products {
             final int totalProductCount = 2;
-            final String name = "cat";
-            final String maker = "codesoom";
-            final Long price = 33_000L;
             private final MockHttpServletRequestBuilder requestBuilder =
                     get("/products")
                             .contentType(MediaType.APPLICATION_JSON);
+            private final Product product = ProductFixtures.helm();
 
             @BeforeEach
             void mocking() {
                 final List<Product> products = new ArrayList<>();
                 for (int index = 1; index <= totalProductCount; index++) {
-                    final Product product = new Product(name, maker,
-                                                        price);
                     products.add(product);
                 }
 
@@ -188,10 +183,12 @@ public class ProductControllerMockTest {
                        .andExpect(jsonPath("$[*]",
                                            hasSize(totalProductCount)))
                        .andExpect(jsonPath("$[0].name",
-                                           is(name)))
+                                           is(product.getName())))
                        .andExpect(jsonPath("$[0].maker",
-                                           containsString(maker)))
-                       .andExpect(jsonPath("$[0].price", is(price.intValue())));
+                                           containsString(product.getMaker())))
+                       .andExpect(jsonPath("$[0].price",
+                                           is(product.getPrice()
+                                                     .intValue())));
 
                 verify(productService).list();
             }
