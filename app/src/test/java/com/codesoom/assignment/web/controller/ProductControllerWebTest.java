@@ -3,6 +3,7 @@ package com.codesoom.assignment.web.controller;
 import com.codesoom.assignment.core.application.ProductService;
 import com.codesoom.assignment.core.domain.Product;
 import com.codesoom.assignment.web.exception.InvalidProductException;
+import com.codesoom.assignment.web.exception.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,8 @@ import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -151,27 +153,26 @@ class ProductControllerWebTest {
     @Nested
     @DisplayName("GET /products/:id")
     class DescribeGetProductById {
-        List<Product> products;
-
         @Nested
         @DisplayName("ID에 해당하는 장난감이 존재할 때")
         class ContextWithProductById {
             @BeforeEach
             void prepare() {
-                Product newProduct = makeValidProduct(NAME, BRAND, PRICE);
-                newProduct.setId(ID);
-                given(productService.findProductById(ID)).willReturn(newProduct);
+                Product foundProduct = makeValidProduct(NAME, BRAND, PRICE);
+                foundProduct.setId(99L);
+
+                given(productService.fetchProductById(eq(99L))).willReturn(foundProduct);
             }
 
             @Test
-            @DisplayName("장난감이 든 배열을 반환한다")
+            @DisplayName("해당 장난감을 반환한다")
             void product() throws Exception {
-                String uri = String.format("/product/%s", ID);
+                String uri = String.format("/products/%s", 99L);
 
                 mockMvc.perform(get(uri))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$").isNotEmpty())
-                        .andExpect(jsonPath("$.id").value(ID))
+                        .andExpect(jsonPath("$.id").value(99L))
                         .andExpect(jsonPath("$.name").value(NAME))
                         .andExpect(jsonPath("$.brand").value(BRAND))
                         .andExpect(jsonPath("$.price").value(PRICE));
@@ -183,14 +184,16 @@ class ProductControllerWebTest {
         class ContextWithoutProductById {
             @BeforeEach
             void prepare() {
-                given(productService.findProductById(any(Long.class)))
+                given(productService.fetchProductById(anyLong()))
                         .willThrow(new ProductNotFoundException());
             }
 
             @Test
-            @DisplayName("빈 배열을 반환한다")
+            @DisplayName("Not found 에러코드를 반환한다")
             void product() throws Exception {
-                mockMvc.perform(get("/products"))
+                String uri = String.format("/products/%s", ID);
+
+                mockMvc.perform(get(uri))
                         .andExpect(status().isNotFound());
             }
         }

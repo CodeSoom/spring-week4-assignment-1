@@ -4,8 +4,10 @@ import com.codesoom.assignment.core.domain.Product;
 import com.codesoom.assignment.core.domain.ProductRepository;
 import com.codesoom.assignment.core.infra.JpaToyRepository;
 import com.codesoom.assignment.web.exception.InvalidProductException;
+import com.codesoom.assignment.web.exception.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -42,4 +44,13 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    /**
+     * ID에 해당하는 장난감을 반환합니다.
+     * @param id
+     * @return
+     */
+    public Product fetchProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException());
+    }
 }

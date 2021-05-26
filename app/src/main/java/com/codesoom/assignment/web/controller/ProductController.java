@@ -48,9 +48,14 @@ public class ProductController {
         return productService.saveProduct(product);
     }
 
+    /**
+     * 요청 ID에 해당하는 고양이 장난감을 반환한다.
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     public Product product(@PathVariable Long id) {
-        return null;
+        return productService.fetchProductById(id);
     }
 
 }

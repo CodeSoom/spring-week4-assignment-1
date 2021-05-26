@@ -33,10 +33,10 @@ class ProductControllerTest {
 
     @Nested
     @DisplayName("GET /products")
-    class DescribeGetTasks {
+    class DescribeGetProducts {
         @Nested
         @DisplayName("고양이 장난감 목록이 비었을 때")
-        class ContextWithEmptyTasks {
+        class ContextWithEmptyProducts {
             @BeforeEach
             void prepare() {
                 products = new ArrayList<>();
@@ -54,7 +54,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("고양이 장난감 목록이 있을 때")
-        class ContextWithSomeTasks {
+        class ContextWithSomeProducts {
             @BeforeEach
             void prepare() {
                 products = new ArrayList<>();
