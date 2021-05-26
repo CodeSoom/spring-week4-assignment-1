@@ -121,4 +121,43 @@ class ProductRepositoryTest {
 
     }
 
+    @Nested
+    @DisplayName("delete 메소드는")
+    class Describe_delete {
+
+        @Nested
+        @DisplayName("상품을 목록에서 삭제하는 경우")
+        class Context_delete_product {
+
+            Product deletedToy;
+
+            @BeforeEach
+            void setUp() {
+                Product toy1 = new Product(1L, "Test Toy1", "Test Maker1", 1000, null);
+                Product toy2 = new Product(2L, "Test Toy2", "Test Maker2", 2000, null);
+                deletedToy = new Product(3L, "Test Toy3", "Test Maker3", 3000, null);
+                productRepository.save(toy1);
+                productRepository.save(toy2);
+                productRepository.save(deletedToy);
+
+            }
+
+            @Test
+            @DisplayName("해당하는 상품이 목록에서 삭제됩니다.")
+            void it_delete_product_to_list() {
+
+                // 현재 3개의 상품이 등록되어 있다.
+                Assertions.assertThat(productRepository.findAll()).hasSize(3);
+
+                productRepository.delete(deletedToy);
+
+                // 삭제 후 2개의 상품만 남아있다.
+                Assertions.assertThat(productRepository.findAll()).hasSize(2);
+
+            }
+
+        }
+
+    }
+
 }

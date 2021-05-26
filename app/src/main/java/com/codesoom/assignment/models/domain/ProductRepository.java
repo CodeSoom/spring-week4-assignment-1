@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 상품에 관한 순수 데이터 처리를 담당합니다.
+ */
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
