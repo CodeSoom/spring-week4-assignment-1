@@ -2,6 +2,7 @@ package com.codesoom.assignment.web.controller;
 
 import com.codesoom.assignment.core.application.ProductService;
 import com.codesoom.assignment.core.domain.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,15 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,7 +45,7 @@ class ProductControllerWebTest {
     private ProductService productService;
 
     @Nested
-    @DisplayName("Request GET /products")
+    @DisplayName("GET /products")
     class DescribeGetProducts {
         List<Product> products;
 
@@ -52,7 +55,7 @@ class ProductControllerWebTest {
             @BeforeEach
             void prepare() {
                 products = new ArrayList<>();
-                products.add(makeNewProduct(NAME, BRAND, PRICE));
+                products.add(makeValidProduct(NAME, BRAND, PRICE));
                 given(productService.fetchProducts()).willReturn(products);
             }
 
@@ -87,7 +90,63 @@ class ProductControllerWebTest {
         }
     }
 
-    public Product makeNewProduct(String name, String brand, Integer price) {
+    @Nested
+    @DisplayName("POST /products")
+    class DescribePostProducts {
+        String content;
+
+        @Nested
+        @DisplayName("유효한 장난감이라면")
+        class ContextWithValidProduct {
+            @BeforeEach
+            void prepare() throws JsonProcessingException {
+                Product newProduct = makeValidProduct(NAME, BRAND, PRICE);
+                content = objectMapper.writeValueAsString(newProduct);
+
+                given(productService.saveProduct()).willReturn(newProduct);
+            }
+
+            @Test
+            @DisplayName("생성된 장난감을 반환한다")
+            void products() throws Exception {
+                mockMvc.perform(post("/products")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$").isNotEmpty())
+                        .andExpect(jsonPath("$.name").value(NAME))
+                        .andExpect(jsonPath("$.brand").value(BRAND))
+                        .andExpect(jsonPath("$.price").value(PRICE));
+            }
+        }
+
+        @Nested
+        @DisplayName("잘못된 장난감이라면")
+        class ContextWithInvalidProduct {
+            @BeforeEach
+            void prepare() throws JsonProcessingException {
+                Product newProduct = makeInvalidProduct();
+                content = objectMapper.writeValueAsString(newProduct);
+
+                given(productService.saveProduct(any(Product.class)))
+                        .willThrow(new InvalidProductException());
+            }
+
+            @Test
+            @DisplayName("Bad Request 에러 코드를 반환한다")
+            void list() throws Exception {
+                mockMvc.perform(get("/products")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+
+    public Product makeValidProduct(String name, String brand, Integer price) {
         return Product.builder()
                 .name(name)
                 .brand(brand)
@@ -95,5 +154,8 @@ class ProductControllerWebTest {
                 .build();
     }
 
+    public Product makeInvalidProduct() {
+        return Product.builder().build();
+    }
 
 }

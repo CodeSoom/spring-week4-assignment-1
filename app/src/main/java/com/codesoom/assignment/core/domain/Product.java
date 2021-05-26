@@ -35,8 +35,4 @@ public class Product {
         this.price = price;
     }
 
-    public String toString() {
-        return String.format("{ id: %s, name: %s, brand: %s, price: %s }", id, name, brand, price);
-    }
-
 }
