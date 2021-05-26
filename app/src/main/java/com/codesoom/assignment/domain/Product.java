@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Optional;
 
 @Entity
 public class Product {
@@ -22,9 +23,21 @@ public class Product {
     private Long price;
 
     @Column
-    private String image;
+    private String imageUrl;
 
     public Product() {}
+
+    public void updateBy(Product product) {
+        id = Optional.ofNullable(product.getId()).orElse(id);
+        name = Optional.ofNullable(product.getName()).orElse(name);
+        maker = Optional.ofNullable(product.getMaker()).orElse(maker);
+        price = Optional.ofNullable(product.getPrice()).orElse(price);
+        imageUrl = Optional.ofNullable(product.getImageUrl()).orElse(imageUrl);
+    }
+
+    public String toString() {
+        return String.format("[Product] id:%d / name:%s / maker:%s / price:%d / imageUrl:%s", id, name, maker, price, imageUrl);
+    }
 
     public Long getId() {
         return id;
@@ -58,11 +71,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getImagePath() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImagePath(String imagePath) {
-        this.image = imagePath;
+    public void setImageUrl(String imagePath) {
+        this.imageUrl = imagePath;
     }
 }
