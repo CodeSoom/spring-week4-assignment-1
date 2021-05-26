@@ -29,4 +29,28 @@ public class ProductService {
     public List<Product> list() {
         return productRepository.findAll();
     }
+
+    public Product update(Long id, Product product) {
+        existsById(id);
+
+        var newProduct = new Product(id,
+                                     product.getName(),
+                                     product.getMaker(),
+                                     product.getPrice(),
+                                     product.getImageUrl());
+        productRepository.save(newProduct);
+        return newProduct;
+    }
+
+    public void delete(Long id) {
+        existsById(id);
+
+        productRepository.deleteById(id);
+    }
+
+    private void existsById(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException();
+        }
+    }
 }
