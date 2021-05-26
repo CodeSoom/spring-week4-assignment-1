@@ -3,9 +3,6 @@ package com.codesoom.assignment.product.service;
 import com.codesoom.assignment.error.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
-import org.assertj.core.api.ThrowableAssert;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +25,7 @@ import static org.mockito.BDDMockito.given;
 
 @DisplayName("ProductService 클래스의")
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 public class ProductServiceMockTest {
 
     @InjectMocks
@@ -40,7 +39,7 @@ public class ProductServiceMockTest {
     class Describe_create {
 
         @Nested
-        @DisplayName("만약 1개의 상품이 주어진다면")
+        @DisplayName("만약 상품이 주어진다면")
         class Context_with_one_product {
             private final String name = "cat1";
             private final String maker = "codesoom";
@@ -110,12 +109,7 @@ public class ProductServiceMockTest {
             @Test
             @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
             void It_returns_null() {
-                // when
-                ThrowableAssert.ThrowingCallable throwable =
-                        () -> productService.get(invalidProductId);
-
-                // then
-                assertThatThrownBy(throwable)
+                assertThatThrownBy(() -> productService.get(invalidProductId))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -137,7 +131,7 @@ public class ProductServiceMockTest {
             @BeforeEach
             void mocking() {
                 for (int index = 1; index <= totalProductCount; index++) {
-                    Product product = new Product(name, maker, price);
+                    Product product = new Product(name + index, maker, price);
                     products.add(product);
                 }
 
@@ -152,17 +146,14 @@ public class ProductServiceMockTest {
                 final List<Product> testProductList = productService.list();
 
                 // then
-                assertThat(totalProductCount)
-                        .isEqualTo(testProductList.size());
-                MatcherAssert.assertThat(testProductList.get(0)
-                                                        .getName(),
-                                         CoreMatchers.containsString("cat"));
-                assertThat(maker)
-                        .isEqualTo(testProductList.get(0)
-                                                  .getMaker());
-                assertThat(price)
-                        .isEqualTo(testProductList.get(0)
-                                                  .getPrice());
+                assertThat(testProductList.size())
+                        .isEqualTo(totalProductCount);
+                assertThat(testProductList.get(0)
+                                          .getName()).contains(name);
+                assertThat(testProductList.get(0)
+                                          .getMaker()).isEqualTo(maker);
+                assertThat(testProductList.get(0)
+                                          .getPrice()).isEqualTo(price);
             }
         }
 
