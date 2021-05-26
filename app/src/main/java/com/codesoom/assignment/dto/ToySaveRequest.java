@@ -2,7 +2,7 @@ package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Toy;
 
-public class ToySaveRequestDto {
+public class ToySaveRequest {
     private String name;
     private String brand;
     private Double price;
@@ -29,14 +29,14 @@ public class ToySaveRequestDto {
             return this;
         }
 
-        public ToySaveRequestDto build() {
-            return new ToySaveRequestDto(this);
+        public ToySaveRequest build() {
+            return new ToySaveRequest(this);
         }
     }
 
-    public ToySaveRequestDto() {}
+    public ToySaveRequest() {}
 
-    private ToySaveRequestDto(Builder builder) {
+    private ToySaveRequest(Builder builder) {
         this.name = builder.name;
         this.brand = builder.brand;
         this.price = builder.price;
