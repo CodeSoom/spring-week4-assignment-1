@@ -21,6 +21,7 @@ import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -32,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayName("ProductController web")
 class ProductControllerWebTest {
+    private final Long ID = 1L;
     private final String NAME = "장난감 이름";
     private final String BRAND = "장난감 브랜드";
     private final int PRICE = 10000;
@@ -83,7 +85,7 @@ class ProductControllerWebTest {
 
             @Test
             @DisplayName("빈 배열을 반환한다")
-            void list() throws Exception {
+            void products() throws Exception {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content().string("[]"));
@@ -142,6 +144,54 @@ class ProductControllerWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /products/:id")
+    class DescribeGetProductById {
+        List<Product> products;
+
+        @Nested
+        @DisplayName("ID에 해당하는 장난감이 존재할 때")
+        class ContextWithProductById {
+            @BeforeEach
+            void prepare() {
+                Product newProduct = makeValidProduct(NAME, BRAND, PRICE);
+                newProduct.setId(ID);
+                given(productService.findProductById(ID)).willReturn(newProduct);
+            }
+
+            @Test
+            @DisplayName("장난감이 든 배열을 반환한다")
+            void product() throws Exception {
+                String uri = String.format("/product/%s", ID);
+
+                mockMvc.perform(get(uri))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$").isNotEmpty())
+                        .andExpect(jsonPath("$.id").value(ID))
+                        .andExpect(jsonPath("$.name").value(NAME))
+                        .andExpect(jsonPath("$.brand").value(BRAND))
+                        .andExpect(jsonPath("$.price").value(PRICE));
+            }
+        }
+
+        @Nested
+        @DisplayName("ID에 해당하는 장난감이 없을 때")
+        class ContextWithoutProductById {
+            @BeforeEach
+            void prepare() {
+                given(productService.findProductById(any(Long.class)))
+                        .willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("빈 배열을 반환한다")
+            void product() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isNotFound());
             }
         }
     }

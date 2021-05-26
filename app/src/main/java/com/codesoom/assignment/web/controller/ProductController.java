@@ -5,6 +5,7 @@ import com.codesoom.assignment.core.domain.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,11 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product saveProduct(@RequestBody Product product) {
         return productService.saveProduct(product);
+    }
+
+    @GetMapping("{id}")
+    public Product product(@PathVariable Long id) {
+        return null;
     }
 
 }
