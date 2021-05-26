@@ -1,6 +1,9 @@
 package com.codesoom.assignment.core.domain;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -12,6 +15,7 @@ import javax.persistence.Id;
  */
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
     @Id
     @GeneratedValue
@@ -21,8 +25,13 @@ public class Product {
 
     private String brand;
 
-    private String price;
+    private Integer price;
 
-    private String image;
+    @Builder
+    public Product(String name, String brand, Integer price) {
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+    }
 
 }

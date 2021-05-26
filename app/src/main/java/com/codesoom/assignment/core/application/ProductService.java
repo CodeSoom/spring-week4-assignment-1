@@ -22,7 +22,7 @@ public class ProductService {
      * 고양이 장난감 목록을 반환합니다.
      * @return
      */
-    public List<Product> toys() {
+    public List<Product> fetchProducts() {
         return productRepository.findAll();
     }
 
