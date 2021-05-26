@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -73,7 +74,7 @@ class ProductControllerWebTest {
         product.setName("Name" + id);
         product.setMaker("Maker " + id);
         product.setPrice(id * 1000L);
-        product.setImage("http://localhost:8080/fish" + id);
+        product.setImageUrl("http://localhost:8080/fish" + id);
         return product;
     }
 
@@ -83,6 +84,7 @@ class ProductControllerWebTest {
         @Nested
         @DisplayName("고양이 장난감 목록이 존재한다면")
         @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+
         class Context_existed_product_list {
             private Long productId = 1L;
             private String productJSON;

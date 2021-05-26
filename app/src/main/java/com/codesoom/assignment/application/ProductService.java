@@ -40,8 +40,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product product = productRepository
-                .findById(id)
+        Product product = productRepository.findById(id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException(id));
@@ -50,8 +49,7 @@ public class ProductService {
     }
 
     public Product deleteProduct(Long id) {
-        Product product = productRepository.
-                findById(id)
+        Product product = productRepository.findById(id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException(id));

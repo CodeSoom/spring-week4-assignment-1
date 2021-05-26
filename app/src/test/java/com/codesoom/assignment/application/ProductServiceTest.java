@@ -50,7 +50,7 @@ class ProductServiceTest {
         product.setName("Name" + id);
         product.setMaker("Maker " + id);
         product.setPrice(id * 1000L);
-        product.setImage("http://localhost:8080/fish" + id);
+        product.setImageUrl("http://localhost:8080/fish" + id);
         return product;
     }
 
@@ -242,7 +242,7 @@ class ProductServiceTest {
                             assertThat(returnProduct).extracting("price").isEqualTo(product.getPrice());
                         },
                         () -> {
-                            assertThat(returnProduct).extracting("image").isEqualTo(product.getImage());
+                            assertThat(returnProduct).extracting("imageUrl").isEqualTo(product.getImageUrl());
                         }
                 );
             }
@@ -304,8 +304,8 @@ class ProductServiceTest {
                         },
                         () -> {
                             assertThat(returnProduct)
-                                    .extracting("image")
-                                    .isEqualTo(nextProduct.getImage());
+                                    .extracting("imageUrl")
+                                    .isEqualTo(nextProduct.getImageUrl());
                         }
                 );
             }

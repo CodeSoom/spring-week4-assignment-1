@@ -12,7 +12,7 @@ public class Product {
     private String name;
     private Long price;
     private String maker;
-    private String image;
+    private String imageUrl;
 
     public Long getId() {
         return id;
@@ -46,12 +46,12 @@ public class Product {
         this.maker = maker;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", maker='" + maker + '\'' +
-                ", image='" + image + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

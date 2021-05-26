@@ -49,7 +49,7 @@ public class ProductControllerTest {
         product.setName("Name" + id);
         product.setMaker("Maker " + id);
         product.setPrice(id * 1000L);
-        product.setImage("http://localhost:8080/fish" + id);
+        product.setImageUrl("http://localhost:8080/fish" + id);
         return product;
     }
 
@@ -60,8 +60,6 @@ public class ProductControllerTest {
         @DisplayName("고양이 장난감 목록이 있다면")
         class Context_not_empty_list {
             private int productSize = 5;
-            private String productJSON;
-            private Long productId = 1L;
 
             @BeforeEach
             void setUpNotEmptyList()  {
@@ -183,7 +181,7 @@ public class ProductControllerTest {
                         },
                         () -> {
                             assertThat(returnProduct)
-                                    .extracting("image").isEqualTo(product.getImage());
+                                    .extracting("imageUrl").isEqualTo(product.getImageUrl());
                         }
                 );
             }
@@ -279,8 +277,8 @@ public class ProductControllerTest {
                         },
                         () -> {
                             assertThat(returnProduct)
-                                    .extracting("image")
-                                    .isEqualTo(product.getImage());
+                                    .extracting("imageUrl")
+                                    .isEqualTo(product.getImageUrl());
                         }
                 );
             }
@@ -337,8 +335,8 @@ public class ProductControllerTest {
                         },
                         () -> {
                             assertThat(returnProduct)
-                                    .extracting("image")
-                                    .isEqualTo(product.getImage());
+                                    .extracting("imageUrl")
+                                    .isEqualTo(product.getImageUrl());
                         }
                 );
             }
