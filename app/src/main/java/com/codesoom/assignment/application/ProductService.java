@@ -2,6 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.exceptions.ProductNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +13,7 @@ public class ProductService implements ProductManagable {
 
     private ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(@Qualifier("jpaProductRepository") ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -22,7 +24,8 @@ public class ProductService implements ProductManagable {
 
     @Override
     public Product getProduct(Long id) {
-        return productRepository.find(id);
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @Override
@@ -31,12 +34,17 @@ public class ProductService implements ProductManagable {
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        return productRepository.update(id, product);
+    public Product updateProduct(Long id, Product sourceProduct) {
+        Product targetProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        targetProduct.updateBy(sourceProduct);
+
+        return targetProduct;
     }
 
     @Override
     public void deleteProduct(Long id) {
-        productRepository.remove(id);
+        productRepository.deleteById(id);
     }
 }
