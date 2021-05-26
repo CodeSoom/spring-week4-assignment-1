@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 import java.util.Optional;
 
 @Entity
@@ -28,7 +29,6 @@ public class Product {
     public Product() {}
 
     public void updateBy(Product product) {
-        id = Optional.ofNullable(product.getId()).orElse(id);
         name = Optional.ofNullable(product.getName()).orElse(name);
         maker = Optional.ofNullable(product.getMaker()).orElse(maker);
         price = Optional.ofNullable(product.getPrice()).orElse(price);
@@ -77,5 +77,28 @@ public class Product {
 
     public void setImageUrl(String imagePath) {
         this.imageUrl = imagePath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(maker, product.maker) &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(imageUrl, product.imageUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, maker, price, imageUrl);
     }
 }
