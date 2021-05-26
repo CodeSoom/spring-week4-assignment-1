@@ -18,7 +18,7 @@ public class Product {
 
     private String maker;
 
-    private String price;
+    private Long price;
 
     @Lob
     @Basic(fetch = FetchType.EAGER)
@@ -48,11 +48,11 @@ public class Product {
         this.maker = maker;
     }
 
-    public String getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Long price) {
         this.price = price;
     }
 
