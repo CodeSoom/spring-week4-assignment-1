@@ -106,7 +106,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 productId 로 null 요청이 들어오면")
+        @DisplayName("만약 productId 가 null인 요청이 들어오면")
         class ContextWithNull {
 
             @Test
