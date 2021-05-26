@@ -14,18 +14,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductController class")
 class ProductControllerTest {
     private final String NAME = "고양이 장난감 이름";
     private final String BRAND = "고양이 장난감 브랜드";
-    private final int PRICE = 10000;
 
     private ProductController productController;
     private ProductService productService;
-    private Product product;
 
     private List<Product> products;
 
@@ -33,8 +29,6 @@ class ProductControllerTest {
     void setUp() {
         productService = mock(ProductService.class);
         productController = new ProductController(productService);
-
-
     }
 
     @Nested

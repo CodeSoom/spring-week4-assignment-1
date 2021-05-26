@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,10 @@ public class Product {
         this.name = name;
         this.brand = brand;
         this.price = price;
+    }
+
+    public String toString() {
+        return String.format("{ id: %s, name: %s, brand: %s, price: %s }", id, name, brand, price);
     }
 
 }
