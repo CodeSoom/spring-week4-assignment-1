@@ -24,8 +24,7 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -206,10 +205,7 @@ class ProductControllerWebTest {
         class ContextWithProductById {
             @BeforeEach
             void prepare() {
-                Product product = makeValidProduct(NAME, BRAND, PRICE);
-                product.setId(ID);
-
-                given(productService.fetchProductById(eq(ID))).willReturn(product);
+                doNothing().when(productService).deleteProductById(eq(ID));
             }
 
             @Test
@@ -229,7 +225,7 @@ class ProductControllerWebTest {
         class ContextWithoutProductById {
             @BeforeEach
             void prepare() {
-                given(productService.fetchProductById(eq(ID))).willThrow(new ProductNotFoundException());
+                doThrow(new ProductNotFoundException()).when(productService).deleteProductById(eq(ID));
             }
 
             @Test
@@ -240,7 +236,7 @@ class ProductControllerWebTest {
                 mockMvc.perform(delete(uri))
                         .andExpect(status().isNotFound());
 
-                verify(productService, times(0)).deleteProductById(ID);
+                verify(productService, times(1)).deleteProductById(ID);
             }
         }
     }
