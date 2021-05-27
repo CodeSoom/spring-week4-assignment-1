@@ -26,7 +26,7 @@ public class ToyController {
         return new ResponseEntity<>(toys, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping
     public ResponseEntity<Toy> createToy(
             @PathVariable @Valid ToySaveRequest toySaveRequest
     ) {
