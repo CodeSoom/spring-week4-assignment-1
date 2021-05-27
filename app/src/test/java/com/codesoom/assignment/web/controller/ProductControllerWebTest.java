@@ -24,8 +24,9 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -156,11 +157,11 @@ class ProductControllerWebTest {
         @DisplayName("ID에 해당하는 장난감이 존재할 때")
         class ContextWithProductById {
             @BeforeEach
-            void prepare() {
-                Product foundProduct = makeValidProduct(NAME, BRAND, PRICE);
-                foundProduct.setId(ID);
+                void prepare() {
+                    Product foundProduct = makeValidProduct(NAME, BRAND, PRICE);
+                    foundProduct.setId(ID);
 
-                given(productService.fetchProductById(eq(ID))).willReturn(foundProduct);
+                    given(productService.fetchProductById(eq(ID))).willReturn(foundProduct);
             }
 
             @Test
@@ -183,8 +184,7 @@ class ProductControllerWebTest {
         class ContextWithoutProductById {
             @BeforeEach
             void prepare() {
-                given(productService.fetchProductById(eq(ID)))
-                        .willThrow(new ProductNotFoundException());
+                given(productService.fetchProductById(eq(ID))).willThrow(new ProductNotFoundException());
             }
 
             @Test
@@ -194,6 +194,53 @@ class ProductControllerWebTest {
 
                 mockMvc.perform(get(uri))
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products/{id}")
+    class DescribeDeleteProductById {
+        @Nested
+        @DisplayName("ID에 해당하는 장난감이 존재할 때")
+        class ContextWithProductById {
+            @BeforeEach
+            void prepare() {
+                Product product = makeValidProduct(NAME, BRAND, PRICE);
+                product.setId(ID);
+
+                given(productService.fetchProductById(eq(ID))).willReturn(product);
+            }
+
+            @Test
+            @DisplayName("No content 응답코드를 반환한다")
+            void deleteProduct() throws Exception {
+                String uri = String.format("/products/%s", ID);
+
+                mockMvc.perform(delete(uri))
+                        .andExpect(status().isNoContent());
+
+                verify(productService, times(1)).deleteProductById(ID);
+            }
+        }
+
+        @Nested
+        @DisplayName("ID에 해당하는 장난감이 없을 때")
+        class ContextWithoutProductById {
+            @BeforeEach
+            void prepare() {
+                given(productService.fetchProductById(eq(ID))).willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("Not found 에러코드를 반환한다")
+            void deleteProduct() throws Exception {
+                String uri = String.format("/products/%s", ID);
+
+                mockMvc.perform(delete(uri))
+                        .andExpect(status().isNotFound());
+
+                verify(productService, times(0)).deleteProductById(ID);
             }
         }
     }
