@@ -86,9 +86,10 @@ public class ToyService {
      * toy 삭제
      * @param id 삭제할 toy id
      */
-    public void deleteToy(Long id) {
+    public Toy deleteToy(Long id) {
         Toy toy = jpaToyRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(id));
         jpaToyRepository.delete(toy);
+        return toy;
     }
 }
