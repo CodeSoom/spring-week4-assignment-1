@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.codesoom.assignment"},{"l":"com.codesoom.assignment.application"},{"l":"com.codesoom.assignment.controllers"},{"l":"com.codesoom.assignment.domain"},{"l":"com.codesoom.assignment.dto"},{"l":"com.codesoom.assignment.infra"}];updateSearchResults();
