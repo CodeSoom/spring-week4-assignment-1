@@ -1,7 +1,7 @@
-package com.codesoom.assignment.infra;
+package com.codesoom.assignment.Task.infra;
 
-import com.codesoom.assignment.domain.Task;
-import com.codesoom.assignment.domain.TaskRepository;
+import com.codesoom.assignment.Task.domain.Task;
+import com.codesoom.assignment.Task.domain.TaskRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

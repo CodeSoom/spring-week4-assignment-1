@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.Task.domain;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;

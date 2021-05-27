@@ -1,7 +1,7 @@
-package com.codesoom.assignment.controllers;
+package com.codesoom.assignment.Task.controllers;
 
-import com.codesoom.assignment.application.TaskService;
-import com.codesoom.assignment.domain.Task;
+import com.codesoom.assignment.Task.application.TaskService;
+import com.codesoom.assignment.Task.domain.Task;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

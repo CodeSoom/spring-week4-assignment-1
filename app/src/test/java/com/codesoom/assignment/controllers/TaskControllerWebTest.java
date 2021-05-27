@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.application.TaskService;
 import com.codesoom.assignment.domain.Task;
 import org.junit.jupiter.api.BeforeEach;

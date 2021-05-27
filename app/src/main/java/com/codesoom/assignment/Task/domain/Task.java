@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.Task.domain;
 
 // Task를 하나의 Entity로 본다.
 // 동일성을 알기 위해 하나의 identifier 를 사용 (unique key)
@@ -14,8 +14,8 @@ import javax.persistence.Id;
 public class Task {
 
     // Identifier - Unique key
-     @Id
-     @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     private String title;

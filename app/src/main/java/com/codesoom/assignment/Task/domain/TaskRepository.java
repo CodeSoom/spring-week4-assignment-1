@@ -1,6 +1,4 @@
-package com.codesoom.assignment.domain;
-
-import org.springframework.stereotype.Component;
+package com.codesoom.assignment.Task.domain;
 
 import java.util.List;
 import java.util.Optional;

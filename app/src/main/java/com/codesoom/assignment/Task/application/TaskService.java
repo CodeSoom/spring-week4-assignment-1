@@ -1,20 +1,22 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.Task.application;
 
-import com.codesoom.assignment.TaskNotFoundException;
-import com.codesoom.assignment.domain.Task;
-import com.codesoom.assignment.domain.TaskRepository;
+import com.codesoom.assignment.Task.domain.Task;
+import com.codesoom.assignment.Task.domain.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
+
+/**
+ * Task Entity 를 다루는 메소드 작성
+ */
 @Service
 @Transactional
 public class TaskService {
-    // 의존관계가 있으니 아래 생성자를 만들어 주입해준다.
+
     private final TaskRepository taskRepository;
 
-    // taskRepository 를 빈으로 주입하기 위해 TaskRepository 위에 @Component 붙여준다.
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }

@@ -1,14 +1,11 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.TaskNotFoundException;
 import com.codesoom.assignment.domain.Task;
 import com.codesoom.assignment.domain.TaskRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

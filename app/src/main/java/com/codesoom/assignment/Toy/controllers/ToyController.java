@@ -1,7 +1,7 @@
-package com.codesoom.assignment.controllers;
+package com.codesoom.assignment.Toy.controllers;
 
-import com.codesoom.assignment.application.ToyService;
-import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.Toy.application.ToyService;
+import com.codesoom.assignment.Toy.domain.Toy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

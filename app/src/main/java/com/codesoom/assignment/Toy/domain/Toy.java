@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.Toy.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
