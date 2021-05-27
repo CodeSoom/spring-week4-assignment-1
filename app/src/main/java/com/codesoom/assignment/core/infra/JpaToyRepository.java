@@ -25,6 +25,6 @@ public interface JpaToyRepository
     public Optional<Product> findById(Long id);
 
     @Override
-    public void delete(Product product);
+    public boolean existsById(Long id);
 
 }

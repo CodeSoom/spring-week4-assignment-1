@@ -7,7 +7,6 @@ import com.codesoom.assignment.web.exception.InvalidProductException;
 import com.codesoom.assignment.web.exception.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -33,11 +32,11 @@ public class ProductService {
     /**
      * 고양이 장난감을 등록합니다.
      * @param product
-     * @return
+     * @return 저장된 장난감
      */
     public Product saveProduct(Product product) {
         if (StringUtils.isEmpty(product.getName()) ||
-            StringUtils.isEmpty(product.getBrand()) ||
+            StringUtils.isEmpty(product.getMaker()) ||
             StringUtils.isEmpty(product.getPrice())) {
             throw new InvalidProductException();
         }
@@ -47,15 +46,32 @@ public class ProductService {
     /**
      * ID에 해당하는 장난감을 반환합니다.
      * @param id
-     * @return
+     * @return 찾아진 장난감
      */
     public Product fetchProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException());
     }
 
+    /**
+     * ID에 해당하는 장난감을 삭제합니다.
+     * @param id
+     */
     public void deleteProductById(Long id) {
         Product product = fetchProductById(id);
         productRepository.delete(product);
+    }
+
+    /**
+     * ID에 해당하는 장난감의 상세정보를 갱신합니다.
+     * @param id
+     * @return 갱신된 장난감
+     */
+    public Product updateProductById(Long id, Product product) {
+        if(!productRepository.existsById(id)) {
+            throw new ProductNotFoundException();
+        }
+
+        return productRepository.save(product);
     }
 }

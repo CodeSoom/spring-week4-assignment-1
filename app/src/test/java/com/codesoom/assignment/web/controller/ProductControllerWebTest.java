@@ -199,7 +199,7 @@ class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("DELETE /products/{id}")
+    @DisplayName("DELETE /products/:id")
     class DescribeDeleteProductById {
         @Nested
         @DisplayName("ID에 해당하는 장난감이 존재할 때")
@@ -210,7 +210,7 @@ class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("No content 응답코드를 반환한다")
+            @DisplayName("해당 장난감을 삭제하고, No content 응답코드를 반환한다")
             void deleteProduct() throws Exception {
                 String uri = String.format("/products/%s", ID);
 
@@ -238,6 +238,73 @@ class ProductControllerWebTest {
                         .andExpect(status().isNotFound());
 
                 verify(productService).deleteProductById(INVALID_ID);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products/{:id}")
+    class DescribePatchProductById {
+        final String POSTFIX = "[UPDATED]";
+        Product updatedProduct;
+        String content;
+
+        @BeforeEach
+        void prepare() throws JsonProcessingException {
+            updatedProduct = makeValidProduct(NAME + POSTFIX, BRAND, PRICE);
+            content = objectMapper.writeValueAsString(updatedProduct);
+        }
+
+        @Nested
+        @DisplayName("ID에 해당하는 장난감이 존재할 때")
+        class ContextWithProductById {
+            @BeforeEach
+            void prepare() {
+                updatedProduct.setId(ID);
+
+                given(productService.updateProductById(eq(ID), any(Product.class)))
+                        .willReturn(updatedProduct);
+            }
+
+            @Test
+            @DisplayName("해당 장남감의 상세정보를 수정한다")
+            void updateProduct() throws Exception {
+                String uri = String.format("/products/%s", ID);
+
+                mockMvc.perform(patch(uri)
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$").isNotEmpty())
+                        .andExpect(jsonPath("$.id").value(ID))
+                        .andExpect(jsonPath("$.name").value(NAME + POSTFIX))
+                        .andExpect(jsonPath("$.brand").value(BRAND))
+                        .andExpect(jsonPath("$.price").value(PRICE));
+            }
+        }
+
+        @Nested
+        @DisplayName("ID에 해당하는 장난감이 없을 때")
+        class ContextWithoutProductById {
+            @BeforeEach
+            void prepare() {
+                updatedProduct.setId(INVALID_ID);
+
+                given(productService.updateProductById(eq(INVALID_ID), any(Product.class)))
+                        .willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("Not found 에러코드를 반환한다")
+            void updateProduct() throws Exception {
+                String uri = String.format("/products/%s", INVALID_ID);
+
+                mockMvc.perform(patch(uri)
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.codesoom.assignment.core.domain;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ class ProductTest {
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isNull();
-                assertThat(product.getBrand()).isNull();
+                assertThat(product.getMaker()).isNull();
                 assertThat(product.getPrice()).isNull();
             }
         }
@@ -44,7 +43,7 @@ class ProductTest {
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(NAME);
-                assertThat(product.getBrand()).isEqualTo(BRAND);
+                assertThat(product.getMaker()).isEqualTo(BRAND);
                 assertThat(product.getPrice()).isEqualTo(PRICE);
             }
         }
@@ -63,15 +62,15 @@ class ProductTest {
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isNull();
-                assertThat(product.getBrand()).isNull();
+                assertThat(product.getMaker()).isNull();
                 assertThat(product.getPrice()).isNull();
 
                 product.setName(NAME);
-                product.setBrand(BRAND);
+                product.setMaker(BRAND);
                 product.setPrice(PRICE);
 
                 assertThat(product.getName()).isEqualTo(NAME);
-                assertThat(product.getBrand()).isEqualTo(BRAND);
+                assertThat(product.getMaker()).isEqualTo(BRAND);
                 assertThat(product.getPrice()).isEqualTo(PRICE);
             }
         }
@@ -86,15 +85,15 @@ class ProductTest {
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(NAME);
-                assertThat(product.getBrand()).isEqualTo(BRAND);
+                assertThat(product.getMaker()).isEqualTo(BRAND);
                 assertThat(product.getPrice()).isEqualTo(PRICE);
 
                 product.setName(NAME + UPDATE_POSTFIX);
-                product.setBrand(BRAND + UPDATE_POSTFIX);
+                product.setMaker(BRAND + UPDATE_POSTFIX);
                 product.setPrice(PRICE + 100);
 
                 assertThat(product.getName()).isEqualTo(NAME + UPDATE_POSTFIX);
-                assertThat(product.getBrand()).isEqualTo(BRAND + UPDATE_POSTFIX);
+                assertThat(product.getMaker()).isEqualTo(BRAND + UPDATE_POSTFIX);
                 assertThat(product.getPrice()).isEqualTo(PRICE + 100);
             }
         }

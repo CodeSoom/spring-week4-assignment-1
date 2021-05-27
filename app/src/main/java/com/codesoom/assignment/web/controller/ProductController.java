@@ -33,7 +33,7 @@ public class ProductController {
     /**
      * 새로운 고양이 장난감을 등록합니다.
      * @param product
-     * @return
+     * @return 생성된 고양이 장난감
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,18 +44,31 @@ public class ProductController {
     /**
      * 요청 ID에 해당하는 고양이 장난감을 반환한다.
      * @param id
-     * @return
+     * @return 해당 고양이 장난감
      */
     @GetMapping("{id}")
     public Product product(@PathVariable Long id) {
         return productService.fetchProductById(id);
     }
 
-
+    /**
+     * 요청 ID에 해당하는 고양이 장난감을 삭제한다.
+     * @param id
+     */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProductById(id);
     }
 
+    /**
+     * 요청 ID에 해당하는 고양이 장난감을 수정하고, 수정된 장난감을 반환한다.
+     * @param id
+     * @param product
+     * @return 갱신된 고양이 장난감
+     */
+    @PatchMapping("{id}")
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        return productService.updateProductById(id, product);
+    }
 }

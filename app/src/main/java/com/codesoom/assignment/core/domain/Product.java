@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,14 +23,16 @@ public class Product {
 
     private String name;
 
-    private String brand;
+    private String maker;
 
     private Integer price;
 
+    private String imageUrl;
+
     @Builder
-    public Product(String name, String brand, Integer price) {
+    public Product(String name, String maker, Integer price) {
         this.name = name;
-        this.brand = brand;
+        this.maker = maker;
         this.price = price;
     }
 

@@ -2,7 +2,6 @@ package com.codesoom.assignment.web.controller;
 
 import com.codesoom.assignment.core.application.ProductService;
 import com.codesoom.assignment.core.domain.Product;
-import com.codesoom.assignment.core.infra.JpaToyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -72,7 +71,7 @@ class ProductControllerTest {
 
                 Product fetchedProduct = products.get(0);
                 assertThat(fetchedProduct.getName()).isEqualTo(NAME);
-                assertThat(fetchedProduct.getBrand()).isEqualTo(BRAND);
+                assertThat(fetchedProduct.getMaker()).isEqualTo(BRAND);
             }
         }
     }
