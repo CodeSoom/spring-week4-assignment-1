@@ -7,6 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+/**
+ * 상품 엔티티
+ */
 @Entity
 public class Product {
 

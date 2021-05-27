@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * 상품 관련 CRUD 로직을 담당
+ */
 @Service
 public class ProductService {
 
@@ -16,25 +19,49 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * 상품 목록 조회
+     * @return 조회한 상품 목록
+     */
     public List<Product> getProductList() {
         return productRepository.findAll();
     }
 
+    /**
+     * 상품 조회
+     * @param productId 조회할 상품의 Id
+     * @return 조회한 상품
+     */
     public Product getProduct(Long productId) {
         return productRepository.findById(productId)
                                 .orElseThrow(() -> new ProductNotFoundException(productId));
     }
 
+    /**
+     * 새 상품 등록
+     * @param newProduct 새로 등록할 상품 내용
+     * @return 등록한 상품
+     */
     public Product createProduct(Product newProduct) {
         return productRepository.save(newProduct);
     }
 
+    /**
+     * 상품 수정
+     * @param productId 수정할 상품 Id
+     * @param product 수정할 상품 내용
+     * @return 수정한 상품
+     */
     public Product updateProduct(Long productId, Product product) {
         Product foundProduct = getProduct(productId);
         Product updatedProduct = updateFoundProduct(foundProduct, product);
         return productRepository.save(updatedProduct);
     }
 
+    /**
+     * 상품 삭제
+     * @param productId 삭제할 상품 Id
+     */
     public void deleteProduct(Long productId) {
         Product foundProduct = getProduct(productId);
         productRepository.delete(foundProduct);
