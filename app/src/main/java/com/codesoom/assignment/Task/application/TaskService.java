@@ -1,5 +1,6 @@
 package com.codesoom.assignment.Task.application;
 
+import com.codesoom.assignment.Task.TaskNotFoundException;
 import com.codesoom.assignment.Task.domain.Task;
 import com.codesoom.assignment.Task.domain.TaskRepository;
 import org.springframework.stereotype.Service;

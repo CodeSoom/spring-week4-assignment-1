@@ -11,6 +11,7 @@ public class Toy {
     @Id
     @GeneratedValue
     private Long id;
+
     private String name;
     private String maker;
     private Long price;

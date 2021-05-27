@@ -1,5 +1,6 @@
 package com.codesoom.assignment.Task.controllers;
 
+import com.codesoom.assignment.Task.TaskNotFoundException;
 import com.codesoom.assignment.Task.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,7 +1,10 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.Task;
-import com.codesoom.assignment.domain.TaskRepository;
+import com.codesoom.assignment.Task.TaskNotFoundException;
+import com.codesoom.assignment.Task.application.TaskService;
+import com.codesoom.assignment.Task.domain.TaskRepository;
+import com.codesoom.assignment.Task.domain.Task;
+import com.codesoom.assignment.Task.domain.TaskRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -64,13 +67,10 @@ class TaskServiceTest {
         verify(taskRepository).findAll();
     }
 
-
     @Test
     void getTaskWitExistedId() {
         Task task = taskService.getTask(1L);
-
         assertThat(task.getTitle()).isEqualTo(TASK_TITLE);
-
         verify(taskRepository).findById(1L);
     }
 

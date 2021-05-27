@@ -1,7 +1,8 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.TaskService;
-import com.codesoom.assignment.domain.Task;
+import com.codesoom.assignment.Task.TaskNotFoundException;
+import com.codesoom.assignment.Task.application.TaskService;
+import com.codesoom.assignment.Task.domain.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
