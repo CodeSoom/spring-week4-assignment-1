@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +34,6 @@ class ToyServiceTest {
     @BeforeEach
     void setUp() {
         toyJpaRepository = mock(ToyJpaRepository.class);
-
         toyService = new ToyService(toyJpaRepository);
 
         setUpFixtures();
@@ -48,27 +48,28 @@ class ToyServiceTest {
         toy.setPrice(TOY_PRICE);
         toy.setImageUrl(TOY_IMAGE_URL);
         toy.setMaker(TOY_MAKER);
-
         toys.add(toy);
 
         given(toyJpaRepository.findAll()).willReturn(toys);
+        given(toyJpaRepository.findById(1L)).willReturn(Optional.of(toy));
+        given(toyJpaRepository.findById(1L)).willReturn(Optional.empty());
+
     }
 
     void setUpSave() {
         given(toyJpaRepository.save(any(Toy.class))).will(invocation -> {
             Toy toy = invocation.getArgument(0);
-            toy.setId(2L);
+            toy.setId(1L);
             return toy;
         });
     }
 
     @Nested
-    @DisplayName("Describe: Get method")
+    @DisplayName("Describe: GET method")
     class getToys {
 
-
         @Nested
-        @DisplayName("context: with No Id")
+        @DisplayName("context: GET with No Id")
         class Context_with_no_id {
 
             @Test
@@ -77,27 +78,56 @@ class ToyServiceTest {
                 verify(toyJpaRepository).findAll();
             }
         }
+    }
+
+
+    @Nested
+    @DisplayName("Describe: GET method with id")
+    class GetToyById{
 
         @Nested
         @DisplayName("context: with specific id")
         class Context_with_id {
 
             @Test
-            void getToyWithSpecificId() {
-                Toy toy = toyService.getToyById(1L);
-                assertThat(toy.getName()).isEqualTo(TOY_NAME);
+            void getToyById() {
+                Toy first = toyService.getToy(1L);
+                assertThat(first.getName()).isEqualTo(TOY_NAME);
                 verify(toyJpaRepository).findById(1L);
             }
         }
     }
 
+    @Nested
+    @DisplayName("Describe: POST Method")
+    class CreateToy {
 
-    @Test
-    void getToyById() {
-    }
+        @Nested
+        @DisplayName("context: create toy entity and verify")
+        class CreateOneToy{
 
-    @Test
-    void createToy() {
+            @Test
+            void createToy(){
+                Toy sample = new Toy();
+                sample.setName(TOY_NAME);
+                sample.setPrice(TOY_PRICE);
+                sample.setImageUrl(TOY_IMAGE_URL);
+                sample.setMaker(TOY_MAKER);
+
+                Toy toy = toyService.createToy(sample);
+                assertThat(toy.getId()).isEqualTo(1L);
+
+                Toy sample2 = new Toy();
+                sample2.setName(TOY_NAME);
+                sample2.setPrice(TOY_PRICE);
+                sample2.setImageUrl(TOY_IMAGE_URL);
+                sample2.setMaker(TOY_MAKER);
+
+                Toy toy2 = toyService.createToy(sample2);
+                assertThat(toy2.getId()).isEqualTo(1L);
+            }
+        }
+
     }
 
     @Test

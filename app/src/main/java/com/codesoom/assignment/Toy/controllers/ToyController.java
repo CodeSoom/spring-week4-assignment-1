@@ -43,7 +43,7 @@ public class ToyController {
      */
     @GetMapping("{id}")
     public Toy detailToy(@PathVariable Long id) {
-        return toyService.getToyById(id);
+        return toyService.getToy(id);
     }
 
     /**

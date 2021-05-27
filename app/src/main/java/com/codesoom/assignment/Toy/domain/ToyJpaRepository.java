@@ -10,14 +10,11 @@ import java.util.Optional;
 @Primary
 public interface ToyJpaRepository extends CrudRepository<Toy, Long> {
 
-    @NonNull
-    Optional<Toy> findById(@NonNull Long newId);
+    Optional<Toy> findById(Long newId);
 
-    @NonNull
-    Toy save(@NonNull Toy toy);
+    Toy save(Toy toy);
 
-    @NonNull
     List<Toy> findAll();
 
-    void delete(@NonNull Toy toy);
+    void delete(Toy toy);
 }

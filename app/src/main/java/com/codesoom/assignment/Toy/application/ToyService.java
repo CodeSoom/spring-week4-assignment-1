@@ -46,7 +46,7 @@ public class ToyService {
      * @param id 찾고자 하는 toy id
      * @return
      */
-    public Toy getToyById(Long id) {
+    public Toy getToy(Long id) {
         return toyJpaRepository.findById(id)
                 .orElseThrow(() -> new ToyNotFoundException(id));
     }
