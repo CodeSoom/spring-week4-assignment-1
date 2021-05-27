@@ -15,3 +15,11 @@
 - @GenerateId
 
 - :8080/h2-console
+
+
+- @Primary의 용도
+
+- @NonNull
+- Not annotated parameter overrides @NonNullApi parameter 
+- TaskNotFoundException 내부 구조
+

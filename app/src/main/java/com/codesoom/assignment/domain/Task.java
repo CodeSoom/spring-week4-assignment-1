@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-
 // Task를 하나의 Entity로 본다.
 // 동일성을 알기 위해 하나의 identifier 를 사용 (unique key)
 
