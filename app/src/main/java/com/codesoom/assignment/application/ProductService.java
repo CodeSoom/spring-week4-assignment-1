@@ -29,9 +29,7 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        return productRepository.findById(id)
-                .stream().findFirst()
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        return findProductById(id);
     }
 
     public Product saveProduct(Product source) {
@@ -40,19 +38,20 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product product = productRepository.findById(id)
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = findProductById(id);
         productRepository.save(source);
         return source;
     }
 
-    public Product deleteProduct(Long id) {
-        Product product = productRepository.findById(id)
+    private Product findProductById(Long id) {
+        return productRepository.findById(id)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    public Product deleteProduct(Long id) {
+        Product product = findProductById(id);
         productRepository.delete(product);
         return product;
     }

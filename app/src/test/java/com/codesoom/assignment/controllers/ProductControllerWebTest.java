@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -38,6 +37,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -84,7 +84,6 @@ class ProductControllerWebTest {
         @Nested
         @DisplayName("고양이 장난감 목록이 존재한다면")
         @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-
         class Context_existed_product_list {
             private Long productId = 1L;
             private String productJSON;
@@ -176,6 +175,13 @@ class ProductControllerWebTest {
                 productJSON = objectMapper.writeValueAsString(product);
                 given(productService.getProduct(productId))
                         .willReturn(product);
+            }
+
+            @AfterEach
+            void setUpLastEmptyList() {
+                then(productService)
+                        .should(times(1))
+                        .getProduct(eq(productId));
             }
 
             @Test
@@ -339,153 +345,206 @@ class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("요청한 고양이 장난감이 목록에 없다면")
-        class Context_not_existed_id_update {
-            private Long productId = 100L;
-            private String productJSON;
+        @DisplayName("patchProduct() 메서드는")
+        class Describe_update_patch {
+            @Nested
+            @DisplayName("요청한 고양이 장난감이 목록에 있다면")
+            class Context_existed_id_update_patch {
+                private Long productId = 1L;
+                private String productJSON;
 
-            @BeforeEach
-            void setUpNotExistedIdUpdate() throws JsonProcessingException {
-                //given
-                product = makingProduct(productId);
-                reuqestUrl += ("/" + productId);
-                productNotFoundMessage += productId;
-                productJSON = objectMapper.writeValueAsString(product);
-                given(productService.updateProduct(eq(productId), any(Product.class)))
-                        .willThrow(new ProductNotFoundException(productId));
+                @BeforeEach
+                void setUpExistedIdUpdatePatch() throws JsonProcessingException {
+                    //given
+                    product = makingProduct(productId);
+                    reuqestUrl += ("/" + productId);
+                    productJSON = objectMapper.writeValueAsString(product);
+                    given(productService.updateProduct(eq(productId), any(Product.class)))
+                            .willReturn(product);
+                }
+
+                @AfterEach
+                void setUpLastExistedIdUpdatePatch() {
+                    then(productService)
+                            .should(times(1))
+                            .updateProduct(eq(productId), any(Product.class));
+                }
+
+                @Test
+                @DisplayName("목록의 고양이 장난감을 수정한다.")
+                void existed_id_update_patch_return() throws Exception {
+                    //when then
+                    mockMvc.perform(patch(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(productJSON))
+                            .andExpect(content().string(containsString(String.valueOf(productId))))
+                            .andDo(print());
+                }
+
+                @Test
+                @DisplayName("수정 요청한 고양이 장난감을 반환한다.")
+                void existed_id_update_patch_json() throws Exception {
+                    //when then
+                    mockMvc.perform(patch(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(productJSON))
+                            .andExpect(content().string(containsString(productJSON)))
+                            .andDo(print());
+                }
             }
 
-            @AfterEach
-            void setUpLastNotExistedIdUpdate() {
-                then(productService)
-                        .should(times(1))
-                        .updateProduct(eq(productId), any(Product.class));
-            }
 
-            @Test
-            @DisplayName("ProductNotFoundException을 발생한다.")
-            void not_existed_id_update_exception() throws Exception {
-                //when then
-                mockMvc.perform(put(reuqestUrl)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(productJSON))
-                        .andExpect(result -> {
-                            assertTrue(result
-                                    .getResolvedException()
-                                    .getClass()
-                                    .isAssignableFrom(ProductNotFoundException.class));
-                        })
-                        .andDo(print());
-            }
+            @Nested
+            @DisplayName("요청한 고양이 장난감이 목록에 없다면")
+            class Context_not_existed_id_update_patch {
+                private Long productId = 100L;
+                private String productJSON;
 
-            @Test
-            @DisplayName("특정 에러 메시지를 반환한다.")
-            void not_existed_id_update_exception_message() throws Exception {
-                //when then
-                mockMvc.perform(put(reuqestUrl)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(productJSON))
-                        .andExpect(result -> {
-                            assertThat(result
-                                    .getResolvedException()
-                                    .getMessage())
-                                    .isEqualTo(productNotFoundMessage);
-                        });
+                @BeforeEach
+                void setUpNotExistedIdUpdatePatch() throws JsonProcessingException {
+                    //given
+                    product = makingProduct(productId);
+                    reuqestUrl += ("/" + productId);
+                    productNotFoundMessage += productId;
+                    productJSON = objectMapper.writeValueAsString(product);
+                    given(productService.updateProduct(eq(productId), any(Product.class)))
+                            .willThrow(new ProductNotFoundException(productId));
+                }
+
+                @AfterEach
+                void setUpLastNotExistedIdUpdatePatch() {
+                    then(productService)
+                            .should(times(1))
+                            .updateProduct(eq(productId), any(Product.class));
+                }
+
+                @Test
+                @DisplayName("ProductNotFoundException을 발생한다.")
+                void not_existed_id_update_patch_exception() throws Exception {
+                    //when then
+                    mockMvc.perform(patch(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(productJSON))
+                            .andExpect(result -> {
+                                assertTrue(result
+                                        .getResolvedException()
+                                        .getClass()
+                                        .isAssignableFrom(ProductNotFoundException.class));
+                            })
+                            .andDo(print());
+                }
+
+                @Test
+                @DisplayName("특정 에러 메시지를 반환한다.")
+                void not_existed_id_update_patch_exception_message() throws Exception {
+                    //when then
+                    mockMvc.perform(patch(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(productJSON))
+                            .andExpect(result -> {
+                                assertThat(result
+                                        .getResolvedException()
+                                        .getMessage())
+                                        .isEqualTo(productNotFoundMessage);
+                            });
+                }
             }
         }
-    }
 
-    @Nested
-    @DisplayName("deleteProduct() 메소드는")
-    class Describe_delete {
-        @Nested
-        @DisplayName("요청한 고양이 장난감이 있다면")
-        class Context_existed_id_delete {
-            private Long productId = 1L;
 
-            @BeforeEach
-            void setUpExistedIdDelete() {
-                //given
-                product = makingProduct(productId);
-                reuqestUrl += ("/" + productId);
-                given(productService.deleteProduct(eq(productId)))
-                        .willReturn(null);
-            }
-
-            @AfterEach
-            void setUpLastExistedIdDelete() {
-                then(productService)
-                        .should(times(1))
-                        .deleteProduct(eq(productId));
-            }
-
-            @Test
-            @DisplayName("ReponseStatus 가 204이다.")
-            void existed_id_delete_status() throws Exception {
-                //when then
-                mockMvc.perform(delete(reuqestUrl)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isNoContent());
-            }
-
-            @Test
-            @DisplayName("목록이 삭제 되었다면 결과는 비어있다.")
-            void existed_id_delete_return() throws Exception {
-                //when then
-                mockMvc.perform(delete(reuqestUrl)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(content().string(""));
-            }
-        }
 
         @Nested
-        @DisplayName("요청한 고양이 장난감이 없다면")
-        class Context_not_existed_id_delete {
-            private Long productId = 100L;
+        @DisplayName("deleteProduct() 메소드는")
+        class Describe_delete {
+            @Nested
+            @DisplayName("요청한 고양이 장난감이 있다면")
+            class Context_existed_id_delete {
+                private Long productId = 1L;
 
-            @BeforeEach
-            void setUpNotExistedIdDelete() {
-                //given
-                product = makingProduct(productId);
-                reuqestUrl += ("/" + productId);
-                productNotFoundMessage += productId;
-                given(productService.deleteProduct(eq(productId)))
-                        .willThrow(new ProductNotFoundException(productId));
+                @BeforeEach
+                void setUpExistedIdDelete() {
+                    //given
+                    product = makingProduct(productId);
+                    reuqestUrl += ("/" + productId);
+                    given(productService.deleteProduct(eq(productId)))
+                            .willReturn(null);
+                }
+
+                @AfterEach
+                void setUpLastExistedIdDelete() {
+                    then(productService)
+                            .should(times(1))
+                            .deleteProduct(eq(productId));
+                }
+
+                @Test
+                @DisplayName("ReponseStatus 가 204이다.")
+                void existed_id_delete_status() throws Exception {
+                    //when then
+                    mockMvc.perform(delete(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isNoContent());
+                }
+
+                @Test
+                @DisplayName("목록이 삭제 되었다면 결과는 비어있다.")
+                void existed_id_delete_return() throws Exception {
+                    //when then
+                    mockMvc.perform(delete(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(content().string(""));
+                }
             }
 
-            @AfterEach
-            void setUpLastNotExistedIdDelete() {
-                then(productService)
-                        .should(times(1))
-                        .deleteProduct(eq(productId));
-            }
+            @Nested
+            @DisplayName("요청한 고양이 장난감이 없다면")
+            class Context_not_existed_id_delete {
+                private Long productId = 100L;
 
-            @Test
-            @DisplayName("ProductNotFoundException을 발생한다.")
-            void not_existed_id_delete_exeption() throws Exception {
-                //when then
-                mockMvc.perform(delete(reuqestUrl)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(result -> {
-                            result
-                                    .getResolvedException()
-                                    .getClass()
-                                    .isAssignableFrom(ProductNotFoundException.class);
-                        });
-            }
+                @BeforeEach
+                void setUpNotExistedIdDelete() {
+                    //given
+                    product = makingProduct(productId);
+                    reuqestUrl += ("/" + productId);
+                    productNotFoundMessage += productId;
+                    given(productService.deleteProduct(eq(productId)))
+                            .willThrow(new ProductNotFoundException(productId));
+                }
 
-            @Test
-            @DisplayName("특정 에러 메시지를 반환한다.")
-            void not_existed_id_delete_exeption_message() throws Exception {
-                //when then
-                mockMvc.perform(delete(reuqestUrl)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(result -> {
-                            assertThat(result
-                                    .getResolvedException()
-                                    .getMessage())
-                                    .isEqualTo(productNotFoundMessage);
-                        });
+                @AfterEach
+                void setUpLastNotExistedIdDelete() {
+                    then(productService)
+                            .should(times(1))
+                            .deleteProduct(eq(productId));
+                }
+
+                @Test
+                @DisplayName("ProductNotFoundException을 발생한다.")
+                void not_existed_id_delete_exeption() throws Exception {
+                    //when then
+                    mockMvc.perform(delete(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(result -> {
+                                result
+                                        .getResolvedException()
+                                        .getClass()
+                                        .isAssignableFrom(ProductNotFoundException.class);
+                            });
+                }
+
+                @Test
+                @DisplayName("특정 에러 메시지를 반환한다.")
+                void not_existed_id_delete_exeption_message() throws Exception {
+                    //when then
+                    mockMvc.perform(delete(reuqestUrl)
+                            .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(result -> {
+                                assertThat(result
+                                        .getResolvedException()
+                                        .getMessage())
+                                        .isEqualTo(productNotFoundMessage);
+                            });
+                }
             }
         }
     }

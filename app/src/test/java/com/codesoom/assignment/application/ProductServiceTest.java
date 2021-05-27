@@ -60,14 +60,12 @@ class ProductServiceTest {
         @Nested
         @DisplayName("기존 고양이 장난감 목록이 있으면")
         class Context_not_empty_getProducts {
-            private int productSize = 5;
+            private int productId = 1;
 
             @BeforeEach
             void setUpNotEmptyGetProducts() {
                 //given
-                for (int i = 0; i < productSize; i++) {
-                    products.add(makingProduct((long) i));
-                }
+                products.add(makingProduct((long) productId));
                 given(productRepository.findAll())
                         .willReturn(products);
             }
@@ -84,16 +82,7 @@ class ProductServiceTest {
             void not_empty_getProducts() {
                 //when then
                 assertThat(productService.getProducts())
-                        .isNotNull()
                         .isNotEmpty();
-            }
-
-            @Test
-            @DisplayName("등록된 고양이 장난감 목록 수 만큼 반환한다.")
-            void not_empty_getProducts_size() {
-                //when then
-                assertThat(productService.getProducts())
-                        .hasSize(productSize);
             }
         }
 
@@ -104,7 +93,7 @@ class ProductServiceTest {
             void setUpEmptyGetProducts() {
                 //given
                 given(productRepository.findAll())
-                        .willReturn(products);
+                        .willReturn(new ArrayList<>());
             }
 
             @AfterEach
@@ -115,11 +104,10 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("Null이 아니고 비어있는 목록을 반환한다.")
+            @DisplayName("비어있는 목록을 반환한다.")
             void empty_getProducts() {
                 //when then
                 assertThat(productService.getProducts())
-                        .isNotNull()
                         .isEmpty();
             }
         }
@@ -132,15 +120,13 @@ class ProductServiceTest {
         @DisplayName("요청한 고양이 장난감이 목록에 있으면")
         class Context_existed_getProduct {
             private Long productId = 1L;
-            private Optional<Product> optionalProduct;
 
             @BeforeEach
             void setUpExistedGetProduct() {
                 //given
                 product = makingProduct(productId);
-                optionalProduct = Optional.of(product);
                 given(productRepository.findById(eq(productId)))
-                        .willReturn(optionalProduct);
+                        .willReturn(Optional.of(product));
             }
 
             @AfterEach
@@ -153,8 +139,8 @@ class ProductServiceTest {
             @Test
             @DisplayName("요청한 고양이 장난감을 반환한다.")
             void existed_getProduct_return() {
-                Optional<Product> returnProduct = productRepository.findById(productId);
-                assertThat(returnProduct.get())
+                product = productService.getProduct(productId);
+                assertThat(product)
                         .extracting("id")
                         .isEqualTo(productId);
             }
@@ -435,7 +421,6 @@ class ProductServiceTest {
                 assertThat(throwable.getMessage())
                         .isEqualTo(productNotFoundMessage);
             }
-
         }
     }
 }

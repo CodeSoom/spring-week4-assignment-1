@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,64 +46,24 @@ class ProductRepositoryTest {
         @DisplayName("고양이 장난감 목록이 존재하면")
         @TestInstance(TestInstance.Lifecycle.PER_CLASS) //class당 인스턴스 생성
         class Context_not_empty_findAll {
-            private int productIndex = 5;
+            private int productId = 1;
 
             @BeforeEach
             void setUpNotEmptyFindAll() {
-                for (int i = 0; i < productIndex; i++) {
-                    product = makingProduct((long) i);
-                    productRepository.save(product);
-                }
-            }
-
-            @AfterEach
-            void setUpLastNotEmptyFindAll(){
-                List<Product> delProducts= productRepository.findAll();
-                for(Product product: delProducts){
-                    productRepository.delete(product);
-                }
+                product = makingProduct((long) productId);
+                productRepository.save(product);
             }
 
             @Test
-            @DisplayName("Null이 아니고 비어있지 않은 목록을 반환한다.")
+            @DisplayName(" 비어있지 않은 목록을 반환한다.")
             void existed_findAll_not_empty() {
                 products = productRepository.findAll();
                 assertThat(products)
-                        .isNotNull()
                         .isNotEmpty();
-            }
-
-            @Test
-            @DisplayName("기존에 등록된 목록의 개수 만큼 반환한다.")
-            void existed_findAll_not_empty_size() {
-                products = productRepository.findAll();
-                assertThat(products)
-                        .hasSize(productIndex);
-            }
-        }
-
-        @Nested
-        @DisplayName("등록된 고양이 장난감 목록이 없다면")
-        @TestInstance(TestInstance.Lifecycle.PER_CLASS) //class당 인스턴스 생성
-        class Context_empty_findAll {
-            @BeforeEach
-            void setUpEmptyFindAll(){
-                List<Product> delProducts= productRepository.findAll();
-                for(Product product: delProducts){
-                    productRepository.delete(product);
-                }
-            }
-
-            @Test
-            @DisplayName("Null이 아닌 비어있는 목록을 반환한다.")
-            void not_existed_findAll_empty() {
-                products = productRepository.findAll();
-                assertThat(products)
-                        .isNotNull()
-                        .isEmpty();
             }
         }
     }
+
 
     @Nested
     @DisplayName("findById() 메소드는")
@@ -121,14 +83,6 @@ class ProductRepositoryTest {
                 saveProduct = productRepository.save(product);
             }
 
-            @AfterEach
-            void setUpLastExistedFindById(){
-                List<Product> delProducts= productRepository.findAll();
-                for(Product product: delProducts){
-                    productRepository.delete(product);
-                }
-            }
-
             @Test
             @DisplayName("요청한 고양이 장난감을 반환한다. ")
             void existed_findById_return() {
@@ -146,15 +100,37 @@ class ProductRepositoryTest {
             private Optional<Product> returnProduct;
 
             @Test
-            @DisplayName("Null이 아니고 비어있는 고양이 장난감을 반환한다.")
+            @DisplayName("비어있는 고양이 장난감을 반환한다.")
             void not_existed_findById_exception() {
                 returnProduct = productRepository.findById(productId);
                 assertThat(returnProduct)
-                        .isNotNull()
                         .isEmpty();
             }
         }
     }
+
+
+    @Nested
+    @DisplayName("등록된 고양이 장난감 목록이 없다면")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS) //class당 인스턴스 생성
+    class Context_empty_findAll {
+        private ProductRepository emptyProductRepository;
+
+        @BeforeEach
+        void setUpEmptyFindAll() {
+            emptyProductRepository = mock(ProductRepository.class);
+            given(emptyProductRepository.findAll()).willReturn(new ArrayList<>());
+        }
+
+        @Test
+        @DisplayName("비어있는 목록을 반환한다.")
+        void not_existed_findAll_empty() {
+            products = emptyProductRepository.findAll();
+            assertThat(products)
+                    .isEmpty();
+        }
+    }
+
 
     @Nested
     @DisplayName("save() 메소드는")
@@ -172,9 +148,9 @@ class ProductRepositoryTest {
             }
 
             @AfterEach
-            void setUpLastExistedFindById(){
-                List<Product> delProducts= productRepository.findAll();
-                for(Product product: delProducts){
+            void setUpLastExistedFindById() {
+                List<Product> delProducts = productRepository.findAll();
+                for (Product product : delProducts) {
                     productRepository.delete(product);
                 }
             }
