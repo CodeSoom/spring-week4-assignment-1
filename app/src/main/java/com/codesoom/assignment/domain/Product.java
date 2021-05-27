@@ -29,10 +29,10 @@ public class Product {
     public Product() {}
 
     public void updateBy(Product product) {
-        name = Optional.ofNullable(product.getName()).orElse(name);
-        maker = Optional.ofNullable(product.getMaker()).orElse(maker);
-        price = Optional.ofNullable(product.getPrice()).orElse(price);
-        imageUrl = Optional.ofNullable(product.getImageUrl()).orElse(imageUrl);
+        name = product.getName();
+        maker = product.getMaker();
+        price = product.getPrice();
+        imageUrl = product.getImageUrl();
     }
 
     public String toString() {
