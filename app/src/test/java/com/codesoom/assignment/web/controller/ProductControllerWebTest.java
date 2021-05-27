@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("ProductController web")
 class ProductControllerWebTest {
     private final Long ID = 1L;
+    private final Long INVALID_ID = 9999L;
     private final String NAME = "장난감 이름";
     private final String BRAND = "장난감 브랜드";
     private final int PRICE = 10000;
@@ -216,7 +217,7 @@ class ProductControllerWebTest {
                 mockMvc.perform(delete(uri))
                         .andExpect(status().isNoContent());
 
-                verify(productService, times(1)).deleteProductById(ID);
+                verify(productService).deleteProductById(ID);
             }
         }
 
@@ -225,18 +226,18 @@ class ProductControllerWebTest {
         class ContextWithoutProductById {
             @BeforeEach
             void prepare() {
-                doThrow(new ProductNotFoundException()).when(productService).deleteProductById(eq(ID));
+                doThrow(new ProductNotFoundException()).when(productService).deleteProductById(eq(INVALID_ID));
             }
 
             @Test
             @DisplayName("Not found 에러코드를 반환한다")
             void deleteProduct() throws Exception {
-                String uri = String.format("/products/%s", ID);
+                String uri = String.format("/products/%s", INVALID_ID);
 
                 mockMvc.perform(delete(uri))
                         .andExpect(status().isNotFound());
 
-                verify(productService, times(1)).deleteProductById(ID);
+                verify(productService).deleteProductById(INVALID_ID);
             }
         }
     }
