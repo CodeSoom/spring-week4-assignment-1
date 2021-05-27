@@ -22,7 +22,6 @@ import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -159,20 +158,20 @@ class ProductControllerWebTest {
             @BeforeEach
             void prepare() {
                 Product foundProduct = makeValidProduct(NAME, BRAND, PRICE);
-                foundProduct.setId(99L);
+                foundProduct.setId(ID);
 
-                given(productService.fetchProductById(eq(99L))).willReturn(foundProduct);
+                given(productService.fetchProductById(eq(ID))).willReturn(foundProduct);
             }
 
             @Test
             @DisplayName("해당 장난감을 반환한다")
             void product() throws Exception {
-                String uri = String.format("/products/%s", 99L);
+                String uri = String.format("/products/%s", ID);
 
                 mockMvc.perform(get(uri))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$").isNotEmpty())
-                        .andExpect(jsonPath("$.id").value(99L))
+                        .andExpect(jsonPath("$.id").value(ID))
                         .andExpect(jsonPath("$.name").value(NAME))
                         .andExpect(jsonPath("$.brand").value(BRAND))
                         .andExpect(jsonPath("$.price").value(PRICE));
@@ -184,7 +183,7 @@ class ProductControllerWebTest {
         class ContextWithoutProductById {
             @BeforeEach
             void prepare() {
-                given(productService.fetchProductById(anyLong()))
+                given(productService.fetchProductById(eq(ID)))
                         .willThrow(new ProductNotFoundException());
             }
 
