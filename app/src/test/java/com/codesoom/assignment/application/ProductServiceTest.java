@@ -49,26 +49,41 @@ class ProductServiceTest {
         @DisplayName("등록된 상품이 있을 때")
         class Context_of_not_empty_products {
 
-            private List<AbstractMap.SimpleEntry<Integer, ProductService>> serviceEntries;
+            private List<ServiceEntry> serviceEntryList = new ArrayList<>();
 
             @BeforeEach
-            void setup() {
-                serviceEntries = new ArrayList<AbstractMap.SimpleEntry<Integer, ProductService>>();
+            void setServiceEntryListWithDifferentSize() {
                 ArrayList<Integer> sizeCases = new ArrayList<>(Arrays.asList(1, 2, 100, 1024));
-                sizeCases.forEach(size ->
-                    serviceEntries.add(new AbstractMap.SimpleEntry<Integer, ProductService>(size, generateProductService(size)))
-                );
+
+                sizeCases.forEach(size -> serviceEntryList.add(new ServiceEntry(size, generateProductService(size))));
             }
 
             @Test
             @DisplayName("모든 상품 리스트를 반환한다")
             void it_returns_empty_list() {
-                serviceEntries.forEach(entry -> {
-                    int size = entry.getKey();
-                    ProductService service = entry.getValue();
-                    assertThat(service.getAllProducts())
-                            .hasSize(size);
-                });
+                serviceEntryList.forEach(entry ->
+                    assertThat(entry.getProductService().getAllProducts())
+                        .hasSize(entry.getSize())
+                );
+            }
+
+            private class ServiceEntry {
+
+                private Integer size;
+                private ProductService productService;
+
+                ServiceEntry(Integer size, ProductService productService) {
+                    this.size = size;
+                    this.productService = productService;
+                }
+
+                public Integer getSize() {
+                    return size;
+                }
+
+                public ProductService getProductService() {
+                    return productService;
+                }
             }
         }
     }
