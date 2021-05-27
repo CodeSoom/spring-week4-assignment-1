@@ -123,7 +123,7 @@ class ProductControllerTest {
     class DescribeCreateProduct {
 
         @Nested
-        @DisplayName("만약 정상인 Product 로 요청이 들어오면")
+        @DisplayName("만약 Product 로 매핑에 성공한 요청이 들어오면")
         class ContextWithValidProduct {
 
             @Test
@@ -139,7 +139,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 비정상인 Product 로 요청이 들어오면")
+        @DisplayName("만약 product 로 매핑에 실패한 요청이 들어오면")
         class ContextWithInvalidProduct {
 
             @Test
