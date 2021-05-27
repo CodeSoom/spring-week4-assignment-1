@@ -37,7 +37,7 @@ class ProductControllerWebTest {
     private final Long ID = 1L;
     private final Long INVALID_ID = 9999L;
     private final String NAME = "장난감 이름";
-    private final String BRAND = "장난감 브랜드";
+    private final String maker = "장난감 브랜드";
     private final int PRICE = 10000;
 
     @Autowired
@@ -60,7 +60,7 @@ class ProductControllerWebTest {
             @BeforeEach
             void prepare() {
                 products = new ArrayList<>();
-                products.add(makeValidProduct(NAME, BRAND, PRICE));
+                products.add(makeValidProduct(NAME, maker, PRICE));
                 given(productService.fetchProducts()).willReturn(products);
             }
 
@@ -71,7 +71,7 @@ class ProductControllerWebTest {
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(1)))
                         .andExpect(jsonPath("$[0].name").value(NAME))
-                        .andExpect(jsonPath("$[0].brand").value(BRAND))
+                        .andExpect(jsonPath("$[0].maker").value(maker))
                         .andExpect(jsonPath("$[0].price").value(PRICE));
             }
         }
@@ -105,7 +105,7 @@ class ProductControllerWebTest {
         class ContextWithValidProduct {
             @BeforeEach
             void prepare() throws JsonProcessingException {
-                Product newProduct = makeValidProduct(NAME, BRAND, PRICE);
+                Product newProduct = makeValidProduct(NAME, maker, PRICE);
                 content = objectMapper.writeValueAsString(newProduct);
 
                 given(productService.saveProduct(any(Product.class))).willReturn(newProduct);
@@ -121,7 +121,7 @@ class ProductControllerWebTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andExpect(jsonPath("$.name").value(NAME))
-                        .andExpect(jsonPath("$.brand").value(BRAND))
+                        .andExpect(jsonPath("$.maker").value(maker))
                         .andExpect(jsonPath("$.price").value(PRICE));
             }
         }
@@ -158,7 +158,7 @@ class ProductControllerWebTest {
         class ContextWithProductById {
             @BeforeEach
                 void prepare() {
-                    Product foundProduct = makeValidProduct(NAME, BRAND, PRICE);
+                    Product foundProduct = makeValidProduct(NAME, maker, PRICE);
                     foundProduct.setId(ID);
 
                     given(productService.fetchProductById(eq(ID))).willReturn(foundProduct);
@@ -174,7 +174,7 @@ class ProductControllerWebTest {
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andExpect(jsonPath("$.id").value(ID))
                         .andExpect(jsonPath("$.name").value(NAME))
-                        .andExpect(jsonPath("$.brand").value(BRAND))
+                        .andExpect(jsonPath("$.maker").value(maker))
                         .andExpect(jsonPath("$.price").value(PRICE));
             }
         }
@@ -251,7 +251,7 @@ class ProductControllerWebTest {
 
         @BeforeEach
         void prepare() throws JsonProcessingException {
-            updatedProduct = makeValidProduct(NAME + POSTFIX, BRAND, PRICE);
+            updatedProduct = makeValidProduct(NAME + POSTFIX, maker, PRICE);
             content = objectMapper.writeValueAsString(updatedProduct);
         }
 
@@ -279,7 +279,7 @@ class ProductControllerWebTest {
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andExpect(jsonPath("$.id").value(ID))
                         .andExpect(jsonPath("$.name").value(NAME + POSTFIX))
-                        .andExpect(jsonPath("$.brand").value(BRAND))
+                        .andExpect(jsonPath("$.maker").value(maker))
                         .andExpect(jsonPath("$.price").value(PRICE));
             }
         }
@@ -309,10 +309,10 @@ class ProductControllerWebTest {
         }
     }
 
-    public Product makeValidProduct(String name, String brand, Integer price) {
+    public Product makeValidProduct(String name, String maker, Integer price) {
         return Product.builder()
                 .name(name)
-                .brand(brand)
+                .maker(maker)
                 .price(price)
                 .build();
     }

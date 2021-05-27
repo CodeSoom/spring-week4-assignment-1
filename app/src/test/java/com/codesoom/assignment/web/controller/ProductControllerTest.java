@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 @DisplayName("ProductController class")
 class ProductControllerTest {
     private final String NAME = "고양이 장난감 이름";
-    private final String BRAND = "고양이 장난감 브랜드";
+    private final String MAKER = "고양이 장난감 브랜드";
 
     private ProductController productController;
     private ProductService productService;
@@ -57,7 +57,7 @@ class ProductControllerTest {
             @BeforeEach
             void prepare() {
                 products = new ArrayList<>();
-                products.add(Product.builder().name(NAME).brand(BRAND).build());
+                products.add(Product.builder().name(NAME).maker(MAKER).build());
 
                 given(productService.fetchProducts()).willReturn(products);
             }
@@ -71,7 +71,7 @@ class ProductControllerTest {
 
                 Product fetchedProduct = products.get(0);
                 assertThat(fetchedProduct.getName()).isEqualTo(NAME);
-                assertThat(fetchedProduct.getMaker()).isEqualTo(BRAND);
+                assertThat(fetchedProduct.getMaker()).isEqualTo(MAKER);
             }
         }
     }

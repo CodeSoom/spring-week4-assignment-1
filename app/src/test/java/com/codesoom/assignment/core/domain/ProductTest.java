@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Product 도메인 클래스")
 class ProductTest {
     private final String NAME = "고양이 장난감 이름";
-    private final String BRAND = "고양이 장난감 브랜드";
+    private final String MAKER = "고양이 장난감 브랜드";
     private final int PRICE = 10000;
 
     private final String UPDATE_POSTFIX = "[SETTER]";
@@ -43,7 +43,7 @@ class ProductTest {
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(NAME);
-                assertThat(product.getMaker()).isEqualTo(BRAND);
+                assertThat(product.getMaker()).isEqualTo(MAKER);
                 assertThat(product.getPrice()).isEqualTo(PRICE);
             }
         }
@@ -66,11 +66,11 @@ class ProductTest {
                 assertThat(product.getPrice()).isNull();
 
                 product.setName(NAME);
-                product.setMaker(BRAND);
+                product.setMaker(MAKER);
                 product.setPrice(PRICE);
 
                 assertThat(product.getName()).isEqualTo(NAME);
-                assertThat(product.getMaker()).isEqualTo(BRAND);
+                assertThat(product.getMaker()).isEqualTo(MAKER);
                 assertThat(product.getPrice()).isEqualTo(PRICE);
             }
         }
@@ -85,15 +85,15 @@ class ProductTest {
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(NAME);
-                assertThat(product.getMaker()).isEqualTo(BRAND);
+                assertThat(product.getMaker()).isEqualTo(MAKER);
                 assertThat(product.getPrice()).isEqualTo(PRICE);
 
                 product.setName(NAME + UPDATE_POSTFIX);
-                product.setMaker(BRAND + UPDATE_POSTFIX);
+                product.setMaker(MAKER + UPDATE_POSTFIX);
                 product.setPrice(PRICE + 100);
 
                 assertThat(product.getName()).isEqualTo(NAME + UPDATE_POSTFIX);
-                assertThat(product.getMaker()).isEqualTo(BRAND + UPDATE_POSTFIX);
+                assertThat(product.getMaker()).isEqualTo(MAKER + UPDATE_POSTFIX);
                 assertThat(product.getPrice()).isEqualTo(PRICE + 100);
             }
         }
@@ -106,7 +106,7 @@ class ProductTest {
     public Product newProductWithArguments() {
         return Product.builder()
                 .name(NAME)
-                .brand(BRAND)
+                .maker(MAKER)
                 .price(PRICE)
                 .build();
     }
