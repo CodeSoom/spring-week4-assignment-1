@@ -30,27 +30,26 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product update(Long id, Product product) {
-        existsById(id);
+    public Product update(Long id, Product productData) {
+        Product product =
+                productRepository.findById(id)
+                                 .orElseThrow(ProductNotFoundException::new);
 
-        var newProduct = new Product(id,
-                                     product.getName(),
-                                     product.getMaker(),
-                                     product.getPrice(),
-                                     product.getImageUrl());
-        productRepository.save(newProduct);
-        return newProduct;
+        product.change(
+                productData.getName(),
+                productData.getMaker(),
+                productData.getPrice(),
+                productData.getImageUrl()
+                      );
+
+        return product;
     }
 
     public void delete(Long id) {
-        existsById(id);
-
-        productRepository.deleteById(id);
-    }
-
-    private void existsById(Long id) {
         if (!productRepository.existsById(id)) {
             throw new ProductNotFoundException();
         }
+
+        productRepository.deleteById(id);
     }
 }

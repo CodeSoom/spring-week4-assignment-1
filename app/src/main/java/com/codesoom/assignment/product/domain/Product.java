@@ -62,4 +62,19 @@ public class Product {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public void change(String name, String maker, Long price, String imageUrl) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (maker != null) {
+            this.maker = maker;
+        }
+        if (price != null) {
+            this.price = price;
+        }
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
+    }
 }
