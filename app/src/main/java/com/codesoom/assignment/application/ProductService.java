@@ -35,12 +35,12 @@ public class ProductService implements ProductManagable {
 
     @Override
     public Product updateProduct(Long id, Product sourceProduct) {
-        Product targetProduct = productRepository.findById(id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        targetProduct.updateBy(sourceProduct);
+        product.updateBy(sourceProduct);
 
-        return targetProduct;
+        return product;
     }
 
     @Override
