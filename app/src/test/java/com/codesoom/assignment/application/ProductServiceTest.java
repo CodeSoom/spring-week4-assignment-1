@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -272,10 +271,6 @@ class ProductServiceTest {
                 @DisplayName("상품을 제거한다")
                 void it_removes_product() {
                     productService.deleteProduct(existentId);
-
-                    assertThatThrownBy(() -> productService.getProduct(existentId))
-                            .isInstanceOf(ProductNotFoundException.class)
-                            .withFailMessage("상품이 제거되지 않았다");
                 }
             }
         }
