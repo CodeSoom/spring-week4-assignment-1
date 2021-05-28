@@ -12,9 +12,15 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductService 클래스")
 class ProductServiceTest {
@@ -24,7 +30,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setup() {
-        productRepository = new InMemoryProductRepository();
+        productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository);
     }
 
@@ -60,6 +66,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("모든 상품 리스트를 반환한다")
             void it_returns_empty_list() {
+                //TODO: productRepository.findAll()을 mockito로 목킹하지 않았는데 어떻게 통과하는걸까?
                 serviceEntryList.forEach(entry ->
                     assertThat(entry.getProductService().getAllProducts())
                         .hasSize(entry.getSize())
@@ -100,6 +107,7 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 registedProduct = generateProduct(1L);
+                //TODO: productRepository.save()를 목킹하지 않았는데 어떻게 작동하는거지..?
                 productService.addProduct(registedProduct);
             }
 
@@ -133,6 +141,9 @@ class ProductServiceTest {
                 @BeforeEach
                 void setUp() {
                     existentId = registedProduct.getId();
+
+                    given(productRepository.findById(existentId))
+                            .willReturn(Optional.of(registedProduct));
                 }
 
                 @Test
@@ -158,6 +169,9 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 givenProduct = generateProduct(1L);
+
+                given(productRepository.save(any(Product.class)))
+                        .will(invocation -> invocation.getArgument(0));
             }
 
             @Test
@@ -167,9 +181,7 @@ class ProductServiceTest {
                         .isEqualTo(givenProduct)
                         .withFailMessage("추가한 상품이 반환되지 않았다");
 
-                assertThat(productService.getProduct(givenProduct.getId()))
-                        .isEqualTo(givenProduct)
-                        .withFailMessage("상품이 추가되지 않았다");
+                verify(productRepository).save(givenProduct);
             }
         }
     }
@@ -187,6 +199,7 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 registeredProduct = generateProduct(1L);
+                //TODO: productRepository.save()를 목킹하지 않았는데 어떻게 작동하는거지..?
                 productService.addProduct(registeredProduct);
             }
 
@@ -202,6 +215,11 @@ class ProductServiceTest {
                     existentId = registeredProduct.getId();
                     givenProduct = generateProduct(42L);
                     givenProduct.setId(registeredProduct.getId());
+
+                    given(productRepository.findById(existentId))
+                            .willReturn(Optional.of(registeredProduct));
+                    given(productRepository.save(any(Product.class)))
+                            .will(invocation -> invocation.getArgument(0));
                 }
 
                 @Test
@@ -210,6 +228,9 @@ class ProductServiceTest {
                     assertThat(productService.updateProduct(existentId, givenProduct))
                             .isEqualTo(givenProduct)
                             .withFailMessage("갱신한 상품을 반환하지 않았다");
+
+                    verify(productRepository).findById(existentId);
+                    verify(productRepository).save(any(Product.class)); //TODO: productService.updateProduct에서 호출한 적이 없는데 어떻게 통과하는 것일까?
 
                     assertThat(productService.getProduct(existentId))
                             .isEqualTo(givenProduct)
@@ -232,6 +253,7 @@ class ProductServiceTest {
             @BeforeEach
             void setup() {
                 registeredProduct = generateProduct(1L);
+                //TODO: productRepository.save()를 목킹하지 않았는데 어떻게 작동하는거지..?
                 productService.addProduct(registeredProduct);
             }
 
@@ -246,6 +268,10 @@ class ProductServiceTest {
                 void setUp() {
                     nonExistentProduct = generateProduct(-1L);
                     nonExistentId = nonExistentProduct.getId();
+
+                    doThrow(new ProductNotFoundException(nonExistentId))
+                            .when(productRepository)
+                            .deleteById(nonExistentId);
                 }
 
                 @Test
