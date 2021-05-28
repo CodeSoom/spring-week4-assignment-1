@@ -4,6 +4,7 @@ import com.codesoom.assignment.error.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.ProductFixtures;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.service.ProductService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,12 +24,14 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,10 +64,11 @@ public class ProductControllerMockTest {
         @DisplayName("상품을 만들고, 만들어진 상품을 반환한다")
         void It_creates_the_product_and_returns_it() throws Exception {
             // when
-            var result = mockMvc.perform(post("/products")
-                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                 .content("{\"name\":\"" + product.getName() + "\"}")
-                                        );
+            var result = mockMvc.perform(
+                    post("/products")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\":\"" + product.getName() + "\"}"));
+
             // then
             result.andExpect(status().isCreated())
                   .andExpect(jsonPath("$.name",
@@ -126,13 +130,16 @@ public class ProductControllerMockTest {
 
             @Test
             @DisplayName("주어진 식별자의 상품을 반환한다")
-            void It_throws_product_not_found_exception() throws Exception {
+            void It_responds_status_not_found() throws Exception {
                 // when
-                mockMvc.perform(get("/products/" + invalidProductId))
-                       // then
-                       .andExpect(status().isNotFound())
-                       .andExpect(jsonPath("$.message",
-                                           containsString("Product Not Found")));
+                var result =
+                        mockMvc.perform(
+                                get("/products/" + invalidProductId));
+
+                // then
+                result.andExpect(status().isNotFound())
+                      .andExpect(jsonPath("$.message",
+                                          containsString("Product Not Found")));
 
                 verify(productService).get(invalidProductId);
             }
@@ -227,6 +234,83 @@ public class ProductControllerMockTest {
                        .andExpect(status().isNotFound());
 
                 verify(productService).delete(invalidProductId);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products/{id}")
+    class Describe_patchProduct {
+        private final ObjectMapper objectMapper = new ObjectMapper();
+        private final Product productHelm = ProductFixtures.helm();
+
+        @Nested
+        @DisplayName("만약 등록된 상품 식별자가 주어진다면")
+        class Context_with_valid_product_id {
+            private final Long validProductId = 2L;
+
+            @BeforeEach
+            void mocking() {
+                given(productService.update(eq(validProductId),
+                                            any(Product.class)))
+                        .willReturn(productHelm);
+            }
+
+            @Test
+            @DisplayName("200 OK 상태 코드와 변경된 상품을 응답한다")
+            void It_returns_200_and_one_product_by_id() throws Exception {
+                // when
+                var result =
+                        mockMvc.perform(
+                                patch("/products/" + validProductId)
+                                        .content(objectMapper.writeValueAsString(productHelm))
+                                        .contentType(MediaType.APPLICATION_JSON));
+                // then
+                result.andExpect(status().isOk())
+                      .andExpect(jsonPath("$.name",
+                                          containsString(productHelm.getName())))
+                      .andExpect(jsonPath("$.maker",
+                                          containsString(productHelm.getMaker())))
+                      .andExpect(jsonPath("$.price",
+                                          is(productHelm.getPrice()
+                                                        .intValue())))
+                      .andExpect(jsonPath("$.imageUrl",
+                                          containsString(productHelm.getImageUrl())));
+
+                verify(productService).update(eq(validProductId),
+                                              any(Product.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 등록되어 있지 않는 상품 식별자가 주어진다면")
+        class Context_with_invalid_product_id {
+            private final Long invalidProductId = -1L;
+
+            @BeforeEach
+            void mocking() {
+                given(productService.update(eq(invalidProductId),
+                                            any(Product.class)))
+                        .willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("404 Not Found 상태 코드를 응답한다")
+            void It_reponds_status_not_found() throws Exception {
+                // when
+                var result =
+                        mockMvc.perform(
+                                patch("/products/" + invalidProductId)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(productHelm)));
+
+                // then
+                result.andExpect(status().isNotFound())
+                      .andExpect(jsonPath("$.message",
+                                          containsString("Product Not Found")));
+
+                verify(productService).update(eq(invalidProductId),
+                                              any(Product.class));
             }
         }
     }

@@ -77,4 +77,16 @@ public class Product {
             this.imageUrl = imageUrl;
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("Product{id=%s,name=%s, maker=%s, price=%d, " +
+                                     "imageUrl=%s}",
+                             this.getId(),
+                             this.getName(),
+                             this.getMaker(),
+                             this.getPrice(),
+                             this.getImageUrl()
+                            );
+    }
 }
