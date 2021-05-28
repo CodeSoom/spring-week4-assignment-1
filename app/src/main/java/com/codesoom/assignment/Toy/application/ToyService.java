@@ -1,6 +1,7 @@
 package com.codesoom.assignment.Toy.application;
 
 
+import com.codesoom.assignment.Task.TaskNotFoundException;
 import com.codesoom.assignment.Toy.ToyNotFoundException;
 import com.codesoom.assignment.Toy.domain.Toy;
 import com.codesoom.assignment.Toy.domain.ToyJpaRepository;
@@ -24,7 +25,6 @@ public class ToyService {
 
     /**
      * 생성자에 ToyJpaRepository 주입
-     *
      * @param toyJpaRepository CrudRepository 상속받은 인터페이스
      */
     public ToyService(ToyJpaRepository toyJpaRepository) {
@@ -33,16 +33,14 @@ public class ToyService {
 
     /**
      * 모든 Toy 목록 가져옴
-     *
      * @return 모든 Toy 를 담고있는 list 반환
      */
-    public List<Toy> getAllToy() {
+    public List<Toy> getAllToy(){
         return toyJpaRepository.findAll();
     }
 
     /**
      * 개별 toy 반환
-     *
      * @param id 찾고자 하는 toy id
      * @return
      */
@@ -53,7 +51,6 @@ public class ToyService {
 
     /**
      * 새로운 Toy 생성
-     *
      * @param source Toy 인스턴스
      * @return toy 저장
      */
@@ -69,15 +66,14 @@ public class ToyService {
 
     /**
      * toy 정보 업데이트
-     *
-     * @param id     update 할 toy의 id
+     * @param id update 할 toy의 id
      * @param source Toy 인스턴스
      * @return 업데이트한 toy
      */
     public Toy updateToy(Long id, Toy source) {
 
         Toy toy = toyJpaRepository.findById(id)
-                .orElseThrow(() -> new ToyNotFoundException(id));
+                .orElseThrow(() -> new TaskNotFoundException(id));
 
         toy.setName(source.getName());
         toy.setMaker(source.getMaker());
@@ -89,12 +85,11 @@ public class ToyService {
 
     /**
      * toy 삭제
-     *
      * @param id 삭제할 toy id
      */
     public Toy deleteToy(Long id) {
         Toy toy = toyJpaRepository.findById(id)
-                .orElseThrow(() -> new ToyNotFoundException(id));
+                .orElseThrow(() -> new TaskNotFoundException(id));
         toyJpaRepository.delete(toy);
         return toy;
     }
