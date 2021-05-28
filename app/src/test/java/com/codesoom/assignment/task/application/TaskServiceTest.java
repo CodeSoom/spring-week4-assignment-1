@@ -52,9 +52,6 @@ class TaskServiceTest {
 
             @BeforeEach
             void registerTask() {
-                taskService.createTask(task);
-                tasks.add(task);
-
                 given(taskRepository.findAll()).willReturn(tasks);
             }
 
@@ -183,7 +180,7 @@ class TaskServiceTest {
             void it_update_task() {
                 assertThat(taskService.getTask(REGISTERED_ID).getTitle()).isEqualTo(UPDATE_TITLE);
 
-                verify(taskRepository, times(2)).findById(REGISTERED_ID);
+                verify(taskRepository, atLeastOnce()).findById(REGISTERED_ID);
             }
         }
 
