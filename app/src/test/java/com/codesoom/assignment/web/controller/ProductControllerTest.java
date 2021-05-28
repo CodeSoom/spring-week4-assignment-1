@@ -63,7 +63,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("모든 장난감 배열을 반환한다")
+            @DisplayName("모든 장난감을 반환한다")
             void returnProducts() {
                 List<Product> products = productService.fetchProducts();
                 assertThat(products).isNotEmpty();

@@ -37,7 +37,7 @@ class ProductControllerWebTest {
     private final Long ID = 1L;
     private final Long INVALID_ID = 9999L;
     private final String NAME = "장난감 이름";
-    private final String maker = "장난감 브랜드";
+    private final String MAKER = "장난감 브랜드";
     private final int PRICE = 10000;
 
     @Autowired
@@ -60,18 +60,18 @@ class ProductControllerWebTest {
             @BeforeEach
             void prepare() {
                 products = new ArrayList<>();
-                products.add(makeValidProduct(NAME, maker, PRICE));
+                products.add(makeValidProduct(NAME, MAKER, PRICE));
                 given(productService.fetchProducts()).willReturn(products);
             }
 
             @Test
-            @DisplayName("장난감이 든 배열을 반환한다")
+            @DisplayName("장난감이 든 배열을 응답한다")
             void products() throws Exception {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(1)))
                         .andExpect(jsonPath("$[0].name").value(NAME))
-                        .andExpect(jsonPath("$[0].maker").value(maker))
+                        .andExpect(jsonPath("$[0].maker").value(MAKER))
                         .andExpect(jsonPath("$[0].price").value(PRICE));
             }
         }
@@ -86,7 +86,7 @@ class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("빈 배열을 반환한다")
+            @DisplayName("빈 배열을 응답한다")
             void products() throws Exception {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
@@ -105,14 +105,14 @@ class ProductControllerWebTest {
         class ContextWithValidProduct {
             @BeforeEach
             void prepare() throws JsonProcessingException {
-                Product newProduct = makeValidProduct(NAME, maker, PRICE);
+                Product newProduct = makeValidProduct(NAME, MAKER, PRICE);
                 content = objectMapper.writeValueAsString(newProduct);
 
                 given(productService.saveProduct(any(Product.class))).willReturn(newProduct);
             }
 
             @Test
-            @DisplayName("생성된 장난감을 반환한다")
+            @DisplayName("생성된 장난감을 응답한다")
             void products() throws Exception {
                 mockMvc.perform(post("/products")
                         .content(content)
@@ -121,7 +121,7 @@ class ProductControllerWebTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andExpect(jsonPath("$.name").value(NAME))
-                        .andExpect(jsonPath("$.maker").value(maker))
+                        .andExpect(jsonPath("$.maker").value(MAKER))
                         .andExpect(jsonPath("$.price").value(PRICE));
             }
         }
@@ -139,7 +139,7 @@ class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("Bad Request 에러 코드를 반환한다")
+            @DisplayName("Bad Request 에러 코드를 응답한다")
             void list() throws Exception {
                 mockMvc.perform(post("/products")
                         .content(content)
@@ -158,14 +158,14 @@ class ProductControllerWebTest {
         class ContextWithProductById {
             @BeforeEach
                 void prepare() {
-                    Product foundProduct = makeValidProduct(NAME, maker, PRICE);
+                    Product foundProduct = makeValidProduct(NAME, MAKER, PRICE);
                     foundProduct.setId(ID);
 
                     given(productService.fetchProductById(eq(ID))).willReturn(foundProduct);
             }
 
             @Test
-            @DisplayName("해당 장난감을 반환한다")
+            @DisplayName("해당 장난감을 응답한다")
             void product() throws Exception {
                 String uri = String.format("/products/%s", ID);
 
@@ -174,7 +174,7 @@ class ProductControllerWebTest {
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andExpect(jsonPath("$.id").value(ID))
                         .andExpect(jsonPath("$.name").value(NAME))
-                        .andExpect(jsonPath("$.maker").value(maker))
+                        .andExpect(jsonPath("$.maker").value(MAKER))
                         .andExpect(jsonPath("$.price").value(PRICE));
             }
         }
@@ -188,7 +188,7 @@ class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("Not found 에러코드를 반환한다")
+            @DisplayName("Not found 에러코드를 응답한다")
             void product() throws Exception {
                 String uri = String.format("/products/%s", ID);
 
@@ -210,7 +210,7 @@ class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("해당 장난감을 삭제하고, No content 응답코드를 반환한다")
+            @DisplayName("해당 장난감을 삭제하고, No content 응답코드를 응답한다")
             void deleteProduct() throws Exception {
                 String uri = String.format("/products/%s", ID);
 
@@ -230,7 +230,7 @@ class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("Not found 에러코드를 반환한다")
+            @DisplayName("Not found 에러코드를 응답한다")
             void deleteProduct() throws Exception {
                 String uri = String.format("/products/%s", INVALID_ID);
 
@@ -251,7 +251,7 @@ class ProductControllerWebTest {
 
         @BeforeEach
         void prepare() throws JsonProcessingException {
-            updatedProduct = makeValidProduct(NAME + POSTFIX, maker, PRICE);
+            updatedProduct = makeValidProduct(NAME + POSTFIX, MAKER, PRICE);
             content = objectMapper.writeValueAsString(updatedProduct);
         }
 
@@ -279,7 +279,7 @@ class ProductControllerWebTest {
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andExpect(jsonPath("$.id").value(ID))
                         .andExpect(jsonPath("$.name").value(NAME + POSTFIX))
-                        .andExpect(jsonPath("$.maker").value(maker))
+                        .andExpect(jsonPath("$.maker").value(MAKER))
                         .andExpect(jsonPath("$.price").value(PRICE));
             }
         }
@@ -296,7 +296,7 @@ class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("Not found 에러코드를 반환한다")
+            @DisplayName("Not found 에러코드를 응답한다")
             void updateProduct() throws Exception {
                 String uri = String.format("/products/%s", INVALID_ID);
 
