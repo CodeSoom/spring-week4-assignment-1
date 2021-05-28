@@ -37,5 +37,5 @@ assertThatThrownBy() 내부에서 exception raise 가 발생하지 않으면 에
 
 #### 잘못 생각한 점
 - 직접 만든 tasks 배열은 JpaRepository 에 저장되지 않는다. tasks 는 그저 test code 에서 비교를 위해 사용된 객체일 뿐이다. 
-- 
+- 클래스가 다르면 @BeforeEach 어노테이션이 작동하지 않는다 => 잘 동작한다
 

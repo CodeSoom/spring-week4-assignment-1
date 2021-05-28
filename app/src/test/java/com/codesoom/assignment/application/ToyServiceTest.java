@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.Task.TaskNotFoundException;
 import com.codesoom.assignment.Toy.application.ToyService;
 import com.codesoom.assignment.Toy.domain.Toy;
 import com.codesoom.assignment.Toy.domain.ToyJpaRepository;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -47,14 +45,12 @@ class ToyServiceTest {
         toy.setPrice(TOY_PRICE);
         toy.setImageUrl(TOY_IMAGE_URL);
         toy.setMaker(TOY_MAKER);
-//        toys.add(toy);
 
         toy2 = new Toy();
-        toy2.setName(TOY_NAME+ADD_POSIX);
+        toy2.setName(TOY_NAME + ADD_POSIX);
         toy2.setPrice(TOY_PRICE);
-        toy2.setImageUrl(TOY_IMAGE_URL+ADD_POSIX);
-        toy2.setMaker(TOY_MAKER+ADD_POSIX);
-//        toys.add(toy2);
+        toy2.setImageUrl(TOY_IMAGE_URL + ADD_POSIX);
+        toy2.setMaker(TOY_MAKER + ADD_POSIX);
     }
 
 
@@ -94,17 +90,60 @@ class ToyServiceTest {
 
             @BeforeEach
             void registerToy() {
-                toyService.createToy(toy);
+                toyService.createToy(toy2);
                 given(toyJpaRepository.findById(2L))
-                        .willReturn(Optional.of(toy));
+                        .willReturn(Optional.of(toy2));
             }
 
             @Test
             @DisplayName("It: returns Toy of requested id")
             void getAllToys() {
                 assertThat(toyService.getToy(2L).getName())
-                        .isEqualTo(TOY_NAME);
+                        .isEqualTo(TOY_NAME + ADD_POSIX);
                 verify(toyJpaRepository).findById(2L);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Describe: POST Method")
+    class DescribeCreateToy {
+
+        @BeforeEach
+        void setUp() {
+
+            // 이게 무슨 라인인지
+            given(toyJpaRepository.save(any(Toy.class))).will(invocation -> {
+                Toy toy = invocation.getArgument(0);
+                toy.setId(1L); // 이거 없으면 에러, 왜 get 할 땐 id 안정해줬는데, 얘는 왜..?
+                toy.setName(TOY_NAME);
+                toy.setPrice(TOY_PRICE);
+                toy.setImageUrl(TOY_IMAGE_URL);
+                toy.setMaker(TOY_MAKER);
+
+                // 에러: Index 1 out of bounds for length 1
+//                Toy toy2 = invocation.getArgument(1);
+
+                return toy;
+            });
+        }
+
+        @Nested
+        @DisplayName("context: when field of Toy is written")
+        class ContextCreateToy {
+
+            @BeforeEach
+            void setUp() {
+                toy = toyService.createToy(toy);
+            }
+
+            @Test
+            @DisplayName("IT: Create New Toy and return")
+            void createToy() {
+                assertThat(toy.getId()).isEqualTo(1L);
+                assertThat(toy.getName()).isEqualTo(TOY_NAME);
+
+                verify(toyJpaRepository).save(any(Toy.class));
             }
         }
     }
