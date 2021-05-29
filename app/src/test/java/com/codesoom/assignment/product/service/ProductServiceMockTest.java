@@ -20,8 +20,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductService 클래스의")
@@ -222,22 +224,57 @@ public class ProductServiceMockTest {
     class Describe_delete {
 
         @Nested
+        @DisplayName("만약 등록되어 있는 상품의 식별자가 주어진다면")
+        class Context_with_valid_product_id {
+            private Long validProductId;
+
+            @BeforeEach
+            void mocking() {
+                validProductId = productHelm.getId();
+
+                // given(productRepository.existsById(validProductId))
+                //         .willReturn(true);
+                // doNothing().when(productRepository)
+                //            .deleteById(validProductId);
+                given(productRepository.findById(validProductId))
+                        .willReturn(Optional.ofNullable(productHelm));
+                doNothing()
+                        .when(productRepository)
+                        .delete(productHelm);
+            }
+
+            @Test
+            @DisplayName("주어진 ID의 상품을 제거한다")
+            void It_deletes_one_product() {
+                productService.delete(validProductId);
+
+                // verify(productRepository).existsById(validProductId);
+                // verify(productRepository).deleteById(validProductId);
+                verify(productRepository).findById(any(Long.class));
+                verify(productRepository).delete(productHelm);
+            }
+        }
+
+        @Nested
         @DisplayName("만약 등록되어 있지 않은 상품의 식별자가 주어진다면")
         class Context_with_invalid_product_id {
             private final Long invalidProductId = -1L;
 
             @BeforeEach
             void mocking() {
-                given(productRepository.existsById(invalidProductId))
-                        .willThrow(new ProductNotFoundException());
+                doThrow(new ProductNotFoundException())
+                        .when(productRepository)
+                        .findById(invalidProductId);
             }
 
             @Test
             @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
             void It_throws_product_not_found() {
                 assertThatThrownBy(() -> productService.delete(invalidProductId))
-                        .isInstanceOf(ProductNotFoundException.class);
+                        .isInstanceOf(ProductNotFoundException.class)
+                        .hasMessageContaining("Product Not Found");
 
+                verify(productRepository).findById(invalidProductId);
             }
         }
     }

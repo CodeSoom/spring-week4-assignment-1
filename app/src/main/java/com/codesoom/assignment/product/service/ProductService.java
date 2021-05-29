@@ -31,9 +31,7 @@ public class ProductService {
     }
 
     public Product update(Long id, Product productData) {
-        Product product =
-                productRepository.findById(id)
-                                 .orElseThrow(ProductNotFoundException::new);
+        Product product = get(id);
 
         product.change(
                 productData.getName(),
@@ -46,10 +44,12 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new ProductNotFoundException();
-        }
-
-        productRepository.deleteById(id);
+        // if (!productRepository.existsById(id)) {
+        //     throw new ProductNotFoundException(); // FIXME: jacoco does
+        //      not cover it
+        // }
+        // productRepository.deleteById(id);
+        Product product = get(id);
+        productRepository.delete(product);
     }
 }
