@@ -1,7 +1,7 @@
 package com.codesoom.assignment.catToy.application;
 
 
-import com.codesoom.assignment.task.TaskNotFoundException;
+import com.codesoom.assignment.catToy.ToyNotFoundException;
 import com.codesoom.assignment.catToy.domain.CatToy;
 import com.codesoom.assignment.catToy.domain.CatToyRepository;
 
@@ -24,8 +24,7 @@ public class CatToyService {
     }
 
     public CatToy getDetailToy(Long id) {
-        return toyRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        return findById(id);
     }
 
     public CatToy createToy(CatToy catToy) {
@@ -33,14 +32,17 @@ public class CatToyService {
     }
 
     public CatToy updateToy(Long id, CatToy source) {
-        CatToy toy = toyRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        CatToy toy = findById(id);
         return toyRepo.updateToy(source, toy);
     }
 
     public void deleteToy(Long id) {
-        CatToy toy = toyRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        CatToy toy = findById(id);
         toyRepo.delete(toy);
+    }
+
+    private CatToy findById(Long id) {
+        return toyRepo.findById(id)
+                .orElseThrow(() -> new ToyNotFoundException(id));
     }
 }

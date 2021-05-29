@@ -22,8 +22,7 @@ public class TaskService {
     }
 
     public Task getTask(Long id) {
-        return taskRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        return findById(id);
     }
 
     public Task createTask(Task source) {
@@ -34,19 +33,22 @@ public class TaskService {
     }
 
     public Task updateTask(Long id, Task source) {
-        Task task = taskRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        Task task = findById(id);
         task.setTitle(source.getTitle());
 
         return task;
     }
 
     public Task deleteTask(Long id) {
-        Task task = taskRepo.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        Task task = findById(id);
         taskRepo.delete(task);
 
         return task;
+    }
+
+    private Task findById(Long id) {
+        return taskRepo.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
     }
 
 

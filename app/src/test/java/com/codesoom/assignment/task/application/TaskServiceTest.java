@@ -1,3 +1,4 @@
+
 package com.codesoom.assignment.task.application;
 
 import com.codesoom.assignment.task.TaskNotFoundException;
@@ -90,7 +91,6 @@ class TaskServiceTest {
 
             @BeforeEach
             void registerTask() {
-                taskService.createTask(task);
                 given(taskRepository.findById(REGISTERED_ID))
                         .willReturn(Optional.of(task));
             }
@@ -138,15 +138,12 @@ class TaskServiceTest {
         @DisplayName("할 일에 들어갈 내용을 받으면")
         class Context_with_some_title {
 
-            @BeforeEach
-            void setUp() {
-                task.setTitle(TITLE);
-                task = taskService.createTask(task);
-            }
-
             @Test
             @DisplayName("할 일을 생성하고, 생성한 할 일을 리턴한다.")
             void it_create_task() {
+                task.setTitle(TITLE);
+                task = taskService.createTask(task);
+
                 verify(taskRepository).save(any(Task.class));
 
                 assertThat(task.getId()).isEqualTo(1L);
@@ -161,7 +158,6 @@ class TaskServiceTest {
 
         @BeforeEach
         void ready_task() {
-            taskService.createTask(task);
             given(taskRepository.findById(REGISTERED_ID)).willReturn(Optional.of(task));
         }
 
@@ -205,7 +201,6 @@ class TaskServiceTest {
 
         @BeforeEach
         void id_register() {
-            taskService.createTask(task);
             given(taskRepository.findById(REGISTERED_ID))
                     .willReturn(Optional.of(task));
         }
@@ -219,9 +214,7 @@ class TaskServiceTest {
             void it_delete_task() {
                 Task task = taskService.deleteTask(REGISTERED_ID);
 
-                assertThat(taskService.getTasks()).isEmpty();
-
-                verify(taskRepository).findById(REGISTERED_ID);
+//                verify(taskRepository).findById(REGISTERED_ID);
                 verify(taskRepository).delete(task);
             }
         }

@@ -22,6 +22,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,24 +45,26 @@ public class TaskControllerWebTest {
     private static final Long REGISTERED_ID = 1L;
     private static final String TEST_TITLE = "Test";
     Task task;
+    List<Task> tasks;
+
+    @BeforeEach
+    void setUp() {
+        task = new Task();
+        tasks = new ArrayList<>();
+    }
 
     @Nested
     @DisplayName("전체 할 일을 요청할 때")
     class Describe_listMvc {
 
-        List<Task> tasks = new ArrayList<>();
 
-        @BeforeEach
-        void setUp() {
-            task = new Task();
-        }
 
         @Nested
         @DisplayName("할 일이 존재하지 않을 경우")
         class Context_not_exist_task {
 
             @Test
-            @DisplayName("빈 배열을 리턴하고, 200 응답코드를 전달합니다.")
+            @DisplayName("빈 배열과 200 상태코드를 응답합니다.")
             void it_return_empty() throws Exception {
                 given(taskService.getTasks()).willReturn(tasks);
 
@@ -80,11 +83,12 @@ public class TaskControllerWebTest {
         class Context_exist_task {
 
             @Test
-            @DisplayName("할 일 목록을 리턴하고, 200 응답코드를 전달합니다.")
+            @DisplayName("할 일 목록과 200 상태코드를 응답합니다.")
             void it_return_all() throws Exception {
-                given(taskService.getTasks()).willReturn(tasks);
                 task.setTitle(TEST_TITLE);
                 tasks.add(task);
+
+                given(taskService.getTasks()).willReturn(tasks);
 
                 final ResultActions actions = mockMvc.perform(get("/tasks"));
 
@@ -100,17 +104,17 @@ public class TaskControllerWebTest {
     @DisplayName("특정한 할 일을 요청할 때")
     class Describe_detailMvc {
 
-        @BeforeEach
-        void setUp() {
-            task = new Task();
-        }
+//        @BeforeEach
+//        void setUp() {
+//            task = new Task();
+//        }
 
         @Nested
         @DisplayName("요청한 ID에 맞는 할 일이 있다면")
         class Context_exist_task {
 
             @Test
-            @DisplayName("요청 ID의 할 일을 리턴하고, 200 응답코드를 전달합니다.")
+            @DisplayName("요청 ID의 할 일과 200 상태코드를 응답합니다.")
             void it_return_specific_task() throws Exception {
                 given(taskService.getTask(REGISTERED_ID)).willReturn(task);
                 task.setTitle(TEST_TITLE);
@@ -129,7 +133,7 @@ public class TaskControllerWebTest {
         class Context_not_exist_task {
 
             @Test
-            @DisplayName("TaskNotFound 예외를 던지고, 404 응답코드를 전달합니다.")
+            @DisplayName("TaskNotFound 예외를 던지고, 404 상태코드를 응답합니다.")
             void it_throw_exception() throws Exception {
                 given(taskService.getTask(NOT_REGISTERED_ID))
                         .willThrow(TaskNotFoundException.class);
@@ -146,11 +150,6 @@ public class TaskControllerWebTest {
     @DisplayName("할 일 생성을 요청할 때")
     class Describe_createMvc {
 
-        @BeforeEach
-        void setUp() {
-            task = new Task();
-        }
-
         @Nested
         @DisplayName("Title 내용이 주어지면")
         class Context_exist_title {
@@ -161,7 +160,7 @@ public class TaskControllerWebTest {
             }
 
             @Test
-            @DisplayName("할 일을 생성하고, 생성된 할 일을 리턴, 201 응답코드를 전달합니다.")
+            @DisplayName("할 일을 생성하고, 생성된 할 일과 201 상태코드를 응답합니다.")
             void it_create_task_and_return() throws Exception {
                 given(taskService.createTask(any(Task.class))).will(invocation -> {
                    Task task = invocation.getArgument(0);
@@ -191,7 +190,6 @@ public class TaskControllerWebTest {
         @BeforeEach
         void setUp() {
             mapper = new ObjectMapper();
-            task = new Task();
         }
 
         @Nested
@@ -199,7 +197,7 @@ public class TaskControllerWebTest {
         class Context_with_registered_ID {
 
             @Test
-            @DisplayName("등록된 ID의 내용을 변경하고, 변경된 할 일을 리턴, 200 응답코드를 전달합니다.")
+            @DisplayName("등록된 ID의 내용을 변경하고, 변경된 할 일과 200 상태코드를 응답합니다.")
             void it_update_task_and_return() throws Exception {
                 given(taskService.updateTask((long)eq(1), any(Task.class)))
                         .will(invocation -> {
@@ -227,7 +225,7 @@ public class TaskControllerWebTest {
         class Context_with_not_registered_ID {
 
             @Test
-            @DisplayName("TaskNotFound 예외를 던지고, 404 응답코드를 전달합니다.")
+            @DisplayName("TaskNotFound 예외를 던지고, 404 상태코드를 응답합니다.")
             void it_throw_exception() throws Exception {
                 given(taskService.updateTask(eq(NOT_REGISTERED_ID), any(Task.class)))
                         .willThrow(TaskNotFoundException.class);
@@ -250,7 +248,6 @@ public class TaskControllerWebTest {
         @BeforeEach
         void setUp() {
             mapper = new ObjectMapper();
-            task = new Task();
         }
 
         @Nested
@@ -258,7 +255,7 @@ public class TaskControllerWebTest {
         class Context_with_registered_ID {
 
             @Test
-            @DisplayName("등록된 ID의 내용을 변경하고, 변경된 할 일을 리턴, 200 응답코드를 전달합니다.")
+            @DisplayName("등록된 ID의 내용을 변경하고, 변경된 할 일과 200 상태코드를 응답합니다.")
             void it_update_task_and_return() throws Exception {
                 given(taskService.updateTask((long)eq(1), any(Task.class)))
                         .will(invocation -> {
@@ -286,7 +283,7 @@ public class TaskControllerWebTest {
         class Context_with_not_registered_ID {
 
             @Test
-            @DisplayName("TaskNotFound 예외를 던지고, 404 응답코드를 전달합니다.")
+            @DisplayName("TaskNotFound 예외를 던지고, 404 상태코드를 응답합니다.")
             void it_throw_exception() throws Exception {
                 given(taskService.updateTask(eq(NOT_REGISTERED_ID), any(Task.class)))
                         .willThrow(TaskNotFoundException.class);
@@ -309,25 +306,6 @@ public class TaskControllerWebTest {
         @BeforeEach
         void setUp() {
             mapper = new ObjectMapper();
-            task = new Task();
-        }
-
-        @Nested
-        @DisplayName("등록되지 않은 ID를 요청하면")
-        class Context_with_not_registered_ID {
-
-            @Test
-            @DisplayName("TaskNotFound 예외를 던지고, 404 응답코드를 전달합니다.")
-            void it_throw_exception() throws Exception {
-                given(taskService.deleteTask(any()))
-                        .willThrow(TaskNotFoundException.class);
-
-                final ResultActions actions = mockMvc.perform(delete("/tasks/100"));
-
-                actions
-                        .andExpect(status().isNotFound());
-                verify(taskService).deleteTask(eq(100L));
-            }
         }
 
         @Nested
@@ -335,7 +313,7 @@ public class TaskControllerWebTest {
         class Context_with_registered_ID {
 
             @Test
-            @DisplayName("등록된 할 일을 삭제하고, 204 응답코드를 전달합니다.")
+            @DisplayName("등록된 할 일을 삭제하고, 204 상태코드를 응답합니다.")
             void it_delete_task() throws Exception {
                 given(taskService.deleteTask(REGISTERED_ID)).willReturn(null);
 
@@ -344,6 +322,24 @@ public class TaskControllerWebTest {
                 actions
                         .andExpect(status().isNoContent());
                 verify(taskService).deleteTask(eq(1L));
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 ID를 요청하면")
+        class Context_with_not_registered_ID {
+
+            @Test
+            @DisplayName("TaskNotFound 예외를 던지고, 404 상태코드를 응답합니다.")
+            void it_throw_exception() throws Exception {
+                given(taskService.deleteTask(eq(100L)))
+                        .willThrow(TaskNotFoundException.class);
+
+                final ResultActions actions = mockMvc.perform(delete("/tasks/100"));
+
+                actions
+                        .andExpect(status().isNotFound());
+                verify(taskService).deleteTask(eq(100L));
             }
         }
     }
