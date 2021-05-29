@@ -3,7 +3,6 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.exceptions.ProductNotFoundException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +12,7 @@ public class ProductService implements ProductManagable {
 
     private ProductRepository productRepository;
 
-    public ProductService(@Qualifier("jpaProductRepository") ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
