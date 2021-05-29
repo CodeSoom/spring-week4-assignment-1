@@ -42,7 +42,10 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public void deleteById(Long id) {
-        Optional<Product> product = findById(id);
+        Product product = products.stream()
+                                .filter(p -> p.getId().equals(id))
+                                .findFirst()
+                                .orElseThrow(() -> new EmptyResultDataAccessException(Math.toIntExact(id)));
         products.remove(product);
     }
 }
