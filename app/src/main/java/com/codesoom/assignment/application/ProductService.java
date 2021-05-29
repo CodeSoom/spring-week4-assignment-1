@@ -23,8 +23,8 @@ public class ProductService implements ProductManagable {
 
     @Override
     public Product getProduct(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        return findById(id);
+
     }
 
     @Override
@@ -34,16 +34,18 @@ public class ProductService implements ProductManagable {
 
     @Override
     public Product updateProduct(Long id, Product sourceProduct) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
-
+        Product product = findById(id);
         product.updateBy(sourceProduct);
-
         return product;
     }
 
     @Override
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
+    }
+
+    private Product findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
