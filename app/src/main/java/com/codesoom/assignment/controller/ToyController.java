@@ -42,7 +42,7 @@ public class ToyController {
      */
     @PostMapping
     public ResponseEntity<Toy> createToy(
-            @PathVariable @Valid ToySaveRequest toySaveRequest
+           @RequestBody ToySaveRequest toySaveRequest
     ) {
         Toy toy = this.toyService.create(toySaveRequest.toEntity());
         return new ResponseEntity<>(toy, HttpStatus.CREATED);
