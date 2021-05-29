@@ -60,4 +60,24 @@ public class Toy {
         this.price = builder.price;
         this.imgUrl = builder.imgUrl;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
 }
