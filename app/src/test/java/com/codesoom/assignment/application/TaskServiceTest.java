@@ -56,7 +56,7 @@ class TaskServiceTest {
     void setUpSaveTask() {
         given(taskRepository.save(any(Task.class))).will(invocation -> {
             Task task = invocation.getArgument(0);
-            task.setId(2L);
+            task.setId(2L); // 임의로 넣은
             return task;
         });
     }
@@ -89,7 +89,7 @@ class TaskServiceTest {
 
         Task task = taskService.createTask(source); // service 는 taskRepository 에 의존적임을 드러내는 테스트코드
         verify(taskRepository).save(any(Task.class)); // <- 너무 내부 구현을 드러내는 것 같다면 숨기는게 맞다.
-        assertThat(task.getId()).isEqualTo(2L);
+        assertThat(task.getId()).isEqualTo(2L); // SetUpSaveTask() 에서 임의로 넣은 값을 검증
         assertThat(task.getTitle()).isEqualTo(TASK_TITLE + CREATE_POSIX);
     }
 

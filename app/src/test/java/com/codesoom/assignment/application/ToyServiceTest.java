@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.Task.TaskNotFoundException;
 import com.codesoom.assignment.Toy.application.ToyService;
 import com.codesoom.assignment.Toy.domain.Toy;
 import com.codesoom.assignment.Toy.domain.ToyJpaRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -114,7 +116,7 @@ class ToyServiceTest {
 
             // 이게 무슨 라인인지
             given(toyJpaRepository.save(any(Toy.class))).will(invocation -> {
-                Toy toy = invocation.getArgument(0);
+                Toy toy = invocation.getArgument(0); // getArgument 의 0, 첫번째 index 는 any(Toy.class) 이다.
                 toy.setId(1L); // 이거 없으면 에러, 왜 get 할 땐 id 안정해줬는데, 얘는 왜..?
                 toy.setName(TOY_NAME);
                 toy.setPrice(TOY_PRICE);
@@ -144,6 +146,51 @@ class ToyServiceTest {
                 assertThat(toy.getName()).isEqualTo(TOY_NAME);
 
                 verify(toyJpaRepository).save(any(Toy.class));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Describe: Delete method")
+    class DescribeDelete {
+
+        @BeforeEach
+        void setUp() {
+            toyService.createToy(toy);
+            // 나는 계속 given 구문을 빼먹어서 toy Not Found : 1 이 발생한다.
+            // + findById에 3L을 넣어도 작동이 된다. 안돼야 하는 거 아닌가..?
+            given(toyJpaRepository.findById(1L))
+                    .willReturn(Optional.of(toy));
+        }
+
+        @Nested
+        @DisplayName("Context: when id is provided")
+        class ContextDeleteWithId {
+
+            @Test
+            @DisplayName("Context: delete with existed Id")
+            void deleteWithId() {
+                toyService.deleteToy(1L);
+                assertThat(toyService.getAllToy()).isEmpty();
+                verify(toyJpaRepository).delete(any(Toy.class));
+                verify(toyJpaRepository).findById(1L);
+            }
+        }
+
+        @Nested
+        @DisplayName("Context: when invalid id is provided")
+        class ContextDeleteWithNotExistedId {
+
+            @Test
+            @DisplayName("Context: delete with not existed Id")
+            void deleteWithNotExistedId() {
+
+                // not existing id를 냅다 넣어버리면 바로 에러터진다. -> 그래서 assertThatThrownBy()의 인자로 넣는 것.
+//                toyService.deleteToy(3L);
+//                verify(toyJpaRepository).delete(any(Toy.class));
+
+                assertThatThrownBy(() -> toyService.deleteToy(-1L))
+                        .isInstanceOf(TaskNotFoundException.class);
             }
         }
     }
