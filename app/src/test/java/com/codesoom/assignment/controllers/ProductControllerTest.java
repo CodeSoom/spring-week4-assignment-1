@@ -2,11 +2,11 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,14 +127,14 @@ class ProductControllerTest {
                     givenId = notRegisteredProduct.getId();
 
                     given(productService.getProduct(givenId))
-                            .willThrow(ProductNotFoundException.class);
+                            .willThrow(EmptyResultDataAccessException.class);
                 }
 
                 @Test
                 @DisplayName("상품을 찾지 못 했다는 예외를 던진다")
                 void it_throws_exception() {
                     assertThatThrownBy(() -> productController.getProduct(givenId))
-                            .isInstanceOf(ProductNotFoundException.class);
+                            .isInstanceOf(EmptyResultDataAccessException.class);
                 }
             }
         }
@@ -233,7 +233,7 @@ class ProductControllerTest {
                     source = generateProduct(42L);
                     source.setName(SOURCE_NAME);
 
-                    doThrow(new ProductNotFoundException(givenId))
+                    doThrow(new EmptyResultDataAccessException(Math.toIntExact(givenId)))
                             .when(productService)
                             .updateProduct(givenId, source);
                 }
@@ -242,7 +242,7 @@ class ProductControllerTest {
                 @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
                 void it_throws_exception() {
                     assertThatThrownBy(() -> productController.updateProduct(givenId, source))
-                            .isInstanceOf(ProductNotFoundException.class);
+                            .isInstanceOf(EmptyResultDataAccessException.class);
                 }
             }
         }
@@ -296,7 +296,7 @@ class ProductControllerTest {
                     Product nonRegisteredProduct = generateProduct(-1L);
                     givenId = nonRegisteredProduct.getId();
 
-                    doThrow(new ProductNotFoundException(givenId))
+                    doThrow(new EmptyResultDataAccessException(Math.toIntExact(givenId)))
                             .when(productService)
                             .deleteProduct(givenId);
                 }
@@ -305,7 +305,7 @@ class ProductControllerTest {
                 @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
                 void it_throws_exception() {
                     assertThatThrownBy(() -> productController.removeProduct(givenId))
-                            .isInstanceOf(ProductNotFoundException.class);
+                            .isInstanceOf(EmptyResultDataAccessException.class);
                 }
             }
         }

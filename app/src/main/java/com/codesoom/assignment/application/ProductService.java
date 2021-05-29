@@ -2,7 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.exceptions.ProductNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +46,6 @@ public class ProductService implements ProductManagable {
 
     private Product findById(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new EmptyResultDataAccessException(Math.toIntExact(id)));
     }
 }

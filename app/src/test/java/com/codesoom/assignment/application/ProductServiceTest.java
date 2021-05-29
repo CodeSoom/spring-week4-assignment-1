@@ -2,12 +2,12 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -128,7 +128,7 @@ class ProductServiceTest {
                 @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
                 void it_throws_exception() {
                     assertThatThrownBy(() -> productService.getProduct(nonExistentId))
-                            .isInstanceOf(ProductNotFoundException.class);
+                            .isInstanceOf(EmptyResultDataAccessException.class);
                 }
             }
 
@@ -269,7 +269,7 @@ class ProductServiceTest {
                     nonExistentProduct = generateProduct(-1L);
                     nonExistentId = nonExistentProduct.getId();
 
-                    doThrow(new ProductNotFoundException(nonExistentId))
+                    doThrow(new EmptyResultDataAccessException(Math.toIntExact(nonExistentId)))
                             .when(productRepository)
                             .deleteById(nonExistentId);
                 }
@@ -278,7 +278,7 @@ class ProductServiceTest {
                 @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
                 void it_throws_exception() {
                     assertThatThrownBy(() -> productService.deleteProduct(nonExistentId))
-                            .isInstanceOf(ProductNotFoundException.class);
+                            .isInstanceOf(EmptyResultDataAccessException.class);
                 }
             }
 
