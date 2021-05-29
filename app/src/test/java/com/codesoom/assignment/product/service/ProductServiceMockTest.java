@@ -52,29 +52,27 @@ public class ProductServiceMockTest {
     @DisplayName("create 메서드는")
     class Describe_create {
 
-        @Nested
-        @DisplayName("만약 상품이 주어진다면")
-        class Context_with_one_product {
+        @BeforeEach
+        void mocking() {
+            given(productRepository.save(productLaser))
+                    .willReturn(productLaser);
+        }
 
-            @BeforeEach
-            void mocking() {
-                given(productRepository.save(productLaser))
-                        .willReturn(productLaser);
-            }
+        @Test
+        @DisplayName("새로운 상품을 생성한 후 생성된 상품을 반환한다")
+        void It_creates_the_product_and_returns_it() {
+            // when
+            Product createdProduct = productService.create(productLaser);
 
-            @Test
-            @DisplayName("새로운 상품을 생성한 후 생성된 상품을 반환한다")
-            void It_creates_the_product_and_returns_it() {
-                // when
-                Product createdProduct = productService.create(productLaser);
-
-                // then
-                // FIXME: 생성됐다는 것을 검증
-                assertThat(createdProduct.getName()).isEqualTo(productLaser.getName());
-                assertThat(createdProduct.getMaker()).isEqualTo(productLaser.getMaker());
-                assertThat(createdProduct.getPrice()).isEqualTo(productLaser.getPrice());
-                assertThat(createdProduct.getImageUrl()).isEqualTo(productLaser.getImageUrl());
-            }
+            // then
+            assertThat(createdProduct.getName())
+                    .isEqualTo(productLaser.getName());
+            assertThat(createdProduct.getMaker())
+                    .isEqualTo(productLaser.getMaker());
+            assertThat(createdProduct.getPrice())
+                    .isEqualTo(productLaser.getPrice());
+            assertThat(createdProduct.getImageUrl())
+                    .isEqualTo(productLaser.getImageUrl());
         }
     }
 
