@@ -1,16 +1,15 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.infra;
 
-import com.codesoom.assignment.TaskNotFoundException;
+import com.codesoom.assignment.domain.Task;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-@Repository
-public interface TaskRepository{
+@Primary
+public interface JpaTaskRepository
+        extends CrudRepository<Task,Long> {
 
     List<Task> findAll();
 
@@ -19,5 +18,4 @@ public interface TaskRepository{
     Task save(Task task);
 
     void delete(Task task);
-
 }
