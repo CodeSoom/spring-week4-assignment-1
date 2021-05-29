@@ -8,46 +8,44 @@ public class ToySaveRequest {
     private Double price;
     private String imgUrl;
 
-    public static class Builder {
-        private String name;
-        private String brand;
-        private Double price;
-        private String imgUrl;
-
-        public Builder(String name, String brand) {
-            this.name = name;
-            this.brand = brand;
-        }
-
-        public Builder price(Double price) {
-            this.price = price;
-            return this;
-        }
-
-        public Builder imgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
-            return this;
-        }
-
-        public ToySaveRequest build() {
-            return new ToySaveRequest(this);
-        }
-    }
-
     public ToySaveRequest() {}
 
-    private ToySaveRequest(Builder builder) {
-        this.name = builder.name;
-        this.brand = builder.brand;
-        this.price = builder.price;
-        this.imgUrl = builder.imgUrl;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public Toy toEntity() {
-        return new Toy
-                .Builder(this.name, this.brand)
+        return new Toy.Builder(this.name, this.brand)
                 .price(this.price)
-                .imgUrl(imgUrl)
+                .imgUrl(this.imgUrl)
                 .build();
     }
 }
