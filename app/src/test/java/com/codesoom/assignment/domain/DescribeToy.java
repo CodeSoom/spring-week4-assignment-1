@@ -1,4 +1,4 @@
-package com.codesoom.assignment.dto;
+package com.codesoom.assignment.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,7 @@ class DescribeToy {
 
     @Nested
     @DisplayName("getter가 호출되었을 경우")
-    class ContextWithGetter {
+    class DescribeWithGetter {
 
         @BeforeEach
         void toyFixtureSetUp() {
