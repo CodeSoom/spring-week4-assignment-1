@@ -2,7 +2,7 @@ package com.codesoom.assignment.infra;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.exceptions.ProductNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class InMemoryProductRepository implements ProductRepository {
         return Optional.ofNullable(products.stream()
                 .filter(product -> product.getId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException(id)));
+                .orElseThrow(() -> new EmptyResultDataAccessException(Math.toIntExact(id))));
     }
 
     @Override
