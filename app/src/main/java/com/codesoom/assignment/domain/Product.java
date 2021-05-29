@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 
 /**
- * 상품 엔티티
+ * 상품 엔티티 입니다.
  */
 @Entity
 public class Product {
