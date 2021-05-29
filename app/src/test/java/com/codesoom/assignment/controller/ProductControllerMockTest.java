@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,15 +50,23 @@ public class ProductControllerMockTest {
     @MockBean
     ProductService productService;
 
+    private Product productLaser;
+    private Product productHelm;
+
+    @BeforeEach
+    void prepareProduct() {
+        productLaser = ProductFixtures.laser();
+        productHelm = ProductFixtures.helm();
+    }
+
     @Nested
     @DisplayName("POST /products")
     class Describe_createProduct {
-        private final Product product = ProductFixtures.laser();
 
         @BeforeEach
         void mocking() {
             given(productService.create(any(Product.class)))
-                    .willReturn(product);
+                    .willReturn(productLaser);
         }
 
         @Test
@@ -67,17 +76,17 @@ public class ProductControllerMockTest {
             var result = mockMvc.perform(
                     post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"name\":\"" + product.getName() + "\"}"));
+                            .content("{\"name\":\"" + productLaser.getName() + "\"}"));
 
             // then
             result.andExpect(status().isCreated())
                   .andExpect(jsonPath("$.name",
-                                      containsString(product.getName())))
+                                      containsString(productLaser.getName())))
                   .andExpect(jsonPath("$.maker",
-                                      containsString(product.getMaker())))
+                                      containsString(productLaser.getMaker())))
                   .andExpect(jsonPath("$.price",
-                                      is(product.getPrice()
-                                                .intValue())));
+                                      is(productLaser.getPrice()
+                                                     .intValue())));
 
             verify(productService).create(any(Product.class));
         }
@@ -86,7 +95,6 @@ public class ProductControllerMockTest {
     @Nested
     @DisplayName("GET /products/{id}")
     class Describe_getProduct {
-        private final Product product = ProductFixtures.laser();
 
         @Nested
         @DisplayName("만약 등록되어 있는 상품 식별자가 주어진다면")
@@ -94,26 +102,26 @@ public class ProductControllerMockTest {
 
             @BeforeEach
             void mocking() {
-                given(productService.get(product.getId()))
-                        .willReturn(product);
+                given(productService.get(productLaser.getId()))
+                        .willReturn(productLaser);
             }
 
             @Test
             @DisplayName("주어진 식별자의 상품을 반환한다")
             void It_returns_one_product_by_id() throws Exception {
                 // when
-                var result = mockMvc.perform(get("/products/" + product.getId())
+                var result = mockMvc.perform(get("/products/" + productLaser.getId())
                                                      .contentType(MediaType.APPLICATION_JSON));
                 // then
                 result.andExpect(status().isOk())
-                      .andExpect(jsonPath("$.name", containsString(product.getName())))
+                      .andExpect(jsonPath("$.name", containsString(productLaser.getName())))
                       .andExpect(jsonPath("$.maker",
-                                          containsString(product.getMaker())))
+                                          containsString(productLaser.getMaker())))
                       .andExpect(jsonPath("$.price",
-                                          is(product.getPrice()
-                                                    .intValue())));
+                                          is(productLaser.getPrice()
+                                                         .intValue())));
 
-                verify(productService).get(product.getId());
+                verify(productService).get(productLaser.getId());
             }
         }
 
@@ -221,7 +229,7 @@ public class ProductControllerMockTest {
 
             @BeforeEach
             void mocking() {
-                doThrow(ProductNotFoundException.class).when(productService)
+                doThrow(new ProductNotFoundException()).when(productService)
                                                        .delete(invalidProductId);
             }
 
@@ -231,7 +239,9 @@ public class ProductControllerMockTest {
                 // when
                 mockMvc.perform(delete("/products/" + invalidProductId))
                        // then
-                       .andExpect(status().isNotFound());
+                       .andExpect(status().isNotFound())
+                       .andExpect(content().string(containsString("Product " +
+                                                                          "Not Found")));
 
                 verify(productService).delete(invalidProductId);
             }
@@ -242,7 +252,6 @@ public class ProductControllerMockTest {
     @DisplayName("PATCH /products/{id}")
     class Describe_patchProduct {
         private final ObjectMapper objectMapper = new ObjectMapper();
-        private final Product productHelm = ProductFixtures.helm();
 
         @Nested
         @DisplayName("만약 등록된 상품 식별자가 주어진다면")
