@@ -58,7 +58,7 @@ class ProductServiceTest {
     @DisplayName("getProducts() 메서드는")
     class Describe_getProducts {
         @Nested
-        @DisplayName("기존 고양이 장난감 목록이 있으면")
+        @DisplayName("등록된 고양이 장난감 목록이 있으면")
         class Context_not_empty_getProducts {
             private Long productId = 1L;
 
@@ -71,7 +71,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("장난감 목록을 반한다.")
+            @DisplayName("장난감 목록을 반환한다.")
             void not_empty_getProducts() {
                 //when then
                 assertThat(productService.getProducts())
