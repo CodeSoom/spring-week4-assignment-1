@@ -1,21 +1,23 @@
 package com.codesoom.assignment.Toy.controllers;
 
+import com.codesoom.assignment.Toy.ToyNotFoundException;
 import com.codesoom.assignment.Toy.application.ToyService;
 import com.codesoom.assignment.Toy.domain.Toy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
 @DisplayName("ToyController class")
@@ -176,16 +178,53 @@ class ToyControllerTest {
                 verify(toyService).updateToy(1L, source);
             }
         }
+    }
 
+    @Nested
+    @DisplayName("Describe: Delete 메소드는 ")
+    class DescribeDelete {
+
+        @BeforeEach
+        void setUp() {
+            long size = 1L;
+            setUpToys(size);
+
+        }
 
         @Nested
-        @DisplayName("Context: 요청한 id가 유효하지 않으면 ")
-        class ContextWithNotExistedId {
+        @DisplayName("Context: 요청한 id가 유효할 때 ")
+        class ContextDeleteWithExistedId {
+
+            @BeforeEach
+            void setUp(){
+                given(controller.delete(1L)).willReturn(toy);
+            }
+
+            @Test
+            @DisplayName("IT: 해당 id의 장난감을 삭제한다. ")
+            void deleteToy(){
+                controller.delete(1L);
+                verify(toyService).deleteToy(1L);
+            }
+        }
+
+        @Nested
+        @DisplayName("Context: 요청한 id가 유효하지 않을 때 ")
+        class ContextDeleteWithNotExistedId{
+
+            @BeforeEach
+            void setUp(){
+            }
+
+            @Test
+            @DisplayName("IT: 예외를 던진다. ")
+            void deleteToy(){
+                assertThatThrownBy(() -> controller.delete(-1L)).isInstanceOf(ToyNotFoundException.class);
+            }
+
         }
     }
-//    @Test
-//    void delete() {
-//    }
+
 
     private List<Toy> setUpToys(long toysSize) {
         toys = new ArrayList<>();
