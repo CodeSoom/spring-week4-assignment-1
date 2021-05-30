@@ -44,3 +44,20 @@ assertThatThrownBy() 내부에서 exception raise 가 발생하지 않으면 에
 verify(toyJpaRepository.findById(1L)); // 잘못된 방법
 // verify() 의 인자로 mock 객체를 넣어줘야 한다. => verify(toyJpaRepository)
 ```
+
+
+```java
+    @BeforeEach
+    void setUp() {
+//        toyService = new ToyService(toyJpaRepository); // 바아로 toyJpaRepository is null 터진다.
+        toyService = mock(ToyService.class);
+        controller = new ToyController(toyService);
+        Toy toy = new Toy();
+
+        toy.setName(TOY_NAME);
+        toy.setPrice(TOY_PRICE);
+        toy.setImageUrl(TOY_IMAGE_URL);
+        toy.setMaker(TOY_MAKER);
+        toys.add(toy);
+    }
+```

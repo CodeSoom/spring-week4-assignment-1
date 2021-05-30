@@ -23,8 +23,6 @@ class TaskControllerTest {
     @BeforeEach
     void SetUp() {
         taskService = new TaskService(taskRepository);
-
-
         controller = new TaskController(taskService); // 주입
         Task task = new Task();
         task.setId(1L);
