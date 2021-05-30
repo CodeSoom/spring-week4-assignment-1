@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,6 +32,43 @@ class InMemoryProductRepositoryTest {
     void setFixture() {
         registeredProduct = generateProduct(EXISTENT_ID);
         productRepository.save(registeredProduct);
+    }
+
+    @Nested
+    @DisplayName("findAll 메소드는")
+    class Describe_of_findAll {
+
+        @Nested
+        @DisplayName("등록된 상품이 있으면")
+        class Context_of_registered_product {
+
+            @Test
+            @DisplayName("상품 목록을 반환한다")
+            void it_returns_all_products() {
+                List<Product> products = new ArrayList<>();
+                products.add(registeredProduct);
+
+                assertThat(productRepository.findAll())
+                        .isEqualTo(products);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 상품이 없으면")
+        class Context_of_empty_products {
+
+            @BeforeEach
+            void clearProducts() {
+                productRepository.deleteById(EXISTENT_ID);
+            }
+
+            @Test
+            @DisplayName("빈 상품 목록을 반환한다")
+            void it_returns_empty_products() {
+                assertThat(productRepository.findAll())
+                        .isEqualTo(new ArrayList<>());
+            }
+        }
     }
 
     @Nested
