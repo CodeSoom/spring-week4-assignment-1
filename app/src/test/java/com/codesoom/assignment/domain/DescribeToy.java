@@ -16,7 +16,7 @@ class DescribeToy {
 
     @Nested
     @DisplayName("getter가 호출되었을 경우")
-    class DescribeWithGetter {
+    class DescribeGetter {
 
         @BeforeEach
         void toyFixtureSetUp() {
