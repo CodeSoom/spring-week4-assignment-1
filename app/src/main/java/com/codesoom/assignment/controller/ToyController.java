@@ -1,13 +1,16 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.dto.ToyResponse;
 import com.codesoom.assignment.dto.ToySaveRequest;
 import com.codesoom.assignment.service.ToyService;
+import com.fasterxml.jackson.databind.util.ArrayIterator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,9 +32,11 @@ public class ToyController {
      * @return 장난감 목록을 포함한 HttpResponse
      */
     @GetMapping
-    public ResponseEntity<Iterable<Toy>> getList() {
+    public ResponseEntity<List<ToyResponse>> getList() {
         Iterable<Toy> toys = this.toyService.list();
-        return new ResponseEntity<>(toys, HttpStatus.OK);
+        List<ToyResponse> response = new ArrayList<>();
+        toys.forEach(toy -> response.add(toy.toResponse()));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /**
@@ -41,11 +46,11 @@ public class ToyController {
      * @return 장난감의 상세정보
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Toy> getDetail(
+    public ResponseEntity<ToyResponse> getDetail(
             @PathVariable Long id
     ) {
         Toy toy = this.toyService.detail(id);
-        return new ResponseEntity<>(toy, HttpStatus.OK);
+        return new ResponseEntity<>(toy.toResponse(), HttpStatus.OK);
     }
 
     /**
@@ -55,11 +60,11 @@ public class ToyController {
      * @return 생성된 장난감의 정보를 포함한 HttpResponse
      */
     @PostMapping
-    public ResponseEntity<Toy> createToy(
+    public ResponseEntity<ToyResponse> createToy(
            @RequestBody ToySaveRequest toySaveRequest
     ) {
         Toy toy = this.toyService.create(toySaveRequest.toEntity());
-        return new ResponseEntity<>(toy, HttpStatus.CREATED);
+        return new ResponseEntity<>(toy.toResponse(), HttpStatus.CREATED);
     }
 
     /**
@@ -70,12 +75,12 @@ public class ToyController {
      * @return 수정된 장난감의 정보
      */
     @PatchMapping("/{id}")
-    public ResponseEntity<Toy> updateToy(
+    public ResponseEntity<ToyResponse> updateToy(
             @PathVariable Long id,
             @RequestBody ToySaveRequest toySaveRequest
     ) {
         Toy toy = this.toyService.update(toySaveRequest.toEntityWithId(id));
-        return new ResponseEntity<>(toy, HttpStatus.OK);
+        return new ResponseEntity<>(toy.toResponse(), HttpStatus.OK);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ToyResponse;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -86,5 +88,9 @@ public class Toy {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public ToyResponse toResponse() {
+        return new ToyResponse(this);
     }
 }
