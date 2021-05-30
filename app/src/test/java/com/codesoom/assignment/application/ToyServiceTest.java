@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.Task.TaskNotFoundException;
+import com.codesoom.assignment.Toy.ToyNotFoundException;
 import com.codesoom.assignment.Toy.application.ToyService;
 import com.codesoom.assignment.Toy.domain.Toy;
 import com.codesoom.assignment.Toy.domain.ToyJpaRepository;
@@ -151,6 +151,41 @@ class ToyServiceTest {
     }
 
     @Nested
+    @DisplayName("Describe: Update Method")
+    class DescribeUpdate {
+
+        @BeforeEach
+        void SetUp() {
+            toyService.createToy(toy);
+            given(toyJpaRepository.findById(1L))
+                    .willReturn(Optional.of(toy));
+        }
+
+        @Nested
+        @DisplayName("Context: When id is proper")
+        class ContextUpdateWithId {
+
+            @Test
+            void updateToyWithProperId() {
+                Toy toy = toyService.updateToy(1L, toy2);
+                verify(toyJpaRepository).findById(1L);
+                assertThat(toy.getName()).isEqualTo(toy2.getName());
+            }
+        }
+
+        @Nested
+        @DisplayName("Context: When id is improper")
+        class ContextUpdateWithImproperId {
+
+            @Test
+            void updateWithImproperId() {
+                assertThatThrownBy(() -> toyService.updateToy(100L, toy))
+                        .isInstanceOf(ToyNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
     @DisplayName("Describe: Delete method")
     class DescribeDelete {
 
@@ -190,7 +225,7 @@ class ToyServiceTest {
 //                verify(toyJpaRepository).delete(any(Toy.class));
 
                 assertThatThrownBy(() -> toyService.deleteToy(-1L))
-                        .isInstanceOf(TaskNotFoundException.class);
+                        .isInstanceOf(ToyNotFoundException.class);
             }
         }
     }

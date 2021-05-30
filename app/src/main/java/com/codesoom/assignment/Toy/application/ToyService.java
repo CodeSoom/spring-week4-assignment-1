@@ -73,7 +73,7 @@ public class ToyService {
     public Toy updateToy(Long id, Toy source) {
 
         Toy toy = toyJpaRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+                .orElseThrow(() -> new ToyNotFoundException(id));
 
         toy.setName(source.getName());
         toy.setMaker(source.getMaker());
@@ -90,7 +90,7 @@ public class ToyService {
      */
     public Toy deleteToy(Long id) {
         Toy toy = toyJpaRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+                .orElseThrow(() -> new ToyNotFoundException(id));
         toyJpaRepository.delete(toy);
         return toy;
     }
