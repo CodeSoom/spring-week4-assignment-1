@@ -1,9 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.dto.ToySaveRequest;
 import com.codesoom.assignment.repository.ToyRepository;
-import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -61,4 +59,12 @@ public class ToyService {
         return this.toyRepository.save(toy);
     }
 
+    /**
+     * 요청받은 id의 장난감 정보를 삭제합니다.
+     *
+     * @param id 삭제될 장난감 정보의 id
+     */
+    public void delete(Long id) {
+        this.toyRepository.deleteById(id);
+    }
 }

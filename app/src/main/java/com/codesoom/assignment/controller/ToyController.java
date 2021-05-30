@@ -77,4 +77,18 @@ public class ToyController {
         Toy toy = this.toyService.update(toySaveRequest.toEntityWithId(id));
         return new ResponseEntity<>(toy, HttpStatus.OK);
     }
+
+    /**
+     * 장난감 정보를 삭제합니다.
+     *
+     * @param id 삭제 요청된 장난감 정보의 id
+     * @return 빈 컨텐츠
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteToy(
+            @PathVariable Long id
+    ) {
+        this.toyService.delete(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
