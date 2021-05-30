@@ -4,11 +4,13 @@ import com.codesoom.assignment.domain.Toy;
 
 public class ToyResponse {
 
-    private final Long id;
-    private final String name;
-    private final String maker;
-    private final Double price;
-    private final String imageUrl;
+    private Long id;
+    private String name;
+    private String maker;
+    private Double price;
+    private String imageUrl;
+
+    public ToyResponse() {}
 
     public ToyResponse(Toy toy) {
         this.id = toy.getId();
