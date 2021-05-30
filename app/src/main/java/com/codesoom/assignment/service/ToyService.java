@@ -3,8 +3,10 @@ package com.codesoom.assignment.service;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.dto.ToySaveRequest;
 import com.codesoom.assignment.repository.ToyRepository;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 /**
@@ -25,7 +27,12 @@ public class ToyService {
      * @return 장난감 목록
      */
     public List<Toy> list() {
-        return (List<Toy>) toyRepository.findAll();
+        return (List<Toy>) this.toyRepository.findAll();
+    }
+
+    public Toy detail(Long id) {
+        return this.toyRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     /**
@@ -47,4 +54,5 @@ public class ToyService {
     public Toy update(Toy toy) {
         return this.toyRepository.save(toy);
     }
+
 }

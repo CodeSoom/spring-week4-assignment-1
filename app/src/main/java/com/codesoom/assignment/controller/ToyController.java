@@ -34,6 +34,14 @@ public class ToyController {
         return new ResponseEntity<>(toys, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Toy> getDetail(
+            @PathVariable Long id
+    ) {
+        Toy toy = this.toyService.detail(id);
+        return new ResponseEntity<>(toy, HttpStatus.OK);
+    }
+
     /**
      * 장난감 정보를 생성하고 반환합니다.
      *
