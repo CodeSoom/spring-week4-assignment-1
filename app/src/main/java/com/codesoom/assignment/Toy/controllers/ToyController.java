@@ -28,7 +28,7 @@ public class ToyController {
     }
 
     /**
-     * Get Method with No resource
+     * 전체 장난감 리스트를 반환합니다.
      * @return 전체 Toy 리스트
      */
     @GetMapping
@@ -37,9 +37,9 @@ public class ToyController {
     }
 
     /**
-     * 상세 Toy 정보
-     * @param id 해당 toy 자원 번호
-     * @return 상세 Toy 정보
+     * 요청한 id의 장난감을 리턴합니다.
+     * @param id 요청 id
+     * @return 상세 요청한 Toy
      */
     @GetMapping("{id}")
     public Toy detailToy(@PathVariable Long id) {
@@ -47,10 +47,9 @@ public class ToyController {
     }
 
     /**
-     * Toy 생성
-     *
+     * 장난감을 생성합니다.
      * @param toy toy 객체
-     * @return 생성된 Toy
+     * @return 새로운 장난감
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,10 +58,10 @@ public class ToyController {
     }
 
     /**
-     * Toy 수정 - Patch
+     * 기존 장난감의 정보를 수정합니다.
      * @param id  해당 toy 자원 번호
      * @param toy toy 객체의 정보
-     * @return
+     * @return 업데이트된 장난감
      */
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -71,9 +70,9 @@ public class ToyController {
     }
 
     /**
-     * Toy 삭제
+     * 요청한 id의 장난감을 삭제합니다.
      * @param id 해당 toy 자원 번호
-     * @return 삭제된 toy 객체
+     * @return 삭제된 장난감
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
