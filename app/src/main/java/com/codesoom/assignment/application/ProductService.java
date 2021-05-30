@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,13 +34,15 @@ public class ProductService implements ProductManagable {
     }
 
     @Override
+    @Transactional
     public Product updateProduct(Long id, Product sourceProduct) {
         Product product = findById(id);
         product.updateBy(sourceProduct);
-        return product;
+        return productRepository.save(product);
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
