@@ -16,7 +16,7 @@ public class ProductService implements ProductManagable {
     /**
      * 주어진 Repository 객체로 초기화하며 ProductService 객체를 생성합니다.
      *
-     * @param productRepository 주어진 저장소 객체
+     * @param productRepository 주어진 Repository 객체
      */
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -33,7 +33,7 @@ public class ProductService implements ProductManagable {
     }
 
     /**
-     * 지정된 id에 해당하는 상품을 반환합니다.
+     * id에 해당하는 상품을 반환합니다.
      *
      * @param id 상품의 id
      * @return id에 해당하는 상품
@@ -46,7 +46,7 @@ public class ProductService implements ProductManagable {
     }
 
     /**
-     * 주어진 상품을 저장합니다.
+     * 상품을 저장합니다.
      *
      * @param product 주어진 상품
      * @return 저장된 상품
