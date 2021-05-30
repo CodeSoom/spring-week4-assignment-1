@@ -2,7 +2,6 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.infra.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -28,10 +26,25 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductRepository productRepository;
 
+    private Product registeredProduct;
+    final private Long EXISTENT_ID = 1L;
+    final private Long NON_EXISTENT_ID = -1L;
+
     @BeforeEach
-    void setup() {
+    void setUp() {
         productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository);
+        setUpFixture();
+    }
+
+    void setUpFixture() {
+        registeredProduct = generateProduct(EXISTENT_ID);
+
+        given(productRepository.findById(EXISTENT_ID))
+                .willReturn(Optional.ofNullable(registeredProduct));
+
+        willThrow(new EmptyResultDataAccessException(Math.toIntExact(NON_EXISTENT_ID)))
+                .given(productRepository).deleteById(NON_EXISTENT_ID);
     }
 
     @Nested
@@ -42,11 +55,19 @@ class ProductServiceTest {
         @DisplayName("등록된 상품이 없을 때")
         class Context_of_empty_products {
 
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findAll())
+                        .willReturn(new ArrayList<>());
+            }
+
             @Test
             @DisplayName("빈 리스트를 반환한다")
             void it_returns_empty_list() {
                 assertThat(productService.getAllProducts())
                         .isEmpty();
+
+                verify(productRepository).findAll();
             }
         }
 
@@ -54,42 +75,24 @@ class ProductServiceTest {
         @DisplayName("등록된 상품이 있을 때")
         class Context_of_not_empty_products {
 
-            private List<ServiceEntry> serviceEntryList = new ArrayList<>();
-
             @BeforeEach
-            void setServiceEntryListWithDifferentSize() {
-                ArrayList<Integer> sizeCases = new ArrayList<>(Arrays.asList(1, 2, 100, 1024));
+            void setUp() {
+                List<Product> products = new ArrayList<>();
+                products.add(registeredProduct);
 
-                sizeCases.forEach(size -> serviceEntryList.add(new ServiceEntry(size, generateProductService(size))));
+                given(productRepository.findAll())
+                        .willReturn(products);
             }
 
             @Test
             @DisplayName("모든 상품 리스트를 반환한다")
-            void it_returns_empty_list() {
-                //TODO: productRepository.findAll()을 mockito로 목킹하지 않았는데 어떻게 통과하는걸까?
-                serviceEntryList.forEach(entry ->
-                    assertThat(entry.getProductService().getAllProducts())
-                        .hasSize(entry.getSize())
-                );
-            }
+            void it_returns_all_products() {
+                List<Product> products = productService.getAllProducts();
 
-            private class ServiceEntry {
+                verify(productRepository).findAll();
 
-                private Integer size;
-                private ProductService productService;
-
-                ServiceEntry(Integer size, ProductService productService) {
-                    this.size = size;
-                    this.productService = productService;
-                }
-
-                public Integer getSize() {
-                    return size;
-                }
-
-                public ProductService getProductService() {
-                    return productService;
-                }
+                assertThat(products.get(0).getName())
+                        .isEqualTo(registeredProduct.getName());
             }
         }
     }
@@ -99,59 +102,42 @@ class ProductServiceTest {
     class Describe_of_getProduct {
 
         @Nested
-        @DisplayName("상품이 등록되어 있을 때")
-        class Context_of_product_registerd {
+        @DisplayName("존재하지 않는 id가 주어지면")
+        class Context_of_non_existent_id {
 
-            private Product registedProduct;
+            private Long givenId;
 
             @BeforeEach
             void setUp() {
-                registedProduct = generateProduct(1L);
-                //TODO: productRepository.save()를 목킹하지 않았는데 어떻게 작동하는거지..?
-                productService.addProduct(registedProduct);
+                givenId = NON_EXISTENT_ID;
             }
 
-            @Nested
-            @DisplayName("존재하지 않는 id가 주어지면")
-            class Context_of_non_existent_id {
+            @Test
+            @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> productService.getProduct(givenId))
+                        .isInstanceOf(EmptyResultDataAccessException.class);
+            }
+        }
 
-                private Product notRegisteredProduct;
-                private Long nonExistentId;
+        @Nested
+        @DisplayName("존재하는 id가 주어지면")
+        class Context_of_existent_id {
 
-                @BeforeEach
-                void setUp() {
-                    notRegisteredProduct = generateProduct(-1L);
-                    nonExistentId = notRegisteredProduct.getId();
-                }
+            private Long givenId;
 
-                @Test
-                @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
-                void it_throws_exception() {
-                    assertThatThrownBy(() -> productService.getProduct(nonExistentId))
-                            .isInstanceOf(EmptyResultDataAccessException.class);
-                }
+            @BeforeEach
+            void setUp() {
+                givenId = EXISTENT_ID;
             }
 
-            @Nested
-            @DisplayName("존재하는 id가 주어지면")
-            class Context_of_existent_id {
+            @Test
+            @DisplayName("상품을 반환한다")
+            void it_returns_product() {
+                assertThat(productService.getProduct(givenId))
+                        .isEqualTo(registeredProduct);
 
-                private Long existentId;
-
-                @BeforeEach
-                void setUp() {
-                    existentId = registedProduct.getId();
-
-                    given(productRepository.findById(existentId))
-                            .willReturn(Optional.of(registedProduct));
-                }
-
-                @Test
-                @DisplayName("상품을 반환한다")
-                void it_returns_product() {
-                    assertThat(productService.getProduct(existentId))
-                            .isEqualTo(registedProduct);
-                }
+                verify(productRepository).findById(givenId);
             }
         }
     }
@@ -159,6 +145,12 @@ class ProductServiceTest {
     @Nested
     @DisplayName("addProduct 메소드는")
     class Describe_of_addProduct {
+
+        @BeforeEach
+        void setUp() {
+            given(productRepository.save(any(Product.class)))
+                    .will(invocation -> invocation.getArgument(0));
+        }
 
         @Nested
         @DisplayName("상품이 주어지면")
@@ -168,10 +160,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                givenProduct = generateProduct(1L);
-
-                given(productRepository.save(any(Product.class)))
-                        .will(invocation -> invocation.getArgument(0));
+                givenProduct = generateProduct(2L);
             }
 
             @Test
@@ -190,52 +179,40 @@ class ProductServiceTest {
     @DisplayName("updateProduct 메소드는")
     class Describe_of_updateProduct {
 
-        @Nested
-        @DisplayName("상품이 등록되어 있을 때")
-        class Context_of_registered_product {
+        @BeforeEach
+        void setUp() {
+            given(productRepository.save(any(Product.class)))
+                    .will(invocation -> invocation.getArgument(0));
+        }
 
-            private Product registeredProduct;
+        @Nested
+        @DisplayName("존재하는 id와 갱신할 상품내용이 주어지면")
+        class Context_of_existent_id_and_product {
+
+            private Long givenId;
+            private Product givenProduct;
+            private Product result;
 
             @BeforeEach
             void setUp() {
-                registeredProduct = generateProduct(1L);
-                //TODO: productRepository.save()를 목킹하지 않았는데 어떻게 작동하는거지..?
-                productService.addProduct(registeredProduct);
+                givenId = EXISTENT_ID;
+
+                givenProduct = generateProduct(42L);
+
+                result = new Product();
+                result.updateBy(givenProduct);
+                result.setId(EXISTENT_ID);
             }
 
-            @Nested
-            @DisplayName("존재하는 id와 상품 정보가 주어지면")
-            class Context_of_existent_id_and_product {
+            @Test
+            @DisplayName("상품을 갱신하고, 갱신한 상품을 반환한다")
+            void it_updates_product_and_returns_it() {
+                assertThat(productService.updateProduct(givenId, givenProduct))
+                        .isEqualTo(result)
+                        .withFailMessage("갱신한 상품을 반환하지 않았다");
 
-                private Long existentId;
-                private Product givenProduct;
-
-                @BeforeEach
-                void setUp() {
-                    existentId = registeredProduct.getId();
-                    givenProduct = generateProduct(42L);
-                    givenProduct.setId(registeredProduct.getId());
-
-                    given(productRepository.findById(existentId))
-                            .willReturn(Optional.of(registeredProduct));
-                    given(productRepository.save(any(Product.class)))
-                            .will(invocation -> invocation.getArgument(0));
-                }
-
-                @Test
-                @DisplayName("상품을 갱신하고, 갱신한 상품을 반환한다")
-                void it_updates_product_and_returns_it() {
-                    assertThat(productService.updateProduct(existentId, givenProduct))
-                            .isEqualTo(givenProduct)
-                            .withFailMessage("갱신한 상품을 반환하지 않았다");
-
-                    verify(productRepository).findById(existentId);
-                    verify(productRepository).save(any(Product.class)); //TODO: productService.updateProduct에서 호출한 적이 없는데 어떻게 통과하는 것일까?
-
-                    assertThat(productService.getProduct(existentId))
-                            .isEqualTo(givenProduct)
-                            .withFailMessage("상품이 갱신되지 않았다");
-                }
+                verify(productRepository).findById(givenId);
+                verify(productRepository).save(result);
             }
         }
     }
@@ -245,59 +222,41 @@ class ProductServiceTest {
     class Describe_of_deleteProduct {
 
         @Nested
-        @DisplayName("상품이 등록되어 있을 때")
-        class Context_of_registered_product {
+        @DisplayName("존재하지 않는 상품의 id가 주어지면")
+        class Context_of_non_existent_id {
 
-            private Product registeredProduct;
+            private Long givenId;
 
             @BeforeEach
-            void setup() {
-                registeredProduct = generateProduct(1L);
-                //TODO: productRepository.save()를 목킹하지 않았는데 어떻게 작동하는거지..?
-                productService.addProduct(registeredProduct);
+            void setUp() {
+                givenId = NON_EXISTENT_ID;
             }
 
-            @Nested
-            @DisplayName("존재하지 않는 상품의 id가 주어지면")
-            class Context_of_non_existent_id {
+            @Test
+            @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> productService.deleteProduct(givenId))
+                        .isInstanceOf(EmptyResultDataAccessException.class);
+            }
+        }
 
-                private Product nonExistentProduct;
-                private Long nonExistentId;
+        @Nested
+        @DisplayName("존재하는 상품의 id가 주어지면")
+        class Context_of_existent_id {
 
-                @BeforeEach
-                void setUp() {
-                    nonExistentProduct = generateProduct(-1L);
-                    nonExistentId = nonExistentProduct.getId();
+            private Long givenId;
 
-                    doThrow(new EmptyResultDataAccessException(Math.toIntExact(nonExistentId)))
-                            .when(productRepository)
-                            .deleteById(nonExistentId);
-                }
-
-                @Test
-                @DisplayName("상품을 찾을 수 없다는 예외를 던진다")
-                void it_throws_exception() {
-                    assertThatThrownBy(() -> productService.deleteProduct(nonExistentId))
-                            .isInstanceOf(EmptyResultDataAccessException.class);
-                }
+            @BeforeEach
+            void setUp() {
+                givenId = EXISTENT_ID;
             }
 
-            @Nested
-            @DisplayName("존재하는 상품의 id가 주어지면")
-            class Context_of_existent_id {
+            @Test
+            @DisplayName("상품을 제거한다")
+            void it_removes_product() {
+                productService.deleteProduct(givenId);
 
-                private Long existentId;
-
-                @BeforeEach
-                void setUp() {
-                    existentId = registeredProduct.getId();
-                }
-
-                @Test
-                @DisplayName("상품을 제거한다")
-                void it_removes_product() {
-                    productService.deleteProduct(existentId);
-                }
+                verify(productRepository).deleteById(givenId);
             }
         }
     }
@@ -310,16 +269,5 @@ class ProductServiceTest {
         newProduct.setMaker("maker" + id);
         newProduct.setImageUrl(String.format("product%d.jpg", id));
         return newProduct;
-    }
-
-    private ProductService generateProductService(Integer size) {
-        ProductRepository productRepository = new InMemoryProductRepository();
-        ProductService productService = new ProductService(productRepository);
-
-        size += 1;
-        for (int i = 1; i < size; i++) {
-           productService.addProduct(generateProduct((long)i));
-        }
-        return productService;
     }
 }
