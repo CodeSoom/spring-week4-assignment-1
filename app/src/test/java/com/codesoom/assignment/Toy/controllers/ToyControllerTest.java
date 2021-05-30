@@ -2,7 +2,6 @@ package com.codesoom.assignment.Toy.controllers;
 
 import com.codesoom.assignment.Toy.application.ToyService;
 import com.codesoom.assignment.Toy.domain.Toy;
-import com.codesoom.assignment.Toy.domain.ToyJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -103,35 +104,85 @@ class ToyControllerTest {
         }
 
         @Nested
-        @DisplayName("Describe: 요청한 id 값이 존재하면")
+        @DisplayName("Context: 요청한 id 값이 존재하면")
         class ContextWithExistedId {
 
             @Test
             @DisplayName("IT: 해당 장난감을 리턴한다.")
-            void getToyWithExistedId(){
+            void getToyWithExistedId() {
                 assertThat(controller.detailToy(1L)).isEqualTo(toy);
             }
         }
     }
 
+    @Nested
+    @DisplayName("Describe: create 메소드는 ")
+    class DescribeCreate {
 
-//    @Test
-//    void toyList() {
-//
-//    }
-//
-//    @Test
-//    void detailToy() {
-//    }
-//
-//    @Test
-//    void create() {
-//    }
-//
-//    @Test
-//    void patch() {
-//    }
-//
+        @Nested
+        @DisplayName("Context: 상품이 주어지면 ")
+        class ContextCreate {
+
+            private Toy givenToy;
+
+            @BeforeEach
+            void serUp() {
+                givenToy = generateToy(1L);
+                given(toyService.createToy(any(Toy.class)))
+                        .will(invocation -> invocation.getArgument(0));
+            }
+
+            @Test
+            @DisplayName("IT: 상품을 저장하고, 리턴한다.")
+            void CreateNewToy() {
+                Toy toy = controller.create(givenToy);
+                assertThat(toy).isEqualTo(givenToy);
+                verify(toyService).createToy(givenToy);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Describe: Patch 메소드는 ")
+    class DescribePatch {
+
+        Toy generatedToy;
+
+        @BeforeEach
+        void setUp() {
+            Long id = 1L;
+            generatedToy = generateToy(id);
+        }
+
+        @Nested
+        @DisplayName("Context: 요청한 id가 유효하면 ")
+        class ContextWithExistedId {
+
+            private Toy source;
+
+            @BeforeEach
+            void setUp() {
+                source = new Toy();
+                source.setName("UpdatedToy");
+                given(toyService.updateToy(eq(1L), any(Toy.class)))
+                        .will(invocation -> invocation.getArgument(1));
+            }
+
+            @Test
+            @DisplayName("IT: 해당 장난감의 정보를 수정한다.")
+            void updateToy() {
+                Toy toy = controller.patch(1L, source);
+                assertThat(toy.getName()).isEqualTo("UpdatedToy");
+                verify(toyService).updateToy(1L, source);
+            }
+        }
+
+
+        @Nested
+        @DisplayName("Context: 요청한 id가 유효하지 않으면 ")
+        class ContextWithNotExistedId {
+        }
+    }
 //    @Test
 //    void delete() {
 //    }
@@ -140,14 +191,18 @@ class ToyControllerTest {
         toys = new ArrayList<>();
 
         for (long i = 1; i < toysSize + 1; i++) {
-            Toy toy = new Toy();
-            toy.setId(toysSize);
-            toy.setName(TOY_NAME);
-            toy.setPrice(TOY_PRICE);
-            toy.setImageUrl(TOY_IMAGE_URL);
-            toy.setMaker(TOY_MAKER);
-            toys.add(toy);
+            toys.add(generateToy(i));
         }
         return toys;
+    }
+
+    private Toy generateToy(Long id) {
+        Toy toy = new Toy();
+        toy.setId(id);
+        toy.setName(TOY_NAME);
+        toy.setPrice(TOY_PRICE);
+        toy.setImageUrl(TOY_IMAGE_URL);
+        toy.setMaker(TOY_MAKER);
+        return toy;
     }
 }
