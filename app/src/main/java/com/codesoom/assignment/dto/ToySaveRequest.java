@@ -4,9 +4,9 @@ import com.codesoom.assignment.domain.Toy;
 
 public class ToySaveRequest {
     private String name;
-    private String brand;
+    private String maker;
     private Double price;
-    private String imgUrl;
+    private String imageUrl;
 
     public ToySaveRequest() {}
 
@@ -18,12 +18,12 @@ public class ToySaveRequest {
         this.name = name;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getMaker() {
+        return maker;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setMaker(String maker) {
+        this.maker = maker;
     }
 
     public Double getPrice() {
@@ -34,26 +34,26 @@ public class ToySaveRequest {
         this.price = price;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Toy toEntity() {
-        return new Toy.Builder(this.name, this.brand)
+        return new Toy.Builder(this.name, this.maker)
                 .price(this.price)
-                .imgUrl(this.imgUrl)
+                .imgUrl(this.imageUrl)
                 .build();
     }
 
     public Toy toEntityWithId(Long id) {
-        return new Toy.Builder(this.name, this.brand)
+        return new Toy.Builder(this.name, this.maker)
                 .id(id)
                 .price(this.price)
-                .imgUrl(this.imgUrl)
+                .imgUrl(this.imageUrl)
                 .build();
     }
 }

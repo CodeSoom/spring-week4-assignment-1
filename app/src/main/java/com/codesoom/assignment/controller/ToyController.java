@@ -29,8 +29,8 @@ public class ToyController {
      * @return 장난감 목록을 포함한 HttpResponse
      */
     @GetMapping
-    public ResponseEntity<List<Toy>> getList() {
-        List<Toy> toys = this.toyService.list();
+    public ResponseEntity<Iterable<Toy>> getList() {
+        Iterable<Toy> toys = this.toyService.list();
         return new ResponseEntity<>(toys, HttpStatus.OK);
     }
 

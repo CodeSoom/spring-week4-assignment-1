@@ -1,11 +1,11 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.dto.ToySaveRequest;
 import com.codesoom.assignment.repository.ToyRepository;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 
 /**
  * 장난감 정보에 대한 작업을 처리합니다.
@@ -24,8 +24,8 @@ public class ToyService {
      *
      * @return 장난감 목록
      */
-    public List<Toy> list() {
-        return (List<Toy>) this.toyRepository.findAll();
+    public Iterable<Toy> list() {
+        return this.toyRepository.findAll();
     }
 
     /**
@@ -56,7 +56,11 @@ public class ToyService {
      * @return 수정된 장난감 정보
      */
     public Toy update(Toy toy) {
-        return this.toyRepository.save(toy);
+        if (this.toyRepository.existsById(toy.getId())) {
+            return this.toyRepository.save(toy);
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     /**

@@ -15,27 +15,27 @@ public class Toy {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "brand")
-    private String brand;
+    @Column(name = "maker")
+    private String maker;
 
     @Column(name = "price")
     @Min(0)
     private Double price;
 
-    @Column(name = "img_url")
-    private String imgUrl;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     public static class Builder {
         private final String name;
-        private final String brand;
+        private final String maker;
 
         private Long id = null;
         private Double price = 0.0;
-        private String imgUrl = "";
+        private String imageUrl = "";
 
-        public Builder(String name, String brand) {
+        public Builder(String name, String maker) {
             this.name = name;
-            this.brand = brand;
+            this.maker = maker;
         }
 
         public Builder id(Long id) {
@@ -48,8 +48,8 @@ public class Toy {
             return this;
         }
 
-        public Builder imgUrl(String imgUrl) {
-            this.imgUrl = imgUrl;
+        public Builder imgUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
             return this;
         }
 
@@ -63,9 +63,9 @@ public class Toy {
     private Toy(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.brand = builder.brand;
+        this.maker = builder.maker;
         this.price = builder.price;
-        this.imgUrl = builder.imgUrl;
+        this.imageUrl = builder.imageUrl;
     }
 
     public Long getId() {
@@ -76,15 +76,15 @@ public class Toy {
         return name;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getMaker() {
+        return maker;
     }
 
     public Double getPrice() {
         return price;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }
