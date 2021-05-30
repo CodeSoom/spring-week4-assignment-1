@@ -29,7 +29,7 @@ public class ToyService {
     }
 
     /**
-     * 장난감 정보를 생성한다.
+     * 장난감 정보를 생성하고, 생성된 결과를 리턴합니다.
      *
      * @param toy 장난감 정보 객체
      * @return 장난감 정보
