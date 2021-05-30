@@ -30,6 +30,12 @@ public class ToyService {
         return (List<Toy>) this.toyRepository.findAll();
     }
 
+    /**
+     * 장난감의 상세정보를 반환합니다.
+     *
+     * @param id 장난감의 id
+     * @return 장난감의 상세정보
+     */
     public Toy detail(Long id) {
         return this.toyRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
