@@ -30,6 +30,7 @@ class ToyControllerTest {
 
 
     List<Toy> toys;
+    Toy toy;
 
     @BeforeEach
     void setUp() {
@@ -44,7 +45,7 @@ class ToyControllerTest {
 
         @Nested
         @DisplayName("Context: 장난감 목록이 존재할 때 ")
-        class ContextGetAll {
+        class ContextToyList {
 
             @BeforeEach
             void setUp() {
@@ -62,7 +63,7 @@ class ToyControllerTest {
 
         @Nested
         @DisplayName("Context: 장난감 목록이 존재하지 않으면 ")
-        class ContextGetWithExistedId {
+        class ContextEmptyList {
 
             @BeforeEach
             void setUp() {
@@ -72,18 +73,46 @@ class ToyControllerTest {
 
             @Test
             @DisplayName("IT: 빈 목록을 반환한다. ")
-            void getToyWithExistedId() {
-                assertThat(controller.toyList()).isEmpty();
-            }
-
-            @Test
-            @DisplayName("IT: 해당 장난감이 없으면 빈 리스트를 리턴한다.")
-            void getToyWithNotExistedId() {
+            void getToys() {
                 assertThat(controller.toyList()).isEmpty();
             }
         }
     }
 
+    @Nested
+    @DisplayName("Describe: detailToy 메소드는 ")
+    class DescribeDetailToy {
+
+        @BeforeEach
+        void setUp() {
+            long size = 1L;
+            setUpToys(size);
+            given(controller.detailToy(1L)).willReturn(toy);
+
+        }
+
+        @Nested
+        @DisplayName("Context: 요청한 id 값이 존재하지 않으면")
+        class ContextWithNotExistedId {
+
+            @Test
+            @DisplayName("IT: 예외를 던진다.")
+            void getToyWithNotExistedId() {
+                assertThat(controller.toyList()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("Describe: 요청한 id 값이 존재하면")
+        class ContextWithExistedId {
+
+            @Test
+            @DisplayName("IT: 해당 장난감을 리턴한다.")
+            void getToyWithExistedId(){
+                assertThat(controller.detailToy(1L)).isEqualTo(toy);
+            }
+        }
+    }
 
 
 //    @Test
