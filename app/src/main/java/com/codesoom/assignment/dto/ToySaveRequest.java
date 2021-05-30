@@ -48,4 +48,12 @@ public class ToySaveRequest {
                 .imgUrl(this.imgUrl)
                 .build();
     }
+
+    public Toy toEntityWithId(Long id) {
+        return new Toy.Builder(this.name, this.brand)
+                .id(id)
+                .price(this.price)
+                .imgUrl(this.imgUrl)
+                .build();
+    }
 }

@@ -29,12 +29,18 @@ public class Toy {
         private final String name;
         private final String brand;
 
+        private Long id = null;
         private Double price = 0.0;
         private String imgUrl = "";
 
         public Builder(String name, String brand) {
             this.name = name;
             this.brand = brand;
+        }
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
         }
 
         public Builder price(Double price) {
@@ -55,6 +61,7 @@ public class Toy {
     public Toy() {}
 
     private Toy(Builder builder) {
+        this.id = builder.id;
         this.name = builder.name;
         this.brand = builder.brand;
         this.price = builder.price;
