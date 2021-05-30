@@ -7,38 +7,65 @@ import com.codesoom.assignment.infra.InMemoryTaskRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
+@DataJpaTest
 class TaskServiceTest {
     private static final String TASK_TITLE = "test";
     private static final String UPDATE_POSTFIX = "|||";
+    private static final String CREATE_POSTFIX = "...";
 
     private TaskService taskService;
 
+    private  TaskRepository taskRepository;
+
 
     @BeforeEach
-    void setUp(){
-        TaskRepository taskRepository = new InMemoryTaskRepository();
-
+    void setUp() {
+        taskRepository = mock(TaskRepository.class);
         //subject
         taskService = new TaskService(taskRepository);
+        setUpFixtures();
+        setUpSaveTask();
+    }
+    void setUpFixtures() {
+        List<Task> tasks = new ArrayList<>();
 
-        //fixtures
         Task task = new Task();
         task.setTitle("test");
 
-        taskService.createTask(task);
+        tasks.add(task);
+        given(taskRepository.findAll()).willReturn(tasks);
+        given(taskRepository.findById(1L)).willReturn(Optional.of(task));
+        given(taskRepository.findById(100L)).willReturn(Optional.empty());
+    }
+    void setUpSaveTask(){
+        given(taskRepository.save(any(Task.class))).will(invocation -> {
+            Task task = invocation.getArgument(0);
+            task.setId(2L);
+            return task;
+        });
     }
 
     @DisplayName("TASK_TITLE을 가져오는 테스트")
     @Test
     void getTasks(){
         List<Task> tasks = taskService.getTasks();
+
+        verify(taskRepository).findAll();
+
         assertThat(tasks).hasSize(1);
 
         Task task = tasks.get(0);
@@ -46,38 +73,43 @@ class TaskServiceTest {
     }
 
     @Test
-    void getTaskWithValidId(){
+    void getTaskWithExistedId(){
         Task task = taskService.getTask(1L);
         assertThat(task.getTitle()).isEqualTo(TASK_TITLE);
 
+        verify(taskRepository).findById(1L);
     }
 
     @Test
     void getTaskWithInvalidId(){
         assertThatThrownBy(()-> taskService.getTask(100L))
                 .isInstanceOf(TaskNotFoundException.class);
+
+        verify(taskRepository).findById(100L);
     }
 
     @Test
     void createTask(){
-        int oldSize = taskService.getTasks().size();
+        Task source = new Task();
+        source.setTitle(TASK_TITLE + CREATE_POSTFIX);
 
-        Task task = new Task();
-        task.setTitle("test");
+        Task task = taskService.createTask(source);
 
-        taskService.createTask(task);
+        verify(taskRepository).save(any(Task.class));
 
-        int newSize = taskService.getTasks().size();
-
-        assertThat(newSize-oldSize).isEqualTo(1);
+        assertThat(task.getId()).isEqualTo(2L);
+        assertThat(task.getTitle()).isEqualTo(TASK_TITLE + CREATE_POSTFIX);
     }
+
     @Test
     void updateTaskWithExistedID(){
         Task source = new Task();
         source.setTitle(TASK_TITLE + UPDATE_POSTFIX);
-        taskService.updateTask(1L,source);
 
-        Task task = taskService.getTask(1L);
+        Task task = taskService.updateTask(1L,source);
+
+        verify(taskRepository).findById(1L);
+
         assertThat(task.getTitle()).isEqualTo(TASK_TITLE + UPDATE_POSTFIX);
     }
 
@@ -88,23 +120,26 @@ class TaskServiceTest {
 
         assertThatThrownBy(()-> taskService.updateTask(100L,source))
                 .isInstanceOf(TaskNotFoundException.class);
+
+        verify(taskRepository).findById(100L);
     }
 
     @Test
     void deleteTaskWithExsitedID(){
-        int oldSize = taskService.getTasks().size();
 
         taskService.deleteTask(1L);
 
-        int newSize = taskService.getTasks().size();
+        verify(taskRepository).findById(1L);
+        verify(taskRepository).delete(any(Task.class));
 
-        assertThat(oldSize-newSize).isEqualTo(1);
     }
 
     @Test
     void deleteTaskWithNotExsitedID(){
         assertThatThrownBy(()->taskService.deleteTask(100L))
                 .isInstanceOf(TaskNotFoundException.class);
+
+        verify(taskRepository).findById(100L);
     }
 
 }

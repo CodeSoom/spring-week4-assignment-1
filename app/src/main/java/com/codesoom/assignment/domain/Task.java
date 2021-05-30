@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class Task {
     // Identifier - Unique Key
     @Id
-    //@GeneratedValue
+    @GeneratedValue
     private Long id;
 
     private String title;

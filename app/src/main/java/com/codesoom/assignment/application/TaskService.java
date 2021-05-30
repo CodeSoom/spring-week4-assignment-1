@@ -7,9 +7,11 @@ import com.codesoom.assignment.domain.TaskRepository;
 import org.springframework.stereotype.Service;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class TaskService {
     private final TaskRepository taskRepository;
 
@@ -38,6 +40,8 @@ public class TaskService {
         Task task = taskRepository.findById(id)
                 .orElseThrow(()-> new TaskNotFoundException(id));
         task.setTitle(source.getTitle());
+
+
 
         return task;
     }
