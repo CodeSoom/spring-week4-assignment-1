@@ -39,8 +39,8 @@ public class InMemoryTaskRepository implements TaskRepository {
     }
 
 
-    private Long generateId() {
-        newId += 1;
-        return newId;
+    private synchronized Long generateId() {
+            newId += 1;
+            return newId;
     }
 }
