@@ -35,6 +35,7 @@ public class Product {
         imageUrl = product.getImageUrl();
     }
 
+    @Override
     public String toString() {
         return String.format("[Product] id:%d / name:%s / maker:%s / price:%d / imageUrl:%s", id, name, maker, price, imageUrl);
     }
