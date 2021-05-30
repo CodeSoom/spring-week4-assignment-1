@@ -78,11 +78,10 @@ public class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("Null이 아니고 비어 있지 않은 목록을 반환한다.")
+            @DisplayName("고양이 장난감 목록을 반환한다.")
             void not_empty_list_return() {
                 //when then
                 assertThat(productController.list())
-                        .isNotNull()
                         .isNotEmpty();
             }
 

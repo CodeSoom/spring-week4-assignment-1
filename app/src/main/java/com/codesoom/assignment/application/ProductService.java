@@ -8,13 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-//ToDo : ProductService 구현
-// 고양이 장난감 전체 조회 -> getCatToys()
-// 고양이 장난감 상세 조회 -> getCatToy(id)
-// 고양이 장난감 등록하기 -> createCatToy(CatToy)
-// 고양이 장난감 수정하기 - updateCatToy(CatToy)findById -> save
-// 고양이 장난감 삭제하기 -> delete
-
 @Service
 @Transactional
 public class ProductService {
@@ -33,14 +26,18 @@ public class ProductService {
     }
 
     public Product saveProduct(Product source) {
-        Product product = productRepository.save(source);
-        return product;
+        return productRepository.save(source);
     }
 
     public Product updateProduct(Long id, Product source) {
         Product product = findProductById(id);
-        productRepository.save(source);
-        return source;
+        return  productRepository.save(source);
+    }
+
+    public Product deleteProduct(Long id) {
+        Product product = findProductById(id);
+        productRepository.delete(product);
+        return product;
     }
 
     private Product findProductById(Long id) {
@@ -48,11 +45,5 @@ public class ProductService {
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException(id));
-    }
-
-    public Product deleteProduct(Long id) {
-        Product product = findProductById(id);
-        productRepository.delete(product);
-        return product;
     }
 }

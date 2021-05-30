@@ -44,7 +44,7 @@ class ProductServiceTest {
         productNotFoundMessage = "Product not foud : ";
     }
 
-    Product makingProduct(Long id) {
+    Product saveProduct(Long id) {
         Product product = new Product();
         product.setId(id);
         product.setName("Name" + id);
@@ -60,29 +60,26 @@ class ProductServiceTest {
         @Nested
         @DisplayName("기존 고양이 장난감 목록이 있으면")
         class Context_not_empty_getProducts {
-            private int productId = 1;
+            private Long productId = 1L;
 
             @BeforeEach
             void setUpNotEmptyGetProducts() {
                 //given
-                products.add(makingProduct((long) productId));
+                products.add(saveProduct(productId));
                 given(productRepository.findAll())
                         .willReturn(products);
             }
 
-            @AfterEach
-            void setUpLastNotEmptyGetProducts() {
-                then(productRepository)
-                        .should(times(1))
-                        .findAll();
-            }
-
             @Test
-            @DisplayName("Null이 아니고 비어있는 목록을 반한다.")
+            @DisplayName("장난감 목록을 반한다.")
             void not_empty_getProducts() {
                 //when then
                 assertThat(productService.getProducts())
                         .isNotEmpty();
+
+                then(productRepository)
+                        .should(times(1))
+                        .findAll();
             }
         }
 
@@ -96,19 +93,16 @@ class ProductServiceTest {
                         .willReturn(new ArrayList<>());
             }
 
-            @AfterEach
-            void setUpLastEmptyGetProducts() {
-                then(productRepository)
-                        .should(times(1))
-                        .findAll();
-            }
-
             @Test
             @DisplayName("비어있는 목록을 반환한다.")
             void empty_getProducts() {
                 //when then
                 assertThat(productService.getProducts())
                         .isEmpty();
+
+                then(productRepository)
+                        .should(times(1))
+                        .findAll();
             }
         }
     }
@@ -124,16 +118,9 @@ class ProductServiceTest {
             @BeforeEach
             void setUpExistedGetProduct() {
                 //given
-                product = makingProduct(productId);
+                product = saveProduct(productId);
                 given(productRepository.findById(eq(productId)))
                         .willReturn(Optional.of(product));
-            }
-
-            @AfterEach
-            void setUpLastExistedGetProduct() {
-                then(productRepository)
-                        .should(times(1))
-                        .findById(eq(productId));
             }
 
             @Test
@@ -143,6 +130,9 @@ class ProductServiceTest {
                 assertThat(product)
                         .extracting("id")
                         .isEqualTo(productId);
+                then(productRepository)
+                        .should(times(1))
+                        .findById(eq(productId));
             }
         }
 
@@ -160,13 +150,6 @@ class ProductServiceTest {
                         .willThrow(new ProductNotFoundException(productId));
             }
 
-            @AfterEach
-            void setUpLastNotExistedGetProduct() {
-                then(productRepository)
-                        .should(times(1))
-                        .findById(productId);
-            }
-
             @Test
             @DisplayName("ProductNotFoundException이 발생한다.")
             void not_existed_getProduct_exception() {
@@ -176,6 +159,9 @@ class ProductServiceTest {
                 assertTrue(throwable
                         .getClass()
                         .isAssignableFrom(ProductNotFoundException.class));
+                then(productRepository)
+                        .should(times(1))
+                        .findById(productId);
             }
 
             @Test
@@ -186,6 +172,9 @@ class ProductServiceTest {
                 });
                 assertThat(throwable.getMessage())
                         .isEqualTo(productNotFoundMessage);
+                then(productRepository)
+                        .should(times(1))
+                        .findById(productId);
             }
         }
     }
@@ -201,16 +190,9 @@ class ProductServiceTest {
             @BeforeEach
             void setUpValidSaveProduct() {
                 //given
-                product = makingProduct(productId);
+                product = saveProduct(productId);
                 given(productRepository.save(any(Product.class)))
                         .willReturn(product);
-            }
-
-            @AfterEach
-            void setUpLastValidSaveProduct() {
-                then(productRepository)
-                        .should(times(1))
-                        .save(any(Product.class));
             }
 
             @Test
@@ -231,6 +213,9 @@ class ProductServiceTest {
                             assertThat(returnProduct).extracting("imageUrl").isEqualTo(product.getImageUrl());
                         }
                 );
+                then(productRepository)
+                        .should(times(1))
+                        .save(any(Product.class));
             }
         }
     }
@@ -248,19 +233,13 @@ class ProductServiceTest {
             @BeforeEach
             void setUpExistedUpdateProduct() {
                 //given
-                preProduct = makingProduct(productId);
-                nextProduct = makingProduct(productId + 1);
+                preProduct = saveProduct(productId);
+                nextProduct = saveProduct(productId + 1);
                 nextProduct.setId(productId);
                 given(productRepository.findById(eq(productId)))
                         .willReturn(Optional.of(preProduct));
                 given(productRepository.save(any(Product.class)))
                         .willReturn(nextProduct);
-            }
-
-            @AfterEach
-            void setUpLastExistedUpdateProduct() {
-                then(productRepository).should(times(1)).findById(eq(productId));
-                then(productRepository).should(times(1)).save(any(Product.class));
             }
 
             @Test
@@ -294,6 +273,8 @@ class ProductServiceTest {
                                     .isEqualTo(nextProduct.getImageUrl());
                         }
                 );
+                then(productRepository).should(times(1)).findById(eq(productId));
+                then(productRepository).should(times(1)).save(any(Product.class));
             }
         }
 
@@ -304,20 +285,10 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUpNotExistedUpdateProduct() {
-                product = makingProduct(productId);
+                product = saveProduct(productId);
                 productNotFoundMessage += productId;
                 given(productRepository.findById(eq(productId)))
                         .willThrow(new ProductNotFoundException(productId));
-            }
-
-            @AfterEach
-            void setUpLastNotExistedUpdateProduct() {
-                then(productRepository)
-                        .should(times(1))
-                        .findById(eq(productId));
-                then(productRepository)
-                        .should(times(0))
-                        .save(any(Product.class));
             }
 
             @Test
@@ -331,6 +302,13 @@ class ProductServiceTest {
                 assertTrue(throwable
                         .getClass()
                         .isAssignableFrom(ProductNotFoundException.class));
+
+                then(productRepository)
+                        .should(times(1))
+                        .findById(eq(productId));
+                then(productRepository)
+                        .should(times(0))
+                        .save(any(Product.class));
             }
 
             @Test
@@ -341,6 +319,13 @@ class ProductServiceTest {
                 });
                 assertThat(throwable.getMessage())
                         .isEqualTo(productNotFoundMessage);
+
+                then(productRepository)
+                        .should(times(1))
+                        .findById(eq(productId));
+                then(productRepository)
+                        .should(times(0))
+                        .save(any(Product.class));
             }
         }
     }
@@ -356,26 +341,22 @@ class ProductServiceTest {
             @BeforeEach
             void setUpExistedDeleteProduct() {
                 //given
-                product = makingProduct(productId);
+                product = saveProduct(productId);
                 given(productRepository.findById(eq(productId)))
                         .willReturn(Optional.of(product));
                 doNothing().when(productRepository).delete(product);
-            }
-
-            @AfterEach
-            void setUpLastExistedDeleteProduct() {
-                then(productRepository)
-                        .should(times(1))
-                        .findById(eq(productId));
-                then(productRepository)
-                        .should(times(1))
-                        .delete(any(Product.class));
             }
 
             @Test
             @DisplayName("고양이 장난감을 삭제한다.")
             void existed_deleteProduct() {
                 productService.deleteProduct(productId);
+                then(productRepository)
+                        .should(times(1))
+                        .findById(eq(productId));
+                then(productRepository)
+                        .should(times(1))
+                        .delete(any(Product.class));
             }
         }
 
@@ -386,20 +367,11 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUpNotExistedDeleteProduct() {
-                product = makingProduct(productId);
+                product = saveProduct(productId);
                 productNotFoundMessage += productId;
                 given(productRepository.findById(eq(productId)))
                         .willThrow(new ProductNotFoundException(productId));
                 doNothing().when(productRepository).delete(product);
-            }
-            @AfterEach
-            void setUpLastNotExistedDeleteProduct(){
-                then(productRepository)
-                        .should(times(1))
-                        .findById(eq(productId));
-                then(productRepository)
-                        .should(times(0))
-                        .delete(any(Product.class));
             }
 
             @Test
@@ -411,15 +383,28 @@ class ProductServiceTest {
                 assertTrue(throwable
                         .getClass()
                         .isAssignableFrom(ProductNotFoundException.class));
+                then(productRepository)
+                        .should(times(1))
+                        .findById(eq(productId));
+                then(productRepository)
+                        .should(times(0))
+                        .delete(any(Product.class));
             }
+
             @Test
             @DisplayName("특정 에러메시지를 반환한다.")
-            void not_existed_deleteProduct_exception_message(){
+            void not_existed_deleteProduct_exception_message() {
                 Throwable throwable = catchThrowable(() -> {
                     productService.deleteProduct(productId);
                 });
                 assertThat(throwable.getMessage())
                         .isEqualTo(productNotFoundMessage);
+                then(productRepository)
+                        .should(times(1))
+                        .findById(eq(productId));
+                then(productRepository)
+                        .should(times(0))
+                        .delete(any(Product.class));
             }
         }
     }

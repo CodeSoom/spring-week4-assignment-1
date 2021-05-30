@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -22,7 +20,6 @@ import java.util.Optional;
 
 @DataJpaTest
 @DisplayName("ProductRepository")
-@Transactional
 class ProductRepositoryTest {
     @Autowired
     ProductRepository productRepository;
@@ -30,7 +27,7 @@ class ProductRepositoryTest {
     Product product;
     List<Product> products;
 
-    Product makingProduct(Long index) {
+    Product saveProduct(Long index) {
         Product product = new Product();
         product.setName("Name" + index);
         product.setMaker("Maker " + index);
@@ -39,6 +36,7 @@ class ProductRepositoryTest {
         return product;
     }
 
+
     @Nested
     @DisplayName("findAll() 메서드는")
     class Describe_findAll {
@@ -46,17 +44,16 @@ class ProductRepositoryTest {
         @DisplayName("고양이 장난감 목록이 존재하면")
         @TestInstance(TestInstance.Lifecycle.PER_CLASS) //class당 인스턴스 생성
         class Context_not_empty_findAll {
-            private int productId = 1;
+            private Long productId = 1L;
 
             @BeforeEach
             void setUpNotEmptyFindAll() {
-                product = makingProduct((long) productId);
-                productRepository.save(product);
+                product = saveProduct(productId);
             }
 
             @Test
-            @DisplayName(" 비어있지 않은 목록을 반환한다.")
-            void existed_findAll_not_empty() {
+            @DisplayName("장난감 목록을 반환한다. ")
+            void existed_findAll_not_empty1() {
                 products = productRepository.findAll();
                 assertThat(products)
                         .isNotEmpty();
@@ -79,9 +76,11 @@ class ProductRepositoryTest {
             @BeforeEach
             void setUpExistedFindById() {
                 //given
-                product = makingProduct(productId);
+                product = saveProduct(productId);
                 saveProduct = productRepository.save(product);
             }
+
+
 
             @Test
             @DisplayName("요청한 고양이 장난감을 반환한다. ")
@@ -144,15 +143,7 @@ class ProductRepositoryTest {
 
             @BeforeAll
             void setUpValidSave() {
-                product = makingProduct(productId);
-            }
-
-            @AfterEach
-            void setUpLastExistedFindById() {
-                List<Product> delProducts = productRepository.findAll();
-                for (Product product : delProducts) {
-                    productRepository.delete(product);
-                }
+                product = saveProduct(productId);
             }
 
             @Test
@@ -193,11 +184,11 @@ class ProductRepositoryTest {
         @TestInstance(TestInstance.Lifecycle.PER_CLASS) //class당 인스턴스 생성
         class Context_existed_delete {
             private Long productId = 40L;
-            private Optional<Product> returnProduct;
+            private Optional<Product> foundProduct;
 
             @BeforeAll
             void setUpExistedDelete() {
-                product = makingProduct(productId);
+                product = saveProduct(productId);
                 productRepository.save(product);
             }
 
@@ -205,8 +196,8 @@ class ProductRepositoryTest {
             @DisplayName("고양이 장난감을 삭제한다.")
             void existed_delete() {
                 productRepository.delete(product);
-                returnProduct = productRepository.findById(productId);
-                assertThat(returnProduct)
+                foundProduct = productRepository.findById(productId);
+                assertThat(foundProduct)
                         .isNotNull()
                         .isEmpty();
             }
