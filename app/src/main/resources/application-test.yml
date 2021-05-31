@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:h2:~/data/demo
+    url: jdbc:h2:~/data/test
   jpa:
     hibernate:
       ddl-auto: update
-#    show-sql: true
     properties:
       hibernate:
         format_sql: true
+        use_sql_comments: true
 
 logging:
   level:
