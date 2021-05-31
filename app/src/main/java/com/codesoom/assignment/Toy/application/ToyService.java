@@ -33,7 +33,7 @@ public class ToyService {
 
     /**
      * 모든 Toy 목록을 가져와 리턴합니다.
-     * @return 모든 Toy 를 담고있는 list
+     * @return Toy list
      */
     public List<Toy> getAllToy(){
         return toyJpaRepository.findAll();
