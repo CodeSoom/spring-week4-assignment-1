@@ -1,0 +1,6 @@
+com.codesoom.assignment
+com.codesoom.assignment.application
+com.codesoom.assignment.controllers
+com.codesoom.assignment.domain
+com.codesoom.assignment.dto
+com.codesoom.assignment.infra
