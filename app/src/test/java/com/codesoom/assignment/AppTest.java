@@ -1,15 +1,12 @@
 package com.codesoom.assignment;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AppTest {
     @Test
-    void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
-        assertEquals(classUnderTest.getGreeting(), "Hello, world!");
+    @DisplayName("스프링 어플리케이션이 가동되는지 확인")
+    void application() {
+        App.main(new String[] {});
     }
 }
