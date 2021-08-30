@@ -13,7 +13,7 @@ import javax.persistence.Id;
 public class CatToy {
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
     private String name;
     private String maker;
     private int price;
