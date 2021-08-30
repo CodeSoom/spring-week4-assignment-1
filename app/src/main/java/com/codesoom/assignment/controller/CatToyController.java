@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.service.CatToyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
