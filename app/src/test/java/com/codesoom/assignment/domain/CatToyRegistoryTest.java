@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -50,7 +49,7 @@ class CatToyRegistoryTest {
 
             @Test
             @DisplayName("빈 데이터를 반환합니다.")
-            void it_return_all_catToy() {
+            void it_return_empty_catToys() {
                 List<CatToy> catToys = catToyRegistory.getAll();
 
                 assertThat(catToys).hasSize(0);
