@@ -9,6 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 고양이 장난감을 관리한다.
+ */
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

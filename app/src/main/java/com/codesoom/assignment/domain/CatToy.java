@@ -8,6 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
+/**
+ * 고양이 장난감 객체로 장난감에 대한 정보를 담는다.
+ */
+
 @Entity
 public class CatToy {
 
