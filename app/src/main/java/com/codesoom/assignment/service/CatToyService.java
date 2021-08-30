@@ -29,10 +29,16 @@ public class CatToyService {
     }
 
     public CatToy updateCatToy(int id, CatToy catToy) {
-        return catToyRepository.updateCatToy(id, catToy);
+        CatToy foundCatToy = catToyRepository.findById(id);
+        foundCatToy.setImage(catToy.getImage());
+        foundCatToy.setMaker(catToy.getMaker());
+        foundCatToy.setPrice(catToy.getPrice());
+        foundCatToy.setName(catToy.getName());
+
+        return catToyRepository.save(foundCatToy);
     }
 
-    public CatToy deleteCatToy(int id) {
-        return catToyRepository.delete(id);
+    public void deleteCatToyById(int id) {
+        catToyRepository.deleteById(id);
     }
 }

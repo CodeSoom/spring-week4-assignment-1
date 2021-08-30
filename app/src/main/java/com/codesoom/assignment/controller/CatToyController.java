@@ -47,7 +47,7 @@ public class CatToyController {
     }
 
     @DeleteMapping("/{id}")
-    public CatToy deleteCatToy(@PathVariable int id) {
-        return catToyService.deleteCatToy(id);
+    public void deleteCatToy(@PathVariable int id) {
+        catToyService.deleteCatToyById(id);
     }
 }
