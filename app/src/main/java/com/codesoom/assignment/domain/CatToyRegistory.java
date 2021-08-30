@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.CatToyNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ public class CatToyRegistory {
 
     public CatToyRegistory() {
         this.catToys = new ArrayList<CatToy>();
-        this.nextId = 1L;
+        this.nextId = 0L;
     }
 
     public void create(CatToy catToy) {
@@ -19,6 +21,13 @@ public class CatToyRegistory {
 
     public List<CatToy> getAll() {
         return this.catToys;
+    }
+
+    public CatToy get(Long id) {
+        return this.catToys.stream()
+                .filter(catToy -> catToy.getId().equals(id))
+                .findFirst()
+                .orElseThrow(()-> new CatToyNotFoundException("id " + id + "를 가지는 CatToy가 없습니다."));
     }
 
     private Long generateId() {
