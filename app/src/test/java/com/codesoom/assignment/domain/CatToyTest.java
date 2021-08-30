@@ -15,6 +15,18 @@ class CatToyTest {
     private final String IMAGE_URI = "이미지 URL";
 
     @Test
+    @DisplayName("CatToy의 생성자를 확인합니다.")
+    void verify_constructor() {
+        CatToy catToy = new CatToy(ID, NAME, MAKER, PRICE, IMAGE_URI);
+
+        assertThat(catToy.getId()).isEqualTo(ID);
+        assertThat(catToy.getName()).isEqualTo(NAME);
+        assertThat(catToy.getMaker()).isEqualTo(MAKER);
+        assertThat(catToy.getPrice()).isEqualTo(PRICE);
+        assertThat(catToy.getImageURI()).isEqualTo(IMAGE_URI);
+    }
+
+    @Test
     @DisplayName("CatToy의 프로퍼티를 검사합니다.")
     void verify_property() {
         CatToy catToy = new CatToy();
