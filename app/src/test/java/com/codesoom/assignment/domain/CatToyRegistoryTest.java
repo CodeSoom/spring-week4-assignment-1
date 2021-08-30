@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.CatToyNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,7 +33,7 @@ class CatToyRegistoryTest {
     class Describe_create {
 
         @Test
-        @DisplayName("")
+        @DisplayName("catToy가 추가됩니다.")
         void it_add_catToy() {
             assertThat(catToyRegistory.getAll()).hasSize(0);
             catToyRegistory.create(catToy1);
