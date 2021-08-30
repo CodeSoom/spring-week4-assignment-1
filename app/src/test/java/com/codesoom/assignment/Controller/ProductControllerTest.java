@@ -1,6 +1,6 @@
 package com.codesoom.assignment.Controller;
 
-import javax.validation.constraints.Negative;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,9 +11,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @DisplayName("ProductController 클래스")
 @ExtendWith(MockitoExtension.class)
-public class ProductController {
+public class ProductControllerTest {
     @InjectMocks
-    private ProductController productController;
+    ProductController productController;
 
     @Nested
     @DisplayName("list 메서드는")
