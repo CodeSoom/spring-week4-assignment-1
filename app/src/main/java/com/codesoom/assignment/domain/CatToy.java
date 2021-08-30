@@ -8,6 +8,15 @@ public class CatToy {
     private Long price;
     private String imageURI;
 
+    public CatToy() {}
+
+    public CatToy(Long id, String name, String maker, Long price, String imageURI) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageURI = imageURI;
+    }
 
     public Long getId() {
         return id;
