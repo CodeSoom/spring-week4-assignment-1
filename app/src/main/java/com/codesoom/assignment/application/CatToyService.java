@@ -25,7 +25,7 @@ public class CatToyService {
 
     public CatToy findById(Long id) {
         return catToyRepository.findById(id)
-                .orElseThrow(()-> new CatToyNotFoundException(id));
+                .orElseThrow(() -> new CatToyNotFoundException(id));
     }
 
     @Transactional
@@ -36,7 +36,8 @@ public class CatToyService {
         return catToy;
     }
 
-    public CatToy save(CatToy catToy) {
+    public CatToy save(CatToy request) {
+        final CatToy catToy = CatToy.of(request.getName(), request.getMaker(), request.getPrice(), request.getImageUrl());
         return catToyRepository.save(catToy);
     }
 
