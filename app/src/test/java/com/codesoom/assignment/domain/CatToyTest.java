@@ -11,7 +11,7 @@ class CatToyTest {
     private final Long ID = 1L;
     private final String NAME = "이름";
     private final String MAKER = "메이커";
-    private final Long PRICE = 1000;
+    private final Long PRICE = 1000L;
     private final String IMAGE_URI = "이미지 URL";
 
     @Test
