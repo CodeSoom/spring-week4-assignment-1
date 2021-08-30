@@ -48,6 +48,7 @@ class CatToyServiceTest {
         given(repository.findById(1L)).willReturn(Optional.of(catToy));
         given(repository.findById(100L)).willReturn(Optional.empty());
         given(repository.save(any(CatToy.class))).willReturn(catToy);
+
     }
 
     @DisplayName("고양이 장난감들이 비어있는 목록을 조회할 수 있습니다.")
@@ -66,7 +67,7 @@ class CatToyServiceTest {
     @Test
     void findAllExistsCatToy() {
         given(service.findAll())
-                .willReturn(List.of(catToy));
+                .willReturn(Arrays.asList(catToy));
         List<CatToy> catToys = service.findAll();
 
         assertThat(catToys).hasSize(1);
@@ -85,7 +86,7 @@ class CatToyServiceTest {
     @DisplayName("존재하지 않는 식별자를 통해 고양이 장난감을 찾을 경우 예외가 발생합니다.")
     @Test
     void findCatToyByNotExistsId() {
-        assertThatThrownBy(()-> service.findById(100L))
+        assertThatThrownBy(() -> service.findById(100L))
                 .isInstanceOf(CatToyNotFoundException.class);
     }
 
@@ -110,7 +111,7 @@ class CatToyServiceTest {
     @Test
     void updateCatToy() {
         final CatToy newCatToy = CatToy.of("Other", "OtherMaker", 3000L, "OtherUrl");
-        CatToy updatedCatToy = service.updateCatToy(1L,newCatToy);
+        CatToy updatedCatToy = service.updateCatToy(1L, newCatToy);
 
         assertThat(updatedCatToy.getName()).isEqualTo(newCatToy.getName());
         assertThat(updatedCatToy.getMaker()).isEqualTo(newCatToy.getMaker());
@@ -124,10 +125,28 @@ class CatToyServiceTest {
     void updateCatToyNotExistsId() {
         final CatToy newCatToy = CatToy.of("Other", "OtherMaker", 3000L, "OtherUrl");
 
-        assertThatThrownBy(()-> service.updateCatToy(10L, newCatToy))
+        assertThatThrownBy(() -> service.updateCatToy(100L, newCatToy))
                 .isInstanceOf(CatToyNotFoundException.class);
 
-        verify(repository).findById(10L);
+        verify(repository).findById(100L);
+    }
+
+    @DisplayName("고양이 장난감을 삭제할 수 있습니다.")
+    @Test
+    void deleteCatToy() {
+        service.deleteCatToy(1L);
+
+        verify(repository).findById(1L);
+        verify(repository).delete(any(CatToy.class));
+    }
+
+    @DisplayName("존재하지 않는 식별자의 고양이 장난감을 삭제하려 하면 예외가 발생합니다.")
+    @Test
+    void deleteCatToyNotExistsId() {
+        assertThatThrownBy(() -> service.deleteCatToy(100L))
+                .isInstanceOf(CatToyNotFoundException.class);
+
+        verify(repository).findById(100L);
     }
 
 

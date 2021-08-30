@@ -57,6 +57,28 @@ public class CatToy {
         return new Builder();
     }
 
+    public void update(CatToy target) {
+        if (updatableString(target.name)) {
+            name = target.name;
+        }
+
+        if (updatableString(target.maker)) {
+            maker = target.maker;
+        }
+
+        if (updatableString(target.imageUrl)) {
+            imageUrl = target.imageUrl;
+        }
+
+        isValidPrice(target.price);
+
+        price = target.price;
+    }
+
+    private boolean updatableString(String source) {
+        return source != null && !source.isEmpty();
+    }
+
     public static class Builder {
         private String name;
         private String maker;
