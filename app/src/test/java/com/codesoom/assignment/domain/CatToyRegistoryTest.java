@@ -11,10 +11,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("CatToyRegistoryTest 클래스")
-class CatToyRegistoryTest {
+@DisplayName("CatToyRepositoryTest 클래스")
+class CatToyRepositoryTest {
 
-    private CatToyRegistory catToyRegistory;
+    private CatToyRepository catToyRepository;
     private CatToy catToy1;
     private CatToy catToy2;
     private CatToy catToy3;
@@ -25,7 +25,7 @@ class CatToyRegistoryTest {
         catToy2 = new CatToy(1L, "toy1", "maker1", 1000L, "toy1.jpg");
         catToy3 = new CatToy(1L, "toy1", "maker1", 1000L, "toy1.jpg");
 
-        catToyRegistory = new CatToyRegistory();
+        catToyRepository = new CatToyRepository();
     }
 
     @Nested
@@ -35,9 +35,9 @@ class CatToyRegistoryTest {
         @Test
         @DisplayName("catToy가 추가됩니다.")
         void it_add_catToy() {
-            assertThat(catToyRegistory.getAll()).hasSize(0);
-            catToyRegistory.create(catToy1);
-            assertThat(catToyRegistory.getAll()).hasSize(1);
+            assertThat(catToyRepository.getAll()).hasSize(0);
+            catToyRepository.create(catToy1);
+            assertThat(catToyRepository.getAll()).hasSize(1);
         }
     }
 
@@ -52,7 +52,7 @@ class CatToyRegistoryTest {
             @Test
             @DisplayName("빈 데이터를 반환합니다.")
             void it_return_empty_catToys() {
-                List<CatToy> catToys = catToyRegistory.getAll();
+                List<CatToy> catToys = catToyRepository.getAll();
 
                 assertThat(catToys).hasSize(0);
             }
@@ -64,15 +64,15 @@ class CatToyRegistoryTest {
 
             @BeforeEach
             void prepare() {
-                catToyRegistory.create(catToy1);
-                catToyRegistory.create(catToy2);
-                catToyRegistory.create(catToy3);
+                catToyRepository.create(catToy1);
+                catToyRepository.create(catToy2);
+                catToyRepository.create(catToy3);
             }
 
             @Test
             @DisplayName("모든 catToy를 반환합니다.")
             void it_return_all_catToy() {
-                List<CatToy> catToys = catToyRegistory.getAll();
+                List<CatToy> catToys = catToyRepository.getAll();
 
                 assertThat(catToys).hasSize(3);
                 assertThat(catToys.get(0)).isEqualTo(catToy1);
@@ -88,7 +88,7 @@ class CatToyRegistoryTest {
 
         @BeforeEach
         void prepare() {
-            catToyRegistory.create(catToy1);
+            catToyRepository.create(catToy1);
         }
 
         @Nested
@@ -98,7 +98,7 @@ class CatToyRegistoryTest {
             @Test
             @DisplayName("해당 Id의 catToy를 반환합니다.")
             void it_return_catToy() {
-                CatToy findedCatToy = catToyRegistory.get(1L);
+                CatToy findedCatToy = catToyRepository.get(1L);
 
                 assertThat(findedCatToy).isEqualTo(catToy1);
             }
@@ -111,7 +111,7 @@ class CatToyRegistoryTest {
             @Test
             @DisplayName("CatToyNotFoundException을 던집니다.")
             void it_throw_CatToyNotFoundException() {
-                assertThatThrownBy(() -> catToyRegistory.get(1000L))
+                assertThatThrownBy(() -> catToyRepository.get(1000L))
                         .isInstanceOf(CatToyNotFoundException.class);
             }
         }
@@ -123,7 +123,7 @@ class CatToyRegistoryTest {
 
         @BeforeEach
         void prepare() {
-            catToyRegistory.create(catToy1);
+            catToyRepository.create(catToy1);
         }
 
         @Nested
@@ -133,9 +133,9 @@ class CatToyRegistoryTest {
             @Test
             @DisplayName("해당 Id의 catToy를 수정합니다.")
             void it_update_catToy() {
-                catToyRegistory.update(1L, catToy2);
+                catToyRepository.update(1L, catToy2);
 
-                CatToy updatedCatToy = catToyRegistory.get(1L);
+                CatToy updatedCatToy = catToyRepository.get(1L);
 
                 assertThat(updatedCatToy.getName()).isEqualTo(catToy2.getName());
                 assertThat(updatedCatToy.getMaker()).isEqualTo(catToy2.getMaker());
@@ -151,7 +151,7 @@ class CatToyRegistoryTest {
             @Test
             @DisplayName("CatToyNotFoundException을 던집니다.")
             void it_throw_CatToyNotFoundException() {
-                assertThatThrownBy(() -> catToyRegistory.update(1000L, catToy2))
+                assertThatThrownBy(() -> catToyRepository.update(1000L, catToy2))
                         .isInstanceOf(CatToyNotFoundException.class);
             }
         }
@@ -163,7 +163,7 @@ class CatToyRegistoryTest {
 
         @BeforeEach
         void prepare() {
-            catToyRegistory.create(catToy1);
+            catToyRepository.create(catToy1);
         }
 
         @Nested
@@ -173,9 +173,9 @@ class CatToyRegistoryTest {
             @Test
             @DisplayName("해당 Id의 catToy를 제거합니다.")
             void it_update_catToy() {
-                catToyRegistory.delete(1L);
+                catToyRepository.delete(1L);
 
-                assertThat(catToyRegistory.getAll()).hasSize(0);
+                assertThat(catToyRepository.getAll()).hasSize(0);
             }
         }
 
@@ -186,7 +186,7 @@ class CatToyRegistoryTest {
             @Test
             @DisplayName("CatToyNotFoundException을 던집니다.")
             void it_throw_CatToyNotFoundException() {
-                assertThatThrownBy(() -> catToyRegistory.update(1000L, catToy2))
+                assertThatThrownBy(() -> catToyRepository.update(1000L, catToy2))
                         .isInstanceOf(CatToyNotFoundException.class);
             }
         }
