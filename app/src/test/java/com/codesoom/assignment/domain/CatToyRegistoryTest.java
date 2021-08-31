@@ -116,4 +116,44 @@ class CatToyRegistoryTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("update 메소드")
+    class Describe_update {
+
+        @BeforeEach
+        void prepare() {
+            catToyRegistory.create(catToy1);
+        }
+
+        @Nested
+        @DisplayName("해당되는 id의 catToy가 있다면")
+        class Context_with_valid_id {
+
+            @Test
+            @DisplayName("해당 Id의 catToy를 수정합니다.")
+            void it_update_catToy() {
+                catToyRegistory.update(1L, catToy2);
+
+                CatToy updatedCatToy = catToyRegistory.get(1L);
+
+                assertThat(updatedCatToy.getName()).isEqualTo(catToy2.getName());
+                assertThat(updatedCatToy.getMaker()).isEqualTo(catToy2.getMaker());
+                assertThat(updatedCatToy.getPrice()).isEqualTo(catToy2.getPrice());
+                assertThat(updatedCatToy.getImageURI()).isEqualTo(catToy2.getImageURI());
+            }
+        }
+
+        @Nested
+        @DisplayName("해당되는 id의 catToy가 없다면")
+        class Context_with_invalid_id {
+
+            @Test
+            @DisplayName("CatToyNotFoundException을 던집니다.")
+            void it_throw_CatToyNotFoundException() {
+                assertThatThrownBy(() -> catToyRegistory.update(1000L, catToy2))
+                        .isInstanceOf(CatToyNotFoundException.class);
+            }
+        }
+    }
 }
