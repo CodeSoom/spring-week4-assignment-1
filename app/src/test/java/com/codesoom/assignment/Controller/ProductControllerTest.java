@@ -1,4 +1,4 @@
-package com.codesoom.assignment.Controller;
+package com.codesoom.assignment.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -1,4 +1,4 @@
-package com.codesoom.assignment.Controller;
+package com.codesoom.assignment.controller;
 
 import java.util.ArrayList;
 import java.util.List;
