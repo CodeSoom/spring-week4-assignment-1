@@ -3,38 +3,50 @@ package com.codesoom.assignment.domain;
 import com.codesoom.assignment.dto.CatToyNotFoundException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CatToyRepository {
-    private List<CatToy> catToys;
+    private HashMap<Long, CatToy> catToys;
     private Long nextId;
 
+    private final Object nextIdLock = new Object();
+
     public CatToyRepository() {
-        this.catToys = new ArrayList<CatToy>();
-        this.nextId = 0L;
+        this.catToys = new HashMap<Long, CatToy>();
+        this.nextId = 1L;
     }
 
     public void create(CatToy catToy) {
-        catToy.setId(generateId());
-        this.catToys.add(catToy);
+        Long newId;
+        synchronized (nextIdLock) {
+            newId = generateId();
+        }
+
+        catToy.setId(newId);
+        this.catToys.put(newId, catToy);
     }
 
     public List<CatToy> getAll() {
-        return this.catToys;
+        return new ArrayList<CatToy>(this.catToys.values());
     }
 
     public CatToy get(Long id) {
-        return this.catToys.stream()
-                .filter(catToy -> catToy.getId().equals(id))
-                .findFirst()
-                .orElseThrow(()-> new CatToyNotFoundException("id " + id + "를 가지는 CatToy가 없습니다."));
+        if(!exist(id)) {
+            String message = "id " + id + "를 가지는 CatToy가 없습니다.";
+            throw new CatToyNotFoundException(message);
+        }
+
+        return this.catToys.get(id);
     }
 
     public void update(Long id, CatToy catToy) {
+        if(!exist(id)) {
+            String message = "id " + id + "를 가지는 CatToy가 없습니다.";
+            throw new CatToyNotFoundException(message);
+        }
 
         CatToy updatedCatToy = get(id);
-
         updatedCatToy.setName(catToy.getName());
         updatedCatToy.setMaker(catToy.getMaker());
         updatedCatToy.setPrice(catToy.getPrice());
@@ -42,14 +54,19 @@ public class CatToyRepository {
     }
 
     public void delete(Long id) {
-        get(id);
+        if(!exist(id)) {
+            String message = "id " + id + "를 가지는 CatToy가 없습니다.";
+            throw new CatToyNotFoundException(message);
+        }
 
-        this.catToys = this.catToys.stream()
-                .filter(catToy -> !catToy.getId().equals(id))
-                .collect(Collectors.toList());
+        this.catToys.remove(id);
     }
 
     private Long generateId() {
-        return nextId + 1L;
+        return nextId++;
+    }
+
+    private boolean exist(Long id) {
+        return this.catToys.containsKey(id);
     }
 }
