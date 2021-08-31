@@ -18,7 +18,6 @@ public class ProductControllerTest {
     @Nested
     @DisplayName("list 메서드는")
     class Describe_list {
-
         @Nested
         @DisplayName("저장된 Product가 없다면")
         class Context_product_empty {
@@ -28,5 +27,19 @@ public class ProductControllerTest {
                 assertThat(productController.list()).isEmpty();
             }
         }
+    }
+
+    @Nested
+    @DisplayName("create 메서드는")
+    class Descirbe_create {
+        @Test
+        @DisplayName("product를 생성한다.")
+        void it_returns_a_product() {
+            CreateProductDto createProductDto = new CreateProductDto("title");
+            assertThat(productController.create(createProductDto))
+                .matches(output -> "title".equals(output.getTitle()));
+        }
+        
+
     }
 }
