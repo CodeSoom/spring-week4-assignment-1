@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import java.util.Objects;
+import com.google.common.base.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -53,17 +53,22 @@ public class Product {
         if (this == o) {
             return true;
         }
+
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+
         Product product = (Product) o;
-        return price == product.price && Objects.equals(name, product.name)
-            && Objects.equals(maker, product.maker) && Objects
-            .equals(imageUrl, product.imageUrl);
+
+        return price == product.price
+            && Objects.equal(id, product.id)
+            && Objects.equal(name, product.name)
+            && Objects.equal(maker, product.maker)
+            && Objects.equal(imageUrl, product.imageUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, maker, price, imageUrl);
+        return Objects.hashCode(id, name, maker, price, imageUrl);
     }
 }
