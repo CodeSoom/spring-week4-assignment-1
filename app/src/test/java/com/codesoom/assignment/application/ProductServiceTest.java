@@ -2,12 +2,9 @@ package com.codesoom.assignment.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.codesoom.assignment.Dto.CreateProductDto;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 
@@ -45,14 +42,13 @@ public class ProductServiceTest {
             Product product = new Product("title");
             assertThat(productService.createProduct(product))
                 .isInstanceOf(Product.class)
-                .matches(output -> "title".equals(output.getTitle()))
-                .matches(output -> output.getId() != null);
+                .matches(output -> "title".equals(output.getTitle()));
         }
 
         @AfterEach
         void tearDown() {
             verify(productRepository)
-                .save(argThat(input -> "title".equals(input.getTitle())));
+                .save(any(Product.class));
         }
     }
 }

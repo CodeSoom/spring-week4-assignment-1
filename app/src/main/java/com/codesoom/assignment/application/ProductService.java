@@ -2,7 +2,6 @@ package com.codesoom.assignment.application;
 
 import javax.transaction.Transactional;
 
-import com.codesoom.assignment.Dto.CreateProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.domain.Product;
 
@@ -17,8 +16,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product createProduct(final CreateProductDto createProductDto) {
-        Product product = new Product(createProductDto.getTitle());
+    public Product createProduct(final Product product) {
         return productRepository.save(product);
     }
 }

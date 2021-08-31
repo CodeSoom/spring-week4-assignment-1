@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -10,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codesoom.assignment.Dto.CreateProductDto;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 
@@ -61,7 +59,7 @@ public final class ProductControllerWebTest {
     class Describe_post_products {
         @BeforeEach
         void setUp() {
-            when(productService.createProduct(any(CreateProductDto.class)))
+            when(productService.createProduct(any(Product.class)))
                 .thenReturn(new Product("title"));
         }
 
@@ -84,7 +82,7 @@ public final class ProductControllerWebTest {
         @AfterEach
         void tearDown() {
             verify(productService)
-                .createProduct(argThat(input -> "title".equals(input.getTitle())));
+                .createProduct(any(Product.class));
         }
 
     }

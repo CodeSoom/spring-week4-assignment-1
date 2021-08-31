@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -57,14 +56,13 @@ public class ProductControllerTest {
         void it_returns_a_product() {
             CreateProductDto createProductDto = new CreateProductDto("title");
             assertThat(productController.create(createProductDto))
-                .matches(output -> "title".equals(output.getTitle()))
-                .matches(output -> output.getId() != null);
+                .matches(output -> "title".equals(output.getTitle()));
         }
 
         @AfterEach
         void tearDown() {
             verify(productService)
-                .createProduct(argThat(input -> "title".equals(input.getTitle())));
+                .createProduct(any(Product.class));
         }
     }
 }
