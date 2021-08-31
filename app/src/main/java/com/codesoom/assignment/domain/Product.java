@@ -14,7 +14,6 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
-
     }
 
     public String getName() {
