@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.CatToyService;
+import com.codesoom.assignment.application.ToyService;
 import com.codesoom.assignment.domain.CatToy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class CatToyController {
 
-    private final CatToyService catToyService;
+    private final ToyService<CatToy> catToyService;
 
 
     /**
