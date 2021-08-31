@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import java.util.Collections;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,8 @@ public class ProductServiceTest {
         given(productRepository.save(product)).willReturn(product);
 
         given(productRepository.findAll()).willReturn(Collections.singletonList(product));
+
+        given(productRepository.findById(1L)).willReturn(Optional.of(product));
     }
 
     @Test
@@ -34,9 +37,9 @@ public class ProductServiceTest {
     void create() {
         Product createdProduct = productService.create(product);
 
-        verify(productRepository).save(createdProduct);
-
         assertThat(createdProduct).isEqualTo(product);
+
+        verify(productRepository).save(createdProduct);
     }
 
     @Test
@@ -44,8 +47,32 @@ public class ProductServiceTest {
     void findAll() {
         Iterable<Product> products = productService.findAll();
 
-        verify(productRepository).findAll();
-
         assertThat(products).isEqualTo(Collections.singletonList(product));
+
+        verify(productRepository).findAll();
+    }
+
+    @Test
+    @DisplayName("존재하는 상품일 경우 상품 하나를 찾아 조회한다")
+    void findById() {
+        Product foundProduct = productService.findById(1L);
+
+        assertThat(foundProduct).isEqualTo(product);
+
+        verify(productRepository).findById(1L);
+    }
+
+    @Test
+    @DisplayName("존재하는 상품일 경우 상품 하나를 찾아 수정한다")
+    void update() {
+        long id = 1L;
+        Product source = new Product("a", "b", 100L, "c");
+
+        Product updatedProduct = productService.update(id, source);
+
+        assertThat(source).isEqualTo(updatedProduct);
+
+        verify(productRepository).findById(id);
+        verify(productRepository).save(source);
     }
 }

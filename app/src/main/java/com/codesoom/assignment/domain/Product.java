@@ -4,8 +4,10 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicUpdate
 public class Product {
 
     @Id
@@ -28,29 +30,13 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    @Id
-    public Long getId() {
-        return id;
-    }
+    public Product updateInfo(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
+        this.imageUrl = source.imageUrl;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getMaker() {
-        return maker;
-    }
-
-    public long getPrice() {
-        return price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
+        return this;
     }
 
     @Override
