@@ -33,7 +33,7 @@ class CatToyRepositoryTest {
     class Describe_create {
 
         @Test
-        @DisplayName("catToy가 추가됩니다.")
+        @DisplayName("catToy가 Repository에 추가됩니다.")
         void it_add_catToy() {
             assertThat(catToyRepository.getAll()).hasSize(0);
             catToyRepository.create(catToy1);
