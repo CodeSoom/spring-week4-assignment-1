@@ -14,6 +14,14 @@ import java.util.Optional;
 public interface CatToyRepository extends JpaRepository<CatToy, Long> {
 
     /**
+     * 장난감을 등록합니다.
+     *
+     * @param catToy 등록할 장난감
+     * @return 등록된 장난감
+     */
+    CatToy save(CatToy catToy);
+
+    /**
      * 장난감을 조회합니다.
      *
      * @param id 장난감 식별자
