@@ -1,7 +1,10 @@
 package com.codesoom.assignment.Dto;
 
 public final class CreateProductDto {
-    private final String title;
+    private String title;
+
+    public CreateProductDto() {
+    }
 
     public CreateProductDto(final String title) {
         this.title = title;

@@ -1,15 +1,27 @@
 package com.codesoom.assignment.controller;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.codesoom.assignment.Dto.CreateProductDto;
+import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.domain.Product;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -17,6 +29,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @DisplayName("Product 리소스")
 public final class ProductControllerWebTest {
     private static final String EMPTY_LIST = "[]";
+
+    @MockBean
+    private ProductService productService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,6 +59,12 @@ public final class ProductControllerWebTest {
     @Nested
     @DisplayName("장난감 생성 엔드포인트는")
     class Describe_post_products {
+        @BeforeEach
+        void setUp() {
+            when(productService.createProduct(any(CreateProductDto.class)))
+                .thenReturn(new Product("title"));
+        }
+
         @Nested
         @DisplayName("장난감 생성 요청 받은 경우")
         class Context_request_product_create {
@@ -56,8 +77,15 @@ public final class ProductControllerWebTest {
                         .content("{\"title\":\"title\"}")
                     )
                     .andExpect(status().isCreated())
-                    .andExpect(content().string("{\"title\":\"title\"}"));
+                    .andExpect(content().string(containsString("title")));
             }
         }
+
+        @AfterEach
+        void tearDown() {
+            verify(productService)
+                .createProduct(argThat(input -> "title".equals(input.getTitle())));
+        }
+
     }
 }
