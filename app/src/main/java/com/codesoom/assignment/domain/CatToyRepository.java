@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CatToyRegistory {
+public class CatToyRepository {
     private List<CatToy> catToys;
     private Long nextId;
 
-    public CatToyRegistory() {
+    public CatToyRepository() {
         this.catToys = new ArrayList<CatToy>();
         this.nextId = 0L;
     }
