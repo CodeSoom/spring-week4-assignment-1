@@ -13,6 +13,6 @@ public class ProductNotFoundException extends RuntimeException {
      * @param id 식별자
      */
     public ProductNotFoundException(long id) {
-        super(FORMAT.formatted(id));
+        super(String.format(FORMAT, id));
     }
 }

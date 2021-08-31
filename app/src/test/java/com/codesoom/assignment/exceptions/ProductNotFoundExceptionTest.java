@@ -16,6 +16,6 @@ public class ProductNotFoundExceptionTest {
         String message = exception.getMessage();
         String format = ProductNotFoundException.FORMAT;
 
-        assertThat(message).isEqualTo(format.formatted(id));
+        assertThat(message).isEqualTo(String.format(format, id));
     }
 }
