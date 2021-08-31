@@ -13,6 +13,10 @@ public class CatToyNotFoundException extends RuntimeException{
         super(message);
     }
 
+    public CatToyNotFoundException(Long id) {
+        super("id " + id + "를 가지는 CatToy가 없습니다.");
+    }
+
     public CatToyNotFoundException(Throwable cause) {
         super(cause);
     }

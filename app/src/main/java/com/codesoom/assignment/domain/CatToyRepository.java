@@ -40,7 +40,8 @@ public class CatToyRepository {
 
     public void update(Long id, CatToy catToy) {
         CatToy updatedCatToy = findById(id)
-                .orElseThrow(() -> new CatToyNotFoundException("id " + id + "를 가지는 CatToy가 없습니다."));
+                .orElseThrow(() -> new CatToyNotFoundException(id
+                q));
 
         updatedCatToy.setName(catToy.getName());
         updatedCatToy.setMaker(catToy.getMaker());
@@ -50,8 +51,7 @@ public class CatToyRepository {
 
     public void deleteById(Long id) {
         if(!existsById(id)) {
-            String message = "id " + id + "를 가지는 CatToy가 없습니다.";
-            throw new CatToyNotFoundException(message);
+            throw new CatToyNotFoundException(id);
         }
 
         this.catToys.remove(id);
