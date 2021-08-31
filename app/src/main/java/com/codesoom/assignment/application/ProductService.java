@@ -20,7 +20,7 @@ public class ProductService {
     }
 
     /**
-     * 상품을 추가합니다.
+     * 상품을 추가하고, 리턴합니다.
      *
      * @param product 추가할 상품
      * @return 추가된 상품
@@ -51,10 +51,11 @@ public class ProductService {
     }
 
     /**
-     * 식별자로 상품을 찾은 후 수정합니다.
+     * 식별자로 상품을 찾아 수정하고, 리턴합니다.
      *
      * @param id     식별자
      * @param source 바꿀 상품 정보
+     * @return 수정된 상품
      * @throws ProductNotFoundException 식별자로 상품을 찾지 못한 경우
      */
     public Product updateProduct(long id, Product source) {

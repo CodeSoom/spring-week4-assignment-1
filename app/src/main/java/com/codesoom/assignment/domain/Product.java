@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import org.hibernate.annotations.DynamicUpdate;
 
 /**
- * 상품 도메인 객체를 담당합니다.
+ * 상품.
  */
 @Entity
 @DynamicUpdate
