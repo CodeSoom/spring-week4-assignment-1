@@ -79,7 +79,7 @@ public class CatToyController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCatToyList(@PathVariable Long id) {
+    public void deleteCatToy(@PathVariable Long id) {
         catToyCommandService.deleteCatToy(id);
     }
 }

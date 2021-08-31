@@ -43,4 +43,8 @@ public interface CatToyRepository extends JpaRepository<CatToy, Long> {
      */
     void deleteById(Long id);
 
+    /**
+     * 장난감을 모두 삭제합니다.
+     */
+    void deleteAll();
 }
