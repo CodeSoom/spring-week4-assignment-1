@@ -29,19 +29,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static com.codesoom.assignment.Constant.IMAGE_URL;
+import static com.codesoom.assignment.Constant.MAKER;
+import static com.codesoom.assignment.Constant.NAME;
+import static com.codesoom.assignment.Constant.PRICE;
+import static com.codesoom.assignment.Constant.OTHER_IMAGE_URL;
+import static com.codesoom.assignment.Constant.OTHER_MAKER;
+import static com.codesoom.assignment.Constant.OTHER_NAME;
+import static com.codesoom.assignment.Constant.OTHER_PRICE;
+
 @DisplayName("CatToyController API Web 테스트")
 @SpringBootTest
 @AutoConfigureMockMvc
 class CatToyControllerWebTest {
-    private static final String NAME = "장난감 뱀";
-    private static final Long PRICE = 5000L;
-    private static final String MAKER = "애옹이네 장난감";
-    private static final String IMAGE_URL = "https://cdn.pixabay.com/photo/2018/09/11/22/19/the-3670813_960_720.jpg";
 
-    private static final String OTHER_NAME = "스크래처";
-    private static final Long OTHER_PRICE = 8000L;
-    private static final String OTHER_MAKER = "뽀떼";
-    private static final String OTHER_IMAGE_URL = "https://www.biteme.co.kr/data/goods/21/06/24/1000005510/1000005510_detail_015.png";
 
     private static final Long MINUS_PRICE = -3000L;
 

@@ -12,6 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codesoom.assignment.Constant.IMAGE_URL;
+import static com.codesoom.assignment.Constant.MAKER;
+import static com.codesoom.assignment.Constant.NAME;
+import static com.codesoom.assignment.Constant.PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,10 +25,6 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("CatToyService 서비스 테스트")
 class CatToyServiceTest {
-    private static final String NAME = "장난감 뱀";
-    private static final Long PRICE = 5000L;
-    private static final String MAKER = "애옹이네 장난감";
-    private static final String IMAGE_URL = "https://cdn.pixabay.com/photo/2018/09/11/22/19/the-3670813_960_720.jpg";
 
     private CatToyService service;
     private CatToyRepository repository;
