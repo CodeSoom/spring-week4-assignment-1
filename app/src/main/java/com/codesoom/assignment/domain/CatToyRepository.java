@@ -5,6 +5,7 @@ import com.codesoom.assignment.dto.CatToyNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class CatToyRepository {
     private HashMap<Long, CatToy> catToys;
@@ -17,7 +18,7 @@ public class CatToyRepository {
         this.nextId = 1L;
     }
 
-    public void create(CatToy catToy) {
+    public CatToy save(CatToy catToy) {
         Long newId;
         synchronized (nextIdLock) {
             newId = generateId();
@@ -25,36 +26,30 @@ public class CatToyRepository {
 
         catToy.setId(newId);
         this.catToys.put(newId, catToy);
+
+        return catToy;
     }
 
-    public List<CatToy> getAll() {
+    public List<CatToy> findAll() {
         return new ArrayList<CatToy>(this.catToys.values());
     }
 
-    public CatToy get(Long id) {
-        if(!exist(id)) {
-            String message = "id " + id + "를 가지는 CatToy가 없습니다.";
-            throw new CatToyNotFoundException(message);
-        }
-
-        return this.catToys.get(id);
+    public Optional<CatToy> findById(Long id) {
+        return Optional.ofNullable(this.catToys.get(id));
     }
 
     public void update(Long id, CatToy catToy) {
-        if(!exist(id)) {
-            String message = "id " + id + "를 가지는 CatToy가 없습니다.";
-            throw new CatToyNotFoundException(message);
-        }
+        CatToy updatedCatToy = findById(id)
+                .orElseThrow(() -> new CatToyNotFoundException("id " + id + "를 가지는 CatToy가 없습니다."));
 
-        CatToy updatedCatToy = get(id);
         updatedCatToy.setName(catToy.getName());
         updatedCatToy.setMaker(catToy.getMaker());
         updatedCatToy.setPrice(catToy.getPrice());
         updatedCatToy.setImageURI(catToy.getImageURI());
     }
 
-    public void delete(Long id) {
-        if(!exist(id)) {
+    public void deleteById(Long id) {
+        if(!existsById(id)) {
             String message = "id " + id + "를 가지는 CatToy가 없습니다.";
             throw new CatToyNotFoundException(message);
         }
@@ -66,7 +61,7 @@ public class CatToyRepository {
         return nextId++;
     }
 
-    private boolean exist(Long id) {
+    private boolean existsById(Long id) {
         return this.catToys.containsKey(id);
     }
 }

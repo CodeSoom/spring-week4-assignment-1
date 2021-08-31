@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,21 +30,31 @@ class CatToyRepositoryTest {
     }
 
     @Nested
-    @DisplayName("create 메소드")
-    class Describe_create {
+    @DisplayName("save 메소드")
+    class Describe_save {
 
         @Test
         @DisplayName("catToy가 Repository에 추가됩니다.")
         void it_add_catToy() {
-            assertThat(catToyRepository.getAll()).hasSize(0);
-            catToyRepository.create(catToy1);
-            assertThat(catToyRepository.getAll()).hasSize(1);
+            assertThat(catToyRepository.findAll()).hasSize(0);
+            catToyRepository.save(catToy1);
+            assertThat(catToyRepository.findAll()).hasSize(1);
+        }
+
+        @Test
+        @DisplayName("새로운 catToy를 반환합니다.")
+        void it_return_new_catToy() {
+            CatToy newCatToy = catToyRepository.save(catToy1);
+            assertThat(newCatToy.getName()).isEqualTo(catToy1.getName());
+            assertThat(newCatToy.getMaker()).isEqualTo(catToy1.getMaker());
+            assertThat(newCatToy.getPrice()).isEqualTo(catToy1.getPrice());
+            assertThat(newCatToy.getImageURI()).isEqualTo(catToy1.getImageURI());
         }
     }
 
     @Nested
-    @DisplayName("getAll 메소드")
-    class Describe_getAll {
+    @DisplayName("findAll 메소드")
+    class Describe_findAll {
 
         @Nested
         @DisplayName("catToy 데이터가 없다면")
@@ -52,7 +63,7 @@ class CatToyRepositoryTest {
             @Test
             @DisplayName("빈 데이터를 반환합니다.")
             void it_return_empty_catToys() {
-                List<CatToy> catToys = catToyRepository.getAll();
+                List<CatToy> catToys = catToyRepository.findAll();
 
                 assertThat(catToys).hasSize(0);
             }
@@ -69,7 +80,7 @@ class CatToyRepositoryTest {
                 givenCatToys = List.of(catToy1, catToy2, catToy3);
 
                 for (CatToy toy: givenCatToys) {
-                    catToyRepository.create(toy);
+                    catToyRepository.save(toy);
                 }
             }
 
@@ -77,7 +88,7 @@ class CatToyRepositoryTest {
             @DisplayName("모든 catToy를 반환합니다.")
             void it_return_all_catToy() {
                 int index = 0;
-                List<CatToy> catToys = catToyRepository.getAll();
+                List<CatToy> catToys = catToyRepository.findAll();
 
                 assertThat(catToys).hasSize(3);
 
@@ -91,37 +102,18 @@ class CatToyRepositoryTest {
     }
 
     @Nested
-    @DisplayName("getOne 메소드")
-    class Describe_getOne {
+    @DisplayName("findById 메소드")
+    class Describe_findById {
 
         @BeforeEach
         void prepare() {
-            catToyRepository.create(catToy1);
+            catToyRepository.save(catToy1);
         }
 
-        @Nested
-        @DisplayName("해당되는 id의 catToy가 있다면")
-        class Context_with_valid_id {
-
-            @Test
-            @DisplayName("해당 Id의 catToy를 반환합니다.")
-            void it_return_catToy() {
-                CatToy findedCatToy = catToyRepository.get(1L);
-
-                assertThat(findedCatToy).isEqualTo(catToy1);
-            }
-        }
-
-        @Nested
-        @DisplayName("해당되는 id의 catToy가 없다면")
-        class Context_with_invalid_id {
-
-            @Test
-            @DisplayName("CatToyNotFoundException을 던집니다.")
-            void it_throw_CatToyNotFoundException() {
-                assertThatThrownBy(() -> catToyRepository.get(1000L))
-                        .isInstanceOf(CatToyNotFoundException.class);
-            }
+        @Test
+        @DisplayName("해당 Id의 Optional<CatToy>를 반환합니다.")
+        void it_return_optional_catToy() {
+            assertThat(catToyRepository.findById(1L)).isEqualTo(Optional.of(catToy1));
         }
     }
 
@@ -131,7 +123,7 @@ class CatToyRepositoryTest {
 
         @BeforeEach
         void prepare() {
-            catToyRepository.create(catToy1);
+            catToyRepository.save(catToy1);
         }
 
         @Nested
@@ -143,7 +135,7 @@ class CatToyRepositoryTest {
             void it_update_catToy() {
                 catToyRepository.update(1L, catToy2);
 
-                CatToy updatedCatToy = catToyRepository.get(1L);
+                CatToy updatedCatToy = catToyRepository.findById(1L).orElseThrow();
 
                 assertThat(updatedCatToy.getName()).isEqualTo(catToy2.getName());
                 assertThat(updatedCatToy.getMaker()).isEqualTo(catToy2.getMaker());
@@ -166,12 +158,12 @@ class CatToyRepositoryTest {
     }
 
     @Nested
-    @DisplayName("delete 메소드")
-    class Describe_delete {
+    @DisplayName("deleteById 메소드")
+    class Describe_deleteById {
 
         @BeforeEach
         void prepare() {
-            catToyRepository.create(catToy1);
+            catToyRepository.save(catToy1);
         }
 
         @Nested
@@ -181,9 +173,9 @@ class CatToyRepositoryTest {
             @Test
             @DisplayName("해당 Id의 catToy를 제거합니다.")
             void it_update_catToy() {
-                catToyRepository.delete(1L);
+                catToyRepository.deleteById(1L);
 
-                assertThat(catToyRepository.getAll()).hasSize(0);
+                assertThat(catToyRepository.findAll()).hasSize(0);
             }
         }
 
