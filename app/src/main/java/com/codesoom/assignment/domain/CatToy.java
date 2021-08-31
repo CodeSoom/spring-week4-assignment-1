@@ -27,11 +27,15 @@ public class CatToy {
     public CatToy() {
     }
 
-    public CatToy(String name, String maker, Long price, String imageUrl) {
+    public CatToy(String name, String maker, long price, String imageUrl) {
         this(null, name, maker, price, imageUrl);
     }
 
-    public CatToy(Long id, String name, String maker, Long price, String imageUrl) {
+    public CatToy(Long id, String name, String maker, long price, String imageUrl) {
+        if (!updatableStrings(name, maker, imageUrl)) {
+            throw new CatToyInvalidFieldException();
+        }
+
         if (!isValidPrice(price)) {
             throw new CatToyInvalidPriceException(price);
         }
@@ -43,7 +47,7 @@ public class CatToy {
         this.imageUrl = imageUrl;
     }
 
-    private boolean isValidPrice(Long price) {
+    private boolean isValidPrice(long price) {
         return price >= 0;
     }
 
@@ -58,7 +62,7 @@ public class CatToy {
         return new CatToy(request.name, request.maker, request.price, request.imageUrl);
     }
 
-    public static CatToy of(String name, String maker, Long price, String imageUrl) {
+    public static CatToy of(String name, String maker, long price, String imageUrl) {
         return new CatToy(name, maker, price, imageUrl);
     }
 
@@ -106,7 +110,7 @@ public class CatToy {
             return this;
         }
 
-        public Builder price(Long price) {
+        public Builder price(long price) {
             this.price = price;
             return this;
         }

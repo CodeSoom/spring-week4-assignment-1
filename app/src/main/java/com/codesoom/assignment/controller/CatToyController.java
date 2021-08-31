@@ -43,7 +43,7 @@ public class CatToyController {
      * @return 고양이 장난감 상세 정보
      */
     @GetMapping("/{id}")
-    public CatToy findById(@PathVariable Long id) {
+    public CatToy findById(@PathVariable long id) {
         return catToyService.findById(id);
     }
 
@@ -65,7 +65,7 @@ public class CatToyController {
      * @return 수정된 고양이 장난감 상세 정보ㅗ
      */
     @PatchMapping("/{id}")
-    public CatToy updateCatToy(@PathVariable Long id, @RequestBody CatToy catToy) {
+    public CatToy updateCatToy(@PathVariable long id, @RequestBody CatToy catToy) {
         return catToyService.updateCatToy(id, catToy);
     }
 
@@ -75,7 +75,7 @@ public class CatToyController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCatToy(@PathVariable Long id) {
+    public void deleteCatToy(@PathVariable long id) {
         final CatToy foundCatToy = catToyService.findById(id);
 
         catToyService.deleteToy(foundCatToy);

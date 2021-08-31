@@ -9,9 +9,9 @@ public interface ToyService <T>{
 
     List<T> findAll();
 
-    T findById(Long id);
+    T findById(long id);
 
-    T updateCatToy(Long id, T target);
+    T updateCatToy(long id, T target);
 
     T save(T request);
 

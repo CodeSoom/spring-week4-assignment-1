@@ -24,14 +24,14 @@ public class CatToyService implements ToyService<CatToy>{
     }
 
     @Override
-    public CatToy findById(Long id) {
+    public CatToy findById(long id) {
         return catToyRepository.findById(id)
                 .orElseThrow(() -> new CatToyNotFoundException(id));
     }
 
     @Override
     @Transactional
-    public CatToy updateCatToy(Long id, CatToy target) {
+    public CatToy updateCatToy(long id, CatToy target) {
         final CatToy catToy = findById(id);
         catToy.update(target);
 
