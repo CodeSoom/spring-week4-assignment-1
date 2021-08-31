@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.matches;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,10 +42,11 @@ public class ProductServiceTest {
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
-            CreateProductDto createProductDto = new CreateProductDto("title");
-            assertThat(productService.createProduct(createProductDto))
+            Product product = new Product("title");
+            assertThat(productService.createProduct(product))
                 .isInstanceOf(Product.class)
-                .matches(output -> "title".equals(output.getTitle()));
+                .matches(output -> "title".equals(output.getTitle()))
+                .matches(output -> output.getId() != null);
         }
 
         @AfterEach

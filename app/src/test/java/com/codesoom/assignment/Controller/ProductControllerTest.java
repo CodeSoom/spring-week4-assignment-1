@@ -48,16 +48,17 @@ public class ProductControllerTest {
     class Descirbe_create {
         @BeforeEach
         void setUp() {
-            when(productService.createProduct(any(CreateProductDto.class)))
+            when(productService.createProduct(any(Product.class)))
                 .thenReturn(new Product("title"));
         }
 
         @Test
-        @DisplayName("product를 생성하고 리턴한다.")
+        @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
             CreateProductDto createProductDto = new CreateProductDto("title");
             assertThat(productController.create(createProductDto))
-                .matches(output -> "title".equals(output.getTitle()));
+                .matches(output -> "title".equals(output.getTitle()))
+                .matches(output -> output.getId() != null);
         }
 
         @AfterEach

@@ -26,7 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest
-@DisplayName("Product 리소스")
+@DisplayName("장난감 리소스")
 public final class ProductControllerWebTest {
     private static final String EMPTY_LIST = "[]";
 
@@ -40,10 +40,10 @@ public final class ProductControllerWebTest {
     @DisplayName("전체 목록 조회 엔드포인트는")
     class Describe_get_products {
         @Nested
-        @DisplayName("장난감 목록을 요청 받은 경우")
+        @DisplayName("전체 목록 요청 시")
         class Context_request_product_list {
             @Nested
-            @DisplayName("장난감이 없다면")
+            @DisplayName("저장된 데이터가 없다면")
             class Context_product_empty {
                 @Test
                 @DisplayName("빈 목록을 리턴한다.")
@@ -57,7 +57,7 @@ public final class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("장난감 생성 엔드포인트는")
+    @DisplayName("생성 엔드포인트는")
     class Describe_post_products {
         @BeforeEach
         void setUp() {
@@ -66,10 +66,10 @@ public final class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("장난감 생성 요청 받은 경우")
+        @DisplayName("장난감 생성 요청 시")
         class Context_request_product_create {
             @Test
-            @DisplayName("생성한 장난감을 리턴한다.")
+            @DisplayName("장난감을 생성하고 리턴한다.")
             void it_returns_a_product() throws Exception {
                 mockMvc.perform(
                         post("/products")

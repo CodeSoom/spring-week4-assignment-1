@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,7 +21,7 @@ public class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     @Nested
-    @DisplayName("save 메서드")
+    @DisplayName("save 메서드는")
     class Describe_save {
         @BeforeEach
         void setUp() {
@@ -42,6 +43,11 @@ public class ProductRepositoryTest {
                         saved.getId() != null && product.getTitle().equals(saved.getTitle())
                     );
             }
+        }
+        
+        @AfterEach
+        void tearDown() {
+            productRepository.deleteAll();
         }
     }
 }
