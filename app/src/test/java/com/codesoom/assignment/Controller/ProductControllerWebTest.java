@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest
@@ -29,12 +31,32 @@ public class ProductControllerWebTest {
             @DisplayName("장난감이 없다면")
             class Context_product_empty {
                 @Test
-                @DisplayName("200과 함께 빈 목록을 리턴한다.")
-                void it_returns_a_200_status_code() throws Exception {
+                @DisplayName("빈 목록을 리턴한다.")
+                void it_returns_a_empty_list() throws Exception {
                     mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content().string(EMPTY_LIST));
                 }
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("장난감 생성 엔드포인트는")
+    class Describe_post_products {
+        @Nested
+        @DisplayName("장난감 생성 요청 받은 경우")
+        class Context_request_product_create {
+            @Test
+            @DisplayName("생성한 장난감을 리턴한다.")
+            void it_returns_a_product() throws Exception {
+                mockMvc.perform(
+                        post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"title\"}")
+                    )
+                    .andExpect(status().isCreated())
+                    .andExpect(content().string("{\"title\":\"title\"}"));
             }
         }
     }
