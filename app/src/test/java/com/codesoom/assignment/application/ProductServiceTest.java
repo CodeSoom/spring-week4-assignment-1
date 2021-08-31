@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -74,5 +75,16 @@ public class ProductServiceTest {
 
         verify(productRepository).findById(id);
         verify(productRepository).save(source);
+    }
+
+    @Test
+    @DisplayName("존재하는 상품일 경우 삭제한다")
+    void delete() {
+       long id = 1L;
+
+       productService.deleteProduct(id);
+
+       verify(productRepository).findById(id);
+       verify(productRepository).delete(any(Product.class));
     }
 }

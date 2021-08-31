@@ -63,4 +63,15 @@ public class ProductService {
 
         return productRepository.save(product);
     }
+
+    /**
+     * 식별자로 상품을 찾아 삭제합니다.
+     * @param id 식별자
+     */
+    public void deleteProduct(long id) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException(id));
+
+        productRepository.delete(product);
+    }
 }
