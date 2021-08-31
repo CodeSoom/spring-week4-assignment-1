@@ -166,7 +166,7 @@ class CatToyControllerTest {
             @DisplayName("CatToyNotFound 예외를 던진다.")
             void updateCatToyWithNoCatToy() {
                 assertThatThrownBy(() -> {
-                    catToyController.getCatToy(INVALID_ID);
+                    catToyController.updateCatToy(INVALID_ID, updateCatToy);
                 }).isInstanceOf(CatToyNotFoundException.class);
             }
         }
