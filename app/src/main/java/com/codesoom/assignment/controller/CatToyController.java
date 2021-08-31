@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.common.exception.CatToyNotFoundException;
 import com.codesoom.assignment.service.CatToyService;
+import com.codesoom.assignment.service.CatToyServiceImpl;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
