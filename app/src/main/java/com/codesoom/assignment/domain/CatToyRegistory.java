@@ -4,6 +4,7 @@ import com.codesoom.assignment.dto.CatToyNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CatToyRegistory {
     private List<CatToy> catToys;
@@ -38,6 +39,14 @@ public class CatToyRegistory {
         updatedCatToy.setMaker(catToy.getMaker());
         updatedCatToy.setPrice(catToy.getPrice());
         updatedCatToy.setImageURI(catToy.getImageURI());
+    }
+
+    public void delete(Long id) {
+        get(id);
+
+        this.catToys = this.catToys.stream()
+                .filter(catToy -> !catToy.getId().equals(id))
+                .collect(Collectors.toList());
     }
 
     private Long generateId() {
