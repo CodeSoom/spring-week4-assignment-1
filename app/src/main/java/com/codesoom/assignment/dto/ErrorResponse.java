@@ -1,5 +1,8 @@
 package com.codesoom.assignment.dto;
 
+/**
+ * 예외 응답 메세지
+ */
 public class ErrorResponse {
     private final String message;
 

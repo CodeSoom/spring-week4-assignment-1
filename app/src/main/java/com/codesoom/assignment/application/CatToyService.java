@@ -12,22 +12,24 @@ import java.util.List;
 /**
  * 고양이 장난감을 관리한다.
  */
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CatToyService {
+public class CatToyService implements ToyService<CatToy>{
     private final CatToyRepository catToyRepository;
 
+    @Override
     public List<CatToy> findAll() {
         return catToyRepository.findAll();
     }
 
+    @Override
     public CatToy findById(Long id) {
         return catToyRepository.findById(id)
                 .orElseThrow(() -> new CatToyNotFoundException(id));
     }
 
+    @Override
     @Transactional
     public CatToy updateCatToy(Long id, CatToy target) {
         final CatToy catToy = findById(id);
@@ -36,12 +38,14 @@ public class CatToyService {
         return catToy;
     }
 
+    @Override
     public CatToy save(CatToy request) {
-        final CatToy catToy = CatToy.of(request.getName(), request.getMaker(), request.getPrice(), request.getImageUrl());
+        final CatToy catToy = CatToy.from(request);
         return catToyRepository.save(catToy);
     }
 
-    public void deleteCatToy(Long id) {
+    @Override
+    public void deleteToy(Long id) {
         CatToy catToy = findById(id);
 
         catToyRepository.delete(catToy);

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * 고양이 장난감 Http Request 요청 처리 중 예외가 발생할 경우
+ * 예외를 처리하고 반환한다.
+ */
 @Slf4j
 @ControllerAdvice
 public class CatToyErrorAdvice {

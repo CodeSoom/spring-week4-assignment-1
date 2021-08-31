@@ -5,11 +5,9 @@ import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.exception.CatToyInvalidPriceException;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apiguardian.api.API;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,11 +21,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @DisplayName("CatToyController API Web 테스트")
 @SpringBootTest
@@ -68,7 +65,7 @@ class CatToyControllerWebTest {
 
         given(catToyService.findAll()).willReturn(new ArrayList<>());
 
-        //given(catToyService.save(catToy)).willReturn(catToy);
+        given(catToyService.save(catToy)).willReturn(catToy);
 
         given(catToyService.findById(1L)).willReturn(catToy);
 

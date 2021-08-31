@@ -14,7 +14,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -134,7 +133,7 @@ class CatToyServiceTest {
     @DisplayName("고양이 장난감을 삭제할 수 있습니다.")
     @Test
     void deleteCatToy() {
-        service.deleteCatToy(1L);
+        service.deleteToy(1L);
 
         verify(repository).findById(1L);
         verify(repository).delete(any(CatToy.class));
@@ -143,7 +142,7 @@ class CatToyServiceTest {
     @DisplayName("존재하지 않는 식별자의 고양이 장난감을 삭제하려 하면 예외가 발생합니다.")
     @Test
     void deleteCatToyNotExistsId() {
-        assertThatThrownBy(() -> service.deleteCatToy(100L))
+        assertThatThrownBy(() -> service.deleteToy(100L))
                 .isInstanceOf(CatToyNotFoundException.class);
 
         verify(repository).findById(100L);
