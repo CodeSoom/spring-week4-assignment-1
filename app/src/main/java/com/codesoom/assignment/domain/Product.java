@@ -1,5 +1,8 @@
 package com.codesoom.assignment.domain;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 public class Product {
         private Long id;
         private String name;
@@ -7,33 +10,45 @@ public class Product {
         private Long price;
         private String imageUrl;
 
-        public  Product(Long id, String name, String maker,
-                        Long price, String imageUrl) {
+        @Id
+        @GeneratedValue
+    public Long getId() {
+        return id;
+    }
 
-            this.id = id;
-            this.name = name;
-            this.maker = maker;
-            this.price = price;
-            this.imageUrl = imageUrl;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public Long getId() {
-            return id;
-        }
+    public String getName() {
+        return name;
+    }
 
-        public String getName() {
-            return name;
-        }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        public String getMaker() {
-            return maker;
-        }
+    public String getMaker() {
+        return maker;
+    }
 
-        public Long getPrice() {
-            return price;
-        }
+    public void setMaker(String maker) {
+        this.maker = maker;
+    }
 
-        public String getImageUrl() {
-            return imageUrl;
-        }
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
