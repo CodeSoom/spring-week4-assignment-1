@@ -29,7 +29,7 @@ public class CatToyService {
         return catToyRepository.save(product);
     }
 
-    public Product updateProduct(Product source, Long id) {
+    public Product updateProduct(Long id, Product source) {
         Product product = catToyRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
@@ -38,9 +38,9 @@ public class CatToyService {
         return product;
     }
 
-    public void deleteProduct(Product product){
-        catToyRepository.findById(product.getId())
-                .orElseThrow(() -> new ProductNotFoundException(product.getId()));
+    public void deleteProduct(Long id) {
+        Product product = catToyRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         catToyRepository.delete(product);
     }
