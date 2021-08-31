@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 
@@ -71,7 +72,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("찾은 Product를 리턴한다.")
             void it_returns_a_find_product() {
-                assertThat(productService.defailProduct(1L))
+                assertThat(productService.detailProduct(1L))
                     .matches(output -> 1L == output.getId())
                     .matches(output -> "title".equals(output.getTitle()));
             }
@@ -89,7 +90,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("ProductNotFoundException을 던진다.")
             void it_throws_a_productNotFoundException() {
-                assertThatThrownBy(() -> productService.defailProduct(1L))
+                assertThatThrownBy(() -> productService.detailProduct(1L))
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }

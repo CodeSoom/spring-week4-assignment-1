@@ -21,7 +21,7 @@ class AppTest {
         App app;
 
         @Test
-        @DisplayName("App개체가 재대로 작동하고 있음을 알려준다.")
+        @DisplayName("App개체가 제대로 작동하고 있음을 알려준다.")
         void it_inform_object_work_fine() {
             assertThat(app.getGreeting()).isNotNull();
         }

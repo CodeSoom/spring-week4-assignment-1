@@ -12,7 +12,8 @@ public final class Product {
 
     private final String title;
 
-    public Product(final String title) {
+    public Product(final Long idOrNull, final String title) {
+        this.id = idOrNull;
         this.title = title;
     }
 

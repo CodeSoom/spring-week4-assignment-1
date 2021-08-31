@@ -1,7 +1,6 @@
 package com.codesoom.assignment.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +38,7 @@ public class ProductRepositoryTest {
             @Test
             @DisplayName("주어진 개체를 저장하고 리턴한다.")
             void it_save_object_and_returns_a_saved_object() {
-                final Product product = new Product("title");
-                assertNull(product.getId());
+                final Product product = new Product(null, "title");
 
                 assertThat(productRepository.save(product))
                     .matches(saved ->
@@ -60,7 +58,7 @@ public class ProductRepositoryTest {
         class Context_findById_success {
             @BeforeEach
             void setUp() {
-                final Product product = new Product("title");
+                final Product product = new Product(null, "title");
                 final Product savedProduct = productRepository.save(product);
                 id = savedProduct.getId();
             }
