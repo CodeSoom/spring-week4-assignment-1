@@ -11,7 +11,9 @@ import java.util.List;
 /**
  * 장난감에 대한 조회, 등록, 수정, 삭제 요청을 처리합니다.
  */
-@RestController("/products")
+@RestController
+@RequestMapping("/products")
+@CrossOrigin
 public class CatToyController {
 
     private final CatToyQueryService catToyQueryService;
@@ -40,7 +42,7 @@ public class CatToyController {
      * @return 조회한 장난감
      */
     @GetMapping("/{id}")
-    public CatToy getCatToy(Long id) {
+    public CatToy getCatToy(@PathVariable Long id) {
         return catToyQueryService.getCatToy(id);
 
     }
