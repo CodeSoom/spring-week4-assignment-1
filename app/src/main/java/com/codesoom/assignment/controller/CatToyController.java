@@ -3,7 +3,6 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
 import com.codesoom.assignment.service.CatToyService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -33,7 +31,7 @@ public class CatToyController {
 
     @GetMapping("/{id}")
     public CatToy findCatToyById(@PathVariable int id) {
-        return catToyService.findCatToyById(id);
+        return catToyService.findCatToyById(id).orElseThrow(CatToyNotFoundException::new);
     }
 
     @PostMapping

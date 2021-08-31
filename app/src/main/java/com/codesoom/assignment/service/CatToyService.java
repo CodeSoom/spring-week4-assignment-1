@@ -1,6 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.exception.CatToyNotFoundException;
 import com.codesoom.assignment.repository.CatToyRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,8 @@ public class CatToyService {
         return catToyRepository.findAll();
     }
 
-    public CatToy findCatToyById(int id) {
-        return catToyRepository.findById(id);
+    public Optional<CatToy> findCatToyById(int id) {
+        return Optional.ofNullable(catToyRepository.findById(id));
     }
 
     public CatToy addCatToy(CatToy catToy) {
@@ -29,13 +30,14 @@ public class CatToyService {
     }
 
     public CatToy updateCatToy(int id, CatToy catToy) {
-        CatToy foundCatToy = catToyRepository.findById(id);
-        foundCatToy.setImage(catToy.getImage());
-        foundCatToy.setMaker(catToy.getMaker());
-        foundCatToy.setPrice(catToy.getPrice());
-        foundCatToy.setName(catToy.getName());
+        Optional<CatToy> foundCatToy = Optional.ofNullable(catToyRepository.findById(id));
+        foundCatToy.orElseThrow(CatToyNotFoundException::new);
 
-        return catToyRepository.save(foundCatToy);
+        foundCatToy.get().setImage(catToy.getImage());
+        foundCatToy.get().setMaker(catToy.getMaker());
+        foundCatToy.get().setPrice(catToy.getPrice());
+        foundCatToy.get().setName(catToy.getName());
+        return catToyRepository.save(foundCatToy.get());
     }
 
     public void deleteCatToyById(int id) {
