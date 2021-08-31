@@ -22,8 +22,8 @@ class CatToyRepositoryTest {
     @BeforeEach
     void setUp() {
         catToy1 = new CatToy(1L, "toy1", "maker1", 1000L, "toy1.jpg");
-        catToy2 = new CatToy(1L, "toy1", "maker1", 1000L, "toy1.jpg");
-        catToy3 = new CatToy(1L, "toy1", "maker1", 1000L, "toy1.jpg");
+        catToy2 = new CatToy(2L, "toy2", "maker2", 2000L, "toy2.jpg");
+        catToy3 = new CatToy(3L, "toy3", "maker3", 3000L, "toy3.jpg");
 
         catToyRepository = new CatToyRepository();
     }
