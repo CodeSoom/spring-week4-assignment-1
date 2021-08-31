@@ -21,10 +21,10 @@ public class ProductControllerWebTest {
 
     @Nested
     @DisplayName("전체 목록 조회 엔드포인트는")
-    class Describe_read_products {
+    class Describe_get_products {
         @Nested
         @DisplayName("장난감 목록을 요청 받은 경우")
-        class Context_get {
+        class Context_request_product_list {
             @Nested
             @DisplayName("장난감이 없다면")
             class Context_product_empty {
