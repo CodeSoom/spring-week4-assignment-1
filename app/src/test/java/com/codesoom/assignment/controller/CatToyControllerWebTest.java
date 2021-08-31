@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.util.ArrayList;
@@ -144,6 +146,28 @@ public class CatToyControllerWebTest {
         }
     }
 
+    @Nested
+    @DisplayName("createCatToy 메소드는")
+    class Describe_createCatToy {
 
+        CatToy newCatToy;
 
+        @BeforeEach
+        void setUp() {
+            newCatToy = new CatToy("newnew", "newnewMaker", 1000, "https://source.unsplash.com/random");
+            given(catToyCommandService.createCatToy(any(CatToy.class))).willReturn(newCatToy);
+        }
+
+        @Test
+        @DisplayName("새로운 장난감을 등록한다.")
+        void createCatToy() throws Exception {
+            mockMvc.perform(post("/products")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(newCatToy)))
+                    .andExpect(status().isCreated())
+                    .andExpect(content().string(containsString("newnew")))
+                    .andExpect(content().string(containsString("newnewMaker")))
+                    .andDo(print());
+        }
+    }
 }
