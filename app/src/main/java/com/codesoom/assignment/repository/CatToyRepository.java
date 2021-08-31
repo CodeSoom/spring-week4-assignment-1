@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CatToyRepository extends CrudRepository<CatToy, Long> {
     List<CatToy> findAll();
-    CatToy findById(int id);
+    CatToy findById(long id);
     CatToy save(CatToy catToy);
-    void deleteById(int id);
+    void deleteById(long id);
 }

@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public interface CatToyService {
     List<CatToy> getCatToys();
-    Optional<CatToy> findCatToyById(int id);
+    Optional<CatToy> findCatToyById(long id);
     CatToy addCatToy(CatToy catToy);
-    CatToy updateCatToy(int id, CatToy catToy);
-    void deleteCatToyById(int id);
+    CatToy updateCatToy(long id, CatToy catToy);
+    void deleteCatToyById(long id);
 }

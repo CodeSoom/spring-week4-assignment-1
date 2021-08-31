@@ -1,9 +1,9 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.common.exception.CatToyNotFoundException;
+import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.service.CatToyService;
-import com.codesoom.assignment.service.CatToyServiceImpl;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/products")
 public class CatToyController {
 
@@ -31,7 +32,7 @@ public class CatToyController {
     }
 
     @GetMapping("/{id}")
-    public CatToy findCatToyById(@PathVariable int id) {
+    public CatToy findCatToyById(@PathVariable long id) {
         return catToyService.findCatToyById(id).orElseThrow(CatToyNotFoundException::new);
     }
 
@@ -41,12 +42,12 @@ public class CatToyController {
     }
 
     @PatchMapping("/{id}")
-    public CatToy updateCatToy(@PathVariable int id, @RequestBody CatToy catToy) {
+    public CatToy updateCatToy(@PathVariable long id, @RequestBody CatToy catToy) {
         return catToyService.updateCatToy(id, catToy);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCatToy(@PathVariable int id) {
+    public void deleteCatToy(@PathVariable long id) {
         catToyService.deleteCatToyById(id);
     }
 }

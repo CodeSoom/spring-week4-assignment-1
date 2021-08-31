@@ -21,7 +21,7 @@ public class CatToyServiceImpl implements CatToyService{
         return catToyRepository.findAll();
     }
 
-    public Optional<CatToy> findCatToyById(int id) {
+    public Optional<CatToy> findCatToyById(long id) {
         return Optional.ofNullable(catToyRepository.findById(id));
     }
 
@@ -29,7 +29,7 @@ public class CatToyServiceImpl implements CatToyService{
         return catToyRepository.save(catToy);
     }
 
-    public CatToy updateCatToy(int id, CatToy catToy) {
+    public CatToy updateCatToy(long id, CatToy catToy) {
         Optional<CatToy> foundCatToy = Optional.ofNullable(catToyRepository.findById(id));
         foundCatToy.orElseThrow(CatToyNotFoundException::new);
 
@@ -40,7 +40,7 @@ public class CatToyServiceImpl implements CatToyService{
         return catToyRepository.save(foundCatToy.get());
     }
 
-    public void deleteCatToyById(int id) {
+    public void deleteCatToyById(long id) {
         catToyRepository.deleteById(id);
     }
 }
