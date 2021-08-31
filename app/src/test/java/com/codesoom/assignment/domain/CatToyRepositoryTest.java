@@ -62,22 +62,30 @@ class CatToyRepositoryTest {
         @DisplayName("catToy 데이터가 있다면")
         class Context_has_catToy {
 
+            private List<CatToy> givenCatToys;
+
             @BeforeEach
             void prepare() {
-                catToyRepository.create(catToy1);
-                catToyRepository.create(catToy2);
-                catToyRepository.create(catToy3);
+                givenCatToys = List.of(catToy1, catToy2, catToy3);
+
+                for (CatToy toy: givenCatToys) {
+                    catToyRepository.create(toy);
+                }
             }
 
             @Test
             @DisplayName("모든 catToy를 반환합니다.")
             void it_return_all_catToy() {
+                int index = 0;
                 List<CatToy> catToys = catToyRepository.getAll();
 
                 assertThat(catToys).hasSize(3);
-                assertThat(catToys.get(0)).isEqualTo(catToy1);
-                assertThat(catToys.get(1)).isEqualTo(catToy2);
-                assertThat(catToys.get(2)).isEqualTo(catToy3);
+
+                for (CatToy toy: givenCatToys) {
+                    assertThat(catToys.get(index)).isEqualTo(toy);
+                    index ++;
+                }
+
             }
         }
     }
