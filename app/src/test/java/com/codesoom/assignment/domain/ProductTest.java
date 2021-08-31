@@ -16,7 +16,9 @@ public class ProductTest {
         String imageUrl= "http://localhost:8080/snake";
 
         Product product = new Product(name, maker, price, imageUrl);
+        product.setId(1L);
 
+        assertThat(product.getId()).isEqualTo(1L);
         assertThat(product.getName()).isEqualTo(name);
         assertThat(product.getMaker()).isEqualTo(maker);
         assertThat(product.getPrice()).isEqualTo(price);

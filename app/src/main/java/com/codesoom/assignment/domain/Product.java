@@ -1,19 +1,40 @@
 package com.codesoom.assignment.domain;
 
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
 public class Product {
 
-    private final String name;
-    private final String maker;
-    private final long price;
-    private final String imageUrl;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+    private String maker;
+    private long price;
+    private String imageUrl;
+
+    public Product() {
+
+    }
 
     public Product(String name, String maker, long price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    @Id
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
