@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class ProductService {
 
-    ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
