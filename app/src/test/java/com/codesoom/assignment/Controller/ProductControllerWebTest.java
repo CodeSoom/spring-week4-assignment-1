@@ -21,7 +21,7 @@ public class ProductControllerWebTest {
     
     @Nested
     @DisplayName("장난감 목록을 요청받은 경우")
-    class Context_list {
+    class Context_get_products {
         @Nested
         @DisplayName("저장된 장난감이 없다면")
         class Context_product_empty {
