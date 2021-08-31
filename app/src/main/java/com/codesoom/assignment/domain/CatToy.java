@@ -17,5 +17,5 @@ public class CatToy {
     private String name;
     private String maker;
     private int price;
-    private String image;
+    private String imageUrl;
 }

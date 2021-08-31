@@ -33,7 +33,7 @@ public class CatToyServiceImpl implements CatToyService{
         Optional<CatToy> foundCatToy = Optional.ofNullable(catToyRepository.findById(id));
         foundCatToy.orElseThrow(CatToyNotFoundException::new);
 
-        foundCatToy.get().setImage(catToy.getImage());
+        foundCatToy.get().setImageUrl(catToy.getImageUrl());
         foundCatToy.get().setMaker(catToy.getMaker());
         foundCatToy.get().setPrice(catToy.getPrice());
         foundCatToy.get().setName(catToy.getName());
