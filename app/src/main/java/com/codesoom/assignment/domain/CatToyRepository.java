@@ -40,8 +40,7 @@ public class CatToyRepository {
 
     public void update(Long id, CatToy catToy) {
         CatToy updatedCatToy = findById(id)
-                .orElseThrow(() -> new CatToyNotFoundException(id
-                q));
+                .orElseThrow(() -> new CatToyNotFoundException(id));
 
         updatedCatToy.setName(catToy.getName());
         updatedCatToy.setMaker(catToy.getMaker());
