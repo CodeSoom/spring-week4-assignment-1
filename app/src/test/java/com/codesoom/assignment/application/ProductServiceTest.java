@@ -100,7 +100,6 @@ public class ProductServiceTest {
         }
     }
 
-
     @Nested
     @DisplayName("수정 시")
     class Describe_updateProduct {
@@ -153,7 +152,7 @@ public class ProductServiceTest {
 
             @Test
             @DisplayName("삭제한다")
-            void deleteProduct() {
+            void it_delete() {
                 productService.deleteProduct(ID);
 
                 verify(productRepository).findById(ID);
@@ -162,7 +161,7 @@ public class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("존재하는 상품일 경우")
+        @DisplayName("존재하지 않는 상품일 경우")
         class Context_notExistProduct {
 
             @Test
