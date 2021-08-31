@@ -34,25 +34,25 @@ public class CatToy {
     /**
      * 장난감 이미지
      */
-    private String imagePath;
+    private String imageUrl;
 
 
     public CatToy() {
 
     }
 
-    public CatToy(String name, String maker, int price, String imagePath) {
+    public CatToy(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imagePath = imagePath;
+        this.imageUrl = imageUrl;
     }
 
     public void edit(CatToy updateCatToy) {
         this.name = updateCatToy.getName();
         this.maker = updateCatToy.getMaker();
         this.price = updateCatToy.getPrice();
-        this.imagePath = updateCatToy.getImagePath();
+        this.imageUrl = updateCatToy.getImageUrl();
     }
 
     public Long getId() {
@@ -71,8 +71,8 @@ public class CatToy {
         return price;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
 

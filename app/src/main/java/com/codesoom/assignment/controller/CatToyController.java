@@ -4,6 +4,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.service.CatToyCommandService;
 import com.codesoom.assignment.service.CatToyQueryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,6 +55,7 @@ public class CatToyController {
      * @return 등록된 장난감
      */
     @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
     public CatToy createCatToy(@RequestBody CatToy catToy) {
         return catToyCommandService.createCatToy(catToy);
     }
@@ -76,6 +78,7 @@ public class CatToyController {
      * @param id 삭제할 장난감 식별자
      */
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCatToyList(@PathVariable Long id) {
         catToyCommandService.deleteCatToy(id);
     }

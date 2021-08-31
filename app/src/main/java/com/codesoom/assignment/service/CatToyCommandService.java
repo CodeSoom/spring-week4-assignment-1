@@ -6,8 +6,6 @@ import com.codesoom.assignment.exception.CatToyNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 /**
  * 장난감 생성, 수정 삭제 기능을 담당합니다.
  */
@@ -17,8 +15,12 @@ public class CatToyCommandService {
 
     private final CatToyRepository catToyRepository;
 
-    public CatToyCommandService(CatToyRepository catToyRepository) {
+    private final CatToyQueryService catToyQueryService;
+
+    public CatToyCommandService(CatToyRepository catToyRepository, CatToyQueryService catToyQueryService) {
         this.catToyRepository = catToyRepository;
+        this.catToyQueryService = catToyQueryService;
+
     }
 
     /**
@@ -51,6 +53,7 @@ public class CatToyCommandService {
      * @param id 삭제할 장난감 식별자
      */
     public void deleteCatToy(Long id) {
+        catToyQueryService.getCatToy(id);
         catToyRepository.deleteById(id);
     }
 }
