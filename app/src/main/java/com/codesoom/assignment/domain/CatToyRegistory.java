@@ -30,6 +30,16 @@ public class CatToyRegistory {
                 .orElseThrow(()-> new CatToyNotFoundException("id " + id + "를 가지는 CatToy가 없습니다."));
     }
 
+    public void update(Long id, CatToy catToy) {
+
+        CatToy updatedCatToy = get(id);
+
+        updatedCatToy.setName(catToy.getName());
+        updatedCatToy.setMaker(catToy.getMaker());
+        updatedCatToy.setPrice(catToy.getPrice());
+        updatedCatToy.setImageURI(catToy.getImageURI());
+    }
+
     private Long generateId() {
         return nextId + 1L;
     }
