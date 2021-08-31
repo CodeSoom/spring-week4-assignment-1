@@ -13,7 +13,7 @@ const product = Joi.object({
 });
 
 describe('Products', () => {
-  const toy = {
+  const product = {
     name: '뱀 장난감',
     maker: '애용이네 장난감',
     price: 10000,
@@ -22,7 +22,7 @@ describe('Products', () => {
 
   describe('GET /products', () => {
     beforeEach(async () => {
-      await frisby.post('/products', toy);
+      await frisby.post('/products', product);
     });
 
     it('responses products', async () => {
@@ -37,7 +37,7 @@ describe('Products', () => {
 
     context('with existing product', () => {
       beforeEach(async () => {
-        const { json } = await frisby.post('/products', toy);
+        const { json } = await frisby.post('/products', product);
         id = json.id;
       });
 
@@ -45,7 +45,7 @@ describe('Products', () => {
         const { json } = await frisby.get(`/products/${id}`)
           .expect('status', 200);
 
-        expect(json).toMatchObject(toy);
+        expect(json).toMatchObject(product);
       });
     });
 
@@ -64,7 +64,7 @@ describe('Products', () => {
   describe('POST /products', () => {
     context('with correct product', () => {
       it('responses created product', async () => {
-        await frisby.post('/products', toy)
+        await frisby.post('/products', product)
           .expect('status', 201)
           .expect('jsonTypes', product);
       });
@@ -83,7 +83,7 @@ describe('Products', () => {
       };
 
       beforeEach(async () => {
-        const { json } = await frisby.post('/products', toy);
+        const { json } = await frisby.post('/products', product);
         id = json.id;
       });
 
@@ -101,7 +101,7 @@ describe('Products', () => {
       });
 
       it('responses bad request', async () => {
-        await frisby.patch(`/products/${id}`, toy)
+        await frisby.patch(`/products/${id}`, product)
           .expect('status', 404);
       });
     });
@@ -112,7 +112,7 @@ describe('Products', () => {
 
     context('with existing product', () => {
       beforeEach(async () => {
-        const { json } = await frisby.post('/products', toy);
+        const { json } = await frisby.post('/products', product);
         id = json.id;
       });
 

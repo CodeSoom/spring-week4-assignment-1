@@ -1,4 +1,4 @@
-package com.codesoom.domain;
+package com.codesoom.assignment.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,7 +6,7 @@ import javax.persistence.Id;
 
 @Entity
 
-public class Toy {
+public class Product {
 
     @Id
     @GeneratedValue
