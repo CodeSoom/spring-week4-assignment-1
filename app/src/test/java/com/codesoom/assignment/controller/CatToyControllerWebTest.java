@@ -20,6 +20,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.util.ArrayList;
@@ -168,6 +170,42 @@ public class CatToyControllerWebTest {
                     .andExpect(content().string(containsString("newnew")))
                     .andExpect(content().string(containsString("newnewMaker")))
                     .andDo(print());
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteCatToy 메소드는")
+    class Describe_delete_cat_toy {
+
+        @Nested
+        @DisplayName("장난감이 없으면")
+        class Context_with_no_cat_toy {
+
+            @BeforeEach
+            void setUp() {
+                doThrow(new CatToyNotFoundException(Long.toString(INVALID_ID))).when(catToyCommandService).deleteCatToy(INVALID_ID);
+            }
+
+            @Test
+            @DisplayName("CatToyNotFound를 던지고 Not Found(404)를 응답한다.")
+            void deleteCatToyWithInvalidId() throws Exception {
+                mockMvc.perform(delete("/products/{id}", INVALID_ID))
+                        .andExpect(status().isNotFound())
+                        .andExpect(result -> assertTrue(result.getResolvedException() instanceof CatToyNotFoundException))
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayName("장난감이 있으면")
+        class Context_with_cat_toy {
+            @Test
+            @DisplayName("장난감을 삭제한다.")
+            void deleteCatToyWithValidId() throws Exception {
+                mockMvc.perform(delete("/products/{id}", 1L))
+                        .andExpect(status().isNoContent())
+                        .andDo(print());
+            }
         }
     }
 }
