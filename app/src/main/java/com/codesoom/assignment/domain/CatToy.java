@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.exception.CatToyInvalidFieldException;
 import com.codesoom.assignment.exception.CatToyInvalidPriceException;
 
 import javax.persistence.Entity;
@@ -66,16 +67,8 @@ public class CatToy {
     }
 
     public void update(CatToy target) {
-        if (updatableString(target.name)) {
-            name = target.name;
-        }
-
-        if (updatableString(target.maker)) {
-            maker = target.maker;
-        }
-
-        if (updatableString(target.imageUrl)) {
-            imageUrl = target.imageUrl;
+        if (!updatableStrings(target.name, target.maker, target.imageUrl)) {
+            throw new CatToyInvalidFieldException();
         }
 
         if (!isValidPrice(target.price)) {
@@ -83,10 +76,18 @@ public class CatToy {
         }
 
         price = target.price;
+        name = target.name;
+        maker = target.maker;
+        imageUrl = target.imageUrl;
     }
 
-    private boolean updatableString(String source) {
-        return source != null && !source.isEmpty();
+    private boolean updatableStrings(String... strings) {
+        for (String string : strings) {
+            if (string == null || string.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static class Builder {

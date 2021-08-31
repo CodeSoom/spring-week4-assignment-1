@@ -15,5 +15,5 @@ public interface ToyService <T>{
 
     T save(T request);
 
-    void deleteToy(Long id);
+    void deleteToy(T toy);
 }

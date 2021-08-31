@@ -133,7 +133,9 @@ class CatToyServiceTest {
     @DisplayName("고양이 장난감을 삭제할 수 있습니다.")
     @Test
     void deleteCatToy() {
-        service.deleteToy(1L);
+
+        final CatToy foundCatToy = service.findById(1L);
+        service.deleteToy(foundCatToy);
 
         verify(repository).findById(1L);
         verify(repository).delete(any(CatToy.class));
@@ -142,7 +144,10 @@ class CatToyServiceTest {
     @DisplayName("존재하지 않는 식별자의 고양이 장난감을 삭제하려 하면 예외가 발생합니다.")
     @Test
     void deleteCatToyNotExistsId() {
-        assertThatThrownBy(() -> service.deleteToy(100L))
+        assertThatThrownBy(() -> {
+            final CatToy foundCatToy = service.findById(100L);
+            service.deleteToy(foundCatToy);
+        })
                 .isInstanceOf(CatToyNotFoundException.class);
 
         verify(repository).findById(100L);

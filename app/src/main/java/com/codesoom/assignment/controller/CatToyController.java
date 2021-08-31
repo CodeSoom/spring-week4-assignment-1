@@ -76,7 +76,9 @@ public class CatToyController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCatToy(@PathVariable Long id) {
-        catToyService.deleteToy(id);
+        final CatToy foundCatToy = catToyService.findById(id);
+
+        catToyService.deleteToy(foundCatToy);
     }
 
 

@@ -45,9 +45,7 @@ public class CatToyService implements ToyService<CatToy>{
     }
 
     @Override
-    public void deleteToy(Long id) {
-        CatToy catToy = findById(id);
-
-        catToyRepository.delete(catToy);
+    public void deleteToy(CatToy toy) {
+        catToyRepository.delete(toy);
     }
 }

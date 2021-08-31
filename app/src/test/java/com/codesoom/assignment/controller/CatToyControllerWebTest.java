@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -20,7 +21,9 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,6 +43,8 @@ class CatToyControllerWebTest {
     private static final String OTHER_MAKER = "뽀떼";
     private static final String OTHER_IMAGE_URL = "https://www.biteme.co.kr/data/goods/21/06/24/1000005510/1000005510_detail_015.png";
 
+    private static final Long MINUS_PRICE = -3000L;
+
     private static final String API_PATH = "/products";
 
     @Autowired
@@ -52,6 +57,8 @@ class CatToyControllerWebTest {
 
     private CatToy catToy;
 
+    private CatToy catToyWithInvalidPrice;
+
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
@@ -62,21 +69,30 @@ class CatToyControllerWebTest {
     private void setUpFixture() {
         catToy = new CatToy(1L, NAME, MAKER, PRICE, IMAGE_URL);
 
+        catToyWithInvalidPrice = new CatToy(NAME, MAKER, PRICE, IMAGE_URL);
+        ReflectionTestUtils.setField(catToyWithInvalidPrice, "price", MINUS_PRICE);
+
 
         given(catToyService.findAll()).willReturn(new ArrayList<>());
 
         given(catToyService.save(catToy)).willReturn(catToy);
 
-        given(catToyService.findById(1L)).willReturn(catToy);
+        given(catToyService.save(catToyWithInvalidPrice))
+                .willThrow(new CatToyInvalidPriceException(MINUS_PRICE));
 
-        given(catToyService.findById(100L)).willThrow(new CatToyNotFoundException(100L));
+        given(catToyService.findById(1L))
+                .willReturn(catToy)
+                .willReturn(catToy)
+                .willThrow(new CatToyNotFoundException(1L));
+
+        given(catToyService.findById(100L))
+                .willThrow(new CatToyNotFoundException(100L));
 
         given(catToyService.updateCatToy(eq(1L), any(CatToy.class)))
                 .willReturn(CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL));
 
         given(catToyService.updateCatToy(eq(100L), any(CatToy.class)))
                 .willThrow(new CatToyNotFoundException(100L));
-
     }
 
 
@@ -131,13 +147,7 @@ class CatToyControllerWebTest {
     @DisplayName("잘못 된 정보로 장난감을 등록할 수 없습니다 - POST /products")
     @Test
     void createProductInvalidPrice() throws Exception {
-        final Long minusPrice = -3000L;
-
-        final String jsonCatToy = "{\"id\":1," +
-                "\"name\":\"장난감 뱀\"," +
-                "\"maker\":\"애옹이네 장난감\"," +
-                "\"price\":"+minusPrice+"," +
-                "\"imageUrl\":\"https://cdn.pixabay.com/photo/2018/09/11/22/19/the-3670813_960_720.jpg\"}";
+        final String jsonCatToy = objectMapper.writeValueAsString(catToyWithInvalidPrice);
 
         mockMvc.perform(
                         post(API_PATH)
@@ -146,32 +156,68 @@ class CatToyControllerWebTest {
                                 .accept(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message")
-                        .value(String.format(CatToyInvalidPriceException.DEFAULT_MESSAGE, minusPrice)));
+                        .value(String.format(CatToyInvalidPriceException.DEFAULT_MESSAGE, MINUS_PRICE)));
 
     }
 
     @DisplayName("식별자를 이용해 장난감 정보를 수정할 수 있습니다 - PATCH /products/{id}")
     @Test
-    void updateProduct() {
+    void updateProduct() throws Exception {
+        final CatToy otherCatToy = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
+        final String jsonOtherCatToy = objectMapper.writeValueAsString(otherCatToy);
+
+        mockMvc.perform(
+                        patch(API_PATH + "/1")
+                                .content(jsonOtherCatToy)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(otherCatToy.getName()))
+                .andExpect(jsonPath("$.maker").value(otherCatToy.getMaker()))
+                .andExpect(jsonPath("$.price").value(otherCatToy.getPrice()))
+                .andExpect(jsonPath("$.imageUrl").value(otherCatToy.getImageUrl()));
 
     }
 
     @DisplayName("존재하지 않는 식별자의 장난감 정보를 수정하려 할 경우 NOT_FOUND로 실패합니다 - PATCH /products/{notExistsId}")
     @Test
-    void updateProductNotExistsId() {
+    void updateProductNotExistsId() throws Exception {
+        final CatToy otherCatToy = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
+        final String jsonOtherCatToy = objectMapper.writeValueAsString(otherCatToy);
+
+        mockMvc.perform(
+                        patch(API_PATH + "/100")
+                                .content(jsonOtherCatToy)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message")
+                        .value(String.format(CatToyNotFoundException.DEFAULT_MESSAGE, 100L)));
 
     }
 
     @DisplayName("식별자를 이용해 장난감 정보를 삭제할 수 있습니다 - DELETE /product/{id}")
     @Test
-    void deleteProduct() {
+    void deleteProduct() throws Exception {
+        mockMvc.perform(get(API_PATH + "/" + catToy.getId()))
+                .andExpect(status().isOk());
 
+        mockMvc.perform(delete(API_PATH +"/1"))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get(API_PATH + "/" + catToy.getId()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message")
+                        .value(String.format(CatToyNotFoundException.DEFAULT_MESSAGE, 1L)));
     }
 
     @DisplayName("존재하지 않는 식별자의 장난감 정보를 삭제하려 할 경우 NOT_FOUND로 실패합니다. - DELETE /product/{notExistsId}")
     @Test
-    void deleteProductNotExistsId() {
-
+    void deleteProductNotExistsId() throws Exception {
+        mockMvc.perform(delete(API_PATH +"/100"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message")
+                        .value(String.format(CatToyNotFoundException.DEFAULT_MESSAGE, 100L)));
     }
 
 }
