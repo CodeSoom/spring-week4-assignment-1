@@ -1,11 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.exception.CatToyInvalidPriceException;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Objects;
 
 
@@ -59,10 +53,17 @@ public class DogToy {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DogToy)) return false;
+        if (this == o){ return true;}
+
+        if (!(o instanceof DogToy)){ return false;}
+
         DogToy dogToy = (DogToy) o;
-        return Objects.equals(id, dogToy.id) && Objects.equals(name, dogToy.name) && Objects.equals(maker, dogToy.maker) && Objects.equals(price, dogToy.price) && Objects.equals(imageUrl, dogToy.imageUrl);
+
+        return Objects.equals(id, dogToy.id)
+                && Objects.equals(name, dogToy.name)
+                && Objects.equals(maker, dogToy.maker)
+                && Objects.equals(price, dogToy.price)
+                && Objects.equals(imageUrl, dogToy.imageUrl);
     }
 
     @Override

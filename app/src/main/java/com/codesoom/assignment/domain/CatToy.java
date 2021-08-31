@@ -9,9 +9,8 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 /**
- * 고양이 장난감 객체로 장난감에 대한 정보를 담는다.
+ * 고양이 장난감
  */
-
 @Entity
 public class CatToy {
 
@@ -24,14 +23,17 @@ public class CatToy {
     private Long price;
     private String imageUrl;
 
-    public CatToy() {}
+    public CatToy() {
+    }
 
     public CatToy(String name, String maker, Long price, String imageUrl) {
-       this(null, name, maker, price, imageUrl);
+        this(null, name, maker, price, imageUrl);
     }
 
     public CatToy(Long id, String name, String maker, Long price, String imageUrl) {
-        isValidPrice(price);
+        if (!isValidPrice(price)) {
+            throw new CatToyInvalidPriceException(price);
+        }
 
         this.id = id;
         this.name = name;
@@ -40,10 +42,8 @@ public class CatToy {
         this.imageUrl = imageUrl;
     }
 
-    private void isValidPrice(Long price) {
-        if (price < 0) {
-            throw new CatToyInvalidPriceException(price);
-        }
+    private boolean isValidPrice(Long price) {
+        return price >= 0;
     }
 
     public CatToy(Builder builder) {
@@ -53,11 +53,15 @@ public class CatToy {
         imageUrl = builder.imageUrl;
     }
 
-    public static CatToy of(String name, String maker, Long price, String imageUrl){
+    public static CatToy from(CatToy request) {
+        return new CatToy(request.name, request.maker, request.price, request.imageUrl);
+    }
+
+    public static CatToy of(String name, String maker, Long price, String imageUrl) {
         return new CatToy(name, maker, price, imageUrl);
     }
 
-    public static Builder builder(){
+    public static Builder builder() {
         return new Builder();
     }
 
@@ -74,7 +78,9 @@ public class CatToy {
             imageUrl = target.imageUrl;
         }
 
-        isValidPrice(target.price);
+        if (!isValidPrice(target.price)) {
+            throw new CatToyInvalidPriceException(target.price);
+        }
 
         price = target.price;
     }
@@ -89,19 +95,22 @@ public class CatToy {
         private Long price;
         private String imageUrl;
 
-        public Builder name(String name){
+        public Builder name(String name) {
             this.name = name;
             return this;
         }
-        public Builder maker(String maker){
+
+        public Builder maker(String maker) {
             this.maker = maker;
             return this;
         }
-        public Builder price(Long price){
+
+        public Builder price(Long price) {
             this.price = price;
             return this;
         }
-        public Builder imageUrl(String imageUrl){
+
+        public Builder imageUrl(String imageUrl) {
             this.imageUrl = imageUrl;
             return this;
         }
@@ -133,10 +142,18 @@ public class CatToy {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CatToy)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof CatToy)) {
+            return false;
+        }
         CatToy catToy = (CatToy) o;
-        return Objects.equals(id, catToy.id) && Objects.equals(name, catToy.name) && Objects.equals(maker, catToy.maker) && Objects.equals(price, catToy.price) && Objects.equals(imageUrl, catToy.imageUrl);
+        return Objects.equals(id, catToy.id)
+                && Objects.equals(name, catToy.name)
+                && Objects.equals(maker, catToy.maker)
+                && Objects.equals(price, catToy.price)
+                && Objects.equals(imageUrl, catToy.imageUrl);
     }
 
     @Override
