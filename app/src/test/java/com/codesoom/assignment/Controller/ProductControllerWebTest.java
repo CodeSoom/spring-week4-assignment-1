@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest
 @DisplayName("Product 리소스")
-public class ProductControllerWebTest {
+public final class ProductControllerWebTest {
     private static final String EMPTY_LIST = "[]";
 
     @Autowired

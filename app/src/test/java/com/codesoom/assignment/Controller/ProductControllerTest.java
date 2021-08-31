@@ -33,7 +33,7 @@ public class ProductControllerTest {
     @DisplayName("create 메서드는")
     class Descirbe_create {
         @Test
-        @DisplayName("product를 생성한다.")
+        @DisplayName("product를 생성하고 리턴한다.")
         void it_returns_a_product() {
             CreateProductDto createProductDto = new CreateProductDto("title");
             assertThat(productController.create(createProductDto))
