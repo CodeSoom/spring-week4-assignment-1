@@ -35,8 +35,8 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("상품 하나를 생성한다")
-    void create() {
-        Product createdProduct = productService.create(product);
+    void createProduct() {
+        Product createdProduct = productService.createProduct(product);
 
         assertThat(createdProduct).isEqualTo(product);
 
@@ -45,8 +45,8 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("모든 상품을 조회한다")
-    void findAll() {
-        Iterable<Product> products = productService.findAll();
+    void getAllProducts() {
+        Iterable<Product> products = productService.getAllProducts();
 
         assertThat(products).isEqualTo(Collections.singletonList(product));
 
@@ -55,8 +55,8 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("존재하는 상품일 경우 상품 하나를 찾아 조회한다")
-    void findById() {
-        Product foundProduct = productService.findById(1L);
+    void getProduct() {
+        Product foundProduct = productService.getProduct(1L);
 
         assertThat(foundProduct).isEqualTo(product);
 
@@ -65,11 +65,11 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("존재하는 상품일 경우 상품 하나를 찾아 수정한다")
-    void update() {
+    void updateProduct() {
         long id = 1L;
         Product source = new Product("a", "b", 100L, "c");
 
-        Product updatedProduct = productService.update(id, source);
+        Product updatedProduct = productService.updateProduct(id, source);
 
         assertThat(source).isEqualTo(updatedProduct);
 
@@ -79,7 +79,7 @@ public class ProductServiceTest {
 
     @Test
     @DisplayName("존재하는 상품일 경우 삭제한다")
-    void delete() {
+    void deleteProduct() {
        long id = 1L;
 
        productService.deleteProduct(id);

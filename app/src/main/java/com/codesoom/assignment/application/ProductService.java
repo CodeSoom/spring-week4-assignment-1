@@ -25,7 +25,7 @@ public class ProductService {
      * @param product 추가할 상품
      * @return 추가된 상품
      */
-    public Product create(Product product) {
+    public Product createProduct(Product product) {
         return productRepository.save(product);
     }
 
@@ -34,7 +34,7 @@ public class ProductService {
      *
      * @return 모든 상품
      */
-    public Iterable<Product> findAll() {
+    public Iterable<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
@@ -44,7 +44,7 @@ public class ProductService {
      * @param id 식별자
      * @return 찾은 상품
      */
-    public Product findById(long id) {
+    public Product getProduct(long id) {
         return productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id));
     }
@@ -55,7 +55,7 @@ public class ProductService {
      * @param id     식별자
      * @param source 바꿀 상품 정보
      */
-    public Product update(long id, Product source) {
+    public Product updateProduct(long id, Product source) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id));
 
