@@ -85,7 +85,7 @@ class CatToyRepositoryTest {
             }
 
             @Test
-            @DisplayName("모든 catToy를 반환합니다.")
+            @DisplayName("저장되어 있는 catToy를 반환합니다.")
             void it_return_all_catToy() {
                 int index = 0;
                 List<CatToy> catToys = catToyRepository.findAll();
