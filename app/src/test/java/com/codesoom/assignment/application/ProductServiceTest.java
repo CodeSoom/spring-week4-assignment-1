@@ -79,11 +79,16 @@ public class ProductServiceTest {
         @DisplayName("존재하는 상품일 경우")
         class Context_existProduct {
 
+            Product foundProduct;
+
+            @BeforeEach
+            void setUp() {
+                foundProduct = productService.getProduct(ID);
+            }
+
             @Test
             @DisplayName("조회한다")
             void it_read() {
-                Product foundProduct = productService.getProduct(ID);
-
                 assertThat(foundProduct).isEqualTo(product);
 
                 verify(productRepository).findById(ID);
@@ -94,13 +99,15 @@ public class ProductServiceTest {
         @DisplayName("존재하지 않는 상품일 경우")
         class Context_notExistProduct {
 
+            private final long notExistId = INVALID_ID;
+
             @Test
             @DisplayName("에러를 던진다")
             void it_throws() {
-                assertThatThrownBy(() -> productService.getProduct(INVALID_ID))
+                assertThatThrownBy(() -> productService.getProduct(notExistId))
                     .isInstanceOf(ProductNotFoundException.class);
 
-                verify(productRepository).findById(INVALID_ID);
+                verify(productRepository).findById(notExistId);
             }
         }
     }
@@ -125,11 +132,16 @@ public class ProductServiceTest {
         @DisplayName("존재하는 상품일 경우")
         class Context_existProduct {
 
+            Product updatedProduct;
+
+            @BeforeEach
+            void setUp() {
+                updatedProduct = productService.updateProduct(ID, source);
+            }
+
             @Test
             @DisplayName("수정한다")
             void it_update() {
-                Product updatedProduct = productService.updateProduct(ID, source);
-
                 assertThat(source).isEqualTo(updatedProduct);
 
                 verify(productRepository).findById(ID);
@@ -141,13 +153,15 @@ public class ProductServiceTest {
         @DisplayName("존재하지 않는 상품일 경우")
         class Context_notExistProduct {
 
+            private final long notExistId = INVALID_ID;
+
             @Test
             @DisplayName("에러를 던진다")
             void it_throws() {
-                assertThatThrownBy(() -> productService.updateProduct(INVALID_ID, source))
+                assertThatThrownBy(() -> productService.updateProduct(notExistId, source))
                     .isInstanceOf(ProductNotFoundException.class);
 
-                verify(productRepository).findById(INVALID_ID);
+                verify(productRepository).findById(notExistId);
                 verify(productRepository, never()).save(source);
             }
         }
@@ -161,12 +175,14 @@ public class ProductServiceTest {
         @DisplayName("존재하는 상품일 경우")
         class Context_existProduct {
 
+            private final long existId = ID;
+
             @Test
             @DisplayName("삭제한다")
             void it_delete() {
-                productService.deleteProduct(ID);
+                productService.deleteProduct(existId);
 
-                verify(productRepository).findById(ID);
+                verify(productRepository).findById(existId);
                 verify(productRepository).delete(any(Product.class));
             }
         }
@@ -175,13 +191,15 @@ public class ProductServiceTest {
         @DisplayName("존재하지 않는 상품일 경우")
         class Context_notExistProduct {
 
+            private final long notExistId = INVALID_ID;
+
             @Test
             @DisplayName("에러를 던진다")
             void it_throws() {
-                assertThatThrownBy(() -> productService.deleteProduct(INVALID_ID))
+                assertThatThrownBy(() -> productService.deleteProduct(notExistId))
                     .isInstanceOf(ProductNotFoundException.class);
 
-                verify(productRepository).findById(INVALID_ID);
+                verify(productRepository).findById(notExistId);
                 verify(productRepository, never()).delete(any(Product.class));
             }
         }
