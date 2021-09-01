@@ -108,7 +108,7 @@ class ProductRepositoryTest {
         @DisplayName("디비에 장난감 목록이 없다면")
         class Context_exist_not_products {
 
-            List<Product> products;
+            Iterable<Product> products;
 
             @BeforeEach
             void setUp() {

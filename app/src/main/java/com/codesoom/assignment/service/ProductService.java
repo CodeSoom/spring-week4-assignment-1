@@ -2,7 +2,6 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ProductService  {
@@ -11,7 +10,9 @@ public interface ProductService  {
 
     Optional<Product> getProduct(Long id);
 
-    List<Product> getProducts();
+    Iterable<Product> getProducts();
+
+    Product updateProduct(Long id, Product product);
 
     void delete(Long id);
 

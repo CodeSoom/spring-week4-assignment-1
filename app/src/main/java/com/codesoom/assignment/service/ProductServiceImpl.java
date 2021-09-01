@@ -5,7 +5,6 @@ import com.codesoom.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,8 +28,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducts() {
+    public Iterable<Product> getProducts() {
         return toyProductRepository.findAll();
+    }
+
+    @Override
+    public Product updateProduct(Long id, Product product) {
+        Optional<Product> foundProduct = toyProductRepository.findById(id);
+
+        foundProduct.get().setName(product.getName());
+        foundProduct.get().setMaker(product.getMaker());
+        foundProduct.get().setPrice(product.getPrice());
+        foundProduct.get().setImg(product.getImg());
+
+        return foundProduct.get();
     }
 
     @Override
