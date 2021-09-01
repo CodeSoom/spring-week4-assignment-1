@@ -9,10 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -20,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -44,39 +40,27 @@ public class CatToyServiceTestNested {
     private CatToyService service;
     private CatToyRepository repository;
 
-    private CatToy catToy;
-
     @BeforeEach
     void setUp() {
-
         repository = mock(CatToyRepository.class);
 
         service = new CatToyService(repository);
-
-        setUpFixtures();
-    }
-
-    private void setUpFixtures() {
-        catToy = new CatToy(1L, NAME, MAKER, PRICE, IMAGE_URL);
-
-        given(repository.findAll())
-                .willReturn(new ArrayList<>())
-                .willReturn(Collections.singletonList(catToy));
-
-        given(repository.findById(1L)).willReturn(Optional.of(catToy));
-
-        given(repository.findById(100L)).willThrow(new CatToyNotFoundException(100L));
-
-        given(repository.save(any(CatToy.class))).willReturn(catToy);
 
     }
 
     @Nested
     @DisplayName("findAll 메서드는")
     class Describe_findAll {
+
         @Nested
         @DisplayName("저장된 장난감들이 없을 경우")
         class Context_without_toy {
+
+            @BeforeEach
+            void prepareSetUp() {
+                given(repository.findAll()).willReturn(new ArrayList<>());
+            }
+
             @DisplayName("빈 목록이 반환된다.")
             @Test
             void findAllNotExistsToy() {
@@ -89,13 +73,16 @@ public class CatToyServiceTestNested {
         @Nested
         @DisplayName("저장된 장난감이 있을 경우")
         class Context_with_toy {
+            final CatToy givenCatToy = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+
+            @BeforeEach
+            void prepareSaveToys() {
+                given(repository.findAll()).willReturn(Collections.singletonList(givenCatToy));
+            }
+
             @DisplayName("목록이 반환된다.")
             @Test
             void findAllExistsToy() {
-                assertThat(service.findAll()).isEmpty();
-
-                service.save(catToy);
-
                 assertThat(service.findAll()).isNotEmpty();
             }
         }
@@ -108,24 +95,39 @@ public class CatToyServiceTestNested {
         @Nested
         @DisplayName("조회하고자 하는 식별자가 존재할 경우 ")
         class Context_with_primary_key {
+            private final CatToy givenCatToy = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+
+            @BeforeEach
+            void prepareSetUp() {
+                ReflectionTestUtils.setField(givenCatToy, "id", 1L);
+
+                given(repository.findById(givenCatToy.getId())).willReturn(Optional.of(givenCatToy));
+            }
+
             @DisplayName("장난감 상세정보를 반환한다.")
             @Test
             void findByExistsId() {
-                final CatToy foundCatToy = service.findById(catToy.getId());
+                final CatToy foundCatToy = service.findById(givenCatToy.getId());
 
-                assertThat(foundCatToy.getId()).isEqualTo(catToy.getId());
-                assertThat(foundCatToy.getName()).isEqualTo(catToy.getName());
-                assertThat(foundCatToy.getMaker()).isEqualTo(catToy.getMaker());
-                assertThat(foundCatToy.getPrice()).isEqualTo(catToy.getPrice());
-                assertThat(foundCatToy.getImageUrl()).isEqualTo(catToy.getImageUrl());
+                assertThat(foundCatToy.getId()).isEqualTo(givenCatToy.getId());
+                assertThat(foundCatToy.getName()).isEqualTo(givenCatToy.getName());
+                assertThat(foundCatToy.getMaker()).isEqualTo(givenCatToy.getMaker());
+                assertThat(foundCatToy.getPrice()).isEqualTo(givenCatToy.getPrice());
+                assertThat(foundCatToy.getImageUrl()).isEqualTo(givenCatToy.getImageUrl());
 
-                assertThat(foundCatToy).isEqualTo(catToy);
+                assertThat(foundCatToy).isEqualTo(givenCatToy);
             }
         }
 
         @Nested
         @DisplayName("조회하고자 하는 식별자가 존재하지 않을 경우")
         class Context_without_primary_key {
+
+            @BeforeEach
+            void prepareSetUp() {
+                given(repository.findById(100L))
+                        .willThrow(new CatToyNotFoundException(100L));
+            }
 
             @DisplayName("예외가 발생한다.")
             @Test
@@ -143,10 +145,22 @@ public class CatToyServiceTestNested {
         @Nested
         @DisplayName("저장하고자 하는 장난감 정보가")
         class Context_with_data {
+            CatToy givenCatToy;
 
             @Nested
             @DisplayName("모두 유효한 경우")
             class Context_with_valid_data {
+
+                @BeforeEach
+                void prepareSetUp() {
+                    givenCatToy = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+                    ReflectionTestUtils.setField(givenCatToy, "id", 1L);
+
+                    given(repository.save(any(CatToy.class)))
+                            .willReturn(givenCatToy);
+                }
+
+
                 @DisplayName("저장된 후 저장된 결과를 반환한다.")
                 @Test
                 void createCatToy() {
@@ -164,6 +178,13 @@ public class CatToyServiceTestNested {
             @Nested
             @DisplayName("유효하지 않은 정보가 있을 경우")
             class Context_with_invalid_data {
+
+                @BeforeEach
+                void prepareSetUp() {
+                    given(repository.save(any(CatToy.class)))
+                            .willThrow(new CatToyInvalidFieldException());
+                }
+
                 @DisplayName("예외가 발생한다.")
                 @ParameterizedTest
                 @ArgumentsSource(ProvideInvalidCatToyArguments.class)
@@ -183,17 +204,33 @@ public class CatToyServiceTestNested {
         @Nested
         @DisplayName("변경할 식별자가 존재 할 경우")
         class Context_with_existsId {
+            final CatToy originCatToy = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+
+            @BeforeEach
+            void prepareSetUp() {
+                ReflectionTestUtils.setField(originCatToy, "id", 1L);
+
+                given(repository.findById(originCatToy.getId())).willReturn(Optional.of(originCatToy));
+            }
 
             @Nested
             @DisplayName("변경할 장난감 정보가 유효하면")
             class Context_with_valid_data {
+                final CatToy otherCatToy = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
+
+
+                @BeforeEach
+                void prepareSetUp() {
+                    ReflectionTestUtils.setField(otherCatToy, "id", 1L);
+                }
+
+
                 @DisplayName("정상적으로 수정되고 수정된 정보를 반환한다.")
                 @Test
                 void updateCatToy() {
-                    final CatToy updatedCatToy = service.updateCatToy(catToy.getId(),
-                            CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL));
+                    final CatToy updatedCatToy = service.updateToy(originCatToy.getId(), otherCatToy);
 
-                    assertThat(updatedCatToy.getId()).isEqualTo(catToy.getId());
+                    assertThat(updatedCatToy.getId()).isEqualTo(originCatToy.getId());
                     assertThat(updatedCatToy.getName()).isEqualTo(OTHER_NAME);
                     assertThat(updatedCatToy.getMaker()).isEqualTo(OTHER_MAKER);
                     assertThat(updatedCatToy.getPrice()).isEqualTo(OTHER_PRICE);
@@ -209,7 +246,7 @@ public class CatToyServiceTestNested {
                 @ParameterizedTest
                 @ArgumentsSource(ProvideInvalidCatToyArguments.class)
                 void updateCatToyWithInvalidData(CatToy target) {
-                    assertThatThrownBy(() -> service.updateCatToy(catToy.getId(), target))
+                    assertThatThrownBy(() -> service.updateToy(originCatToy.getId(), target))
                             .isInstanceOf(CatToyInvalidFieldException.class);
                 }
 
@@ -219,10 +256,15 @@ public class CatToyServiceTestNested {
         @Nested
         @DisplayName("변경할 식별자가 존재하지 않을 경우")
         class Context_with_not_existsId {
+            @BeforeEach
+            void prepareSetUp() {
+                given(repository.findById(100L)).willThrow(new CatToyNotFoundException(100L));
+            }
+
             @DisplayName("예외가 발생합니다.")
             @Test
             void updateCatToyNotExistsId() {
-                assertThatThrownBy(() -> service.updateCatToy(100L, CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL)))
+                assertThatThrownBy(() -> service.updateToy(100L, CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL)))
                         .isInstanceOf(CatToyNotFoundException.class);
             }
         }
@@ -235,12 +277,14 @@ public class CatToyServiceTestNested {
         @Nested
         @DisplayName("삭제하려는 장난감의 식별자가 존재할 경우")
         class Context_with_existsId {
+            final CatToy givenCatToy = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+
             @DisplayName("정상적으로 장난감 정보가 삭제된다.")
             @Test
             void deleteCatToy() {
-                service.deleteToy(catToy);
+                service.deleteToy(givenCatToy);
 
-                verify(repository).delete(catToy);
+                verify(repository).delete(givenCatToy);
             }
         }
     }

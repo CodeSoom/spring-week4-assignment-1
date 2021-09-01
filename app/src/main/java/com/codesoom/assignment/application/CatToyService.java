@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CatToyService implements ToyService<CatToy>{
+public class CatToyService implements ToyService<CatToy> {
     private final CatToyRepository catToyRepository;
 
     @Override
