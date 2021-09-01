@@ -2,16 +2,13 @@ package com.codesoom.assignment.repository;
 
 import com.codesoom.assignment.domain.Product;
 import org.junit.jupiter.api.*;
-import org.mockito.BDDMockito;
 import org.mockito.Mockito;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 @DisplayName("ProductRepository 클래스")
