@@ -1,12 +1,12 @@
-package com.codesoom.assignment.controller;
+package com.codesoom.assignment.cattoy.controller;
 
 import com.codesoom.assignment.ProvideInvalidCatToyArguments;
-import com.codesoom.assignment.application.CatToyService;
-import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.exception.CatToyInvalidFieldException;
-import com.codesoom.assignment.exception.CatToyNotFoundException;
+import com.codesoom.assignment.cattoy.application.CatToyService;
+import com.codesoom.assignment.common.application.ProductService;
+import com.codesoom.assignment.cattoy.domain.CatToy;
+import com.codesoom.assignment.common.domain.Product;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidFieldException;
+import com.codesoom.assignment.cattoy.exception.CatToyNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

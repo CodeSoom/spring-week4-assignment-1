@@ -1,5 +1,7 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.cattoy.domain;
 
+
+import com.codesoom.assignment.common.domain.Product;
 
 import java.util.Objects;
 
@@ -18,7 +20,7 @@ public class DogToy extends Product {
     }
 
     @Override
-    protected void update(Product target) {}
+    public void update(Product target) {}
 
     public static DogToy of(String name, String maker, Long price, String imageUrl) {
         return new DogToy(name, maker, price, imageUrl);

@@ -1,10 +1,11 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.cattoy.application;
 
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyRepository;
-import com.codesoom.assignment.domain.DogToy;
-import com.codesoom.assignment.exception.CatToyNotFoundException;
-import com.codesoom.assignment.exception.NotSupportedTypeException;
+import com.codesoom.assignment.common.application.ProductService;
+import com.codesoom.assignment.cattoy.domain.CatToy;
+import com.codesoom.assignment.cattoy.domain.CatToyRepository;
+import com.codesoom.assignment.cattoy.domain.DogToy;
+import com.codesoom.assignment.cattoy.exception.CatToyNotFoundException;
+import com.codesoom.assignment.cattoy.exception.NotSupportedTypeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

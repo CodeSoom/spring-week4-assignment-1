@@ -1,8 +1,9 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.cattoy.domain;
 
-import com.codesoom.assignment.exception.CatToyInvalidFieldException;
-import com.codesoom.assignment.exception.CatToyInvalidPriceException;
-import com.codesoom.assignment.exception.NotSupportedTypeException;
+import com.codesoom.assignment.common.domain.Product;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidFieldException;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidPriceException;
+import com.codesoom.assignment.cattoy.exception.NotSupportedTypeException;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -77,6 +78,12 @@ public class CatToy extends Product {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        final int hashCode = getHashCode();
+
+        if (hashCode != 0) {
+            return hashCode;
+        }
+        setHashCode(Objects.hash(getId(), getName(), getMaker(), getPrice(), getImageUrl()));
+        return getHashCode();
     }
 }

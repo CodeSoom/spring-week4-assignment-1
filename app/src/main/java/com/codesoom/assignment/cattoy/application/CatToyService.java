@@ -1,8 +1,9 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.cattoy.application;
 
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyRepository;
-import com.codesoom.assignment.exception.CatToyNotFoundException;
+import com.codesoom.assignment.common.application.ProductService;
+import com.codesoom.assignment.cattoy.domain.CatToy;
+import com.codesoom.assignment.cattoy.domain.CatToyRepository;
+import com.codesoom.assignment.cattoy.exception.CatToyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

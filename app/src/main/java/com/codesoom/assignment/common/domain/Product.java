@@ -1,7 +1,7 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.common.domain;
 
-import com.codesoom.assignment.exception.CatToyInvalidFieldException;
-import com.codesoom.assignment.exception.CatToyInvalidPriceException;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidFieldException;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidPriceException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Transient;
-import java.util.Objects;
 
 /**
  * 제품
@@ -54,7 +53,7 @@ public abstract class Product {
         this.imageUrl = imageUrl;
     }
 
-    protected abstract void update(Product target);
+    public abstract void update(Product target);
 
     protected boolean isValidPrice(long price) {
         return price >= 0;
@@ -67,14 +66,5 @@ public abstract class Product {
             }
         }
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        if (hashCode != 0) {
-            return hashCode;
-        }
-        hashCode = Objects.hash(id, name, maker, price, imageUrl);
-        return hashCode;
     }
 }

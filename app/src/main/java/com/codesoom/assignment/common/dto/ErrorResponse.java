@@ -1,4 +1,4 @@
-package com.codesoom.assignment.dto;
+package com.codesoom.assignment.common.dto;
 
 /**
  * 예외 응답 메세지

@@ -1,4 +1,4 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.common.application;
 
 import java.util.List;
 

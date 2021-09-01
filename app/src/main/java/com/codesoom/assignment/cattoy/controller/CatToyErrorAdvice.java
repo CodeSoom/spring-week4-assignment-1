@@ -1,8 +1,8 @@
-package com.codesoom.assignment.controller;
+package com.codesoom.assignment.cattoy.controller;
 
-import com.codesoom.assignment.dto.ErrorResponse;
-import com.codesoom.assignment.exception.CatToyInvalidPriceException;
-import com.codesoom.assignment.exception.CatToyNotFoundException;
+import com.codesoom.assignment.common.dto.ErrorResponse;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidPriceException;
+import com.codesoom.assignment.cattoy.exception.CatToyNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

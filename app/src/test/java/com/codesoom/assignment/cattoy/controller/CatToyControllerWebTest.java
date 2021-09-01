@@ -1,9 +1,9 @@
-package com.codesoom.assignment.controller;
+package com.codesoom.assignment.cattoy.controller;
 
-import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.exception.CatToyInvalidPriceException;
-import com.codesoom.assignment.exception.CatToyNotFoundException;
+import com.codesoom.assignment.common.application.ProductService;
+import com.codesoom.assignment.cattoy.domain.CatToy;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidPriceException;
+import com.codesoom.assignment.cattoy.exception.CatToyNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.cattoy.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

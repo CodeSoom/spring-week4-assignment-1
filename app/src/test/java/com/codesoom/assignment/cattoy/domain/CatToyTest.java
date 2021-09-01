@@ -1,8 +1,9 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.cattoy.domain;
 
 import com.codesoom.assignment.ProvideInvalidCatToyArguments;
-import com.codesoom.assignment.exception.CatToyInvalidFieldException;
-import com.codesoom.assignment.exception.CatToyInvalidPriceException;
+import com.codesoom.assignment.common.domain.Product;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidFieldException;
+import com.codesoom.assignment.cattoy.exception.CatToyInvalidPriceException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

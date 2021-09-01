@@ -1,7 +1,7 @@
-package com.codesoom.assignment.controller;
+package com.codesoom.assignment.cattoy.controller;
 
-import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.common.application.ProductService;
+import com.codesoom.assignment.cattoy.domain.CatToy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
