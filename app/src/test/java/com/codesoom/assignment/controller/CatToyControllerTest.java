@@ -11,18 +11,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import static com.codesoom.assignment.Constant.IMAGE_URL;
 import static com.codesoom.assignment.Constant.MAKER;
@@ -83,7 +78,7 @@ class CatToyControllerTest {
             return args;
         });
 
-        given(catToyService.updateCatToy(eq(1L), any(CatToy.class))).will(invocation -> {
+        given(catToyService.updateToy(eq(1L), any(CatToy.class))).will(invocation -> {
             CatToy catToy = invocation.getArgument(1, CatToy.class);
             if (!catToy.equals(otherCatToy)) {
                 throw new CatToyInvalidFieldException();
@@ -91,7 +86,7 @@ class CatToyControllerTest {
             return otherCatToy;
         });
 
-        given(catToyService.updateCatToy(eq(100L), any(CatToy.class)))
+        given(catToyService.updateToy(eq(100L), any(CatToy.class)))
                 .willThrow(new CatToyNotFoundException(100L));
     }
 

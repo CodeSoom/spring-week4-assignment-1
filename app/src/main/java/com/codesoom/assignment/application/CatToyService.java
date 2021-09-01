@@ -31,7 +31,7 @@ public class CatToyService implements ToyService<CatToy>{
 
     @Override
     @Transactional
-    public CatToy updateCatToy(long id, CatToy target) {
+    public CatToy updateToy(long id, CatToy target) {
         final CatToy catToy = findById(id);
         catToy.update(target);
 

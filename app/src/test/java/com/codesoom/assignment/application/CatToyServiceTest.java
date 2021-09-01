@@ -110,7 +110,7 @@ class CatToyServiceTest {
     @Test
     void updateCatToy() {
         final CatToy newCatToy = CatToy.of("Other", "OtherMaker", 3000L, "OtherUrl");
-        CatToy updatedCatToy = service.updateCatToy(1L, newCatToy);
+        CatToy updatedCatToy = service.updateToy(1L, newCatToy);
 
         assertThat(updatedCatToy.getName()).isEqualTo(newCatToy.getName());
         assertThat(updatedCatToy.getMaker()).isEqualTo(newCatToy.getMaker());
@@ -124,7 +124,7 @@ class CatToyServiceTest {
     void updateCatToyNotExistsId() {
         final CatToy newCatToy = CatToy.of("Other", "OtherMaker", 3000L, "OtherUrl");
 
-        assertThatThrownBy(() -> service.updateCatToy(100L, newCatToy))
+        assertThatThrownBy(() -> service.updateToy(100L, newCatToy))
                 .isInstanceOf(CatToyNotFoundException.class);
 
         verify(repository).findById(100L);

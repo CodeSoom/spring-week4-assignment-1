@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.application.ToyService;
 import com.codesoom.assignment.domain.CatToy;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import java.util.List;
 
 
 /**
- * 고양이 장난감에 대한 Http Request 요청을 처리합니다.
+ * 장난감에 대한 Http Request 요청을 처리합니다.
  */
 @RestController
 @RequiredArgsConstructor
@@ -30,8 +29,8 @@ public class CatToyController {
 
 
     /**
-     * 고양이 장남감 전체 목록을 조회한다.
-     * @return 장난감이 존재하지 않을 땐 빈 목록을 반환한다.
+     * 장남감 전체 목록을 반환합니다.
+     * @return 장난감 목록
      */
     @GetMapping
     public List<CatToy> findAll() {
@@ -39,9 +38,9 @@ public class CatToyController {
     }
 
     /**
-     * 식별자를 이용해 고양이 장난감 상세정보를 조회한다.
-     * @param id 고양이 장난감 식별자
-     * @return 고양이 장난감 상세 정보
+     * 식별자를 이용해 장난감 상세정보를 조회한다.
+     * @param id 장난감 식별자
+     * @return  장난감 상세 정보
      */
     @GetMapping("/{id}")
     public CatToy findById(@PathVariable long id) {
@@ -49,9 +48,9 @@ public class CatToyController {
     }
 
     /**
-     * 새로운 고양이 장난감 정보를 생성한다.
-     * @param catToy 고양이 장난감 정보
-     * @return 생성된 고양이 장난감 상세 정보
+     * 새로운 장난감 정보를 생성한다.
+     * @param catToy  장난감 정보
+     * @return 생성된 장난감 상세 정보
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -61,18 +60,18 @@ public class CatToyController {
 
     /**
      * 식별자를 이용해 조회한 장난감 정보를 수정한다.
-     * @param id 고양이 장난감 식별자
+     * @param id 장난감 식별자
      * @param catToy 수정할 장난감 정보
-     * @return 수정된 고양이 장난감 상세 정보ㅗ
+     * @return 수정된 장난감 상세 정보
      */
     @PatchMapping("/{id}")
     public CatToy updateCatToy(@PathVariable long id, @RequestBody CatToy catToy) {
-        return catToyService.updateCatToy(id, catToy);
+        return catToyService.updateToy(id, catToy);
     }
 
     /**
      * 식별자를 이용해 조회한 장난감 정보를 삭제한다.
-     * @param id 삭제할 고양이 장난감 식별자
+     * @param id 삭제할 장난감 식별자
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

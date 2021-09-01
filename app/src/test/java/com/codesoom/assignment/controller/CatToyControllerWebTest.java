@@ -89,10 +89,10 @@ class CatToyControllerWebTest {
         given(catToyService.findById(100L))
                 .willThrow(new CatToyNotFoundException(100L));
 
-        given(catToyService.updateCatToy(eq(1L), any(CatToy.class)))
+        given(catToyService.updateToy(eq(1L), any(CatToy.class)))
                 .willReturn(CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL));
 
-        given(catToyService.updateCatToy(eq(100L), any(CatToy.class)))
+        given(catToyService.updateToy(eq(100L), any(CatToy.class)))
                 .willThrow(new CatToyNotFoundException(100L));
     }
 
