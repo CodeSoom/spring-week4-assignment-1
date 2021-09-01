@@ -2,8 +2,9 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.ProvideInvalidCatToyArguments;
 import com.codesoom.assignment.application.CatToyService;
-import com.codesoom.assignment.application.ToyService;
+import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.CatToyInvalidFieldException;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,7 @@ import static org.mockito.Mockito.verify;
 class CatToyControllerTest {
 
     private CatToyController controller;
-    private ToyService<CatToy> catToyService;
+    private ProductService<CatToy> catToyService;
 
     private CatToy catToy;
     private CatToy otherCatToy;
@@ -78,7 +79,7 @@ class CatToyControllerTest {
             return args;
         });
 
-        given(catToyService.updateToy(eq(1L), any(CatToy.class))).will(invocation -> {
+        given(catToyService.updateProduct(eq(1L), any(CatToy.class))).will(invocation -> {
             CatToy catToy = invocation.getArgument(1, CatToy.class);
             if (!catToy.equals(otherCatToy)) {
                 throw new CatToyInvalidFieldException();
@@ -86,7 +87,7 @@ class CatToyControllerTest {
             return otherCatToy;
         });
 
-        given(catToyService.updateToy(eq(100L), any(CatToy.class)))
+        given(catToyService.updateProduct(eq(100L), any(CatToy.class)))
                 .willThrow(new CatToyNotFoundException(100L));
     }
 
@@ -113,7 +114,7 @@ class CatToyControllerTest {
     @DisplayName("존재하는 식별자를 이용해 장난감 상세정보를 조회할 수 있습니다.")
     @Test
     void findByExistsId() {
-        final CatToy foundCatToy = controller.findById(1L);
+        final Product foundCatToy = controller.findById(1L);
 
         assertThat(foundCatToy).isEqualTo(catToy);
         assertThat(foundCatToy.getName()).isEqualTo(catToy.getName());
@@ -148,9 +149,9 @@ class CatToyControllerTest {
     @DisplayName("존재하는 식별자의 장난감 정보를 수정할 수 있습니다.")
     @Test
     void updateExistsIdWithValidCatToy() {
-        final CatToy foundCatToy = controller.findById(1L);
+        final Product foundCatToy = controller.findById(1L);
 
-        final CatToy updatedCatToy = controller.updateCatToy(foundCatToy.getId(),
+        final Product updatedCatToy = controller.updateCatToy(foundCatToy.getId(),
                 CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL));
 
         assertThat(updatedCatToy.getName()).isEqualTo(OTHER_NAME);
@@ -165,7 +166,7 @@ class CatToyControllerTest {
     @ParameterizedTest
     @ArgumentsSource(ProvideInvalidCatToyArguments.class)
     void updateExistsIdWithInvalidCatToy(CatToy target) {
-        final CatToy foundCatToy = controller.findById(1L);
+        final Product foundCatToy = controller.findById(1L);
 
         assertThatThrownBy(() -> controller.updateCatToy(foundCatToy.getId(), target))
                 .isInstanceOf(CatToyInvalidFieldException.class);
@@ -185,7 +186,7 @@ class CatToyControllerTest {
         controller.deleteCatToy(1L);
 
         verify(catToyService).findById(1L);
-        verify(catToyService).deleteToy(catToy);
+        verify(catToyService).deleteProduct(catToy);
     }
 
     @DisplayName("존재하지 않는 식별자의 장난감 정보를 삭제할 수 없습니다.")

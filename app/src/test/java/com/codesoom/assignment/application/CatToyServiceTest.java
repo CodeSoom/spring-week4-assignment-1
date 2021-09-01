@@ -2,7 +2,9 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
+import com.codesoom.assignment.domain.DogToy;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
+import com.codesoom.assignment.exception.NotSupportedTypeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,10 @@ import java.util.Optional;
 import static com.codesoom.assignment.Constant.IMAGE_URL;
 import static com.codesoom.assignment.Constant.MAKER;
 import static com.codesoom.assignment.Constant.NAME;
+import static com.codesoom.assignment.Constant.OTHER_IMAGE_URL;
+import static com.codesoom.assignment.Constant.OTHER_MAKER;
+import static com.codesoom.assignment.Constant.OTHER_NAME;
+import static com.codesoom.assignment.Constant.OTHER_PRICE;
 import static com.codesoom.assignment.Constant.PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -110,7 +116,7 @@ class CatToyServiceTest {
     @Test
     void updateCatToy() {
         final CatToy newCatToy = CatToy.of("Other", "OtherMaker", 3000L, "OtherUrl");
-        CatToy updatedCatToy = service.updateToy(1L, newCatToy);
+        CatToy updatedCatToy = service.updateProduct(1L, newCatToy);
 
         assertThat(updatedCatToy.getName()).isEqualTo(newCatToy.getName());
         assertThat(updatedCatToy.getMaker()).isEqualTo(newCatToy.getMaker());
@@ -124,10 +130,20 @@ class CatToyServiceTest {
     void updateCatToyNotExistsId() {
         final CatToy newCatToy = CatToy.of("Other", "OtherMaker", 3000L, "OtherUrl");
 
-        assertThatThrownBy(() -> service.updateToy(100L, newCatToy))
+        assertThatThrownBy(() -> service.updateProduct(100L, newCatToy))
                 .isInstanceOf(CatToyNotFoundException.class);
 
         verify(repository).findById(100L);
+    }
+
+    @DisplayName("지원하지 않는 타입으로 장난감 정보를 수정하려 하면 예외가 발생합니다.")
+    @Test
+    void updateCatToyNotSupportedType() {
+        final DogToy dogToy = DogToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
+
+        assertThatThrownBy(()-> catToy.update(dogToy))
+                .isInstanceOf(NotSupportedTypeException.class);
+
     }
 
     @DisplayName("고양이 장난감을 삭제할 수 있습니다.")
@@ -135,7 +151,7 @@ class CatToyServiceTest {
     void deleteCatToy() {
 
         final CatToy foundCatToy = service.findById(1L);
-        service.deleteToy(foundCatToy);
+        service.deleteProduct(foundCatToy);
 
         verify(repository).findById(1L);
         verify(repository).delete(any(CatToy.class));
@@ -146,7 +162,7 @@ class CatToyServiceTest {
     void deleteCatToyNotExistsId() {
         assertThatThrownBy(() -> {
             final CatToy foundCatToy = service.findById(100L);
-            service.deleteToy(foundCatToy);
+            service.deleteProduct(foundCatToy);
         })
                 .isInstanceOf(CatToyNotFoundException.class);
 

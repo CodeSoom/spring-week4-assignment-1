@@ -228,7 +228,7 @@ public class CatToyServiceTestNested {
                 @DisplayName("정상적으로 수정되고 수정된 정보를 반환한다.")
                 @Test
                 void updateCatToy() {
-                    final CatToy updatedCatToy = service.updateToy(originCatToy.getId(), otherCatToy);
+                    final CatToy updatedCatToy = service.updateProduct(originCatToy.getId(), otherCatToy);
 
                     assertThat(updatedCatToy.getId()).isEqualTo(originCatToy.getId());
                     assertThat(updatedCatToy.getName()).isEqualTo(OTHER_NAME);
@@ -246,7 +246,7 @@ public class CatToyServiceTestNested {
                 @ParameterizedTest
                 @ArgumentsSource(ProvideInvalidCatToyArguments.class)
                 void updateCatToyWithInvalidData(CatToy target) {
-                    assertThatThrownBy(() -> service.updateToy(originCatToy.getId(), target))
+                    assertThatThrownBy(() -> service.updateProduct(originCatToy.getId(), target))
                             .isInstanceOf(CatToyInvalidFieldException.class);
                 }
 
@@ -264,7 +264,7 @@ public class CatToyServiceTestNested {
             @DisplayName("예외가 발생합니다.")
             @Test
             void updateCatToyNotExistsId() {
-                assertThatThrownBy(() -> service.updateToy(100L, CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL)))
+                assertThatThrownBy(() -> service.updateProduct(100L, CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL)))
                         .isInstanceOf(CatToyNotFoundException.class);
             }
         }
@@ -282,7 +282,7 @@ public class CatToyServiceTestNested {
             @DisplayName("정상적으로 장난감 정보가 삭제된다.")
             @Test
             void deleteCatToy() {
-                service.deleteToy(givenCatToy);
+                service.deleteProduct(givenCatToy);
 
                 verify(repository).delete(givenCatToy);
             }

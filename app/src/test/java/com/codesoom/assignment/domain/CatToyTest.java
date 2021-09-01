@@ -59,7 +59,7 @@ class CatToyTest {
         final String otherName = "Other";
         final String otherMaker = "OtherMaker";
         final String otherUrl = "OtherUrl";
-        final Long otherPrice = 3000L;
+        final long otherPrice = 3000L;
 
         assertThat(source).isEqualTo(CatToy.of(NAME, MAKER, PRICE, IMAGE_URL));
         assertThat(source).isNotEqualTo(CatToy.of(otherName, MAKER, PRICE, IMAGE_URL));
@@ -76,21 +76,6 @@ class CatToyTest {
         final DogToy target = DogToy.of(NAME, MAKER, PRICE, IMAGE_URL);
 
         assertThat(source).isNotEqualTo(target);
-    }
-
-    @DisplayName("빌더 패턴을 이용해 객체를 생성할 수 있습니다.")
-    @Test
-    void createFromBuilderPattern() {
-        final CatToy sourceCatToy = CatToy.builder()
-                .name(NAME)
-                .maker(MAKER)
-                .price(PRICE)
-                .imageUrl(IMAGE_URL)
-                .build();
-
-        final CatToy targetCatToy = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
-
-        assertThat(sourceCatToy).isEqualTo(targetCatToy);
     }
 
     @DisplayName("객체의 정보를 업데이트 할 수 있습니다.")

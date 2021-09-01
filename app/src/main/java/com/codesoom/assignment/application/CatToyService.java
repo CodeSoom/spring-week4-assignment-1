@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CatToyService implements ToyService<CatToy> {
+public class CatToyService implements ProductService<CatToy> {
     private final CatToyRepository catToyRepository;
 
     @Override
@@ -31,7 +31,7 @@ public class CatToyService implements ToyService<CatToy> {
 
     @Override
     @Transactional
-    public CatToy updateToy(long id, CatToy target) {
+    public CatToy updateProduct(long id, CatToy target) {
         final CatToy catToy = findById(id);
         catToy.update(target);
 
@@ -45,7 +45,7 @@ public class CatToyService implements ToyService<CatToy> {
     }
 
     @Override
-    public void deleteToy(CatToy toy) {
+    public void deleteProduct(CatToy toy) {
         catToyRepository.delete(toy);
     }
 }
