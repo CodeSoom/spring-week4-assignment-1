@@ -11,7 +11,7 @@ import com.codesoom.assignment.domain.Product;
 import org.springframework.stereotype.Service;
 
 /**
- * Product 데이터 처리를 담당한다.
+ * Product리소스 비즈니스 로직 처리를 담당한다.
  */
 @Service
 @Transactional
