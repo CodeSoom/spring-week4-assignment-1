@@ -34,7 +34,7 @@ class CatToyRepositoryTest {
     class Describe_save {
 
         @Test
-        @DisplayName("catToy가 Repository에 추가됩니다.")
+        @DisplayName("catToy를 Repository에 저장합니다.")
         void it_add_catToy() {
             assertThat(catToyRepository.findAll()).hasSize(0);
             catToyRepository.save(catToy1);
@@ -42,7 +42,7 @@ class CatToyRepositoryTest {
         }
 
         @Test
-        @DisplayName("새로운 catToy를 반환합니다.")
+        @DisplayName("새로 저장된 catToy를 반환합니다.")
         void it_return_new_catToy() {
             CatToy newCatToy = catToyRepository.save(catToy1);
             assertThat(newCatToy.getName()).isEqualTo(catToy1.getName());
