@@ -43,7 +43,7 @@ public class CatToy extends Product {
 
         CatToy catToyTarget = (CatToy) target;
 
-        if (!updatableStrings(catToyTarget.getName(), catToyTarget.getMaker(), catToyTarget.getImageUrl())) {
+        if (!updatableStrings(catToyTarget.getName(), catToyTarget.getMaker())) {
             throw new CatToyInvalidFieldException();
         }
 
@@ -55,5 +55,19 @@ public class CatToy extends Product {
         setName(catToyTarget.getName());
         setMaker(catToyTarget.getMaker());
         setImageUrl(catToyTarget.getImageUrl());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof CatToy)) {
+            return false;
+        }
+
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

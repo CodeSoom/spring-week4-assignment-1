@@ -45,6 +45,7 @@ public class CatToyService implements ProductService<CatToy> {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(CatToy toy) {
         catToyRepository.delete(toy);
     }

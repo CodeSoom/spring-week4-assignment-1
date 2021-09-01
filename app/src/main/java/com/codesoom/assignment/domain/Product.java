@@ -40,7 +40,7 @@ public abstract class Product {
     }
 
     protected Product(Long id, String name, String maker, Long price, String imageUrl) {
-        if (!updatableStrings(name, maker, imageUrl)) {
+        if (!updatableStrings(name, maker)) {
             throw new CatToyInvalidFieldException();
         }
 

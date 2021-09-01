@@ -37,7 +37,7 @@ import static com.codesoom.assignment.Constant.OTHER_PRICE;
 @DisplayName("CatToyService 서비스 테스트")
 public class CatToyServiceTestNested {
 
-    private CatToyService service;
+    private ProductService<CatToy> service;
     private CatToyRepository repository;
 
     @BeforeEach

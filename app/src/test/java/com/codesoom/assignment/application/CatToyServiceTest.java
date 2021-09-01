@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 @DisplayName("CatToyService 서비스 테스트")
 class CatToyServiceTest {
 
-    private CatToyService service;
+    private ProductService<CatToy> service;
     private CatToyRepository repository;
 
     private CatToy catToy;

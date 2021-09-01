@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.CatToyService;
+import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.exception.CatToyInvalidPriceException;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
@@ -18,6 +18,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
+import static com.codesoom.assignment.Constant.IMAGE_URL;
+import static com.codesoom.assignment.Constant.MAKER;
+import static com.codesoom.assignment.Constant.NAME;
+import static com.codesoom.assignment.Constant.OTHER_IMAGE_URL;
+import static com.codesoom.assignment.Constant.OTHER_MAKER;
+import static com.codesoom.assignment.Constant.OTHER_NAME;
+import static com.codesoom.assignment.Constant.OTHER_PRICE;
+import static com.codesoom.assignment.Constant.PRICE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -28,15 +36,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static com.codesoom.assignment.Constant.IMAGE_URL;
-import static com.codesoom.assignment.Constant.MAKER;
-import static com.codesoom.assignment.Constant.NAME;
-import static com.codesoom.assignment.Constant.PRICE;
-import static com.codesoom.assignment.Constant.OTHER_IMAGE_URL;
-import static com.codesoom.assignment.Constant.OTHER_MAKER;
-import static com.codesoom.assignment.Constant.OTHER_NAME;
-import static com.codesoom.assignment.Constant.OTHER_PRICE;
 
 @DisplayName("CatToyController API Web 테스트")
 @SpringBootTest
@@ -52,7 +51,7 @@ class CatToyControllerWebTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CatToyService catToyService;
+    private ProductService<CatToy> catToyService;
 
     private ObjectMapper objectMapper;
 

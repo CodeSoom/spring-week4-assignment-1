@@ -31,19 +31,13 @@ public class ProvideInvalidCatToyArguments implements ArgumentsProvider {
         CatToy catToy4 = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
         ReflectionTestUtils.setField(catToy4, "maker", null);
 
-        CatToy catToy5 = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
-        ReflectionTestUtils.setField(catToy5, "imageUrl", "");
 
-        CatToy catToy6 = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
-        ReflectionTestUtils.setField(catToy6, "imageUrl", null);
 
         return Stream.of(
                 Arguments.of(catToy1),
                 Arguments.of(catToy2),
                 Arguments.of(catToy3),
-                Arguments.of(catToy4),
-                Arguments.of(catToy5),
-                Arguments.of(catToy6)
+                Arguments.of(catToy4)
         );
     }
 }

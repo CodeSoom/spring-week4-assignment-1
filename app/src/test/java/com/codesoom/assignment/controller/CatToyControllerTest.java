@@ -17,17 +17,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import static com.codesoom.assignment.Constant.IMAGE_URL;
 import static com.codesoom.assignment.Constant.MAKER;
 import static com.codesoom.assignment.Constant.NAME;
-import static com.codesoom.assignment.Constant.PRICE;
 import static com.codesoom.assignment.Constant.OTHER_IMAGE_URL;
 import static com.codesoom.assignment.Constant.OTHER_MAKER;
 import static com.codesoom.assignment.Constant.OTHER_NAME;
 import static com.codesoom.assignment.Constant.OTHER_PRICE;
+import static com.codesoom.assignment.Constant.PRICE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;

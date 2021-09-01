@@ -23,4 +23,18 @@ public class DogToy extends Product{
     public static DogToy of(String name, String maker, Long price, String imageUrl) {
         return new DogToy(name, maker, price, imageUrl);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof DogToy)) {
+            return false;
+        }
+
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
