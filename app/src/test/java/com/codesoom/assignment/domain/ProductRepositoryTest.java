@@ -1,6 +1,8 @@
 package com.codesoom.assignment.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +26,6 @@ public class ProductRepositoryTest {
         productRepository.deleteAll();
     }
 
-    @AfterEach
-    void tearDown() {
-        productRepository.deleteAll();
-    }
-
     @Nested
     @DisplayName("save 메서드는")
     class Describe_save {
@@ -38,12 +35,11 @@ public class ProductRepositoryTest {
             @Test
             @DisplayName("주어진 개체를 저장하고 리턴한다.")
             void it_save_object_and_returns_a_saved_object() {
-                final Product product = new Product(null, "title");
+                final Product product = new Product(null, TITLE);
 
                 assertThat(productRepository.save(product))
-                    .matches(saved ->
-                        saved.getId() != null && product.getTitle().equals(saved.getTitle())
-                    );
+                    .matches(saved -> saved.getId() != null)
+                    .matches(saved -> product.getTitle().equals(saved.getTitle()));
             }
         }
     }
@@ -58,7 +54,7 @@ public class ProductRepositoryTest {
         class Context_findById_success {
             @BeforeEach
             void setUp() {
-                final Product product = new Product(null, "title");
+                final Product product = new Product(null, TITLE);
                 final Product savedProduct = productRepository.save(product);
                 id = savedProduct.getId();
             }
@@ -69,7 +65,7 @@ public class ProductRepositoryTest {
                 assertThat(productRepository.findById(id))
                     .matches(output -> output.isPresent())
                     .matches(output -> id.equals(output.get().getId()))
-                    .matches(output -> "title".equals(output.get().getTitle()));
+                    .matches(output -> TITLE.equals(output.get().getTitle()));
             }
         }
 
@@ -79,9 +75,14 @@ public class ProductRepositoryTest {
             @Test
             @DisplayName("빈 값을 리턴한다.")
             void it_returns_a_empty_value() {
-                assertThat(productRepository.findById(1L))
+                assertThat(productRepository.findById(ID))
                     .matches(output -> output.isEmpty());
             }
         }
+    }
+
+    @AfterEach
+    void tearDown() {
+        productRepository.deleteAll();
     }
 }

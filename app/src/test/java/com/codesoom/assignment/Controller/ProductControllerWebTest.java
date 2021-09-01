@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.ProductNotFoundException;
@@ -62,19 +64,13 @@ public final class ProductControllerWebTest {
         @Nested
         @DisplayName("장난감 데이터 요청 시")
         class Contest_request_product {
-            @AfterEach
-            void tearDown() {
-                verify(productService)
-                    .detailProduct(anyLong());
-            }
-
             @Nested
             @DisplayName("요청한 장난감을 찾을 수 있다면")
             class Context_find_success {
                 @BeforeEach
                 void setUp() {
-                    when(productService.detailProduct(1L))
-                        .thenReturn(new Product(1L, "title"));
+                    when(productService.detailProduct(anyLong()))
+                        .thenReturn(new Product(ID, TITLE));
                 }
 
                 @Test
@@ -82,8 +78,8 @@ public final class ProductControllerWebTest {
                 void it_returns_a_find_product() throws Exception {
                     mockMvc.perform(get("/products/1"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("\"title\":\"title\"")))
-                        .andExpect(content().string(containsString("\"id\":1")));
+                        .andExpect(content().string(containsString(ID.toString())))
+                        .andExpect(content().string(containsString(TITLE)));
                 }
             }
 
@@ -103,6 +99,12 @@ public final class ProductControllerWebTest {
                         .andExpect(status().isNotFound());
                 }
             }
+
+            @AfterEach
+            void tearDown() {
+                verify(productService)
+                    .detailProduct(anyLong());
+            }
         }
     }
 
@@ -112,13 +114,7 @@ public final class ProductControllerWebTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(1L, "title"));
-        }
-
-        @AfterEach
-        void tearDown() {
-            verify(productService)
-                .createProduct(any(Product.class));
+                .thenReturn(new Product(ID, TITLE));
         }
 
         @Nested
@@ -133,9 +129,15 @@ public final class ProductControllerWebTest {
                         .content("{\"title\":\"title\"}")
                     )
                     .andExpect(status().isCreated())
-                    .andExpect(content().string(containsString("\"title\":\"title\"")))
-                    .andExpect(content().string(containsString("\"id\":1")));
+                    .andExpect(content().string(containsString(TITLE)))
+                    .andExpect(content().string(containsString(ID.toString())));
             }
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productService)
+                .createProduct(any(Product.class));
         }
     }
 }

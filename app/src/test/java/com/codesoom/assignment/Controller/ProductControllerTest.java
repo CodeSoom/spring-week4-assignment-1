@@ -6,6 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.Dto.CreateProductDto;
@@ -51,22 +53,22 @@ public class ProductControllerTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(1L, "title"));
+                .thenReturn(new Product(ID, TITLE));
+        }
+
+        @Test
+        @DisplayName("Product를 생성하고 리턴한다.")
+        void it_returns_a_product() {
+            CreateProductDto createProductDto = new CreateProductDto(TITLE);
+            assertThat(productController.create(createProductDto))
+                .matches(output -> TITLE.equals(output.getTitle()))
+                .matches(output -> ID == output.getId());
         }
 
         @AfterEach
         void tearDown() {
             verify(productService)
                 .createProduct(any(Product.class));
-        }
-
-        @Test
-        @DisplayName("Product를 생성하고 리턴한다.")
-        void it_returns_a_product() {
-            CreateProductDto createProductDto = new CreateProductDto("title");
-            assertThat(productController.create(createProductDto))
-                .matches(output -> "title".equals(output.getTitle()))
-                .matches(output -> 1L == output.getId());
         }
     }
 
@@ -79,15 +81,15 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 when(productService.detailProduct(anyLong()))
-                    .thenReturn(new Product(1L, "title"));
+                    .thenReturn(new Product(ID, TITLE));
             }
 
             @Test
             @DisplayName("찾은 Product를 리턴한다.")
             void it_returns_a_product() {
-                assertThat(productController.detail(1L))
-                    .matches(output -> 1L == output.getId())
-                    .matches(output -> "title".equals(output.getTitle()));
+                assertThat(productController.detail(ID))
+                    .matches(output -> ID == output.getId())
+                    .matches(output -> TITLE.equals(output.getTitle()));
             }
         }
 
@@ -103,7 +105,7 @@ public class ProductControllerTest {
             @Test
             @DisplayName("ProductNotFoundException을 던진다.")
             void it_throws_a_productNotFoundException() {
-                assertThatThrownBy(() -> productController.detail(1L))
+                assertThatThrownBy(() -> productController.detail(ID))
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }
