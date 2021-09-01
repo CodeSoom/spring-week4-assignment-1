@@ -29,7 +29,12 @@ public class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product("name", "maker", 10000L, "imageUrl");
+        product = Product.builder()
+            .name("name")
+            .maker("maker")
+            .price(10000L)
+            .imageUrl("imageUrl")
+            .build();
         productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository);
 
@@ -108,7 +113,12 @@ public class ProductServiceTest {
 
         @BeforeEach
         void setUp() {
-            source = new Product("a", "b", 100L, "c");
+            source = Product.builder()
+                .name("a")
+                .maker("b")
+                .price(100L)
+                .imageUrl("c")
+                .build();
         }
 
         @Nested

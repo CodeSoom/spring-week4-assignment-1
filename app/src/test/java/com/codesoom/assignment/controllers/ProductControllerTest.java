@@ -19,7 +19,12 @@ public class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product("name", "maker", 10000L, "imageUrl");
+        product = Product.builder()
+            .name("name")
+            .maker("maker")
+            .price(10000L)
+            .imageUrl("imageUrl")
+            .build();
         productService = mock(ProductService.class);
         productController = new ProductController(productService);
     }
@@ -51,7 +56,12 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품을 수정한다")
     void update() {
-        Product source = new Product("name", "maker", 5000L, "imageUrl");
+        Product source = Product.builder()
+            .name("name")
+            .maker("maker")
+            .price(5000L)
+            .imageUrl("imageUrl")
+            .build();
 
         productController.update(ID, source);
 
