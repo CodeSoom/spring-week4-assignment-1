@@ -51,9 +51,9 @@ public class ProductControllerTest {
     @Test
     @DisplayName("상품을 수정한다")
     void update() {
-        Product source = new Product();
+        Product source = new Product("name", "maker", 5000L, "imageUrl");
 
-        productController.update(ID, new Product());
+        productController.update(ID, source);
 
         verify(productService).updateProduct(ID, source);
     }
