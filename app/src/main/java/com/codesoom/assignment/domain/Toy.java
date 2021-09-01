@@ -14,6 +14,8 @@ public class Toy {
     private Integer price;
     private String imageUrl;
 
+    public Toy() {}
+
     public Toy(Long id, String name, String maker, Integer price, String imageUrl) {
         this.id = id;
         this.name = name;
