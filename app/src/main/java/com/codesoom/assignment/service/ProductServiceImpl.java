@@ -5,6 +5,7 @@ import com.codesoom.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Iterable<Product> getProducts() {
+    public List<Product> getProducts() {
         return toyProductRepository.findAll();
     }
 
