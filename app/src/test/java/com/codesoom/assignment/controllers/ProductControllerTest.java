@@ -10,7 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class ProductControllerTest {
-    public static final long ID = 1L;
+
+    private static final long ID = 1L;
 
     private Product product;
     private ProductService productService;
@@ -34,9 +35,9 @@ public class ProductControllerTest {
     @Test
     @DisplayName("모든 상품을 불러온다")
     void getAllProducts() {
-       productController.getAll();
+        productController.getAll();
 
-       verify(productService).getAllProducts();
+        verify(productService).getAllProducts();
     }
 
     @Test

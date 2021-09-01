@@ -20,8 +20,8 @@ import org.junit.jupiter.api.Test;
 
 public class ProductServiceTest {
 
-    public static final long ID = 1L;
-    public static final long INVALID_ID = 2L;
+    private static final long ID = 1L;
+    private static final long INVALID_ID = 2L;
 
     private Product product;
     private ProductRepository productRepository;
@@ -103,6 +103,7 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("수정 시")
     class Describe_updateProduct {
+
         private Product source;
 
         @BeforeEach
