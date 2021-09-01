@@ -10,6 +10,9 @@ import com.codesoom.assignment.domain.Product;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * Product 데이터 처리를 담당한다.
+ */
 @Service
 @Transactional
 public class ProductService {

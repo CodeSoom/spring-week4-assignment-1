@@ -86,7 +86,7 @@ public class ProductControllerTest {
             @DisplayName("찾은 Product를 리턴한다.")
             void it_returns_a_product() {
                 assertThat(productController.detail(1L))
-                    .matches(output -> id.equals(output.getId()))
+                    .matches(output -> 1L == output.getId())
                     .matches(output -> "title".equals(output.getTitle()));
             }
         }

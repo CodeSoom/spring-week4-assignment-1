@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 
 import org.junit.jupiter.api.AfterEach;
@@ -81,7 +82,8 @@ public final class ProductControllerWebTest {
                 void it_returns_a_find_product() throws Exception {
                     mockMvc.perform(get("/products/1"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("title")));
+                        .andExpect(content().string(containsString("\"title\":\"title\"")))
+                        .andExpect(content().string(containsString("\"id\":1")));
                 }
             }
 
@@ -90,12 +92,12 @@ public final class ProductControllerWebTest {
             class Context_find_fail {
                 @BeforeEach
                 void setUp() {
-                    when(productService.detailProduct(anyLong())
-                        .thenThrow(new ProductNotFoundException(anyLong()));
+                when(productService.detailProduct(anyLong()))
+                    .thenThrow(new ProductNotFoundException(anyLong()));
                 }
 
                 @Test
-                @DisplayName("NOT FOUND http status code를 리턴한다.")
+                @DisplayName("404(NOT FOUND) http status code를 리턴한다.")
                 void it_notify_a_find_fail() throws Exception {
                     mockMvc.perform(get("/products/1"))
                         .andExpect(status().isNotFound());
