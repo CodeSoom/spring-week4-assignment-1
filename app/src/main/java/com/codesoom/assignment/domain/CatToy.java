@@ -6,6 +6,7 @@ import com.codesoom.assignment.exception.NotSupportedTypeException;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Objects;
 
 /**
  * 고양이 장난감
@@ -59,11 +60,19 @@ public class CatToy extends Product {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
         if (!(o instanceof CatToy)) {
             return false;
         }
-
-        return super.equals(o);
+        CatToy catToy = (CatToy) o;
+        return Objects.equals(this.getId(), catToy.getId())
+                && Objects.equals(this.getName(), catToy.getName())
+                && Objects.equals(this.getMaker(), catToy.getMaker())
+                && Objects.equals(this.getPrice(), catToy.getPrice())
+                && Objects.equals(this.getImageUrl(), catToy.getImageUrl());
     }
 
     @Override

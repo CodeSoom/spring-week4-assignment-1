@@ -72,8 +72,8 @@ class CatToyTest {
     @DisplayName("객체의 내용이 동일하더라도 객체가 다르면 동일하지도 동등하지도 않습니다.")
     @Test
     void equalsSameContentsAndOtherObject() {
-        final CatToy source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
-        final DogToy target = DogToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+        final Product source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+        final Product target = DogToy.of(NAME, MAKER, PRICE, IMAGE_URL);
 
         assertThat(source).isNotEqualTo(target);
     }
@@ -81,8 +81,8 @@ class CatToyTest {
     @DisplayName("객체의 정보를 업데이트 할 수 있습니다.")
     @Test
     void updateCatToy() {
-        final CatToy source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
-        final CatToy target = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
+        final Product source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+        final Product target = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
 
         source.update(target);
 
@@ -97,7 +97,7 @@ class CatToyTest {
     @ParameterizedTest
     @ArgumentsSource(ProvideInvalidCatToyArguments.class)
     void updateCatToyWithSpace(final CatToy target) {
-        final CatToy source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+        final Product source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
 
         assertThatThrownBy(()-> source.update(target))
                 .isInstanceOf(CatToyInvalidFieldException.class);
@@ -107,8 +107,8 @@ class CatToyTest {
     @DisplayName("장난감의 가격을 잘 못 업데이트 할 경우 예외가 발생합니다.")
     @Test
     void updateCatToyWithInvalidPrice() {
-        final CatToy source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
-        final CatToy target = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
+        final Product source = CatToy.of(NAME, MAKER, PRICE, IMAGE_URL);
+        final Product target = CatToy.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
         ReflectionTestUtils.setField(target, "price", -3000L);
 
         assertThatThrownBy(()-> source.update(target))

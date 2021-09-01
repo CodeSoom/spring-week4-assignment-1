@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Transient;
 import java.util.Objects;
 
 /**
@@ -32,12 +33,10 @@ public abstract class Product {
     private Long price;
     private String imageUrl;
 
-    protected Product() {
-    }
+    @Transient
+    private int hashCode;
 
-    protected Product(String name, String maker, Long price, String imageUrl) {
-        this(null, name, maker, price, imageUrl);
-    }
+    protected Product() {}
 
     protected Product(Long id, String name, String maker, Long price, String imageUrl) {
         if (!updatableStrings(name, maker)) {
@@ -71,23 +70,11 @@ public abstract class Product {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Product)) {
-            return false;
-        }
-        Product product = (Product) o;
-        return Objects.equals(id, product.id)
-                && Objects.equals(name, product.name)
-                && Objects.equals(maker, product.maker)
-                && Objects.equals(price, product.price)
-                && Objects.equals(imageUrl, product.imageUrl);
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hash(id, name, maker, price, imageUrl);
+        if (hashCode != 0) {
+            return hashCode;
+        }
+        hashCode = Objects.hash(id, name, maker, price, imageUrl);
+        return hashCode;
     }
 }

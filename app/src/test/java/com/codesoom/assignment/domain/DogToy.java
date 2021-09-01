@@ -1,9 +1,9 @@
 package com.codesoom.assignment.domain;
 
+
 import java.util.Objects;
 
-
-public class DogToy extends Product{
+public class DogToy extends Product {
 
     public DogToy() {
         super();
@@ -26,11 +26,19 @@ public class DogToy extends Product{
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof DogToy)) {
-            return false;
+        if (this == o) {
+            return true;
         }
 
-        return super.equals(o);
+        if (!(o instanceof CatToy)) {
+            return false;
+        }
+        DogToy dogToy = (DogToy) o;
+        return Objects.equals(this.getId(), dogToy.getId())
+                && Objects.equals(this.getName(), dogToy.getName())
+                && Objects.equals(this.getMaker(), dogToy.getMaker())
+                && Objects.equals(this.getPrice(), dogToy.getPrice())
+                && Objects.equals(this.getImageUrl(), dogToy.getImageUrl());
     }
 
     @Override
