@@ -78,6 +78,13 @@ class ToyControllerWebTest {
         return toyInService;
     }
 
+    private List<Toy> getCreatedToyList() throws Exception {
+        return getResponseContent(
+                mockMvc.perform(get("/products")),
+                new TypeReference<List<Toy>>() {}
+        );
+    }
+
     @Nested
     @DisplayName("Post Request")
     class PostRequest {
@@ -95,19 +102,13 @@ class ToyControllerWebTest {
         @Test
         @DisplayName("increases the number of toys by one")
         void increasesNumberOfToy() throws Exception {
-            List<Toy> toysBeforePost = getResponseContent(
-                    mockMvc.perform(get("/products")),
-                    new TypeReference<List<Toy>>() {}
-            );
+            List<Toy> toysBeforePost = getCreatedToyList();
 
             mockMvc.perform(post("/products")
                     .content(objectMapper.writeValueAsString(toyFixture))
                     .contentType(MediaType.APPLICATION_JSON));
 
-            List<Toy> toysAfterPost = getResponseContent(
-                    mockMvc.perform(get("/products")),
-                    new TypeReference<List<Toy>>() {}
-            );
+            List<Toy> toysAfterPost = getCreatedToyList();
 
             assertThat(toysAfterPost.size()).isEqualTo(toysBeforePost.size() + 1);
         }
