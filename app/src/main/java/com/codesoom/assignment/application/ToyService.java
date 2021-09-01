@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -38,12 +37,11 @@ public class ToyService {
     }
 
     public void deleteToy(Long id) {
-        Optional<Toy> toy = this.toyRepository.findById(id);
-
-        if (toy.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-
-        this.toyRepository.deleteById(id);
+        this.toyRepository.findById(id)
+                .ifPresentOrElse(it -> {
+                    this.toyRepository.deleteById(id);
+                }, () -> {
+                    throw new NoSuchElementException();
+                });
     }
 }
