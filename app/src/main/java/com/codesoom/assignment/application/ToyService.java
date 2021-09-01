@@ -31,17 +31,10 @@ public class ToyService {
     }
 
     public Toy updateToy(Long id, Toy source) {
-        Optional<Toy> toy = this.toyRepository.findById(id);
-
-        if (toy.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-
-        Toy updatedToy = toy.get();
-
-        updatedToy.setContent(source);
-
-        return updatedToy;
+        return this.toyRepository.findById(id).map(it -> {
+            it.setContent(source);
+            return it;
+        }).orElseThrow();
     }
 
     public void deleteToy(Long id) {
