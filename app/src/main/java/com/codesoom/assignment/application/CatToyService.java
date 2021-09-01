@@ -30,26 +30,24 @@ public class CatToyService {
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product product = catToyRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = getProduct(id);
 
-        updateProduct(source, product);
-
-        return product;
+        return updateProduct(source, product);
     }
 
     public void deleteProduct(Long id) {
-        Product product = catToyRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = getProduct(id);
 
         catToyRepository.delete(product);
     }
 
-    private void updateProduct(Product source, Product product) {
+    private Product updateProduct(Product source, Product product) {
         product.setName(source.getName());
         product.setMaker(source.getMaker());
         product.setPrice(source.getPrice());
         product.setImageUrl(source.getImageUrl());
+
+        return product;
     }
 
 }
