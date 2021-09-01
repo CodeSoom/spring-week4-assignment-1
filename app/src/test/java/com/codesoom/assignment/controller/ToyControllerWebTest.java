@@ -38,13 +38,13 @@ class ToyControllerWebTest {
     private Toy toyFixture;
     private Toy newToyFixture;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final static Long VALID_ID = 1L;
-    private final static Long INVALID_ID = 1000000L;
+    private final static Long EXISTENT_ID = 1L;
+    private final static Long NON_EXISTENT_ID = 1000000L;
 
     @BeforeEach
     void setupFixtures() {
         toyFixture = new Toy(
-                VALID_ID,
+                EXISTENT_ID,
                 "cat",
                 "new balance",
                 12345,
@@ -138,8 +138,8 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("With valid id")
-        class WithValidId {
+        @DisplayName("With an existent id")
+        class WithExistentId {
             @Test
             @DisplayName("returns a toy with HTTP status code 200")
             void returnsToy() throws Exception {
@@ -150,12 +150,12 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("With invalid id with HTTP status code 404")
-        class WithInvalidId {
+        @DisplayName("With a non existent id")
+        class WithNonExistentId {
             @Test
-            @DisplayName("returns an error")
+            @DisplayName("returns an error with HTTP status code 404")
             void returnsError() throws Exception {
-                mockMvc.perform(get("/products/" + INVALID_ID))
+                mockMvc.perform(get("/products/" + NON_EXISTENT_ID))
                         .andExpect(status().isNotFound());
             }
         }
@@ -172,8 +172,8 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("With valid id")
-        class WithValidId {
+        @DisplayName("With an existent id")
+        class WithExistentId {
             @Test
             @DisplayName("returns an updated toy with HTTP status code 200")
             void returnsUpdatedToy() throws Exception {
@@ -192,12 +192,12 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("With invalid id")
-        class WithInvalidId {
+        @DisplayName("With a non existent id")
+        class WithNonExistentId {
             @Test
             @DisplayName("returns an error with HTTP status code 404")
             void returnsError() throws Exception {
-                mockMvc.perform(put("/products/" + INVALID_ID)
+                mockMvc.perform(put("/products/" + NON_EXISTENT_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(newToyFixture)))
                         .andExpect(status().isNotFound());
@@ -216,8 +216,8 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("With valid id")
-        class WithValidId {
+        @DisplayName("With an existent id")
+        class WithExistentId {
             @Test
             @DisplayName("returns an updated toy with HTTP status code 200")
             void returnsUpdatedToy() throws Exception {
@@ -236,12 +236,12 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("With invalid id")
-        class WithInvalidId {
+        @DisplayName("With a non existent id")
+        class WithNonExistentId {
             @Test
             @DisplayName("returns an error with HTTP status code 404")
             void returnsError() throws Exception {
-                mockMvc.perform(patch("/products/" + INVALID_ID)
+                mockMvc.perform(patch("/products/" + NON_EXISTENT_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(newToyFixture)))
                         .andExpect(status().isNotFound());
@@ -255,8 +255,8 @@ class ToyControllerWebTest {
         private Toy toyInService;
 
         @Nested
-        @DisplayName("With valid id")
-        class WithValidId {
+        @DisplayName("With an existent id")
+        class WithExistentId {
             @BeforeEach
             void setup() throws Exception {
                 toyInService = addToyForSetup();
@@ -271,12 +271,12 @@ class ToyControllerWebTest {
         }
 
         @Nested
-        @DisplayName("With invalid id")
-        class WithInvalidId {
+        @DisplayName("With a non existent id")
+        class WithNonExistentId {
             @Test
             @DisplayName("returns an error with HTTP status code 404")
             void returnsError() throws Exception {
-                mockMvc.perform(delete("/products/" + INVALID_ID))
+                mockMvc.perform(delete("/products/" + NON_EXISTENT_ID))
                        .andExpect(status().isNotFound());
             }
         }

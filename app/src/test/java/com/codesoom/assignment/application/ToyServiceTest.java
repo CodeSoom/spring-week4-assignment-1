@@ -26,8 +26,8 @@ class ToyServiceTest {
     private Toy newToyFixture;
     private List<Toy> toysFixture;
 
-    private final static Long VALID_ID = 1L;
-    private final static Long INVALID_ID = 100L;
+    private final static Long EXISTENT_ID = 1L;
+    private final static Long NON_EXISTENT_ID = 100L;
 
     @BeforeEach
     void setup() {
@@ -35,7 +35,7 @@ class ToyServiceTest {
         toyService = new ToyService(toyRepository);
 
         toyFixture = new Toy(
-                VALID_ID,
+                EXISTENT_ID,
                 "애오옹",
                 "난난",
                 12345,
@@ -43,7 +43,7 @@ class ToyServiceTest {
         );
 
         newToyFixture = new Toy(
-                VALID_ID,
+                EXISTENT_ID,
                 "애오옹2",
                 "난난2",
                 123450,
@@ -78,31 +78,31 @@ class ToyServiceTest {
     class GetService {
         @BeforeEach
         void setup() {
-            given(toyRepository.findById(VALID_ID)).willReturn(Optional.of(toyFixture));
-            given(toyRepository.findById(INVALID_ID)).willReturn(Optional.empty());
+            given(toyRepository.findById(EXISTENT_ID)).willReturn(Optional.of(toyFixture));
+            given(toyRepository.findById(NON_EXISTENT_ID)).willReturn(Optional.empty());
         }
 
         @Nested
-        @DisplayName("With Valid Id")
-        class WithValidId {
+        @DisplayName("With an existent Id")
+        class WithExistentId {
             @Test
             @DisplayName("calls findById in repository and returns toy")
-            void getToyWithValidId() {
-                Toy result = toyService.getToy(VALID_ID);
+            void getToyWithExistentId() {
+                Toy result = toyService.getToy(EXISTENT_ID);
 
-                verify(toyRepository).findById(VALID_ID);
+                verify(toyRepository).findById(EXISTENT_ID);
 
-                assertThat(result.getId()).isEqualTo(VALID_ID);
+                assertThat(result.getId()).isEqualTo(EXISTENT_ID);
             }
         }
 
         @Nested
-        @DisplayName("With Invalid Id")
-        class WithInvalidId {
+        @DisplayName("With non existent Id")
+        class WithNonExistentId {
             @Test
             @DisplayName("throws NoSuchElementException")
-            void getToyWithInvalidId() {
-                assertThatThrownBy(() -> toyService.getToy(INVALID_ID))
+            void getToyWithNonExistentId() {
+                assertThatThrownBy(() -> toyService.getToy(NON_EXISTENT_ID))
                         .isInstanceOf(NoSuchElementException.class);
             }
         }
@@ -136,19 +136,19 @@ class ToyServiceTest {
     class UpdateService {
         @BeforeEach
         void setup() {
-            given(toyRepository.findById(VALID_ID)).willReturn(Optional.of(toyFixture));
-            given(toyRepository.findById(INVALID_ID)).willReturn(Optional.empty());
+            given(toyRepository.findById(EXISTENT_ID)).willReturn(Optional.of(toyFixture));
+            given(toyRepository.findById(NON_EXISTENT_ID)).willReturn(Optional.empty());
         }
 
         @Nested
-        @DisplayName("With valid id")
-        class WithValidId {
+        @DisplayName("With an existent id")
+        class WithExistentId {
             @Test
             @DisplayName("calls findById in repository and returns an updated toy")
-            void updateWithValidId() {
-                Toy result = toyService.updateToy(VALID_ID, newToyFixture);
+            void updateWithExistentId() {
+                Toy result = toyService.updateToy(EXISTENT_ID, newToyFixture);
 
-                verify(toyRepository).findById(VALID_ID);
+                verify(toyRepository).findById(EXISTENT_ID);
 
                 assertThat(result.getId()).isEqualTo(toyFixture.getId());
                 assertThat(result.getName()).isEqualTo(newToyFixture.getName());
@@ -159,12 +159,12 @@ class ToyServiceTest {
         }
 
         @Nested
-        @DisplayName("With invalid id")
-        class WithInvalidId {
+        @DisplayName("With a non existent id")
+        class WithNonExistentId {
             @Test
             @DisplayName("throws NoSuchElementException")
-            void updateWithInvalidId() {
-                assertThatThrownBy(() -> toyService.updateToy(INVALID_ID, newToyFixture))
+            void updateWithNonExistentId() {
+                assertThatThrownBy(() -> toyService.updateToy(NON_EXISTENT_ID, newToyFixture))
                         .isInstanceOf(NoSuchElementException.class);
             }
         }
@@ -174,35 +174,35 @@ class ToyServiceTest {
     @DisplayName("Delete Service")
     class DeleteService {
         @Nested
-        @DisplayName("With valid id")
-        class WithValidId {
+        @DisplayName("With an existent id")
+        class WithExistentId {
             @BeforeEach
             void setup() {
-                given(toyRepository.findById(VALID_ID)).willReturn(Optional.of(toyFixture));
+                given(toyRepository.findById(EXISTENT_ID)).willReturn(Optional.of(toyFixture));
             }
 
             @Test
             @DisplayName("calls findById and delete in repository")
-            void deleteWithValidId() {
-                toyService.deleteToy(VALID_ID);
+            void deleteWithExistentId() {
+                toyService.deleteToy(EXISTENT_ID);
 
-                verify(toyRepository).findById(VALID_ID);
-                verify(toyRepository).deleteById(VALID_ID);
+                verify(toyRepository).findById(EXISTENT_ID);
+                verify(toyRepository).deleteById(EXISTENT_ID);
             }
         }
 
         @Nested
-        @DisplayName("With invalid id")
-        class WithInvalidId {
+        @DisplayName("With non existent id")
+        class WithNonExistentId {
             @BeforeEach
             void setup() {
-                given(toyRepository.findById(INVALID_ID)).willReturn(Optional.empty());
+                given(toyRepository.findById(NON_EXISTENT_ID)).willReturn(Optional.empty());
             }
 
             @Test
             @DisplayName("throws NoSuchElementException")
-            void deleteWithInvalidId() {
-                assertThatThrownBy(() -> toyService.deleteToy(INVALID_ID))
+            void deleteWithNonExistentId() {
+                assertThatThrownBy(() -> toyService.deleteToy(NON_EXISTENT_ID))
                         .isInstanceOf(NoSuchElementException.class);
             }
         }
