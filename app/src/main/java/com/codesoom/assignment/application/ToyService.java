@@ -22,7 +22,8 @@ public class ToyService {
     }
 
     public Toy getToy(Long id) {
-        return this.toyRepository.findById(id).orElseThrow();
+        return this.toyRepository.findById(id)
+                .orElseThrow(() -> new ToyNotFoundException(id));
     }
 
     public Toy saveToy(Toy source) {
@@ -30,10 +31,12 @@ public class ToyService {
     }
 
     public Toy updateToy(Long id, Toy source) {
-        return this.toyRepository.findById(id).map(it -> {
-            it.setContent(source);
-            return it;
-        }).orElseThrow();
+        return this.toyRepository.findById(id)
+                .map(it -> {
+                    it.setContent(source);
+                    return it;
+                })
+                .orElseThrow(() -> new ToyNotFoundException(id));
     }
 
     public void deleteToy(Long id) {
@@ -41,7 +44,7 @@ public class ToyService {
                 .ifPresentOrElse(it -> {
                     this.toyRepository.deleteById(id);
                 }, () -> {
-                    throw new NoSuchElementException();
+                    throw new ToyNotFoundException(id);
                 });
     }
 }
