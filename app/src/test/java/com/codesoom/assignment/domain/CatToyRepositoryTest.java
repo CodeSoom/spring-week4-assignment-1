@@ -70,7 +70,7 @@ class CatToyRepositoryTest {
         }
 
         @Nested
-        @DisplayName("catToy 데이터가 있다면")
+        @DisplayName("catToy 데이터가 저장되어 있다면")
         class Context_has_catToy {
 
             private List<CatToy> givenCatToys;
