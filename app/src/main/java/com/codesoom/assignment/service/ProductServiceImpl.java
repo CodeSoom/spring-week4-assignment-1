@@ -34,14 +34,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product updateProduct(Long id, Product product) {
-        Optional<Product> foundProduct = toyProductRepository.findById(id);
 
-        foundProduct.get().setName(product.getName());
-        foundProduct.get().setMaker(product.getMaker());
-        foundProduct.get().setPrice(product.getPrice());
-        foundProduct.get().setImg(product.getImg());
+        Product updateProduct = toyProductRepository.findById(id).get();
+        return updateProduct.setProduct(product);
 
-        return foundProduct.get();
     }
 
     @Override

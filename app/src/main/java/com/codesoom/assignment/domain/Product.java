@@ -55,4 +55,11 @@ public class Product {
         this.img = img;
     }
 
+    public Product setProduct(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.img = product.getImg();
+        return this;
+    }
 }
