@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public final class ProductErrorAdvise {
     /**
-     * 예외를 처리하고 예외가 발생하였음을 알려준다.
+     * ProductNotFoundException을 처리한다.
      * 
      * @return 에러 메시지("Product not found.")
-     * @see ProductController#detail(Long) detail
+     * 
+     * @see ProductController#detail(Long)
+     * @see com.codesoom.assignment.application.ProductService#detailProduct(Long)
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)

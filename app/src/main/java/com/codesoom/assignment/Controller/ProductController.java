@@ -59,6 +59,7 @@ public final class ProductController {
      * 
      * @param id 찾을 Product의 id
      * @return 찾은 Product
+     * @throws ProductNotFoundException Product를 찾지 못한 경우
      */
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
