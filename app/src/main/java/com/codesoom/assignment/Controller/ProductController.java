@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.codesoom.assignment.Dto.CreateProductDto;
@@ -38,7 +37,7 @@ public final class ProductController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Product> list() {
-        return new ArrayList<>();
+        return productService.listProduct();
     }
 
     /**
