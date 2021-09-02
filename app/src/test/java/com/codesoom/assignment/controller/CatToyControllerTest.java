@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -35,6 +36,7 @@ class CatToyControllerTest {
         catToyList.add(catToy);
 
         given(catToyService.getCatToys()).willReturn(catToyList);
+        given(catToyService.findCatToyById(ID)).willReturn(Optional.of(catToy));
 
         catToyController = new CatToyController(catToyService);
     }
@@ -42,22 +44,35 @@ class CatToyControllerTest {
     @Nested
     @DisplayName("getCatToys 메서드는")
     class getAllCatToys {
-
         @Test
         @DisplayName("고양이 장난감 목록 전체를 반환한다.")
         void getCatToys() {
-            Assertions.assertEquals(catToyController.getCatToys().size(), 2);
+            Assertions.assertEquals(catToyController.getCatToys().size(), 1);
         }
     }
 
-    @Test
-    void findCatToyById() {
+    @Nested
+    @DisplayName("findCatTiyById 메서드는")
+    class findCatToyById {
+        @Test
+        @DisplayName("식별자에 해당하는 장난감을 반환한다.")
+        void findCatToyById() {
+            Assertions.assertEquals(catToyController.findCatToyById(1L).getName(), NAME);
+        }
     }
 
-    @Test
-    void registerCatToy() {
-    }
+    @Nested
+    @DisplayName("registerCatToy 메서드는")
+    class registerCatToy {
+        CatToy givenCatToy = new CatToy(2L, "test name2", "test maker2", 20000, "test imageUrl2");
 
+        @Test
+        void registerCatToy() {
+            catToyService.addCatToy(givenCatToy);
+
+            Assertions.assertEquals(catToyService.getCatToys().size(), 2);
+        }
+    }
     @Test
     void updateCatToy() {
     }
