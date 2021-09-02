@@ -13,7 +13,7 @@ public class CatProductService {
   }
 
 
-    public List<CatProduct> getCatProducts{
+    public List<CatProduct> getCatProducts(){
     return catProductRepository.findAll();
   }
 
