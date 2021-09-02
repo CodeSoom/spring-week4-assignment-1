@@ -29,8 +29,8 @@ public class ProductService {
                 .orElseThrow(()->new ProductNotFoundException(id));
     }
 
-    public void update(Long id, Product product) {
-        productRepository.update(id, product);
+    public Product update(Long id, Product product) {
+        return productRepository.update(id, product);
     }
 
     public void deleteById(Long id) {
