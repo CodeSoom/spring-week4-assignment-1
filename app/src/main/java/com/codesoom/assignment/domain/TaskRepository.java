@@ -24,6 +24,7 @@ public class TaskRepository {
     }
 
     public Task save(Task task) {
+        task.setId(generateId());
         tasks.add(task);
         return task;
     }
