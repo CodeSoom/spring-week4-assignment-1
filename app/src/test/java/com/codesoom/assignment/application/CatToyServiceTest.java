@@ -23,23 +23,36 @@ import static org.mockito.Mockito.verify;
 class CatToyServiceTest {
     private CatToyService catToyService;
     private CatToyRepository catToyRepository;
+    static final Long EXIST_ID = 1L;
+    static final Long NOT_EXIST_ID = 999L;
+    Product product;
 
     @BeforeEach
     void setUp() {
         catToyRepository = mock(CatToyRepository.class);
         catToyService = new CatToyService(catToyRepository);
+
+        product = new Product();
+
+        given(catToyRepository.findById(EXIST_ID)).willReturn(Optional.of(product));
+        given(catToyRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
+        given(catToyRepository.save(any(Product.class))).willReturn(product);
     }
 
     @Nested
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts {
+
         @Nested
         @DisplayName("등록된 상품이 없다면")
         class Context_no_have_product {
+
             @Test
             @DisplayName("비어 있는 리스트를 리턴")
             void it_returns_EmptyProducts() {
                 List<Product> products = catToyService.getProducts();
+
+                verify(catToyRepository).findAll();
 
                 assertThat(products).isEmpty();
             }
@@ -80,20 +93,6 @@ class CatToyServiceTest {
         @Nested
         @DisplayName("id와 일치하는 상품이 있다면")
         class Context_exist_match_id {
-            Product product;
-            final Long EXIST_ID = 1L;
-
-            @BeforeEach
-            void prepareProduct() {
-                product = new Product();
-
-                List<Product> list = new ArrayList<>();
-
-                list.add(product);
-
-                given(catToyRepository.findById(EXIST_ID))
-                        .willReturn(java.util.Optional.of(product));
-            }
 
             @Test
             @DisplayName("상품을 리턴")
@@ -109,12 +108,6 @@ class CatToyServiceTest {
         @Nested
         @DisplayName("id와 일치하는 상품이 없다면")
         class Context_not_exist_match_id {
-            final Long NOT_EXIST_ID = 1L;
-
-            @BeforeEach
-            void prepareProduct() {
-                given(catToyRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
-            }
 
             @Test
             @DisplayName("찾을 수 없다는 예외를 던짐")
@@ -134,14 +127,6 @@ class CatToyServiceTest {
         @Nested
         @DisplayName("상품 저장에 성공했다면")
         class Context_success_save_product {
-            Product product;
-
-            @BeforeEach
-            void prepareProduct() {
-                product = new Product();
-
-                given(catToyRepository.save(any(Product.class))).willReturn(product);
-            }
 
             @Test
             @DisplayName("저장한 상품을 리턴")
@@ -162,29 +147,20 @@ class CatToyServiceTest {
         @Nested
         @DisplayName("id와 일치하는 상품이 없다면")
         class Context_exist_match_id {
-            final Long NOT_EXIST_ID = 1L;
-            Product product;
-
-            @BeforeEach
-            void prepareProduct() {
-                product = new Product();
-                given(catToyRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
-            }
 
             @Test
             @DisplayName("찾을 수 없다는 예외를 던짐")
             void it_returns_not_found() {
+                verify(catToyRepository).findById(NOT_EXIST_ID);
+
                 assertThatThrownBy(() -> catToyService.updateProduct(NOT_EXIST_ID, product))
                         .isInstanceOf(ProductNotFoundException.class);
-
-                verify(catToyRepository).findById(NOT_EXIST_ID);
             }
         }
 
         @Nested
         @DisplayName("id와 일치하는 상품이 있다면")
         class context_exist_match_id {
-            final Long EXIST_ID = 1L;
             Product source;
 
             @BeforeEach
@@ -196,7 +172,7 @@ class CatToyServiceTest {
                 source.setImageUrl("update url");
 
                 given(catToyRepository.findById(EXIST_ID))
-                        .willReturn(Optional.ofNullable(source));
+                        .willReturn(Optional.of(source));
             }
 
             @Test
@@ -221,17 +197,11 @@ class CatToyServiceTest {
         @Nested
         @DisplayName("id와 일치하는 상품이 없다면")
         class Context_not_exist_match_id {
-            final Long NOT_EXIST_ID = 1L;
-
-            @BeforeEach
-            void prepareProduct() {
-                given(catToyRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
-            }
 
             @Test
             @DisplayName("찾을 수 없다는 예외를 던짐")
             void it_returns_not_found() {
-                assertThatThrownBy(()-> catToyService.deleteProduct(NOT_EXIST_ID))
+                assertThatThrownBy(() -> catToyService.deleteProduct(NOT_EXIST_ID))
                         .isInstanceOf(ProductNotFoundException.class);
 
                 verify(catToyRepository).findById(NOT_EXIST_ID);
@@ -241,13 +211,6 @@ class CatToyServiceTest {
         @Nested
         @DisplayName("id와 일치하는 상품이 있다면")
         class context_exist_match_id {
-            final Long EXIST_ID = 1L;
-            @BeforeEach
-            void prepareProduct() {
-                Product product = new Product();
-                given(catToyRepository.findById(EXIST_ID))
-                        .willReturn(Optional.of(product));
-            }
 
             @Test
             @DisplayName("상품을 삭제")
