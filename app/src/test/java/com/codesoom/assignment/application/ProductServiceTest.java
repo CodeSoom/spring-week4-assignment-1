@@ -16,7 +16,6 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.google.common.collect.Lists;
 
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -156,6 +155,8 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
+                when(product.update(any(Product.class)))
+                    .thenReturn(new Product("updated" + TITLE));
                 when(productRepository.findById(anyLong()))
                     .thenReturn(Optional.of(product));
             }
@@ -169,7 +170,7 @@ public class ProductServiceTest {
 
             @AfterEach
             void tearDown() {
-                verify(product).updateProduct(any(Product.class));
+                verify(product).update(any(Product.class));
             }
         }
 

@@ -27,7 +27,8 @@ public final class Product {
         return title;
     }
 
-    public void update(final Product source) {
+    public Product update(final Product source) {
         title = source.getTitle();
+        return this;
     }
 }

@@ -23,7 +23,7 @@ public class ProductTest {
             final Product product = spy(new Product(TITLE));
             final Product source = new Product("updated" + TITLE);
 
-            product.update(source);
+            final Product updatedProduct = product.update(source);
 
             assertThat(product.getId()).isNull();
 
@@ -33,7 +33,7 @@ public class ProductTest {
             .filter(method -> !method.getName().equals("getId"))
             .forEach(method -> {
                 try {
-                    assertThat(method.invoke(product)).isEqualTo(method.invoke(source));
+                    assertThat(method.invoke(updatedProduct)).isEqualTo(method.invoke(source));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

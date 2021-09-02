@@ -45,11 +45,24 @@ public class ProductService {
     }
 
     /**
-     * 저장된 Product 목록을 리턴한다.
+     * Product 목록을 리턴한다.
      *
      * @return 저장된 Product 목록
      */
     public List<Product> listProduct() {
         return productRepository.findAll();
+    }
+
+    /**
+     * Product 업데이트하고 리턴한다.
+     *
+     * @param id 업데이트할 Product의 id
+     * @param product id를 제외한 Product 데이터
+     * @return 업데이트한 Product 데이터
+     * @throws ProductNotFoundException Product를 찾지 못한 경우
+     */
+    public Product updateProduct(final Long id, final Product source) {
+        return productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException(id)).update(source);
     }
 }
