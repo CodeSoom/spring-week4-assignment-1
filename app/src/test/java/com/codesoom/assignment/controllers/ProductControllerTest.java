@@ -154,16 +154,17 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                willDoNothing().given(productService).update(eq(VALID_ID), any(Product.class));
+                given(productService.update(eq(VALID_ID), any(Product.class))).willReturn(product1);
             }
 
             @Test
-            @DisplayName("response(status: ok)를 반환합니다.")
+            @DisplayName("response(status: ok, content: json product)를 반환합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(patch("/products/" + VALID_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(contentProduct))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(contentProduct));
             }
         }
 
