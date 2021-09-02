@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.dto.CatToyModel;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
 import com.codesoom.assignment.repository.CatToyRepository;
@@ -18,6 +19,8 @@ class CatToyServiceTest {
 
     private CatToyService catToyService;
     private CatToyModel catToyModel;
+    private CatToyModel changeCatToyModel;
+    private Long saveCatToyId;
 
     @Autowired
     private CatToyRepository catToyRepository;
@@ -26,6 +29,13 @@ class CatToyServiceTest {
     void setup() {
         catToyService = new CatToyService(catToyRepository);
         catToyModel = new CatToyModel(TOY_NAME, TOY_MAKER, PRICE, IMAGE_URL);
+        saveCatToyId = saveCatToy();
+        changeCatToyModel = new CatToyModel(saveCatToyId, CHANGE_NAME, CHANGE_MAKER, CHANGE_PRICE, CHANGE_IMAGE_URL);
+
+    }
+
+    private Long saveCatToy() {
+        return catToyRepository.save(new CatToy(TOY_NAME, TOY_MAKER, PRICE, IMAGE_URL)).id();
     }
 
     @Test
@@ -61,5 +71,16 @@ class CatToyServiceTest {
         // then
         assertThatThrownBy(() -> catToyService.selectCatToy(NOT_EXISTS_ID))
                 .isInstanceOf(CatToyNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("고양이 장난감을 수정")
+    void modifyCatToy() {
+        // when
+        CatToyModel modifyCatToy = catToyService.modifyCatToy(changeCatToyModel);
+
+        // then
+        assertThat(modifyCatToy.name()).isEqualTo(CHANGE_NAME);
+        assertThat(modifyCatToy.maker()).isEqualTo(CHANGE_MAKER);
     }
 }

@@ -1,5 +1,8 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.CatToyModel;
+import org.springframework.util.StringUtils;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +31,42 @@ public class CatToy {
     }
 
     public CatToy() {
+    }
+
+    public void changeCatToy(CatToyModel catToyModel) {
+        if (catToyModel == null) {
+            throw new IllegalArgumentException();
+        }
+
+        changeName(catToyModel.name());
+        changeMaker(catToyModel.maker());
+        changePrice(catToyModel.price());
+        changeImageUrl(catToyModel.imageUrl());
+
+    }
+
+    private void changeName(String name) {
+        if (StringUtils.hasLength(name)) {
+            this.name = name;
+        }
+    }
+
+    private void changeMaker(String maker) {
+        if (StringUtils.hasLength(maker)) {
+            this.maker = maker;
+        }
+    }
+
+    private void changePrice(Integer price) {
+        if (!Objects.isNull(price)) {
+            this.price = price;
+        }
+    }
+
+    private void changeImageUrl(String imageUrl) {
+        if (StringUtils.hasLength(imageUrl)) {
+            this.imageUrl = imageUrl;
+        }
     }
 
     public Long id() {

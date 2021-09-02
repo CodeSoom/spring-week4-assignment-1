@@ -52,6 +52,16 @@ public class CatToyService {
         return new CatToyModel(findCatToy(id));
     }
 
+    /**
+     * 고양이 장난감을 수정한다.
+     * @param changeCatToyModel
+     * @return 고양이 장난감
+     */
+    public CatToyModel modifyCatToy(CatToyModel changeCatToyModel) {
+        CatToy catToy = findCatToy(changeCatToyModel.id());
+        catToy.changeCatToy(changeCatToyModel);
+        return new CatToyModel(catToyRepository.save(catToy));
+    }
 
     /**
      * 고양이 장난감이 있으면 조회, 없으면 CatToyNotFoundException 발생

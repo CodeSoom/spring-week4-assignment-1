@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.CatToyViewModel;
 import com.codesoom.assignment.dto.CatToyModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,6 +59,18 @@ public class CatToyController {
     @GetMapping(value = "/{id}")
     public CatToyViewModel.Response selectCatToy(@PathVariable Long id) {
         CatToyModel catToy = catToyService.selectCatToy(id);
+        return new CatToyViewModel.Response(catToy);
+    }
+
+    /**
+     * 고양이 장난감 하나를 수정한다.
+     * @param id
+     * @param request
+     * @return 고양이 장난감
+     */
+    @PatchMapping(value = "/{id}")
+    public CatToyViewModel.Response modifyCatToy(@PathVariable Long id, @RequestBody CatToyViewModel.Request request) {
+        CatToyModel catToy = catToyService.modifyCatToy(new CatToyModel(id, request.getName(), request.getMaker(), request.getPrice(), request.getImageUrl()));
         return new CatToyViewModel.Response(catToy);
     }
 

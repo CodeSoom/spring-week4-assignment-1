@@ -1,6 +1,7 @@
 package com.codesoom.assignment.repository;
 
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.dto.CatToyModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,13 @@ class CatToyRepositoryTest {
     private CatToyRepository catToyRepository;
 
     private CatToy catToy;
+    private CatToyModel changeCatToyModel;
     private Long id;
 
     @BeforeEach
-    void setup() {
+    void setup(){
         catToy = new CatToy(TOY_NAME, TOY_MAKER, PRICE, IMAGE_URL);
+        changeCatToyModel = new CatToyModel(id, CHANGE_NAME, CHANGE_MAKER, CHANGE_PRICE, CHANGE_IMAGE_URL);
         id = saveCatToyId();
     }
 
@@ -60,5 +63,20 @@ class CatToyRepositoryTest {
 
         // then
         assertThat(selectCatToy).isEqualTo(catToy);
+    }
+
+    @Test
+    @DisplayName("고양이 장난감을 수정하여 반환한다.")
+    void modifyCatToy() {
+        // given
+        CatToy selectCatToy = catToyRepository.findById(id).get();
+
+        // when
+        selectCatToy.changeCatToy(changeCatToyModel);
+        catToyRepository.save(selectCatToy);
+
+        // then
+        assertThat(selectCatToy.name()).isEqualTo(CHANGE_NAME);
+        assertThat(selectCatToy.maker()).isEqualTo(CHANGE_MAKER);
     }
 }
