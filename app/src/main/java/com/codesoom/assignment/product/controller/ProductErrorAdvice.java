@@ -1,8 +1,8 @@
-package com.codesoom.assignment.cattoy.controller;
+package com.codesoom.assignment.product.controller;
 
 import com.codesoom.assignment.common.dto.ErrorResponse;
-import com.codesoom.assignment.cattoy.exception.CatToyInvalidPriceException;
-import com.codesoom.assignment.cattoy.exception.CatToyNotFoundException;
+import com.codesoom.assignment.product.exception.ProductInvalidPriceException;
+import com.codesoom.assignment.product.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @Slf4j
 @ControllerAdvice
-public class CatToyErrorAdvice {
+public class ProductErrorAdvice {
 
     @ResponseBody
-    @ExceptionHandler(CatToyNotFoundException.class)
+    @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse catToyNotFoundExceptionHandler(RuntimeException err) {
         log.info(err.getMessage());
@@ -27,7 +27,7 @@ public class CatToyErrorAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(CatToyInvalidPriceException.class)
+    @ExceptionHandler(ProductInvalidPriceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse catToyInvalidPriceExceptionHandler(RuntimeException err) {
         log.info(err.getMessage());
