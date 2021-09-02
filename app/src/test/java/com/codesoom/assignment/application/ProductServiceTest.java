@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.codesoom.assignment.domain.Product;
@@ -50,9 +51,6 @@ public class ProductServiceTest {
 
         given(productRepository.findById(NOT_EXIST_ID))
             .willThrow(ProductNotFoundException.class);
-
-        given(productRepository.existsById(ID))
-            .willReturn(Boolean.TRUE);
     }
 
     @Nested
@@ -114,9 +112,9 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = getProductId();
 
-                boolean hasId = productRepository.existsById(productId);
+                assertThat(productRepository.findById(productId))
+                    .isNotEqualTo(Optional.empty());
 
-                assertThat(hasId).isTrue();
                 foundProduct = productService.getProduct(productId);
             }
 
@@ -125,7 +123,8 @@ public class ProductServiceTest {
             void it_return_found_product() {
                 assertThat(foundProduct).isEqualTo(product);
 
-                verify(productRepository).findById(ID);
+                verify(productRepository, times(2))
+                    .findById(ID);
             }
         }
 
@@ -137,9 +136,9 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean hasId = productRepository.existsById(NOT_EXIST_ID);
+                assertThatThrownBy(() -> productRepository.findById(NOT_EXIST_ID))
+                    .isInstanceOf(ProductNotFoundException.class);
 
-                assertThat(hasId).isFalse();
                 notExistProductId = NOT_EXIST_ID;
             }
 
@@ -149,7 +148,8 @@ public class ProductServiceTest {
                 assertThatThrownBy(() -> productService.getProduct(notExistProductId))
                     .isInstanceOf(ProductNotFoundException.class);
 
-                verify(productRepository).findById(notExistProductId);
+                verify(productRepository, times(2))
+                    .findById(notExistProductId);
             }
         }
     }
@@ -180,9 +180,9 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = getProductId();
 
-                boolean hasId = productRepository.existsById(productId);
+                assertThat(productRepository.findById(productId))
+                    .isNotEqualTo(Optional.empty());
 
-                assertThat(hasId).isTrue();
                 updatedProduct = productService.updateProduct(productId, source);
             }
 
@@ -191,7 +191,8 @@ public class ProductServiceTest {
             void it_return_updated_product() {
                 assertThat(source).isEqualTo(updatedProduct);
 
-                verify(productRepository).findById(ID);
+                verify(productRepository, times(2))
+                    .findById(ID);
                 verify(productRepository).save(source);
             }
         }
@@ -204,9 +205,9 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean hasId = productRepository.existsById(NOT_EXIST_ID);
+                assertThatThrownBy(() -> productRepository.findById(NOT_EXIST_ID))
+                    .isInstanceOf(ProductNotFoundException.class);
 
-                assertThat(hasId).isFalse();
                 notExistProductId = NOT_EXIST_ID;
             }
 
@@ -216,7 +217,8 @@ public class ProductServiceTest {
                 assertThatThrownBy(() -> productService.updateProduct(notExistProductId, source))
                     .isInstanceOf(ProductNotFoundException.class);
 
-                verify(productRepository).findById(notExistProductId);
+                verify(productRepository, times(2))
+                    .findById(notExistProductId);
                 verify(productRepository, never()).save(source);
             }
         }
@@ -236,9 +238,9 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = getProductId();
 
-                boolean hasId = productRepository.existsById(productId);
+                assertThat(productRepository.findById(productId))
+                    .isNotEqualTo(Optional.empty());
 
-                assertThat(hasId).isTrue();
                 existProductId = productId;
             }
 
@@ -247,7 +249,8 @@ public class ProductServiceTest {
             void it_delete() {
                 productService.deleteProduct(existProductId);
 
-                verify(productRepository).findById(existProductId);
+                verify(productRepository, times(2))
+                    .findById(existProductId);
                 verify(productRepository).delete(any(Product.class));
             }
         }
@@ -260,8 +263,8 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean hasId = productRepository.existsById(NOT_EXIST_ID);
-                assertThat(hasId).isFalse();
+                assertThatThrownBy(() -> productRepository.findById(NOT_EXIST_ID))
+                    .isInstanceOf(ProductNotFoundException.class);
 
                 notExistProductId = NOT_EXIST_ID;
             }
@@ -272,7 +275,8 @@ public class ProductServiceTest {
                 assertThatThrownBy(() -> productService.deleteProduct(notExistProductId))
                     .isInstanceOf(ProductNotFoundException.class);
 
-                verify(productRepository).findById(notExistProductId);
+                verify(productRepository, times(2))
+                    .findById(notExistProductId);
                 verify(productRepository, never()).delete(any(Product.class));
             }
         }
