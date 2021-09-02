@@ -13,6 +13,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.Dto.CreateProductDto;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,11 +40,38 @@ public class ProductControllerTest {
         @Nested
         @DisplayName("저장된 Product가 없다면")
         class Context_product_empty {
+            @BeforeEach
+            void setUp() {
+                when(productService.listProduct())
+                    .thenReturn(Lists.newArrayList());
+            }
+
             @Test
             @DisplayName("빈 목록을 리턴한다.")
             void it_returns_a_empty_list() {
                 assertThat(productController.list()).isEmpty();
             }
+        }
+
+        @Nested
+        @DisplayName("저장된 Product가 있다면")
+        class Context_product_exist {
+            @BeforeEach
+            void setUp() {
+                when(productService.listProduct())
+                    .thenReturn(Lists.newArrayList(new Product(TITLE)));
+            }
+
+            @Test
+            @DisplayName("Product 목록을 리턴한다.")
+            void it_returns_a_product_list() {
+                assertThat(productController.list()).isNotEmpty();
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productService).listProduct();
         }
     }
 

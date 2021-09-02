@@ -1,6 +1,8 @@
 package com.codesoom.assignment.controller;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -16,6 +18,7 @@ import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,8 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest
 @DisplayName("장난감 리소스")
 public final class ProductControllerWebTest {
-    private static final String EMPTY_LIST = "[]";
-
     @MockBean
     private ProductService productService;
 
@@ -41,19 +42,58 @@ public final class ProductControllerWebTest {
     @Nested
     @DisplayName("전체 목록 조회 엔드포인트는")
     class Describe_products_get {
+
+        private static final String LIST_PREFIX = "[";
+        private static final String LIST_SUFFIX = "]";
+        private static final String OBJECT_PREFIX = "{";
+        private static final String OBJECT_SUFFIX = "}";
+
         @Nested
         @DisplayName("전체 목록 요청 시")
         class Context_request_product_list {
             @Nested
-            @DisplayName("저장된 데이터가 없다면")
+            @DisplayName("저장된 Product가 없다면")
             class Context_product_empty {
+                @BeforeEach
+                void setUp() {
+                    when(productService.listProduct())
+                        .thenReturn(Lists.newArrayList());
+                }
+
                 @Test
                 @DisplayName("빈 목록을 리턴한다.")
                 void it_returns_a_empty_list() throws Exception {
                     mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(EMPTY_LIST));
+                        .andExpect(content().string(startsWith(LIST_PREFIX)))
+                        .andExpect(content().string(endsWith(LIST_SUFFIX)));
                 }
+            }
+
+            @Nested
+            @DisplayName("저장된 Product가 있다면")
+            class Context_product_exist {
+                @BeforeEach
+                void setUp() {
+                    when(productService.listProduct())
+                        .thenReturn(Lists.newArrayList(new Product(TITLE)));
+                }
+
+                @Test
+                @DisplayName("Product 목록을 리턴한다.")
+                void it_returns_a_product_list() throws Exception {
+                    mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(startsWith(LIST_PREFIX)))
+                        .andExpect(content().string(endsWith(LIST_SUFFIX)))
+                        .andExpect(content().string(containsString(OBJECT_PREFIX)))
+                        .andExpect(content().string(containsString(OBJECT_SUFFIX)));
+                }
+            }
+
+            @AfterEach
+            void tearDown() {
+                verify(productService).listProduct();
             }
         }
     }

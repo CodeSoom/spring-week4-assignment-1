@@ -94,7 +94,7 @@ public class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("저장된 Product 목록을 리턴한다.")
+            @DisplayName("Product 목록을 리턴한다.")
             void it_returns_a_product_list() {
                 assertThat(productRepository.findAll())
                     .extracting(Product::getTitle)
