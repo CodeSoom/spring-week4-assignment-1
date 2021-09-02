@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,8 +15,10 @@ import org.hibernate.annotations.DynamicUpdate;
  * 상품.
  */
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @DynamicUpdate
 @Entity
 public class Product {
@@ -29,23 +32,6 @@ public class Product {
     private String maker;
     private Long price;
     private String imageUrl;
-
-    @Builder
-    public Product(Long id, String name, String maker, Long price, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
-    @Builder
-    public Product(String name, String maker, Long price, String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 
     /**
      * 수정될 정보가 담긴 상품을 받아, 현재 상품 정보를 수정하고 리턴합니다.
