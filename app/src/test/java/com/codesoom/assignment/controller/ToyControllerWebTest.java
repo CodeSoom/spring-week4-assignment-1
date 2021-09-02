@@ -73,9 +73,9 @@ class ToyControllerWebTest {
                 .content(objectMapper.writeValueAsString(toyFixture))
                 .contentType(MediaType.APPLICATION_JSON));
 
-        Toy toyInService = getResponseContent(actions, new TypeReference<Toy>() {});
+        Toy toyAlreadyStored = getResponseContent(actions, new TypeReference<Toy>() {});
 
-        return toyInService;
+        return toyAlreadyStored;
     }
 
     private List<Toy> getCreatedToyList() throws Exception {
@@ -117,13 +117,13 @@ class ToyControllerWebTest {
     @Nested
     @DisplayName("Get Request")
     class GetRequest {
-        private Toy toyInService;
+        private Toy toyAlreadyStored;
         private String toyContent;
 
         @BeforeEach
         void setup() throws Exception {
-            toyInService = addToyForSetup();
-            toyContent = objectMapper.writeValueAsString(toyInService);
+            toyAlreadyStored = addToyForSetup();
+            toyContent = objectMapper.writeValueAsString(toyAlreadyStored);
         }
 
         @Nested
@@ -144,7 +144,7 @@ class ToyControllerWebTest {
             @Test
             @DisplayName("returns a toy with HTTP status code 200")
             void returnsToy() throws Exception {
-                mockMvc.perform(get("/products/" + toyInService.getId()))
+                mockMvc.perform(get("/products/" + toyAlreadyStored.getId()))
                         .andExpect(status().isOk())
                         .andExpect(content().json(toyContent));
             }
@@ -165,11 +165,11 @@ class ToyControllerWebTest {
     @Nested
     @DisplayName("Put Request")
     class PutRequest {
-        private Toy toyInService;
+        private Toy toyAlreadyStored;
 
         @BeforeEach
         void setup() throws Exception {
-            toyInService = addToyForSetup();
+            toyAlreadyStored = addToyForSetup();
         }
 
         @Nested
@@ -180,7 +180,7 @@ class ToyControllerWebTest {
             @BeforeEach
             void setup() throws JsonProcessingException {
                 Toy updatedToy = new Toy(
-                        toyInService.getId(),
+                        toyAlreadyStored.getId(),
                         newToyFixture.getName(),
                         newToyFixture.getMaker(),
                         newToyFixture.getPrice(),
@@ -193,7 +193,7 @@ class ToyControllerWebTest {
             @Test
             @DisplayName("returns an updated toy with HTTP status code 200")
             void returnsUpdatedToy() throws Exception {
-                mockMvc.perform(put("/products/"+ toyInService.getId())
+                mockMvc.perform(put("/products/"+ toyAlreadyStored.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(newToyFixture)))
                         .andExpect(content().json(expectedContent));
@@ -217,11 +217,11 @@ class ToyControllerWebTest {
     @Nested
     @DisplayName("Patch Request")
     class PatchRequest {
-        private Toy toyInService;
+        private Toy toyAlreadyStored;
 
         @BeforeEach
         void setup() throws Exception {
-            toyInService = addToyForSetup();
+            toyAlreadyStored = addToyForSetup();
         }
 
         @Nested
@@ -232,7 +232,7 @@ class ToyControllerWebTest {
             @BeforeEach
             void setup() throws JsonProcessingException {
                 Toy updatedToy = new Toy(
-                        toyInService.getId(),
+                        toyAlreadyStored.getId(),
                         newToyFixture.getName(),
                         newToyFixture.getMaker(),
                         newToyFixture.getPrice(),
@@ -245,7 +245,7 @@ class ToyControllerWebTest {
             @Test
             @DisplayName("returns an updated toy with HTTP status code 200")
             void returnsUpdatedToy() throws Exception {
-                mockMvc.perform(patch("/products/"+ toyInService.getId())
+                mockMvc.perform(patch("/products/"+ toyAlreadyStored.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newToyFixture)))
                         .andExpect(content().json(expectedContent));
@@ -269,20 +269,20 @@ class ToyControllerWebTest {
     @Nested
     @DisplayName("Delete Request")
     class DeleteRequest {
-        private Toy toyInService;
+        private Toy toyAlreadyStored;
 
         @Nested
         @DisplayName("With an existent id")
         class WithExistentId {
             @BeforeEach
             void setup() throws Exception {
-                toyInService = addToyForSetup();
+                toyAlreadyStored = addToyForSetup();
             }
 
             @Test
             @DisplayName("returns nothing with HTTP status code 200")
             void returnsUpdatedToy() throws Exception {
-                mockMvc.perform(delete("/products/"+ toyInService.getId()))
+                mockMvc.perform(delete("/products/"+ toyAlreadyStored.getId()))
                         .andExpect(status().isNoContent());
             }
         }
