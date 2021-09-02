@@ -16,24 +16,24 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    Product save(Product product) {
+    public Product save(Product product) {
         return productRepository.save(product);
     }
 
-    List<Product> findAll() {
+    public List<Product> findAll() {
         return productRepository.findAll();
     }
 
-    Product findById(Long id) {
+    public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(()->new ProductNotFoundException(id));
     }
 
-    void update(Long id, Product product) {
+    public void update(Long id, Product product) {
         productRepository.update(id, product);
     }
 
-    void deleteById(Long id) {
+    public void deleteById(Long id) {
         productRepository.deleteById(id);
     }
 
