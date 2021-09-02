@@ -14,7 +14,7 @@ public class ProductNotFoundException extends RuntimeException{
     }
 
     public ProductNotFoundException(Long id) {
-        super("id " + id + "를 가지는 Product가 없습니다.");
+        super("id " + id + "를 가지는 Product를 찾지 못했습니다.");
     }
 
     public ProductNotFoundException(Throwable cause) {
