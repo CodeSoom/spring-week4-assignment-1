@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -8,6 +9,8 @@ import com.codesoom.assignment.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 public class ProductControllerTest {
 
@@ -74,5 +77,14 @@ public class ProductControllerTest {
         productController.delete(ID);
 
         verify(productService).deleteProduct(ID);
+    }
+
+    @Test
+    @DisplayName("handleProductNotFound 메서드는 404를 응답한다")
+    void verify_handleProductNotFound_return_404_response() {
+        ResponseEntity<Product> productResponseEntity = productController.handleProductNotFound();
+
+        assertThat(productResponseEntity)
+            .isEqualTo(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
