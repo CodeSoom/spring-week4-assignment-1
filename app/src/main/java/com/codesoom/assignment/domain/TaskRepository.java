@@ -28,6 +28,11 @@ public class TaskRepository {
         return task;
     }
 
+    public Task remove(Task task) {
+        tasks.remove(task);
+        return task;
+    }
+
     public void add(Task task) {
         task.setId(generateId());
         tasks.add(task);

@@ -27,7 +27,12 @@ public class TaskService {
     public Task createTask(Task source) {
         Task task = new Task();
         task.setTitle(source.getTitle());
-        
+
         return taskRepository.save(task);
+    }
+
+    public Task deleteTask(Long id) throws TaskNotFoundException {
+        Task task = taskRepository.find(id);
+        return taskRepository.remove(task);
     }
 }
