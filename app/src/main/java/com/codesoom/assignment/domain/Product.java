@@ -55,6 +55,8 @@ public class Product {
         this.img = img;
     }
 
+    public Product() {};
+
     public Product(Long id, String name, String maker, Long price, String img) {
         this.id = id;
         this.name = name;
@@ -69,4 +71,5 @@ public class Product {
         this.price = product.getPrice();
         this.img = product.getImg();
     }
+
 }
