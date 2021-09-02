@@ -141,11 +141,9 @@ class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("해당 Id의 product를 수정합니다.")
-            void it_update_catToy() {
-                productRepository.update(valid_id, product2);
-
-                Product updatedProduct = productRepository.findById(1L).orElseThrow();
+            @DisplayName("업데이트된 product를 반환합니다.")
+            void it_return_product() {
+                Product updatedProduct = productRepository.update(valid_id, product2);
 
                 assertThat(updatedProduct.getName()).isEqualTo(product2.getName());
                 assertThat(updatedProduct.getMaker()).isEqualTo(product2.getMaker());
