@@ -1,10 +1,13 @@
 package com.codesoom.assignment.service;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -23,26 +26,34 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> getProduct(Long id) {
-       return toyProductRepository.findById(id);
+    public Product getProduct(Long id) {
+
+        return toyProductRepository.findById(id).orElseThrow();
+
     }
 
     @Override
-    public Iterable<Product> getProducts() {
+    public List<Product> getProducts() {
         return toyProductRepository.findAll();
     }
 
     @Override
     public Product updateProduct(Long id, Product product) {
 
-        Product updateProduct = toyProductRepository.findById(id).get();
-        return updateProduct.setProduct(product);
+        Product updateProduct = getProduct(id);
+
+        updateProduct.setProduct(product);
+        return updateProduct;
 
     }
 
     @Override
     public void delete(Long id) {
-        toyProductRepository.deleteById(id);
+
+        Optional<Product> foundProduct = toyProductRepository.findById(id);
+
+        toyProductRepository.deleteById(foundProduct.get().getId());
+
     }
 
 }

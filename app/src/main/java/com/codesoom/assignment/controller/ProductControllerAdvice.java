@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class ProductControllerAdvice {
 
-    @ExceptionHandler(ProductNotFoundException.class)
+    @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ErrorResponse notFoundProduct() {
         return new ErrorResponse("찾을 수 없습니다.");

@@ -55,11 +55,18 @@ public class Product {
         this.img = img;
     }
 
-    public Product setProduct(Product product) {
+    public Product(Long id, String name, String maker, Long price, String img) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.img = img;
+    }
+
+    public void setProduct(Product product) {
         this.name = product.getName();
         this.maker = product.getMaker();
         this.price = product.getPrice();
         this.img = product.getImg();
-        return this;
     }
 }

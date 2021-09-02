@@ -2,6 +2,7 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.repository.ProductRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -10,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,17 +21,18 @@ import static org.mockito.Mockito.verify;
 @DisplayName("ProductServiceTest 클래스")
 class ProductServiceImplTest {
 
-    private Long[] PRODUCT_ID = {1L, 2L, 3L, 4L, 5L};
-    private String[] PRODUCT_NAME = {"test1", "test2", "test3", "test4", "test5",};
-    private String[] PRODUCT_MAKER = {"maker1", "maker2", "maker3", "maker4", "maker5"};
-    private Long[] PRODUCT_PRICE = {1000L, 2000L, 3000L, 4000L, 5000L};
-    private String[] PRODUCT_IMG = {"img1", "img2", "img3", "img4", "img5"};
-
-    private  ProductRepository productRepository;
-    private  ProductService productService;
+    private ProductRepository productRepository;
+    private ProductService productService;
+    private Product TEST_PRODUCT;
+    private Product UPDATE_PRODUCT;
+    private Long VALID_ID = 1L;
+    private Long INVALID_ID = 100L;
 
     @BeforeEach
     void setUp() {
+
+        TEST_PRODUCT = new Product(1L,"name1","maker1",1000L,"img1");
+        UPDATE_PRODUCT = new Product(null, "update_name1", "update_maker1", 1500L, "update_img1");
 
         productRepository = Mockito.mock(ProductRepository.class);
         productService = new ProductServiceImpl(productRepository);
@@ -41,31 +44,25 @@ class ProductServiceImplTest {
     class Describe_register {
 
         @Nested
-        @DisplayName("등록할 장난감이 있다면")
+        @DisplayName("영구 저장소에 등록할 product가 있다면")
         class Context_exist_product {
-
-            Product product;
 
             @BeforeEach
             void setUp() {
 
-                product = new Product();
-                product.setId(PRODUCT_ID[0]);
-                product.setName(PRODUCT_NAME[0]);
-                product.setMaker(PRODUCT_MAKER[0]);
-                product.setPrice(PRODUCT_PRICE[0]);
-                product.setImg(PRODUCT_IMG[0]);
-
-                productService.register(product);
-                given(productService.register(any(Product.class))).willReturn(product);
+                given(productService.register(any(Product.class))).willReturn(TEST_PRODUCT);
 
             }
 
             @Test
-            @DisplayName("디비에 장난감을 저장한다")
+            @DisplayName("영구 저장소에 저장 후 product를 반환합니다")
             void It_save_product() {
 
-                verify(productRepository).save(product);
+                Product createProduct = productService.register(TEST_PRODUCT);
+
+                assertThat(createProduct.getName()).isEqualTo(TEST_PRODUCT.getName());
+
+                verify(productRepository).save(TEST_PRODUCT);
 
             }
 
@@ -77,33 +74,45 @@ class ProductServiceImplTest {
     @DisplayName("getProduct 메소드는")
     class Describe_getProduct {
 
+        @BeforeEach
+        void setUp() {
+
+            // 아이디가 존재할 때
+            given(productRepository.findById(VALID_ID)).willReturn(Optional.of(TEST_PRODUCT));
+
+            // 아이디가 존재하지 않을 때
+            given(productRepository.findById(INVALID_ID)).willThrow(NoSuchElementException.class);
+
+        }
+
         @Nested
-        @DisplayName("디비에 아이디가 존재하면")
+        @DisplayName("영구 저장소에 product 상품이 존재하면")
         class Context_exist_id {
 
-            Product product;
+            @Test
+            @DisplayName("id를 통해 product 객체를 리턴한다")
+            void It_return_product() {
 
-            @BeforeEach
-            void setUp() {
+                Product foundProduct = productService.getProduct(VALID_ID);
 
-                product = new Product();
-                product.setId(PRODUCT_ID[0]);
-                product.setName(PRODUCT_NAME[0]);
-                product.setMaker(PRODUCT_MAKER[0]);
-                product.setPrice(PRODUCT_PRICE[0]);
-                product.setImg(PRODUCT_IMG[0]);
+                assertThat(foundProduct.getId()).isEqualTo(VALID_ID);
 
-                productService.register(product);
-                given(productService.getProduct(PRODUCT_ID[0])).willReturn(Optional.of(product));
+                verify(productRepository).findById(VALID_ID);
 
             }
 
+        }
+
+        @Nested
+        @DisplayName("영구 저장소에 product 상품이 존재하지 않다면")
+        class Context_exist_not_id {
+
             @Test
-            @DisplayName("product 객체를 리턴한다")
+            @DisplayName("NoSuchElementException 을 던진다")
             void It_return_product() {
 
-                assertThat(productService.getProduct(PRODUCT_ID[0]).get()).isEqualTo(product);
-                verify(productRepository).findById(PRODUCT_ID[0]);
+                Assertions.assertThatThrownBy(() -> productService.getProduct(INVALID_ID))
+                        .isInstanceOf(NoSuchElementException.class);
 
             }
 
@@ -125,28 +134,21 @@ class ProductServiceImplTest {
             void setUp() {
 
                 products = new ArrayList<>();
-
-                for (int i = 0; i < PRODUCT_ID.length; i++) {
-
-                    Product product = new Product();
-                    product.setId(PRODUCT_ID[i]);
-                    product.setName(PRODUCT_NAME[i]);
-                    product.setMaker(PRODUCT_MAKER[i]);
-                    product.setPrice(PRODUCT_PRICE[i]);
-                    product.setImg(PRODUCT_IMG[i]);
-                    products.add(product);
-
-                }
+                products.add(new Product(1L,"name1","maker1",1000L,"img1"));
+                products.add(new Product(2L,"name2","maker2",2000L,"img2"));
+                products.add(new Product(3L,"name3","maker3",3000L,"img3"));
 
                 given(productService.getProducts()).willReturn(products);
-
             }
 
             @Test
             @DisplayName("장난감 들을 리턴한다")
             void It_return_products() {
 
-                assertThat(productService.getProducts()).hasSize(PRODUCT_ID.length);
+                List<Product> foundProducts = productService.getProducts();
+
+                assertThat(foundProducts).hasSize(3);
+
                 verify(productRepository).findAll();
 
             }
@@ -154,46 +156,41 @@ class ProductServiceImplTest {
     }
 
     @Nested
-    @DisplayName("delete 메소드는")
-    class Describe_delete {
+    @DisplayName("updateProduct 메소드는")
+    class Describe_updateProduct {
 
         @Nested
-        @DisplayName("삭제할 아이디가 존재하면")
-        class Context_exist_delete_id {
-
-            List<Product> products;
+        @DisplayName("영구 저장소에 수정 할 product가 있다면")
+        class Context_exist_product {
 
             @BeforeEach
             void setUp() {
 
-                products = new ArrayList<>();
+                given(productRepository.findById(VALID_ID)).willReturn(Optional.of(TEST_PRODUCT));
 
-                for (int i = 0; i < PRODUCT_ID.length; i++) {
+                given(productRepository.findById(INVALID_ID)).willThrow(NoSuchElementException.class);
+            }
 
-                    Product product = new Product();
-                    product.setId(PRODUCT_ID[i]);
-                    product.setName(PRODUCT_NAME[i]);
-                    product.setMaker(PRODUCT_MAKER[i]);
-                    product.setPrice(PRODUCT_PRICE[i]);
-                    product.setImg(PRODUCT_IMG[i]);
-                    products.add(product);
+            @Test
+            @DisplayName("아이디와 product 수정 객체를 받아 수정한다")
+            void It_update_product() {
 
-                }
+                Product updateProduct = productService.updateProduct(VALID_ID, UPDATE_PRODUCT);
 
-                products.remove(0);
-                productService.delete(PRODUCT_ID[0]);
+                verify(productRepository).findById(VALID_ID);
+
+                assertThat(updateProduct.getName()).isEqualTo(UPDATE_PRODUCT.getName());
 
             }
 
             @Test
-            @DisplayName("디비에서 해당 아이디 객체를 삭제한다")
-            void It_delete_product() {
+            @DisplayName("아이디가 없다면 NoSuchElementsException 을 던진다")
+            void It_not_update_product() {
 
-                assertThat(products).hasSize(PRODUCT_ID.length - 1);
-                verify(productRepository).deleteById(PRODUCT_ID[0]);
+                Assertions.assertThatThrownBy(() -> productRepository.findById(INVALID_ID))
+                        .isInstanceOf(NoSuchElementException.class);
 
             }
-
         }
 
     }

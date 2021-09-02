@@ -5,6 +5,8 @@ import com.codesoom.assignment.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/products")
 @CrossOrigin
@@ -17,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public Iterable<Product> getProducts() {
+    public List<Product> getProducts() {
 
         return productService.getProducts();
 
@@ -34,18 +36,12 @@ public class ProductController {
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {
 
-        return productService.getProduct(id).get();
+        return productService.getProduct(id);
 
     }
 
-    @PutMapping("/{id}")
+    @RequestMapping(value = "/{id}", method = {RequestMethod.PUT,RequestMethod.PATCH})
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
-    }
-
-
-    @PatchMapping("/{id}")
-    public Product updateProduct2(@PathVariable Long id, @RequestBody Product product) {
         return productService.updateProduct(id, product);
     }
 
