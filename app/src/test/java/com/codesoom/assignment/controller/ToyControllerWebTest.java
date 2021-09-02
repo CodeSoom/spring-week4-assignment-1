@@ -146,7 +146,7 @@ class ToyControllerWebTest {
             void returnsToy() throws Exception {
                 mockMvc.perform(get("/products/" + toyInService.getId()))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(toyContent)));
+                        .andExpect(content().json(toyContent));
             }
         }
 
@@ -175,20 +175,28 @@ class ToyControllerWebTest {
         @Nested
         @DisplayName("With an existent id")
         class WithExistentId {
+            String expectedContent;
+
+            @BeforeEach
+            void setup() throws JsonProcessingException {
+                Toy updatedToy = new Toy(
+                        toyInService.getId(),
+                        newToyFixture.getName(),
+                        newToyFixture.getMaker(),
+                        newToyFixture.getPrice(),
+                        newToyFixture.getImageUrl()
+                );
+
+                expectedContent = objectMapper.writeValueAsString(updatedToy);
+            }
+
             @Test
             @DisplayName("returns an updated toy with HTTP status code 200")
             void returnsUpdatedToy() throws Exception {
-                ResultActions actions = mockMvc.perform(put("/products/"+ toyInService.getId())
+                mockMvc.perform(put("/products/"+ toyInService.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(newToyFixture)));
-
-                Toy result = getResponseContent(actions, new TypeReference<Toy>() {});
-
-                assertThat(result.getId()).isEqualTo(toyInService.getId());
-                assertThat(result.getName()).isEqualTo(newToyFixture.getName());
-                assertThat(result.getPrice()).isEqualTo(newToyFixture.getPrice());
-                assertThat(result.getImageUrl()).isEqualTo(newToyFixture.getImageUrl());
-                assertThat(result.getMaker()).isEqualTo(newToyFixture.getMaker());
+                                .content(objectMapper.writeValueAsString(newToyFixture)))
+                        .andExpect(content().json(expectedContent));
             }
         }
 
@@ -219,20 +227,28 @@ class ToyControllerWebTest {
         @Nested
         @DisplayName("With an existent id")
         class WithExistentId {
+            String expectedContent;
+
+            @BeforeEach
+            void setup() throws JsonProcessingException {
+                Toy updatedToy = new Toy(
+                        toyInService.getId(),
+                        newToyFixture.getName(),
+                        newToyFixture.getMaker(),
+                        newToyFixture.getPrice(),
+                        newToyFixture.getImageUrl()
+                );
+
+                expectedContent = objectMapper.writeValueAsString(updatedToy);
+            }
+
             @Test
             @DisplayName("returns an updated toy with HTTP status code 200")
             void returnsUpdatedToy() throws Exception {
-                ResultActions actions = mockMvc.perform(patch("/products/"+ toyInService.getId())
+                mockMvc.perform(patch("/products/"+ toyInService.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(newToyFixture)));
-
-                Toy result = getResponseContent(actions, new TypeReference<Toy>() {});
-
-                assertThat(result.getId()).isEqualTo(toyInService.getId());
-                assertThat(result.getName()).isEqualTo(newToyFixture.getName());
-                assertThat(result.getPrice()).isEqualTo(newToyFixture.getPrice());
-                assertThat(result.getImageUrl()).isEqualTo(newToyFixture.getImageUrl());
-                assertThat(result.getMaker()).isEqualTo(newToyFixture.getMaker());
+                        .content(objectMapper.writeValueAsString(newToyFixture)))
+                        .andExpect(content().json(expectedContent));
             }
         }
 
