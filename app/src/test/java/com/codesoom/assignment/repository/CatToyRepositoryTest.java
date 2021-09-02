@@ -79,4 +79,14 @@ class CatToyRepositoryTest {
         assertThat(selectCatToy.name()).isEqualTo(CHANGE_NAME);
         assertThat(selectCatToy.maker()).isEqualTo(CHANGE_MAKER);
     }
+
+    @Test
+    @DisplayName("고양이 장난감을 삭제")
+    void deleteCatToy() {
+        // when
+        catToyRepository.deleteById(id);
+
+        // then
+        assertThat(catToyRepository.findById(id)).isEmpty();
+    }
 }

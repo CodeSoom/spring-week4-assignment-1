@@ -83,4 +83,15 @@ class CatToyServiceTest {
         assertThat(modifyCatToy.name()).isEqualTo(CHANGE_NAME);
         assertThat(modifyCatToy.maker()).isEqualTo(CHANGE_MAKER);
     }
+
+    @Test
+    @DisplayName("고양이 장난감을 삭제")
+    void deleteCatToy() {
+        // when
+        catToyService.deleteCatToy(saveCatToyId);
+
+        // then
+        assertThatThrownBy(() -> catToyService.selectCatToy(saveCatToyId))
+                .isInstanceOf(CatToyNotFoundException.class);
+    }
 }

@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.domain.CatToyViewModel;
 import com.codesoom.assignment.dto.CatToyModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,4 +75,13 @@ public class CatToyController {
         return new CatToyViewModel.Response(catToy);
     }
 
+    /**
+     * 고양이 장난감을 삭제한다.
+     * @param id
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{id}")
+    public void modifyCatToy(@PathVariable Long id) {
+        catToyService.deleteCatToy(id);
+    }
 }

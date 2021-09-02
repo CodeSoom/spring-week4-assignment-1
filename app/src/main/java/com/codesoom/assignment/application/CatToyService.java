@@ -64,6 +64,14 @@ public class CatToyService {
     }
 
     /**
+     * 고양이 장난감을 삭제한다.
+     * @param catToyId
+     */
+    public void deleteCatToy(Long catToyId) {
+        catToyRepository.delete(findCatToy(catToyId));
+    }
+
+    /**
      * 고양이 장난감이 있으면 조회, 없으면 CatToyNotFoundException 발생
      * @param id
      * @exception CatToyNotFoundException

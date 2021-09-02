@@ -122,6 +122,17 @@ class CatToyControllerTest {
 
     }
 
+    @Test
+    @DisplayName("고양이 장난감을 삭제")
+    void deleteCatToy() throws Exception {
+        // when
+        // then
+        mockMvc.perform(delete("/products/" + catToyId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
     private CatToyViewModel.Response getResponse(MvcResult mvcResult) throws JsonProcessingException, UnsupportedEncodingException {
         return new ObjectMapper()
                 .readValue(mvcResult.getResponse().getContentAsString(), CatToyViewModel.Response.class);
