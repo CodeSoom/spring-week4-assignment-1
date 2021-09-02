@@ -1,8 +1,10 @@
 package com.codesoom.assignment.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.spy;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.DisplayName;
@@ -17,14 +19,25 @@ public class ProductTest {
         @Test
         @DisplayName("id를 제외한 모든 멤버변수를 업데이트 한다.")
         void it_updates_all_member_variables() {
-            final Product product = new Product(TITLE);
+            final Method[] methods = Product.class.getMethods();
+            final Product product = spy(new Product(TITLE));
             final Product source = new Product("updated" + TITLE);
 
-            final Product updatedProduct = product.update(source);
+            product.update(source);
 
-            Arrays.stream(updatedProduct.getClass().getDeclaredFields())
-            .filter(field -> field.getName() == "id" && assertThat(field.get(updatedProduct)).isNull())
-            .forEach(field -> assertThat(field.get(updatedProduct)).isEqualTo(field.get(source)));
+            assertThat(product.getId()).isNull();
+
+            Arrays.stream(methods)
+            .filter(method -> method.getName().indexOf("get") != -1)
+            .filter(method -> !method.getName().equals("getClass"))
+            .filter(method -> !method.getName().equals("getId"))
+            .forEach(method -> {
+                try {
+                    assertThat(method.invoke(product)).isEqualTo(method.invoke(source));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 }
