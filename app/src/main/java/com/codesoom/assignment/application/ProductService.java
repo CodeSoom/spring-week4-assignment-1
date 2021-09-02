@@ -2,6 +2,8 @@ package com.codesoom.assignment.application;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
@@ -40,5 +42,14 @@ public class ProductService {
     public Product detailProduct(final Long id) {
         return productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    /**
+     * 저장된 Product 목록을 리턴한다.
+     * 
+     * @return 저장된 Product 목록
+     */
+    public List<Product> listProduct() {
+        return productRepository.findAll();
     }
 }

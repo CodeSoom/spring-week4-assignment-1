@@ -3,8 +3,6 @@ package com.codesoom.assignment.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -12,8 +10,6 @@ import static org.mockito.Mockito.when;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Optional;
 
 import com.codesoom.assignment.ProductNotFoundException;
@@ -21,7 +17,6 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.google.common.collect.Lists;
 
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -116,7 +111,7 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(productRepository.findAll())
-                    .thenReturn(Lists.newArrayList(new Product(anyString())));
+                    .thenReturn(Lists.newArrayList(new Product(TITLE)));
             }
 
             @Test
