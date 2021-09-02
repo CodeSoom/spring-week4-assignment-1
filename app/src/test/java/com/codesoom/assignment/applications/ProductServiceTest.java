@@ -126,7 +126,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("업데이트된 product를 반환합니다.")
             void it_return_updated_product() {
-                Product updatedProduct = productRepository.update(valid_id, product2);
+                Product updatedProduct = productService.update(valid_id, product2);
 
                 assertThat(updatedProduct.getName()).isEqualTo(product2.getName());
                 assertThat(updatedProduct.getMaker()).isEqualTo(product2.getMaker());
@@ -150,7 +150,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productRepository.update(invalid_id, product2))
+                assertThatThrownBy(() -> productService.update(invalid_id, product2))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
