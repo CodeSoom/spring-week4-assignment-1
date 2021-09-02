@@ -13,7 +13,7 @@ public final class Product {
     @GeneratedValue
     private Long id;
 
-    private final String title;
+    private String title;
 
     public Product(final String title) {
         this.title = title;
@@ -25,5 +25,9 @@ public final class Product {
 
     public String getTitle() {
         return title;
+    }
+
+    public void update(final Product source) {
+        title = source.getTitle();
     }
 }
