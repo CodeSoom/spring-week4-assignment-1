@@ -1,8 +1,6 @@
 package com.codesoom.assignment.service;
 
-import com.codesoom.assignment.common.exception.CatToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.repository.CatToyRepository;
 
 import java.util.List;
 import java.util.Optional;
