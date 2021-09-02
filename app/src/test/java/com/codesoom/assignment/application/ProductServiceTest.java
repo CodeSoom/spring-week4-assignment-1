@@ -3,6 +3,8 @@ package com.codesoom.assignment.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyListOf;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -10,12 +12,16 @@ import static org.mockito.Mockito.when;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.google.common.collect.Lists;
 
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -98,6 +104,49 @@ public class ProductServiceTest {
         void tearDown() {
             verify(productRepository)
                 .findById(any(Long.class));
+        }
+    }
+
+    @Nested
+    @DisplayName("listProduct 메서드는")
+    class Describe_listProduct {
+        @Nested
+        @DisplayName("저장된 Product가 있다면")
+        class Context_product_exist {
+            @BeforeEach
+            void setUp() {
+                when(productRepository.findAll())
+                    .thenReturn(Lists.newArrayList(new Product(anyString())));
+            }
+
+            @Test
+            @DisplayName("저장된 Product 목록을 리턴한다.")
+            void it_returns_a_product_list() {
+                assertThat(productService.listProduct())
+                    .isNotEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("저장된 Product가 없다면")
+        class Context_product_empty {
+            @BeforeEach
+            void setUp() {
+                when(productRepository.findAll())
+                    .thenReturn(Lists.newArrayList());
+            }
+
+            @Test
+            @DisplayName("빈 목록을 리턴한다.")
+            void it_returns_a_empty_list() {
+                assertThat(productService.listProduct())
+                    .isEmpty();
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productRepository).findAll();
         }
     }
 }
