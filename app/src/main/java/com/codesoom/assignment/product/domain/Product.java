@@ -75,7 +75,6 @@ public class Product {
             throw new ProductInvalidPriceException(target.price);
         }
 
-        this.id = target.id;
         this.name = target.name;
         this.maker = target.maker;
         this.price = target.price;
