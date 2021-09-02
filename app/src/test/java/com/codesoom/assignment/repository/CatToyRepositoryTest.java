@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static com.codesoom.assignment.constant.CatToyTestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,10 +19,16 @@ class CatToyRepositoryTest {
     private CatToyRepository catToyRepository;
 
     private CatToy catToy;
+    private Long id;
 
     @BeforeEach
     void setup() {
         catToy = new CatToy(TOY_NAME, TOY_MAKER, PRICE, IMAGE_URL);
+        id = saveCatToyId();
+    }
+
+    private Long saveCatToyId() {
+        return catToyRepository.save(catToy).id();
     }
 
     @Test
@@ -32,5 +40,25 @@ class CatToyRepositoryTest {
         // then
         assertThat(catToyRepository.findById(saveCatToy.id()).isPresent()).isTrue();
 
+    }
+
+    @Test
+    @DisplayName("고양이 장난감 리스트를 검색하여 반환한다.")
+    void selectCatToyList() {
+        // when
+        List<CatToy> catToys = catToyRepository.findAll();
+
+        // then
+        assertThat(catToys).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("고양이 장난감을 검색하여 반환한다.")
+    void selectCatToy() {
+        // when
+        CatToy selectCatToy = catToyRepository.findById(id).get();
+
+        // then
+        assertThat(selectCatToy).isEqualTo(catToy);
     }
 }
