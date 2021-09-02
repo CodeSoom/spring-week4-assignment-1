@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 public class ProductServiceTest {
 
     private static final long ID = 1L;
-    private static final long INVALID_ID = 2L;
+    private static final long NOT_EXIST_ID = 2L;
 
     private Product product;
     private ProductRepository productRepository;
@@ -48,7 +48,7 @@ public class ProductServiceTest {
         given(productRepository.findById(ID))
             .willReturn(Optional.of(product));
 
-        given(productRepository.findById(INVALID_ID))
+        given(productRepository.findById(NOT_EXIST_ID))
             .willThrow(ProductNotFoundException.class);
 
         given(productRepository.existsById(ID))
@@ -112,14 +112,11 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Long productId = productRepository.findAll()
-                    .iterator()
-                    .next()
-                    .getId();
+                Long productId = getProductId();
 
                 boolean hasId = productRepository.existsById(productId);
-                assertThat(hasId).isTrue();
 
+                assertThat(hasId).isTrue();
                 foundProduct = productService.getProduct(productId);
             }
 
@@ -140,10 +137,10 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean hasId = productRepository.existsById(INVALID_ID);
-                assertThat(hasId).isFalse();
+                boolean hasId = productRepository.existsById(NOT_EXIST_ID);
 
-                notExistProductId = INVALID_ID;
+                assertThat(hasId).isFalse();
+                notExistProductId = NOT_EXIST_ID;
             }
 
             @Test
@@ -181,14 +178,11 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Long productId = productRepository.findAll()
-                    .iterator()
-                    .next()
-                    .getId();
+                Long productId = getProductId();
 
                 boolean hasId = productRepository.existsById(productId);
-                assertThat(hasId).isTrue();
 
+                assertThat(hasId).isTrue();
                 updatedProduct = productService.updateProduct(productId, source);
             }
 
@@ -210,10 +204,10 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean hasId = productRepository.existsById(INVALID_ID);
-                assertThat(hasId).isFalse();
+                boolean hasId = productRepository.existsById(NOT_EXIST_ID);
 
-                notExistProductId = INVALID_ID;
+                assertThat(hasId).isFalse();
+                notExistProductId = NOT_EXIST_ID;
             }
 
             @Test
@@ -240,14 +234,11 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Long productId = productRepository.findAll()
-                    .iterator()
-                    .next()
-                    .getId();
+                Long productId = getProductId();
 
                 boolean hasId = productRepository.existsById(productId);
-                assertThat(hasId).isTrue();
 
+                assertThat(hasId).isTrue();
                 existProductId = productId;
             }
 
@@ -269,10 +260,10 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean hasId = productRepository.existsById(INVALID_ID);
+                boolean hasId = productRepository.existsById(NOT_EXIST_ID);
                 assertThat(hasId).isFalse();
 
-                notExistProductId = INVALID_ID;
+                notExistProductId = NOT_EXIST_ID;
             }
 
             @Test
@@ -285,5 +276,12 @@ public class ProductServiceTest {
                 verify(productRepository, never()).delete(any(Product.class));
             }
         }
+    }
+
+    private Long getProductId() {
+        return productRepository.findAll()
+            .iterator()
+            .next()
+            .getId();
     }
 }
