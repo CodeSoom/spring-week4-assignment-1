@@ -17,9 +17,15 @@ public class TaskService {
     }
 
     public List<Task> getTasks() {
-        return getTasks().stream()
-                .filter(task -> task.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new TaskNotFoundException(id))
+        return taskRepository.findAll();
+    }
+
+    public Task getTask(Long id) throws TaskNotFoundException {
+        return taskRepository.find(id);
+    }
+
+    public Task createTask(Task source) {
+
+        return taskRepository.save(task);
     }
 }
