@@ -112,6 +112,30 @@ class ProductServiceTest {
     class Describe_update {
 
         @Nested
+        @DisplayName("해당되는 id의 product가 있다면")
+        class Context_with_valid_id {
+
+            private Long valid_id;
+
+            @BeforeEach
+            void setUp() {
+                valid_id = product1.getId();
+                productService.save(product1);
+            }
+
+            @Test
+            @DisplayName("업데이트된 product를 반환합니다.")
+            void it_return_updated_product() {
+                Product updatedProduct = productRepository.update(valid_id, product2);
+
+                assertThat(updatedProduct.getName()).isEqualTo(product2.getName());
+                assertThat(updatedProduct.getMaker()).isEqualTo(product2.getMaker());
+                assertThat(updatedProduct.getPrice()).isEqualTo(product2.getPrice());
+                assertThat(updatedProduct.getImageUrl()).isEqualTo(product2.getImageUrl());
+            }
+        }
+
+        @Nested
         @DisplayName("해당되는 id의 product가 없다면")
         class Context_with_invalid_id {
 
