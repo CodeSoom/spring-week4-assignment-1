@@ -95,4 +95,39 @@ public class ProductRepositoryTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("existById 메서드는")
+    class Describe_existById {
+
+        @Nested
+        @DisplayName("id가 존재할 경우")
+        class Context_existId {
+
+            @Test
+            @DisplayName("true를 리턴한다")
+            void it_returns_true() {
+                Long id = product.getId();
+
+                boolean actual = productRepository.existsById(id);
+
+                assertThat(actual).isTrue();
+            }
+        }
+
+        @Nested
+        @DisplayName("id가 존재하지 않은 경우")
+        class Context_notExistId {
+
+            @Test
+            @DisplayName("false를 리턴한다")
+            void it_returns_false() {
+                Long id = product.getId() + 1L;
+
+                boolean actual = productRepository.existsById(id);
+
+                assertThat(actual).isFalse();
+            }
+        }
+    }
 }
