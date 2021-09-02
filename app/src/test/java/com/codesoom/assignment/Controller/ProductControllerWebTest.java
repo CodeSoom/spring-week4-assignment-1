@@ -42,12 +42,6 @@ public final class ProductControllerWebTest {
     @Nested
     @DisplayName("전체 목록 조회 엔드포인트는")
     class Describe_products_get {
-
-        private static final String LIST_PREFIX = "[";
-        private static final String LIST_SUFFIX = "]";
-        private static final String OBJECT_PREFIX = "{";
-        private static final String OBJECT_SUFFIX = "}";
-
         @Nested
         @DisplayName("전체 목록 요청 시")
         class Context_request_product_list {
@@ -65,8 +59,7 @@ public final class ProductControllerWebTest {
                 void it_returns_a_empty_list() throws Exception {
                     mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(startsWith(LIST_PREFIX)))
-                        .andExpect(content().string(endsWith(LIST_SUFFIX)));
+                        .andExpect(content().string("[]"));
                 }
             }
 
@@ -84,10 +77,10 @@ public final class ProductControllerWebTest {
                 void it_returns_a_product_list() throws Exception {
                     mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(startsWith(LIST_PREFIX)))
-                        .andExpect(content().string(endsWith(LIST_SUFFIX)))
-                        .andExpect(content().string(containsString(OBJECT_PREFIX)))
-                        .andExpect(content().string(containsString(OBJECT_SUFFIX)));
+                        .andExpect(content().string(startsWith("[")))
+                        .andExpect(content().string(endsWith("]")))
+                        .andExpect(content().string(containsString("{")))
+                        .andExpect(content().string(containsString("}")));
                 }
             }
 
