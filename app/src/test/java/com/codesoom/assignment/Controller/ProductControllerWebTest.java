@@ -3,7 +3,6 @@ package com.codesoom.assignment.controller;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,6 +10,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.ProductNotFoundException;
@@ -70,7 +70,7 @@ public final class ProductControllerWebTest {
                 @BeforeEach
                 void setUp() {
                     when(productService.detailProduct(anyLong()))
-                        .thenReturn(new Product(anyString()));
+                        .thenReturn(new Product(TITLE));
                 }
 
                 @Test
@@ -88,7 +88,7 @@ public final class ProductControllerWebTest {
                 @BeforeEach
                 void setUp() {
                 when(productService.detailProduct(anyLong()))
-                    .thenThrow(new ProductNotFoundException(anyLong()));
+                    .thenThrow(new ProductNotFoundException(ID));
                 }
 
                 @Test
@@ -113,7 +113,7 @@ public final class ProductControllerWebTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(anyString()));
+                .thenReturn(new Product(TITLE));
         }
 
         @Nested
