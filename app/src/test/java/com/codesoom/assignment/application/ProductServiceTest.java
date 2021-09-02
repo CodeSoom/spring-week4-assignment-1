@@ -112,15 +112,15 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Long id = productRepository.findAll()
+                Long productId = productRepository.findAll()
                     .iterator()
                     .next()
                     .getId();
 
-                boolean hasId = productRepository.existsById(id);
+                boolean hasId = productRepository.existsById(productId);
                 assertThat(hasId).isTrue();
 
-                foundProduct = productService.getProduct(id);
+                foundProduct = productService.getProduct(productId);
             }
 
             @Test
@@ -140,8 +140,8 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean actual = productRepository.existsById(INVALID_ID);
-                assertThat(actual).isFalse();
+                boolean hasId = productRepository.existsById(INVALID_ID);
+                assertThat(hasId).isFalse();
 
                 notExistProductId = INVALID_ID;
             }
@@ -181,15 +181,15 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Long id = productRepository.findAll()
+                Long productId = productRepository.findAll()
                     .iterator()
                     .next()
                     .getId();
 
-                boolean hasId = productRepository.existsById(id);
+                boolean hasId = productRepository.existsById(productId);
                 assertThat(hasId).isTrue();
 
-                updatedProduct = productService.updateProduct(id, source);
+                updatedProduct = productService.updateProduct(productId, source);
             }
 
             @Test
@@ -210,8 +210,8 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean actual = productRepository.existsById(INVALID_ID);
-                assertThat(actual).isFalse();
+                boolean hasId = productRepository.existsById(INVALID_ID);
+                assertThat(hasId).isFalse();
 
                 notExistProductId = INVALID_ID;
             }
@@ -240,10 +240,15 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                boolean hasId = productRepository.existsById(ID);
+                Long productId = productRepository.findAll()
+                    .iterator()
+                    .next()
+                    .getId();
+
+                boolean hasId = productRepository.existsById(productId);
                 assertThat(hasId).isTrue();
 
-                existProductId = ID;
+                existProductId = productId;
             }
 
             @Test
