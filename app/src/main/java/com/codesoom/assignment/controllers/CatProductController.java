@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/cat-products")
 public class CatProductController {
 
   private final CatProductService catProductService;
