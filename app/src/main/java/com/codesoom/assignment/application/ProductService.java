@@ -1,7 +1,5 @@
 package com.codesoom.assignment.application;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
 
 import com.codesoom.assignment.domain.ProductRepository;
@@ -40,10 +38,7 @@ public class ProductService {
      * @throws ProductNotFoundException Product를 찾지 못한 경우
      */
     public Product detailProduct(final Long id) {
-        Optional<Product> findProduct = productRepository.findById(id);
-        if (findProduct.isEmpty()) {
-            throw new ProductNotFoundException(id);
-        }
-        return findProduct.get();
+        return productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
