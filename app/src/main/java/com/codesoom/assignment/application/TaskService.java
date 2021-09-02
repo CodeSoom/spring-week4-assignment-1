@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class TaskService {
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
     private Long id;
 
     public TaskService(TaskRepository taskRepository) {
