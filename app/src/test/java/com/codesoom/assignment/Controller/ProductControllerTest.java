@@ -61,7 +61,7 @@ public class ProductControllerTest {
         void it_returns_a_product() {
             CreateProductDto createProductDto = new CreateProductDto(TITLE);
             assertThat(productController.create(createProductDto))
-                .matches(output -> TITLE.equals(output.getTitle()));
+                .isInstanceOf(Product.class);
         }
 
         @AfterEach
@@ -87,7 +87,7 @@ public class ProductControllerTest {
             @DisplayName("찾은 Product를 리턴한다.")
             void it_returns_a_product() {
                 assertThat(productController.detail(ID))
-                    .matches(output -> TITLE.equals(output.getTitle()));
+                    .isInstanceOf(Product.class);
             }
         }
 

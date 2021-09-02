@@ -46,7 +46,7 @@ public class ProductServiceTest {
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
             assertThat(productService.createProduct(new Product(TITLE)))
-                .matches(output -> TITLE.equals(output.getTitle()));
+                .isInstanceOf(Product.class);
         }
 
         @AfterEach
@@ -71,7 +71,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("찾은 Product를 리턴한다.") void it_returns_a_find_product() {
                 assertThat(productService.detailProduct(anyLong()))
-                    .matches(output -> TITLE.equals(output.getTitle()));
+                    .isInstanceOf(Product.class);
             }
         }
 
