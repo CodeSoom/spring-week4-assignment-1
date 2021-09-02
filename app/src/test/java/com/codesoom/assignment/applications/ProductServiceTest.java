@@ -6,24 +6,17 @@ import com.codesoom.assignment.dto.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.Test;;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.*;
 
 @DisplayName("ProductServiceTest 클래스")
 class ProductServiceTest {
     private ProductService productService;
 
-    @Mock
     private ProductRepository productRepository;
 
     private Product product1;
@@ -31,22 +24,17 @@ class ProductServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
 
         product1 = new Product(1L, "toy1", "maker1", 1000L, "toy1.jpg");
         product2 = new Product(2L, "toy2", "maker2", 2000L, "toy2.jpg");
 
+        productRepository = new ProductRepository();
         productService = new ProductService(productRepository);
     }
 
     @Nested
     @DisplayName("save 메소드")
     class Describe_save {
-
-        @BeforeEach
-        void setUp() {
-            given(productRepository.save(product1)).willReturn(product1);
-        }
 
         @Test
         @DisplayName("새로운 product를 반환합니다.")
@@ -62,10 +50,10 @@ class ProductServiceTest {
         private List<Product> givenProducts;
 
         @BeforeEach
-        void setUp() {
+        void prepare() {
             givenProducts = List.of(product1, product2);
-
-            given(productRepository.findAll()).willReturn(givenProducts);
+            productService.save(product1);
+            productService.save(product2);
         }
 
         @Test
@@ -83,17 +71,18 @@ class ProductServiceTest {
         @DisplayName("해당되는 id의 product가 있다면")
         class Context_with_valid_id {
 
-            private final Long VALID_ID = 1L;
+            private Long valid_id;
 
             @BeforeEach
             void setUp() {
-                given(productRepository.findById(VALID_ID)).willReturn(Optional.of(product1));
+                valid_id = product1.getId();
+                productService.save(product1);
             }
 
             @Test
             @DisplayName("해당 Id의 product를 반환합니다.")
             void it_return_product() {
-                assertThat(productService.findById(VALID_ID)).isEqualTo(product1);
+                assertThat(productService.findById(valid_id)).isEqualTo(product1);
             }
         }
 
@@ -101,17 +90,18 @@ class ProductServiceTest {
         @DisplayName("해당되는 id의 product가 없다면")
         class Context_with_invalid_id {
 
-            private final Long INVALID_ID = 100L;
+            private Long invalid_id;
 
             @BeforeEach
             void setUp() {
-                willThrow(new ProductNotFoundException(INVALID_ID)).given(productRepository).findById(INVALID_ID);
+                invalid_id = product2.getId();
+                productService.save(product1);
             }
 
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productService.findById(INVALID_ID))
+                assertThatThrownBy(() -> productService.findById(invalid_id))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -121,35 +111,22 @@ class ProductServiceTest {
     @DisplayName("update 메소드")
     class Describe_update {
 
-        private final Long VALID_ID = 1L;
-
-        @BeforeEach
-        void setUp() {
-            willDoNothing().given(productRepository).update(any(Long.class), any(Product.class));
-        }
-
-        @Test
-        @DisplayName("catToryRepository의 update를 호출합니다.")
-        void it_call_update() {
-            productService.update(VALID_ID, product1);
-            verify(productRepository).update(any(Long.class), any(Product.class));
-        }
-
         @Nested
         @DisplayName("해당되는 id의 product가 없다면")
         class Context_with_invalid_id {
 
-            private final Long INVALID_ID = 100L;
+            private Long invalid_id;
 
             @BeforeEach
             void setUp() {
-                willThrow(new ProductNotFoundException(INVALID_ID)).given(productRepository).update(eq(INVALID_ID), any(Product.class));
+                invalid_id = product2.getId();
+                productService.save(product1);
             }
 
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productRepository.update(INVALID_ID, product2))
+                assertThatThrownBy(() -> productRepository.update(invalid_id, product2))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -159,35 +136,22 @@ class ProductServiceTest {
     @DisplayName("deleteById 메소드")
     class Describe_deleteById {
 
-        private final Long VALID_ID = 1L;
-
-        @BeforeEach
-        void setUp() {
-            willDoNothing().given(productRepository).deleteById(any(Long.class));
-        }
-
-        @Test
-        @DisplayName("catToryRepository의 update를 호출합니다.")
-        void it_call_update() {
-            productService.deleteById(VALID_ID);
-            verify(productRepository).deleteById(any(Long.class));
-        }
-
         @Nested
         @DisplayName("해당되는 id의 product가 없다면")
         class Context_with_invalid_id {
 
-            private final Long INVALID_ID = 100L;
+            private Long invalid_id;
 
             @BeforeEach
             void setUp() {
-                willThrow(new ProductNotFoundException(INVALID_ID)).given(productRepository).deleteById(INVALID_ID);
+                invalid_id = product2.getId();
+                productService.save(product1);
             }
 
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productService.deleteById(INVALID_ID))
+                assertThatThrownBy(() -> productService.deleteById(invalid_id))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
