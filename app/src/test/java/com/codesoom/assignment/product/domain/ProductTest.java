@@ -9,6 +9,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.List;
+
 import static com.codesoom.assignment.Constant.IMAGE_URL;
 import static com.codesoom.assignment.Constant.MAKER;
 import static com.codesoom.assignment.Constant.NAME;
@@ -61,11 +63,11 @@ class ProductTest {
         final String otherUrl = "OtherUrl";
         final long otherPrice = 3000L;
 
-        assertThat(source).isEqualTo(Product.of(NAME, MAKER, PRICE, IMAGE_URL));
-        assertThat(source).isNotEqualTo(Product.of(otherName, MAKER, PRICE, IMAGE_URL));
-        assertThat(source).isNotEqualTo(Product.of(NAME, otherMaker, PRICE, IMAGE_URL));
-        assertThat(source).isNotEqualTo(Product.of(NAME, MAKER, otherPrice, IMAGE_URL));
-        assertThat(source).isNotEqualTo(Product.of(NAME, MAKER, PRICE, otherUrl));
+        assertThat(source).isEqualTo(Product.of(NAME, MAKER, PRICE, IMAGE_URL))
+                .isNotEqualTo(Product.of(otherName, MAKER, PRICE, IMAGE_URL))
+                .isNotEqualTo(Product.of(NAME, otherMaker, PRICE, IMAGE_URL))
+                .isNotEqualTo(Product.of(NAME, MAKER, otherPrice, IMAGE_URL))
+                .isNotEqualTo(Product.of(NAME, MAKER, PRICE, otherUrl));
 
     }
 
@@ -96,12 +98,13 @@ class ProductTest {
     @DisplayName("상품의 정보를 공백 혹은 null로 업데이트 할 경우 예외가 발생합니다.")
     @ParameterizedTest
     @ArgumentsSource(ProvideInvalidProductArguments.class)
-    void updateCatToyWithSpace(final Product target) {
+    void updateCatToyWithSpace(final List<Product> products) {
         final Product source = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
 
-        assertThatThrownBy(()-> source.update(target))
-                .isInstanceOf(ProductInvalidFieldException.class);
-
+        for (Product target : products) {
+            assertThatThrownBy(() -> source.update(target))
+                    .isInstanceOf(ProductInvalidFieldException.class);
+        }
     }
 
     @DisplayName("상품의 가격을 잘 못 업데이트 할 경우 예외가 발생합니다.")
@@ -111,7 +114,7 @@ class ProductTest {
         final Product target = Product.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
         ReflectionTestUtils.setField(target, "price", -3000L);
 
-        assertThatThrownBy(()-> source.update(target))
+        assertThatThrownBy(() -> source.update(target))
                 .isInstanceOf(ProductInvalidPriceException.class);
 
 

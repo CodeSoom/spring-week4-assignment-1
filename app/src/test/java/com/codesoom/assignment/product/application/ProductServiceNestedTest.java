@@ -35,7 +35,7 @@ import static com.codesoom.assignment.Constant.OTHER_NAME;
 import static com.codesoom.assignment.Constant.OTHER_PRICE;
 
 @DisplayName("ProductService 서비스 테스트")
-public class ProductServiceTestNested {
+public class ProductServiceNestedTest {
 
     private ProductService service;
     private ProductRepository repository;
@@ -188,9 +188,11 @@ public class ProductServiceTestNested {
                 @DisplayName("예외가 발생한다.")
                 @ParameterizedTest
                 @ArgumentsSource(ProvideInvalidProductArguments.class)
-                void createProductWithInvalidData(Product source) {
-                    assertThatThrownBy(() -> service.save(source))
-                            .isInstanceOf(ProductInvalidFieldException.class);
+                void createProductWithInvalidData(List<Product> productList) {
+                    for (Product product : productList) {
+                        assertThatThrownBy(() -> service.save(product))
+                                .isInstanceOf(ProductInvalidFieldException.class);
+                    }
                 }
             }
         }
@@ -245,9 +247,11 @@ public class ProductServiceTestNested {
                 @DisplayName("예외가 발생합니다.")
                 @ParameterizedTest
                 @ArgumentsSource(ProvideInvalidProductArguments.class)
-                void updateProductWithInvalidData(Product target) {
-                    assertThatThrownBy(() -> service.updateProduct(originProduct.getId(), target))
-                            .isInstanceOf(ProductInvalidFieldException.class);
+                void updateProductWithInvalidData(List<Product> products) {
+                    for (Product product : products) {
+                        assertThatThrownBy(() -> service.updateProduct(originProduct.getId(), product))
+                                .isInstanceOf(ProductInvalidFieldException.class);
+                    }
                 }
 
             }

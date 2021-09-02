@@ -14,6 +14,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static com.codesoom.assignment.Constant.IMAGE_URL;
 import static com.codesoom.assignment.Constant.MAKER;
@@ -138,9 +139,11 @@ class ProductControllerTest {
     @DisplayName("유효하지 못한 상품 정보를 생성하려 하면 예외가 발생합니다.")
     @ParameterizedTest
     @ArgumentsSource(ProvideInvalidProductArguments.class)
-    void createInvalidProduct(Product target) {
-        assertThatThrownBy(() -> controller.create(target))
-                .isInstanceOf(ProductInvalidFieldException.class);
+    void createInvalidProduct(List<Product> products) {
+        for (Product product : products) {
+            assertThatThrownBy(() -> controller.create(product))
+                    .isInstanceOf(ProductInvalidFieldException.class);
+        }
     }
 
     @DisplayName("존재하는 식별자의 상품 정보를 수정할 수 있습니다.")
@@ -162,11 +165,13 @@ class ProductControllerTest {
     @DisplayName("존재하는 식별자의 상품 정보를 잘 못된 정보로 수정하려 하면 예외가 발생합니다.")
     @ParameterizedTest
     @ArgumentsSource(ProvideInvalidProductArguments.class)
-    void updateExistsIdWithInvalidProduct(Product target) {
+    void updateExistsIdWithInvalidProduct(List<Product> products) {
         final Product foundProduct = controller.findById(1L);
 
-        assertThatThrownBy(() -> controller.updateProduct(foundProduct.getId(), target))
-                .isInstanceOf(ProductInvalidFieldException.class);
+        for (Product product : products) {
+            assertThatThrownBy(() -> controller.updateProduct(foundProduct.getId(), product))
+                    .isInstanceOf(ProductInvalidFieldException.class);
+        }
 
     }
 
