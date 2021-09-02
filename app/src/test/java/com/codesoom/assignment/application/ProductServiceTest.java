@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static com.codesoom.assignment.domain.ProductConstant.ID;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
 
 import java.util.Optional;
@@ -39,7 +41,7 @@ public class ProductServiceTest {
         @BeforeEach
         void setUp() {
             when(productRepository.save(any(Product.class)))
-                .thenReturn(new Product(TITLE));
+                .thenReturn(new Product(anyString()));
         }
 
         @Test
@@ -65,12 +67,12 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(productRepository.findById(anyLong()))
-                    .thenReturn(Optional.of(new Product(TITLE)));
+                    .thenReturn(Optional.of(new Product(anyString())));
             }
 
             @Test
             @DisplayName("찾은 Product를 리턴한다.") void it_returns_a_find_product() {
-                assertThat(productService.detailProduct(anyLong()))
+                assertThat(productService.detailProduct(ID))
                     .isInstanceOf(Product.class);
             }
         }
@@ -87,7 +89,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("ProductNotFoundException을 던진다.")
             void it_throws_a_productNotFoundException() {
-                assertThatThrownBy(() -> productService.detailProduct(anyLong()))
+                assertThatThrownBy(() -> productService.detailProduct(ID))
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }

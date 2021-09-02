@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
@@ -53,7 +54,7 @@ public class ProductControllerTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(TITLE));
+                .thenReturn(new Product(anyString()));
         }
 
         @Test
@@ -80,7 +81,7 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 when(productService.detailProduct(anyLong()))
-                    .thenReturn(new Product(TITLE));
+                    .thenReturn(new Product(anyString()));
             }
 
             @Test
