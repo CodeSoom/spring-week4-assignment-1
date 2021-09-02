@@ -6,6 +6,7 @@ caches
 daemon
 native
 notifications
+*.db
 
 # Ignore Gradle build output directory
 build
