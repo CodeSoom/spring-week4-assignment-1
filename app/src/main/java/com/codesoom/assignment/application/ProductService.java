@@ -11,7 +11,7 @@ import com.codesoom.assignment.domain.Product;
 import org.springframework.stereotype.Service;
 
 /**
- * Product리소스 비즈니스 로직 처리를 담당한다.
+ * Product리소스 데이터 처리를 담당한다.
  */
 @Service
 @Transactional
@@ -24,7 +24,7 @@ public class ProductService {
 
     /**
      * Product를 저장하고 리턴한다.
-     * 
+     *
      * @param product id를 제외한 Product 데이터
      * @return id를 포함한 모든 Product 데이터
      */
@@ -34,7 +34,7 @@ public class ProductService {
 
     /**
      * Product를 찾아 리턴한다.
-     * 
+     *
      * @param id 찾을 Product의 id
      * @return 찾은 Product 개체
      * @throws ProductNotFoundException Product를 찾지 못한 경우
@@ -46,7 +46,7 @@ public class ProductService {
 
     /**
      * 저장된 Product 목록을 리턴한다.
-     * 
+     *
      * @return 저장된 Product 목록
      */
     public List<Product> listProduct() {
