@@ -35,7 +35,7 @@ public class ProductRepositoryTest {
             @Test
             @DisplayName("주어진 개체를 저장하고 리턴한다.")
             void it_save_object_and_returns_a_saved_object() {
-                final Product product = new Product(null, TITLE);
+                final Product product = new Product(TITLE);
 
                 assertThat(productRepository.save(product))
                     .matches(saved -> saved.getId() != null)
@@ -54,7 +54,7 @@ public class ProductRepositoryTest {
         class Context_findById_success {
             @BeforeEach
             void setUp() {
-                final Product product = new Product(null, TITLE);
+                final Product product = new Product(TITLE);
                 final Product savedProduct = productRepository.save(product);
                 id = savedProduct.getId();
             }

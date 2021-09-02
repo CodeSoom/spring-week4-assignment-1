@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
-import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import java.util.Optional;
 
@@ -40,14 +39,13 @@ public class ProductServiceTest {
         @BeforeEach
         void setUp() {
             when(productRepository.save(any(Product.class)))
-                .thenReturn(new Product(ID, TITLE));
+                .thenReturn(new Product(TITLE));
         }
 
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
-            assertThat(productService.createProduct(new Product(null, TITLE)))
-                .matches(output -> ID == output.getId())
+            assertThat(productService.createProduct(new Product(TITLE)))
                 .matches(output -> TITLE.equals(output.getTitle()));
         }
 
@@ -67,13 +65,12 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(productRepository.findById(anyLong()))
-                    .thenReturn(Optional.of(new Product(ID, TITLE)));
+                    .thenReturn(Optional.of(new Product(TITLE)));
             }
 
             @Test
             @DisplayName("찾은 Product를 리턴한다.") void it_returns_a_find_product() {
                 assertThat(productService.detailProduct(anyLong()))
-                    .matches(output -> ID == output.getId())
                     .matches(output -> TITLE.equals(output.getTitle()));
             }
         }

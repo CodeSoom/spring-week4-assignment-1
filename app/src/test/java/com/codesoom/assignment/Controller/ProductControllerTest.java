@@ -53,7 +53,7 @@ public class ProductControllerTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(ID, TITLE));
+                .thenReturn(new Product(TITLE));
         }
 
         @Test
@@ -61,8 +61,7 @@ public class ProductControllerTest {
         void it_returns_a_product() {
             CreateProductDto createProductDto = new CreateProductDto(TITLE);
             assertThat(productController.create(createProductDto))
-                .matches(output -> TITLE.equals(output.getTitle()))
-                .matches(output -> ID == output.getId());
+                .matches(output -> TITLE.equals(output.getTitle()));
         }
 
         @AfterEach
@@ -81,14 +80,13 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 when(productService.detailProduct(anyLong()))
-                    .thenReturn(new Product(ID, TITLE));
+                    .thenReturn(new Product(TITLE));
             }
 
             @Test
             @DisplayName("찾은 Product를 리턴한다.")
             void it_returns_a_product() {
                 assertThat(productController.detail(ID))
-                    .matches(output -> ID == output.getId())
                     .matches(output -> TITLE.equals(output.getTitle()));
             }
         }

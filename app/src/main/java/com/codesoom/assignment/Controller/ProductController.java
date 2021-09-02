@@ -50,7 +50,7 @@ public final class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody final CreateProductDto createProductDto) {
-        Product product = new Product(null, createProductDto.getTitle());
+        Product product = new Product(createProductDto.getTitle());
         return productService.createProduct(product);
     }
 

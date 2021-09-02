@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
-import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.ProductNotFoundException;
@@ -70,7 +69,7 @@ public final class ProductControllerWebTest {
                 @BeforeEach
                 void setUp() {
                     when(productService.detailProduct(anyLong()))
-                        .thenReturn(new Product(ID, TITLE));
+                        .thenReturn(new Product(TITLE));
                 }
 
                 @Test
@@ -78,7 +77,6 @@ public final class ProductControllerWebTest {
                 void it_returns_a_find_product() throws Exception {
                     mockMvc.perform(get("/products/1"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(ID.toString())))
                         .andExpect(content().string(containsString(TITLE)));
                 }
             }
@@ -114,7 +112,7 @@ public final class ProductControllerWebTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(ID, TITLE));
+                .thenReturn(new Product(TITLE));
         }
 
         @Nested
@@ -129,8 +127,7 @@ public final class ProductControllerWebTest {
                         .content("{\"title\":\"title\"}")
                     )
                     .andExpect(status().isCreated())
-                    .andExpect(content().string(containsString(TITLE)))
-                    .andExpect(content().string(containsString(ID.toString())));
+                    .andExpect(content().string(containsString(TITLE)));
             }
         }
 
