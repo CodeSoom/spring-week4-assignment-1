@@ -25,7 +25,9 @@ public class TaskService {
     }
 
     public Task createTask(Task source) {
-
+        Task task = new Task();
+        task.setTitle(source.getTitle());
+        
         return taskRepository.save(task);
     }
 }
