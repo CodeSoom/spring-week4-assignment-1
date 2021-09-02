@@ -6,16 +6,16 @@ public class Product {
     private String name;
     private String maker;
     private Long price;
-    private String imageURI;
+    private String imageUrl;
 
     public Product() {}
 
-    public Product(Long id, String name, String maker, Long price, String imageURI) {
+    public Product(Long id, String name, String maker, Long price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imageURI = imageURI;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -50,11 +50,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getImageURI() {
-        return imageURI;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImageURI(String imageURI) {
-        this.imageURI = imageURI;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

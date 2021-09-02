@@ -47,7 +47,7 @@ public class ProductRepository {
         updatedProduct.setName(product.getName());
         updatedProduct.setMaker(product.getMaker());
         updatedProduct.setPrice(product.getPrice());
-        updatedProduct.setImageURI(product.getImageURI());
+        updatedProduct.setImageUrl(product.getImageUrl());
     }
 
     public void deleteById(Long id) {

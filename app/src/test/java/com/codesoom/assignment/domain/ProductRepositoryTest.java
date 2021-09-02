@@ -48,7 +48,7 @@ class ProductRepositoryTest {
             assertThat(newProduct.getName()).isEqualTo(product1.getName());
             assertThat(newProduct.getMaker()).isEqualTo(product1.getMaker());
             assertThat(newProduct.getPrice()).isEqualTo(product1.getPrice());
-            assertThat(newProduct.getImageURI()).isEqualTo(product1.getImageURI());
+            assertThat(newProduct.getImageUrl()).isEqualTo(product1.getImageUrl());
         }
     }
 
@@ -150,7 +150,7 @@ class ProductRepositoryTest {
                 assertThat(updatedProduct.getName()).isEqualTo(product2.getName());
                 assertThat(updatedProduct.getMaker()).isEqualTo(product2.getMaker());
                 assertThat(updatedProduct.getPrice()).isEqualTo(product2.getPrice());
-                assertThat(updatedProduct.getImageURI()).isEqualTo(product2.getImageURI());
+                assertThat(updatedProduct.getImageUrl()).isEqualTo(product2.getImageUrl());
             }
         }
 
