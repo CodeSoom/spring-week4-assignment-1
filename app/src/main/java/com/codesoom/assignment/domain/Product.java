@@ -22,12 +22,22 @@ public class Product {
 
     @Id
     @GeneratedValue
+    @EqualsAndHashCode.Exclude
     private Long id;
 
     private String name;
     private String maker;
     private Long price;
     private String imageUrl;
+
+    @Builder
+    public Product(Long id, String name, String maker, Long price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     @Builder
     public Product(String name, String maker, Long price, String imageUrl) {
