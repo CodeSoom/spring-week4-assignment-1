@@ -70,12 +70,13 @@ class ProductControllerTest {
         }
 
         @Test
-        @DisplayName("response(status: created) 반환합니다.")
+        @DisplayName("response(status: created, content: json product) 반환합니다.")
         void it_response_created() throws Exception {
             mockMvc.perform(post("/products")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(contentProduct))
-                    .andExpect(status().isCreated());
+                    .andExpect(status().isCreated())
+                    .andExpect(content().string(contentProduct));
         }
     }
 
