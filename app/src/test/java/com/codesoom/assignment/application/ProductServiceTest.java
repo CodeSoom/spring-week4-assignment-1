@@ -51,28 +51,53 @@ public class ProductServiceTest {
             .willThrow(ProductNotFoundException.class);
     }
 
-    @Test
-    @DisplayName("상품 하나를 생성한다")
-    void createProduct() {
-        Product createdProduct = productService.createProduct(product);
+    @Nested
+    @DisplayName("createProduct 메서드는")
+    class Describe_createProduct {
 
-        assertThat(createdProduct).isEqualTo(product);
+        @Nested
+        @DisplayName("상품 객체를 넘길 경우")
+        class Context_passProduct {
 
-        verify(productRepository).save(createdProduct);
-    }
+            Product createdProduct;
 
-    @Test
-    @DisplayName("모든 상품을 조회한다")
-    void getAllProducts() {
-        Iterable<Product> products = productService.getAllProducts();
+            @BeforeEach
+            void setUp() {
+                createdProduct = productService.createProduct(product);
+            }
 
-        assertThat(products).isEqualTo(Collections.singletonList(product));
+            @Test
+            @DisplayName("생성된 상품을 리턴한다")
+            void it_create() {
+                assertThat(createdProduct).isEqualTo(product);
 
-        verify(productRepository).findAll();
+                verify(productRepository).save(createdProduct);
+            }
+        }
     }
 
     @Nested
-    @DisplayName("단일 조회 시")
+    @DisplayName("getAllProducts 메서드는")
+    class Describe_getAllProducts {
+
+        Iterable<Product> products;
+
+        @BeforeEach
+        void setUp() {
+            products = productService.getAllProducts();
+        }
+
+        @Test
+        @DisplayName("모든 상품을 리턴한다")
+        void it_returns_all_products() {
+            assertThat(products).isEqualTo(Collections.singletonList(product));
+
+            verify(productRepository).findAll();
+        }
+    }
+
+    @Nested
+    @DisplayName("getProduct 메서드는")
     class Describe_getProduct {
 
         @Nested
@@ -87,8 +112,8 @@ public class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("조회한다")
-            void it_read() {
+            @DisplayName("찾은 상품을 리턴한다")
+            void it_return_found_product() {
                 assertThat(foundProduct).isEqualTo(product);
 
                 verify(productRepository).findById(ID);
@@ -113,7 +138,7 @@ public class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("수정 시")
+    @DisplayName("updateProduct 메서드는")
     class Describe_updateProduct {
 
         private Product source;
@@ -140,8 +165,8 @@ public class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("수정한다")
-            void it_update() {
+            @DisplayName("수정한 상품을 리턴한다")
+            void it_return_updated_product() {
                 assertThat(source).isEqualTo(updatedProduct);
 
                 verify(productRepository).findById(ID);
@@ -168,7 +193,7 @@ public class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("삭제 시")
+    @DisplayName("deleteProduct 메서드는")
     class Describe_deleteProduct {
 
         @Nested
