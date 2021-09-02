@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.Dto.ErrorResponseDto;
+import com.codesoom.assignment.dto.ErrorResponseDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

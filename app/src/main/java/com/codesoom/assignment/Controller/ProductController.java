@@ -2,9 +2,9 @@ package com.codesoom.assignment.controller;
 
 import java.util.List;
 
-import com.codesoom.assignment.Dto.CreateProductDto;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.CreateProductDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;

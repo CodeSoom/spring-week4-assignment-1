@@ -1,4 +1,4 @@
-package com.codesoom.assignment.Dto;
+package com.codesoom.assignment.dto;
 
 public final class CreateProductDto {
     private String title;

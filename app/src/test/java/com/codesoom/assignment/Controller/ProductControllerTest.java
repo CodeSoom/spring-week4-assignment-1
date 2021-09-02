@@ -10,9 +10,9 @@ import static com.codesoom.assignment.domain.ProductConstant.TITLE;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.Dto.CreateProductDto;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.CreateProductDto;
 import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.AfterEach;
