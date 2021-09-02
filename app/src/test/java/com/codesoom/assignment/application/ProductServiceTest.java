@@ -22,11 +22,6 @@ import static org.mockito.Mockito.verify;
 // 2. TaskRepository taskRepository = mock(TaskRepository.class)
 @DisplayName("ProductService 클래스")
 class ProductServiceTest {
-    public static final String TEST_VAR_MAKER = "test_var_maker";
-    public static final String TEST_VAR_NAME = "test_var_name";
-    public static final String TEST_VAR_IMAGE_PATH = "test_var_ImagePath";
-    public static final int TEST_VAR_PRICE = 30000;
-
     private ProductService productService;
     private ProductRepository productRepository;
 
@@ -60,19 +55,20 @@ class ProductServiceTest {
     }
 */
     @Nested
-    @DisplayName("get 메소드는")
-    class describe_get{
-        @Nested
-        @DisplayName("파라미터 없이 호출됐을 경우")
-        class context_with_no_param{
-            @Test
-            @DisplayName("List<Product>를 반환한다.")
-            void get(){
-                List<Product> products = productService.getProducts();
-                verify(productRepository).findAll();
-                assertThat(products).isInstanceOf(List.class);
-            }
+    @DisplayName("getProducts 메소드")
+    class describe_getProducts{
+
+        @Test
+        @DisplayName("List<Product>를 반환한다.")
+        void it_returns_list(){
+            List<Product> products = productService.getProducts();
+            verify(productRepository).findAll();
+            assertThat(products).isInstanceOf(List.class);
         }
+    }
+
+    @Nested
+    class Describe_getProduct{
 
         @Nested
         @DisplayName("만약 유효한 id를 전달받았다면")
@@ -91,7 +87,7 @@ class ProductServiceTest {
         class Context_with_invalid_id{
             @DisplayName("파라미터가 잘못됬다는 예외를 던진다.")
             @Test
-            void it_returns_an_exception(){
+            void it_throws_an_exception(){
                 assertThatThrownBy(() -> productService.getProduct(100L))
                         .isInstanceOf(IllegalArgumentException.class);
             }
@@ -99,32 +95,27 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("create 메소드는")
-    class Describe_create{
-        @Nested
-        @DisplayName("만약 올바른 값을 전달받았다면")
-        class Context_with_valid_param{
+    class Describe_createProduct{
+        @Test
+        @DisplayName("생성된 product를 리턴한다.")
+        void it_returns_a_product() {
             Product source = makeSource();
+            productService.createProduct(source);
+            //Product result = productService.createProduct(source);
 
-            @Test
-            @DisplayName("생성된 product를 리턴한다.")
-            void it_returns_a_product() {
-                Product result = productService.createProduct(source);
-                // verify를 createProduct(source) 위에서 실행했을 경우 org.mockito.exceptions.verification.WantedButNotInvoked at ProductServiceTest 예외 발생.
-                verify(productRepository).save(source);
-                assertThat(result.getMaker()).isEqualTo(TEST_VAR_MAKER);
-                assertThat(result).isInstanceOf(Product.class);
-            }
+            verify(productRepository).save(source);
+            //assertThat(result.getMaker()).isEqualTo(TEST_VAR_MAKER);
+            //assertThat(result).isInstanceOf(Product.class);
         }
     }
 
     @Nested
-    @DisplayName("update 메소드는")
     class Describe_update{
+
         @Nested
         @DisplayName("만약 유효한 id를 전달받았다면")
         class Context_with_valid_param{
-            Long validId = 0L;
+            Long validId = 1L;
             Product source = makeSource();
             Product updateSource = makeSource();
 
@@ -136,7 +127,7 @@ class ProductServiceTest {
 
                 Product result = productService.updateProduct(validId, updateSource);
                 assertThat(result).isInstanceOf(Product.class);
-                assertThat(result.getName()).isEqualTo(TEST_VAR_NAME);
+                assertThat(result.getName()).isEqualTo("TEST_VAR_NAME");
             }
         }
 
@@ -148,7 +139,7 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("파라미터가 잘못됬다는 예외를 던진다.")
-            void it_returns_a_product() {
+            void it_thorws_IllegalArgumentException() {
                 Product source = makeSource();
                 assertThatThrownBy(() -> productService.updateProduct(invalidId, source))
                         .isInstanceOf(IllegalArgumentException.class);
@@ -157,20 +148,22 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("delete 메소드는")
-    class Describe_delete{
+    class Describe_deleteProduct{
+
         @Nested
         @DisplayName("만약 유효한 id를 전달받았다면")
         class Context_with_valid_param{
-            Long validId = 0L;
+            Long validId = 1L;
+
             @Test
             @DisplayName("삭제한 product를 리턴한다.")
             void it_returns_a_product() {
-                //given(productRepository.deleteById(0L)).willReturn(any(Product.class));
                 Product result = productService.deleteProduct(validId);
+                verify(productRepository).deleteById(validId);
 
-                assertThat(result).isInstanceOf(Product.class);
-                assertThat(result.getId()).isEqualTo(validId);
+                //given(productRepository.deleteById(0L)).willReturn(any(Product.class));
+                //assertThat(result).isInstanceOf(Product.class);
+                //assertThat(result.getId()).isEqualTo(validId);
             }
         }
 
@@ -181,7 +174,7 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("파라미터가 잘못됬다는 예외를 던진다.")
-            void it_returns_a_product() {
+            void it_throws_IllegalArgumentException() {
                 Product source = makeSource();
                 assertThatThrownBy(() -> productService.deleteProduct(invalidId))
                         .isInstanceOf(IllegalArgumentException.class);
@@ -189,13 +182,12 @@ class ProductServiceTest {
         }
     }
 
-
     private Product makeSource(){
         Product product = Product.builder()
-                .name(TEST_VAR_NAME)
-                .maker(TEST_VAR_MAKER)
-                .price(TEST_VAR_PRICE)
-                .imagePath(TEST_VAR_IMAGE_PATH)
+                .name("TEST_VAR_NAME")
+                .maker("TEST_VAR_MAKER")
+                .price(3000)
+                .imagePath("TEST_VAR_IMAGE_PATH")
                 .build();
         return product;
     }
