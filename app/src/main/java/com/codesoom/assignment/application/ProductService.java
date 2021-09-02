@@ -37,7 +37,7 @@ public class ProductService {
     }
 
     /**
-     * 식별자로 상품을 찾아 리턴합니다.
+     * 상품을 찾아 리턴합니다.
      *
      * @param id 식별자
      * @return 찾은 상품
@@ -49,7 +49,7 @@ public class ProductService {
     }
 
     /**
-     * 식별자로 상품을 찾아 수정하고, 리턴합니다.
+     * 상품을 찾아 수정하고, 리턴합니다.
      *
      * @param id     식별자
      * @param source 바꿀 상품 정보
@@ -66,7 +66,7 @@ public class ProductService {
     }
 
     /**
-     * 식별자로 상품을 찾아 삭제합니다.
+     * 상품을 찾아 삭제합니다.
      *
      * @param id 식별자
      * @throws ProductNotFoundException 식별자로 상품을 찾지 못한 경우
