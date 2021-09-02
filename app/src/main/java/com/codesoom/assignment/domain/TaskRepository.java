@@ -1,6 +1,6 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.models.Task;
+import com.codesoom.assignment.domain.Task;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,6 +14,14 @@ public class TaskRepository {
 
     public List<Task> findAll() {
         return tasks.stream().collect(Collectors.toList());
+    }
+
+    public Task find(Long id) {
+        return null;
+    }
+
+    public Task save(Task task) {
+        return null;
     }
 
     public void add(Task task) {

@@ -7,7 +7,7 @@
 
 package com.codesoom.assignment;
 
-import com.codesoom.assignment.models.Task;
+import com.codesoom.assignment.domain.Task;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
