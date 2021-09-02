@@ -16,6 +16,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.google.common.collect.Lists;
 
+import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -141,6 +142,59 @@ public class ProductServiceTest {
         @AfterEach
         void tearDown() {
             verify(productRepository).findAll();
+        }
+    }
+
+    @Nested
+    @DisplayName("updateProduct 메서드는")
+    class Describe_updateProduct {
+        @Nested
+        @DisplayName("Product를 찾을 수 있다면")
+        class Context_find_success {
+            @Mock
+            private Product product;
+
+            @BeforeEach
+            void setUp() {
+                when(productRepository.findById(anyLong()))
+                    .thenReturn(Optional.of(product));
+            }
+
+            @Test
+            @DisplayName("업데이트한 Product를 리턴한다.")
+            void it_returns_a_updated_product() {
+                assertThat(productService.updateProduct(ID, new Product(TITLE)))
+                    .isInstanceOf(Product.class);
+            }
+
+            @AfterEach
+            void tearDown() {
+                verify(product).updateProduct(any(Product.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("Product를 찾을 수 없다면")
+        class Context_find_fail {
+            @BeforeEach
+            void setUp() {
+                when(productRepository.findById(anyLong()))
+                .thenReturn(Optional.empty());
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다.")
+            void it_throws_a_productNotFoundException() {
+                assertThatThrownBy(() -> productService.updateProduct(ID, new Product(TITLE)))
+                    .isInstanceOf(ProductNotFoundException.class);
+
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productRepository)
+                .findById(anyLong());
         }
     }
 }
