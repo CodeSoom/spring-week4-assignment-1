@@ -105,15 +105,18 @@ class ProductRepositoryTest {
     @DisplayName("findById 메소드")
     class Describe_findById {
 
+        private Long valid_id;
+
         @BeforeEach
         void prepare() {
+            valid_id = product1.getId();
             productRepository.save(product1);
         }
 
         @Test
         @DisplayName("해당 Id의 Optional<Product>를 반환합니다.")
         void it_return_optional_product() {
-            assertThat(productRepository.findById(1L)).isEqualTo(Optional.of(product1));
+            assertThat(productRepository.findById(valid_id)).isEqualTo(Optional.of(product1));
         }
     }
 
@@ -130,10 +133,17 @@ class ProductRepositoryTest {
         @DisplayName("해당되는 id의 product가 있다면")
         class Context_with_valid_id {
 
+            private Long valid_id;
+
+            @BeforeEach
+            void prepare_valid_id() {
+                valid_id = product1.getId();
+            }
+
             @Test
             @DisplayName("해당 Id의 product를 수정합니다.")
             void it_update_catToy() {
-                productRepository.update(1L, product2);
+                productRepository.update(valid_id, product2);
 
                 Product updatedProduct = productRepository.findById(1L).orElseThrow();
 
@@ -148,10 +158,17 @@ class ProductRepositoryTest {
         @DisplayName("해당되는 id의 product가 없다면")
         class Context_with_invalid_id {
 
+            private Long invalid_id;
+
+            @BeforeEach
+            void prepare_invalid_id() {
+                invalid_id = product2.getId();
+            }
+
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productRepository.update(1000L, product2))
+                assertThatThrownBy(() -> productRepository.update(invalid_id, product2))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -170,10 +187,17 @@ class ProductRepositoryTest {
         @DisplayName("해당되는 id의 product가 있다면")
         class Context_with_valid_id {
 
+            private Long valid_id;
+
+            @BeforeEach
+            void prepare_valid_id() {
+                valid_id = product1.getId();
+            }
+
             @Test
             @DisplayName("해당 Id의 product를 제거합니다.")
             void it_update_product() {
-                productRepository.deleteById(1L);
+                productRepository.deleteById(valid_id);
 
                 assertThat(productRepository.findAll()).hasSize(0);
             }
@@ -183,10 +207,17 @@ class ProductRepositoryTest {
         @DisplayName("해당되는 id의 product가 없다면")
         class Context_with_invalid_id {
 
+            private Long invalid_id;
+
+            @BeforeEach
+            void prepare_invalid_id() {
+                invalid_id = product2.getId();
+            }
+
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productRepository.update(1000L, product2))
+                assertThatThrownBy(() -> productRepository.update(invalid_id, product2))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
