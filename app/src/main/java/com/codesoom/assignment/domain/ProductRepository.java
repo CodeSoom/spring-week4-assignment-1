@@ -40,7 +40,7 @@ public class ProductRepository {
         return Optional.ofNullable(this.products.get(id));
     }
 
-    public void update(Long id, Product product) {
+    public Product update(Long id, Product product) {
         Product updatedProduct = findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
@@ -48,6 +48,8 @@ public class ProductRepository {
         updatedProduct.setMaker(product.getMaker());
         updatedProduct.setPrice(product.getPrice());
         updatedProduct.setImageUrl(product.getImageUrl());
+
+        return updatedProduct;
     }
 
     public void deleteById(Long id) {
