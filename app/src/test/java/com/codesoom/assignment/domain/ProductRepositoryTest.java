@@ -81,6 +81,39 @@ public class ProductRepositoryTest {
         }
     }
 
+    @Nested
+    @DisplayName("findAll 메서드는")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("저장된 Product가 있다면")
+        class Context_product_exist {
+            @BeforeEach
+            void setUp() {
+                final Product product = new Product(TITLE);
+                productRepository.save(product);
+            }
+
+            @Test
+            @DisplayName("저장된 Product 목록을 리턴한다.")
+            void it_returns_a_product_list() {
+                assertThat(productRepository.findAll())
+                    .extracting(Product::getTitle)
+                    .contains(TITLE);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장된 Product가 없다면")
+        class Context_product_empty {
+            @Test
+            @DisplayName("빈 목록을 리턴한다.")
+            void it_returns_a_empty_list() {
+                assertThat(productRepository.findAll())
+                    .isEmpty();
+            }
+        }
+    }
+
     @AfterEach
     void tearDown() {
         productRepository.deleteAll();
