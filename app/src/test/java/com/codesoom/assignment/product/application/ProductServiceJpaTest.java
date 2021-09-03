@@ -37,9 +37,7 @@ class ProductServiceJpaTest {
     }
 
     private void setUpFixtures() {
-        product = new Product(NAME, MAKER, PRICE, IMAGE_URL);
-
-        productRepository.save(product);
+        product = productRepository.save(Product.of(NAME, MAKER, PRICE, IMAGE_URL));
     }
 
     @DisplayName("제품들이 존재하는 목록을 조회할 수 있습니다.")
@@ -84,7 +82,7 @@ class ProductServiceJpaTest {
     @Test
     void updateProduct() {
         final Product newProduct = Product.of("Other", "OtherMaker", 3000L, "OtherUrl");
-        Product updatedProduct = productService.updateProduct(1L, newProduct);
+        Product updatedProduct = productService.updateProduct(product.getId(), newProduct);
 
         assertThat(updatedProduct.getName()).isEqualTo(newProduct.getName());
         assertThat(updatedProduct.getMaker()).isEqualTo(newProduct.getMaker());
