@@ -2,46 +2,50 @@ package com.codesoom.assignment.applications;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domains.Product;
+import com.codesoom.assignment.domains.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductService {
+    private final ProductRepository productRepository;
     private List<Product> Products = new ArrayList<>();
     private Long newId = 0L;
 
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     public List<Product> getProducts() {
-        return Products;
+        return productRepository.findAll();
     }
 
     public Product getProduct(Long id) {
-        return Products.stream()
-                .filter(Product -> Product.getId().equals(id))
-                .findFirst()
+        return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(Product source) {
-        source.setId(generateId());
-        Products.add(source);
+        productRepository.save(source);
         return source;
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product Product = getProduct(id);
-        Product.setName(source.getName());
-        Product.setPrice(source.getPrice());
-        Product.setImage(source.getImage());
-        return Product;
+        Product product = getProduct(id);
+        product.setName(source.getName());
+        product.setPrice(source.getPrice());
+        product.setImage(source.getImage());
+        return product;
     }
 
     public Product deleteProduct(Long id) {
-        Product Product = getProduct(id);
-        Products.remove(Product);
-
-        return Product;
+        Product product = getProduct(id);
+        productRepository.delete(product);
+        return product;
     }
 
     private Long generateId() {
