@@ -1,6 +1,7 @@
 package com.codesoom.assignment.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
 
@@ -111,6 +112,31 @@ public class ProductRepositoryTest {
                 assertThat(productRepository.findAll())
                     .isEmpty();
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+        private Product product;
+
+        @BeforeEach
+        void setUp() {
+            product = productRepository.save(new Product(TITLE));
+        }
+
+        @Test
+        @DisplayName("Product를 삭제한다.")
+        void it_delete_a_product() {
+            assertThat(productRepository.findById(product.getId()))
+                .matches(output -> output.isPresent())
+                .matches(output -> product.getId().equals(output.get().getId()))
+                .matches(output -> product.getTitle().equals(output.get().getTitle()));
+
+            productRepository.delete(product);
+
+            assertThat(productRepository.findById(product.getId()))
+                .matches(output -> output.isEmpty());
         }
     }
 
