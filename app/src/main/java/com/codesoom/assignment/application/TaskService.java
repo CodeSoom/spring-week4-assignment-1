@@ -24,8 +24,9 @@ public class TaskService {
         return taskRepository.find(id);
     }
 
-    public Task createTask(Task source) throws TaskNotFoundException {
+    public Task createTask(Long id) throws TaskNotFoundException {
         Task task = taskRepository.find(id);
+        taskRepository.addTitle(id);
         return taskRepository.save(task);
     }
 

@@ -38,6 +38,13 @@ public class TaskRepository {
         tasks.add(task);
     }
 
+    public Task addTitle(Long id) throws TaskNotFoundException {
+        return tasks.stream()
+                .filter(task -> task.getTitle().equals(id))
+                .findFirst()
+                .orElseThrow(()-> new TaskNotFoundException(id));
+    }
+
     private Long generateId() {
         newId += 1;
         return newId;
