@@ -5,8 +5,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Builder
+@Getter @Setter
 public class Product {
   @Id
   @GeneratedValue
@@ -18,7 +23,7 @@ public class Product {
 
   private String maker;
 
-  private BigDecimal price;
+  private int price;
 
   private String imgUrl;
 

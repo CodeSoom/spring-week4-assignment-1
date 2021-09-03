@@ -13,7 +13,7 @@ class ProductTest {
     private static final Long ID = 1L;
     private static final String NAME = "TEST";
     private static final String MAKER = "GUCCI";
-    private static final Long PRICE = 100000L;
+    private static final int PRICE = 100000;
     private static final String IMAGE = "image";
 
 
@@ -22,24 +22,23 @@ class ProductTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product();
+        product = Product.builder()
+            .id(ID)
+            .name(NAME)
+            .maker(MAKER)
+            .price(PRICE)
+            .imgUrl(IMAGE)
+            .build();
     }
 
-
     @Test
-    @DisplayName("catProduct의 속성설정 테스트")
+    @DisplayName("Product의 속성설정 테스트")
     public void settings(){
-        product.setId(ID);
-        product.setName(NAME);
-        product.setMaker(MAKER);
-        product.setPrice(PRICE);
-        product.setImage(IMAGE);
-
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImage()).isEqualTo(IMAGE);
+        assertThat(product.getImgUrl()).isEqualTo(IMAGE);
 
     }
 }
