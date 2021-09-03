@@ -53,17 +53,17 @@ public class ProductRepositoryTest {
         @DisplayName("존재하는 아이디일 경우")
         class Context_existId {
 
-            private long id;
+            private long existId;
 
             @BeforeEach
             void setUp() {
-                id = product.getId();
+                existId = product.getId();
             }
 
             @Test
             @DisplayName("찾은 상품을 반환한다")
             void it_returns_found_product() {
-                Optional<Product> actual = productRepository.findById(id);
+                Optional<Product> actual = productRepository.findById(existId);
 
                 assertThat(actual.isPresent()).isTrue();
                 assertThat(actual.get()).isEqualTo(product);
@@ -78,7 +78,9 @@ public class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                notExistId = getNotExistId();
+                productRepository.deleteAll();
+
+                notExistId = product.getId();
             }
 
             @Test
@@ -87,11 +89,6 @@ public class ProductRepositoryTest {
                 Optional<Product> actual = productRepository.findById(notExistId);
 
                 assertThat(actual).isEqualTo(Optional.empty());
-            }
-
-            private long getNotExistId() {
-                long nextId = 1L;
-                return product.getId() + nextId;
             }
         }
     }
@@ -104,14 +101,19 @@ public class ProductRepositoryTest {
         @DisplayName("id가 존재할 경우")
         class Context_existId {
 
+            private Long existId;
+
+            @BeforeEach
+            void setUp() {
+                existId = product.getId();
+            }
+
             @Test
             @DisplayName("true를 리턴한다")
             void it_returns_true() {
-                Long id = product.getId();
+                boolean hasId = productRepository.existsById(existId);
 
-                boolean actual = productRepository.existsById(id);
-
-                assertThat(actual).isTrue();
+                assertThat(hasId).isTrue();
             }
         }
 
@@ -119,14 +121,21 @@ public class ProductRepositoryTest {
         @DisplayName("id가 존재하지 않은 경우")
         class Context_notExistId {
 
+            private Long notExistId;
+
+            @BeforeEach
+            void setUp() {
+                productRepository.deleteAll();
+
+                notExistId = product.getId();
+            }
+
             @Test
             @DisplayName("false를 리턴한다")
             void it_returns_false() {
-                Long id = product.getId() + 1L;
+                boolean hasId = productRepository.existsById(notExistId);
 
-                boolean actual = productRepository.existsById(id);
-
-                assertThat(actual).isFalse();
+                assertThat(hasId).isFalse();
             }
         }
     }
