@@ -5,15 +5,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import com.codesoom.assignment.application.CatProductService;
-import com.codesoom.assignment.domain.CatProduct;
+import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @WebAppConfiguration
 @DisplayName("CatProductController 클래스")
-class CatProductControllerTest {
+class ProductControllerTest {
 
 
   @Nested
@@ -40,10 +39,10 @@ class CatProductControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CatProductService catProductService;
+    private ProductService productService;
 
-    private List<CatProduct> catProducts;
-    private CatProduct catProduct;
+    private List<Product> products;
+    private Product product;
 
     @Nested
     @DisplayName("cat상품목록에 데이터가 있으면")
@@ -51,9 +50,9 @@ class CatProductControllerTest {
 
       @BeforeEach
       void setUp() {
-        catProducts.add(catProduct);
-        given(catProductService.getCatProducts())
-            .willReturn(catProducts);
+        products.add(product);
+        given(productService.getCatProducts())
+            .willReturn(products);
       }
 
       @Test
@@ -61,7 +60,7 @@ class CatProductControllerTest {
       void it_responds_200_and_all_products() throws Exception {
         mockMvc.perform(get("/cat-products"))
             .andExpect(status().isOk())
-            .andExpect(content().string(objectMapper.writeValueAsString(catProducts)));
+            .andExpect(content().string(objectMapper.writeValueAsString(products)));
       }
     }
 
@@ -70,7 +69,7 @@ class CatProductControllerTest {
     class Context_with_no_product {
       @BeforeEach
       void setUp() {
-        given(catProductService.getCatProducts()).willReturn(catProducts);
+        given(productService.getCatProducts()).willReturn(products);
       }
 
       @Test

@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class CatProduct {
+public class Product {
   @Id
   @GeneratedValue
   @Column(name = "product_id")

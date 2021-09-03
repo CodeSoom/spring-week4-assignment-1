@@ -1,4 +1,4 @@
-package com.codesoom.assignment.models;
+package com.codesoom.assignment.domain;
 
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("CatProduct model에 대한 테스트")
-class CatProductTest {
+class ProductTest {
 
     private static final Long ID = 1L;
     private static final String NAME = "TEST";
@@ -17,29 +17,29 @@ class CatProductTest {
     private static final String IMAGE = "image";
 
 
-    private CatProduct catProduct;
+    private Product product;
 
 
     @BeforeEach
     void setUp() {
-        catProduct = new CatProduct();
+        product = new Product();
     }
 
 
     @Test
     @DisplayName("catProduct의 속성설정 테스트")
     public void settings(){
-        catProduct.setId(ID);
-        catProduct.setName(NAME);
-        catProduct.setMaker(MAKER);
-        catProduct.setPrice(PRICE);
-        catProduct.setImage(IMAGE);
+        product.setId(ID);
+        product.setName(NAME);
+        product.setMaker(MAKER);
+        product.setPrice(PRICE);
+        product.setImage(IMAGE);
 
-        assertThat(catProduct.getId()).isEqualTo(ID);
-        assertThat(catProduct.getName()).isEqualTo(NAME);
-        assertThat(catProduct.getMaker()).isEqualTo(MAKER);
-        assertThat(catProduct.getPrice()).isEqualTo(PRICE);
-        assertThat(catProduct.getImage()).isEqualTo(IMAGE);
+        assertThat(product.getId()).isEqualTo(ID);
+        assertThat(product.getName()).isEqualTo(NAME);
+        assertThat(product.getMaker()).isEqualTo(MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRICE);
+        assertThat(product.getImage()).isEqualTo(IMAGE);
 
     }
 }

@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CatProductRepository extends JpaRepository<CatProduct, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
-  List<CatProduct> findAll();
+  List<Product> findAll();
 
 
-  Optional<CatProduct> findCatProductBy(Long id);
+  Optional<Product> findCatProductBy(Long id);
 }
