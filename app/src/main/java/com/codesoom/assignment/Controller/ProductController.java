@@ -8,6 +8,7 @@ import com.codesoom.assignment.dto.CreateProductDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,5 +84,17 @@ public final class ProductController {
     ) {
         Product source = new Product(createProductDto.getTitle());
         return productService.updateProduct(id, source);
+    }
+
+    /**
+     * Product를 삭제한다.
+     *
+     * @param id 삭제할 Product의 id
+     * @throws ProductNotFoundException Product를 찾지 못한 경우
+     */
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable final Long id) {
+        productService.deleteProduct(id);
     }
 }
