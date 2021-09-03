@@ -1,7 +1,15 @@
 package com.codesoom.assignment.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String maker;
@@ -16,6 +24,16 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public static Product of(String name, String maker, Long price, String imageUrl) {
+        Product product = new Product();
+        product.setName(name);
+        product.setMaker(maker);
+        product.setPrice(price);
+        product.setImageUrl(imageUrl);
+
+        return product;
     }
 
     public Long getId() {
