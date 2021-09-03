@@ -5,10 +5,13 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
@@ -92,55 +95,6 @@ public final class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("검색 엔드포인트는")
-    class Describe_products_id_get {
-        @Nested
-        @DisplayName("장난감 데이터 요청 시")
-        class Contest_request_product {
-            @Nested
-            @DisplayName("요청한 장난감을 찾을 수 있다면")
-            class Context_find_success {
-                @BeforeEach
-                void setUp() {
-                    when(productService.detailProduct(anyLong()))
-                        .thenReturn(new Product(TITLE));
-                }
-
-                @Test
-                @DisplayName("찾은 장난감을 리턴한다.")
-                void it_returns_a_find_product() throws Exception {
-                    mockMvc.perform(get("/products/1"))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(TITLE)));
-                }
-            }
-
-            @Nested
-            @DisplayName("요청한 장난감을 찾을 수 없다면")
-            class Context_find_fail {
-                @BeforeEach
-                void setUp() {
-                when(productService.detailProduct(anyLong()))
-                    .thenThrow(new ProductNotFoundException(ID));
-                }
-
-                @Test
-                @DisplayName("404(NOT FOUND) http status code를 리턴한다.")
-                void it_notify_a_find_fail() throws Exception {
-                    mockMvc.perform(get("/products/1"))
-                        .andExpect(status().isNotFound());
-                }
-            }
-
-            @AfterEach
-            void tearDown() {
-                verify(productService)
-                    .detailProduct(anyLong());
-            }
-        }
-    }
-
-    @Nested
     @DisplayName("생성 엔드포인트는")
     class Describe_products_post {
         @BeforeEach
@@ -169,6 +123,123 @@ public final class ProductControllerWebTest {
         void tearDown() {
             verify(productService)
                 .createProduct(any(Product.class));
+        }
+    }
+
+    @Nested
+    @DisplayName("검색 엔드포인트는")
+    class Describe_products_id_get {
+        @Nested
+        @DisplayName("장난감 데이터 요청 시")
+        class Contest_request_product {
+            @Nested
+            @DisplayName("장난감을 찾을 수 있다면")
+            class Context_find_success {
+                @BeforeEach
+                void setUp() {
+                    when(productService.detailProduct(anyLong()))
+                        .thenReturn(new Product(TITLE));
+                }
+
+                @Test
+                @DisplayName("찾은 장난감을 리턴한다.")
+                void it_returns_a_find_product() throws Exception {
+                    mockMvc.perform(get("/products/1"))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(TITLE)));
+                }
+            }
+
+            @Nested
+            @DisplayName("장난감을 찾을 수 없다면")
+            class Context_find_fail {
+                @BeforeEach
+                void setUp() {
+                when(productService.detailProduct(anyLong()))
+                    .thenThrow(new ProductNotFoundException(ID));
+                }
+
+                @Test
+                @DisplayName("404(NOT FOUND) http status code를 리턴한다.")
+                void it_notify_a_find_fail() throws Exception {
+                    mockMvc.perform(get("/products/1"))
+                        .andExpect(status().isNotFound());
+                }
+            }
+
+            @AfterEach
+            void tearDown() {
+                verify(productService)
+                    .detailProduct(anyLong());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("수정 엔드포인트는")
+    class Describe_product_id_put_patch {
+        @Nested
+        @DisplayName("장난감 업데이트 요청 시")
+        class Context_request_update_product {
+            @Nested
+            @DisplayName("장난감을 찾을 수 있다면")
+            class Context_find_success {
+                @BeforeEach
+                void setUp() {
+                    when(productService.updateProduct(anyLong(), any(Product.class)))
+                        .thenReturn(new Product("updated" + TITLE));
+                }
+
+                @Test
+                @DisplayName("업데이트한 장난감을 리턴한다.")
+                void it_returns_a_updated_product() throws Exception {
+                    mockMvc.perform(
+                        put("/products/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"updated title\"}")
+                    ).andExpect(status().isOk())
+                    .andExpect(content().string(containsString("updated")));
+
+                    mockMvc.perform(
+                        patch("/products/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"updated title\"}")
+                    ).andExpect(status().isOk())
+                    .andExpect(content().string(containsString("updated")));
+                }
+            }
+
+            @Nested
+            @DisplayName("장난감을 찾을 수 없다면")
+            class Context_find_fail {
+                @BeforeEach
+                void setUp() {
+                    when(productService.updateProduct(anyLong(), any(Product.class)))
+                        .thenThrow(new ProductNotFoundException(ID));
+                }
+
+                @Test
+                @DisplayName("404(NOT FOUND) http status code를 리턴한다.")
+                void it_notify_a_find_fail() throws Exception {
+                    mockMvc.perform(
+                        put("/products/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"updated title\"}")
+                    ).andExpect(status().isNotFound());
+
+                    mockMvc.perform(
+                        patch("/products/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"updated title\"}")
+                    ).andExpect(status().isNotFound());
+                }
+            }
+
+            @AfterEach
+            void tearDown() {
+                verify(productService, atLeastOnce())
+                    .updateProduct(anyLong(), any(Product.class));
+            }
         }
     }
 }

@@ -141,4 +141,49 @@ public class ProductControllerTest {
                 .detailProduct(anyLong());
         }
     }
+
+    @Nested
+    @DisplayName("update 메서드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("Product를 찾을 수 있다면")
+        class Context_product_exist {
+            @BeforeEach
+            void setUp() {
+                when(productService.updateProduct(anyLong(), any(Product.class)))
+                    .thenReturn(new Product("updated" + TITLE));
+            }
+
+            @Test
+            @DisplayName("업데이트한 Product를 리턴한다.")
+            void it_returns_a_updated_product() {
+                assertThat(productController.update(ID, new CreateProductDto(TITLE)))
+                    .isInstanceOf(Product.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("Product를 찾을 수 없다면")
+        class Context_product_empty {
+            @BeforeEach
+            void setUp() {
+                when(productService.updateProduct(anyLong(), any(Product.class)))
+                    .thenThrow(new ProductNotFoundException(ID));
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다.")
+            void it_throws_a_productNotFoundException() {
+                assertThatThrownBy(() -> productController.update(ID, new CreateProductDto(TITLE)))
+                    .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productService)
+                .updateProduct(anyLong(), any(Product.class));
+        }
+
+    }
 }
