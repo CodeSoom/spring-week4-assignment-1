@@ -208,7 +208,7 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(productRepository.findById(anyLong()))
-                    .thenThrow(new ProductNotFoundException(ID));
+                    .thenReturn(Optional.empty());
             }
 
             @Test

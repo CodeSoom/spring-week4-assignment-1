@@ -65,4 +65,16 @@ public class ProductService {
         return productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException(id)).update(source);
     }
+
+    /**
+     * Product를 삭제한다.
+     *
+     * @param id 삭제할 Product의 id
+     * @throws ProductNotFoundException Product를 찾지 못한 경우
+     */
+    public void deleteProduct(final Long id) {
+        Product product = productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException(id));
+        productRepository.delete(product);
+    }
 }
