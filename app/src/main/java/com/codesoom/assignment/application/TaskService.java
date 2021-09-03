@@ -21,7 +21,7 @@ public class TaskService {
     }
 
     /**
-    * id에 해당하는 task를 찾아서 해당 task를 반환 합니다.
+    * id에 해당하는 task를 찾아서 반환합니다.
     **/
     public Task getTask(Long id) throws TaskNotFoundException {
         return taskRepository.find(id);
