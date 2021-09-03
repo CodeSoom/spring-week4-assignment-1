@@ -13,7 +13,7 @@ public class Product {
     private String name;
     private String maker;
     private Long price;
-    private String img;
+    private String imageUrl;
 
     public Long getId() {
         return id;
@@ -47,29 +47,29 @@ public class Product {
         this.price = price;
     }
 
-    public String getImg() {
-        return img;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Product() {};
 
-    public Product(Long id, String name, String maker, Long price, String img) {
+    public Product(Long id, String name, String maker, Long price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.img = img;
+        this.imageUrl = imageUrl;
     }
 
     public void setProduct(Product product) {
         this.name = product.getName();
         this.maker = product.getMaker();
         this.price = product.getPrice();
-        this.img = product.getImg();
+        this.imageUrl = product.getImageUrl();
     }
 
 }
