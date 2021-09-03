@@ -27,6 +27,17 @@ class ProductTest {
     }
 
     @Test
+    @DisplayName("id가 없는 Prodcut를 생성한다.")
+    void of() {
+        Product product = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
+
+        assertThat(product.getName()).isEqualTo(NAME);
+        assertThat(product.getMaker()).isEqualTo(MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRICE);
+        assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
+    }
+
+    @Test
     @DisplayName("Product의 프로퍼티를 검사합니다.")
     void verify_property() {
         Product product = new Product();
