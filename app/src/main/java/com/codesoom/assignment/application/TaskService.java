@@ -5,8 +5,8 @@ import com.codesoom.assignment.domain.Task;
 import com.codesoom.assignment.domain.TaskRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
+import java.util.List;
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;

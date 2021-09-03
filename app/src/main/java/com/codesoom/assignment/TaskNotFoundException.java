@@ -1,8 +1,10 @@
 package com.codesoom.assignment;
 
-import java.io.IOException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class TaskNotFoundException implements IOException {
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Not found tasks")
+public class TaskNotFoundException extends RuntimeException{
     public TaskNotFoundException(Long id) {
 
     }
