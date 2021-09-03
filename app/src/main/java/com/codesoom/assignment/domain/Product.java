@@ -47,4 +47,15 @@ public class Product {
 
         return this;
     }
+
+    /**
+     * JSON 문자열로 변환하여 리턴합니다.
+     *
+     * @return 변환된 문자열
+     */
+    public String stringify() {
+        return String
+            .format("{\"name\":\"%s\",\"maker\":\"%s\",\"price\":%s,\"imageUrl\":\"%s\"}", name,
+                maker, price, imageUrl);
+    }
 }
