@@ -75,11 +75,13 @@ public class ProductServiceTest {
         @Test
         @DisplayName("모든 상품을 리턴한다")
         void it_returns_all_products() {
-            Iterable<Product> allProducts = productService.getAllProducts();
-
-            ArrayList<Product> products = Lists.newArrayList(allProducts);
+            ArrayList<Product> products = toArrayList(productService.getAllProducts());
 
             assertThat(products).hasSize(1);
+        }
+
+        private ArrayList<Product> toArrayList(Iterable<Product> allProducts) {
+            return Lists.newArrayList(allProducts);
         }
     }
 
