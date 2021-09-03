@@ -58,7 +58,7 @@ public class ProductServiceTest {
     class Describe_createProduct {
 
         @Nested
-        @DisplayName("상품 객체를 넘길 경우")
+        @DisplayName("상품 객체가 주어지면")
         class Context_passProduct {
 
             Product createdProduct;
