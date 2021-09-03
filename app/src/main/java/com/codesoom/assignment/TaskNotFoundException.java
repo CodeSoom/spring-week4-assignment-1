@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Not found tasks")
 public class TaskNotFoundException extends RuntimeException{
-    public TaskNotFoundException(Long id) {
+    public String TaskNotFoundException(Long id) {
+        return id + "not found";
 
     }
 }
