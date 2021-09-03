@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static com.codesoom.assignment.domain.ProductConstant.TITLE;
@@ -184,6 +185,44 @@ public class ProductControllerTest {
             verify(productService)
                 .updateProduct(anyLong(), any(Product.class));
         }
+    }
+
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("Product를 찾을 수 없다면")
+        class Context_product_empty {
+            @BeforeEach
+            void setUp() {
+                doThrow(new ProductNotFoundException(ID))
+                    .when(productService).deleteProduct(anyLong());
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다.")
+            void it_throws_a_productNotFoundException() {
+                assertThatThrownBy(() -> productController.delete(ID))
+                    .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("Product를 찾을 수 있다면")
+        class Context_product_exist {
+            @Test
+            @DisplayName("Product를 삭제한다.")
+            void it_deletes_a_product() {
+                productController.delete(ID);
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productService)
+                .deleteProduct(anyLong());
+        }
 
     }
+
 }

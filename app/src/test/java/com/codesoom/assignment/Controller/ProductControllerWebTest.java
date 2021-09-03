@@ -6,8 +6,10 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -105,7 +107,7 @@ public final class ProductControllerWebTest {
 
         @Nested
         @DisplayName("장난감 생성 요청 시")
-        class Context_request_product_create {
+        class Context_request_create_product {
             @Test
             @DisplayName("장난감을 생성하고 리턴한다.")
             void it_returns_a_product() throws Exception {
@@ -239,6 +241,48 @@ public final class ProductControllerWebTest {
             void tearDown() {
                 verify(productService, atLeastOnce())
                     .updateProduct(anyLong(), any(Product.class));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("삭제 엔드포인트는")
+    class Describe_product_id_delete {
+        @Nested
+        @DisplayName("장난감 삭제 요청 시")
+        class Context_request_delete_product {
+            @Nested
+            @DisplayName("장난감을 찾을 수 있다면")
+            class Context_find_success {
+                @Test
+                @DisplayName("Product를 삭제한다.")
+                void it_deletes_a_product() throws Exception {
+                    mockMvc.perform(delete("/products/1"))
+                        .andExpect(status().isOk());
+                }
+            }
+
+            @Nested
+            @DisplayName("장난감을 찾을 수 없다면")
+            class Context_find_fail {
+                @BeforeEach
+                void setUp() {
+                    doThrow(new ProductNotFoundException(ID))
+                        .when(productService).deleteProduct(anyLong());
+                }
+
+                @Test
+                @DisplayName("404(NOT FOUND) http status code를 리턴한다.")
+                void it_notify_a_find_fail() throws Exception {
+                    mockMvc.perform(delete("/products/1"))
+                        .andExpect(status().isNotFound());
+                }
+            }
+
+            @AfterEach
+            void tearDown() {
+                verify(productService)
+                    .deleteProduct(anyLong());
             }
         }
     }
