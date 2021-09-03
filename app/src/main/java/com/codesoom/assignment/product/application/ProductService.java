@@ -41,7 +41,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteProduct(Product toy) {
-        productRepository.delete(toy);
+    public void deleteProduct(Product product) {
+        productRepository.delete(product);
     }
 }

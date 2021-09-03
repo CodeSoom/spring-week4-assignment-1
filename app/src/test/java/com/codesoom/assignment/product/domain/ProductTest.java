@@ -84,7 +84,7 @@ class ProductTest {
 
     @DisplayName("객체의 정보를 업데이트 할 수 있습니다.")
     @Test
-    void updateCatToy() {
+    void updateProduct() {
         final Product source = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
         final Product target = Product.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
 
@@ -100,7 +100,7 @@ class ProductTest {
     @DisplayName("상품의 정보를 공백 혹은 null로 업데이트 할 경우 예외가 발생합니다.")
     @ParameterizedTest
     @ArgumentsSource(ProvideInvalidProductArguments.class)
-    void updateCatToyWithSpace(final List<Product> products) {
+    void updateProductWithSpace(final List<Product> products) {
         final Product source = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
 
         for (Product target : products) {
@@ -111,7 +111,7 @@ class ProductTest {
 
     @DisplayName("상품의 가격을 잘 못 업데이트 할 경우 예외가 발생합니다.")
     @Test
-    void updateCatToyWithInvalidPrice() {
+    void updateProductWithInvalidPrice() {
         final Product source = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
         final Product target = Product.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL);
         ReflectionTestUtils.setField(target, "price", -3000L);

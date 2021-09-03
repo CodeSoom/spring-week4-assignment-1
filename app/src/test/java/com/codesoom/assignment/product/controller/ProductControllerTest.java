@@ -91,7 +91,7 @@ class ProductControllerTest {
 
     @DisplayName("상품 정보가 없더라도 전체 목록을 조회할 수 있습니다.")
     @Test
-    void findAllWithoutToy() {
+    void findAllWithoutProduct() {
         assertThat(controller.findAll()).isEmpty();
 
         verify(productService).findAll();
@@ -99,7 +99,7 @@ class ProductControllerTest {
 
     @DisplayName("상품 정보가 있을 경우에도 전체 목록을 조회할 수 있습니다.")
     @Test
-    void findAllWithToy() {
+    void findAllWithProduct() {
         assertThat(controller.findAll()).isEmpty();
 
         controller.create(product);
@@ -112,10 +112,10 @@ class ProductControllerTest {
     @DisplayName("존재하는 식별자를 이용해 상품 상세정보를 조회할 수 있습니다.")
     @Test
     void findByExistsId() {
-        final Product foundCatToy = controller.findById(1L);
+        final Product foundProduct = controller.findById(1L);
 
-        assertThat(foundCatToy).isEqualTo(product);
-        assertThat(foundCatToy.getName()).isEqualTo(product.getName());
+        assertThat(foundProduct).isEqualTo(product);
+        assertThat(foundProduct.getName()).isEqualTo(product.getName());
 
         verify(productService).findById(1L);
     }

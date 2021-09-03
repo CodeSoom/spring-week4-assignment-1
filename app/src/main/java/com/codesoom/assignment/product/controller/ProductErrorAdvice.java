@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * 고양이 장난감 Http Request 요청 처리 중 예외가 발생할 경우
+ * 상품 Http Request 요청 처리 중 예외가 발생할 경우
  * 예외를 처리하고 반환한다.
  */
 @Slf4j
@@ -21,7 +21,7 @@ public class ProductErrorAdvice {
     @ResponseBody
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse catToyNotFoundExceptionHandler(RuntimeException err) {
+    public ErrorResponse productNotFoundExceptionHandler(RuntimeException err) {
         log.info(err.getMessage());
         return new ErrorResponse(err.getMessage());
     }
@@ -29,7 +29,7 @@ public class ProductErrorAdvice {
     @ResponseBody
     @ExceptionHandler(ProductInvalidPriceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse catToyInvalidPriceExceptionHandler(RuntimeException err) {
+    public ErrorResponse productInvalidPriceExceptionHandler(RuntimeException err) {
         log.info(err.getMessage());
         return new ErrorResponse(err.getMessage());
     }
