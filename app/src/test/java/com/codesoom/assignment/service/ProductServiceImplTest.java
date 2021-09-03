@@ -23,51 +23,61 @@ class ProductServiceImplTest {
 
     private ProductRepository productRepository;
     private ProductService productService;
+
+    private List<Product> products;
     private Product TEST_PRODUCT;
     private Product UPDATE_PRODUCT;
+
+
     private Long VALID_ID = 1L;
     private Long INVALID_ID = 100L;
 
     @BeforeEach
     void setUp() {
 
-        TEST_PRODUCT = new Product(1L,"name1","maker1",1000L,"img1");
-        UPDATE_PRODUCT = new Product(null, "update_name1", "update_maker1", 1500L, "update_img1");
-
         productRepository = Mockito.mock(ProductRepository.class);
         productService = new ProductServiceImpl(productRepository);
+
+        // getProducts 테스트 setUp
+        products = new ArrayList<>();
+        products.add(new Product(1L,"name1","maker1",1000L,"img1"));
+        products.add(new Product(2L,"name2","maker2",2000L,"img2"));
+        products.add(new Product(3L,"name3","maker3",3000L,"img3"));
+
+        // register, update, getProduct 테스트 setUp
+        TEST_PRODUCT = new Product(1L,"name1","maker1",1000L,"img1");
+        UPDATE_PRODUCT = new Product(null, "update_name1", "update_maker1", 1500L, "update_img1");
 
     }
 
     @Nested
-    @DisplayName("register 메소드는")
-    class Describe_register {
+    @DisplayName("getProducts 메소드는")
+    class Describe_getProducts {
 
         @Nested
-        @DisplayName("영구 저장소에 등록할 product가 있다면")
-        class Context_exist_product {
+        @DisplayName("제품 저장소에 장난감들이 존재하면")
+        class Context_exist_products {
+
 
             @BeforeEach
             void setUp() {
 
-                given(productService.register(any(Product.class))).willReturn(TEST_PRODUCT);
+                given(productService.getProducts()).willReturn(products);
 
             }
 
             @Test
-            @DisplayName("영구 저장소에 저장 후 product를 반환합니다")
-            void It_save_product() {
+            @DisplayName("제품 저장소에 있는 장난감들을 리턴한다")
+            void It_return_products() {
 
-                Product createProduct = productService.register(TEST_PRODUCT);
+                List<Product> product = productService.getProducts();
 
-                assertThat(createProduct.getName()).isEqualTo(TEST_PRODUCT.getName());
+                assertThat(product).hasSize(3);
 
-                verify(productRepository).save(TEST_PRODUCT);
+                verify(productRepository).findAll();
 
             }
-
         }
-
     }
 
     @Nested
@@ -77,25 +87,21 @@ class ProductServiceImplTest {
         @BeforeEach
         void setUp() {
 
-            // 아이디가 존재할 때
-            given(productRepository.findById(VALID_ID)).willReturn(Optional.of(TEST_PRODUCT));
-
-            // 아이디가 존재하지 않을 때
-            given(productRepository.findById(INVALID_ID)).willThrow(NoSuchElementException.class);
+            ID_CHECK_SETUP();
 
         }
 
         @Nested
-        @DisplayName("영구 저장소에 product 상품이 존재하면")
+        @DisplayName("제품 저장소에 id에 맞는 제품이 존재하면")
         class Context_exist_id {
 
             @Test
             @DisplayName("id를 통해 product 객체를 리턴한다")
             void It_return_product() {
 
-                Product foundProduct = productService.getProduct(VALID_ID);
+                Product product = productService.getProduct(VALID_ID);
 
-                assertThat(foundProduct.getId()).isEqualTo(VALID_ID);
+                assertThat(product.getId()).isEqualTo(VALID_ID);
 
                 verify(productRepository).findById(VALID_ID);
 
@@ -104,7 +110,7 @@ class ProductServiceImplTest {
         }
 
         @Nested
-        @DisplayName("영구 저장소에 product 상품이 존재하지 않다면")
+        @DisplayName("제품 저장소에 id에 맞는 제품이 없다면")
         class Context_exist_not_id {
 
             @Test
@@ -121,38 +127,34 @@ class ProductServiceImplTest {
     }
 
     @Nested
-    @DisplayName("getProducts 메소드는")
-    class Describe_getProducts {
+    @DisplayName("register 메소드는")
+    class Describe_register {
 
         @Nested
-        @DisplayName("디비에 장난감들이 존재하면")
-        class Context_exist_products {
-
-            List<Product> products;
+        @DisplayName("제품 저장소에 등록할 제품이 있다면")
+        class Context_exist_product {
 
             @BeforeEach
             void setUp() {
 
-                products = new ArrayList<>();
-                products.add(new Product(1L,"name1","maker1",1000L,"img1"));
-                products.add(new Product(2L,"name2","maker2",2000L,"img2"));
-                products.add(new Product(3L,"name3","maker3",3000L,"img3"));
+                given(productService.register(any(Product.class))).willReturn(TEST_PRODUCT);
 
-                given(productService.getProducts()).willReturn(products);
             }
 
             @Test
-            @DisplayName("장난감 들을 리턴한다")
-            void It_return_products() {
+            @DisplayName("제품 저장소에 저장 후 등록한 제품을 반환합니다")
+            void It_save_product() {
 
-                List<Product> foundProducts = productService.getProducts();
+                Product product = productService.register(TEST_PRODUCT);
 
-                assertThat(foundProducts).hasSize(3);
+                assertThat(product.getName()).isEqualTo(TEST_PRODUCT.getName());
 
-                verify(productRepository).findAll();
+                verify(productRepository).save(TEST_PRODUCT);
 
             }
+
         }
+
     }
 
     @Nested
@@ -160,26 +162,25 @@ class ProductServiceImplTest {
     class Describe_updateProduct {
 
         @Nested
-        @DisplayName("영구 저장소에 수정 할 product가 있다면")
+        @DisplayName("제품 저장소에 수정 할 제품이 있다면")
         class Context_exist_product {
 
             @BeforeEach
             void setUp() {
 
-                given(productRepository.findById(VALID_ID)).willReturn(Optional.of(TEST_PRODUCT));
+                ID_CHECK_SETUP();
 
-                given(productRepository.findById(INVALID_ID)).willThrow(NoSuchElementException.class);
             }
 
             @Test
-            @DisplayName("아이디와 product 수정 객체를 받아 수정한다")
+            @DisplayName("id와 제품정보 객체를 받아 수정한다")
             void It_update_product() {
 
-                Product updateProduct = productService.updateProduct(VALID_ID, UPDATE_PRODUCT);
+                Product product = productService.updateProduct(VALID_ID, UPDATE_PRODUCT);
 
                 verify(productRepository).findById(VALID_ID);
 
-                assertThat(updateProduct.getName()).isEqualTo(UPDATE_PRODUCT.getName());
+                assertThat(product.getName()).isEqualTo(UPDATE_PRODUCT.getName());
 
             }
 
@@ -191,8 +192,17 @@ class ProductServiceImplTest {
                         .isInstanceOf(NoSuchElementException.class);
 
             }
+
         }
 
+    }
+
+    private void ID_CHECK_SETUP() {
+        // 아이디가 존재할 때
+        given(productRepository.findById(VALID_ID)).willReturn(Optional.of(TEST_PRODUCT));
+
+        // 아이디가 존재하지 않을 때
+        given(productRepository.findById(INVALID_ID)).willThrow(NoSuchElementException.class);
     }
 
 }

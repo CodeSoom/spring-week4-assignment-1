@@ -42,7 +42,9 @@ public class ProductController {
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.PUT,RequestMethod.PATCH})
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+
         return productService.updateProduct(id, product);
+
     }
 
     @DeleteMapping("/{id}")

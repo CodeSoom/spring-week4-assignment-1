@@ -17,12 +17,16 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository toyProductRepository;
 
     public ProductServiceImpl(ProductRepository toyProductRepository) {
+
         this.toyProductRepository = toyProductRepository;
+
     }
 
     @Override
     public Product register(Product product) {
+
        return toyProductRepository.save(product);
+
     }
 
     @Override
@@ -34,15 +38,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProducts() {
+
         return toyProductRepository.findAll();
+
     }
 
     @Override
     public Product updateProduct(Long id, Product product) {
 
         Product updateProduct = getProduct(id);
-
         updateProduct.setProduct(product);
+
         return updateProduct;
 
     }
