@@ -7,7 +7,6 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import java.util.ArrayList;
-import java.util.Optional;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -98,8 +97,9 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(productRepository.findById(productId))
-                    .isNotEqualTo(Optional.empty());
+                assertThat(productRepository.findById(productId)
+                    .isPresent())
+                    .isTrue();
 
                 existProductId = productId;
             }
@@ -161,8 +161,9 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(productRepository.findById(productId))
-                    .isNotEqualTo(Optional.empty());
+                assertThat(productRepository.findById(productId)
+                    .isPresent())
+                    .isTrue();
 
                 existProductId = productId;
             }
@@ -212,8 +213,9 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(productRepository.findById(productId))
-                    .isNotEqualTo(Optional.empty());
+                assertThat(productRepository.findById(productId)
+                    .isPresent())
+                    .isTrue();
 
                 existProductId = productId;
             }
@@ -223,9 +225,9 @@ public class ProductServiceTest {
             void it_delete() {
                 productService.deleteProduct(existProductId);
 
-                Optional<Product> findFromId = productRepository.findById(existProductId);
-
-                assertThat(findFromId.isPresent()).isFalse();
+                assertThat(productRepository.findById(existProductId)
+                    .isPresent())
+                    .isFalse();
             }
         }
 
