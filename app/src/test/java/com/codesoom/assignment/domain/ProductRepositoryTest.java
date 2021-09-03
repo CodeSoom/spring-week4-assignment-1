@@ -127,7 +127,7 @@ public class ProductRepositoryTest {
 
         @Test
         @DisplayName("Product를 삭제한다.")
-        void it_delete_a_product() {
+        void it_deletes_a_product() {
             assertThat(productRepository.findById(product.getId()))
                 .matches(output -> output.isPresent())
                 .matches(output -> product.getId().equals(output.get().getId()))

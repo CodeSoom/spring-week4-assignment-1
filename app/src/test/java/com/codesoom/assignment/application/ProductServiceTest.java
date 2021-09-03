@@ -198,4 +198,52 @@ public class ProductServiceTest {
                 .findById(anyLong());
         }
     }
+
+    @Nested
+    @DisplayName("deleteProduct 메서드는")
+    class Describe_deleteProduct {
+        @Nested
+        @DisplayName("Product를 찾을 수 없다면")
+        class Context_find_fail {
+            @BeforeEach
+            void setUp() {
+                when(productRepository.findById(anyLong()))
+                    .thenThrow(new ProductNotFoundException(ID));
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundExceptio을 리턴한다.")
+            void it_throws_a_productNotFoundException() {
+                assertThatThrownBy(() -> productService.deleteProduct(ID))
+                    .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("Product를 찾을 수 있다면")
+        class Context_find_success {
+            @BeforeEach
+            void setUp() {
+                when(productRepository.findById(anyLong()))
+                    .thenReturn(Optional.of(new Product(TITLE)));
+            }
+
+            @Test
+            @DisplayName("Product를 삭제한다.")
+            void it_deletes_a_product() {
+                productService.deleteProduct(ID);
+            }
+
+            @AfterEach
+            void tearDown() {
+                verify(productRepository)
+                    .delete(any(Product.class));
+            }
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productRepository).findById(anyLong());
+        }
+    }
 }
