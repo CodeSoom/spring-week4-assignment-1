@@ -5,7 +5,7 @@ package com.codesoom.assignment.exceptions;
  */
 public class ProductNotFoundException extends RuntimeException {
 
-    public static final String FORMAT = "식별자 %s에 해당하는 상품을 찾을 수 없습니다.";
+    private static final String FORMAT = "식별자 %s에 해당하는 상품을 찾을 수 없습니다.";
 
     /**
      * 식별자를 통해 상품을 찾지 못할 경우 발생합니다.
