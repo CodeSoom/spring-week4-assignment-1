@@ -24,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ProductControllerWebTest {
     private String TITLE = "Test1";
+    private String PRICE = "Price1";
+    private String IMAGE = "Image1";
     private String NEW_TITLE = "Test2";
     private String UPDATED_TITLE = "Test1_updated";
 
@@ -37,13 +39,14 @@ public class ProductControllerWebTest {
     @BeforeEach
     void setUp(){
         Product source = new Product();
-        source.setTitle(TITLE);
+        source.setName(TITLE);
+        source.setPrice(PRICE);
+        source.setImage(IMAGE);
         ProductService.createProduct(source);
     }
 
     @Test
-    //@Order(3)
-    @DisplayName("할일 목록 가져오기")
+    @Order(2)
     void list() throws Exception{
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
@@ -51,9 +54,7 @@ public class ProductControllerWebTest {
                 .andDo(print());
     }
 
-    @Test
-    //@Order(2)
-    @DisplayName("1번 할일 가져오기 Validation : isOk, expect TITLE")
+    //@Test
     void getProduct() throws Exception{
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
@@ -61,25 +62,24 @@ public class ProductControllerWebTest {
     }
 
     @Test
-    //@Order(1)
-    @DisplayName("할일 생성하기  Validation : isCreated, expect NEW_TITLE")
+    @Order(1)
     void createProduct() throws Exception{
         Product newProduct = new Product();
-        newProduct.setTitle(NEW_TITLE);
+        newProduct.setName(NEW_TITLE);
+        newProduct.setPrice(PRICE);
+        newProduct.setImage(IMAGE);
         String content = objectMapper.writeValueAsString(newProduct);
         mockMvc.perform(post("/products").content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.title").value(NEW_TITLE));
+                .andExpect(jsonPath("$.name").value(NEW_TITLE));
     }
 
-    @Test
-    //@Order(4)
-    @DisplayName("할일 수정하기 Validation : isOk, expect UPDATED_TITLE")
+    //@Test
     void updateProduct() throws Exception{
         Product newProduct = new Product();
-        newProduct.setTitle(UPDATED_TITLE);
+        newProduct.setName(UPDATED_TITLE);
 
         String content = objectMapper.writeValueAsString(newProduct);
         mockMvc.perform(put("/products/1").content(content)
@@ -89,9 +89,7 @@ public class ProductControllerWebTest {
                 .andExpect(jsonPath("$.title").value(UPDATED_TITLE));
     }
 
-    @Test
-    //@Order(5)
-    @DisplayName("할일 삭제하기 Validation : isNoContent")
+    //@Test
     void deleteProduct() throws Exception{
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent());
