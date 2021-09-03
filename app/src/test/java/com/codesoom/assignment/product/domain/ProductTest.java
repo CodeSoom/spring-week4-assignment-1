@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import static com.codesoom.assignment.Constant.PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("CatToy 객체 유닛 테스트")
+@DisplayName("Product 객체 유닛 테스트")
 class ProductTest {
 
     @DisplayName("객체를 생성할 수 있습니다.")
@@ -37,10 +38,11 @@ class ProductTest {
     }
 
     @DisplayName("유효하지 않은 가격으로 객체를 만들 수 없습니다.")
-    @Test
-    void createWithInvalidPrice() {
+    @ParameterizedTest
+    @ValueSource(longs = {0L, -1L ,-5000L, Long.MIN_VALUE})
+    void createWithInvalidPrice(Long invalidPrice) {
 
-        assertThatThrownBy(() -> Product.of(NAME, MAKER, -5000L, IMAGE_URL)
+        assertThatThrownBy(() -> Product.of(NAME, MAKER, invalidPrice, IMAGE_URL)
         ).isInstanceOf(ProductInvalidPriceException.class);
     }
 

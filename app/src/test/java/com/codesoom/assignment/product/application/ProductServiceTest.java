@@ -53,7 +53,7 @@ class ProductServiceTest {
     @DisplayName("제품들이 비어있는 목록을 조회할 수 있습니다.")
     @Test
     void findAllNotExistsProduct() {
-        given(service.findAll()).willReturn(new ArrayList<>());
+        given(repository.findAll()).willReturn(new ArrayList<>());
 
         List<Product> products = service.findAll();
 
@@ -65,7 +65,7 @@ class ProductServiceTest {
     @DisplayName("제품들이 존재하는 목록을 조회할 수 있습니다.")
     @Test
     void findAllExistsProduct() {
-        given(service.findAll())
+        given(repository.findAll())
                 .willReturn(Arrays.asList(product));
         List<Product> products = service.findAll();
 
