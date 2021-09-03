@@ -3,9 +3,11 @@ package com.codesoom.assignment.product.controller;
 import com.codesoom.assignment.EnableMockMvc;
 import com.codesoom.assignment.product.application.ProductService;
 import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.domain.ProductRepository;
 import com.codesoom.assignment.product.exception.ProductInvalidPriceException;
 import com.codesoom.assignment.product.exception.ProductNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 
@@ -27,6 +31,7 @@ import static com.codesoom.assignment.Constant.OTHER_MAKER;
 import static com.codesoom.assignment.Constant.OTHER_NAME;
 import static com.codesoom.assignment.Constant.OTHER_PRICE;
 import static com.codesoom.assignment.Constant.PRICE;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -41,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("ProductController API Web 테스트")
 @SpringBootTest
 @EnableMockMvc
-class ProductControllerWebTest {
+class ProductControllerWebJpaTest {
 
 
     private static final Long MINUS_PRICE = -3000L;
@@ -51,8 +56,10 @@ class ProductControllerWebTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     private ObjectMapper objectMapper;
 
@@ -63,37 +70,17 @@ class ProductControllerWebTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
+        productService = new ProductService(productRepository);
 
         setUpFixture();
     }
 
     private void setUpFixture() {
-        product = new Product(1L, NAME, MAKER, PRICE, IMAGE_URL);
+        productRepository.deleteAll();
+        product = productService.save(Product.of(NAME, MAKER, PRICE, IMAGE_URL));
 
         productWithInvalidPrice = new Product(NAME, MAKER, PRICE, IMAGE_URL);
         ReflectionTestUtils.setField(productWithInvalidPrice, "price", MINUS_PRICE);
-
-
-        given(productService.findAll()).willReturn(new ArrayList<>());
-
-        given(productService.save(product)).willReturn(product);
-
-        given(productService.save(productWithInvalidPrice))
-                .willThrow(new ProductInvalidPriceException(MINUS_PRICE));
-
-        given(productService.findById(1L))
-                .willReturn(product)
-                .willReturn(product)
-                .willThrow(new ProductNotFoundException(1L));
-
-        given(productService.findById(100L))
-                .willThrow(new ProductNotFoundException(100L));
-
-        given(productService.updateProduct(eq(1L), any(Product.class)))
-                .willReturn(Product.of(OTHER_NAME, OTHER_MAKER, OTHER_PRICE, OTHER_IMAGE_URL));
-
-        given(productService.updateProduct(eq(100L), any(Product.class)))
-                .willThrow(new ProductNotFoundException(100L));
     }
 
 
@@ -102,7 +89,10 @@ class ProductControllerWebTest {
     void getProducts() throws Exception {
         mockMvc.perform(get(API_PATH))
                 .andExpect(status().isOk())
-                .andExpect(content().string("[]"));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].name").value(product.getName()));
+
+
     }
 
     @DisplayName("식별자를 통해 상품 상세조회를 할 수 있습니다. - GET /products/{id}")
@@ -110,7 +100,7 @@ class ProductControllerWebTest {
     void getProductById() throws Exception {
         mockMvc.perform(get(API_PATH + "/" + product.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(product.getId()))
                 .andExpect(jsonPath("$.name").value(product.getName()))
                 .andExpect(jsonPath("$.maker").value(product.getMaker()))
                 .andExpect(jsonPath("$.price").value(product.getPrice()))
@@ -138,7 +128,6 @@ class ProductControllerWebTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value(product.getName()))
                 .andExpect(jsonPath("$.maker").value(product.getMaker()))
                 .andExpect(jsonPath("$.price").value(product.getPrice()))
@@ -168,7 +157,7 @@ class ProductControllerWebTest {
         final String jsonOtherProduct = objectMapper.writeValueAsString(otherProduct);
 
         mockMvc.perform(
-                        patch(API_PATH + "/1")
+                        patch(API_PATH + "/" + product.getId())
                                 .content(jsonOtherProduct)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -203,19 +192,19 @@ class ProductControllerWebTest {
         mockMvc.perform(get(API_PATH + "/" + product.getId()))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(delete(API_PATH +"/1"))
+        mockMvc.perform(delete(API_PATH + "/" + product.getId()))
                 .andExpect(status().isNoContent());
 
         mockMvc.perform(get(API_PATH + "/" + product.getId()))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message")
-                        .value(String.format(ProductNotFoundException.DEFAULT_MESSAGE, 1L)));
+                        .value(String.format(ProductNotFoundException.DEFAULT_MESSAGE, product.getId())));
     }
 
     @DisplayName("존재하지 않는 식별자의 상품 정보를 삭제하려 할 경우 NOT_FOUND로 실패합니다. - DELETE /product/{notExistsId}")
     @Test
     void deleteProductNotExistsId() throws Exception {
-        mockMvc.perform(delete(API_PATH +"/100"))
+        mockMvc.perform(delete(API_PATH + "/100"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message")
                         .value(String.format(ProductNotFoundException.DEFAULT_MESSAGE, 100L)));
