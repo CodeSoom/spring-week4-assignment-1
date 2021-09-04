@@ -13,7 +13,7 @@ import static com.codesoom.assignment.domain.ProductConstant.ID;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.CreateProductDto;
+import com.codesoom.assignment.dto.ProductDto;
 import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.AfterEach;
@@ -88,7 +88,7 @@ public class ProductControllerTest {
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
-            assertThat(productController.create(new CreateProductDto(TITLE)))
+            assertThat(productController.create(new ProductDto(TITLE)))
                 .isInstanceOf(Product.class);
         }
 
@@ -158,7 +158,7 @@ public class ProductControllerTest {
             @Test
             @DisplayName("업데이트한 Product를 리턴한다.")
             void it_returns_a_updated_product() {
-                assertThat(productController.update(ID, new CreateProductDto(TITLE)))
+                assertThat(productController.update(ID, new ProductDto(TITLE)))
                     .isInstanceOf(Product.class);
             }
         }
@@ -175,7 +175,7 @@ public class ProductControllerTest {
             @Test
             @DisplayName("ProductNotFoundException을 던진다.")
             void it_throws_a_productNotFoundException() {
-                assertThatThrownBy(() -> productController.update(ID, new CreateProductDto(TITLE)))
+                assertThatThrownBy(() -> productController.update(ID, new ProductDto(TITLE)))
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }

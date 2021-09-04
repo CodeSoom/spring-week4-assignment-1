@@ -1,12 +1,12 @@
 package com.codesoom.assignment.dto;
 
-public final class CreateProductDto {
+public final class ProductDto {
     private String title;
 
-    public CreateProductDto() {
+    public ProductDto() {
     }
 
-    public CreateProductDto(final String title) {
+    public ProductDto(final String title) {
         this.title = title;
     }
 

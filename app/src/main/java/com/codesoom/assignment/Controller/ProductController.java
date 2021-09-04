@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.CreateProductDto;
+import com.codesoom.assignment.dto.ProductDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,13 +36,13 @@ public final class ProductController {
     /**
      * 서비스 개체가 Product 생성을 수행하게 한다.
      *
-     * @param createProductDto Product 생성에 필요한 데이터
+     * @param productDto Product 생성에 필요한 데이터
      * @return 생성한 Product
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody final CreateProductDto createProductDto) {
-        Product product = new Product(createProductDto.getTitle());
+    public Product create(@RequestBody final ProductDto productDto) {
+        Product product = new Product(productDto.getTitle());
         return productService.createProduct(product);
     }
 
@@ -74,7 +74,7 @@ public final class ProductController {
      * 서비스 개체가 Product 수정을 수행하게 한다.
      *
      * @param id 수정할 Product의 id
-     * @param createProductDto 수정할 Product 데이터
+     * @param productDto 수정할 Product 데이터
      * @return 수정한 Product
      * @throws ProductNotFoundException Product를 찾지 못한 경우
      */
@@ -83,9 +83,9 @@ public final class ProductController {
     )
     @ResponseStatus(HttpStatus.OK)
     public Product update(
-        @PathVariable final Long id, @RequestBody final CreateProductDto createProductDto
+        @PathVariable final Long id, @RequestBody final ProductDto productDto
     ) {
-        Product product = new Product(createProductDto.getTitle());
+        Product product = new Product(productDto.getTitle());
         return productService.updateProduct(id, product);
     }
 
