@@ -30,11 +30,11 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product entity = productRepository.findById(id)
+        Product foundProduct = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + id));
         //더티 체킹
-        entity.update(source.getName(), source.getMaker(), source.getPrice(), source.getImagePath());
-        return entity;
+        foundProduct.update(source.getName(), source.getMaker(), source.getPrice(), source.getImagePath());
+        return foundProduct;
     }
 
     public Product deleteProduct(Long id) {
