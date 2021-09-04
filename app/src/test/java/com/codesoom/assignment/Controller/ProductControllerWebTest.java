@@ -48,51 +48,43 @@ public final class ProductControllerWebTest {
     @DisplayName("전체 목록 조회 엔드포인트는")
     class Describe_products_get {
         @Nested
-        @DisplayName("전체 목록 요청 시")
-        class Context_request_product_list {
-            @Nested
-            @DisplayName("저장된 Product가 없다면")
-            class Context_product_empty {
-                @BeforeEach
-                void setUp() {
-                    when(productService.listProduct())
-                        .thenReturn(Lists.newArrayList());
-                }
-
-                @Test
-                @DisplayName("빈 목록을 리턴한다.")
-                void it_returns_a_empty_list() throws Exception {
-                    mockMvc.perform(get("/products"))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string("[]"));
-                }
+        @DisplayName("저장된 Product가 없다면")
+        class Context_product_empty {
+            @BeforeEach
+            void setUp() {
+                when(productService.listProduct())
+                    .thenReturn(Lists.newArrayList());
             }
-
-            @Nested
-            @DisplayName("저장된 Product가 있다면")
-            class Context_product_exist {
-                @BeforeEach
-                void setUp() {
-                    when(productService.listProduct())
-                        .thenReturn(Lists.newArrayList(new Product(TITLE)));
-                }
-
-                @Test
-                @DisplayName("Product 목록을 리턴한다.")
-                void it_returns_a_product_list() throws Exception {
-                    mockMvc.perform(get("/products"))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(startsWith("[")))
-                        .andExpect(content().string(endsWith("]")))
-                        .andExpect(content().string(containsString("{")))
-                        .andExpect(content().string(containsString("}")));
-                }
+            @Test
+            @DisplayName("빈 목록을 리턴한다.")
+            void it_returns_a_empty_list() throws Exception {
+                mockMvc.perform(get("/products"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string("[]"));
             }
-
-            @AfterEach
-            void tearDown() {
-                verify(productService).listProduct();
+        }
+        @Nested
+        @DisplayName("저장된 Product가 있다면")
+        class Context_product_exist {
+            @BeforeEach
+            void setUp() {
+                when(productService.listProduct())
+                    .thenReturn(Lists.newArrayList(new Product(TITLE)));
             }
+            @Test
+            @DisplayName("Product 목록을 리턴한다.")
+            void it_returns_a_product_list() throws Exception {
+                mockMvc.perform(get("/products"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(startsWith("[")))
+                    .andExpect(content().string(endsWith("]")))
+                    .andExpect(content().string(containsString("{")))
+                    .andExpect(content().string(containsString("}")));
+            }
+        }
+        @AfterEach
+        void tearDown() {
+            verify(productService).listProduct();
         }
     }
 
@@ -105,8 +97,6 @@ public final class ProductControllerWebTest {
                 .thenReturn(new Product(TITLE));
         }
 
-        @Nested
-        @DisplayName("장난감 생성 요청 시")
         class Context_request_create_product {
             @Test
             @DisplayName("장난감을 생성하고 리턴한다.")
