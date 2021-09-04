@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface CatToyRepository extends CrudRepository<CatToy, Long> {
     List<CatToy> findAll();
-    Optional<CatToy> findById(long id);
+    Optional<CatToy> findById(Long id);
     CatToy save(CatToy catToy);
-    void deleteById(long id);
+    void deleteById(Long id);
 }

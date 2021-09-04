@@ -9,5 +9,5 @@ public interface CatToyService {
     CatToy findCatToyById(Long id);
     CatToy addCatToy(CatToy catToy);
     CatToy updateCatToy(Long id, CatToy catToy);
-    void deleteCatToyById(Long id);
+    CatToy deleteCatToyById(Long id);
 }
