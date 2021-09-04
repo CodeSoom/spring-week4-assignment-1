@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.codesoom.assignment.dto.ProductDto;
+
 /**
  * Product 리소스
  */
@@ -18,14 +20,11 @@ public final class Product {
     private String imageUrl;
     private Long price;
 
-    public Product(
-        final String name, final String maker,
-        final String imageUrl, final Long price
-    ) {
-        this.name = name;
-        this.maker = maker;
-        this.imageUrl = imageUrl;
-        this.price = price;
+    public Product(final ProductDto productDto) {
+        this.name = productDto.getName();
+        this.maker = productDto.getMaker();
+        this.imageUrl = productDto.getImageUrl();
+        this.price = productDto.getPrice();
     }
 
     public Long getId() {

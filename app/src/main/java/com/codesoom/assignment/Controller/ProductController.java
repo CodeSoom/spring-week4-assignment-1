@@ -42,7 +42,7 @@ public final class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody final ProductDto productDto) {
-        Product product = new Product(productDto.getTitle());
+        Product product = new Product(productDto);
         return productService.createProduct(product);
     }
 
@@ -85,7 +85,7 @@ public final class ProductController {
     public Product update(
         @PathVariable final Long id, @RequestBody final ProductDto productDto
     ) {
-        Product product = new Product(productDto.getTitle());
+        Product product = new Product(productDto);
         return productService.updateProduct(id, product);
     }
 
