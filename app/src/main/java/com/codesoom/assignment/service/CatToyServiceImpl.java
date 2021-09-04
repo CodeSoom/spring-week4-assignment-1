@@ -21,26 +21,21 @@ public class CatToyServiceImpl implements CatToyService{
         return catToyRepository.findAll();
     }
 
-    public Optional<CatToy> findCatToyById(long id) {
-        return Optional.ofNullable(catToyRepository.findById(id));
+    public CatToy findCatToyById(Long id) {
+        return catToyRepository.findById(id).orElseThrow(CatToyNotFoundException::new);
     }
 
     public CatToy addCatToy(CatToy catToy) {
         return catToyRepository.save(catToy);
     }
 
-    public CatToy updateCatToy(long id, CatToy catToy) {
-        Optional<CatToy> foundCatToy = Optional.ofNullable(catToyRepository.findById(id));
-        foundCatToy.orElseThrow(CatToyNotFoundException::new);
-
-        foundCatToy.get().setImageUrl(catToy.getImageUrl());
-        foundCatToy.get().setMaker(catToy.getMaker());
-        foundCatToy.get().setPrice(catToy.getPrice());
-        foundCatToy.get().setName(catToy.getName());
-        return catToyRepository.save(foundCatToy.get());
+    public CatToy updateCatToy(Long id, CatToy catToy) {
+        CatToy foundCatToy = catToyRepository.findById(id).orElseThrow(CatToyNotFoundException::new);
+        foundCatToy.update(catToy);
+        return catToyRepository.save(foundCatToy);
     }
 
-    public void deleteCatToyById(long id) {
+    public void deleteCatToyById(Long id) {
         catToyRepository.deleteById(id);
     }
 }

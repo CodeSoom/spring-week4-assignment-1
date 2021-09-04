@@ -15,9 +15,19 @@ import javax.persistence.Id;
 public class CatToy {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
     private String name;
     private String maker;
-    private int price;
+    private Integer price;
     private String imageUrl;
+
+    public CatToy() {
+    }
+
+    public void update(CatToy catToy) {
+        this.name = catToy.getName();
+        this.maker = catToy.getMaker();
+        this.price = catToy.getPrice();
+        this.imageUrl = catToy.getImageUrl();
+    }
 }

@@ -36,8 +36,8 @@ public class CatToyController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CatToy findCatToyById(@PathVariable long id) {
-        return catToyService.findCatToyById(id).orElseThrow(CatToyNotFoundException::new);
+    public CatToy findCatToyById(@PathVariable Long id) {
+        return catToyService.findCatToyById(id);
     }
 
     @PostMapping
@@ -48,13 +48,13 @@ public class CatToyController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CatToy updateCatToy(@PathVariable long id, @RequestBody CatToy catToy) {
+    public CatToy updateCatToy(@PathVariable Long id, @RequestBody CatToy catToy) {
         return catToyService.updateCatToy(id, catToy);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCatToy(@PathVariable long id) {
+    public void deleteCatToy(@PathVariable Long id) {
         catToyService.deleteCatToyById(id);
     }
 }
