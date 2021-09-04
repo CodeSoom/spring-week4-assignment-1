@@ -57,20 +57,25 @@ public class ProductControllerWebTest {
         @DisplayName("상품 객체가 주어지면")
         class Context_givenProduct {
 
-            Product product = Product.builder()
-                .name("name")
-                .maker("maker")
-                .price(10000L)
-                .imageUrl("imageUrl")
-                .build();
+            private Product source;
+
+            @BeforeEach
+            void setUp() {
+                source = Product.builder()
+                    .name("name")
+                    .maker("maker")
+                    .price(10000L)
+                    .imageUrl("imageUrl")
+                    .build();
+            }
 
             @Test
             @DisplayName("새 상품을 생성하고 201을 응답한다")
             void it_create_a_product_and_response_201() throws Exception {
                 mockMvc.perform(post("/products")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(product.toString()))
-                    .andExpect(content().json(product.toString()))
+                    .content(source.toString()))
+                    .andExpect(content().json(source.toString()))
                     .andExpect(status().isCreated());
             }
         }
@@ -81,7 +86,7 @@ public class ProductControllerWebTest {
     class Describe_getProduct {
 
         @Test
-        @DisplayName("모든 상품을 반환한다")
+        @DisplayName("모든 상품을 반환하고 200을 응답한다")
         void it_returns_all_products_with_200() throws Exception {
             mockMvc.perform(get("/products"))
                 .andExpect(status().isOk());
