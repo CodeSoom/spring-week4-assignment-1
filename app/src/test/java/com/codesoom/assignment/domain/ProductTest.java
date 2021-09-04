@@ -1,10 +1,13 @@
 package com.codesoom.assignment.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static org.mockito.ArgumentMatchers.isNull;
+import static com.codesoom.assignment.domain.ProductConstant.NAME;
+import static com.codesoom.assignment.domain.ProductConstant.MAKER;
+import static com.codesoom.assignment.domain.ProductConstant.IMAGE_URL;
+import static com.codesoom.assignment.domain.ProductConstant.PRICE;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import com.codesoom.assignment.dto.ProductDto;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,25 +18,22 @@ public class ProductTest {
     @Nested
     @DisplayName("update 메서드는")
     class Describe_update {
-@Test
-@DisplayName("id를 제외한 모든 멤버변수를 업데이트 한다.")
-void it_updates_all_member_variables() {
-    final Method[] methods = Product.class.getMethods();
-    final Product product = new Product(TITLE);
-    final Product source = new Product("updated" + TITLE);
-    final Product updatedProduct = product.update(source);
-    assertThat(product.getId()).isNull();
-    Arrays.stream(methods)
-    .filter(method -> method.getName().indexOf("get") != -1)
-    .filter(method -> !method.getName().equals("getClass"))
-    .filter(method -> !method.getName().equals("getId"))
-    .forEach(method -> {
-        try {
-            assertThat(method.invoke(updatedProduct)).isEqualTo(method.invoke(source));
-        } catch (Exception e) {
-            e.printStackTrace();
+        @Test
+        @DisplayName("id를 제외한 모든 멤버변수를 업데이트 한다.")
+        void it_updates_all_member_variables() {
+            final Product product = new Product(
+                new ProductDto(null, null, null, null)
+            );
+            final Product source = new Product(
+                new ProductDto(NAME, MAKER, IMAGE_URL, PRICE)
+            );
+
+            assertThat(product.update(source))
+                .matches(output -> output.getId() == isNull())
+                .matches(output -> NAME.equals(output.getName()))
+                .matches(output -> MAKER.equals(output.getMaker()))
+                .matches(output -> IMAGE_URL.equals(output.getImageUrl()))
+                .matches(output -> PRICE.equals(output.getPrice()));
         }
-    });
-}
     }
 }

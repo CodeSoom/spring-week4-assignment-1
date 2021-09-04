@@ -51,6 +51,7 @@ public final class Product {
         name = source.name;
         maker = source.maker;
         imageUrl = source.imageUrl;
+        price = source.price;
         return this;
     }
 }
