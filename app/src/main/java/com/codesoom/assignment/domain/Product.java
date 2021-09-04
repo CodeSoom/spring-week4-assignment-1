@@ -10,7 +10,7 @@ import com.codesoom.assignment.dto.ProductDto;
  * Product 리소스
  */
 @Entity
-public final class Product {
+public class Product {
     @Id
     @GeneratedValue
     private Long id;

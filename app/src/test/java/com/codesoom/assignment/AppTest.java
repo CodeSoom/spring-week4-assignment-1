@@ -3,16 +3,16 @@ package com.codesoom.assignment;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.mockito.MockedStatic;
-import org.springframework.boot.SpringApplication;
+// import org.mockito.MockedStatic;
+// import org.springframework.boot.SpringApplication;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mockStatic;
+// import static org.mockito.Mockito.mockStatic;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+// import org.junit.jupiter.api.AfterAll;
+// import org.junit.jupiter.api.AfterEach;
+// import org.junit.jupiter.api.BeforeAll;
+// import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 
@@ -33,25 +33,25 @@ class AppTest {
             assertThat(app.getGreeting()).isNotNull();
         }
     }
-    
+
     @Nested
     @DisplayName("main 메서드는")
     @TestInstance(Lifecycle.PER_CLASS)
     class Describe_main {
-        private MockedStatic<SpringApplication> springMock;
+        // private MockedStatic<SpringApplication> springMock;
         private final String[] args = new String[] {};
 
-        @BeforeAll
-        void beforeAll() {
-            springMock = mockStatic(SpringApplication.class);
-        }
+        // @BeforeAll
+        // void beforeAll() {
+        //     springMock = mockStatic(SpringApplication.class);
+        // }
 
-        @BeforeEach
-        void setUp() {
-            springMock.when(
-                () -> SpringApplication.run(App.class, args)
-            ).thenReturn(null);
-        }
+        // @BeforeEach
+        // void setUp() {
+        //     springMock.when(
+        //         () -> SpringApplication.run(App.class, args)
+        //     ).thenReturn(null);
+        // }
 
         @Test
         @DisplayName("스프링 어플리케이션을 작동시킨다.")
@@ -59,16 +59,16 @@ class AppTest {
             App.main(args);
         }
 
-        @AfterEach
-        void tearDown() {
-            springMock.verify(
-                () -> SpringApplication.run(App.class, args)
-            );
-        }
+        // @AfterEach
+        // void tearDown() {
+        //     springMock.verify(
+        //         () -> SpringApplication.run(App.class, args)
+        //     );
+        // }
 
-        @AfterAll
-        void afterAll() {
-            springMock.close();
-        }
+        // @AfterAll
+        // void afterAll() {
+        //     springMock.close();
+        // }
     }
 }
