@@ -7,7 +7,10 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static com.codesoom.assignment.domain.ProductConstant.NAME;
+import static com.codesoom.assignment.domain.ProductConstant.MAKER;
+import static com.codesoom.assignment.domain.ProductConstant.IMAGE_URL;
+import static com.codesoom.assignment.domain.ProductConstant.PRICE;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import com.codesoom.assignment.ProductNotFoundException;
@@ -35,6 +38,8 @@ public class ProductControllerTest {
     @Mock
     private ProductService productService;
 
+    private final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
+
     @Nested
     @DisplayName("list 메서드는")
     class Describe_list {
@@ -60,7 +65,7 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 when(productService.listProduct())
-                    .thenReturn(Lists.newArrayList(new Product(TITLE)));
+                    .thenReturn(Lists.newArrayList(new Product(productDto)));
             }
 
             @Test
@@ -82,13 +87,13 @@ public class ProductControllerTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(TITLE));
+                .thenReturn(new Product(productDto));
         }
 
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
-            assertThat(productController.create(new ProductDto(TITLE)))
+            assertThat(productController.create(productDto))
                 .isInstanceOf(Product.class);
         }
 
@@ -108,7 +113,7 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 when(productService.detailProduct(anyLong()))
-                    .thenReturn(new Product(TITLE));
+                    .thenReturn(new Product(productDto));
             }
 
             @Test
@@ -152,13 +157,13 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 when(productService.updateProduct(anyLong(), any(Product.class)))
-                    .thenReturn(new Product("updated" + TITLE));
+                    .thenReturn(new Product(productDto));
             }
 
             @Test
             @DisplayName("업데이트한 Product를 리턴한다.")
             void it_returns_a_updated_product() {
-                assertThat(productController.update(ID, new ProductDto(TITLE)))
+                assertThat(productController.update(ID, productDto))
                     .isInstanceOf(Product.class);
             }
         }
@@ -175,7 +180,7 @@ public class ProductControllerTest {
             @Test
             @DisplayName("ProductNotFoundException을 던진다.")
             void it_throws_a_productNotFoundException() {
-                assertThatThrownBy(() -> productController.update(ID, new ProductDto(TITLE)))
+                assertThatThrownBy(() -> productController.update(ID, productDto))
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }
