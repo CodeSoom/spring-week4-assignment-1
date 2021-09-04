@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.Builder;
+import lombok.Generated;
 import lombok.Getter;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -54,6 +55,7 @@ public class Product {
         return this;
     }
 
+    @Generated
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -72,6 +74,7 @@ public class Product {
             && Objects.equal(getImageUrl(), product.getImageUrl());
     }
 
+    @Generated
     @Override
     public int hashCode() {
         return Objects.hashCode(getName(), getMaker(), getPrice(), getImageUrl());
