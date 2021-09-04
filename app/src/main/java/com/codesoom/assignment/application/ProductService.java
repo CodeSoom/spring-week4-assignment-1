@@ -11,9 +11,9 @@ import com.codesoom.assignment.domain.Product;
 import org.springframework.stereotype.Service;
 
 /**
- * Product 리소스 작업(CRUD)을 정의하고, ProductRepository개체에 수행을 위임한다.
+ * Product 리소스관련 수행할 작업을 정의하고, 도메인 개체에 수행을 위임한다.
  *
- * @see ProductRepository
+ * @see ProductRepository Product 리소스 생성, 수정, 삭제, 조회 작업을 위임받는다.
  */
 @Service
 @Transactional
@@ -25,20 +25,29 @@ public class ProductService {
     }
 
     /**
-     * Product를 저장하고 리턴한다.
+     * Product 생성을 도메인 개체에 위임힌다.
      *
-     * @param product id를 제외한 Product 데이터
-     * @return id를 포함한 모든 Product 데이터
+     * @param product Product 생성에 필요한 데이터
+     * @return 생성한 Product
      */
     public Product createProduct(final Product product) {
         return productRepository.save(product);
     }
 
     /**
-     * Product를 찾아 리턴한다.
+     * Product 목록 조회를 도메인 개체에 위힘한다.
+     *
+     * @return Product 목록
+     */
+    public List<Product> listProduct() {
+        return productRepository.findAll();
+    }
+
+    /**
+     * Product 조회를 도메인 개체에 위임힌다.
      *
      * @param id 찾을 Product의 id
-     * @return 찾은 Product 개체
+     * @return 찾은 Product
      * @throws ProductNotFoundException Product를 찾지 못한 경우
      */
     public Product detailProduct(final Long id) {
@@ -47,20 +56,11 @@ public class ProductService {
     }
 
     /**
-     * Product 목록을 리턴한다.
+     * Product 수정을 도메인 개체에 위임힌다.
      *
-     * @return 저장된 Product 목록
-     */
-    public List<Product> listProduct() {
-        return productRepository.findAll();
-    }
-
-    /**
-     * Product 업데이트하고 리턴한다.
-     *
-     * @param id 업데이트할 Product의 id
-     * @param product id를 제외한 Product 데이터
-     * @return 업데이트한 Product 데이터
+     * @param id 수정할 Product의 id
+     * @param product 수정할 Product 데이터
+     * @return 수정한 Product
      * @throws ProductNotFoundException Product를 찾지 못한 경우
      */
     public Product updateProduct(final Long id, final Product source) {
@@ -69,7 +69,7 @@ public class ProductService {
     }
 
     /**
-     * Product를 삭제한다.
+     * Product를 삭제를 도메인 개체에 위임힌다.
      *
      * @param id 삭제할 Product의 id
      * @throws ProductNotFoundException Product를 찾지 못한 경우

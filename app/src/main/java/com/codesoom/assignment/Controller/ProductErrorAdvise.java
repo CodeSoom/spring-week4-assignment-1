@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ErrorResponseDto;
 
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,12 @@ public final class ProductErrorAdvise {
      *
      * @see ProductController#detail(Long)
      * @see ProductService#detailProduct(Long)
+     *
+     * @see ProductController#update(Long)
+     * @see ProductService#updateProduct(Long, Product)
+     *
+     * @see ProductController#delete(Long)
+     * @see ProductService#deleteProduct(Long)
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
