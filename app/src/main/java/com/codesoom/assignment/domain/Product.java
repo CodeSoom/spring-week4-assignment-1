@@ -58,18 +58,22 @@ public class Product {
     public Product() {};
 
     public Product(Long id, String name, String maker, Long price, String imageUrl) {
+
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+
     }
 
     public void setProduct(Product product) {
+
         this.name = product.getName();
         this.maker = product.getMaker();
         this.price = product.getPrice();
         this.imageUrl = product.getImageUrl();
+
     }
 
 }

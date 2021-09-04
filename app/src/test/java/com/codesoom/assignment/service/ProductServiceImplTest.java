@@ -28,7 +28,6 @@ class ProductServiceImplTest {
     private Product TEST_PRODUCT;
     private Product UPDATE_PRODUCT;
 
-
     private Long VALID_ID = 1L;
     private Long INVALID_ID = 100L;
 
@@ -55,9 +54,8 @@ class ProductServiceImplTest {
     class Describe_getProducts {
 
         @Nested
-        @DisplayName("제품 저장소에 장난감들이 존재하면")
+        @DisplayName("제품 저장소에 제품들이 존재하면")
         class Context_exist_products {
-
 
             @BeforeEach
             void setUp() {
@@ -67,7 +65,7 @@ class ProductServiceImplTest {
             }
 
             @Test
-            @DisplayName("제품 저장소에 있는 장난감들을 리턴한다")
+            @DisplayName("제품 저장소에 있는 제품들을 리턴한다")
             void It_return_products() {
 
                 List<Product> product = productService.getProducts();
@@ -77,7 +75,9 @@ class ProductServiceImplTest {
                 verify(productRepository).findAll();
 
             }
+
         }
+
     }
 
     @Nested
@@ -92,11 +92,11 @@ class ProductServiceImplTest {
         }
 
         @Nested
-        @DisplayName("제품 저장소에 id에 맞는 제품이 존재하면")
+        @DisplayName("제품 저장소에 검색한 제품이 존재하면")
         class Context_exist_id {
 
             @Test
-            @DisplayName("id를 통해 product 객체를 리턴한다")
+            @DisplayName("제품 객체를 리턴한다")
             void It_return_product() {
 
                 Product product = productService.getProduct(VALID_ID);
@@ -110,7 +110,7 @@ class ProductServiceImplTest {
         }
 
         @Nested
-        @DisplayName("제품 저장소에 id에 맞는 제품이 없다면")
+        @DisplayName("제품 저장소에 검색한 제품을 찾을 수 없다면")
         class Context_exist_not_id {
 
             @Test
@@ -161,19 +161,19 @@ class ProductServiceImplTest {
     @DisplayName("updateProduct 메소드는")
     class Describe_updateProduct {
 
+        @BeforeEach
+        void setUp() {
+
+            ID_CHECK_SETUP();
+
+        }
+
         @Nested
         @DisplayName("제품 저장소에 수정 할 제품이 있다면")
         class Context_exist_product {
 
-            @BeforeEach
-            void setUp() {
-
-                ID_CHECK_SETUP();
-
-            }
-
             @Test
-            @DisplayName("id와 제품정보 객체를 받아 수정한다")
+            @DisplayName("제품을 수정하고, 수정한 제품을 리턴한다")
             void It_update_product() {
 
                 Product product = productService.updateProduct(VALID_ID, UPDATE_PRODUCT);
@@ -184,8 +184,14 @@ class ProductServiceImplTest {
 
             }
 
+        }
+
+        @Nested
+        @DisplayName("제품 저장소에 제품을 찾을 수 없다면")
+        class Context_exist_not_product {
+
             @Test
-            @DisplayName("아이디가 없다면 NoSuchElementsException 을 던진다")
+            @DisplayName("NoSuchElementsException 을 던진다")
             void It_not_update_product() {
 
                 Assertions.assertThatThrownBy(() -> productRepository.findById(INVALID_ID))
@@ -198,11 +204,13 @@ class ProductServiceImplTest {
     }
 
     private void ID_CHECK_SETUP() {
+
         // 아이디가 존재할 때
         given(productRepository.findById(VALID_ID)).willReturn(Optional.of(TEST_PRODUCT));
 
         // 아이디가 존재하지 않을 때
         given(productRepository.findById(INVALID_ID)).willThrow(NoSuchElementException.class);
+
     }
 
 }

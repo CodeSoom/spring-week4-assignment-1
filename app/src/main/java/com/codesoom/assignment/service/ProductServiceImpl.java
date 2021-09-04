@@ -1,13 +1,11 @@
 package com.codesoom.assignment.service;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -58,7 +56,11 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<Product> foundProduct = toyProductRepository.findById(id);
 
-        toyProductRepository.deleteById(foundProduct.get().getId());
+        if (foundProduct.isPresent()) {
+
+            toyProductRepository.deleteById(foundProduct.get().getId());
+
+        }
 
     }
 
