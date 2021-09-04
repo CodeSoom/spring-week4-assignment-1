@@ -41,7 +41,7 @@ public class ProductControllerWebTest {
             void it_create_a_product_and_response_201() throws Exception {
                 mockMvc.perform(post("/products")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(product.stringify()))
+                    .content(product.toString()))
                     .andExpect(status().isCreated());
             }
         }

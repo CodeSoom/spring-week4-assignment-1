@@ -38,7 +38,7 @@ public class ProductTest {
     @Test
     @DisplayName("상품을 JSON 문자열로 변환한다.")
     void stringify() {
-        String actual = product.stringify();
+        String actual = product.toString();
 
         assertThat(actual).isEqualTo(
             "{\"name\":\"장난감 뱀\",\"maker\":\"애옹이네 장난감\",\"price\":10000,\"imageUrl\":\"http://localhost:8080/snake\"}");
