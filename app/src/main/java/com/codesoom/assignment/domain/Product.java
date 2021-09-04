@@ -1,23 +1,21 @@
 package com.codesoom.assignment.domain;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * 상품.
  */
 @Getter
-@EqualsAndHashCode
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Builder
 @DynamicUpdate
 @Entity
@@ -25,13 +23,36 @@ public class Product {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Exclude
     private Long id;
 
+    @NonNull
     private String name;
+
+    @NonNull
     private String maker;
+
+    @NonNull
     private Long price;
+
+    @NonNull
     private String imageUrl;
+
+    /**
+     * JPA 에서 생성은 허용하나 직접 생성은 허용하지 않습니다.
+     */
+    protected Product() {
+    }
+
+    @Builder
+    @VisibleForTesting
+    private Product(Long id, @NonNull String name, @NonNull String maker, @NonNull Long price,
+        @NonNull String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     /**
      * 수정될 정보가 담긴 상품을 받아, 현재 상품 정보를 수정하고 리턴합니다.
@@ -53,9 +74,35 @@ public class Product {
      *
      * @return 변환된 문자열
      */
+    @VisibleForTesting
     public String stringify() {
         return String
             .format("{\"name\":\"%s\",\"maker\":\"%s\",\"price\":%s,\"imageUrl\":\"%s\"}", name,
                 maker, price, imageUrl);
+    }
+
+    @Override
+    @VisibleForTesting
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Product product = (Product) o;
+
+        return Objects.equal(getName(), product.getName())
+            && Objects.equal(getMaker(), product.getMaker())
+            && Objects.equal(getPrice(), product.getPrice())
+            && Objects.equal(getImageUrl(), product.getImageUrl());
+    }
+
+    @Override
+    @VisibleForTesting
+    public int hashCode() {
+        return Objects.hashCode(getName(), getMaker(), getPrice(), getImageUrl());
     }
 }
