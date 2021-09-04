@@ -7,13 +7,17 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
-import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static com.codesoom.assignment.domain.ProductConstant.NAME;
+import static com.codesoom.assignment.domain.ProductConstant.MAKER;
+import static com.codesoom.assignment.domain.ProductConstant.IMAGE_URL;
+import static com.codesoom.assignment.domain.ProductConstant.PRICE;
 
 import java.util.Optional;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.ProductDto;
 import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.AfterEach;
@@ -35,19 +39,22 @@ public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+
+    private final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
+
     @Nested
     @DisplayName("create 메서드는")
     class Describe_createProduct {
         @BeforeEach
         void setUp() {
             when(productRepository.save(any(Product.class)))
-                .thenReturn(new Product(TITLE));
+                .thenReturn(new Product(productDto));
         }
 
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
-            assertThat(productService.createProduct(new Product(TITLE)))
+            assertThat(productService.createProduct(new Product(productDto)))
                 .isInstanceOf(Product.class);
         }
 
@@ -67,7 +74,7 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(productRepository.findById(anyLong()))
-                    .thenReturn(Optional.of(new Product(TITLE)));
+                    .thenReturn(Optional.of(new Product(productDto)));
             }
 
             @Test
@@ -110,7 +117,7 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(productRepository.findAll())
-                    .thenReturn(Lists.newArrayList(new Product(TITLE)));
+                    .thenReturn(Lists.newArrayList(new Product(productDto)));
             }
 
             @Test
@@ -156,7 +163,7 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(product.update(any(Product.class)))
-                    .thenReturn(new Product("updated" + TITLE));
+                    .thenReturn(new Product(productDto));
                 when(productRepository.findById(anyLong()))
                     .thenReturn(Optional.of(product));
             }
@@ -164,7 +171,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("업데이트한 Product를 리턴한다.")
             void it_returns_a_updated_product() {
-                assertThat(productService.updateProduct(ID, new Product(TITLE)))
+                assertThat(productService.updateProduct(ID, new Product(productDto)))
                     .isInstanceOf(Product.class);
             }
 
@@ -186,7 +193,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("ProductNotFoundException을 던진다.")
             void it_throws_a_productNotFoundException() {
-                assertThatThrownBy(() -> productService.updateProduct(ID, new Product(TITLE)))
+                assertThatThrownBy(() -> productService.updateProduct(ID, new Product(productDto)))
                     .isInstanceOf(ProductNotFoundException.class);
 
             }
@@ -225,7 +232,7 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 when(productRepository.findById(anyLong()))
-                    .thenReturn(Optional.of(new Product(TITLE)));
+                    .thenReturn(Optional.of(new Product(productDto)));
             }
 
             @Test
