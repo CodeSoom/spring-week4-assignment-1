@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -44,16 +46,18 @@ class ProductServiceTest {
         given(productRepository.findAll()).willReturn(products);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
         given(productRepository.findById(100L)).willReturn(Optional.empty());
+        setUpSaveProduct();
     }
-/*
+
     void setUpSaveProduct() {
-        given(productRepository.save(any(Product.class))).will(invocation -> {
+        //import static org.hamcrest.Matchers.any;  any()는 이것을 사용하였더니 localvariable오류. Hamcrest가 아닌 mockito사용.
+        given(productRepository.save(ArgumentMatchers.any(Product.class))).will(invocation -> {
             Product product = invocation.getArgument(0);
             product.setId(1L);
             return product;
         });
     }
-*/
+
     @Nested
     @DisplayName("getProducts 메소드")
     class describe_getProducts{
@@ -61,9 +65,13 @@ class ProductServiceTest {
         @Test
         @DisplayName("List<Product>를 반환한다.")
         void it_returns_list(){
+
             List<Product> products = productService.getProducts();
+
             verify(productRepository).findAll();
+
             assertThat(products).isInstanceOf(List.class);
+
         }
     }
 
@@ -72,12 +80,23 @@ class ProductServiceTest {
 
         @Nested
         @DisplayName("만약 유효한 id를 전달받았다면")
-        class context_with_a_valid_id {
+        class Context_with_a_valid_id {
+            Product source = makeSource();
+
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findById(0L)).willReturn(Optional.of(source));
+            }
+
             @Test
             @DisplayName("id에 해당하는 product를 반환한다.")
             void it_returns_a_product(){
-                Product result = productService.getProduct(1L);
-                verify(productRepository).findById(1L);
+                Long id = source.getId();
+                Product result = productService.getProduct(id);
+
+                verify(productRepository).findById(id);
+
+                assertThat(result.getId()).isEqualTo(id);
                 assertThat(result).isInstanceOf(Product.class);
             }
         }
@@ -96,19 +115,22 @@ class ProductServiceTest {
 
     @Nested
     class Describe_createProduct{
+        //given
+        Product source = makeSource();
+
         @Test
         @DisplayName("생성된 product를 리턴한다.")
         void it_returns_a_product() {
-            Product source = makeSource();
-            productService.createProduct(source);
-            //Product result = productService.createProduct(source);
+            //when
+            Product result = productService.createProduct(source);
 
+            //then
             verify(productRepository).save(source);
-            //assertThat(result.getMaker()).isEqualTo(TEST_VAR_MAKER);
-            //assertThat(result).isInstanceOf(Product.class);
+            assertThat(result).isInstanceOf(Product.class);
         }
     }
 
+    //Update 테스트는 아직 개선되지 않았습니다.
     @Nested
     class Describe_update{
 
@@ -119,6 +141,7 @@ class ProductServiceTest {
             Product source = makeSource();
             Product updateSource = makeSource();
 
+            //Update 테스트는 아직 개선되지 않았습니다.
             @Test
             @DisplayName("수정한 product를 리턴한다.")
             void it_returns_a_product() {
@@ -138,7 +161,7 @@ class ProductServiceTest {
             Product source = makeSource();
 
             @Test
-            @DisplayName("파라미터가 잘못됬다는 예외를 던진다.")
+            @DisplayName("파라미터가 잘못됐다는 예외를 던진다.")
             void it_thorws_IllegalArgumentException() {
                 Product source = makeSource();
                 assertThatThrownBy(() -> productService.updateProduct(invalidId, source))
@@ -159,8 +182,10 @@ class ProductServiceTest {
             @DisplayName("삭제한 product를 리턴한다.")
             void it_returns_a_product() {
                 Product result = productService.deleteProduct(validId);
+
                 verify(productRepository).deleteById(validId);
 
+                //todo Id 검증에 대한 테스트
                 //given(productRepository.deleteById(0L)).willReturn(any(Product.class));
                 //assertThat(result).isInstanceOf(Product.class);
                 //assertThat(result.getId()).isEqualTo(validId);
@@ -175,7 +200,6 @@ class ProductServiceTest {
             @Test
             @DisplayName("파라미터가 잘못됬다는 예외를 던진다.")
             void it_throws_IllegalArgumentException() {
-                Product source = makeSource();
                 assertThatThrownBy(() -> productService.deleteProduct(invalidId))
                         .isInstanceOf(IllegalArgumentException.class);
             }

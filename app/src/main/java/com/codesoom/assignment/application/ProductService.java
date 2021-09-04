@@ -11,12 +11,13 @@ import java.util.List;
 @Transactional
 public class ProductService {
     private ProductRepository productRepository;
+
     public ProductService(ProductRepository productRepository){
         this.productRepository = productRepository;
     }
 
     public List<Product> getProducts() {
-        return (List<Product>) productRepository.findAll();
+        return productRepository.findAll();
     }
 
     public Product getProduct(Long id) {
@@ -37,10 +38,8 @@ public class ProductService {
     }
 
     public Product deleteProduct(Long id) {
-        Product entity = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + id));
-
+        Product product = this.getProduct(id);
         productRepository.deleteById(id);
-        return entity;
+        return product;
     }
 }

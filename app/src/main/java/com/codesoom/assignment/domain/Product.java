@@ -20,6 +20,10 @@ public class Product {
     private int price;
     private String imagePath;
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Builder
     public Product(String name, String maker, int price, String imagePath) {
         this.name = name;
