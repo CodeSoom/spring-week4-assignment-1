@@ -1,9 +1,14 @@
 package com.codesoom.assignment.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static org.assertj.core.api.Assertions.tuple;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
+import static com.codesoom.assignment.domain.ProductConstant.NAME;
+import static com.codesoom.assignment.domain.ProductConstant.MAKER;
+import static com.codesoom.assignment.domain.ProductConstant.IMAGE_URL;
+import static com.codesoom.assignment.domain.ProductConstant.PRICE;
+
+import com.codesoom.assignment.dto.ProductDto;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,11 +41,16 @@ public class ProductRepositoryTest {
             @Test
             @DisplayName("주어진 개체를 저장하고 리턴한다.")
             void it_save_object_and_returns_a_saved_object() {
-                final Product product = new Product(TITLE);
+                final Product product = new Product(
+                    new ProductDto(NAME, MAKER, IMAGE_URL, PRICE)
+                );
 
                 assertThat(productRepository.save(product))
                     .matches(saved -> saved.getId() != null)
-                    .matches(saved -> product.getTitle().equals(saved.getTitle()));
+                    .matches(output -> NAME.equals(output.getName()))
+                    .matches(output -> MAKER.equals(output.getMaker()))
+                    .matches(output -> IMAGE_URL.equals(output.getImageUrl()))
+                    .matches(output -> PRICE.equals(output.getPrice()));
             }
         }
     }
@@ -55,7 +65,9 @@ public class ProductRepositoryTest {
         class Context_findById_success {
             @BeforeEach
             void setUp() {
-                final Product product = new Product(TITLE);
+                final Product product = new Product(
+                    new ProductDto(NAME, MAKER, IMAGE_URL, PRICE)
+                );
                 final Product savedProduct = productRepository.save(product);
                 id = savedProduct.getId();
             }
@@ -66,7 +78,10 @@ public class ProductRepositoryTest {
                 assertThat(productRepository.findById(id))
                     .matches(output -> output.isPresent())
                     .matches(output -> id.equals(output.get().getId()))
-                    .matches(output -> TITLE.equals(output.get().getTitle()));
+                    .matches(output -> NAME.equals(output.get().getName()))
+                    .matches(output -> MAKER.equals(output.get().getMaker()))
+                    .matches(output -> IMAGE_URL.equals(output.get().getImageUrl()))
+                    .matches(output -> PRICE.equals(output.get().getPrice()));
             }
         }
 
@@ -90,7 +105,9 @@ public class ProductRepositoryTest {
         class Context_product_exist {
             @BeforeEach
             void setUp() {
-                final Product product = new Product(TITLE);
+                final Product product = new Product(
+                    new ProductDto(NAME, MAKER, IMAGE_URL, PRICE)
+                );
                 productRepository.save(product);
             }
 
@@ -98,8 +115,11 @@ public class ProductRepositoryTest {
             @DisplayName("Product 목록을 리턴한다.")
             void it_returns_a_product_list() {
                 assertThat(productRepository.findAll())
-                    .extracting(Product::getTitle)
-                    .contains(TITLE);
+                    .extracting(
+                        Product::getName, Product::getMaker,
+                        Product::getImageUrl, Product::getPrice
+                    )
+                    .contains(tuple(NAME, MAKER, IMAGE_URL, PRICE));
             }
         }
 
@@ -122,7 +142,8 @@ public class ProductRepositoryTest {
 
         @BeforeEach
         void setUp() {
-            product = productRepository.save(new Product(TITLE));
+            final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
+            product = productRepository.save(new Product(productDto));
         }
 
         @Test
@@ -131,7 +152,10 @@ public class ProductRepositoryTest {
             assertThat(productRepository.findById(product.getId()))
                 .matches(output -> output.isPresent())
                 .matches(output -> product.getId().equals(output.get().getId()))
-                .matches(output -> product.getTitle().equals(output.get().getTitle()));
+                .matches(output -> NAME.equals(output.get().getName()))
+                .matches(output -> MAKER.equals(output.get().getMaker()))
+                .matches(output -> IMAGE_URL.equals(output.get().getImageUrl()))
+                .matches(output -> PRICE.equals(output.get().getPrice()));
 
             productRepository.delete(product);
 
