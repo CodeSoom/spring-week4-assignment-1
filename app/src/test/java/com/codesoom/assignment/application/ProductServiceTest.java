@@ -39,7 +39,6 @@ public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
-
     private final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
 
     @Nested
@@ -162,8 +161,13 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
+                final Long UPDATED_PRICE = PRICE.longValue() + PRICE.longValue();
+                final ProductDto updateProductDto = new ProductDto(
+                    "updated" + NAME, "updated" + MAKER,
+                    "updated" + IMAGE_URL, UPDATED_PRICE
+                );
                 when(product.update(any(Product.class)))
-                    .thenReturn(new Product(productDto));
+                    .thenReturn(new Product(updateProductDto));
                 when(productRepository.findById(anyLong()))
                     .thenReturn(Optional.of(product));
             }

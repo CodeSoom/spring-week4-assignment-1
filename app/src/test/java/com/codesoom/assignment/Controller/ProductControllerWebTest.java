@@ -16,12 +16,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.codesoom.assignment.domain.ProductConstant.TITLE;
+import static com.codesoom.assignment.domain.ProductConstant.NAME;
+import static com.codesoom.assignment.domain.ProductConstant.MAKER;
+import static com.codesoom.assignment.domain.ProductConstant.IMAGE_URL;
+import static com.codesoom.assignment.domain.ProductConstant.PRICE;
 import static com.codesoom.assignment.domain.ProductConstant.ID;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
@@ -43,6 +47,8 @@ public final class ProductControllerWebTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    private final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
 
     @Nested
     @DisplayName("전체 목록 조회 엔드포인트는")
@@ -69,7 +75,7 @@ public final class ProductControllerWebTest {
             @BeforeEach
             void setUp() {
                 when(productService.listProduct())
-                    .thenReturn(Lists.newArrayList(new Product(TITLE)));
+                    .thenReturn(Lists.newArrayList(new Product(productDto)));
             }
             @Test
             @DisplayName("Product 목록을 리턴한다.")
@@ -94,7 +100,7 @@ public final class ProductControllerWebTest {
         @BeforeEach
         void setUp() {
             when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(TITLE));
+                .thenReturn(new Product(productDto));
         }
         // TODO body가 달라지는 컨텍스트 추가
         // TODO parameter가 달라지는 컨텍스트 추가
@@ -106,10 +112,20 @@ public final class ProductControllerWebTest {
                 mockMvc.perform(
                         post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"title\"}")
+                        .content(
+                            "{"
+                                + "\"name\":\"name\","
+                                + "\"maker\":\"maker\","
+                                + "\"imageUrl\":\"imageUrl\","
+                                + "\"price\":1000" +
+                            "}"
+                        )
                     )
                     .andExpect(status().isCreated())
-                    .andExpect(content().string(containsString(TITLE)));
+                    .andExpect(content().string(containsString(NAME)))
+                    .andExpect(content().string(containsString(MAKER)))
+                    .andExpect(content().string(containsString(IMAGE_URL)))
+                    .andExpect(content().string(containsString(PRICE.toString())));
             }
         }
 
@@ -133,7 +149,7 @@ public final class ProductControllerWebTest {
                 @BeforeEach
                 void setUp() {
                     when(productService.detailProduct(anyLong()))
-                        .thenReturn(new Product(TITLE));
+                        .thenReturn(new Product(productDto));
                 }
 
                 @Test
@@ -141,7 +157,10 @@ public final class ProductControllerWebTest {
                 void it_returns_a_find_product() throws Exception {
                     mockMvc.perform(get("/products/1"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(TITLE)));
+                        .andExpect(content().string(containsString(NAME)))
+                        .andExpect(content().string(containsString(MAKER)))
+                        .andExpect(content().string(containsString(IMAGE_URL)))
+                        .andExpect(content().string(containsString(PRICE.toString())));
                 }
             }
 
@@ -182,8 +201,13 @@ public final class ProductControllerWebTest {
             class Context_find_success {
                 @BeforeEach
                 void setUp() {
+                    final Long UPDATED_PRICE = PRICE.longValue() + PRICE.longValue();
+                    final ProductDto updateProductDto = new ProductDto(
+                        "updated" + NAME, "updated" + MAKER,
+                        "updated" + IMAGE_URL, UPDATED_PRICE
+                    );
                     when(productService.updateProduct(anyLong(), any(Product.class)))
-                        .thenReturn(new Product("updated" + TITLE));
+                        .thenReturn(new Product(updateProductDto));
                 }
 
                 @Test
@@ -192,14 +216,28 @@ public final class ProductControllerWebTest {
                     mockMvc.perform(
                         put("/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"updated title\"}")
+                        .content(
+                            "{"
+                                + "\"name\":\"updated name\","
+                                + "\"maker\":\"updated maker\","
+                                + "\"imageUrl\":\"updated imageUrl\","
+                                + "\"price\":2000" +
+                            "}"
+                        )
                     ).andExpect(status().isOk())
                     .andExpect(content().string(containsString("updated")));
 
                     mockMvc.perform(
                         patch("/products/2")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"updated title\"}")
+                        .content(
+                            "{"
+                                + "\"name\":\"updated name\","
+                                + "\"maker\":\"updated maker\","
+                                + "\"imageUrl\":\"updated imageUrl\","
+                                + "\"price\":2000" +
+                            "}"
+                        )
                     ).andExpect(status().isOk())
                     .andExpect(content().string(containsString("updated")));
                 }
@@ -220,13 +258,27 @@ public final class ProductControllerWebTest {
                     mockMvc.perform(
                         put("/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"updated title\"}")
+                        .content(
+                            "{"
+                                + "\"name\":\"updated name\","
+                                + "\"maker\":\"updated maker\","
+                                + "\"imageUrl\":\"updated imageUrl\","
+                                + "\"price\":2000" +
+                            "}"
+                        )
                     ).andExpect(status().isNotFound());
 
                     mockMvc.perform(
                         patch("/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"updated title\"}")
+                        .content(
+                            "{"
+                                + "\"name\":\"updated name\","
+                                + "\"maker\":\"updated maker\","
+                                + "\"imageUrl\":\"updated imageUrl\","
+                                + "\"price\":2000" +
+                            "}"
+                        )
                     ).andExpect(status().isNotFound());
                 }
             }

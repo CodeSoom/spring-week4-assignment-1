@@ -156,8 +156,13 @@ public class ProductControllerTest {
         class Context_product_exist {
             @BeforeEach
             void setUp() {
+                final Long UPDATED_PRICE = PRICE.longValue() + PRICE.longValue();
+                final ProductDto updateProductDto = new ProductDto(
+                    "updated" + NAME, "updated" + MAKER,
+                    "updated" + IMAGE_URL, UPDATED_PRICE
+                );
                 when(productService.updateProduct(anyLong(), any(Product.class)))
-                    .thenReturn(new Product(productDto));
+                    .thenReturn(new Product(updateProductDto));
             }
 
             @Test
