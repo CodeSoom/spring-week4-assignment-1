@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ~/data/demo
+    url: jdbc:h2:~/data/demo
   jpa:
     hibernate:
       ddl-auto: update
