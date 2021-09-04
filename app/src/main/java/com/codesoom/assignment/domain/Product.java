@@ -1,22 +1,17 @@
 package com.codesoom.assignment.domain;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * 상품.
  */
 @Getter
-@RequiredArgsConstructor
-@Builder
 @DynamicUpdate
 @Entity
 public class Product {
@@ -25,16 +20,9 @@ public class Product {
     @GeneratedValue
     private Long id;
 
-    @NonNull
     private String name;
-
-    @NonNull
     private String maker;
-
-    @NonNull
     private Long price;
-
-    @NonNull
     private String imageUrl;
 
     /**
@@ -44,10 +32,7 @@ public class Product {
     }
 
     @Builder
-    @VisibleForTesting
-    private Product(Long id, @NonNull String name, @NonNull String maker, @NonNull Long price,
-        @NonNull String imageUrl) {
-        this.id = id;
+    private Product(String name, String maker, Long price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -74,7 +59,6 @@ public class Product {
      *
      * @return 변환된 문자열
      */
-    @VisibleForTesting
     public String stringify() {
         return String
             .format("{\"name\":\"%s\",\"maker\":\"%s\",\"price\":%s,\"imageUrl\":\"%s\"}", name,
@@ -82,7 +66,6 @@ public class Product {
     }
 
     @Override
-    @VisibleForTesting
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -101,7 +84,6 @@ public class Product {
     }
 
     @Override
-    @VisibleForTesting
     public int hashCode() {
         return Objects.hashCode(getName(), getMaker(), getPrice(), getImageUrl());
     }
