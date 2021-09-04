@@ -96,7 +96,7 @@ public final class ProductController {
      * @throws ProductNotFoundException Product를 찾지 못한 경우
      */
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable final Long id) {
         productService.deleteProduct(id);
     }

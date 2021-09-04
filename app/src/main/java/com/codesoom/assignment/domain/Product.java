@@ -20,6 +20,9 @@ public final class Product {
     private String imageUrl;
     private Long price;
 
+    public Product() {
+    }
+
     public Product(final ProductDto productDto) {
         this.name = productDto.getName();
         this.maker = productDto.getMaker();

@@ -305,7 +305,7 @@ public final class ProductControllerWebTest {
                 @DisplayName("Product를 삭제한다.")
                 void it_deletes_a_product() throws Exception {
                     mockMvc.perform(delete("/products/1"))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isNoContent());
                 }
             }
 
