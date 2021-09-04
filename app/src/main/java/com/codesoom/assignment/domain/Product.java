@@ -13,22 +13,45 @@ public final class Product {
     @GeneratedValue
     private Long id;
 
-    private String title;
+    private String name;
+    private String maker;
+    private String imageUrl;
+    private Long price;
 
-    public Product(final String title) {
-        this.title = title;
+    public Product(
+        final String name, final String maker,
+        final String imageUrl, final Long price
+    ) {
+        this.name = name;
+        this.maker = maker;
+        this.imageUrl = imageUrl;
+        this.price = price;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
+    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public Long getPrice() {
+        return price;
     }
 
     public Product update(final Product source) {
-        title = source.getTitle();
+        name = source.name;
+        maker = source.maker;
+        imageUrl = source.imageUrl;
         return this;
     }
 }

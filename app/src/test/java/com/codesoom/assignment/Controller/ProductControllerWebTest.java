@@ -96,6 +96,8 @@ public final class ProductControllerWebTest {
             when(productService.createProduct(any(Product.class)))
                 .thenReturn(new Product(TITLE));
         }
+        // TODO body가 달라지는 컨텍스트 추가
+        // TODO parameter가 달라지는 컨텍스트 추가
 
         class Context_request_create_product {
             @Test
@@ -121,6 +123,7 @@ public final class ProductControllerWebTest {
     @Nested
     @DisplayName("검색 엔드포인트는")
     class Describe_products_id_get {
+        // TODO parameter가 달라지는 컨텍스트 추가
         @Nested
         @DisplayName("장난감 데이터 요청 시")
         class Contest_request_product {
@@ -170,6 +173,7 @@ public final class ProductControllerWebTest {
     @Nested
     @DisplayName("수정 엔드포인트는")
     class Describe_product_id_put_patch {
+        // TODO parameter body 달라지는 컨텍스트 추가
         @Nested
         @DisplayName("장난감 업데이트 요청 시")
         class Context_request_update_product {
@@ -238,6 +242,7 @@ public final class ProductControllerWebTest {
     @Nested
     @DisplayName("삭제 엔드포인트는")
     class Describe_product_id_delete {
+        // TODO parameter 컨텍스트 추가
         @Nested
         @DisplayName("장난감 삭제 요청 시")
         class Context_request_delete_product {
