@@ -99,8 +99,7 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(productRepository.findById(productId)
-                    .isPresent())
+                assertThat(productRepository.existsById(productId))
                     .isTrue();
 
                 existProductId = productId;
@@ -163,8 +162,7 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(productRepository.findById(productId)
-                    .isPresent())
+                assertThat(productRepository.existsById(productId))
                     .isTrue();
 
                 existProductId = productId;
@@ -215,8 +213,7 @@ public class ProductServiceTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(productRepository.findById(productId)
-                    .isPresent())
+                assertThat(productRepository.existsById(productId))
                     .isTrue();
 
                 existProductId = productId;
@@ -227,8 +224,7 @@ public class ProductServiceTest {
             void it_delete() {
                 productService.deleteProduct(existProductId);
 
-                assertThat(productRepository.findById(existProductId)
-                    .isPresent())
+                assertThat(productRepository.existsById(existProductId))
                     .isFalse();
             }
         }
