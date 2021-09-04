@@ -11,7 +11,9 @@ import com.codesoom.assignment.domain.Product;
 import org.springframework.stereotype.Service;
 
 /**
- * Product리소스 데이터 처리를 담당한다.
+ * Product 리소스 작업(CRUD)을 정의하고, ProductRepository개체에 수행을 위임한다.
+ *
+ * @see ProductRepository
  */
 @Service
 @Transactional

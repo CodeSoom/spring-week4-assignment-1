@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponseDto;
 
@@ -22,7 +23,7 @@ public final class ProductErrorAdvise {
      * @return 에러 메시지("Product not found.")
      *
      * @see ProductController#detail(Long)
-     * @see com.codesoom.assignment.application.ProductService#detailProduct(Long)
+     * @see ProductService#detailProduct(Long)
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
