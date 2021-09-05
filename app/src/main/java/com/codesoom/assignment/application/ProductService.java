@@ -4,7 +4,6 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import javax.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,10 +11,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     /**
      * 상품을 추가하고, 리턴합니다.
