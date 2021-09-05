@@ -38,22 +38,4 @@ class ProductTest {
         assertThat(updatedProduct.getPrice()).isEqualTo(PRICE);
         assertThat(updatedProduct.getImageUrl()).isEqualTo(IMAGE_URL);
     }
-
-    @Test
-    @DisplayName("Product의 프로퍼티를 검사합니다.")
-    void verify_property() {
-        Product product = new Product();
-
-        product.setId(ID);
-        product.setName(NAME);
-        product.setMaker(MAKER);
-        product.setPrice(PRICE);
-        product.setImageUrl(IMAGE_URL);
-
-        assertThat(product.getId()).isEqualTo(ID);
-        assertThat(product.getName()).isEqualTo(NAME);
-        assertThat(product.getMaker()).isEqualTo(MAKER);
-        assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
-    }
 }
