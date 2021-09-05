@@ -184,7 +184,7 @@ public final class ProductControllerWebTest {
 
             @AfterEach
             void tearDown() {
-                verify(productService)
+                verify(productService, atLeastOnce())
                     .detailProduct(anyLong());
             }
         }
