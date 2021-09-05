@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -69,6 +71,7 @@ public final class ProductControllerWebTest {
                     .andExpect(content().string("[]"));
             }
         }
+
         @Nested
         @DisplayName("저장된 Product가 있다면")
         class Context_product_exist {
@@ -88,9 +91,10 @@ public final class ProductControllerWebTest {
                     .andExpect(content().string(containsString("}")));
             }
         }
+
         @AfterEach
         void tearDown() {
-            verify(productService).listProduct();
+            verify(productService, atLeastOnce()).listProduct();
         }
     }
 
@@ -148,8 +152,8 @@ public final class ProductControllerWebTest {
             class Context_find_success {
                 @BeforeEach
                 void setUp() {
-                    when(productService.detailProduct(anyLong()))
-                        .thenReturn(new Product(productDto));
+                    doReturn(new Product(productDto)).when(productService).detailProduct(anyLong());
+                        // .thenReturn(new Product(productDto));
                 }
 
                 @Test
@@ -169,8 +173,8 @@ public final class ProductControllerWebTest {
             class Context_find_fail {
                 @BeforeEach
                 void setUp() {
-                when(productService.detailProduct(anyLong()))
-                    .thenThrow(new ProductNotFoundException(ID));
+                    when(productService.detailProduct(anyLong()))
+                        .thenThrow(new ProductNotFoundException(ID));
                 }
 
                 @Test
@@ -183,7 +187,7 @@ public final class ProductControllerWebTest {
 
             @AfterEach
             void tearDown() {
-                verify(productService)
+                verify(productService, atLeastOnce())
                     .detailProduct(anyLong());
             }
         }
@@ -301,6 +305,12 @@ public final class ProductControllerWebTest {
             @Nested
             @DisplayName("장난감을 찾을 수 있다면")
             class Context_find_success {
+                @BeforeEach
+                void setUp() {
+                    doNothing()
+                        .when(productService).deleteProduct(anyLong());
+                }
+
                 @Test
                 @DisplayName("Product를 삭제한다.")
                 void it_deletes_a_product() throws Exception {
@@ -328,9 +338,10 @@ public final class ProductControllerWebTest {
 
             @AfterEach
             void tearDown() {
-                verify(productService)
+                verify(productService, atLeastOnce())
                     .deleteProduct(anyLong());
             }
+
         }
     }
 }
