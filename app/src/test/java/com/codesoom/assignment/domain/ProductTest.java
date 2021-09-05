@@ -30,10 +30,10 @@ public class ProductTest {
 
             assertThat(product.update(source))
                 .matches(output -> output.getId() == isNull())
-                .matches(output -> NAME.equals(output.getName()))
-                .matches(output -> MAKER.equals(output.getMaker()))
-                .matches(output -> IMAGE_URL.equals(output.getImageUrl()))
-                .matches(output -> PRICE.equals(output.getPrice()));
+                .matches(output -> source.getName().equals(output.getName()))
+                .matches(output -> source.getMaker().equals(output.getMaker()))
+                .matches(output -> source.getImageUrl().equals(output.getImageUrl()))
+                .matches(output -> source.getPrice().equals(output.getPrice()));
         }
     }
 }
