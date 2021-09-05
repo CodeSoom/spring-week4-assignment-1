@@ -36,6 +36,13 @@ public class Product {
         return product;
     }
 
+    public void update(String name, String maker, Long price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     public Long getId() {
         return id;
     }
