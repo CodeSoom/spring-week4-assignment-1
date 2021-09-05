@@ -38,6 +38,19 @@ class ProductTest {
     }
 
     @Test
+    @DisplayName("update 메서드는 주어진 name, maker, price, image_url로 prodcut를 업데이트합니다.")
+    void update() {
+        Product product = new Product();
+
+        product.update(NAME, MAKER, PRICE, IMAGE_URL);
+
+        assertThat(product.getName()).isEqualTo(NAME);
+        assertThat(product.getMaker()).isEqualTo(MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRICE);
+        assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
+    }
+
+    @Test
     @DisplayName("Product의 프로퍼티를 검사합니다.")
     void verify_property() {
         Product product = new Product();
