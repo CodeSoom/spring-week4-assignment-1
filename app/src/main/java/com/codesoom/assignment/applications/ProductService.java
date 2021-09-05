@@ -3,25 +3,33 @@ package com.codesoom.assignment.applications;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     public Product save(Product product) {
-        return productRepository.save(product);
+        Product newProdcut = Product.of(
+                product.getName(),
+                product.getMaker(),
+                product.getPrice(),
+                product.getImageUrl());
+        return productRepository.save(newProdcut);
     }
 
     public List<Product> findAll() {
-        return productRepository.findAll();
+        return (List<Product>) productRepository.findAll();
     }
 
     public Product findById(Long id) {
@@ -30,11 +38,23 @@ public class ProductService {
     }
 
     public Product update(Long id, Product product) {
-        return productRepository.update(id, product);
+        Product updatedProduct = findById(id);
+
+        updatedProduct.setName(product.getName());
+        updatedProduct.setMaker(product.getMaker());
+        updatedProduct.setPrice(product.getPrice());
+        updatedProduct.setImageUrl(product.getImageUrl());
+
+        return productRepository.save(updatedProduct);
     }
 
     public void deleteById(Long id) {
-        productRepository.deleteById(id);
+        try {
+            productRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println(e.getMessage());
+            throw new ProductNotFoundException(id);
+        }
     }
 
 

@@ -1,22 +1,26 @@
 package com.codesoom.assignment.applications;
 
 import com.codesoom.assignment.domain.Product;
+
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;;
+import org.checkerframework.checker.units.qual.A;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ProductServiceTest 클래스")
+@DataJpaTest
 class ProductServiceTest {
     private ProductService productService;
 
+    @Autowired
     private ProductRepository productRepository;
 
     private Product product1;
@@ -24,12 +28,15 @@ class ProductServiceTest {
 
     @BeforeEach
     public void setUp() {
-
-        product1 = new Product(1L, "toy1", "maker1", 1000L, "toy1.jpg");
-        product2 = new Product(2L, "toy2", "maker2", 2000L, "toy2.jpg");
-
-        productRepository = new ProductRepository();
         productService = new ProductService(productRepository);
+
+        product1 = new Product(0L, "toy1", "maker1", 1000L, "toy1.jpg");
+        product2 = new Product(1L, "toy2", "maker2", 2000L, "toy2.jpg");
+    }
+
+    @AfterEach
+    public void tearDown() {
+        productRepository.deleteAll();
     }
 
     @Nested
@@ -39,7 +46,8 @@ class ProductServiceTest {
         @Test
         @DisplayName("새로운 product를 반환합니다.")
         void it_return_new_product() {
-            assertThat(productService.save(product1)).isEqualTo(product1);
+            Product newProduct = productService.save(product1);
+            equalProduct(newProduct, product1);
         }
     }
 
@@ -59,7 +67,11 @@ class ProductServiceTest {
         @Test
         @DisplayName("모든 product를 반환합니다.")
         void it_return_all_product() {
-            assertThat(productService.findAll()).isEqualTo(givenProducts);
+            List<Product> resultProducts = productService.findAll();
+
+            for(int i=0; i<resultProducts.size(); i++) {
+                equalProduct(resultProducts.get(i), givenProducts.get(i));
+            }
         }
     }
 
@@ -75,14 +87,15 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                valid_id = product1.getId();
-                productService.save(product1);
+                Product givenProduct = productService.save(product1);
+                valid_id = givenProduct.getId();
             }
 
             @Test
             @DisplayName("해당 Id의 product를 반환합니다.")
             void it_return_product() {
-                assertThat(productService.findById(valid_id)).isEqualTo(product1);
+                Product resultProduct = productService.findById(valid_id);
+                equalProduct(resultProduct, product1);
             }
         }
 
@@ -94,8 +107,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                invalid_id = product2.getId();
                 productService.save(product1);
+                invalid_id = product2.getId();
             }
 
             @Test
@@ -119,8 +132,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                valid_id = product1.getId();
-                productService.save(product1);
+                Product givenProduct = productService.save(product1);
+                valid_id = givenProduct.getId();
             }
 
             @Test
@@ -128,10 +141,7 @@ class ProductServiceTest {
             void it_return_updated_product() {
                 Product updatedProduct = productService.update(valid_id, product2);
 
-                assertThat(updatedProduct.getName()).isEqualTo(product2.getName());
-                assertThat(updatedProduct.getMaker()).isEqualTo(product2.getMaker());
-                assertThat(updatedProduct.getPrice()).isEqualTo(product2.getPrice());
-                assertThat(updatedProduct.getImageUrl()).isEqualTo(product2.getImageUrl());
+                equalProduct(updatedProduct, product2);
             }
         }
 
@@ -144,7 +154,6 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 invalid_id = product2.getId();
-                productService.save(product1);
             }
 
             @Test
@@ -169,7 +178,6 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 invalid_id = product2.getId();
-                productService.save(product1);
             }
 
             @Test
@@ -179,5 +187,12 @@ class ProductServiceTest {
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
+    }
+
+    void equalProduct(Product product, Product actualProdcut) {
+        assertThat(product.getName()).isEqualTo(actualProdcut.getName());
+        assertThat(product.getMaker()).isEqualTo(actualProdcut.getMaker());
+        assertThat(product.getPrice()).isEqualTo(actualProdcut.getPrice());
+        assertThat(product.getImageUrl()).isEqualTo(actualProdcut.getImageUrl());
     }
 }
