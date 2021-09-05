@@ -13,9 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ProductRepositoryTest 클래스")
-class ProductRepositoryTest {
+class InMemoryProductRepositoryTest {
 
-    private ProductRepository productRepository;
+    private InMemoryProductRepository inMemoryProductRepository;
     private Product product1;
     private Product product2;
     private Product product3;
@@ -26,7 +26,7 @@ class ProductRepositoryTest {
         product2 = new Product(2L, "toy2", "maker2", 2000L, "toy2.jpg");
         product3 = new Product(3L, "toy3", "maker3", 3000L, "toy3.jpg");
 
-        productRepository = new ProductRepository();
+        inMemoryProductRepository = new InMemoryProductRepository();
     }
 
     @Nested
@@ -36,15 +36,15 @@ class ProductRepositoryTest {
         @Test
         @DisplayName("product를 Repository에 저장합니다.")
         void it_add_product() {
-            assertThat(productRepository.findAll()).hasSize(0);
-            productRepository.save(product1);
-            assertThat(productRepository.findAll()).hasSize(1);
+            assertThat(inMemoryProductRepository.findAll()).hasSize(0);
+            inMemoryProductRepository.save(product1);
+            assertThat(inMemoryProductRepository.findAll()).hasSize(1);
         }
 
         @Test
         @DisplayName("새로 저장된 product를 반환합니다.")
         void it_return_new_product() {
-            Product newProduct = productRepository.save(product1);
+            Product newProduct = inMemoryProductRepository.save(product1);
             assertThat(newProduct.getName()).isEqualTo(product1.getName());
             assertThat(newProduct.getMaker()).isEqualTo(product1.getMaker());
             assertThat(newProduct.getPrice()).isEqualTo(product1.getPrice());
@@ -63,7 +63,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("빈 데이터를 반환합니다.")
             void it_return_empty_products() {
-                List<Product> products = productRepository.findAll();
+                List<Product> products = inMemoryProductRepository.findAll();
 
                 assertThat(products).hasSize(0);
             }
@@ -80,7 +80,7 @@ class ProductRepositoryTest {
                 givenProducts = List.of(product1, product2, product3);
 
                 for (Product product: givenProducts) {
-                    productRepository.save(product);
+                    inMemoryProductRepository.save(product);
                 }
             }
 
@@ -88,7 +88,7 @@ class ProductRepositoryTest {
             @DisplayName("저장되어 있는 product를 반환합니다.")
             void it_return_all_products() {
                 int index = 0;
-                List<Product> products = productRepository.findAll();
+                List<Product> products = inMemoryProductRepository.findAll();
 
                 assertThat(products).hasSize(3);
 
@@ -110,13 +110,13 @@ class ProductRepositoryTest {
         @BeforeEach
         void prepare() {
             valid_id = product1.getId();
-            productRepository.save(product1);
+            inMemoryProductRepository.save(product1);
         }
 
         @Test
         @DisplayName("해당 Id의 Optional<Product>를 반환합니다.")
         void it_return_optional_product() {
-            assertThat(productRepository.findById(valid_id)).isEqualTo(Optional.of(product1));
+            assertThat(inMemoryProductRepository.findById(valid_id)).isEqualTo(Optional.of(product1));
         }
     }
 
@@ -126,7 +126,7 @@ class ProductRepositoryTest {
 
         @BeforeEach
         void prepare() {
-            productRepository.save(product1);
+            inMemoryProductRepository.save(product1);
         }
 
         @Nested
@@ -143,7 +143,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("업데이트된 product를 반환합니다.")
             void it_return_product() {
-                Product updatedProduct = productRepository.update(valid_id, product2);
+                Product updatedProduct = inMemoryProductRepository.update(valid_id, product2);
 
                 assertThat(updatedProduct.getName()).isEqualTo(product2.getName());
                 assertThat(updatedProduct.getMaker()).isEqualTo(product2.getMaker());
@@ -166,7 +166,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productRepository.update(invalid_id, product2))
+                assertThatThrownBy(() -> inMemoryProductRepository.update(invalid_id, product2))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -178,7 +178,7 @@ class ProductRepositoryTest {
 
         @BeforeEach
         void prepare() {
-            productRepository.save(product1);
+            inMemoryProductRepository.save(product1);
         }
 
         @Nested
@@ -195,9 +195,9 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("해당 Id의 product를 제거합니다.")
             void it_update_product() {
-                productRepository.deleteById(valid_id);
+                inMemoryProductRepository.deleteById(valid_id);
 
-                assertThat(productRepository.findAll()).hasSize(0);
+                assertThat(inMemoryProductRepository.findAll()).hasSize(0);
             }
         }
 
@@ -215,7 +215,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("ProductNotFoundException을 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productRepository.update(invalid_id, product2))
+                assertThatThrownBy(() -> inMemoryProductRepository.update(invalid_id, product2))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
