@@ -44,6 +44,11 @@ public class ProductControllerTest {
     @Nested
     @DisplayName("list 메서드는")
     class Describe_list {
+        @AfterEach
+        void tearDown() {
+            verify(productServiceMock).listProduct();
+        }
+
         @Nested
         @DisplayName("저장된 Product가 없다면")
         class Context_product_empty {
@@ -75,11 +80,6 @@ public class ProductControllerTest {
                 assertThat(productController.list()).isNotEmpty();
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productServiceMock).listProduct();
-        }
     }
 
     @Nested
@@ -91,23 +91,29 @@ public class ProductControllerTest {
                 .thenReturn(product);
         }
 
+        @AfterEach
+        void tearDown() {
+            verify(productServiceMock)
+                .createProduct(any(Product.class));
+        }
+
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
             assertThat(productController.create(productDto))
                 .isInstanceOf(Product.class);
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productServiceMock)
-                .createProduct(any(Product.class));
-        }
     }
 
     @Nested
     @DisplayName("detail 메서드는")
     class Describe_detail {
+        @AfterEach
+        void tearDown() {
+            verify(productServiceMock)
+                .detailProduct(anyLong());
+        }
+
         @Nested
         @DisplayName("Product를 찾을 수 있으면")
         class Context_find_success {
@@ -141,17 +147,17 @@ public class ProductControllerTest {
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productServiceMock)
-                .detailProduct(anyLong());
-        }
     }
 
     @Nested
     @DisplayName("update 메서드는")
     class Describe_update {
+        @AfterEach
+        void tearDown() {
+            verify(productServiceMock)
+                .updateProduct(anyLong(), any(Product.class));
+        }
+
         @Nested
         @DisplayName("Product를 찾을 수 있다면")
         class Context_product_exist {
@@ -190,17 +196,17 @@ public class ProductControllerTest {
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productServiceMock)
-                .updateProduct(anyLong(), any(Product.class));
-        }
     }
 
     @Nested
     @DisplayName("delete 메서드는")
     class Describe_delete {
+        @AfterEach
+        void tearDown() {
+            verify(productServiceMock)
+                .deleteProduct(anyLong());
+        }
+
         @Nested
         @DisplayName("Product를 찾을 수 없다면")
         class Context_product_empty {
@@ -227,13 +233,5 @@ public class ProductControllerTest {
                 productController.delete(ID);
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productServiceMock)
-                .deleteProduct(anyLong());
-        }
-
     }
-
 }

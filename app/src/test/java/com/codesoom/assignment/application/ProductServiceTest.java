@@ -51,23 +51,30 @@ public class ProductServiceTest {
                 .thenReturn(product);
         }
 
+        @AfterEach
+        void tearDown() {
+            verify(productRepositoryMock)
+                .save(any(Product.class));
+        }
+
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
             assertThat(productService.createProduct(product))
                 .isInstanceOf(Product.class);
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productRepositoryMock)
-                .save(any(Product.class));
-        }
     }
 
     @Nested
     @DisplayName("detailProduct 메서드는")
     class Describe_detailProduct {
+
+        @AfterEach
+        void tearDown() {
+            verify(productRepositoryMock)
+                .findById(any(Long.class));
+        }
+
         @Nested
         @DisplayName("Product를 찾을 수 있다면")
         class Context_find_success {
@@ -100,17 +107,16 @@ public class ProductServiceTest {
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productRepositoryMock)
-                .findById(any(Long.class));
-        }
     }
 
     @Nested
     @DisplayName("listProduct 메서드는")
     class Describe_listProduct {
+        @AfterEach
+        void tearDown() {
+            verify(productRepositoryMock).findAll();
+        }
+
         @Nested
         @DisplayName("저장된 Product가 있다면")
         class Context_product_exist {
@@ -144,11 +150,6 @@ public class ProductServiceTest {
                     .isEmpty();
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productRepositoryMock).findAll();
-        }
     }
 
     @Nested
@@ -173,22 +174,28 @@ public class ProductServiceTest {
                     .thenReturn(Optional.of(productMock));
             }
 
+            @AfterEach
+            void tearDown() {
+                verify(productMock).update(any(Product.class));
+            }
+
             @Test
             @DisplayName("업데이트한 Product를 리턴한다.")
             void it_returns_a_updated_product() {
                 assertThat(productService.updateProduct(ID, new Product(productDto)))
                     .isInstanceOf(Product.class);
             }
-
-            @AfterEach
-            void tearDown() {
-                verify(productMock).update(any(Product.class));
-            }
         }
 
         @Nested
         @DisplayName("Product를 찾을 수 없다면")
         class Context_find_fail {
+            @AfterEach
+            void tearDown() {
+                verify(productRepositoryMock)
+                    .findById(anyLong());
+            }
+
             @BeforeEach
             void setUp() {
                 when(productRepositoryMock.findById(anyLong()))
@@ -203,17 +210,16 @@ public class ProductServiceTest {
 
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productRepositoryMock)
-                .findById(anyLong());
-        }
     }
 
     @Nested
     @DisplayName("deleteProduct 메서드는")
     class Describe_deleteProduct {
+        @AfterEach
+        void tearDown() {
+            verify(productRepositoryMock).findById(anyLong());
+        }
+
         @Nested
         @DisplayName("Product를 찾을 수 없다면")
         class Context_find_fail {
@@ -240,22 +246,17 @@ public class ProductServiceTest {
                     .thenReturn(Optional.of(product));
             }
 
-            @Test
-            @DisplayName("Product를 삭제한다.")
-            void it_deletes_a_product() {
-                productService.deleteProduct(ID);
-            }
-
             @AfterEach
             void tearDown() {
                 verify(productRepositoryMock)
                     .delete(any(Product.class));
             }
-        }
 
-        @AfterEach
-        void tearDown() {
-            verify(productRepositoryMock).findById(anyLong());
+            @Test
+            @DisplayName("Product를 삭제한다.")
+            void it_deletes_a_product() {
+                productService.deleteProduct(ID);
+            }
         }
     }
 }

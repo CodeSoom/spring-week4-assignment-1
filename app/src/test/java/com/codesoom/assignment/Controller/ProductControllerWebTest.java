@@ -56,6 +56,11 @@ public final class ProductControllerWebTest {
     @Nested
     @DisplayName("전체 목록 조회 엔드포인트는")
     class Describe_products_get {
+        @AfterEach
+        void tearDown() {
+            verify(productServiceMock, atLeastOnce()).listProduct();
+        }
+
         @Nested
         @DisplayName("저장된 Product가 없다면")
         class Context_product_empty {
@@ -64,6 +69,7 @@ public final class ProductControllerWebTest {
                 when(productServiceMock.listProduct())
                     .thenReturn(Lists.newArrayList());
             }
+
             @Test
             @DisplayName("빈 목록을 리턴한다.")
             void it_returns_a_empty_list() throws Exception {
@@ -81,6 +87,7 @@ public final class ProductControllerWebTest {
                 when(productServiceMock.listProduct())
                     .thenReturn(Lists.newArrayList(product));
             }
+
             @Test
             @DisplayName("Product 목록을 리턴한다.")
             void it_returns_a_product_list() throws Exception {
@@ -92,11 +99,6 @@ public final class ProductControllerWebTest {
                     .andExpect(content().string(containsString("}")));
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productServiceMock, atLeastOnce()).listProduct();
-        }
     }
 
     @Nested
@@ -106,6 +108,12 @@ public final class ProductControllerWebTest {
         void setUp() {
             when(productServiceMock.createProduct(any(Product.class)))
                 .thenReturn(product);
+        }
+
+        @AfterEach
+        void tearDown() {
+            verify(productServiceMock)
+                .createProduct(any(Product.class));
         }
 
         class Context_request_create_product {
@@ -131,12 +139,6 @@ public final class ProductControllerWebTest {
                     .andExpect(content().string(containsString(PRICE.toString())));
             }
         }
-
-        @AfterEach
-        void tearDown() {
-            verify(productServiceMock)
-                .createProduct(any(Product.class));
-        }
     }
 
     @Nested
@@ -145,6 +147,12 @@ public final class ProductControllerWebTest {
         @Nested
         @DisplayName("장난감 데이터 요청 시")
         class Contest_request_product {
+            @AfterEach
+            void tearDown() {
+                verify(productServiceMock, atLeastOnce())
+                    .detailProduct(anyLong());
+            }
+
             @Nested
             @DisplayName("장난감을 찾을 수 있다면")
             class Context_find_success {
@@ -182,12 +190,6 @@ public final class ProductControllerWebTest {
                         .andExpect(status().isNotFound());
                 }
             }
-
-            @AfterEach
-            void tearDown() {
-                verify(productServiceMock, atLeastOnce())
-                    .detailProduct(anyLong());
-            }
         }
     }
 
@@ -197,6 +199,12 @@ public final class ProductControllerWebTest {
         @Nested
         @DisplayName("장난감 업데이트 요청 시")
         class Context_request_update_product {
+            @AfterEach
+            void tearDown() {
+                verify(productServiceMock, atLeastOnce())
+                    .updateProduct(anyLong(), any(Product.class));
+            }
+
             @Nested
             @DisplayName("장난감을 찾을 수 있다면")
             class Context_find_success {
@@ -283,12 +291,6 @@ public final class ProductControllerWebTest {
                     ).andExpect(status().isNotFound());
                 }
             }
-
-            @AfterEach
-            void tearDown() {
-                verify(productServiceMock, atLeastOnce())
-                    .updateProduct(anyLong(), any(Product.class));
-            }
         }
     }
 
@@ -298,6 +300,12 @@ public final class ProductControllerWebTest {
         @Nested
         @DisplayName("장난감 삭제 요청 시")
         class Context_request_delete_product {
+            @AfterEach
+            void tearDown() {
+                verify(productServiceMock, atLeastOnce())
+                    .deleteProduct(anyLong());
+            }
+
             @Nested
             @DisplayName("장난감을 찾을 수 있다면")
             class Context_find_success {
@@ -330,12 +338,6 @@ public final class ProductControllerWebTest {
                     mockMvc.perform(delete("/products/1"))
                         .andExpect(status().isNotFound());
                 }
-            }
-
-            @AfterEach
-            void tearDown() {
-                verify(productServiceMock, atLeastOnce())
-                    .deleteProduct(anyLong());
             }
         }
     }

@@ -129,6 +129,11 @@ public class ProductRepositoryTest {
             id = productRepository.save(product).getId();
         }
 
+        @AfterEach
+        void tearDown() {
+            productRepository.deleteAll();
+        }
+
         @Test
         @DisplayName("Product를 삭제한다.")
         void it_deletes_a_product() {
@@ -141,10 +146,5 @@ public class ProductRepositoryTest {
             assertThat(productRepository.findById(id))
                 .matches(output -> output.isEmpty());
         }
-    }
-
-    @AfterEach
-    void tearDown() {
-        productRepository.deleteAll();
     }
 }
