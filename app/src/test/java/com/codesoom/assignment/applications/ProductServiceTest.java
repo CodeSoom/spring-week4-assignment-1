@@ -44,7 +44,7 @@ class ProductServiceTest {
     class Describe_save {
 
         @Test
-        @DisplayName("새로운 product를 반환합니다.")
+        @DisplayName("요청한 내용으로 저장된 product를 반환합니다.")
         void it_return_new_product() {
             Product newProduct = productService.save(product1);
             equalProduct(newProduct, product1);
