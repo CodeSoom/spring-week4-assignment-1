@@ -15,18 +15,6 @@ class ProductTest {
     private final String IMAGE_URL = "이미지 URL";
 
     @Test
-    @DisplayName("Product의 생성자를 확인합니다.")
-    void verify_constructor() {
-        Product product = new Product(ID, NAME, MAKER, PRICE, IMAGE_URL);
-
-        assertThat(product.getId()).isEqualTo(ID);
-        assertThat(product.getName()).isEqualTo(NAME);
-        assertThat(product.getMaker()).isEqualTo(MAKER);
-        assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
-    }
-
-    @Test
     @DisplayName("id가 없는 Prodcut를 생성한다.")
     void of() {
         Product product = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
