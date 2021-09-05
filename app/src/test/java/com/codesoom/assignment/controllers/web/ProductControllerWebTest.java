@@ -1,7 +1,6 @@
 package com.codesoom.assignment.controllers.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -11,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -107,7 +105,7 @@ public class ProductControllerWebTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(checkHasId(productId)).isTrue();
+                assertThat(isExistId(productId)).isTrue();
 
                 existProductId = productId;
             }
@@ -133,7 +131,7 @@ public class ProductControllerWebTest {
 
                 productService.deleteProduct(productId);
 
-                assertThat(checkHasId(productId)).isFalse();
+                assertThat(isExistId(productId)).isFalse();
 
                 notExistProductId = productId;
             }
@@ -162,7 +160,7 @@ public class ProductControllerWebTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(checkHasId(productId)).isTrue();
+                assertThat(isExistId(productId)).isTrue();
 
                 existProductId = productId;
             }
@@ -197,7 +195,7 @@ public class ProductControllerWebTest {
 
                 productService.deleteProduct(productId);
 
-                assertThat(checkHasId(productId)).isFalse();
+                assertThat(isExistId(productId)).isFalse();
 
                 notExistProductId = productId;
             }
@@ -228,7 +226,7 @@ public class ProductControllerWebTest {
             void setUp() {
                 Long productId = product.getId();
 
-                assertThat(checkHasId(productId)).isTrue();
+                assertThat(isExistId(productId)).isTrue();
 
                 existProductId = productId;
             }
@@ -253,7 +251,7 @@ public class ProductControllerWebTest {
 
                 productService.deleteProduct(productId);
 
-                assertThat(checkHasId(productId)).isFalse();
+                assertThat(isExistId(productId)).isFalse();
 
                 notExistProductId = productId;
             }
@@ -267,7 +265,7 @@ public class ProductControllerWebTest {
         }
     }
 
-    private boolean checkHasId(Long productId) {
+    private boolean isExistId(Long productId) {
         List<Product> products = new ArrayList<>();
 
         Iterator<Product> iterator = productService.getAllProducts()
