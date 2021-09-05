@@ -100,7 +100,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("해당되는 id의 product가 없다면")
+        @DisplayName("찾을 수 없는 id가 주어지면")
         class Context_with_invalid_id {
 
             private Long invalid_id;
