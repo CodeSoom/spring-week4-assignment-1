@@ -20,12 +20,12 @@ public class ProductService {
     }
 
     public Product save(Product product) {
-        Product newProdcut = Product.of(
+        Product newProduct = Product.of(
                 product.getName(),
                 product.getMaker(),
                 product.getPrice(),
                 product.getImageUrl());
-        return productRepository.save(newProdcut);
+        return productRepository.save(newProduct);
     }
 
     public List<Product> findAll() {
@@ -52,7 +52,6 @@ public class ProductService {
         try {
             productRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            System.out.println(e.getMessage());
             throw new ProductNotFoundException(id);
         }
     }
