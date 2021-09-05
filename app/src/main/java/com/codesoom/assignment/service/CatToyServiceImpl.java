@@ -29,7 +29,7 @@ public class CatToyServiceImpl implements CatToyService{
     }
 
     public CatToy updateCatToy(Long id, CatToy catToy) {
-        CatToy foundCatToy = catToyRepository.findById(id).orElseThrow(CatToyNotFoundException::new);
+        CatToy foundCatToy = findCatToyById(id);
         foundCatToy.update(catToy);
         return foundCatToy;
     }

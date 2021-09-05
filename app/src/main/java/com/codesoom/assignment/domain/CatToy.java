@@ -2,6 +2,7 @@ package com.codesoom.assignment.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 @Setter
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 public class CatToy {
     @Id
     @GeneratedValue
@@ -20,9 +22,6 @@ public class CatToy {
     private String maker;
     private Integer price;
     private String imageUrl;
-
-    public CatToy() {
-    }
 
     public void update(CatToy catToy) {
         this.name = catToy.getName();

@@ -59,7 +59,9 @@ class CatToyServiceTest {
         @DisplayName("장난감 목록 전체를 반환한다.")
         void getCatToys() {
             List<CatToy> catToys = catToyServiceImpl.getCatToys();
+
             verify(catToyRepository).findAll();
+
             Assertions.assertThat(catToys).hasSize(1);
         }
     }
@@ -69,14 +71,16 @@ class CatToyServiceTest {
     class findCatToyById {
         @BeforeEach
         void prepareTest() {
-            given(catToyRepository.findById(EXIST_ID)).willReturn(Optional.ofNullable(givenCatToy));
+            given(catToyRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
         }
 
         @Test
         @DisplayName("식별자와 일치하는 장난감을 반환한다.")
         void findCatToyById() {
             CatToy catToy = catToyServiceImpl.findCatToyById(EXIST_ID);
+
             verify(catToyRepository).findById(EXIST_ID);
+
             Assertions.assertThat(catToy.getName()).isEqualTo("Test Name");
         }
     }
@@ -93,6 +97,7 @@ class CatToyServiceTest {
         @DisplayName("요청된 장난감을 저장하고 반환한다.")
         void addCatToy() {
             CatToy catToy = catToyServiceImpl.addCatToy(givenCatToy);
+
             verify(catToyRepository).save(givenCatToy);
 
             Assertions.assertThat(catToy.getName()).isEqualTo("Test Name");
@@ -111,8 +116,10 @@ class CatToyServiceTest {
         @DisplayName("요청된 장난감을 수정한다.")
         void updateCatToy() {
             CatToy catToy = catToyServiceImpl.updateCatToy(EXIST_ID, givenCatToy);
+
             verify(catToyRepository).findById(EXIST_ID);
-            Assertions.assertThat(catToy.getName()).isEqualTo("Test Name");
+
+            Assertions.assertThat(catToy.getName()).isEqualTo(givenCatToy.getName());
         }
     }
 
@@ -128,6 +135,7 @@ class CatToyServiceTest {
         @DisplayName("요청된 장난감을 삭제한다.")
         void deleteCatToyById() {
             catToyServiceImpl.deleteCatToyById(EXIST_ID);
+
             verify(catToyRepository).findById(EXIST_ID);
             verify(catToyRepository).deleteById(EXIST_ID);
         }
