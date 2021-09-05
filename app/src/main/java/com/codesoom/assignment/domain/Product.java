@@ -36,11 +36,11 @@ public class Product {
         return product;
     }
 
-    public void update(String name, String maker, Long price, String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public void update(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
     }
 
     public Long getId() {
