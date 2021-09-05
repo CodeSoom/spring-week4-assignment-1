@@ -24,6 +24,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DisplayName("ProductRepository 테스트")
 public class ProductRepositoryTest {
+    private final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
+    private final Product product = new Product(productDto);
     @Autowired
     private ProductRepository productRepository;
 
@@ -41,16 +43,8 @@ public class ProductRepositoryTest {
             @Test
             @DisplayName("주어진 개체를 저장하고 리턴한다.")
             void it_save_object_and_returns_a_saved_object() {
-                final Product product = new Product(
-                    new ProductDto(NAME, MAKER, IMAGE_URL, PRICE)
-                );
-
                 assertThat(productRepository.save(product))
-                    .matches(saved -> saved.getId() != null)
-                    .matches(output -> NAME.equals(output.getName()))
-                    .matches(output -> MAKER.equals(output.getMaker()))
-                    .matches(output -> IMAGE_URL.equals(output.getImageUrl()))
-                    .matches(output -> PRICE.equals(output.getPrice()));
+                    .matches(saved -> saved.getId() != null);
             }
         }
     }
@@ -65,9 +59,6 @@ public class ProductRepositoryTest {
         class Context_findById_success {
             @BeforeEach
             void setUp() {
-                final Product product = new Product(
-                    new ProductDto(NAME, MAKER, IMAGE_URL, PRICE)
-                );
                 final Product savedProduct = productRepository.save(product);
                 id = savedProduct.getId();
             }
@@ -101,9 +92,6 @@ public class ProductRepositoryTest {
         class Context_product_exist {
             @BeforeEach
             void setUp() {
-                final Product product = new Product(
-                    new ProductDto(NAME, MAKER, IMAGE_URL, PRICE)
-                );
                 productRepository.save(product);
             }
 
@@ -134,28 +122,23 @@ public class ProductRepositoryTest {
     @Nested
     @DisplayName("delete 메서드는")
     class Describe_delete {
-        private Product product;
+        private Long id;
 
         @BeforeEach
         void setUp() {
-            final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
-            product = productRepository.save(new Product(productDto));
+            id = productRepository.save(product).getId();
         }
 
         @Test
         @DisplayName("Product를 삭제한다.")
         void it_deletes_a_product() {
-            assertThat(productRepository.findById(product.getId()))
+            assertThat(productRepository.findById(id))
                 .matches(output -> output.isPresent())
-                .matches(output -> product.getId().equals(output.get().getId()))
-                .matches(output -> NAME.equals(output.get().getName()))
-                .matches(output -> MAKER.equals(output.get().getMaker()))
-                .matches(output -> IMAGE_URL.equals(output.get().getImageUrl()))
-                .matches(output -> PRICE.equals(output.get().getPrice()));
+                .matches(output -> id.equals(output.get().getId()));
 
             productRepository.delete(product);
 
-            assertThat(productRepository.findById(product.getId()))
+            assertThat(productRepository.findById(id))
                 .matches(output -> output.isEmpty());
         }
     }

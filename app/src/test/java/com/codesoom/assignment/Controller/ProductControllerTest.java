@@ -36,9 +36,10 @@ public class ProductControllerTest {
     private ProductController productController;
 
     @Mock
-    private ProductService productService;
+    private ProductService productServiceMock;
 
     private final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
+    private final Product product = new Product(productDto);
 
     @Nested
     @DisplayName("list 메서드는")
@@ -48,7 +49,7 @@ public class ProductControllerTest {
         class Context_product_empty {
             @BeforeEach
             void setUp() {
-                when(productService.listProduct())
+                when(productServiceMock.listProduct())
                     .thenReturn(Lists.newArrayList());
             }
 
@@ -64,8 +65,8 @@ public class ProductControllerTest {
         class Context_product_exist {
             @BeforeEach
             void setUp() {
-                when(productService.listProduct())
-                    .thenReturn(Lists.newArrayList(new Product(productDto)));
+                when(productServiceMock.listProduct())
+                    .thenReturn(Lists.newArrayList(product));
             }
 
             @Test
@@ -77,7 +78,7 @@ public class ProductControllerTest {
 
         @AfterEach
         void tearDown() {
-            verify(productService).listProduct();
+            verify(productServiceMock).listProduct();
         }
     }
 
@@ -86,8 +87,8 @@ public class ProductControllerTest {
     class Describe_create {
         @BeforeEach
         void setUp() {
-            when(productService.createProduct(any(Product.class)))
-                .thenReturn(new Product(productDto));
+            when(productServiceMock.createProduct(any(Product.class)))
+                .thenReturn(product);
         }
 
         @Test
@@ -99,7 +100,7 @@ public class ProductControllerTest {
 
         @AfterEach
         void tearDown() {
-            verify(productService)
+            verify(productServiceMock)
                 .createProduct(any(Product.class));
         }
     }
@@ -112,8 +113,8 @@ public class ProductControllerTest {
         class Context_find_success {
             @BeforeEach
             void setUp() {
-                when(productService.detailProduct(anyLong()))
-                    .thenReturn(new Product(productDto));
+                when(productServiceMock.detailProduct(anyLong()))
+                    .thenReturn(product);
             }
 
             @Test
@@ -129,7 +130,7 @@ public class ProductControllerTest {
         class Context_find_fail {
             @BeforeEach
             void setUp() {
-                when(productService.detailProduct(anyLong()))
+                when(productServiceMock.detailProduct(anyLong()))
                     .thenThrow(new ProductNotFoundException(ID));
             }
 
@@ -143,7 +144,7 @@ public class ProductControllerTest {
 
         @AfterEach
         void tearDown() {
-            verify(productService)
+            verify(productServiceMock)
                 .detailProduct(anyLong());
         }
     }
@@ -161,7 +162,7 @@ public class ProductControllerTest {
                     "updated" + NAME, "updated" + MAKER,
                     "updated" + IMAGE_URL, UPDATED_PRICE
                 );
-                when(productService.updateProduct(anyLong(), any(Product.class)))
+                when(productServiceMock.updateProduct(anyLong(), any(Product.class)))
                     .thenReturn(new Product(updateProductDto));
             }
 
@@ -178,7 +179,7 @@ public class ProductControllerTest {
         class Context_product_empty {
             @BeforeEach
             void setUp() {
-                when(productService.updateProduct(anyLong(), any(Product.class)))
+                when(productServiceMock.updateProduct(anyLong(), any(Product.class)))
                     .thenThrow(new ProductNotFoundException(ID));
             }
 
@@ -192,7 +193,7 @@ public class ProductControllerTest {
 
         @AfterEach
         void tearDown() {
-            verify(productService)
+            verify(productServiceMock)
                 .updateProduct(anyLong(), any(Product.class));
         }
     }
@@ -206,7 +207,7 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 doThrow(new ProductNotFoundException(ID))
-                    .when(productService).deleteProduct(anyLong());
+                    .when(productServiceMock).deleteProduct(anyLong());
             }
 
             @Test
@@ -229,7 +230,7 @@ public class ProductControllerTest {
 
         @AfterEach
         void tearDown() {
-            verify(productService)
+            verify(productServiceMock)
                 .deleteProduct(anyLong());
         }
 

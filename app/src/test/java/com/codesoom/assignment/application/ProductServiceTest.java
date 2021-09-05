@@ -37,29 +37,30 @@ public class ProductServiceTest {
     private ProductService productService;
 
     @Mock
-    private ProductRepository productRepository;
+    private ProductRepository productRepositoryMock;
 
     private final ProductDto productDto = new ProductDto(NAME, MAKER, IMAGE_URL, PRICE);
+    private final Product product = new Product(productDto);
 
     @Nested
     @DisplayName("create 메서드는")
     class Describe_createProduct {
         @BeforeEach
         void setUp() {
-            when(productRepository.save(any(Product.class)))
-                .thenReturn(new Product(productDto));
+            when(productRepositoryMock.save(any(Product.class)))
+                .thenReturn(product);
         }
 
         @Test
         @DisplayName("Product를 생성하고 리턴한다.")
         void it_returns_a_product() {
-            assertThat(productService.createProduct(new Product(productDto)))
+            assertThat(productService.createProduct(product))
                 .isInstanceOf(Product.class);
         }
 
         @AfterEach
         void tearDown() {
-            verify(productRepository)
+            verify(productRepositoryMock)
                 .save(any(Product.class));
         }
     }
@@ -72,8 +73,8 @@ public class ProductServiceTest {
         class Context_find_success {
             @BeforeEach
             void setUp() {
-                when(productRepository.findById(anyLong()))
-                    .thenReturn(Optional.of(new Product(productDto)));
+                when(productRepositoryMock.findById(anyLong()))
+                    .thenReturn(Optional.of(product));
             }
 
             @Test
@@ -88,7 +89,7 @@ public class ProductServiceTest {
         class Context_find_fail {
             @BeforeEach
             void setUp() {
-                when(productRepository.findById(anyLong()))
+                when(productRepositoryMock.findById(anyLong()))
                     .thenReturn(Optional.empty());
             }
 
@@ -102,7 +103,7 @@ public class ProductServiceTest {
 
         @AfterEach
         void tearDown() {
-            verify(productRepository)
+            verify(productRepositoryMock)
                 .findById(any(Long.class));
         }
     }
@@ -115,8 +116,8 @@ public class ProductServiceTest {
         class Context_product_exist {
             @BeforeEach
             void setUp() {
-                when(productRepository.findAll())
-                    .thenReturn(Lists.newArrayList(new Product(productDto)));
+                when(productRepositoryMock.findAll())
+                    .thenReturn(Lists.newArrayList(product));
             }
 
             @Test
@@ -132,7 +133,7 @@ public class ProductServiceTest {
         class Context_product_empty {
             @BeforeEach
             void setUp() {
-                when(productRepository.findAll())
+                when(productRepositoryMock.findAll())
                     .thenReturn(Lists.newArrayList());
             }
 
@@ -146,7 +147,7 @@ public class ProductServiceTest {
 
         @AfterEach
         void tearDown() {
-            verify(productRepository).findAll();
+            verify(productRepositoryMock).findAll();
         }
     }
 
@@ -157,7 +158,7 @@ public class ProductServiceTest {
         @DisplayName("Product를 찾을 수 있다면")
         class Context_find_success {
             @Mock
-            private Product product;
+            private Product productMock;
 
             @BeforeEach
             void setUp() {
@@ -166,10 +167,10 @@ public class ProductServiceTest {
                     "updated" + NAME, "updated" + MAKER,
                     "updated" + IMAGE_URL, UPDATED_PRICE
                 );
-                when(product.update(any(Product.class)))
+                when(productMock.update(any(Product.class)))
                     .thenReturn(new Product(updateProductDto));
-                when(productRepository.findById(anyLong()))
-                    .thenReturn(Optional.of(product));
+                when(productRepositoryMock.findById(anyLong()))
+                    .thenReturn(Optional.of(productMock));
             }
 
             @Test
@@ -181,7 +182,7 @@ public class ProductServiceTest {
 
             @AfterEach
             void tearDown() {
-                verify(product).update(any(Product.class));
+                verify(productMock).update(any(Product.class));
             }
         }
 
@@ -190,14 +191,14 @@ public class ProductServiceTest {
         class Context_find_fail {
             @BeforeEach
             void setUp() {
-                when(productRepository.findById(anyLong()))
+                when(productRepositoryMock.findById(anyLong()))
                 .thenReturn(Optional.empty());
             }
 
             @Test
             @DisplayName("ProductNotFoundException을 던진다.")
             void it_throws_a_productNotFoundException() {
-                assertThatThrownBy(() -> productService.updateProduct(ID, new Product(productDto)))
+                assertThatThrownBy(() -> productService.updateProduct(ID, product))
                     .isInstanceOf(ProductNotFoundException.class);
 
             }
@@ -205,7 +206,7 @@ public class ProductServiceTest {
 
         @AfterEach
         void tearDown() {
-            verify(productRepository)
+            verify(productRepositoryMock)
                 .findById(anyLong());
         }
     }
@@ -218,7 +219,7 @@ public class ProductServiceTest {
         class Context_find_fail {
             @BeforeEach
             void setUp() {
-                when(productRepository.findById(anyLong()))
+                when(productRepositoryMock.findById(anyLong()))
                     .thenReturn(Optional.empty());
             }
 
@@ -235,8 +236,8 @@ public class ProductServiceTest {
         class Context_find_success {
             @BeforeEach
             void setUp() {
-                when(productRepository.findById(anyLong()))
-                    .thenReturn(Optional.of(new Product(productDto)));
+                when(productRepositoryMock.findById(anyLong()))
+                    .thenReturn(Optional.of(product));
             }
 
             @Test
@@ -247,14 +248,14 @@ public class ProductServiceTest {
 
             @AfterEach
             void tearDown() {
-                verify(productRepository)
+                verify(productRepositoryMock)
                     .delete(any(Product.class));
             }
         }
 
         @AfterEach
         void tearDown() {
-            verify(productRepository).findById(anyLong());
+            verify(productRepositoryMock).findById(anyLong());
         }
     }
 }
