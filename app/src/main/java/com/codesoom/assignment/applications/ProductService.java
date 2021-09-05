@@ -40,11 +40,7 @@ public class ProductService {
     public Product update(Long id, Product product) {
         Product updatedProduct = findById(id);
 
-        updatedProduct.setName(product.getName());
-        updatedProduct.setMaker(product.getMaker());
-        updatedProduct.setPrice(product.getPrice());
-        updatedProduct.setImageUrl(product.getImageUrl());
-
+        updatedProduct.update(product);
         return productRepository.save(updatedProduct);
     }
 
