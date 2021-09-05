@@ -54,13 +54,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
 
-        Optional<Product> foundProduct = toyProductRepository.findById(id);
+        toyProductRepository.findById(id).ifPresent(it -> {
+            toyProductRepository.deleteById(it.getId());
+        });
 
-        if (foundProduct.isPresent()) {
-
-            toyProductRepository.deleteById(foundProduct.get().getId());
-
-        }
 
     }
 

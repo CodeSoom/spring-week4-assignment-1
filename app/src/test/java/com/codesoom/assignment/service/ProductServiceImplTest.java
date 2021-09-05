@@ -53,16 +53,16 @@ class ProductServiceImplTest {
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts {
 
+        @BeforeEach
+        void setUp() {
+
+            given(productService.getProducts()).willReturn(products);
+
+        }
+
         @Nested
         @DisplayName("제품 저장소에 제품들이 존재하면")
         class Context_exist_products {
-
-            @BeforeEach
-            void setUp() {
-
-                given(productService.getProducts()).willReturn(products);
-
-            }
 
             @Test
             @DisplayName("제품 저장소에 있는 제품들을 리턴한다")
@@ -71,6 +71,26 @@ class ProductServiceImplTest {
                 List<Product> product = productService.getProducts();
 
                 assertThat(product).hasSize(3);
+
+                verify(productRepository).findAll();
+
+            }
+
+        }
+
+        @Nested
+        @DisplayName("제품 저장소에 제품들이 없다면")
+        class Context_exist_not_product {
+
+
+            @Test
+            @DisplayName("비어있는 리스트를 반환한다")
+            void It_return_empty_products() {
+
+                List<Product> product = productService.getProducts();
+                product.clear();
+
+                assertThat(products).isEmpty();
 
                 verify(productRepository).findAll();
 
@@ -87,12 +107,12 @@ class ProductServiceImplTest {
         @BeforeEach
         void setUp() {
 
-            ID_CHECK_SETUP();
+            idCheckSetUp();
 
         }
 
         @Nested
-        @DisplayName("제품 저장소에 검색한 제품이 존재하면")
+        @DisplayName("주어진 id를 가진 제품이 존재하면")
         class Context_exist_id {
 
             @Test
@@ -164,7 +184,7 @@ class ProductServiceImplTest {
         @BeforeEach
         void setUp() {
 
-            ID_CHECK_SETUP();
+            idCheckSetUp();
 
         }
 
@@ -203,7 +223,7 @@ class ProductServiceImplTest {
 
     }
 
-    private void ID_CHECK_SETUP() {
+    private void idCheckSetUp() {
 
         // 아이디가 존재할 때
         given(productRepository.findById(VALID_ID)).willReturn(Optional.of(TEST_PRODUCT));
