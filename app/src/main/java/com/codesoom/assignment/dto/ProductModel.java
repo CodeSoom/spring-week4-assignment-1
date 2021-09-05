@@ -1,30 +1,29 @@
 package com.codesoom.assignment.dto;
 
-import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CatToyModel {
+public class ProductModel {
     private Long id;
     private final String name;
     private final String maker;
     private final Integer price;
     private final String imageUrl;
 
-    public CatToyModel(CatToy catToy) {
+    public ProductModel(Product catToy) {
         this (catToy.id(), catToy.name(), catToy.maker(), catToy.price(), catToy.imageUrl());
     }
 
-    public CatToyModel(String name, String maker, Integer price, String imageUrl) {
+    public ProductModel(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public CatToyModel(Long id, String name, String maker, Integer price, String imageUrl) {
+    public ProductModel(Long id, String name, String maker, Integer price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
@@ -32,9 +31,9 @@ public class CatToyModel {
         this.imageUrl = imageUrl;
     }
 
-    public static List<CatToyModel> ofList(List<CatToy> catToys) {
+    public static List<ProductModel> ofList(List<Product> catToys) {
         return catToys.stream()
-                .map(CatToyModel::new)
+                .map(ProductModel::new)
                 .collect(Collectors.toList());
     }
 

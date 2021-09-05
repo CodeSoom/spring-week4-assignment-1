@@ -1,6 +1,6 @@
 package com.codesoom.assignment.constant;
 
-public class CatToyTestConstant {
+public class ProductTestConstant {
     public static final Long NOT_EXISTS_ID = 10000L;
     public static final String TOY_NAME = "고양이";
     public static final String TOY_MAKER = "메이커";

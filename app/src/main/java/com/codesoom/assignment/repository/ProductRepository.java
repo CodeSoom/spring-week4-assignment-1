@@ -1,9 +1,9 @@
 package com.codesoom.assignment.repository;
 
-import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CatToyRepository extends JpaRepository<CatToy, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 }

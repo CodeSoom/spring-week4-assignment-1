@@ -1,21 +1,18 @@
-package com.codesoom.assignment.domain;
-
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.dto.CatToyModel;
+package com.codesoom.assignment.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CatToyViewModel {
+public class ProductDto {
     private String name;
     private String maker;
     private Integer price;
     private String imageUrl;
 
-    public CatToyViewModel() {
+    public ProductDto() {
     }
 
-    public CatToyViewModel(String name, String maker, Integer price, String imageUrl) {
+    public ProductDto(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -55,7 +52,7 @@ public class CatToyViewModel {
     }
 
 
-    public static class Request extends CatToyViewModel {
+    public static class Request extends ProductDto {
         public Request() {
         }
 
@@ -64,13 +61,13 @@ public class CatToyViewModel {
         }
     }
 
-    public static class Response extends CatToyViewModel {
+    public static class Response extends ProductDto {
         private Long id;
 
         public Response() {
         }
 
-        public Response(CatToyModel catToy) {
+        public Response(ProductModel catToy) {
             this (catToy.name(), catToy.maker(), catToy.price(), catToy.imageUrl(), catToy.id());
         }
 
@@ -79,7 +76,7 @@ public class CatToyViewModel {
             this.id = id;
         }
 
-        public static List<Response> ofList(List<CatToyModel> catToys) {
+        public static List<Response> ofList(List<ProductModel> catToys) {
             return catToys.stream()
                     .map(Response::new)
                     .collect(Collectors.toList());

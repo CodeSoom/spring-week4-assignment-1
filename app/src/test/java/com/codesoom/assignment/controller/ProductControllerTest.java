@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
 
-import com.codesoom.assignment.domain.CatToyViewModel;
+import com.codesoom.assignment.dto.ProductDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.io.UnsupportedEncodingException;
 
-import static com.codesoom.assignment.constant.CatToyTestConstant.*;
+import static com.codesoom.assignment.constant.ProductTestConstant.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CatToyControllerTest {
+class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,9 +38,9 @@ class CatToyControllerTest {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    private CatToyViewModel request;
-    private CatToyViewModel changeRequest;
-    private Long catToyId;
+    private ProductDto request;
+    private ProductDto changeRequest;
+    private Long productId;
 
     @BeforeEach
     void characterEncodingSetup(){
@@ -52,9 +52,9 @@ class CatToyControllerTest {
 
     @BeforeEach
     void setup() throws Exception {
-        request = new CatToyViewModel.Request(TOY_NAME, TOY_MAKER, PRICE, IMAGE_URL);
-        catToyId = createCatToyResponse().getId();
-        changeRequest = new CatToyViewModel.Request(CHANGE_NAME, CHANGE_MAKER, CHANGE_PRICE, CHANGE_IMAGE_URL);
+        request = new ProductDto.Request(TOY_NAME, TOY_MAKER, PRICE, IMAGE_URL);
+        productId = createProductResponse().getId();
+        changeRequest = new ProductDto.Request(CHANGE_NAME, CHANGE_MAKER, CHANGE_PRICE, CHANGE_IMAGE_URL);
     }
 
     @Test
@@ -70,7 +70,7 @@ class CatToyControllerTest {
                 .andReturn();
 
         // then
-        CatToyViewModel.Response response = getResponse(mvcResult);
+        ProductDto.Response response = getResponse(mvcResult);
 
         assertThat(response.getName()).isEqualTo(TOY_NAME);
         assertThat(response.getId()).isNotNull();
@@ -92,14 +92,14 @@ class CatToyControllerTest {
     @DisplayName("고양이 장난감을 검색하여 반환한다.")
     void selectCatToy() throws Exception {
         // when
-        MvcResult mvcResult = mockMvc.perform(get("/products/" + catToyId)
+        MvcResult mvcResult = mockMvc.perform(get("/products/" + productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
         // then
-        CatToyViewModel.Response response = getResponse(mvcResult);
+        ProductDto.Response response = getResponse(mvcResult);
         assertThat(response.getName()).isEqualTo(TOY_NAME);
         assertThat(response.getId()).isNotNull();
     }
@@ -108,7 +108,7 @@ class CatToyControllerTest {
     @DisplayName("고양이 장난감을 수정하여 반환한다.")
     void modifyCatToy() throws Exception {
         // when
-        MvcResult mvcResult = mockMvc.perform(patch("/products/" + catToyId)
+        MvcResult mvcResult = mockMvc.perform(patch("/products/" + productId)
                         .content(objectMapper.writeValueAsString(changeRequest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -116,7 +116,7 @@ class CatToyControllerTest {
                 .andReturn();
 
         // then
-        CatToyViewModel.Response response = getResponse(mvcResult);
+        ProductDto.Response response = getResponse(mvcResult);
         assertThat(response.getName()).isEqualTo(CHANGE_NAME);
         assertThat(response.getMaker()).isEqualTo(CHANGE_MAKER);
 
@@ -127,18 +127,18 @@ class CatToyControllerTest {
     void deleteCatToy() throws Exception {
         // when
         // then
-        mockMvc.perform(delete("/products/" + catToyId)
+        mockMvc.perform(delete("/products/" + productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
 
-    private CatToyViewModel.Response getResponse(MvcResult mvcResult) throws JsonProcessingException, UnsupportedEncodingException {
+    private ProductDto.Response getResponse(MvcResult mvcResult) throws JsonProcessingException, UnsupportedEncodingException {
         return new ObjectMapper()
-                .readValue(mvcResult.getResponse().getContentAsString(), CatToyViewModel.Response.class);
+                .readValue(mvcResult.getResponse().getContentAsString(), ProductDto.Response.class);
     }
 
-    private CatToyViewModel.Response createCatToyResponse() throws Exception {
+    private ProductDto.Response createProductResponse() throws Exception {
         MvcResult mvcResult = mockMvc.perform(post("/products")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)

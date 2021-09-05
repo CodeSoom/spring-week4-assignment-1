@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.CatToyService;
-import com.codesoom.assignment.domain.CatToyViewModel;
-import com.codesoom.assignment.dto.CatToyModel;
+import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.dto.ProductModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +21,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/products")
-public class CatToyController {
+public class ProductController {
 
-    private final CatToyService catToyService;
+    private final ProductService productService;
 
-    public CatToyController(CatToyService catToyService) {
-        this.catToyService = catToyService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
 
@@ -37,9 +37,9 @@ public class CatToyController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public CatToyViewModel.Response createCatToy(@RequestBody CatToyViewModel.Request request) {
-        CatToyModel catToy = catToyService.createCatToy(new CatToyModel(request.getName(), request.getMaker(), request.getPrice(), request.getImageUrl()));
-        return new CatToyViewModel.Response(catToy);
+    public ProductDto.Response createCatToy(@RequestBody ProductDto.Request request) {
+        ProductModel catToy = productService.createProduct(new ProductModel(request.getName(), request.getMaker(), request.getPrice(), request.getImageUrl()));
+        return new ProductDto.Response(catToy);
     }
 
     /**
@@ -47,9 +47,9 @@ public class CatToyController {
      * @return 고양이 장난감 리스트
      */
     @GetMapping
-    public List<CatToyViewModel.Response> selectCatToyList() {
-        List<CatToyModel> catToyList = catToyService.selectCatToyList();
-        return CatToyViewModel.Response.ofList(catToyList);
+    public List<ProductDto.Response> selectCatToyList() {
+        List<ProductModel> catToyList = productService.selectCatToyList();
+        return ProductDto.Response.ofList(catToyList);
     }
 
     /**
@@ -58,9 +58,9 @@ public class CatToyController {
      * @return 고양이 장난감
      */
     @GetMapping(value = "/{id}")
-    public CatToyViewModel.Response selectCatToy(@PathVariable Long id) {
-        CatToyModel catToy = catToyService.selectCatToy(id);
-        return new CatToyViewModel.Response(catToy);
+    public ProductDto.Response selectCatToy(@PathVariable Long id) {
+        ProductModel catToy = productService.selectProduct(id);
+        return new ProductDto.Response(catToy);
     }
 
     /**
@@ -70,9 +70,10 @@ public class CatToyController {
      * @return 고양이 장난감
      */
     @PatchMapping(value = "/{id}")
-    public CatToyViewModel.Response modifyCatToy(@PathVariable Long id, @RequestBody CatToyViewModel.Request request) {
-        CatToyModel catToy = catToyService.modifyCatToy(new CatToyModel(id, request.getName(), request.getMaker(), request.getPrice(), request.getImageUrl()));
-        return new CatToyViewModel.Response(catToy);
+    public ProductDto.Response modifyCatToy(@PathVariable Long id, @RequestBody ProductDto.Request request) {
+        ProductModel catToy = productService.modifyProduct(
+                new ProductModel(id, request.getName(), request.getMaker(), request.getPrice(), request.getImageUrl()));
+        return new ProductDto.Response(catToy);
     }
 
     /**
@@ -82,6 +83,6 @@ public class CatToyController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}")
     public void modifyCatToy(@PathVariable Long id) {
-        catToyService.deleteCatToy(id);
+        productService.deleteCatToy(id);
     }
 }

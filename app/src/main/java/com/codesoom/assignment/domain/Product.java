@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.CatToyModel;
+import com.codesoom.assignment.dto.ProductModel;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Entity;
@@ -11,8 +11,8 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "CatToy")
-public class CatToy {
+@Table(name = "Product")
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,25 +23,25 @@ public class CatToy {
     private int price;
     private String imageUrl;
 
-    public CatToy(String name, String maker, int price, String imageUrl) {
+    public Product(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public CatToy() {
+    public Product() {
     }
 
-    public void changeCatToy(CatToyModel catToyModel) {
-        if (catToyModel == null) {
+    public void changeProduct(ProductModel productModel) {
+        if (productModel == null) {
             throw new IllegalArgumentException();
         }
 
-        changeName(catToyModel.name());
-        changeMaker(catToyModel.maker());
-        changePrice(catToyModel.price());
-        changeImageUrl(catToyModel.imageUrl());
+        changeName(productModel.name());
+        changeMaker(productModel.maker());
+        changePrice(productModel.price());
+        changeImageUrl(productModel.imageUrl());
 
     }
 
@@ -93,7 +93,7 @@ public class CatToy {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CatToy catToy = (CatToy) o;
+        Product catToy = (Product) o;
         return price == catToy.price && Objects.equals(id, catToy.id) && Objects.equals(name, catToy.name) && Objects.equals(maker, catToy.maker) && Objects.equals(imageUrl, catToy.imageUrl);
     }
 
