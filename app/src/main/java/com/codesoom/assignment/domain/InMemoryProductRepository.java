@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class ProductRepository {
+public class InMemoryProductRepository {
     private HashMap<Long, Product> products;
     private Long nextId;
 
     private final Object nextIdLock = new Object();
 
-    public ProductRepository() {
+    public InMemoryProductRepository() {
         this.products = new HashMap<Long, Product>();
         this.nextId = 1L;
     }
