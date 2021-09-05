@@ -38,16 +38,17 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("update 메서드는 주어진 name, maker, price, image_url로 prodcut를 업데이트합니다.")
+    @DisplayName("update 메서드는 주어진 Product의 name, maker, price, image_url으로 업데이트합니다.")
     void update() {
-        Product product = new Product();
+        Product updatedProduct = new Product();
+        Product product = Product.of(NAME, MAKER, PRICE, IMAGE_URL);
 
-        product.update(NAME, MAKER, PRICE, IMAGE_URL);
+        updatedProduct.update(product);
 
-        assertThat(product.getName()).isEqualTo(NAME);
-        assertThat(product.getMaker()).isEqualTo(MAKER);
-        assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
+        assertThat(updatedProduct.getName()).isEqualTo(NAME);
+        assertThat(updatedProduct.getMaker()).isEqualTo(MAKER);
+        assertThat(updatedProduct.getPrice()).isEqualTo(PRICE);
+        assertThat(updatedProduct.getImageUrl()).isEqualTo(IMAGE_URL);
     }
 
     @Test
