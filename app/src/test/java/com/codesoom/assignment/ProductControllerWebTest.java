@@ -25,11 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@DataJpaTest
 public class ProductControllerWebTest {
-    private String TITLE = "Test1";
-    private String PRICE = "Price1";
+    private String NAME = "Test Name";
+    private String MAKER = "Test Maker1";
+    private Integer PRICE = 1000;
     private String IMAGE = "Image1";
-    private String NEW_TITLE = "Test2";
-    private String UPDATED_TITLE = "Test1_updated";
+    private String NEW_NAME = "Test2";
+    private String UPDATED_NAME = "Test1_updated";
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -40,10 +41,7 @@ public class ProductControllerWebTest {
 
     @BeforeEach
     void setUp(){
-        Product source = new Product();
-        source.setName(TITLE);
-        source.setPrice(PRICE);
-        source.setImage(IMAGE);
+        Product source = new Product(NAME, MAKER, PRICE, IMAGE);
         ProductService.createProduct(source);
     }
 
@@ -60,14 +58,14 @@ public class ProductControllerWebTest {
     void getProduct() throws Exception{
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString(TITLE)));
+                .andExpect(content().string(containsString(NAME)));
     }
 
     @Test
     @Order(1)
     void createProduct() throws Exception{
         Product newProduct = new Product();
-        newProduct.setName(NEW_TITLE);
+        newProduct.setName(NEW_NAME);
         newProduct.setPrice(PRICE);
         newProduct.setImage(IMAGE);
         String content = objectMapper.writeValueAsString(newProduct);
@@ -75,20 +73,20 @@ public class ProductControllerWebTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value(NEW_TITLE));
+                .andExpect(jsonPath("$.name").value(NEW_NAME));
     }
 
     //@Test
     void updateProduct() throws Exception{
         Product newProduct = new Product();
-        newProduct.setName(UPDATED_TITLE);
+        newProduct.setName(UPDATED_NAME);
 
         String content = objectMapper.writeValueAsString(newProduct);
         mockMvc.perform(put("/products/1").content(content)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value(UPDATED_TITLE));
+                .andExpect(jsonPath("$.name").value(UPDATED_NAME));
     }
 
     //@Test

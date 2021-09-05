@@ -12,8 +12,19 @@ public class Product {
     private Long id;
     private String name;
     private String maker;
-    private String price;
+    private Integer price;
     private String image;
+
+    public Product(){
+
+    }
+
+    public Product(String name, String maker, Integer price, String image){
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.image = image;
+    }
 
     public Long getId() {
         return id;
@@ -39,11 +50,11 @@ public class Product {
         this.maker = maker;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -54,4 +65,5 @@ public class Product {
     public void setImage(String image) {
         this.image = image;
     }
+
 }
