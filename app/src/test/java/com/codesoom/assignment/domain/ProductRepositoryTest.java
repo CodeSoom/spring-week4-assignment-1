@@ -77,11 +77,7 @@ public class ProductRepositoryTest {
             void it_returns_a_find_product() {
                 assertThat(productRepository.findById(id))
                     .matches(output -> output.isPresent())
-                    .matches(output -> id.equals(output.get().getId()))
-                    .matches(output -> NAME.equals(output.get().getName()))
-                    .matches(output -> MAKER.equals(output.get().getMaker()))
-                    .matches(output -> IMAGE_URL.equals(output.get().getImageUrl()))
-                    .matches(output -> PRICE.equals(output.get().getPrice()));
+                    .matches(output -> id.equals(output.get().getId()));
             }
         }
 
