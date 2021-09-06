@@ -18,28 +18,7 @@
 - 모든 API 테스트를 통과해야 합니다.
 - 모든 E2E 테스트를 통과해야 합니다.
 
-## API 실행하기
-
-```bash
-./gradlew run
-```
-
-## 웹 실행하기
-
-### 설치
-
-```bash
-$ cd web
-$ npm install
-```
-
-### 실행
-
-```bash
-$ npm start
-```
-
-브라우저 `http://localhost:9000`로 열면 실행된 것을 확인할 수 있습니다.
+## 고양이 장난감 가게 도메인 모델
 
 ## 테스트
 
@@ -47,27 +26,6 @@ $ npm start
 
 ```bash
 $ ./gradlew test
-```
-
-### 커버리지 확인하기
-
-테스트를 실행하면 자동으로 커버리지 정보를 수집하여 저장합니다. 커버리지 정보는 `app/build/reports`
-폴더에 저장됩니다. 커버리지 정보를 확인하려면 `app/build/reports/jacoco/test/html/index.html`파일을
-브라우저에서 열면 확인할 수 있습니다.
-
-### API 테스트 설치하기
-
-```bash
-$ cd tests
-$ npm install
-```
-
-### API 테스트 실행
-
-테스트는 실제로 동작하는 서버에 테스트하므로 서버가 동작하고 있는 상태여야 올바르게 동작합니다.
-
-```bash
-$ npm test
 ```
 
 ### E2E 테스트 실행하기
