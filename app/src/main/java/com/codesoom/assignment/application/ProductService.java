@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.eception.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,7 +23,7 @@ public class ProductService {
 
     public Product getProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + id));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(Product source) {
@@ -30,8 +31,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product foundProduct = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 없습니다. id=" + id));
+        Product foundProduct = this.getProduct(id);
         //더티 체킹
         foundProduct.update(source.getName(), source.getMaker(), source.getPrice(), source.getImagePath());
         return foundProduct;

@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.eception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -54,11 +55,11 @@ class ProductControllerTest {
         given(productService.getProducts()).willReturn(products);
         given(productService.getProduct(VALID_ID)).willReturn(initProduct);
         given(productService.getProduct(INVALID_ID))
-                .willThrow(new IllegalArgumentException());
+                .willThrow(new ProductNotFoundException(INVALID_ID));
         given(productService.deleteProduct(INVALID_ID))
-                .willThrow(new IllegalArgumentException());
+                .willThrow(new ProductNotFoundException(INVALID_ID));
         given(productService.updateProduct(eq(INVALID_ID), any(Product.class)))
-                .willThrow(new IllegalArgumentException());
+                .willThrow(new ProductNotFoundException(INVALID_ID));
     }
 
     @Nested
@@ -111,10 +112,10 @@ class ProductControllerTest {
         @DisplayName("유효하지 않은 id를 수정할 경우")
         class Context_with_invalid_id{
             @Test
-            void it_throws_IllegalArgumentException() {
+            void it_throws_ProductNotFoundException() {
                 Product source = makeSource();
                 assertThatThrownBy(()-> controller.update(INVALID_ID, source))
-                        .isInstanceOf(IllegalArgumentException.class);
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
 
@@ -137,9 +138,9 @@ class ProductControllerTest {
         @Nested
         class Context_with_invalid_id{
             @Test
-            void it_throws_IllegalArgumentException() {
+            void it_throws_ProductNotFoundException() {
                 assertThatThrownBy(() -> controller.delete(INVALID_ID))
-                        .isInstanceOf(IllegalArgumentException.class);
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }

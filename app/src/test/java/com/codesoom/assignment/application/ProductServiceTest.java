@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.eception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,6 +28,9 @@ class ProductServiceTest {
     private ProductService productService;
     private ProductRepository productRepository;
 
+    public static final long VALID_ID = 1L;
+    public static final long INVALID_ID = 100L;
+
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
@@ -44,8 +48,8 @@ class ProductServiceTest {
 
         //given
         given(productRepository.findAll()).willReturn(products);
-        given(productRepository.findById(1L)).willReturn(Optional.of(product));
-        given(productRepository.findById(100L)).willReturn(Optional.empty());
+        given(productRepository.findById(VALID_ID)).willReturn(Optional.of(product));
+        given(productRepository.findById(INVALID_ID)).willReturn(Optional.empty());
         setUpSaveProduct();
     }
 
@@ -53,7 +57,7 @@ class ProductServiceTest {
         //import static org.hamcrest.Matchers.any;  any()는 이것을 사용하였더니 localvariable오류. Hamcrest가 아닌 mockito사용.
         given(productRepository.save(ArgumentMatchers.any(Product.class))).will(invocation -> {
             Product product = invocation.getArgument(0);
-            product.setId(1L);
+            product.setId(VALID_ID);
             return product;
         });
     }
@@ -65,33 +69,35 @@ class ProductServiceTest {
         @Test
         @DisplayName("List<Product>를 반환한다.")
         void it_returns_list(){
-
             List<Product> products = productService.getProducts();
 
             verify(productRepository).findAll();
 
             assertThat(products).isInstanceOf(List.class);
-
+            assertThat(products.get(0)).isInstanceOf(Product.class);
         }
     }
 
     @Nested
     class Describe_getProduct{
+        Long id;
 
         @Nested
         @DisplayName("만약 유효한 id를 전달받았다면")
         class Context_with_a_valid_id {
-            Product source = makeSource();
+            Product source;
 
             @BeforeEach
             void setUp() {
+                source = makeSource("");
                 given(productRepository.findById(0L)).willReturn(Optional.of(source));
             }
 
             @Test
             @DisplayName("id에 해당하는 product를 반환한다.")
-            void it_returns_a_product(){
+            void it_returns_a_product() {
                 Long id = source.getId();
+
                 Product result = productService.getProduct(id);
 
                 verify(productRepository).findById(id);
@@ -104,68 +110,83 @@ class ProductServiceTest {
         @Nested
         @DisplayName("만약 유효하지 못한 id를 전달받았다면")
         class Context_with_invalid_id{
+
+            @BeforeEach
+            void setUp() {
+                id = INVALID_ID;
+            }
+
             @DisplayName("파라미터가 잘못됬다는 예외를 던진다.")
             @Test
             void it_throws_an_exception(){
-                assertThatThrownBy(() -> productService.getProduct(100L))
-                        .isInstanceOf(IllegalArgumentException.class);
+                assertThatThrownBy(
+                        () -> productService.getProduct(id)
+                ).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
 
     @Nested
     class Describe_createProduct{
-        //given
-        Product source = makeSource();
+        Product source = makeSource("");
 
         @Test
         @DisplayName("생성된 product를 리턴한다.")
         void it_returns_a_product() {
-            //when
             Product result = productService.createProduct(source);
 
-            //then
             verify(productRepository).save(source);
             assertThat(result).isInstanceOf(Product.class);
         }
     }
 
-    //Update 테스트는 아직 개선되지 않았습니다.
     @Nested
     class Describe_update{
+        Long id;
+        Product source;
+        Product updateSource;
+
+        @BeforeEach
+        void setUp() {
+            source = makeSource("source");
+            updateSource = makeSource("updateSource");
+        }
 
         @Nested
         @DisplayName("만약 유효한 id를 전달받았다면")
         class Context_with_valid_param{
-            Long validId = 1L;
-            Product source = makeSource();
-            Product updateSource = makeSource();
 
-            //Update 테스트는 아직 개선되지 않았습니다.
+            @BeforeEach
+            void setUp() {
+                id = VALID_ID;
+                given(productRepository.save(source)).willReturn(source);
+            }
+
             @Test
             @DisplayName("수정한 product를 리턴한다.")
             void it_returns_a_product() {
-                given(productRepository.save(source)).willReturn(source);
-                //given(productRepository.findById(validId)).willReturn(Product.class);
+                Product result = productService.updateProduct(id, updateSource);
 
-                Product result = productService.updateProduct(validId, updateSource);
                 assertThat(result).isInstanceOf(Product.class);
-                assertThat(result.getName()).isEqualTo("TEST_VAR_NAME");
+                assertThat(result.getName()).isEqualTo("TEST_VAR_NAME" + "updateSource");
             }
         }
 
         @Nested
         @DisplayName("만약 유효한 id를 전달받지 못했을 경우")
         class Context_with_invalid_id{
-            Long invalidId = 0L;
-            Product source = makeSource();
+
+            @BeforeEach
+            void setUp() {
+                id = INVALID_ID;
+            }
 
             @Test
             @DisplayName("파라미터가 잘못됐다는 예외를 던진다.")
-            void it_thorws_IllegalArgumentException() {
-                Product source = makeSource();
-                assertThatThrownBy(() -> productService.updateProduct(invalidId, source))
-                        .isInstanceOf(IllegalArgumentException.class);
+            void it_thorws_ProductNotFoundException() {
+                assertThatThrownBy(() ->
+                        productService.updateProduct(id, source)
+                ).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
@@ -176,19 +197,17 @@ class ProductServiceTest {
         @Nested
         @DisplayName("만약 유효한 id를 전달받았다면")
         class Context_with_valid_param{
-            Long validId = 1L;
+            Long id = VALID_ID;
 
             @Test
             @DisplayName("삭제한 product를 리턴한다.")
             void it_returns_a_product() {
-                Product result = productService.deleteProduct(validId);
+                Product foundProduct = productService.getProduct(id);
+                Product deletedProduct = productService.deleteProduct(id);
 
-                verify(productRepository).deleteById(validId);
+                verify(productRepository).deleteById(id);
 
-                //todo Id 검증에 대한 테스트
-                //given(productRepository.deleteById(0L)).willReturn(any(Product.class));
-                //assertThat(result).isInstanceOf(Product.class);
-                //assertThat(result.getId()).isEqualTo(validId);
+                assertThat(foundProduct).isEqualTo(deletedProduct);
             }
         }
 
@@ -199,19 +218,20 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("파라미터가 잘못됬다는 예외를 던진다.")
-            void it_throws_IllegalArgumentException() {
-                assertThatThrownBy(() -> productService.deleteProduct(invalidId))
-                        .isInstanceOf(IllegalArgumentException.class);
+            void it_throws_ProductNotFoundException() {
+                assertThatThrownBy(() ->
+                        productService.deleteProduct(invalidId)
+                ).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
 
-    private Product makeSource(){
+    private Product makeSource(String postfix){
         Product product = Product.builder()
-                .name("TEST_VAR_NAME")
-                .maker("TEST_VAR_MAKER")
+                .name("TEST_VAR_NAME" + postfix)
+                .maker("TEST_VAR_MAKER" + postfix)
                 .price(3000)
-                .imagePath("TEST_VAR_IMAGE_PATH")
+                .imagePath("TEST_VAR_IMAGE_PATH" + postfix)
                 .build();
         return product;
     }
