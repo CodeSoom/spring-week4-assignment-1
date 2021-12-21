@@ -51,6 +51,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
+    // Model Mapper
+    implementation 'org.modelmapper:modelmapper:2.4.4'
+
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
