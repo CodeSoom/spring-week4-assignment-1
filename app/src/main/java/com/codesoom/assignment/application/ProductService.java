@@ -32,7 +32,6 @@ public class ProductService {
         product.setMaker(source.getMaker());
         product.setPrice(source.getPrice());
         product.setImageUrl(source.getImageUrl());
-
         return productRepository.save(product);
 
     }

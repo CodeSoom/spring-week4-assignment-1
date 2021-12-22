@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 
 class ProductServiceTest {
 
-    private static final String Product_TITLE = "test";
+    private static final String PRODUCT_NAME = "test";
     private static final String CREATE_POSTFIX = "...";
     private static final String UPDATE_POSTFIX = "!!!";
 
@@ -32,10 +32,28 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
-
         // subject
         productService = new ProductService(productRepository);
+    }
 
+    private List<Product> getProducts() {
+        List<Product> products = new ArrayList<>();
+
+        Product product = new Product();
+        product.setMaker(PRODUCT_NAME);
+
+        products.add(product);
+        return products;
+    }
+
+    private Product getProduct() {
+        List<Product> products = new ArrayList<>();
+
+        Product product = new Product();
+        product.setMaker(PRODUCT_NAME);
+
+        products.add(product);
+        return product;
     }
 
     @Nested
@@ -47,13 +65,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> tasks = new ArrayList<>();
-
-                Product product = new Product();
-                product.setMaker(Product_TITLE);
-
-                tasks.add(product);
-                given(productRepository.findAll()).willReturn(tasks);
+                List<Product> products = getProducts();
+                given(productRepository.findAll()).willReturn(products);
             }
 
             @Test
@@ -66,7 +79,7 @@ class ProductServiceTest {
                 assertThat(products).hasSize(1);
 
                 Product task = products.get(0);
-                assertThat(task.getMaker()).isEqualTo(Product_TITLE);
+                assertThat(task.getMaker()).isEqualTo(PRODUCT_NAME);
             }
         }
         @Nested
@@ -78,6 +91,7 @@ class ProductServiceTest {
                 List<Product> products = productService.getProducts();
                 products.forEach(product -> productService.deleteProduct(product.getId()));
             }
+
             @Test
             @DisplayName("비어 있는 리스트를 리턴한다")
             void it_return_products(){
@@ -95,14 +109,10 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = new ArrayList<>();
-
-                Product product = new Product();
-                product.setMaker(Product_TITLE);
-
-                products.add(product);
+                Product product = getProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
+
             @Test
             @DisplayName("해당 Product를 리턴한다")
             void It_return_product(){
@@ -110,7 +120,7 @@ class ProductServiceTest {
 
                 verify(productRepository).findById(1L);
 
-                assertThat(found.getMaker()).isEqualTo(Product_TITLE);
+                assertThat(found.getMaker()).isEqualTo(PRODUCT_NAME);
             }
         }
 
@@ -120,12 +130,6 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = new ArrayList<>();
-
-                Product product = new Product();
-                product.setMaker(Product_TITLE);
-
-                products.add(product);
                 given(productRepository.findById(100L)).willReturn(Optional.empty());
             }
 
@@ -149,7 +153,7 @@ class ProductServiceTest {
             @BeforeEach
             void prepareProduct() {
                 Product createdProduct = new Product();
-                createdProduct.setMaker(Product_TITLE + CREATE_POSTFIX);
+                createdProduct.setMaker(PRODUCT_NAME + CREATE_POSTFIX);
 
                 given(productRepository.save(any(Product.class))).will(invocation -> {
                     Product product = invocation.getArgument(0);
@@ -157,25 +161,28 @@ class ProductServiceTest {
                     return product;
                 });
             }
+
             @Test
             @DisplayName("Product를 생성하고 리턴한다.")
             void It_return_product(){
                 Product source = new Product();
-                source.setMaker(Product_TITLE + CREATE_POSTFIX);
+                source.setMaker(PRODUCT_NAME + CREATE_POSTFIX);
 
                 Product product = productService.createProduct(source);
 
                 verify(productRepository).save(any(Product.class));
 
                 assertThat(product.getId()).isEqualTo(2L);
-                assertThat(product.getMaker()).isEqualTo(Product_TITLE + CREATE_POSTFIX);
+                assertThat(product.getMaker()).isEqualTo(PRODUCT_NAME + CREATE_POSTFIX);
             }
         }
+
         @Nested
-        @DisplayName("등록할 Product가 주어지지 않는다면")
+        @DisplayName("NULL값이 주이지면")
         class Context_without_product{
+
             @Test
-            @DisplayName("내용이 없다는 예외를 던진다.")
+            @DisplayName("내용이 없다는 NullPointerException를 리턴한다.")
             void it_return_error(){
                 Product product = null;
 
@@ -193,40 +200,31 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = new ArrayList<>();
-
-                Product product = new Product();
-                product.setMaker(Product_TITLE);
-
-                products.add(product);
+                Product product = getProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
             @Test
-            @DisplayName("등록되어있는 Product를 바꾸고 리턴한다.")
+            @DisplayName("등록되어있는 Product를 수정하고 리턴한다.")
             void it_return_product(){
                 Product source = new Product();
-                source.setMaker(Product_TITLE + UPDATE_POSTFIX);
+                source.setMaker(PRODUCT_NAME + UPDATE_POSTFIX);
 
                 Product product = productService.updateProduct(1L, source);
 
                 verify(productRepository).findById(1L);
 
-                assertThat(product.getMaker()).isEqualTo(Product_TITLE + UPDATE_POSTFIX);
+                assertThat(product.getMaker()).isEqualTo(PRODUCT_NAME + UPDATE_POSTFIX);
             }
         }
+
         @Nested
         @DisplayName("등록되지 않은 Product의 id가 주어진다면")
         class Context_withInvalid_id{
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = new ArrayList<>();
-
-                Product product = new Product();
-                product.setMaker(Product_TITLE);
-
-                products.add(product);
+                Product product = getProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
@@ -234,7 +232,7 @@ class ProductServiceTest {
             @DisplayName("Product를 찾을수 없다는 예외를 던진다.")
             void It_return_error(){
                 Product source = new Product();
-                source.setMaker(Product_TITLE + UPDATE_POSTFIX);
+                source.setMaker(PRODUCT_NAME + UPDATE_POSTFIX);
 
                 assertThatThrownBy(()-> productService.updateProduct(100L, source))
                         .isInstanceOf(ProductNotFoundException.class);
@@ -253,12 +251,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = new ArrayList<>();
-
-                Product product = new Product();
-                product.setMaker(Product_TITLE);
-
-                products.add(product);
+                Product product = getProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
@@ -278,12 +271,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = new ArrayList<>();
-
-                Product product = new Product();
-                product.setMaker(Product_TITLE);
-
-                products.add(product);
+                Product product = getProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
@@ -298,5 +286,3 @@ class ProductServiceTest {
         }
     }
 }
-
-

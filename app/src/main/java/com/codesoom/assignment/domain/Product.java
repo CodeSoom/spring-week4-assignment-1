@@ -8,7 +8,6 @@ import javax.persistence.Id;
 public class Product {
     @Id
     @GeneratedValue
-
     private Long id;
     private String name;
     private String maker;
