@@ -158,7 +158,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("등록되어있는 Product를 삭제하고 리턴한다")
             void It_return_product(){
-                controller.delete(1L);
+                controller.delete(VALID_ID);
 
                 assertThat(controller.list().size()).isEqualTo(0);
             }

@@ -150,6 +150,8 @@ class ProductServiceTest {
         @DisplayName("등록할 product가 주어진다면")
         class Context_with_product{
 
+            final Long NEW_PRODUCT = 2L;
+
             @BeforeEach
             void prepareProduct() {
                 Product createdProduct = new Product();
@@ -157,7 +159,7 @@ class ProductServiceTest {
 
                 given(productRepository.save(any(Product.class))).will(invocation -> {
                     Product product = invocation.getArgument(0);
-                    product.setId(2L);
+                    product.setId(NEW_PRODUCT);
                     return product;
                 });
             }
@@ -172,7 +174,7 @@ class ProductServiceTest {
 
                 verify(productRepository).save(any(Product.class));
 
-                assertThat(product.getId()).isEqualTo(2L);
+                assertThat(product.getId()).isEqualTo(NEW_PRODUCT);
                 assertThat(product.getMaker()).isEqualTo(PRODUCT_NAME + CREATE_POSTFIX);
             }
         }
