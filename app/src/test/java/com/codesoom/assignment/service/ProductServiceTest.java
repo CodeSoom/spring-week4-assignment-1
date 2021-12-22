@@ -111,6 +111,36 @@ public class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("createProduct 메소드는")
+    class Describe_createProduct {
+        @Nested
+        @DisplayName("등록할 Product가 주어진다면")
+        class Context_with_product {
+            Product givenProduct = getProduct();
+            Long givenProductId = 1L;
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.save(any(Product.class))).will(invocation -> {
+                    Product product =  invocation.getArgument(0);
+                    product.setId(givenProductId);
+                    return product;
+                });
+            }
+
+            @Test
+            @DisplayName("Product를 생성하고, 리턴한다.")
+            void it_create_product_return_product() {
+                Product createdProduct = productService.createProduct(givenProduct);
+
+                verify(productRepository).save(any(Product.class));
+
+                assertThat(createdProduct.getId()).isEqualTo(givenProductId);
+                assertThat(createdProduct.getName()).isEqualTo(givenProduct.getName());
+            }
+        }
     
     private Product getProduct() {
         return Product.builder()

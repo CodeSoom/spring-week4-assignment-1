@@ -79,6 +79,26 @@ class ProductRepositoryTest {
         }
     }
 
+    @Nested
+    @DisplayName("save 메소드는")
+    class Describe_save {
+        Product givenProduct = getProduct();
+        @Nested
+        @DisplayName("등록할 Product가 주어진다면")
+        class Context_with_product {
+
+            @Test
+            @DisplayName("Product가 저장되고, 리턴됩니다.")
+            void it_create_product_return_product() {
+                Product product = productRepository.save(givenProduct);
+
+                assertThat(product).isNotNull();
+                assertThat(product.getName()).isEqualTo(givenProduct.getName());
+            }
+        }
+    }
+
+
     private Product getProduct() {
         return Product.builder()
                 .name("테스트 제품")

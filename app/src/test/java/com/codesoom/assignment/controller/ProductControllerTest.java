@@ -1,7 +1,9 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.service.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -137,6 +139,45 @@ class ProductControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("create() 메소드는")
+    class Describe_create {
+
+        @Nested
+        @DisplayName("Product가 주어진다면")
+        class Context_with_product {
+            final Long givenId = 1L;
+            Product givenProduct = getProduct();
+
+            @BeforeEach
+            void prepare() {
+                when(productService.createProduct(any(Product.class)))
+                        .then((arg) -> {
+                            Optional<Product> source = Optional.of(arg.getArgument(0, Product.class));
+
+                            Product product = source.orElseThrow(() -> new NullPointerException());
+
+                            product.setId(givenId);
+                            return product;
+                        });
+            }
+
+            @Test
+            @DisplayName("201(Created)와 Product를 응답합니다.")
+            void it_create_product_return_created_and_product() throws Exception {
+                mockMvc.perform(post(PRODUCTS_URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productToContent(givenProduct)))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id").value(givenId))
+                        .andExpect(jsonPath("$.name").value(givenProduct.getName()))
+                        .andDo(print());
+            }
+        }
+    }
+
+
     private Product getProduct() {
         return Product.builder()
                 .name("테스트 제품")
@@ -144,5 +185,9 @@ class ProductControllerTest {
                 .price(1000)
                 .image("http://test.com/test.jpg")
                 .build();
+    }
+
+    private String productToContent(Product product) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(product);
     }
 }
