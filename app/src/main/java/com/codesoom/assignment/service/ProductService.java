@@ -28,4 +28,8 @@ public class ProductService {
     public Product getProduct(Long id) {
         return productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
+
+    public Product createProduct(Product product) {
+        return productsRepository.save(product);
+    }
 }

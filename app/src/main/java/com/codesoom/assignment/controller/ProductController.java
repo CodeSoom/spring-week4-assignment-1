@@ -34,4 +34,10 @@ public class ProductController {
     public Product detail(@PathVariable Long id) {
         return productService.getProduct(id);
     }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product create(@RequestBody Product product) {
+        return productService.createProduct(product);
+    }
 }
