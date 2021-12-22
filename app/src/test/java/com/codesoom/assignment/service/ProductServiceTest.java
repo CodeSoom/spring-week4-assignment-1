@@ -74,7 +74,11 @@ public class ProductServiceTest {
                 assertThat(productService.getProducts()).isEmpty();
             }
         }
+    }
 
+    @Nested
+    @DisplayName("getProduct 메소드는")
+    class Describe_getProduct {
         @Nested
         @DisplayName("등록된 Product의 id 값이 주어진다면")
         class Context_with_id {
