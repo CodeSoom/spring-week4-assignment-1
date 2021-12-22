@@ -136,7 +136,6 @@ class ProductRepositoryTest {
         }
     }
 
-
     private Product getProduct() {
         return Product.builder()
                 .name("테스트 제품")
