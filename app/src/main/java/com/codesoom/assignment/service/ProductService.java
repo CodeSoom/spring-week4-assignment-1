@@ -33,12 +33,14 @@ public class ProductService {
         return productsRepository.save(product);
     }
 
-    public Product updateProduct(Long id, Product source) {
-        Product existingProduct = getProduct(id);
+    public Product updateProduct(Long targetId, Product product) {
+        Product founfProduct = getProduct(targetId);
 
-        this.modelMapper.map(source, existingProduct);
-        existingProduct.setId(id);
+        this.modelMapper.map(product, founfProduct);
+        founfProduct.setId(targetId);
 
-        return existingProduct;
+        return founfProduct;
+    }
+
     }
 }
