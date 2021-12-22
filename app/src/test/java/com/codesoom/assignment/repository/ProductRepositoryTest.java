@@ -7,10 +7,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @DisplayName("ProductRepository 인터페이스")
@@ -29,6 +31,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
+                productRepository.deleteAll();
                 IntStream.range(0, givenProductCnt).forEach((i) -> productRepository.save(getProduct()));
             }
 
@@ -67,8 +70,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                Product product = productRepository.findById(givenProductInvalidId).orElse(null);
-                productRepository.delete(product);
+                productRepository.deleteAll();
             }
 
             @Test
@@ -82,10 +84,11 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("save 메소드는")
     class Describe_save {
-        Product givenProduct = getProduct();
+
         @Nested
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
+            Product givenProduct = getProduct();
 
             @Test
             @DisplayName("Product가 저장되고, 리턴됩니다.")
@@ -94,6 +97,18 @@ class ProductRepositoryTest {
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(givenProduct.getName());
+            }
+        }
+
+        @Nested
+        @DisplayName("null이 주어진다면")
+        class Context_with_null {
+            Product givenNullProduct = null;
+
+            @Test
+            @DisplayName("IllegalArgumentException이 리턴됩니다.")
+            void it_return_InvalidDataAccessApiUsageException() {
+                assertThatThrownBy(() -> productRepository.save(givenNullProduct)).isInstanceOf(InvalidDataAccessApiUsageException.class);
             }
         }
     }

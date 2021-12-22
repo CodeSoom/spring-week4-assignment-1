@@ -175,8 +175,20 @@ class ProductControllerTest {
                         .andDo(print());
             }
         }
-    }
 
+        @Nested
+        @DisplayName("Product가 없다면")
+        class Context_without_product {
+            @Test
+            @DisplayName("400(Bad Request)를 응답합니다.")
+            void it_return_bad_request() throws Exception {
+                mockMvc.perform(post(PRODUCTS_URI)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
+    }
 
     private Product getProduct() {
         return Product.builder()

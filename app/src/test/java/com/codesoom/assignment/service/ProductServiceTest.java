@@ -141,6 +141,24 @@ public class ProductServiceTest {
                 assertThat(createdProduct.getName()).isEqualTo(givenProduct.getName());
             }
         }
+
+        @Nested
+        @DisplayName("null 주어진다면")
+        class Context_with_null {
+            Product givenNullProduct = null;
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.save(givenNullProduct)).willThrow(RuntimeException.class);
+            }
+
+            @Test
+            @DisplayName("RuntimeException을 던진다.")
+            void it_return_runtimeException() {
+                assertThatThrownBy(() -> productService.createProduct(givenNullProduct)).isInstanceOf(RuntimeException.class);
+            }
+        }
+    }
     
     private Product getProduct() {
         return Product.builder()
