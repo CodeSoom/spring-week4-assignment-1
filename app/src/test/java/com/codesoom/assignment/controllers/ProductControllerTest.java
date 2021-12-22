@@ -5,10 +5,8 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.errors.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -18,9 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -102,12 +100,12 @@ class ProductControllerTest {
     @DisplayName("PATCH /products/{id}는 상품 목록에서 일치하지 않는 아이디의 상품은 에러를 던진다")
     @Test
     void updateProduct_no() throws Exception {
-        given(productService.getProduct(100L)).willThrow(ProductNotFoundException.class);
+        given(productService.updateProduct(eq(100L), any(Product.class))).willThrow(ProductNotFoundException.class);
 
         String name = PRODUCT_NAME + UPDATE_POSTFIX;
         String json = createProductJson(name);
 
-        mockMvc.perform(patch("/products/1")
+        mockMvc.perform(patch("/products/100")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -125,7 +123,7 @@ class ProductControllerTest {
     @DisplayName("DELETE /products/{id}는 상품 목록에서 일치하지 않는 아이디의 상품은 에러를 던진다")
     @Test
     void deleteProduct_no() throws Exception {
-        willThrow(ProductNotFoundException.class).given(productService).deleteProduct(100L);
+        willThrow(new ProductNotFoundException(100L)).given(productService).deleteProduct(100L);
 
         mockMvc.perform(delete("/products/100"))
                 .andExpect(status().isNotFound());
