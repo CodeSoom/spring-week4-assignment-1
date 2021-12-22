@@ -149,30 +149,6 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("patch메서드는")
-    class Describe_patch{
-        @Nested
-        @DisplayName("등록된 Product의 id가 주어진다면")
-        class Context_withValid_id{
-
-            @Test
-            @DisplayName("등록되어있는 Product를 수정하고 리턴한다")
-            void it_return_product(){
-                Product source = new Product();
-                source.setMaker(UPDATE_POSTFIX + PRODUCT_MAKER);
-                controller.update(1L, source);
-
-                Product product = controller.detail(1L);
-
-                assertThat(product.getId()).isEqualTo(VALID_ID);
-                assertThat(product.getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
-                assertThat(controller.list().get(0).getId()).isEqualTo(VALID_ID);
-                assertThat(controller.list().get(0).getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
-            }
-        }
-    }
-
-    @Nested
     @DisplayName("삭제 요청 메소드는")
     class Describe_delete{
         @Nested
