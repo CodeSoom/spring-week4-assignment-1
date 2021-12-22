@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /*
 * TODO: 고양이 장난감 가게 서버 만들기
-*  1. 장난감 domain 테스트 및 구현
+*  1. 장난감 domain 테스트 및 구현 (완료)
 *  2. 장난감 도메인 controller 만들기
 *   2-1. 장난감 도메인 controller의 unit test 를 만들면서 만들기
 *   2-2. 장난감 도메인 controller의 web test를 만들면서 만들기
