@@ -57,9 +57,7 @@ public class ProductController {
         products.add(product);
 
         return product;
-
     }
-
 
 
     private Long generateId() {
