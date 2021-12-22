@@ -95,6 +95,8 @@ class ProductControllerTest {
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        verify(productService).updateProduct(eq(1L), any(Product.class));
     }
 
     @DisplayName("PATCH /products/{id}는 상품 목록에서 일치하지 않는 아이디의 상품은 에러를 던진다")
@@ -109,6 +111,8 @@ class ProductControllerTest {
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+
+        verify(productService).updateProduct(eq(100L), any(Product.class));
     }
 
     @DisplayName("DELETE /products/{id}는 주어진 아이디의 상품을 삭제한다")
