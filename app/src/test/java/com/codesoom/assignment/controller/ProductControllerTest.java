@@ -57,12 +57,12 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록된 Product들이 존재하면")
         class Context_has_product {
-            final int givenProductCnt = 5;
+            final int givenProductCount = 5;
 
             @BeforeEach
             void prepare() {
                 List<Product> products = new ArrayList<>();
-                IntStream.range(0, givenProductCnt).forEach((i) -> products.add(getProduct()));
+                IntStream.range(0, givenProductCount).forEach((i) -> products.add(getProduct()));
 
                 given(productService.getProducts()).willReturn(products);
             }
@@ -72,7 +72,7 @@ class ProductControllerTest {
             void it_return_ok_and_product() throws Exception {
                 mockMvc.perform(get(PRODUCTS_URI))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$", hasSize(givenProductCnt)))
+                        .andExpect(jsonPath("$", hasSize(givenProductCount)))
                         .andDo(print());
             }
         }
@@ -80,7 +80,7 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록된 Product들이 없다면")
         class Context_has_not_product {
-            final int givenProductCnt = 0;
+            final int givenProductCount = 0;
 
             @BeforeEach
             void prepare() {
@@ -94,7 +94,7 @@ class ProductControllerTest {
             void it_return_ok_and_products() throws Exception {
                 mockMvc.perform(get(PRODUCTS_URI))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$", hasSize(givenProductCnt)))
+                        .andExpect(jsonPath("$", hasSize(givenProductCount)))
                         .andDo(print());
             }
         }

@@ -40,12 +40,12 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("등록된 Product가 있다면")
         class Context_has_product {
-            final int givenProductCnt = 5;
+            final int givenProductCount = 5;
 
             @BeforeEach
             void prepare() {
                 List<Product> products = new ArrayList<>();
-                IntStream.range(0, givenProductCnt).forEach((i) -> products.add(getProduct()));
+                IntStream.range(0, givenProductCount).forEach((i) -> products.add(getProduct()));
 
                 given(productRepository.findAll()).willReturn(products);
             }
@@ -53,7 +53,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("Product의 전체 리스트를 리턴한다.")
             void it_return_products() {
-                assertThat(productService.getProducts()).hasSize(givenProductCnt);
+                assertThat(productService.getProducts()).hasSize(givenProductCount);
             }
         }
 
