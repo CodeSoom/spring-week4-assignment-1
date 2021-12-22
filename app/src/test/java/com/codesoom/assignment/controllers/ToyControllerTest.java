@@ -23,6 +23,7 @@ class ToyControllerTest {
     @Test
     void create() {
         Toy toy = new Toy();
+        toy.setName("test 장난감");
         ToyController toyController = new ToyController();
 
         int oldSize = toyController.products().size();
@@ -32,5 +33,17 @@ class ToyControllerTest {
         int newSize = toyController.products().size();
 
         assertThat(newSize - oldSize).isEqualTo(1);
+    }
+
+    @Test
+    void product() {
+        Toy toy = new Toy();
+        toy.setName("test 장난감");
+        ToyController toyController = new ToyController();
+        toyController.create(toy);
+
+        Toy find = toyController.product(1L);
+
+        assertThat(find.getName()).isEqualTo("test 장난감");
     }
 }

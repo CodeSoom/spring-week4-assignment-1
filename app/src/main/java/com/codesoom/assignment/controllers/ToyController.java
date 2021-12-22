@@ -20,6 +20,13 @@ public class ToyController {
         return toy;
     }
 
+    public Toy product(Long id) {
+        return toys.stream()
+                .filter(toy -> toy.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
     public Long generatedId() {
         newId += 1;
         return newId;
