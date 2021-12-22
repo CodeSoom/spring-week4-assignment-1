@@ -32,7 +32,7 @@ public class ProductService {
                 source.getName(),
                 source.getMaker(),
                 source.getPrice(),
-                source.getImage()
+                source.getImageUrl()
         );
 
         return productRepository.save(source);
@@ -46,7 +46,7 @@ public class ProductService {
                 source.getName(),
                 source.getMaker(),
                 source.getPrice(),
-                source.getImage()
+                source.getImageUrl()
         );
 
         return product;
