@@ -15,15 +15,15 @@ class ProductErrorAdviceTest {
 
     }
 
-    @Test
-    void handleNotFound(){
-        String errorMessage1 = "not found";
-        ProductErrorAdvice response1 = new ProductErrorAdvice();
-
-
-        String errorMessage = "not found";
-        ErrorResponse response = new ErrorResponse(errorMessage);
-        assertThat(response.getMessage()).isEqualTo(errorMessage);
-    }
+//    @Test
+//    void handleNotFound(){
+//        String errorMessage1 = "not found";
+//        ProductErrorAdvice response1 = new ProductErrorAdvice();
+//
+//
+//        String errorMessage = "not found";
+//        ErrorResponse response = new ErrorResponse(errorMessage);
+//        assertThat(response.getMessage()).isEqualTo(errorMessage);
+//    }
 
 }
