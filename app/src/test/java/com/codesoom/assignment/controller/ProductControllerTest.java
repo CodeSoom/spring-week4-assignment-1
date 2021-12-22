@@ -23,10 +23,13 @@ import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -103,17 +106,17 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록된 Product의 id가 주어진다면")
         class Context_with_id {
-            Long givenProductId = 1L;
+            Long givenId = 1L;
 
             @BeforeEach
             void prepare() {
-                given(productService.getProduct(givenProductId)).willReturn(getProduct());
+                given(productService.getProduct(givenId)).willReturn(getProduct());
             }
 
             @Test
             @DisplayName("200(Ok)와 Product의 정보를 응답합니다.")
             void it_return_ok_and_product() throws Exception {
-                mockMvc.perform(get(PRODUCTS_URI_SLASH + givenProductId))
+                mockMvc.perform(get(PRODUCTS_URI_SLASH + givenId))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andDo(print());
@@ -143,7 +146,6 @@ class ProductControllerTest {
     @Nested
     @DisplayName("create() 메소드는")
     class Describe_create {
-
         @Nested
         @DisplayName("Product가 주어진다면")
         class Context_with_product {
@@ -157,8 +159,8 @@ class ProductControllerTest {
                             Optional<Product> source = Optional.of(arg.getArgument(0, Product.class));
 
                             Product product = source.orElseThrow(() -> new NullPointerException());
-
                             product.setId(givenId);
+
                             return product;
                         });
             }
@@ -190,12 +192,67 @@ class ProductControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("update() 메소드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("등록된 Product의 Id와 수정할 Product가 주어진다면")
+        class Context_with_id_and_product {
+            Long givenId = 1L;
+            Product givenProduct = getProductToBeUpdated();
+
+            @BeforeEach
+            void prepare() {
+                when(productService.updateProduct(eq(givenId), any(Product.class)))
+                        .then(arg -> {
+                            Product product = arg.getArgument(1, Product.class);
+
+                            product.setId(givenId);
+                            return product;
+                        });
+            }
+
+            @Test
+            @DisplayName("PUT요청 / 200(Ok)과 Product를 응답합니다.")
+            void it_put_update_product_return_ok_and_product() throws Exception {
+                mockMvc.perform(put(PRODUCTS_URI_SLASH + givenId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(productToContent(givenProduct)))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id").value(givenId))
+                        .andExpect(jsonPath("$.name").value(givenProduct.getName()))
+                        .andDo(print());
+            }
+
+            @Test
+            @DisplayName("PATCH요청 / 200(Ok)과 Product를 응답합니다.")
+            void it_patch_update_product_return_ok_and_product() throws Exception {
+                mockMvc.perform(patch(PRODUCTS_URI_SLASH + givenId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(productToContent(givenProduct)))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id").value(givenId))
+                        .andExpect(jsonPath("$.name").value(givenProduct.getName()))
+                        .andDo(print());
+            }
+        }
+    }
+
     private Product getProduct() {
         return Product.builder()
                 .name("테스트 제품")
                 .maker("테스트 메이커")
                 .price(1000)
                 .image("http://test.com/test.jpg")
+                .build();
+    }
+
+    private Product getProductToBeUpdated() {
+        return Product.builder()
+                .name("업데이트 제품")
+                .maker("업데이트 메이커")
+                .price(2000)
+                .image("http://update.com/update.jpg")
                 .build();
     }
 

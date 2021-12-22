@@ -78,17 +78,17 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("등록된 Product의 id 값이 주어진다면")
         class Context_with_id {
-            private Long givenProductId = 1L;
+            private Long givenId = 1L;
 
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(givenProductId)).willReturn(Optional.of(getProduct()));
+                given(productRepository.findById(givenId)).willReturn(Optional.of(getProduct()));
             }
 
             @Test
             @DisplayName("등록된 product 정보를 리턴한다.")
             void it_return_product() {
-                Product foundProduct = productService.getProduct(givenProductId);
+                Product foundProduct = productService.getProduct(givenId);
 
                 assertThat(foundProduct).isNotNull();
             }
@@ -119,13 +119,13 @@ public class ProductServiceTest {
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
             Product givenProduct = getProduct();
-            Long givenProductId = 1L;
+            Long givenId = 1L;
 
             @BeforeEach
             void prepare() {
                 given(productRepository.save(any(Product.class))).will(invocation -> {
                     Product product =  invocation.getArgument(0);
-                    product.setId(givenProductId);
+                    product.setId(givenId);
                     return product;
                 });
             }
@@ -137,7 +137,7 @@ public class ProductServiceTest {
 
                 verify(productRepository).save(any(Product.class));
 
-                assertThat(createdProduct.getId()).isEqualTo(givenProductId);
+                assertThat(createdProduct.getId()).isEqualTo(givenId);
                 assertThat(createdProduct.getName()).isEqualTo(givenProduct.getName());
             }
         }
@@ -156,6 +156,37 @@ public class ProductServiceTest {
             @DisplayName("RuntimeException을 던진다.")
             void it_return_runtimeException() {
                 assertThatThrownBy(() -> productService.createProduct(givenNullProduct)).isInstanceOf(RuntimeException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("updateProduct 메소드는")
+    class Describe_updateProduct {
+        @Nested
+        @DisplayName("등록된 Product의 id와 수정할 Product가 주어진다면")
+        class Context_with_id_and_product {
+            Long givenId = 1L;
+            Product givenSource = getProductToBeUpdated();
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(givenId)).willReturn(Optional.of(getProduct()));
+                given(productRepository.save(any(Product.class))).will(args -> {
+                    Product product = args.getArgument(0);
+                    product.setId(givenId);
+                    return product;
+                });
+            }
+
+            @Test
+            @DisplayName("해당 id의 Product를 수정하고, 리턴한다.")
+            void it_update_product_return_product() {
+                Product updatedProduct = productService.updateProduct(givenId, givenSource);
+
+                verify(productRepository).findById(givenId);
+
+                assertThat(updatedProduct.getName()).isEqualTo(givenSource.getName());
             }
         }
     }

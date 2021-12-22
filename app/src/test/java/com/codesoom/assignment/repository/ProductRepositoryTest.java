@@ -84,7 +84,6 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("save 메소드는")
     class Describe_save {
-
         @Nested
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
