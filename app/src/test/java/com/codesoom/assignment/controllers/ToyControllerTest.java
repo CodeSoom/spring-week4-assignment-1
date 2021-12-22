@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.domain.Toy;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,5 +18,19 @@ class ToyControllerTest {
         ToyController toyController = new ToyController();
 
         assertThat(toyController.products()).isEmpty();
+    }
+
+    @Test
+    void create() {
+        Toy toy = new Toy();
+        ToyController toyController = new ToyController();
+
+        int oldSize = toyController.products().size();
+
+        toyController.create(toy);
+
+        int newSize = toyController.products().size();
+
+        assertThat(newSize - oldSize).isEqualTo(1);
     }
 }
