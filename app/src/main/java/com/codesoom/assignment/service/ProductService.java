@@ -28,22 +28,4 @@ public class ProductService {
     public Product getProduct(Long id) {
         return productsRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
-
-    public Product createProduct(Product product) {
-        return productsRepository.save(product);
-    }
-
-    public Product updateProduct(Long id, Product source) {
-        Product existingProduct = getProduct(id);
-
-        this.modelMapper.map(source, existingProduct);
-        existingProduct.setId(id);
-
-        return existingProduct;
-    }
-
-    public void deleteProduct(Long id) {
-        Product existingProduct = getProduct(id);
-        productsRepository.delete(existingProduct);
-    }
 }
