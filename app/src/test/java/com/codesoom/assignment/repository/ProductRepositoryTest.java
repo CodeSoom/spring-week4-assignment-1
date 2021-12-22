@@ -40,6 +40,45 @@ class ProductRepositoryTest {
         }
     }
 
+    @Nested
+    @DisplayName("findById 메소드는")
+    class Describe_findById {
+        @Nested
+        @DisplayName("등록된 Product의 id가 주어진다면")
+        class Context_with_id {
+            private Long givenProductId;
+
+            @BeforeEach
+            void prepare() {
+                givenProductId = productRepository.save(getProduct()).getId();
+            }
+
+            @Test
+            @DisplayName("Product의 정보를 리턴한다.")
+            void it_return_products() {
+                assertThat(productRepository.findById(givenProductId)).isNotNull();
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 Product의 id가 주어진다면")
+        class Context_with_invalid_id {
+            private Long givenProductInvalidId = 100L;
+
+            @BeforeEach
+            void prepare() {
+                Product product = productRepository.findById(givenProductInvalidId).orElse(null);
+                productRepository.delete(product);
+            }
+
+            @Test
+            @DisplayName("Product의 정보를 리턴한다.")
+            void it_return_products() {
+                assertThat(productRepository.findById(givenProductInvalidId)).isNotNull();
+            }
+        }
+    }
+
     private Product getProduct() {
         return Product.builder()
                 .name("테스트 제품")
