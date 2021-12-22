@@ -190,7 +190,31 @@ public class ProductServiceTest {
             }
         }
     }
-    
+
+    @Nested
+    @DisplayName("deleteProduct 메소드")
+    class Describe_deleteProduct {
+        @Nested
+        @DisplayName("등록된 Product의 id가 주어진다면")
+        class Context_with_id {
+            Long givenProductId = 1L;
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(givenProductId)).willReturn(Optional.of(getProduct()));
+            }
+
+            @Test
+            @DisplayName("등록된 Product를 삭제하고, 빈값이 리턴한다.")
+            void it_delete_product_return() {
+                productService.deleteProduct(givenProductId);
+
+                verify(productRepository).findById(givenProductId);
+                verify(productRepository).delete(any(Product.class));
+            }
+        }
+    }
+
     private Product getProduct() {
         return Product.builder()
                 .name("테스트 제품")

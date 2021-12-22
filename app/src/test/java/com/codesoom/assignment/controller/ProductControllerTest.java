@@ -26,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -233,6 +234,24 @@ class ProductControllerTest {
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.id").value(givenId))
                         .andExpect(jsonPath("$.name").value(givenProduct.getName()))
+                        .andDo(print());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete() 메소드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("등록된 Product가 주어진다면")
+        class Context_with_product {
+            Long givenId = 1L;
+
+            @Test
+            @DisplayName("204(No Content)과 빈값을 응답합니다.")
+            void it_delete_task_return_noContent() throws Exception {
+                mockMvc.perform(delete(PRODUCTS_URI_SLASH + givenId))
+                        .andExpect(status().isNoContent())
                         .andDo(print());
             }
         }

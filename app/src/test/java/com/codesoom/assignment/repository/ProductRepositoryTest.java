@@ -112,6 +112,30 @@ class ProductRepositoryTest {
         }
     }
 
+    @Nested
+    @DisplayName("delete 메소드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("등록할 Product가 주어진다면")
+        class Context_with_product {
+            Product givenProduct;
+
+            @BeforeEach
+            void prepare() {
+                productRepository.deleteAll();
+                givenProduct = productRepository.save(getProduct());
+            }
+
+            @Test
+            @DisplayName("Product가 삭제되고, 빈값이 리턴됩니다.")
+            void it_delete_product_return() {
+                productRepository.delete(givenProduct);
+
+                assertThat(productRepository.findAll()).hasSize(0);
+            }
+        }
+    }
+
 
     private Product getProduct() {
         return Product.builder()
