@@ -176,6 +176,16 @@ class ProductServiceTest {
                 assertThat(products.size()).isEqualTo(0);
             }
         }
+
+        @Nested
+        @DisplayName("등록되지않은 id가 주어진다면")
+        class Context_when_product_isnot_exist {
+            @Test
+            @DisplayName("id에 해당하는 Product를 찾을 수 없어 삭제할 수 없다고 예외를 던진다.")
+            void it_return_products() {
+                assertThatThrownBy(() -> productService.deleteProduct(0L)).isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
     private Product getProduct() {
