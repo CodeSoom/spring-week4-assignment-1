@@ -80,12 +80,14 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                product = productService.createProduct(getProduct());
+                productService.createProduct(getProduct());
             }
 
             @Test
             @DisplayName("등록된 Product 정보를 리턴한다.")
             void it_return_product() {
+                product = productService.getProduct(1L).get();
+
                 assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
                 assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
                 assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
