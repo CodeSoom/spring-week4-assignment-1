@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -63,7 +64,7 @@ class ProductControllerTest {
             @BeforeEach
             void prepare() {
                 List<Product> products = new ArrayList<>();
-                IntStream.range(0, givenProductsCount).forEach((i) -> products.add(getProduct()));
+                IntStream.range(0, givenProductsCount).forEach((i) -> products.add(getTestProduct()));
 
                 given(productService.getProducts()).willReturn(products);
             }
@@ -111,7 +112,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void prepare() {
-                given(productService.getProduct(givenId)).willReturn(getProduct());
+                given(productService.getProduct(givenId)).willReturn(getTestProduct());
             }
 
             @Test
@@ -151,7 +152,7 @@ class ProductControllerTest {
         @DisplayName("Product가 주어진다면")
         class Context_with_product {
             final Long givenId = 1L;
-            Product givenProduct = getProduct();
+            Product givenProduct = getTestProduct();
 
             @BeforeEach
             void prepare() {
@@ -257,7 +258,7 @@ class ProductControllerTest {
         }
     }
 
-    private Product getProduct() {
+    private Product getTestProduct() {
         return Product.builder()
                 .name("테스트 제품")
                 .maker("테스트 메이커")

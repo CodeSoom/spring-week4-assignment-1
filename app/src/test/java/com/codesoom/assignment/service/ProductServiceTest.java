@@ -45,7 +45,7 @@ public class ProductServiceTest {
             @BeforeEach
             void prepare() {
                 List<Product> products = new ArrayList<>();
-                IntStream.range(0, givenProductsCount).forEach((i) -> products.add(getProduct()));
+                IntStream.range(0, givenProductsCount).forEach((i) -> products.add(getTestProduct()));
 
                 given(productRepository.findAll()).willReturn(products);
             }
@@ -86,7 +86,7 @@ public class ProductServiceTest {
 
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(givenId)).willReturn(Optional.of(getProduct()));
+                given(productRepository.findById(givenId)).willReturn(Optional.of(getTestProduct()));
             }
 
             @Test
@@ -122,7 +122,7 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
-            Product givenProduct = getProduct();
+            Product givenProduct = getTestProduct();
             Long givenId = 1L;
 
             @BeforeEach
@@ -175,7 +175,7 @@ public class ProductServiceTest {
 
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(givenId)).willReturn(Optional.of(getProduct()));
+                given(productRepository.findById(givenId)).willReturn(Optional.of(getTestProduct()));
                 given(productRepository.save(any(Product.class))).will(args -> {
                     Product product = args.getArgument(0);
                     product.setId(givenId);
@@ -205,7 +205,7 @@ public class ProductServiceTest {
 
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(givenProductId)).willReturn(Optional.of(getProduct()));
+                given(productRepository.findById(givenProductId)).willReturn(Optional.of(getTestProduct()));
             }
 
             @Test
@@ -219,7 +219,7 @@ public class ProductServiceTest {
         }
     }
 
-    private Product getProduct() {
+    private Product getTestProduct() {
         return Product.builder()
                 .name("테스트 제품")
                 .maker("테스트 메이커")

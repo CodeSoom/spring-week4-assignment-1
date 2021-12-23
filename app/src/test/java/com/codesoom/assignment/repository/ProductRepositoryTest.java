@@ -32,7 +32,7 @@ class ProductRepositoryTest {
             @BeforeEach
             void prepare() {
                 productRepository.deleteAll();
-                IntStream.range(0, givenProductCnt).forEach((i) -> productRepository.save(getProduct()));
+                IntStream.range(0, givenProductCnt).forEach((i) -> productRepository.save(getTestProduct()));
             }
 
             @Test
@@ -53,7 +53,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                givenProductId = productRepository.save(getProduct()).getId();
+                givenProductId = productRepository.save(getTestProduct()).getId();
             }
 
             @Test
@@ -87,7 +87,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
-            Product givenProduct = getProduct();
+            Product givenProduct = getTestProduct();
 
             @Test
             @DisplayName("Product가 저장되고, 리턴됩니다.")
@@ -123,7 +123,7 @@ class ProductRepositoryTest {
             @BeforeEach
             void prepare() {
                 productRepository.deleteAll();
-                givenProduct = productRepository.save(getProduct());
+                givenProduct = productRepository.save(getTestProduct());
             }
 
             @Test
@@ -136,7 +136,7 @@ class ProductRepositoryTest {
         }
     }
 
-    private Product getProduct() {
+    private Product getTestProduct() {
         return Product.builder()
                 .name("테스트 제품")
                 .maker("테스트 메이커")
