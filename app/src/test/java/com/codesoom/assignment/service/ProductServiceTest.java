@@ -233,6 +233,20 @@ public class ProductServiceTest {
                 verify(productRepository).delete(any(Product.class));
             }
         }
+
+        @Nested
+        @DisplayName("등록되지 않은 Product의 id가 주어진다면")
+        class Context_with_invalid_id {
+            Long givenProductInvalidId = 100L;
+
+            @Test
+            @DisplayName("Product를 찾을 수 없다는 내용의 예외를 던진다.")
+            void it_return_productNotFoundException() {
+                assertThatThrownBy(() -> productService.deleteProduct(givenProductInvalidId)).isInstanceOf(ProductNotFoundException.class);
+
+                verify(productRepository).findById(givenProductInvalidId);
+            }
+        }
     }
 
     private Product getTestProduct() {
