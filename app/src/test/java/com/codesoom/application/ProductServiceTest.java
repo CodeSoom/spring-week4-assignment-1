@@ -96,7 +96,7 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("Product를 찾을 수 없다는 예외를 던진다.")
-            void it_return_product() {
+            void it_return_ProductNotFoundException() {
                 assertThatThrownBy(() -> productService.getProduct(0L)).isInstanceOf(ProductNotFoundException.class);
             }
         }
