@@ -5,6 +5,9 @@ import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.errors.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 class ProductServiceTest {
 
     private ProductRepository productRepository;
@@ -45,7 +49,7 @@ class ProductServiceTest {
         given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
     }
 
-    @DisplayName("getProducts는 저장하고 있는 상품 목록을 반환한다")
+    @DisplayName("getProducts는 저장하고 있는 상품 목록을 리턴한다")
     @Test
     void getProducts() {
         List<Product> products = productService.getProducts();
@@ -55,21 +59,32 @@ class ProductServiceTest {
         assertThat(products).hasSize(1);
     }
 
-    @DisplayName("getProduct는 주어진 아이디의 상품을 반환한다")
-    @Test
-    void getProduct_ok() {
-        Product product = productService.getProduct(productId);
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class getProduct_메소드는 {
 
-        verify(productRepository).findById(productId);
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_있다면 {
+            @Test
+            void 상품을_리턴한다() {
+                Product product = productService.getProduct(productId);
 
-        assertThat(product.getId()).isEqualTo(productId);
-    }
+                verify(productRepository).findById(productId);
 
-    @DisplayName("getProduct는 상품 목록에서 일치하지 않는 아이디이면 에러를 던진다")
-    @Test
-    void getProduct_no() {
-        assertThatThrownBy(() -> productService.getProduct(wrongId))
-                .isInstanceOf(ProductNotFoundException.class);
+                assertThat(product.getId()).isEqualTo(productId);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @Test
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> productService.getProduct(wrongId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
     @DisplayName("saveProduct는 주어진 상품을 저장한다")
@@ -88,40 +103,59 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo(productName);
     }
 
-    @DisplayName("updateProduct는 주어진 아이디의 상품을 수정한다")
-    @Test
-    void updateProduct_ok() {
-        String productName = PRODUCT_NAME + UPDATE_POSTFIX;
-        Product source = new Product(null, productName, null, 0, null);
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class updateProduct_메소드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_있다면 {
+            @Test
+            void 상품을_수정한다() {
+                String productName = PRODUCT_NAME + UPDATE_POSTFIX;
+                Product source = new Product(null, productName, null, 0, null);
 
-        Product product = productService.updateProduct(productId, source);
+                Product product = productService.updateProduct(productId, source);
 
-        assertThat(product.getName()).isEqualTo(productName);
+                assertThat(product.getName()).isEqualTo(productName);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @Test
+            void 예외를_던진다() {
+                String productName = PRODUCT_NAME + UPDATE_POSTFIX;
+                Product source = new Product(null, productName, null, 0, null);
+
+                assertThatThrownBy(() -> productService.updateProduct(wrongId, source))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
-    @DisplayName("updateProduct는 상품 목록에 일치하지 않는 아이디이면 에러를 던진다")
-    @Test
-    void updateProduct_no() {
-        String productName = PRODUCT_NAME + UPDATE_POSTFIX;
-        Product source = new Product(null, productName, null, 0, null);
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class deleteProduct_메소드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_있다면 {
+            @Test
+            void 상품을_삭제한다() {
+                productService.deleteProduct(productId);
 
-        assertThatThrownBy(() -> productService.updateProduct(wrongId, source))
-                .isInstanceOf(ProductNotFoundException.class);
+                verify(productRepository).delete(any(Product.class));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @Test
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> productService.deleteProduct(wrongId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
-
-    @DisplayName("deleteProduct는 주어진 아이디의 상품을 삭제한다")
-    @Test
-    void deleteProduct_ok() {
-        productService.deleteProduct(productId);
-
-        verify(productRepository).delete(any(Product.class));
-    }
-
-    @DisplayName("deleteProduct는 상품 목록에 일치하지 않는 아이디이면 에러를 던진다")
-    @Test
-    void deleteProduct_no() {
-        assertThatThrownBy(() -> productService.deleteProduct(wrongId))
-                .isInstanceOf(ProductNotFoundException.class);
-    }
-
 }
