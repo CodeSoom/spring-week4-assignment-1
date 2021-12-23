@@ -6,6 +6,9 @@ import com.codesoom.assignment.errors.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @WebMvcTest
 class ProductControllerTest {
 
@@ -49,24 +53,34 @@ class ProductControllerTest {
         verify(productService).getProducts();
     }
 
-    @DisplayName("GET /products/{id}는 주어진 아이디의 상품을 반환한다")
-    @Test
-    void getProduct_ok() throws Exception {
-        mockMvc.perform(get("/products/1"))
-                .andExpect(status().isOk());
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 상품_조회_요청은 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_있다면 {
+            @Test
+            void 상품을_리턴한다() throws Exception {
+                mockMvc.perform(get("/products/1"))
+                        .andExpect(status().isOk());
 
-        verify(productService).getProduct(1L);
-    }
+                verify(productService).getProduct(1L);
+            }
+        }
 
-    @DisplayName("GET /products/{id}는 상품 목록에서 일치하지 않는 아이디의 상품은 에러를 던진다")
-    @Test
-    void getProduct_no() throws Exception {
-        given(productService.getProduct(100L)).willThrow(ProductNotFoundException.class);
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @Test
+            void NOT_FOUND를_보낸다() throws Exception {
+                given(productService.getProduct(100L)).willThrow(ProductNotFoundException.class);
 
-        mockMvc.perform(get("/products/100"))
-                .andExpect(status().isNotFound());
+                mockMvc.perform(get("/products/100"))
+                        .andExpect(status().isNotFound());
 
-        verify(productService).getProduct(100L);
+                verify(productService).getProduct(100L);
+            }
+        }
     }
 
     @DisplayName("POST /products는 상품을 저장한다")
@@ -84,55 +98,75 @@ class ProductControllerTest {
         verify(productService).saveProduct(any(Product.class));
     }
 
-    @DisplayName("PATCH /products/{id}는 주어진 아이디의 상품을 수정한다")
-    @Test
-    void updateProduct_ok() throws Exception {
-        String name = PRODUCT_NAME + UPDATE_POSTFIX;
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 상품_수정_요청은 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_있다면 {
+            @Test
+            void 상품을_수정한다() throws Exception {
+                String name = PRODUCT_NAME + UPDATE_POSTFIX;
 
-        String json = createProductJson(name);
+                String json = createProductJson(name);
 
-        mockMvc.perform(patch("/products/1")
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                mockMvc.perform(patch("/products/1")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
 
-        verify(productService).updateProduct(eq(1L), any(Product.class));
+                verify(productService).updateProduct(eq(1L), any(Product.class));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @Test
+            void NOT_FOUND를_보낸다() throws Exception {
+                given(productService.updateProduct(eq(100L), any(Product.class))).willThrow(ProductNotFoundException.class);
+
+                String name = PRODUCT_NAME + UPDATE_POSTFIX;
+                String json = createProductJson(name);
+
+                mockMvc.perform(patch("/products/100")
+                                .content(json)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
+
+                verify(productService).updateProduct(eq(100L), any(Product.class));
+            }
+        }
     }
 
-    @DisplayName("PATCH /products/{id}는 상품 목록에서 일치하지 않는 아이디의 상품은 에러를 던진다")
-    @Test
-    void updateProduct_no() throws Exception {
-        given(productService.updateProduct(eq(100L), any(Product.class))).willThrow(ProductNotFoundException.class);
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 상품_삭제_요청은 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_있다면 {
+            @Test
+            void 상품을_삭제한다() throws Exception {
+                mockMvc.perform(delete("/products/1"))
+                        .andExpect(status().isNoContent());
 
-        String name = PRODUCT_NAME + UPDATE_POSTFIX;
-        String json = createProductJson(name);
+                verify(productService).deleteProduct(1L);
+            }
+        }
 
-        mockMvc.perform(patch("/products/100")
-                        .content(json)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @Test
+            void NOT_FOUND를_보낸다() throws Exception {
+                willThrow(new ProductNotFoundException(100L)).given(productService).deleteProduct(100L);
 
-        verify(productService).updateProduct(eq(100L), any(Product.class));
-    }
+                mockMvc.perform(delete("/products/100"))
+                        .andExpect(status().isNotFound());
 
-    @DisplayName("DELETE /products/{id}는 주어진 아이디의 상품을 삭제한다")
-    @Test
-    void deleteProduct() throws Exception {
-        mockMvc.perform(delete("/products/1"))
-                .andExpect(status().isNoContent());
-
-        verify(productService).deleteProduct(1L);
-    }
-
-    @DisplayName("DELETE /products/{id}는 상품 목록에서 일치하지 않는 아이디의 상품은 에러를 던진다")
-    @Test
-    void deleteProduct_no() throws Exception {
-        willThrow(new ProductNotFoundException(100L)).given(productService).deleteProduct(100L);
-
-        mockMvc.perform(delete("/products/100"))
-                .andExpect(status().isNotFound());
-
-        verify(productService).deleteProduct(100L);
+                verify(productService).deleteProduct(100L);
+            }
+        }
     }
 
     private String createProductJson(String name) throws JsonProcessingException {
