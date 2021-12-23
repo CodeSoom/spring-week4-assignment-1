@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 상품에 대한 요청을 받고 응답을 보낸다.
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/products")
@@ -25,27 +28,51 @@ public class ProductController {
 
     private final ProductService productService;
 
+    /**
+     * 상품목록 조회 요청은 상품목록을 리턴한다.
+     * @return 상품목록
+     */
     @GetMapping
     public List<Product> getProducts() {
         return productService.getProducts();
     }
 
+    /**
+     * 상품상세 조회 요청은 주어진 id의 상품을 리턴한다.
+     * @param id 상품 id
+     * @return 주어진 id의 상품
+     */
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
     }
 
+    /**
+     * 상품 저장 요청은 상품을 저장하고 저장된 상품을 리턴한다.
+     * @param source 저장할 상품 source
+     * @return 저장된 상품
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product saveProduct(@RequestBody Product source) {
         return productService.saveProduct(source);
     }
 
+    /**
+     * 상품 수정 요청은 주어진 id의 상품을 수정하고 수정된 상품을 리턴한다.
+     * @param id 수정할 상품 id
+     * @param source 수정할 상품 source
+     * @return 수정된 상품
+     */
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product source) {
         return productService.updateProduct(id, source);
     }
 
+    /**
+     * 상품 삭제 요청은 주어진 id의 상품을 삭제한다.
+     * @param id 삭제할 상품 id
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
