@@ -1,5 +1,6 @@
 package com.codesoom.assignment.services;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class ToyService {
         return toys.stream()
                 .filter(toy -> toy.getId().equals(id))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public void deleteProduct(Long id) {

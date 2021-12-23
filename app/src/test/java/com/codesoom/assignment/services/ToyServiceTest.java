@@ -1,5 +1,6 @@
 package com.codesoom.assignment.services;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ToyServiceTest {
     private ToyService toyService;
@@ -38,10 +40,16 @@ class ToyServiceTest {
     }
 
     @Test
-    void getProduct() {
+    void getProductWithExistedId() {
         Toy toy = toyService.getProduct(1L);
 
         assertThat(toy.getName()).isEqualTo(TOY_NAME);
+    }
+
+    @Test
+    void getProductWithNotExistedId() {
+        assertThatThrownBy(() -> toyService.getProduct(100L))
+                .isInstanceOf(ProductNotFoundException.class);
     }
 
     @Test
