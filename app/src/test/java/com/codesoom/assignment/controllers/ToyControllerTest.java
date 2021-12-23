@@ -46,4 +46,16 @@ class ToyControllerTest {
 
         assertThat(find.getName()).isEqualTo("test 장난감");
     }
+
+    @Test
+    void delete() {
+        Toy toy = new Toy();
+        toy.setName("test 장난감");
+        ToyController toyController = new ToyController();
+        toyController.create(toy);
+
+        toyController.delete(1L);
+
+        assertThat(toyController.products()).isEmpty();
+    }
 }

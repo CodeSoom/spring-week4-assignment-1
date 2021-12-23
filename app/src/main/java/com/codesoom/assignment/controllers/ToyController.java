@@ -27,6 +27,11 @@ public class ToyController {
                 .orElse(null);
     }
 
+    public void delete(Long id) {
+        Toy toy = this.product(id);
+        toys.remove(toy);
+    }
+
     public Long generatedId() {
         newId += 1;
         return newId;
