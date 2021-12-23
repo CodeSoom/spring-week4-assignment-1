@@ -8,25 +8,46 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 상품을 관리합니다.
+ */
 @Service
 @Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
 
+    /**
+     * 주어진 의존성 객체를 사용하여 ProductService 객체를 생성합니다.
+     * @param productRepository 상품 repository
+     */
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
+    /**
+     * 저장하고 있는 상품 목록을 반환합니다.
+     * @return 상품 목록
+     */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
+    /**
+     * 주어진 id와 일치하는 상품을 반환합니다.
+     * @param id 상품 id
+     * @return 일치하는 id의 상품
+     */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    /**
+     * 상품을 저장하고 저장된 상품을 반환합니다.
+     * @param source 저장할 상품의 source
+     * @return 저장된 상품
+     */
     public Product saveProduct(Product source) {
         Product.createSaveProduct(
                 source.getName(),
@@ -38,6 +59,12 @@ public class ProductService {
         return productRepository.save(source);
     }
 
+    /**
+     * 주어진 id의 상품을 수정하고 수정된 상품을 반환합니다.
+     * @param id 수정할 상품 id
+     * @param source 수정할 상품 source
+     * @return 수정된 상품
+     */
     public Product updateProduct(Long id, Product source) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
@@ -52,6 +79,10 @@ public class ProductService {
         return product;
     }
 
+    /**
+     * 주어진 id의 상품을 삭제합니다.
+     * @param id 삭제할 상품 id
+     */
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
