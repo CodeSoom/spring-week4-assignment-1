@@ -108,7 +108,24 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("Update 메소드는")
+    @DisplayName("createProduct 메소드는")
+    class Describe_create {
+        Product product;
+
+        @Nested
+        @DisplayName("Product를 입력받으면")
+        class Context_when_product {
+            @Test
+            @DisplayName("저장하고 Product를 리턴한다.")
+            void it_return_product() {
+                product = productService.createProduct(getProduct());
+                assertThat(productService.createProduct(getProduct()));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("updateProduct 메소드는")
     class Describe_update {
         Product product;
 
@@ -160,7 +177,7 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("Delete 메소드는")
+    @DisplayName("deleteProduct 메소드는")
     class Describe_delete {
 
         @BeforeEach
