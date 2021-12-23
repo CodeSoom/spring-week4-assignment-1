@@ -15,11 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 * */
 class ToyControllerTest {
     private ToyController toyController;
+    private static final String TOY_NAME = "test 장난감";
+    private static final String CREATE_PREFIX = "new";
 
     @BeforeEach
     void setUp() {
         Toy toy = new Toy();
-        toy.setName("test 장난감");
+        toy.setName(TOY_NAME);
         toyController = new ToyController();
 
         toyController.create(toy);
@@ -35,7 +37,7 @@ class ToyControllerTest {
         int oldSize = toyController.products().size();
 
         Toy newToy = new Toy();
-        newToy.setName("new test 장난감");
+        newToy.setName(CREATE_PREFIX + TOY_NAME);
         toyController.create(newToy);
 
         int newSize = toyController.products().size();
@@ -47,7 +49,7 @@ class ToyControllerTest {
     void product() {
         Toy find = toyController.product(1L);
 
-        assertThat(find.getName()).isEqualTo("test 장난감");
+        assertThat(find.getName()).isEqualTo(TOY_NAME);
     }
 
     @Test
