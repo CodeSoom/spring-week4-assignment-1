@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.services.ToyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,26 +15,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 *  4. delete(id) 등록된 장난감 삭제
 * */
 class ToyControllerTest {
-    private ToyController toyController;
+    private ToyService toyService;
     private static final String TOY_NAME = "test 장난감";
     private static final String CREATE_PREFIX = "new";
     private static final String TOY_MAKER = "애옹이네 장난감 가게";
     private static final Integer TOY_PRICE = 5000;
     private static final String TOY_IMAGE = "someUrl";
 
-
     @BeforeEach
     void setUp() {
+        toyService = new ToyService();
+
         Toy toy = new Toy();
         toy.setName(TOY_NAME);
-        toyController = new ToyController();
 
-        toyController.create(toy);
+        toyService.createProduct(toy);
     }
 
     @Test
     void products() {
-        assertThat(toyController.products()).isNotEmpty();
+        assertThat(toyService.getProducts()).isNotEmpty();
     }
 
     @Test
@@ -45,7 +46,7 @@ class ToyControllerTest {
         newToy.setPrice(TOY_PRICE);
         newToy.setImage(TOY_IMAGE);
 
-        Toy createdToy = toyController.create(newToy);
+        Toy createdToy = toyService.createProduct(newToy);
 
         assertThat(createdToy.getName()).isEqualTo(CREATE_PREFIX + TOY_NAME);
         assertThat(createdToy.getMaker()).isEqualTo(TOY_MAKER);
@@ -55,18 +56,18 @@ class ToyControllerTest {
 
     @Test
     void product() {
-        Toy find = toyController.product(1L);
+        Toy find = toyService.getProduct(1L);
 
         assertThat(find.getName()).isEqualTo(TOY_NAME);
     }
 
     @Test
     void delete() {
-        int oldSize = toyController.products().size();
+        int oldSize = toyService.getProducts().size();
 
-        toyController.delete(1L);
+        toyService.deleteProduct(1L);
 
-        int newSize = toyController.products().size();
+        int newSize = toyService.getProducts().size();
 
         assertThat(newSize - oldSize).isEqualTo(-1);
     }
