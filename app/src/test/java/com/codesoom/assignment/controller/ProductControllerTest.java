@@ -16,32 +16,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Nested
+@DisplayName("ProductController 클래스")
 class ProductControllerTest {
-
     private static final String PRODUCT_TITLE = "고양이 장난감";
 
-    private ProductController productController;
-    private Product product;
+    ProductController productController;
+    private  Product product;
 
-    @BeforeEach
-    void setUp() {
-        productController = new ProductController(product);
+    @Nested
+    @DisplayName("List 메소드는")
+    class ProductList {
 
-        product = new Product();
-        product.setId(1L);
-        product.setTitle(PRODUCT_TITLE);
+        @BeforeEach
+        void setUp() {
 
-        productController.create(product);
+        }
+
+
+        @Test
+        @DisplayName("만약 List 안에 setTilte 값이 있다면")
+        void getList() {
+            List<Product> products = productController.list();
+
+            assertThat(products).hasSize(1);
+
+            products.get(0);
+            assertThat(product.getId()).isEqualTo(1L);
+            assertThat(product.getTitle()).isEqualTo(PRODUCT_TITLE);
+        }
     }
-
-    @Test
-    void getList() {
-        List<Product> products = productController.list();
-
-        assertThat(products).hasSize(1);
-
-        Product product = products.get(0);
-        assertThat(product.getTitle()).isEqualTo(PRODUCT_TITLE);
-    }
-
 }
+
