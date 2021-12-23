@@ -99,7 +99,7 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("Product를 찾을 수 없다는 예외를 던진다.")
-            void it_return_ProductNotFoundException() {
+            void it_throw_ProductNotFoundException() {
                 assertThatThrownBy(() -> productService.getProduct(0L)).isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -116,7 +116,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("수정할 id가 주어진다면")
+        @DisplayName("등록된 id가 주어진다면")
         class Context_when_product_is_exist {
             @Test
             @DisplayName("id에 해당하는 Product 정보를 수정하고 리턴한다.")
@@ -136,6 +136,23 @@ class ProductServiceTest {
                 assertThat(product.get().getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
                 assertThat(product.get().getImageUrl()).isEqualTo(UPDATE_POSTFIX + PRODUCT_IMAGE_URL);
                 assertThat(product.get().getPrice()).isEqualTo(NEW_PRICE);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지않은 id가 주어진다면")
+        class Context_when_product_isnot_exist {
+            @Test
+            @DisplayName("id에 해당하는 Product를 찾을 수 없어 수정할 수 없다고 예외를 던진다.")
+            void it_throw_ProductNotFoundException() {
+                Product source = new Product();
+
+                source.setName(UPDATE_POSTFIX + PRODUCT_NAME);
+                source.setMaker(UPDATE_POSTFIX + PRODUCT_MAKER);
+                source.setImageUrl(UPDATE_POSTFIX + PRODUCT_IMAGE_URL);
+                source.setPrice(NEW_PRICE);
+
+                assertThatThrownBy(() -> productService.updateProduct(source, 0L)).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
