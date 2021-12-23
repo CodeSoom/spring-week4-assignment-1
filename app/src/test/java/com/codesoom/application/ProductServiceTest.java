@@ -1,6 +1,7 @@
 package com.codesoom.application;
 
 import com.codesoom.domain.Product;
+import com.codesoom.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ProductService 클래스")
 class ProductServiceTest {
@@ -70,7 +72,7 @@ class ProductServiceTest {
 
         @Nested
         @DisplayName("등록된 id 값이 주어졌을때")
-        class Context_with_id {
+        class Context_when_product_is_exist {
             Product product = new Product();
 
             @BeforeEach
@@ -85,6 +87,17 @@ class ProductServiceTest {
                 assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
                 assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
                 assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL);
+            }
+        }
+
+        @Nested
+        @DisplayName("id에 해당하는 Product가 존재하지 않으면")
+        class Context_when_product_isnot_exist {
+
+            @Test
+            @DisplayName("Product를 찾을 수 없다는 예외를 던진다.")
+            void it_return_product() {
+                assertThatThrownBy(() -> productService.getProduct(0L)).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
