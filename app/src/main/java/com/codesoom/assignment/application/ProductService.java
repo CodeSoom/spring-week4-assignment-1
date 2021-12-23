@@ -28,7 +28,7 @@ public class ProductService {
     }
 
     public Product saveProduct(Product source) {
-        Product.insert(
+        Product.createSaveProduct(
                 source.getName(),
                 source.getMaker(),
                 source.getPrice(),

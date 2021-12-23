@@ -136,7 +136,7 @@ class ProductControllerTest {
     }
 
     private String createProductJson(String name) throws JsonProcessingException {
-        Product source = Product.insert(name, null, 0, null);
+        Product source = Product.createSaveProduct(name, null, 0, null);
         return objectMapper.writeValueAsString(source);
     }
 }

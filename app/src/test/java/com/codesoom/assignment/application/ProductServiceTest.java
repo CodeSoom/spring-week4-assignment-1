@@ -79,7 +79,7 @@ class ProductServiceTest {
                 .will(invocation -> invocation.getArgument(0));
 
         String productName = PRODUCT_NAME + SAVE_POSTFIX;
-        Product source = Product.insert(productName, null, 0, null);
+        Product source = Product.createSaveProduct(productName, null, 0, null);
 
         Product product = productService.saveProduct(source);
 

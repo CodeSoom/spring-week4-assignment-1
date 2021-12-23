@@ -30,7 +30,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public static Product insert(String name, String maker, int price, String imageUrl) {
+    public static Product createSaveProduct(String name, String maker, int price, String imageUrl) {
         Product product = new Product();
         product.name = name;
         product.maker = maker;
