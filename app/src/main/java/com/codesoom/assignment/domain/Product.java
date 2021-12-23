@@ -6,15 +6,29 @@ import javax.persistence.Id;
 
 @Entity
 public class Product {
-
     @Id
     @GeneratedValue
     private Long id;
-
     private String name;
     private String maker;
     private Long price;
-    private String image;
+    private String imageUrl;
+
+    public Product() {}
+
+    public Product(String name, String maker, Long price, String image) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = image;
+    }
+
+    public Product(Product source) {
+        this.name = source.getName();
+        this.maker = source.getMaker();
+        this.price = source.getPrice();
+        this.imageUrl = source.getImageUrl();
+    }
 
     public Long getId() {
         return id;
@@ -48,12 +62,12 @@ public class Product {
         this.price = price;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
 
