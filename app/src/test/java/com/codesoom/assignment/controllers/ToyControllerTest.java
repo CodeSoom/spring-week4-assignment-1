@@ -17,6 +17,10 @@ class ToyControllerTest {
     private ToyController toyController;
     private static final String TOY_NAME = "test 장난감";
     private static final String CREATE_PREFIX = "new";
+    private static final String TOY_MAKER = "애옹이네 장난감 가게";
+    private static final Integer TOY_PRICE = 5000;
+    private static final String TOY_IMAGE = "someUrl";
+
 
     @BeforeEach
     void setUp() {
@@ -34,15 +38,19 @@ class ToyControllerTest {
 
     @Test
     void create() {
-        int oldSize = toyController.products().size();
-
         Toy newToy = new Toy();
+
         newToy.setName(CREATE_PREFIX + TOY_NAME);
-        toyController.create(newToy);
+        newToy.setMaker(TOY_MAKER);
+        newToy.setPrice(TOY_PRICE);
+        newToy.setImage(TOY_IMAGE);
 
-        int newSize = toyController.products().size();
+        Toy createdToy = toyController.create(newToy);
 
-        assertThat(newSize - oldSize).isEqualTo(1);
+        assertThat(createdToy.getName()).isEqualTo(CREATE_PREFIX + TOY_NAME);
+        assertThat(createdToy.getMaker()).isEqualTo(TOY_MAKER);
+        assertThat(createdToy.getPrice()).isEqualTo(TOY_PRICE);
+        assertThat(createdToy.getImage()).isEqualTo(TOY_IMAGE);
     }
 
     @Test

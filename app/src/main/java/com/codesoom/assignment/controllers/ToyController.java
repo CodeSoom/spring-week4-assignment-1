@@ -13,8 +13,15 @@ public class ToyController {
         return toys;
     }
 
-    public Toy create(Toy toy) {
+    public Toy create(Toy source) {
+        Toy toy = new Toy();
+
         toy.setId(generatedId());
+        toy.setName(source.getName());
+        toy.setMaker(source.getMaker());
+        toy.setPrice(source.getPrice());
+        toy.setImage(source.getImage());
+
         toys.add(toy);
 
         return toy;
