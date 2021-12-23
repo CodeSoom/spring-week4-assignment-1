@@ -19,23 +19,23 @@ public class CatToyTest {
 
     @DisplayName("getName 메서드는")
     @Nested
-    class Describe_getName{
+    class Describe_getName {
         @DisplayName("이름이 등록되었다면")
         @Nested
-        class Context_with_name{
-            String subject(){
+        class Context_with_name {
+            String subject() {
                 return catToy.getName();
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
                 catToy.setName(CAT_TOY_NAME);
             }
 
             @DisplayName("이름(String)을 리턴한다.")
             @Test
-            void it_returns_name(){
+            void it_returns_name() {
                 assertThat(subject()).isEqualTo(CAT_TOY_NAME);
             }
         }
@@ -43,22 +43,22 @@ public class CatToyTest {
 
     @DisplayName("setName 메서드는")
     @Nested
-    class Describe_setName{
+    class Describe_setName {
         @DisplayName("이름(String)이 주어지면")
         @Nested
-        class Context_with_name{
-            void subject(){
+        class Context_with_name {
+            void subject() {
                 catToy.setName(CAT_TOY_NAME);
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
             }
 
             @DisplayName("이름 필드에 그 이름(String)을 저장한다. ")
             @Test
-            void it_returns_name(){
+            void it_returns_name() {
                 subject();
                 assertThat(catToy.getName()).isEqualTo(CAT_TOY_NAME);
             }
@@ -67,23 +67,23 @@ public class CatToyTest {
 
     @DisplayName("getMaker 메서드는")
     @Nested
-    class Describe_getMaker{
+    class Describe_getMaker {
         @DisplayName("메이커가 등록되었다면")
         @Nested
-        class Context_with_maker{
-            String subject(){
+        class Context_with_maker {
+            String subject() {
                 return catToy.getMaker();
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
                 catToy.setMaker(CAT_TOY_MAKER);
             }
 
             @DisplayName("메이커(String)를 리턴한다.")
             @Test
-            void it_returns_maker(){
+            void it_returns_maker() {
                 assertThat(subject()).isEqualTo(CAT_TOY_MAKER);
             }
         }
@@ -91,22 +91,22 @@ public class CatToyTest {
 
     @DisplayName("setMaker 메서드는")
     @Nested
-    class Describe_setMaker{
+    class Describe_setMaker {
         @DisplayName("메이커(String)가 주어지면")
         @Nested
-        class Context_with_maker{
-            void subject(){
+        class Context_with_maker {
+            void subject() {
                 catToy.setMaker(CAT_TOY_MAKER);
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
             }
 
             @DisplayName("메이커 필드에 그 메이커(String)를 저장한다. ")
             @Test
-            void it_returns_maker(){
+            void it_returns_maker() {
                 subject();
                 assertThat(catToy.getMaker()).isEqualTo(CAT_TOY_MAKER);
             }
@@ -115,23 +115,23 @@ public class CatToyTest {
 
     @DisplayName("getPrice 메서드는")
     @Nested
-    class Describe_getPrice{
+    class Describe_getPrice {
         @DisplayName("가격이 등록되었다면")
         @Nested
-        class Context_with_price{
-            String subject(){
+        class Context_with_price {
+            Integer subject() {
                 return catToy.getPrice();
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
                 catToy.setPrice(CAT_TOY_PRICE);
             }
 
             @DisplayName("가격(Integer)을 리턴한다.")
             @Test
-            void it_returns_price(){
+            void it_returns_price() {
                 assertThat(subject()).isEqualTo(CAT_TOY_PRICE);
             }
         }
@@ -139,22 +139,22 @@ public class CatToyTest {
 
     @DisplayName("setPrice 메서드는")
     @Nested
-    class Describe_setPrice{
+    class Describe_setPrice {
         @DisplayName("가격(Integer)이 주어지면")
         @Nested
-        class Context_with_price{
-            void subject(){
+        class Context_with_price {
+            void subject() {
                 catToy.setPrice(CAT_TOY_PRICE);
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
             }
 
             @DisplayName("가격 필드에 그 가격(Integer)을 저장한다. ")
             @Test
-            void it_returns_price(){
+            void it_returns_price() {
                 subject();
                 assertThat(catToy.getPrice()).isEqualTo(CAT_TOY_PRICE);
             }
@@ -163,23 +163,23 @@ public class CatToyTest {
 
     @DisplayName("getImage 메서드는")
     @Nested
-    class Describe_getImage{
+    class Describe_getImage {
         @DisplayName("이미지가 등록되었다면")
         @Nested
-        class Context_with_image{
-            String subject(){
+        class Context_with_image {
+            String subject() {
                 return catToy.getImage();
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
-                catToy.getImage(CAT_TOY_IMAGE);
+                catToy.setImage(CAT_TOY_IMAGE);
             }
 
             @DisplayName("이미지 URL(String)를 리턴한다.")
             @Test
-            void it_returns_image(){
+            void it_returns_image() {
                 assertThat(subject()).isEqualTo(CAT_TOY_IMAGE);
             }
         }
@@ -187,22 +187,22 @@ public class CatToyTest {
 
     @DisplayName("setImage 메서드는")
     @Nested
-    class Describe_setImage{
+    class Describe_setImage {
         @DisplayName("이미지 URL(String)이 주어지면")
         @Nested
-        class Context_with_image{
-            void subject(){
+        class Context_with_image {
+            void subject() {
                 catToy.setImage(CAT_TOY_IMAGE);
             }
 
             @BeforeEach
-            void prepare(){
+            void prepare() {
                 catToy = new CatToy();
             }
 
-            @DisplayName("이미지 필드에 그 이미지URL(String)을 저장한다. ")
+            @DisplayName("이미지 필드에 그 이미지URL(String)을 저장한다.")
             @Test
-            void it_returns_image(){
+            void it_returns_image() {
                 subject();
                 assertThat(catToy.getImage()).isEqualTo(CAT_TOY_IMAGE);
             }
