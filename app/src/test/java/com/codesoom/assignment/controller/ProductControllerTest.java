@@ -127,7 +127,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("등록되지 않은 Product의 id가 주어진다면")
-        class Context_without_id {
+        class Context_with_invaild_id {
             Long givenInvalidId = 100L;
 
             @BeforeEach

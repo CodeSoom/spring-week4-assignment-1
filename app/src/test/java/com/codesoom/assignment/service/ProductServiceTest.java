@@ -193,6 +193,22 @@ public class ProductServiceTest {
                 assertThat(updatedProduct.getName()).isEqualTo(givenSource.getName());
             }
         }
+        @Nested
+        @DisplayName("등록되지 않은 Product의 id 와 Product가 있다면 ")
+        class Context_with_invalid_id_and_product {
+            Long givenInvalidId = 100L;
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(givenInvalidId)).willReturn(Optional.empty());
+            }
+
+            @Test
+            @DisplayName("Product를 찾을 수 없다는 내용의 예외를 던진다.")
+            void it_return_productNotFoundException() {
+                assertThatThrownBy(() -> productService.updateProduct(givenInvalidId, getTestProduct())).isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
     @Nested
