@@ -238,6 +238,21 @@ class ProductControllerTest {
                         .andDo(print());
             }
         }
+
+        @Nested
+        @DisplayName("등록된 Product의 Id만 주어진다면")
+        class Context_with_id {
+            Long givenId = 1L;
+
+            @Test
+            @DisplayName("400(Bad Request)를 응답합니다.")
+            void it_return_badRequest() throws Exception {
+                mockMvc.perform(put(PRODUCTS_URI_SLASH + givenId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
     }
 
     @Nested
