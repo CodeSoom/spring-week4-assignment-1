@@ -253,6 +253,22 @@ class ProductControllerTest {
                         .andDo(print());
             }
         }
+
+        @Nested
+        @DisplayName("수정할 Product만 주어진다면")
+        class Context_with_product {
+            Product givenProduct = getProductToBeUpdated();
+
+            @Test
+            @DisplayName("405(Method not allowed)를 응답합니다.")
+            void it_return_badRequest() throws Exception {
+                mockMvc.perform(put(PRODUCTS_URI_SLASH)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(productToContent(givenProduct)))
+                        .andExpect(status().isMethodNotAllowed())
+                        .andDo(print());
+            }
+        }
     }
 
     @Nested
