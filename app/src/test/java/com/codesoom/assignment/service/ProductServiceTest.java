@@ -37,9 +37,11 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts {
+
         @Nested
         @DisplayName("등록된 Product가 있다면")
         class Context_has_product {
+
             final int givenProductsCount = 5;
 
             @BeforeEach
@@ -79,9 +81,11 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("getProduct 메소드는")
     class Describe_getProduct {
+
         @Nested
         @DisplayName("등록된 Product의 id 값이 주어진다면")
         class Context_with_id {
+
             private Long givenId = 1L;
 
             @BeforeEach
@@ -101,6 +105,7 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("등록되지 않은 Product의 id 값이 주어진다면")
         class Context_with_invalid_id {
+
             private Long givenInvalidId = 100L;
 
             @BeforeEach
@@ -119,9 +124,11 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("createProduct 메소드는")
     class Describe_createProduct {
+
         @Nested
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
+
             Product givenProduct = getTestProduct();
             Long givenId = 1L;
 
@@ -149,6 +156,7 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("null 주어진다면")
         class Context_with_null {
+
             Product givenNullProduct = null;
 
             @BeforeEach
@@ -167,9 +175,11 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메소드는")
     class Describe_updateProduct {
+
         @Nested
         @DisplayName("등록된 Product의 id와 수정할 Product가 주어진다면")
         class Context_with_id_and_product {
+
             Long givenId = 1L;
             Product givenSource = getProductToBeUpdated();
 
@@ -196,6 +206,7 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("등록되지 않은 Product의 id 와 Product가 있다면 ")
         class Context_with_invalid_id_and_product {
+
             Long givenInvalidId = 100L;
 
             @BeforeEach
@@ -214,9 +225,11 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("deleteProduct 메소드")
     class Describe_deleteProduct {
+
         @Nested
         @DisplayName("등록된 Product의 id가 주어진다면")
         class Context_with_id {
+
             Long givenProductId = 1L;
 
             @BeforeEach
@@ -237,6 +250,7 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("등록되지 않은 Product의 id가 주어진다면")
         class Context_with_invalid_id {
+
             Long givenProductInvalidId = 100L;
 
             @Test

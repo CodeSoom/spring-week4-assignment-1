@@ -53,9 +53,11 @@ class ProductControllerTest {
     @Nested
     @DisplayName("GET /products 요청은")
     class Describe_list {
+
         @Nested
         @DisplayName("등록된 Product들이 존재하면")
         class Context_has_product {
+
             final int givenProductsCount = 5;
 
             @BeforeEach
@@ -79,6 +81,7 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록된 Product들이 없다면")
         class Context_has_not_product {
+
             final int givenProductsCount = 0;
 
             @BeforeEach
@@ -102,9 +105,11 @@ class ProductControllerTest {
     @Nested
     @DisplayName("GET /products/{id} 요청은")
     class Describe_detail {
+
         @Nested
         @DisplayName("등록된 Product의 id가 주어진다면")
         class Context_with_id {
+
             Long givenId = 1L;
 
             @BeforeEach
@@ -125,6 +130,7 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록되지 않은 Product의 id가 주어진다면")
         class Context_with_invaild_id {
+
             Long givenInvalidId = 100L;
 
             @BeforeEach
@@ -145,9 +151,11 @@ class ProductControllerTest {
     @Nested
     @DisplayName("POST /products 요청은")
     class Describe_create {
+
         @Nested
         @DisplayName("Product가 주어진다면")
         class Context_with_product {
+
             final Long givenId = 1L;
             Product givenProduct = getTestProduct();
 
@@ -180,6 +188,7 @@ class ProductControllerTest {
         @Nested
         @DisplayName("Product가 없다면")
         class Context_without_product {
+
             @Test
             @DisplayName("400(Bad Request)를 응답합니다.")
             void it_return_bad_request() throws Exception {
@@ -194,6 +203,7 @@ class ProductControllerTest {
     @Nested
     @DisplayName("PUT/PATCH /products 요청은")
     class Describe_update {
+
         @Nested
         @DisplayName("등록된 Product의 Id와 수정할 Product가 주어진다면")
         class Context_with_id_and_product {
@@ -239,6 +249,7 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록된 Product의 Id만 주어진다면")
         class Context_with_id {
+
             Long givenId = 1L;
 
             @Test
@@ -254,6 +265,7 @@ class ProductControllerTest {
         @Nested
         @DisplayName("수정할 Product만 주어진다면")
         class Context_with_product {
+
             Product givenProduct = getProductToBeUpdated();
 
             @Test
@@ -271,9 +283,11 @@ class ProductControllerTest {
     @Nested
     @DisplayName("DELETE /products 요청은")
     class Describe_delete {
+
         @Nested
         @DisplayName("등록된 Product가 주어진다면")
         class Context_with_product {
+
             Long givenId = 1L;
 
             @Test

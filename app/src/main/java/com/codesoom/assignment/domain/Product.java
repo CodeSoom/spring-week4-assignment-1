@@ -14,6 +14,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Entity
 public class Product {
+
     @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

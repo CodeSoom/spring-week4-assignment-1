@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Product 클래스")
 class ProductTest {
+
     @Test
     @DisplayName("Product 객체를 생성합니다.")
     void createproduct() {

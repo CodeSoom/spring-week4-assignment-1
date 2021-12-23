@@ -24,9 +24,11 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("findAll 메소드는")
     class Describe_findAll {
+
         @Nested
         @DisplayName("등록된 Product가 있다면")
         class Context_has_product {
+            
             private final int givenProductCnt = 5;
 
             @BeforeEach
@@ -46,9 +48,11 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("findById 메소드는")
     class Describe_findById {
+
         @Nested
         @DisplayName("등록된 Product의 id가 주어진다면")
         class Context_with_id {
+
             private Long givenProductId;
 
             @BeforeEach
@@ -66,6 +70,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("등록되지 않은 Product의 id가 주어진다면")
         class Context_with_invalid_id {
+
             private Long givenProductInvalidId = 100L;
 
             @BeforeEach
@@ -84,9 +89,11 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("save 메소드는")
     class Describe_save {
+
         @Nested
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
+
             Product givenProduct = getTestProduct();
 
             @Test
@@ -102,6 +109,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("null이 주어진다면")
         class Context_with_null {
+
             Product givenNullProduct = null;
 
             @Test
@@ -115,9 +123,11 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("delete 메소드는")
     class Describe_delete {
+
         @Nested
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
+
             Product givenProduct;
 
             @BeforeEach

@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductService {
+
     private final ProductRepository productsRepository;
 
     private final ModelMapper modelMapper;
