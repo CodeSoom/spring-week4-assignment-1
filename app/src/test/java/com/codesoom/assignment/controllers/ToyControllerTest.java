@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.domain.Toy;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,22 +14,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 *  4. delete(id) 등록된 장난감 삭제
 * */
 class ToyControllerTest {
+    private ToyController toyController;
+
+    @BeforeEach
+    void setUp() {
+        Toy toy = new Toy();
+        toy.setName("test 장난감");
+        toyController = new ToyController();
+
+        toyController.create(toy);
+    }
+
     @Test
     void products() {
-        ToyController toyController = new ToyController();
-
-        assertThat(toyController.products()).isEmpty();
+        assertThat(toyController.products()).isNotEmpty();
     }
 
     @Test
     void create() {
-        Toy toy = new Toy();
-        toy.setName("test 장난감");
-        ToyController toyController = new ToyController();
-
         int oldSize = toyController.products().size();
 
-        toyController.create(toy);
+        Toy newToy = new Toy();
+        newToy.setName("new test 장난감");
+        toyController.create(newToy);
 
         int newSize = toyController.products().size();
 
@@ -37,11 +45,6 @@ class ToyControllerTest {
 
     @Test
     void product() {
-        Toy toy = new Toy();
-        toy.setName("test 장난감");
-        ToyController toyController = new ToyController();
-        toyController.create(toy);
-
         Toy find = toyController.product(1L);
 
         assertThat(find.getName()).isEqualTo("test 장난감");
@@ -49,13 +52,12 @@ class ToyControllerTest {
 
     @Test
     void delete() {
-        Toy toy = new Toy();
-        toy.setName("test 장난감");
-        ToyController toyController = new ToyController();
-        toyController.create(toy);
+        int oldSize = toyController.products().size();
 
         toyController.delete(1L);
 
-        assertThat(toyController.products()).isEmpty();
+        int newSize = toyController.products().size();
+
+        assertThat(newSize - oldSize).isEqualTo(-1);
     }
 }
