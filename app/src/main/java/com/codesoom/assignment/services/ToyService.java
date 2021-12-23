@@ -2,10 +2,12 @@ package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ToyService {
     private List<Toy> toys = new ArrayList<>();
     private Long newId = 0L;
