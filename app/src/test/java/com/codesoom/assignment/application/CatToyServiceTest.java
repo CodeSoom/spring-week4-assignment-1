@@ -7,11 +7,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DataJpaTest
 @DisplayName("CatToyService")
 public class CatToyServiceTest {
 
@@ -38,7 +40,10 @@ public class CatToyServiceTest {
 
         @BeforeEach
         void prepare() {
+            catToyRepository.deleteAll();
+
             prepareService();
+
             CatToy catToy1 = new CatToy();
             CatToy catToy2 = new CatToy();
             catToyRepository.save(catToy1);
@@ -53,7 +58,6 @@ public class CatToyServiceTest {
             void it_returns_cat_toy_list() {
                 assertThat(subject()).hasSize(2);
             }
-
         }
     }
 
@@ -76,6 +80,8 @@ public class CatToyServiceTest {
 
             @BeforeEach
             void prepare() {
+                catToyRepository.deleteAll();
+
                 prepareService();
                 prepareCatToy();
             }
@@ -89,10 +95,12 @@ public class CatToyServiceTest {
             @Test
             void it_returns_cat_toy() {
                 CatToy result = subject();
-                assertThat(result).isEqualTo(catToy);
+                assertThat(result.getName()).isEqualTo(catToy.getName());
+                assertThat(result.getMaker()).isEqualTo(catToy.getMaker());
+                assertThat(result.getPrice()).isEqualTo(catToy.getPrice());
+                assertThat(result.getImage()).isEqualTo(catToy.getImage());
             }
         }
-
     }
 
     @DisplayName("deleteCatToy")
@@ -118,6 +126,8 @@ public class CatToyServiceTest {
 
             @BeforeEach
             void prepare() {
+                catToyRepository.deleteAll();
+
                 prepareService();
                 prepareCatToy();
             }
@@ -153,6 +163,8 @@ public class CatToyServiceTest {
 
             @BeforeEach
             void prepare() {
+                catToyRepository.deleteAll();
+
                 prepareService();
                 prepareNewCatToy();
             }
@@ -160,11 +172,11 @@ public class CatToyServiceTest {
             @DisplayName("동일한 CatToy를 생성하고, 리턴한다.")
             @Test
             void it_returns_created_cat_toy() {
-                assertThat(subject().getId()).isEqualTo(1L);
-                assertThat(subject().getPrice()).isEqualTo(CAT_TOY_PRICE);
-                assertThat(subject().getMaker()).isEqualTo(CAT_TOY_MAKER);
-                assertThat(subject().getImage()).isEqualTo(CAT_TOY_IMAGE);
-                assertThat(subject().getName()).isEqualTo(CAT_TOY_NAME);
+                CatToy result = subject();
+                assertThat(result.getPrice()).isEqualTo(CAT_TOY_PRICE);
+                assertThat(result.getMaker()).isEqualTo(CAT_TOY_MAKER);
+                assertThat(result.getImage()).isEqualTo(CAT_TOY_IMAGE);
+                assertThat(result.getName()).isEqualTo(CAT_TOY_NAME);
             }
         }
     }
@@ -172,7 +184,6 @@ public class CatToyServiceTest {
     @DisplayName("updateCatToy")
     @Nested
     class Describe_updateCatToy {
-
         private final String UPDATE_CAT_TOY_NAME = "update_test_cat_toy";
         private final String UPDATE_CAT_TOY_MAKER = "update_test_maker";
         private final String UPDATE_CAT_TOY_IMAGE = "http://update_test.jpg";
@@ -203,6 +214,8 @@ public class CatToyServiceTest {
 
             @BeforeEach
             void prepare() {
+                catToyRepository.deleteAll();
+
                 prepareService();
                 prepareCatToy();
                 prepareUpdateCatToy();
