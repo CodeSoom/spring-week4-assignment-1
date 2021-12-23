@@ -12,6 +12,15 @@
 * 고양이 장난감 수정하기 - `PATCH /products/{id}`
 * 고양이 장난감 삭제하기 - `DELETE /products/{id}`
 
+## TODO
+1. 서비스 테스트 설계 및 구현(productService, productRepository)
+2. productController 테스트 및 구현
+3. productWebController 테스트 및 구현
+
+### 주의 사항
+1. Product말고 Task로 쓰진 않았는지 체크하기
+
+
 ## 요구 사항
 
 - 테스트 커버리지 100%를 달성해야 합니다.
