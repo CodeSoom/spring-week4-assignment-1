@@ -25,13 +25,12 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,8 +49,6 @@ class ProductControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    private static final String PRODUCTS_URI = "/products";
-    private static final String PRODUCTS_URI_SLASH = "/products/";
 
     @Nested
     @DisplayName("list() 메소드는")
@@ -72,7 +69,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("200(Ok)와 Product의 전체 리스트를 응답합니다.")
             void it_return_ok_and_product() throws Exception {
-                mockMvc.perform(get(PRODUCTS_URI))
+                mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(givenProductsCount)))
                         .andDo(print());
@@ -94,7 +91,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("200(Ok)와 빈 리스트를 응답합니다.")
             void it_return_ok_and_products() throws Exception {
-                mockMvc.perform(get(PRODUCTS_URI))
+                mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(givenProductsCount)))
                         .andDo(print());
@@ -118,7 +115,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("200(Ok)와 Product의 정보를 응답합니다.")
             void it_return_ok_and_product() throws Exception {
-                mockMvc.perform(get(PRODUCTS_URI_SLASH + givenId))
+                mockMvc.perform(get("/products/" + givenId))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$").isNotEmpty())
                         .andDo(print());
@@ -138,7 +135,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("404(Not found)를 응답합니다.")
             void it_return_not_fount() throws Exception {
-                mockMvc.perform(get(PRODUCTS_URI_SLASH + givenInvalidId))
+                mockMvc.perform(get("/products/" + givenInvalidId))
                         .andExpect(status().isNotFound())
                         .andDo(print());
             }
@@ -170,7 +167,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("201(Created)와 Product를 응답합니다.")
             void it_create_product_return_created_and_product() throws Exception {
-                mockMvc.perform(post(PRODUCTS_URI)
+                mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productToContent(givenProduct)))
                         .andExpect(status().isCreated())
@@ -186,7 +183,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("400(Bad Request)를 응답합니다.")
             void it_return_bad_request() throws Exception {
-                mockMvc.perform(post(PRODUCTS_URI)
+                mockMvc.perform(post("/products")
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andDo(print());
@@ -217,7 +214,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("PUT요청 / 200(Ok)과 Product를 응답합니다.")
             void it_put_update_product_return_ok_and_product() throws Exception {
-                mockMvc.perform(put(PRODUCTS_URI_SLASH + givenId)
+                mockMvc.perform(put("/products/" + givenId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(productToContent(givenProduct)))
                         .andExpect(status().isOk())
@@ -229,7 +226,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("PATCH요청 / 200(Ok)과 Product를 응답합니다.")
             void it_patch_update_product_return_ok_and_product() throws Exception {
-                mockMvc.perform(patch(PRODUCTS_URI_SLASH + givenId)
+                mockMvc.perform(patch("/products/" + givenId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(productToContent(givenProduct)))
                         .andExpect(status().isOk())
@@ -247,7 +244,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("400(Bad Request)를 응답합니다.")
             void it_return_badRequest() throws Exception {
-                mockMvc.perform(put(PRODUCTS_URI_SLASH + givenId)
+                mockMvc.perform(put("/products/" + givenId)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andDo(print());
@@ -262,7 +259,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("405(Method not allowed)를 응답합니다.")
             void it_return_badRequest() throws Exception {
-                mockMvc.perform(put(PRODUCTS_URI_SLASH)
+                mockMvc.perform(put("/products/")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(productToContent(givenProduct)))
                         .andExpect(status().isMethodNotAllowed())
@@ -282,7 +279,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("204(No Content)과 빈값을 응답합니다.")
             void it_delete_task_return_noContent() throws Exception {
-                mockMvc.perform(delete(PRODUCTS_URI_SLASH + givenId))
+                mockMvc.perform(delete("/products/" + givenId))
                         .andExpect(status().isNoContent())
                         .andDo(print());
             }
