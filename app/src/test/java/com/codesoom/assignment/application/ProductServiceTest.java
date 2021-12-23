@@ -31,10 +31,10 @@ class ProductServiceTest {
         productService = new ProductService();
 
         Product product = new Product();
-        Product.setName(NAME);
-        Product.setMaker(MAKER);
-        Product.setPrice(PRICE);
-        Product.setImage(IMAGE);
+        product.setName(NAME);
+        product.setMaker(MAKER);
+        product.setPrice(PRICE);
+        product.setImage(IMAGE);
 
         productService.createProduct(product);
     }
@@ -47,7 +47,7 @@ class ProductServiceTest {
         @DisplayName("저장되어 있는 제품 리스트를 리턴합니다.")
         void it_returns_products(){
             List<Product> products = productService.getProducts();
-            assertThat(product).hasSize(1);
+            assertThat(products).hasSize(1);
 
             Product product = products.get(0);
             assertThat(product.getName()).isEqualTo(NAME);
