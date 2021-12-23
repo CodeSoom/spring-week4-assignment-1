@@ -1,15 +1,20 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 @DisplayName("Product Service")
 class ProductServiceTest {
     //1. list   -> getProducts
@@ -21,20 +26,18 @@ class ProductServiceTest {
     private static final String NAME = "TestName ";
     private static final String MAKER = "TestMaker";
     private static final long PRICE = 1000;
-    private static final String IMAGE = "http://gdimg.gmarket.co.kr/1482334965/still/600?ver=1535083811";
+    private static final String IMAGE_URL = "http://gdimg.gmarket.co.kr/1482334965/still/600?ver=1535083811";
 
     private ProductService productService;
 
+    @Autowired
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp(){
-        productService = new ProductService();
+        productService = new ProductService(productRepository);
 
-        Product product = new Product();
-        product.setName(NAME);
-        product.setMaker(MAKER);
-        product.setPrice(PRICE);
-        product.setImage(IMAGE);
+        Product product = new Product(NAME, MAKER, PRICE, IMAGE_URL);
 
         productService.createProduct(product);
     }
@@ -53,9 +56,7 @@ class ProductServiceTest {
             assertThat(product.getName()).isEqualTo(NAME);
             assertThat(product.getMaker()).isEqualTo(MAKER);
             assertThat(product.getPrice()).isEqualTo(PRICE);
-            assertThat(product.getImage()).isEqualTo(IMAGE);
+            assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
         }
-
-
     }
 }
