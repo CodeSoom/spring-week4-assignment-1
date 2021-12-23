@@ -67,6 +67,26 @@ class ProductServiceTest {
                 assertThat(productService.getProducts()).isEmpty();
             }
         }
+
+        @Nested
+        @DisplayName("등록된 id 값이 주어졌을때")
+        class Context_with_id {
+            Product product = new Product();
+
+            @BeforeEach
+            void setUp() {
+                product = productService.createProduct(getProduct());
+            }
+
+            @Test
+            @DisplayName("등록된 Product 정보를 리턴한다.")
+            void it_return_product() {
+                assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+                assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
+                assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+                assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL);
+            }
+        }
     }
 
     private Product getProduct() {
