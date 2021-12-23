@@ -51,7 +51,7 @@ class ProductControllerTest {
 
 
     @Nested
-    @DisplayName("list() 메소드는")
+    @DisplayName("GET /products 요청은")
     class Describe_list {
         @Nested
         @DisplayName("등록된 Product들이 존재하면")
@@ -100,7 +100,7 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("detail() 메소드는")
+    @DisplayName("GET /products/{id} 요청은")
     class Describe_detail {
         @Nested
         @DisplayName("등록된 Product의 id가 주어진다면")
@@ -143,7 +143,7 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("create() 메소드는")
+    @DisplayName("POST /products 요청은")
     class Describe_create {
         @Nested
         @DisplayName("Product가 주어진다면")
@@ -192,7 +192,7 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("update() 메소드는")
+    @DisplayName("PUT/PATCH /products 요청은")
     class Describe_update {
         @Nested
         @DisplayName("등록된 Product의 Id와 수정할 Product가 주어진다면")
@@ -269,7 +269,7 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("delete() 메소드는")
+    @DisplayName("DELETE /products 요청은")
     class Describe_delete {
         @Nested
         @DisplayName("등록된 Product가 주어진다면")
