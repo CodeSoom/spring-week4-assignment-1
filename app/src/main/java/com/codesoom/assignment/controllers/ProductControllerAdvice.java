@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ProductControllerAdvice {
 
     /**
-     * ProductNotFoundException 예외를 처리하여 에러응답 객체를 리턴한다.
-     * @param productNotFoundException 상품 컨트롤러에서 발생한 예외
+     * 상품을 찾지 못하여 던져진 예외를 처리하여 에러응답 객체를 리턴한다.
+     * @param productNotFoundException 상품을 찾지 못해 던져진 예외
      * @return 에러 응답 객체
      */
     @ResponseBody
