@@ -35,10 +35,12 @@ public class CatToyService {
 
     public CatToy updateCatToy(Long id, CatToy source) {
         CatToy catToy = catToyRepository.findById(id).orElseThrow(() -> new CatToyNotFoundException(id));
-        catToy.setImage(source.getImage());
+        catToy.setImageUrl(source.getImageUrl());
         catToy.setName(source.getName());
         catToy.setMaker(source.getMaker());
         catToy.setPrice(source.getPrice());
-        return catToy;
+
+        CatToy updatedCatToy = catToyRepository.save(catToy);
+        return updatedCatToy;
     }
 }

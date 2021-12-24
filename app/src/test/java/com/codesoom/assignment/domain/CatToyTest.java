@@ -168,13 +168,13 @@ public class CatToyTest {
         @Nested
         class Context_with_image {
             String subject() {
-                return catToy.getImage();
+                return catToy.getImageUrl();
             }
 
             @BeforeEach
             void prepare() {
                 catToy = new CatToy();
-                catToy.setImage(CAT_TOY_IMAGE);
+                catToy.setImageUrl(CAT_TOY_IMAGE);
             }
 
             @DisplayName("이미지 URL(String)를 리턴한다.")
@@ -192,7 +192,7 @@ public class CatToyTest {
         @Nested
         class Context_with_image {
             void subject() {
-                catToy.setImage(CAT_TOY_IMAGE);
+                catToy.setImageUrl(CAT_TOY_IMAGE);
             }
 
             @BeforeEach
@@ -204,7 +204,7 @@ public class CatToyTest {
             @Test
             void it_returns_image() {
                 subject();
-                assertThat(catToy.getImage()).isEqualTo(CAT_TOY_IMAGE);
+                assertThat(catToy.getImageUrl()).isEqualTo(CAT_TOY_IMAGE);
             }
         }
     }

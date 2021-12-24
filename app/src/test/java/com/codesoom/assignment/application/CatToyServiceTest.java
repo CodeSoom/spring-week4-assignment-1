@@ -44,7 +44,7 @@ public class CatToyServiceTest {
         existedCatToy.setName(CAT_TOY_NAME);
         existedCatToy.setMaker(CAT_TOY_MAKER);
         existedCatToy.setPrice(CAT_TOY_PRICE);
-        existedCatToy.setImage(CAT_TOY_IMAGE);
+        existedCatToy.setImageUrl(CAT_TOY_IMAGE);
         catToyRepository.save(existedCatToy);
     }
 
@@ -93,7 +93,7 @@ public class CatToyServiceTest {
                 assertThat(result.getName()).isEqualTo(existedCatToy.getName());
                 assertThat(result.getMaker()).isEqualTo(existedCatToy.getMaker());
                 assertThat(result.getPrice()).isEqualTo(existedCatToy.getPrice());
-                assertThat(result.getImage()).isEqualTo(existedCatToy.getImage());
+                assertThat(result.getImageUrl()).isEqualTo(existedCatToy.getImageUrl());
             }
         }
     }
@@ -141,7 +141,7 @@ public class CatToyServiceTest {
                 newCatToy.setName(CAT_TOY_NAME);
                 newCatToy.setMaker(CAT_TOY_MAKER);
                 newCatToy.setPrice(CAT_TOY_PRICE);
-                newCatToy.setImage(CAT_TOY_IMAGE);
+                newCatToy.setImageUrl(CAT_TOY_IMAGE);
             }
 
             @DisplayName("동일한 CatToy를 생성하고, 리턴한다.")
@@ -150,7 +150,7 @@ public class CatToyServiceTest {
                 CatToy result = subject();
                 assertThat(result.getPrice()).isEqualTo(CAT_TOY_PRICE);
                 assertThat(result.getMaker()).isEqualTo(CAT_TOY_MAKER);
-                assertThat(result.getImage()).isEqualTo(CAT_TOY_IMAGE);
+                assertThat(result.getImageUrl()).isEqualTo(CAT_TOY_IMAGE);
                 assertThat(result.getName()).isEqualTo(CAT_TOY_NAME);
             }
         }
@@ -174,7 +174,7 @@ public class CatToyServiceTest {
                 updateCatToy.setName(UPDATE_CAT_TOY_NAME);
                 updateCatToy.setMaker(UPDATE_CAT_TOY_MAKER);
                 updateCatToy.setPrice(UPDATE_CAT_TOY_PRICE);
-                updateCatToy.setImage(UPDATE_CAT_TOY_IMAGE);
+                updateCatToy.setImageUrl(UPDATE_CAT_TOY_IMAGE);
             }
 
             @BeforeEach
@@ -194,7 +194,7 @@ public class CatToyServiceTest {
                 assertThat(result.getName()).isEqualTo(UPDATE_CAT_TOY_NAME);
                 assertThat(result.getMaker()).isEqualTo(UPDATE_CAT_TOY_MAKER);
                 assertThat(result.getPrice()).isEqualTo(UPDATE_CAT_TOY_PRICE);
-                assertThat(result.getImage()).isEqualTo(UPDATE_CAT_TOY_IMAGE);
+                assertThat(result.getImageUrl()).isEqualTo(UPDATE_CAT_TOY_IMAGE);
             }
         }
     }

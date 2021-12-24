@@ -12,7 +12,7 @@ public class CatToy {
 
     private String name;
     private String maker;
-    private String image;
+    private String imageUrl;
     private Integer price;
 
     public String getName() {
@@ -31,12 +31,12 @@ public class CatToy {
         this.price = price;
     }
 
-    public String getImage() {
-        return image;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getMaker() {

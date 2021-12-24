@@ -62,7 +62,7 @@ public class CatToyControllerWebTest {
         CatToy catToy = new CatToy();
         catToy.setName(CAT_TOY_NAME);
         catToy.setMaker(CAT_TOY_MAKER);
-        catToy.setImage(CAT_TOY_IMAGE);
+        catToy.setImageUrl(CAT_TOY_IMAGE);
         catToy.setPrice(CAT_TOY_PRICE);
 
         existedCatToy = catToyRepository.save(catToy);
@@ -72,7 +72,7 @@ public class CatToyControllerWebTest {
         CatToy catToy = new CatToy();
         catToy.setName(NEW_CAT_TOY_NAME);
         catToy.setMaker(NEW_CAT_TOY_MAKER);
-        catToy.setImage(NEW_CAT_TOY_IMAGE);
+        catToy.setImageUrl(NEW_CAT_TOY_IMAGE);
         catToy.setPrice(NEW_CAT_TOY_PRICE);
 
         requestBody = objectMapper.writeValueAsString(catToy);
@@ -95,7 +95,7 @@ public class CatToyControllerWebTest {
                 mockmvc.perform(get("/products"))
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                         .andExpect(content().string(containsString(existedCatToy.getName())))
-                        .andExpect(content().string(containsString(existedCatToy.getImage())))
+                        .andExpect(content().string(containsString(existedCatToy.getImageUrl())))
                         .andExpect(content().string(containsString(existedCatToy.getMaker())))
                         .andExpect(content().string(containsString(existedCatToy.getPrice().toString())))
                         .andExpect(status().isOk());
