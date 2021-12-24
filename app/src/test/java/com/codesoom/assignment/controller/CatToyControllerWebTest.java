@@ -181,6 +181,17 @@ public class CatToyControllerWebTest {
                 assertThat(catToyRepository.findById(existedCatToy.getId()).orElse(null)).isNull();
             }
         }
+
+        @DisplayName("등록되지않은 CatToy id가 주어진다면")
+        @Nested
+        class Context_without_existed_cat_toy {
+            @DisplayName("에러메시지와 Not Found를 응답한다.")
+            @Test
+            void it_returns_not_found() throws Exception {
+                mockmvc.perform(delete("/products/" + NOT_EXISTED_ID))
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 
     @DisplayName("POST /products/{id}")
@@ -209,15 +220,15 @@ public class CatToyControllerWebTest {
     @DisplayName("PATCH /products/{id}")
     @Nested
     class Describe_patch_products_id {
+        @BeforeEach
+        void prepare() throws JsonProcessingException {
+            prepareExistedCatToy();
+            prepareNewCatToy();
+        }
+
         @DisplayName("등록된 CatToy id와 CatToy가 주어진다면")
         @Nested
         class Context_with_existed_cat_toy {
-            @BeforeEach
-            void prepare() throws JsonProcessingException {
-                prepareExistedCatToy();
-                prepareNewCatToy();
-            }
-
             @DisplayName("해당 id의 CatToy를 주어진 CatToy와 동일하게 변경하고 리턴한다.")
             @Test
             void it_returns_created_cat_toy() throws Exception {
@@ -226,6 +237,19 @@ public class CatToyControllerWebTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(content().string(containsString(NEW_CAT_TOY_NAME)))
                         .andExpect(status().isOk());
+            }
+        }
+
+        @DisplayName("등록되지않은 CatToy id가 주어진다면")
+        @Nested
+        class Context_without_existed_cat_toy {
+            @DisplayName("에러메시지와 Not Found를 응답한다.")
+            @Test
+            void it_returns_not_found() throws Exception {
+                mockmvc.perform(patch("/products/" + NOT_EXISTED_ID)
+                                .content(requestBody)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
             }
         }
     }
