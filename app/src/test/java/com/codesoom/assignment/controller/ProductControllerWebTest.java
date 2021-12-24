@@ -20,9 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -122,7 +122,6 @@ public class ProductControllerWebTest {
                         .andExpect(status().isNotFound());
             }
         }
-
     }
 
     @Nested
@@ -142,6 +141,55 @@ public class ProductControllerWebTest {
                             .content(contentProduct))
                     .andExpect(status().isCreated())
                     .andExpect(content().string(contentProduct));
+        }
+    }
+
+
+    @Nested
+    @DisplayName("/products/{id} 로 PATCH 요청을 보내면")
+    class Describe_request_patch_to_products_id_path {
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재한다면")
+        class Context_with_exist_id {
+
+            private final Long EXIST_ID = 0L;
+
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(EXIST_ID), any(Product.class))).willReturn(product1);
+            }
+
+            @Test
+            @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
+            void it_responses_200_and_product_by_json_type() throws Exception {
+                mockMvc.perform(patch("/products/" + EXIST_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(contentProduct))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(contentProduct));
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            private final Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(NOT_EXIST_ID), any(Product.class))).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404) 상태를 리턴합니다.")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(patch("/products/" + NOT_EXIST_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(contentProduct))
+                        .andExpect(status().isNotFound());
+            }
         }
     }
 }
