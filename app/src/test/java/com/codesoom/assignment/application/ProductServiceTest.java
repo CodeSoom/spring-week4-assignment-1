@@ -23,7 +23,7 @@ class ProductServiceTest {
     //V 1. list   -> getProducts
     //V 2. detail -> getProduct (with ID)
     //V 3. create -> createProduct (with source)
-    //4. update -> updateProduct (with ID, source)
+    //V 4. update -> updateProduct (with ID, source)
     //5. delete -> deleteProduct (with ID)
 
     private ProductService productService;
@@ -155,8 +155,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp(){
-                Product givendProduct = productService.createProduct(product1);
-                exist_id = givendProduct.getId();
+                Product givenProduct = productService.createProduct(product1);
+                exist_id = givenProduct.getId();
             }
 
             @Test
@@ -183,6 +183,52 @@ class ProductServiceTest {
             @DisplayName("ProductNotFoundException란 예외를 던집니다.")
             void it_throw_ProductNotFoundException(){
                 assertThatThrownBy(() -> productService.updateProduct(not_exist_id, product2))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteProductById 메소드는")
+    class Describe_deleteProductById{
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재한다면")
+        class Context_with_exist_id {
+
+            private Long exist_id;
+
+            @BeforeEach
+            void setUp(){
+                Product givenProduct = productService.createProduct(product1);
+                exist_id = givenProduct.getId();
+            }
+
+            @Test
+            @DisplayName("해당하는 id의 product를 삭제합니다.")
+            void it_delete_product(){
+                productService.delete(exist_id);
+                assertThatThrownBy(() -> productService.getProductById(exist_id))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            Long not_exist_id;
+
+            @BeforeEach
+            void setUp(){
+                productService.createProduct(product1);
+                not_exist_id = product2.getId();
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException란 예외를 던집니다.")
+            void it_throw_ProductNotFoundException(){
+                assertThatThrownBy(() -> productService.delete(not_exist_id))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
