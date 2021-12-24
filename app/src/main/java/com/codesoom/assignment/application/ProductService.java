@@ -18,9 +18,9 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product createProduct(Product sourceProduct) {
-        Product product = new Product(sourceProduct);
-        return productRepository.save(product);
+    public Product createProduct(Product source) {
+        Product target = new Product(source);
+        return productRepository.save(target);
     }
 
     public List<Product> getProducts() {
@@ -31,10 +31,10 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public Product updateProduct(Long id, Product sourceProduct) {
-        Product updatedProduct = getProductById(id);
-        updatedProduct.update(sourceProduct);
-        return productRepository.save(updatedProduct);
+    public Product updateProduct(Long id, Product source) {
+        Product target = getProductById(id);
+        target.update(source);
+        return productRepository.save(target);
     }
 
     public void deleteById(Long id) {
