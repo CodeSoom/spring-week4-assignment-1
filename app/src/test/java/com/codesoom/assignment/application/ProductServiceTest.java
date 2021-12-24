@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,8 +51,9 @@ class ProductServiceTest {
 
         @BeforeEach
         void setUp() {
-            testProducts = new ArrayList<Product>();
-            testProducts = Arrays.asList(product1, product2);
+            testProducts = new ArrayList<>();
+            testProducts.add(product1);
+            testProducts.add(product2);
 
             for (Product testProduct : testProducts) {
                 productService.createProduct(testProduct);
@@ -203,7 +203,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당하는 id의 product를 삭제합니다.")
             void it_delete_product() {
-                productService.delete(exist_id);
+                productService.deleteById(exist_id);
                 assertThatThrownBy(() -> productService.getProductById(exist_id))
                         .isInstanceOf(ProductNotFoundException.class);
             }
@@ -219,13 +219,13 @@ class ProductServiceTest {
             void setUp() {
                 Product givenProduct = productService.createProduct(product1);
                 not_exist_id = givenProduct.getId();
-                productService.delete(not_exist_id);
+                productService.deleteById(not_exist_id);
             }
 
             @Test
             @DisplayName("ProductNotFoundException란 예외를 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productService.delete(not_exist_id))
+                assertThatThrownBy(() -> productService.deleteById(not_exist_id))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

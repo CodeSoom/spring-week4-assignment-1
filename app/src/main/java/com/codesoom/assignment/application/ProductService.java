@@ -37,7 +37,7 @@ public class ProductService {
         return productRepository.save(updatedProduct);
     }
 
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         try {
             productRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
