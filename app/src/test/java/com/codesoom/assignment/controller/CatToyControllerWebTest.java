@@ -101,6 +101,24 @@ public class CatToyControllerWebTest {
                         .andExpect(status().isOk());
             }
         }
+
+        @DisplayName("등록된 CatToy가 없다면")
+        @Nested
+        class Context_without_existed_cat_toy {
+            @BeforeEach
+            void prepare() {
+                catToyRepository.deleteAll();
+            }
+
+            @DisplayName("비어있는 리스트와 OK를 응답한다.")
+            @Test
+            void it_returns_empty_list() throws Exception {
+                mockmvc.perform(get("/products"))
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(content().string(containsString("[]")))
+                        .andExpect(status().isOk());
+            }
+        }
     }
 
     @DisplayName("GET /products/{id}")
