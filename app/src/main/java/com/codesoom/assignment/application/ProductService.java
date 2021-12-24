@@ -10,7 +10,7 @@ import java.util.List;
 public class ProductService {
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -23,7 +23,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product getProductById(Long id){
+    public Product getProductById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
@@ -34,10 +34,9 @@ public class ProductService {
     }
 
     public void delete(Long id) {
-        try{
+        try {
             productRepository.deleteById(id);
-        }
-        catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new ProductNotFoundException(id);
         }
     }

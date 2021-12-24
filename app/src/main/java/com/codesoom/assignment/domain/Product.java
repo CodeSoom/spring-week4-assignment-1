@@ -17,7 +17,8 @@ public class Product {
     private Long price;
     private String imageUrl;
 
-    public Product() {}
+    public Product() {
+    }
 
 
     public Product(Long id, String name, String maker, Long price, String imageUrl) {
@@ -75,7 +76,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public void update(Product sourceProduct){
+    public void update(Product sourceProduct) {
         this.name = sourceProduct.getName();
         this.maker = sourceProduct.getMaker();
         this.price = sourceProduct.getPrice();
@@ -83,7 +84,7 @@ public class Product {
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Product product = (Product) o;
