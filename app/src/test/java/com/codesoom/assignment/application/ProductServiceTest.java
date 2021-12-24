@@ -73,4 +73,54 @@ class ProductServiceTest {
             }
         }
     }
+    
+    @Nested
+    @DisplayName("getProductById 메소드는")
+    class Describe_getProductById{
+
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재한다면")
+        class Context_with_exist_id {
+
+            private Long exist_id;
+            private Product givenProduct;
+
+            @BeforeEach
+            void setUp(){
+                givenProduct = productService.createProduct(product1);
+                exist_id = givenProduct.getId();
+            }
+
+            @Test
+            @DisplayName("해당하는 id의 product를 리턴합니다.")
+            void it_returns_exist_id(){
+                Product product = productService.getProductById(exist_id);
+                assertThat(product.equals(givenProduct)).isEqualTo(true);
+
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            Long not_exist_id;
+
+            @BeforeEach
+            void setUp(){
+                productService.createProduct(product1);
+                not_exist_id = product2.getId();
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException란 예외를 던집니다. ")
+            void it_throw_ProductNotFoundException(){
+                assertThatThrownBy(() -> productService.getProductById(not_exist_id))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+
+    }
+
 }
