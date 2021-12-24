@@ -40,7 +40,7 @@ public class ProductService {
      */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ProductNotFoundException(String.format("아이디 [%d]에 해당하는 상품을 찾지 못했습니다.", id)));
     }
 
     /**
@@ -67,7 +67,7 @@ public class ProductService {
      */
     public Product updateProduct(Long id, Product source) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ProductNotFoundException(String.format("아이디 [%d]에 해당하는 상품을 찾지 못했으므로, 상품을 수정하지 못했습니다.", id)));
 
         product.update(
                 source.getName(),
@@ -85,7 +85,7 @@ public class ProductService {
      */
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ProductNotFoundException(String.format("아이디 [%d]에 해당하는 상품을 찾지 못했으므로 상품을 삭제하지 못했습니다.", id)));
 
         productRepository.delete(product);
     }
