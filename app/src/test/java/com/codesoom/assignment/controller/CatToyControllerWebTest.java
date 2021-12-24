@@ -41,6 +41,8 @@ public class CatToyControllerWebTest {
     private static final String NEW_CAT_TOY_IMAGE = "http://new_test.jpg";
     private static final Integer NEW_CAT_TOY_PRICE = 20000;
 
+    private static final Long NOT_EXISTED_ID = 0L;
+
     @Autowired
     private MockMvc mockmvc;
 
@@ -139,6 +141,22 @@ public class CatToyControllerWebTest {
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                         .andExpect(content().string(containsString(CAT_TOY_NAME)))
                         .andExpect(status().isOk());
+            }
+        }
+
+        @DisplayName("등록되지않은 CatToy id가 주어진다면")
+        @Nested
+        class Context_without_existed_cat_toy {
+            @BeforeEach
+            void prepare() {
+                prepareExistedCatToy();
+            }
+
+            @DisplayName("에러메시지와 Not Found를 응답한다.")
+            @Test
+            void it_returns_not_found() throws Exception {
+                mockmvc.perform(get("/products/" + NOT_EXISTED_ID))
+                        .andExpect(status().isNotFound());
             }
         }
     }
