@@ -161,8 +161,8 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
-            void it_responses_200_and_product_by_json_type() throws Exception {
+            @DisplayName("OK(200)과 해당하는 id의 product를 주어진 요청대로 수정하고 json 형식으로 리턴합니다.")
+            void it_responses_200_and_updated_product_by_json_type() throws Exception {
                 mockMvc.perform(patch("/products/" + EXIST_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(contentProduct))
