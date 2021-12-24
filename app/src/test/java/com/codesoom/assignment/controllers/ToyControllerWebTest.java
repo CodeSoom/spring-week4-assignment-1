@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.services.ToyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +47,8 @@ public class ToyControllerWebTest {
 
         given(toyService.getProducts()).willReturn(toys);
         given(toyService.getProduct(1L)).willReturn(toy);
+        given(toyService.getProduct(100L)).willThrow(new ProductNotFoundException(100L));
+        given(toyService.deleteProduct(100L)).willThrow(new ProductNotFoundException(100L));
     }
 
     @Test
@@ -53,12 +56,24 @@ public class ToyControllerWebTest {
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("test")));
+
+        verify(toyService).getProducts();
     }
 
     @Test
-    void product() throws Exception {
+    void productWithExistedId() throws Exception {
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk());
+
+        verify(toyService).getProduct(1L);
+    }
+
+    @Test
+    void productWithNotExistedId() throws Exception {
+        mockMvc.perform(get("/products/100"))
+                .andExpect(status().isNotFound());
+
+        verify(toyService).getProduct(100L);
     }
 
     @Test
@@ -84,10 +99,18 @@ public class ToyControllerWebTest {
     }
 
     @Test
-    void deleteProduct() throws Exception {
+    void deleteProductWithExistedId() throws Exception {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isOk());
 
         verify(toyService).deleteProduct(1L);
+    }
+
+    @Test
+    void deleteProductWithNotExistedId() throws Exception {
+        mockMvc.perform(delete("/products/100"))
+                .andExpect(status().isNotFound());
+
+        verify(toyService).deleteProduct(100L);
     }
 }

@@ -23,9 +23,11 @@ public class ToyService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public void deleteProduct(Long id) {
+    public Toy deleteProduct(Long id) {
         Toy toy = getProduct(id);
         toys.remove(toy);
+
+        return toy;
     }
 
     public Toy createProduct(Toy source) {
