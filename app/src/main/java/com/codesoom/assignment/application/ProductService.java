@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.List;
 
@@ -31,5 +32,14 @@ public class ProductService {
         Product updatedProduct = getProductById(id);
         updatedProduct.update(sourceProduct);
         return productRepository.save(updatedProduct);
+    }
+
+    public void delete(Long id) {
+        try{
+            productRepository.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException e){
+            throw new ProductNotFoundException(id);
+        }
     }
 }
