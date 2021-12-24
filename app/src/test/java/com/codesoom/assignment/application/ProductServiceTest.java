@@ -46,7 +46,6 @@ class ProductServiceTest {
 
         given(productRepository.findAll()).willReturn(products);
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
-        given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
     }
 
     @DisplayName("getProducts는 저장하고 있는 상품 목록을 리턴한다")
@@ -79,6 +78,11 @@ class ProductServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
+            }
+
             @Test
             void 예외를_던진다() {
                 assertThatThrownBy(() -> productService.getProduct(wrongId))
@@ -123,6 +127,11 @@ class ProductServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
+            }
+
             @Test
             void 예외를_던진다() {
                 String productName = PRODUCT_NAME + UPDATE_POSTFIX;
@@ -151,6 +160,11 @@ class ProductServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            @BeforeEach
+            void setUp() {
+                given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
+            }
+
             @Test
             void 예외를_던진다() {
                 assertThatThrownBy(() -> productService.deleteProduct(wrongId))
