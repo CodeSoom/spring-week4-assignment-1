@@ -221,8 +221,9 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp(){
-                productService.createProduct(product1);
-                not_exist_id = product2.getId();
+                Product givenProduct = productService.createProduct(product1);
+                not_exist_id = givenProduct.getId();
+                productService.delete(not_exist_id);
             }
 
             @Test
