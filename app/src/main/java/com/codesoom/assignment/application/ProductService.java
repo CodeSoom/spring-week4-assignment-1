@@ -12,9 +12,9 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public void createProduct(Product source) {
+    public Product createProduct(Product source) {
         Product product = new Product(source);
-        productRepository.save(product);
+        return productRepository.save(product);
     }
 
 
