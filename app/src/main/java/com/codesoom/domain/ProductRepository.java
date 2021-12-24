@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * 상품의 기능을 어떻게 할 것인지 정의
+ * 상품을 관리하는 기능
  */
 @Repository
 public class ProductRepository {
