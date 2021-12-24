@@ -115,6 +115,32 @@ public class CatToyServiceTest {
             }
         }
 
+
+    }
+
+    @DisplayName("deleteCatToy")
+    @Nested
+    class Describe_deleteCatToy {
+        void subject(Long id) {
+            catToyService.deleteCatToy(id);
+        }
+
+        @BeforeEach
+        void prepare() {
+            prepareExistedCatToy();
+        }
+
+        @DisplayName("등록된 CatToy id가 주어진다면")
+        @Nested
+        class Context_with_cat_toy_id {
+            @DisplayName("해당 id의 CatToy를 삭제하고, 아무것도 리턴하지 않는다.")
+            @Test
+            void it_returns_nothing() {
+                subject(existedCatToy.getId());
+                assertThat(catToyRepository.findById(existedCatToy.getId())).isEmpty();
+            }
+        }
+
         @DisplayName("등록되지않은 CatToy id가 주어진다면")
         @Nested
         class Context_with_not_existed_id {
@@ -122,31 +148,6 @@ public class CatToyServiceTest {
             @Test
             void it_returns_cat_toy() {
                 assertThatThrownBy(() -> subject(NOT_EXISTED_ID)).isInstanceOf(CatToyNotFoundException.class);
-            }
-        }
-    }
-
-    @DisplayName("deleteCatToy")
-    @Nested
-    class Describe_deleteCatToy {
-        @DisplayName("등록된 CatToy id가 주어진다면")
-        @Nested
-        class Context_with_cat_toy_id {
-
-            void subject() {
-                catToyService.deleteCatToy(existedCatToy.getId());
-            }
-
-            @BeforeEach
-            void prepare() {
-                prepareExistedCatToy();
-            }
-
-            @DisplayName("해당 id의 CatToy를 삭제하고, 아무것도 리턴하지 않는다.")
-            @Test
-            void it_returns_nothing() {
-                subject();
-                assertThat(catToyRepository.findById(existedCatToy.getId())).isEmpty();
             }
         }
     }
