@@ -22,7 +22,12 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -192,4 +197,48 @@ public class ProductControllerWebTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("/products/{id} 로 DELETE 요청을 보내면")
+    class Describe_request_delete_to_products_id_path {
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재한다면")
+        class Context_with_exist_id {
+
+            private final Long EXIST_ID = 0L;
+
+            @BeforeEach
+            void setUp() {
+                willDoNothing().given(productService).deleteById(EXIST_ID);
+            }
+
+            @Test
+            @DisplayName("OK(200) 상태를 리턴합니다.")
+            void it_responses_200() throws Exception {
+                mockMvc.perform(delete("/products/" + EXIST_ID))
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            private final Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setUp() {
+                willThrow(new ProductNotFoundException(NOT_EXIST_ID)).given(productService).deleteById(NOT_EXIST_ID);
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404) 상태를 리턴합니다.")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(delete("/products/" + NOT_EXIST_ID))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
 }
