@@ -69,7 +69,23 @@ public class CatToyServiceTest {
                 assertThat(subject()).hasSize(1);
             }
         }
+
+        @DisplayName("등록된 CatToy가 없다면")
+        @Nested
+        class Context_without_cat_toy {
+            @BeforeEach
+            void prepare() {
+                catToyRepository.deleteAll();
+            }
+
+            @DisplayName("비어있는 리스트를 리턴한다.")
+            @Test
+            void it_returns_empty_list() {
+                assertThat(subject()).isEmpty();
+            }
+        }
     }
+
 
     @DisplayName("findCatToy")
     @Nested
