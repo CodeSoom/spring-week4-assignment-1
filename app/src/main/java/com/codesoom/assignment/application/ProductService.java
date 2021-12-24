@@ -26,7 +26,7 @@ public class ProductService {
     }
 
     /**
-     * 저장하고 있는 상품 목록을 반환합니다.
+     * 상품 목록을 반환합니다.
      * @return 상품 목록
      */
     public List<Product> getProducts() {
