@@ -48,7 +48,7 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 for (int i = 0; i < productCount; i++) {
-                    productController.create(getProduct());
+                    productController.create(getProduct(i));
                 }
             }
 
@@ -83,7 +83,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                productController.create(getProduct());
+                productController.create(getProduct(1));
             }
 
             @Test
@@ -117,7 +117,7 @@ class ProductControllerTest {
 
         @BeforeEach
         void setUp() {
-            productController.create(getProduct());
+            productController.create(getProduct(1));
         }
 
         @Nested
@@ -168,7 +168,7 @@ class ProductControllerTest {
 
         @BeforeEach
         void setUp() {
-            productController.create(getProduct());
+            productController.create(getProduct(1));
         }
 
         @Nested
@@ -193,11 +193,11 @@ class ProductControllerTest {
         }
     }
 
-    private Product getProduct() {
+    private Product getProduct(int number) {
         Product product = new Product();
 
-        product.setName(PRODUCT_NAME);
-        product.setMaker(PRODUCT_MAKER);
+        product.setName(PRODUCT_NAME + number);
+        product.setMaker(PRODUCT_MAKER + number);
         product.setPrice(PRODUCT_PRICE);
         product.setImageUrl(PRODUCT_IMAGE_URL);
 
