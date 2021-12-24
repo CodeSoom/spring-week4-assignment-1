@@ -27,8 +27,25 @@ public class CatToyServiceTest {
 
     CatToyService catToyService;
 
+    CatToy existedCatToy;
+
+    @BeforeEach
     void prepareService() {
         catToyService = new CatToyService(catToyRepository);
+    }
+
+    @BeforeEach
+    void prepareRepository() {
+        catToyRepository.deleteAll();
+    }
+
+    void prepareExistedCatToy() {
+        existedCatToy = new CatToy();
+        existedCatToy.setName(CAT_TOY_NAME);
+        existedCatToy.setMaker(CAT_TOY_MAKER);
+        existedCatToy.setPrice(CAT_TOY_PRICE);
+        existedCatToy.setImage(CAT_TOY_IMAGE);
+        catToyRepository.save(existedCatToy);
     }
 
     @DisplayName("findAllCatToys")
@@ -40,14 +57,7 @@ public class CatToyServiceTest {
 
         @BeforeEach
         void prepare() {
-            catToyRepository.deleteAll();
-
-            prepareService();
-
-            CatToy catToy1 = new CatToy();
-            CatToy catToy2 = new CatToy();
-            catToyRepository.save(catToy1);
-            catToyRepository.save(catToy2);
+            prepareExistedCatToy();
         }
 
         @DisplayName("등록된 CatToy가 있다면")
@@ -56,7 +66,7 @@ public class CatToyServiceTest {
             @DisplayName("등록된 모든 CatToy의 리스트를 리턴한다.")
             @Test
             void it_returns_cat_toy_list() {
-                assertThat(subject()).hasSize(2);
+                assertThat(subject()).hasSize(1);
             }
         }
     }
@@ -67,38 +77,23 @@ public class CatToyServiceTest {
         @DisplayName("등록된 CatToy id가 주어진다면")
         @Nested
         class Context_with_existed_id {
-            CatToy catToy;
-
-            void prepareCatToy() {
-                catToy = new CatToy();
-                catToy.setName(CAT_TOY_NAME);
-                catToy.setMaker(CAT_TOY_MAKER);
-                catToy.setPrice(CAT_TOY_PRICE);
-                catToy.setImage(CAT_TOY_IMAGE);
-                catToyRepository.save(catToy);
-            }
-
             @BeforeEach
             void prepare() {
-                catToyRepository.deleteAll();
-
-                prepareService();
-                prepareCatToy();
+                prepareExistedCatToy();
             }
 
             CatToy subject() {
-                Long existedId = catToy.getId();
-                return catToyService.findCatToy(existedId);
+                return catToyService.findCatToy(existedCatToy.getId());
             }
 
             @DisplayName("해당 id의 CatToy를 리턴한다.")
             @Test
             void it_returns_cat_toy() {
                 CatToy result = subject();
-                assertThat(result.getName()).isEqualTo(catToy.getName());
-                assertThat(result.getMaker()).isEqualTo(catToy.getMaker());
-                assertThat(result.getPrice()).isEqualTo(catToy.getPrice());
-                assertThat(result.getImage()).isEqualTo(catToy.getImage());
+                assertThat(result.getName()).isEqualTo(existedCatToy.getName());
+                assertThat(result.getMaker()).isEqualTo(existedCatToy.getMaker());
+                assertThat(result.getPrice()).isEqualTo(existedCatToy.getPrice());
+                assertThat(result.getImage()).isEqualTo(existedCatToy.getImage());
             }
         }
     }
@@ -109,34 +104,21 @@ public class CatToyServiceTest {
         @DisplayName("등록된 CatToy id가 주어진다면")
         @Nested
         class Context_with_cat_toy_id {
-            CatToy catToy;
 
             void subject() {
-                catToyService.deleteCatToy(catToy.getId());
-            }
-
-            void prepareCatToy() {
-                catToy = new CatToy();
-                catToy.setName(CAT_TOY_NAME);
-                catToy.setMaker(CAT_TOY_MAKER);
-                catToy.setPrice(CAT_TOY_PRICE);
-                catToy.setImage(CAT_TOY_IMAGE);
-                catToyRepository.save(catToy);
+                catToyService.deleteCatToy(existedCatToy.getId());
             }
 
             @BeforeEach
             void prepare() {
-                catToyRepository.deleteAll();
-
-                prepareService();
-                prepareCatToy();
+                prepareExistedCatToy();
             }
 
             @DisplayName("해당 id의 CatToy를 삭제하고, 아무것도 리턴하지 않는다.")
             @Test
             void it_returns_nothing() {
                 subject();
-                assertThat(catToyRepository.findById(catToy.getId())).isEmpty();
+                assertThat(catToyRepository.findById(existedCatToy.getId())).isEmpty();
             }
         }
     }
@@ -147,26 +129,19 @@ public class CatToyServiceTest {
         @DisplayName("CatToy가 주어진다면")
         @Nested
         class Context_with_cat_toy {
-            CatToy catToy;
+            CatToy newCatToy;
 
             CatToy subject() {
-                return catToyService.createCatToy(catToy);
-            }
-
-            void prepareNewCatToy() {
-                catToy = new CatToy();
-                catToy.setName(CAT_TOY_NAME);
-                catToy.setMaker(CAT_TOY_MAKER);
-                catToy.setPrice(CAT_TOY_PRICE);
-                catToy.setImage(CAT_TOY_IMAGE);
+                return catToyService.createCatToy(newCatToy);
             }
 
             @BeforeEach
-            void prepare() {
-                catToyRepository.deleteAll();
-
-                prepareService();
-                prepareNewCatToy();
+            void prepareNewCatToy() {
+                newCatToy = new CatToy();
+                newCatToy.setName(CAT_TOY_NAME);
+                newCatToy.setMaker(CAT_TOY_MAKER);
+                newCatToy.setPrice(CAT_TOY_PRICE);
+                newCatToy.setImage(CAT_TOY_IMAGE);
             }
 
             @DisplayName("동일한 CatToy를 생성하고, 리턴한다.")
@@ -192,17 +167,7 @@ public class CatToyServiceTest {
         @DisplayName("등록된 CatToy id와 CatToy가 주어진다면")
         @Nested
         class Context_with_cat_toy_and_existed_id {
-            CatToy catToy;
             CatToy updateCatToy;
-
-            void prepareCatToy() {
-                catToy = new CatToy();
-                catToy.setName(CAT_TOY_NAME);
-                catToy.setMaker(CAT_TOY_MAKER);
-                catToy.setPrice(CAT_TOY_PRICE);
-                catToy.setImage(CAT_TOY_IMAGE);
-                catToyRepository.save(catToy);
-            }
 
             void prepareUpdateCatToy() {
                 updateCatToy = new CatToy();
@@ -214,15 +179,12 @@ public class CatToyServiceTest {
 
             @BeforeEach
             void prepare() {
-                catToyRepository.deleteAll();
-
-                prepareService();
-                prepareCatToy();
+                prepareExistedCatToy();
                 prepareUpdateCatToy();
             }
 
             CatToy subject() {
-                return catToyService.updateCatToy(catToy.getId(), updateCatToy);
+                return catToyService.updateCatToy(existedCatToy.getId(), updateCatToy);
             }
 
             @DisplayName("해당 id의 CatToy를 주어진 CatToy와 동일하게 변경하고 리턴한다.")
