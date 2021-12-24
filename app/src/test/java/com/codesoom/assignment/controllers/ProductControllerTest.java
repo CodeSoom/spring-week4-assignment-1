@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ProductControllerTest {
 
     private static final String PRODUCT_MAKER = "test1";
+    private static final String PRODUCT_NAME = "딸랑이";
     private static final String PRODUCT_MAKER2= "test2";
     private static final String UPDATE_POSTFIX = "!!!";
     private static final Long INVALID_ID = 0L;
@@ -87,6 +89,7 @@ class ProductControllerTest {
                 product.setMaker(PRODUCT_MAKER2);
 
                 controller.create(product);
+
                 int newSize = controller.list().size();
 
                 assertThat(newSize - oldSize).isEqualTo(1);
@@ -135,15 +138,31 @@ class ProductControllerTest {
             @DisplayName("등록되어있는 Product를 수정하고 리턴한다")
             void it_return_product(){
                 Product source = new Product();
-                source.setMaker(UPDATE_POSTFIX + PRODUCT_MAKER);
-                controller.update(1L, source);
+                source.setMaker(PRODUCT_MAKER);
 
-                Product product = controller.detail(1L);
+                assertThat(source.getMaker()).isEqualTo(PRODUCT_MAKER);
+
+                source.setMaker(UPDATE_POSTFIX + PRODUCT_MAKER);
+                controller.update(VALID_ID, source);
+
+                Product product = controller.detail(VALID_ID);
 
                 assertThat(product.getId()).isEqualTo(VALID_ID);
                 assertThat(product.getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
-                assertThat(controller.list().get(0).getId()).isEqualTo(VALID_ID);
-                assertThat(controller.list().get(0).getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 id가 주어진다면")
+        class Context_withInvalid_id{
+
+            @Test
+            @DisplayName("Product를 찾을 수 없다는 예외를 던진다.")
+            void it_return_error(){
+                Product source = new Product();
+                source.setMaker(PRODUCT_MAKER);
+
+                assertThatThrownBy(() -> controller.update(INVALID_ID, source)).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
