@@ -1,10 +1,14 @@
 package com.codesoom.assignment.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public class ErrorResponse {
     private String message;
+
+    @Builder
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
 }
