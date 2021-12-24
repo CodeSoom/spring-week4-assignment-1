@@ -56,7 +56,9 @@ class ProductServiceTest {
 
         @BeforeEach
         void setUp(){
+
             testProducts = Arrays.asList(product1, product2);
+
             for (Product testProduct: testProducts ){
                 productService.createProduct(testProduct);
             }
@@ -98,7 +100,7 @@ class ProductServiceTest {
             @DisplayName("해당하는 id의 product를 리턴합니다.")
             void it_returns_product(){
                 Product product = productService.getProductById(exist_id);
-                assertThat(product.equals(givenProduct)).isEqualTo(true);
+                assertThat(product.equals(product1)).isEqualTo(true);
             }
         }
 
@@ -123,10 +125,10 @@ class ProductServiceTest {
         }
     }
 
-
     @Nested
     @DisplayName("createProduct 메소드는")
     class Describe_createProduct{
+
         Product newProduct;
 
         @BeforeEach
@@ -138,6 +140,51 @@ class ProductServiceTest {
         @DisplayName("요청한 내용으로 저장된 product를 리턴합니다.")
         void it_returns_new_product(){
             assertThat(newProduct.equals(product1)).isEqualTo(true);
+        }
+    }
+
+    @Nested
+    @DisplayName("updateProduct 메소드는")
+    class Describe_updateProduct{
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재한다면")
+        class Context_with_exist_id {
+
+            private Long exist_id;
+
+            @BeforeEach
+            void setUp(){
+                Product givendProduct = productService.createProduct(product1);
+                exist_id = givendProduct.getId();
+            }
+
+            @Test
+            @DisplayName("해당하는 id의 product를 수정하여 리턴합니다.")
+            void it_returns_product(){
+                Product updatedProduct = productService.updateProduct(exist_id, product2);
+                assertThat(updatedProduct.equals(product2)).isEqualTo(true);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            Long not_exist_id;
+
+            @BeforeEach
+            void setUp(){
+                productService.createProduct(product1);
+                not_exist_id = product2.getId();
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException란 예외를 던집니다.")
+            void it_throw_ProductNotFoundException(){
+                assertThatThrownBy(() -> productService.updateProduct(not_exist_id, product2))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
         }
     }
 }
