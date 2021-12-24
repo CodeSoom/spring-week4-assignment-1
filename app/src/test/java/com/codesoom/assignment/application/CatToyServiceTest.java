@@ -193,37 +193,47 @@ public class CatToyServiceTest {
         private final String UPDATE_CAT_TOY_IMAGE = "http://update_test.jpg";
         private final Integer UPDATE_CAT_TOY_PRICE = 20000;
 
+        CatToy updateCatToy;
+
+        void prepareUpdateCatToy() {
+            updateCatToy = new CatToy();
+            updateCatToy.setName(UPDATE_CAT_TOY_NAME);
+            updateCatToy.setMaker(UPDATE_CAT_TOY_MAKER);
+            updateCatToy.setPrice(UPDATE_CAT_TOY_PRICE);
+            updateCatToy.setImageUrl(UPDATE_CAT_TOY_IMAGE);
+        }
+
+        @BeforeEach
+        void prepare() {
+            prepareExistedCatToy();
+            prepareUpdateCatToy();
+        }
+
+        CatToy subject(Long id) {
+            return catToyService.updateCatToy(id, updateCatToy);
+        }
+
         @DisplayName("등록된 CatToy id와 CatToy가 주어진다면")
         @Nested
         class Context_with_cat_toy_and_existed_id {
-            CatToy updateCatToy;
-
-            void prepareUpdateCatToy() {
-                updateCatToy = new CatToy();
-                updateCatToy.setName(UPDATE_CAT_TOY_NAME);
-                updateCatToy.setMaker(UPDATE_CAT_TOY_MAKER);
-                updateCatToy.setPrice(UPDATE_CAT_TOY_PRICE);
-                updateCatToy.setImageUrl(UPDATE_CAT_TOY_IMAGE);
-            }
-
-            @BeforeEach
-            void prepare() {
-                prepareExistedCatToy();
-                prepareUpdateCatToy();
-            }
-
-            CatToy subject() {
-                return catToyService.updateCatToy(existedCatToy.getId(), updateCatToy);
-            }
-
             @DisplayName("해당 id의 CatToy를 주어진 CatToy와 동일하게 변경하고 리턴한다.")
             @Test
             void it_returns_updated_cat_toy() {
-                CatToy result = subject();
+                CatToy result = subject(existedCatToy.getId());
                 assertThat(result.getName()).isEqualTo(UPDATE_CAT_TOY_NAME);
                 assertThat(result.getMaker()).isEqualTo(UPDATE_CAT_TOY_MAKER);
                 assertThat(result.getPrice()).isEqualTo(UPDATE_CAT_TOY_PRICE);
                 assertThat(result.getImageUrl()).isEqualTo(UPDATE_CAT_TOY_IMAGE);
+            }
+        }
+
+        @DisplayName("등록되지않은 CatToy id가 주어진다면")
+        @Nested
+        class Context_with_cat_toy_and_not_existed_id {
+            @DisplayName("'CatToy를 찾을 수 없다'는 예외를 던진다.")
+            @Test
+            void it_throws_exception() {
+                assertThatThrownBy(() -> subject(NOT_EXISTED_ID)).isInstanceOf(CatToyNotFoundException.class);
             }
         }
     }
