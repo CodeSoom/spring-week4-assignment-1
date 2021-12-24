@@ -32,7 +32,6 @@ class ProductServiceTest {
     private static final String SAVE_POSTFIX = "save";
     private static final String UPDATE_POSTFIX = "update";
     private static final Long productId = 1L;
-    private static final Long wrongId = 100L;
 
     @BeforeEach
     void setUp() {
@@ -78,6 +77,8 @@ class ProductServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            private final Long wrongId = 100L;
+
             @BeforeEach
             void setUp() {
                 given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
@@ -127,6 +128,8 @@ class ProductServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            private final Long wrongId = 100L;
+
             @BeforeEach
             void setUp() {
                 given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
@@ -160,6 +163,8 @@ class ProductServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 상품목록에서_주어진_아이디의_상품이_없다면 {
+            private final Long wrongId = 100L;
+
             @BeforeEach
             void setUp() {
                 given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
