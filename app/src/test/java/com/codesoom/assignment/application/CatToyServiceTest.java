@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("CatToyService")
@@ -21,6 +22,7 @@ public class CatToyServiceTest {
     private static final String CAT_TOY_MAKER = "test_maker";
     private static final String CAT_TOY_IMAGE = "http://test.jpg";
     private static final Integer CAT_TOY_PRICE = 10000;
+    private static final Long NOT_EXISTED_ID = 0L;
 
     @Autowired
     CatToyRepository catToyRepository;
@@ -90,26 +92,36 @@ public class CatToyServiceTest {
     @DisplayName("findCatToy")
     @Nested
     class Describe_findCatToy {
+        @BeforeEach
+        void prepare() {
+            prepareExistedCatToy();
+        }
+
+        CatToy subject(Long id) {
+            return catToyService.findCatToy(id);
+        }
+
         @DisplayName("등록된 CatToy id가 주어진다면")
         @Nested
         class Context_with_existed_id {
-            @BeforeEach
-            void prepare() {
-                prepareExistedCatToy();
-            }
-
-            CatToy subject() {
-                return catToyService.findCatToy(existedCatToy.getId());
-            }
-
             @DisplayName("해당 id의 CatToy를 리턴한다.")
             @Test
             void it_returns_cat_toy() {
-                CatToy result = subject();
+                CatToy result = subject(existedCatToy.getId());
                 assertThat(result.getName()).isEqualTo(existedCatToy.getName());
                 assertThat(result.getMaker()).isEqualTo(existedCatToy.getMaker());
                 assertThat(result.getPrice()).isEqualTo(existedCatToy.getPrice());
                 assertThat(result.getImageUrl()).isEqualTo(existedCatToy.getImageUrl());
+            }
+        }
+
+        @DisplayName("등록되지않은 CatToy id가 주어진다면")
+        @Nested
+        class Context_with_not_existed_id {
+            @DisplayName("'CatToy를 찾을 수 없다'는 예외를 던진다.")
+            @Test
+            void it_returns_cat_toy() {
+                assertThatThrownBy(() -> subject(NOT_EXISTED_ID)).isInstanceOf(CatToyNotFoundException.class);
             }
         }
     }
