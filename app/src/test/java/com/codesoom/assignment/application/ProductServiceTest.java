@@ -20,11 +20,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 @DisplayName("Product Service")
 class ProductServiceTest {
-    //V 1. list   -> getProducts
-    //V 2. detail -> getProduct (with ID)
-    //V 3. create -> createProduct (with source)
-    //V 4. update -> updateProduct (with ID, source)
-    //5. delete -> deleteProduct (with ID)
 
     private ProductService productService;
 
