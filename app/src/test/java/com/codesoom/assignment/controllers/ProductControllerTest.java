@@ -159,7 +159,7 @@ class ProductControllerTest {
         class 상품목록에서_주어진_아이디의_상품이_없다면 {
             @Test
             void NOT_FOUND를_보낸다() throws Exception {
-                willThrow(new ProductNotFoundException(100L)).given(productService).deleteProduct(100L);
+                willThrow(new ProductNotFoundException("아이디 100번의 상품을 찾지 못했으므로, 상품을 삭제하지 못했습니다.")).given(productService).deleteProduct(100L);
 
                 mockMvc.perform(delete("/products/100"))
                         .andExpect(status().isNotFound());
