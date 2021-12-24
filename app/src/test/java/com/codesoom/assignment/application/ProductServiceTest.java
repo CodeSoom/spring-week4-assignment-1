@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,7 +52,7 @@ class ProductServiceTest {
 
         @BeforeEach
         void setUp() {
-
+            testProducts = new ArrayList<Product>();
             testProducts = Arrays.asList(product1, product2);
 
             for (Product testProduct : testProducts) {
