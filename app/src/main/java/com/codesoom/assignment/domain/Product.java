@@ -1,8 +1,11 @@
 package com.codesoom.assignment.domain;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -16,11 +19,13 @@ public class Product {
 
     public Product() {}
 
-    public Product(String name, String maker, Long price, String image) {
+
+    public Product(Long id, String name, String maker, Long price, String imageUrl) {
+        this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imageUrl = image;
+        this.imageUrl = imageUrl;
     }
 
     public Product(Product source) {
@@ -68,6 +73,19 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.getId()) &&
+                Objects.equals(name, product.getName()) &&
+                Objects.equals(maker, product.getMaker()) &&
+                Objects.equals(price, product.getPrice()) &&
+                Objects.equals(imageUrl, product.getImageUrl());
+
     }
 }
 

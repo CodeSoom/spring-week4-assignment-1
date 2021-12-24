@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @DisplayName("Product Service")
@@ -23,23 +24,23 @@ class ProductServiceTest {
     //4. update -> updateProduct (with ID, source)
     //5. delete -> deleteProduct (with ID)
 
-    private static final String NAME = "TestName ";
-    private static final String MAKER = "TestMaker";
-    private static final long PRICE = 1000;
-    private static final String IMAGE_URL = "http://gdimg.gmarket.co.kr/1482334965/still/600?ver=1535083811";
-
     private ProductService productService;
 
     @Autowired
     private ProductRepository productRepository;
 
+    private List<Product> testProducts;
     @BeforeEach
     void setUp(){
         productService = new ProductService(productRepository);
 
-        Product product = new Product(NAME, MAKER, PRICE, IMAGE_URL);
+        testProducts.clear();
+        testProducts.add(new Product(0L, "catTower", "samsung", 35900L, "https://thumbnail14.coupangcdn.com/thumbnails/remote/712x712ex/image/retail/images/451976858609946-e5186418-5f5e-4f4c-bccc-a59ac573d029.jpg"));
+        testProducts.add(new Product(1L, "catBall", "love cat", 8000L, "http://mstatic1.e-himart.co.kr/contents/goods/00/05/96/13/20/0005961320__TB10__M_640_640.jpg"));
 
-        productService.createProduct(product);
+        for (Product testProduct: testProducts ){
+            productService.createProduct(testProduct);
+        }
     }
 
     @Nested
@@ -50,13 +51,15 @@ class ProductServiceTest {
         @DisplayName("저장되어 있는 제품 리스트를 리턴합니다.")
         void it_returns_products(){
             List<Product> products = productService.getProducts();
-            assertThat(products).hasSize(1);
 
-            Product product = products.get(0);
-            assertThat(product.getName()).isEqualTo(NAME);
-            assertThat(product.getMaker()).isEqualTo(MAKER);
-            assertThat(product.getPrice()).isEqualTo(PRICE);
-            assertThat(product.getImageUrl()).isEqualTo(IMAGE_URL);
+            verify(productRepository).findAll();
+
+            assertThat(products).hasSize(testProducts.size());
+
+            for (int i = 0; i < products.size(); i++){
+                Product product = products.get(i);
+                assertThat(product.equals(testProducts.get(i))).isEqualTo(true);
+            }
         }
     }
 }
