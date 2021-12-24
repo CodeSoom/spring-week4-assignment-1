@@ -88,7 +88,7 @@ public class ProductControllerWebTest {
         @Test
         @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
         void it_responses_200_and_product_by_json_type() throws Exception {
-            mockMvc.perform(get("/product/0"))
+            mockMvc.perform(get("/products/0"))
                     .andExpect(status().isOk())
                     .andExpect(content().string(contentProduct));
         }
