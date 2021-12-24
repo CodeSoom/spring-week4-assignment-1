@@ -13,8 +13,8 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product createProduct(Product source) {
-        Product product = new Product(source);
+    public Product createProduct(Product sourceProduct) {
+        Product product = new Product(sourceProduct);
         return productRepository.save(product);
     }
 
@@ -25,5 +25,11 @@ public class ProductService {
 
     public Product getProductById(Long id){
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    public Product updateProduct(Long id, Product sourceProduct) {
+        Product updatedProduct = getProductById(id);
+        updatedProduct.update(sourceProduct);
+        return productRepository.save(updatedProduct);
     }
 }

@@ -28,11 +28,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public Product(Product source) {
-        this.name = source.getName();
-        this.maker = source.getMaker();
-        this.price = source.getPrice();
-        this.imageUrl = source.getImageUrl();
+    public Product(Product sourceProduct) {
+        this.name = sourceProduct.getName();
+        this.maker = sourceProduct.getMaker();
+        this.price = sourceProduct.getPrice();
+        this.imageUrl = sourceProduct.getImageUrl();
     }
 
     public Long getId() {
@@ -73,6 +73,13 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void update(Product sourceProduct){
+        this.name = sourceProduct.getName();
+        this.maker = sourceProduct.getMaker();
+        this.price = sourceProduct.getPrice();
+        this.imageUrl = sourceProduct.getImageUrl();
     }
 
     @Override

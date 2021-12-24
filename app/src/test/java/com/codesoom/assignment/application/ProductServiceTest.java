@@ -160,7 +160,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("해당하는 id의 product를 수정하여 리턴합니다.")
+            @DisplayName("해당하는 id의 product를 주어진 요청대로 수정하여 리턴합니다.")
             void it_returns_product(){
                 Product updatedProduct = productService.updateProduct(exist_id, product2);
                 assertThat(updatedProduct.equals(product2)).isEqualTo(true);
