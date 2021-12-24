@@ -98,7 +98,7 @@ class ProductServiceTest {
 
         Product product = productService.saveProduct(source);
 
-        verify(productRepository).save(source);
+        verify(productRepository).save(any(Product.class));
 
         assertThat(product.getName()).isEqualTo(productName);
     }

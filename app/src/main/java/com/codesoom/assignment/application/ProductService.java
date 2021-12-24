@@ -49,14 +49,14 @@ public class ProductService {
      * @return 저장된 상품
      */
     public Product saveProduct(Product source) {
-        Product.createSaveProduct(
+        Product newProduct = Product.createSaveProduct(
                 source.getName(),
                 source.getMaker(),
                 source.getPrice(),
                 source.getImageUrl()
         );
 
-        return productRepository.save(source);
+        return productRepository.save(newProduct);
     }
 
     /**
