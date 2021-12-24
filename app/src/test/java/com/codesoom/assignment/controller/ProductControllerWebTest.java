@@ -12,13 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -94,4 +97,23 @@ public class ProductControllerWebTest {
         }
     }
 
+    @Nested
+    @DisplayName("/products 로 POST 요청을 보내면")
+    class Describe_request_post_to_products_path {
+
+        @BeforeEach
+        void setUp() {
+            given(productService.createProduct(any(Product.class))).willReturn(product1);
+        }
+
+        @Test
+        @DisplayName("Created(201)과 요청에 따라 생성한 product를 json 형식으로 리턴합니다.")
+        void it_responses_created_and_product_by_json_type() throws Exception {
+            mockMvc.perform(post("/products")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(contentProduct))
+                    .andExpect(status().isCreated())
+                    .andExpect(content().string(contentProduct));
+        }
+    }
 }
