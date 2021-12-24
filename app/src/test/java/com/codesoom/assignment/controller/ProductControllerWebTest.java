@@ -26,8 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProductControllerWebTest {
-    //    고양이 장난감 목록 얻기 - GET /products
-    //    고양이 장난감 상세 조회하기 - GET /products/{id}
+    //  V 고양이 장난감 목록 얻기 - GET /products
+    //  V 고양이 장난감 상세 조회하기 - GET /products/{id}
     //    고양이 장난감 등록하기 - POST /products
     //    고양이 장난감 수정하기 - PATCH /products/{id}
     //    고양이 장난감 삭제하기 - DELETE /products/{id}
@@ -73,6 +73,24 @@ public class ProductControllerWebTest {
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk())
                     .andExpect(content().string(contentProducts));
+        }
+    }
+
+    @Nested
+    @DisplayName("/products/{id} 로 GET 요청을 보내면")
+    class Describe_request_get_to_products_id_path {
+
+        @BeforeEach
+        void setUp() {
+            given(productService.getProductById(0L)).willReturn(product1);
+        }
+
+        @Test
+        @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
+        void it_responses_200_and_product_by_json_type() throws Exception {
+            mockMvc.perform(get("/product/0"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(contentProduct));
         }
     }
 
