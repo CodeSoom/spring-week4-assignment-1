@@ -80,8 +80,7 @@ public class Product {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Product product = (Product) o;
-        return Objects.equals(id, product.getId()) &&
-                Objects.equals(name, product.getName()) &&
+        return Objects.equals(name, product.getName()) &&
                 Objects.equals(maker, product.getMaker()) &&
                 Objects.equals(price, product.getPrice()) &&
                 Objects.equals(imageUrl, product.getImageUrl());

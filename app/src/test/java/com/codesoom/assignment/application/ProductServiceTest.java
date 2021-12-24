@@ -2,12 +2,13 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.ProductNotFoundException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -15,7 +16,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @DisplayName("Product Service")
@@ -43,6 +43,11 @@ class ProductServiceTest {
         product2 = new Product(1L, "catBall", "love cat", 8000L, "http://mstatic1.e-himart.co.kr/contents/goods/00/05/96/13/20/0005961320__TB10__M_640_640.jpg");
     }
 
+    @AfterEach
+    public void afterEach() {
+        productRepository.deleteAll();
+    }
+
     @Nested
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts{
@@ -63,8 +68,6 @@ class ProductServiceTest {
 
             List<Product> products = productService.getProducts();
 
-            verify(productRepository).findAll();
-
             assertThat(products).hasSize(testProducts.size());
 
             for (int i = 0; i < products.size(); i++){
@@ -73,11 +76,10 @@ class ProductServiceTest {
             }
         }
     }
-    
+
     @Nested
     @DisplayName("getProductById 메소드는")
     class Describe_getProductById{
-
 
         @Nested
         @DisplayName("만약 조회하는 id의 product가 존재한다면")
@@ -97,7 +99,6 @@ class ProductServiceTest {
             void it_returns_exist_id(){
                 Product product = productService.getProductById(exist_id);
                 assertThat(product.equals(givenProduct)).isEqualTo(true);
-
             }
         }
 
@@ -120,7 +121,5 @@ class ProductServiceTest {
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
-
     }
-
 }
