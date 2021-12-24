@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerWebTest {
     //  V 고양이 장난감 목록 얻기 - GET /products
     //  V 고양이 장난감 상세 조회하기 - GET /products/{id}
-    //    고양이 장난감 등록하기 - POST /products
+    //  V 고양이 장난감 등록하기 - POST /products
     //    고양이 장난감 수정하기 - PATCH /products/{id}
     //    고양이 장난감 삭제하기 - DELETE /products/{id}
 
@@ -83,18 +84,45 @@ public class ProductControllerWebTest {
     @DisplayName("/products/{id} 로 GET 요청을 보내면")
     class Describe_request_get_to_products_id_path {
 
-        @BeforeEach
-        void setUp() {
-            given(productService.getProductById(0L)).willReturn(product1);
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재한다면")
+        class Context_with_exist_id {
+
+            private final Long EXIST_ID = 0L;
+
+            @BeforeEach
+            void setUp() {
+                given(productService.getProductById(EXIST_ID)).willReturn(product1);
+            }
+
+            @Test
+            @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
+            void it_responses_200_and_product_by_json_type() throws Exception {
+                mockMvc.perform(get("/products/" + EXIST_ID))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(contentProduct));
+            }
         }
 
-        @Test
-        @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
-        void it_responses_200_and_product_by_json_type() throws Exception {
-            mockMvc.perform(get("/products/0"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(contentProduct));
+        @Nested
+        @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            private final Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setUp() {
+                given(productService.getProductById(NOT_EXIST_ID)).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404) 상태를 리턴합니다.")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(get("/products/" + NOT_EXIST_ID))
+                        .andExpect(status().isNotFound());
+            }
         }
+
     }
 
     @Nested
