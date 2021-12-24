@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,11 @@ public class CatToyService {
     }
 
     public void deleteCatToy(Long id) {
-        catToyRepository.deleteById(id);
+        try {
+            catToyRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new CatToyNotFoundException(id);
+        }
     }
 
     public CatToy createCatToy(CatToy catToy) {
