@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SpringBootTest
 @DisplayName("Product Service")
 class ProductServiceTest {
-    //1. list   -> getProducts
-    //2. detail -> getProduct (with ID)
-    //3. create -> createProduct (with source)
+    //V 1. list   -> getProducts
+    //V 2. detail -> getProduct (with ID)
+    //V 3. create -> createProduct (with source)
     //4. update -> updateProduct (with ID, source)
     //5. delete -> deleteProduct (with ID)
 
@@ -63,7 +63,7 @@ class ProductServiceTest {
         }
         
         @Test
-        @DisplayName("저장되어 있는 제품 리스트를 리턴합니다.")
+        @DisplayName("저장되어 있는 product 리스트를 리턴합니다.")
         void it_returns_products(){
 
             List<Product> products = productService.getProducts();
@@ -96,7 +96,7 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("해당하는 id의 product를 리턴합니다.")
-            void it_returns_exist_id(){
+            void it_returns_product(){
                 Product product = productService.getProductById(exist_id);
                 assertThat(product.equals(givenProduct)).isEqualTo(true);
             }
@@ -115,11 +115,29 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("ProductNotFoundException란 예외를 던집니다. ")
+            @DisplayName("ProductNotFoundException란 예외를 던집니다.")
             void it_throw_ProductNotFoundException(){
                 assertThatThrownBy(() -> productService.getProductById(not_exist_id))
                         .isInstanceOf(ProductNotFoundException.class);
             }
+        }
+    }
+
+
+    @Nested
+    @DisplayName("createProduct 메소드는")
+    class Describe_createProduct{
+        Product newProduct;
+
+        @BeforeEach
+        void setUp(){
+            newProduct = productService.createProduct(product1);
+        }
+
+        @Test
+        @DisplayName("요청한 내용으로 저장된 product를 리턴합니다.")
+        void it_returns_new_product(){
+            assertThat(newProduct.equals(product1)).isEqualTo(true);
         }
     }
 }
