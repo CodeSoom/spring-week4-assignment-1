@@ -11,8 +11,8 @@ import java.util.Optional;
 
 /**
  * 상품 데이터를 관리합니다.
- * 추상화한 상품 데이터 접근 기능을 제공합니다.
  */
+
 @Repository
 public class ProductRepository {
     private final Map<Long, Product> products = new LinkedHashMap<>();
@@ -33,9 +33,9 @@ public class ProductRepository {
      * @param id 상품 id
      * @return id에 해당하는 상품
      */
-    public Optional<Product> find(Long id) {
-        Optional<Product> product = findProduct(id);
-        if (!product.isPresent()) {
+    public Product find(Long id) {
+       Product product = findProduct(id);
+        if (product == null) {
             throw new ProductNotFoundException("요청한 " + id + "의 Product를 찾지 못했습니다.");
         }
         return product;
@@ -60,8 +60,8 @@ public class ProductRepository {
      *
      * @param product 삭제할 상품
      */
-    public void remove(Optional<Product> product) {
-        products.remove(product.get().getId());
+    public void remove(Product product) {
+        products.remove(product.getId());
     }
 
     /**
@@ -70,11 +70,12 @@ public class ProductRepository {
      * @param id 상품 아이디
      * @return id에 해당하는 상품
      */
-    private Optional<Product> findProduct(Long id) {
+    private Product findProduct(Long id) {
+
         if (id == null) {
             throw new IllegalArgumentException("id가 null이므로 Product를 찾을 수 없습니다.");
         }
-        return Optional.ofNullable(products.get(id));
+        return Optional.ofNullable(products.get(id)).orElse(null);
     }
 
     /**
