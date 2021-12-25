@@ -109,7 +109,7 @@ public class ToyControllerWebTest {
     @Test
     void deleteProductWithExistedId() throws Exception {
         mockMvc.perform(delete("/products/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         verify(toyService).deleteProduct(1L);
     }

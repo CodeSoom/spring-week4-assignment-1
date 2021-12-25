@@ -48,6 +48,7 @@ public class ToyController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         toyService.deleteProduct(id);
     }
