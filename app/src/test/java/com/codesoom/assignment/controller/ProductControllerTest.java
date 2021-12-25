@@ -49,6 +49,22 @@ class ProductControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    List<Product> products = new ArrayList<>();
+
+    @BeforeEach
+    void setUp() {
+        Product product = Product.builder()
+                .name("테스트 제품")
+                .maker("테스트 메이커")
+                .price(1000)
+                .image("http://test.com/test.jpg")
+                .build();
+
+        IntStream.range(0, 5).forEach(i -> {
+            product.setId(Long.valueOf(i));
+            products.add(product);
+        });
+    }
 
     @Nested
     @DisplayName("GET /products 요청은")
@@ -58,13 +74,11 @@ class ProductControllerTest {
         @DisplayName("등록된 Product들이 존재하면")
         class Context_has_product {
 
-            final int givenProductsCount = 5;
+            int givenProductsCount;
 
             @BeforeEach
             void prepare() {
-                List<Product> products = new ArrayList<>();
-                IntStream.range(0, givenProductsCount).forEach((i) -> products.add(getTestProduct()));
-
+                givenProductsCount = products.size();
                 given(productService.getProducts()).willReturn(products);
             }
 
@@ -81,14 +95,13 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록된 Product들이 없다면")
         class Context_has_not_product {
-
-            final int givenProductsCount = 0;
+            List<Product> emptyProducts = new ArrayList<>();
+            int givenProductsCount;
 
             @BeforeEach
             void prepare() {
-                List<Product> products = new ArrayList<>();
-
-                given(productService.getProducts()).willReturn(products);
+                givenProductsCount = emptyProducts.size();
+                given(productService.getProducts()).willReturn(emptyProducts);
             }
 
             @Test
@@ -114,7 +127,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void prepare() {
-                given(productService.getProduct(givenId)).willReturn(getTestProduct());
+                given(productService.getProduct(givenId)).willReturn(products.get(0));
             }
 
             @Test
@@ -131,10 +144,11 @@ class ProductControllerTest {
         @DisplayName("등록되지 않은 Product의 id가 주어진다면")
         class Context_with_invaild_id {
 
-            Long givenInvalidId = 100L;
+            Long givenInvalidId;
 
             @BeforeEach
             void prepare() {
+                givenInvalidId = Long.valueOf(products.size() + 1);
                 given(productService.getProduct(givenInvalidId)).willThrow(new ProductNotFoundException(givenInvalidId));
             }
 
@@ -157,10 +171,11 @@ class ProductControllerTest {
         class Context_with_product {
 
             final Long givenId = 1L;
-            Product givenProduct = getTestProduct();
+            Product givenProduct;
 
             @BeforeEach
             void prepare() {
+                givenProduct = products.get(0);
                 when(productService.createProduct(any(Product.class)))
                         .then((arg) -> {
                             Optional<Product> source = Optional.of(arg.getArgument(0, Product.class));
@@ -208,10 +223,11 @@ class ProductControllerTest {
         @DisplayName("등록된 Product의 Id와 수정할 Product가 주어진다면")
         class Context_with_id_and_product {
             Long givenId = 1L;
-            Product givenProduct = getProductToBeUpdated();
+            Product givenProduct;
 
             @BeforeEach
             void prepare() {
+                givenProduct = products.get(0);
                 when(productService.updateProduct(eq(givenId), any(Product.class)))
                         .then(arg -> {
                             Product product = arg.getArgument(1, Product.class);
@@ -266,7 +282,12 @@ class ProductControllerTest {
         @DisplayName("수정할 Product만 주어진다면")
         class Context_with_product {
 
-            Product givenProduct = getProductToBeUpdated();
+            Product givenProduct;
+
+            @BeforeEach
+            void prepare() {
+                givenProduct = products.get(0);
+            }
 
             @Test
             @DisplayName("405(Method not allowed)를 응답합니다.")
@@ -298,24 +319,6 @@ class ProductControllerTest {
                         .andDo(print());
             }
         }
-    }
-
-    private Product getTestProduct() {
-        return Product.builder()
-                .name("테스트 제품")
-                .maker("테스트 메이커")
-                .price(1000)
-                .image("http://test.com/test.jpg")
-                .build();
-    }
-
-    private Product getProductToBeUpdated() {
-        return Product.builder()
-                .name("업데이트 제품")
-                .maker("업데이트 메이커")
-                .price(2000)
-                .image("http://update.com/update.jpg")
-                .build();
     }
 
     private String productToContent(Product product) throws JsonProcessingException {
