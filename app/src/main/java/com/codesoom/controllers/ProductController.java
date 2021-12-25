@@ -22,7 +22,6 @@ import java.util.Optional;
 /**
  * 상품에 대한 HTTP 요청의 처리를 담당한다.
  */
-
 @RestController
 @RequestMapping("/products")
 @CrossOrigin
@@ -50,7 +49,7 @@ public class ProductController {
      * @return 해당하는 상품
      */
     @GetMapping("/{id}")
-    public Optional<Product> view(@PathVariable Long id) {
+    public Product view(@PathVariable Long id) {
         return productService.getProduct(id);
     }
 
@@ -74,7 +73,7 @@ public class ProductController {
      * @return 수정된 상품
      */
     @PatchMapping("/{id}")
-    public Optional<Product> update(
+    public Product update(
             @RequestBody Product product
             , @PathVariable Long id) {
         return productService.updateProduct(product, id);
