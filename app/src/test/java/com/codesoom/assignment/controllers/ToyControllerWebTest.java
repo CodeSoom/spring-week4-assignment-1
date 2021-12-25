@@ -38,24 +38,30 @@ public class ToyControllerWebTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private static final Long NOT_EXISTED_ID = 100L;
+    private static final String TOY_NAME = "test 장난감";
+    private static final String TOY_MAKER = "애옹이네 장난감 가게";
+    private static final Integer TOY_PRICE = 5000;
+    private static final String TOY_IMAGE = "someUrl";
+
     @BeforeEach
     void setUp() {
         Toy toy = new Toy();
-        toy.setName("test");
+        toy.setName(TOY_NAME);
         List<Toy> toys = new ArrayList<>();
         toys.add(toy);
 
         given(toyService.getProducts()).willReturn(toys);
         given(toyService.getProduct(1L)).willReturn(toy);
-        given(toyService.getProduct(100L)).willThrow(new ProductNotFoundException(100L));
-        given(toyService.deleteProduct(100L)).willThrow(new ProductNotFoundException(100L));
+        given(toyService.getProduct(NOT_EXISTED_ID)).willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
+        given(toyService.deleteProduct(NOT_EXISTED_ID)).willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
     }
 
     @Test
     void products() throws Exception {
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("test")));
+                .andExpect(content().string(containsString(TOY_NAME)));
 
         verify(toyService).getProducts();
     }
@@ -73,7 +79,7 @@ public class ToyControllerWebTest {
         mockMvc.perform(get("/products/100"))
                 .andExpect(status().isNotFound());
 
-        verify(toyService).getProduct(100L);
+        verify(toyService).getProduct(NOT_EXISTED_ID);
     }
 
     @Test
@@ -81,10 +87,10 @@ public class ToyControllerWebTest {
         Toy source = new Toy();
 
         source.setId(1L);
-        source.setName("test");
-        source.setMaker("test maker");
-        source.setImage("test image");
-        source.setPrice(5000);
+        source.setName(TOY_NAME);
+        source.setMaker(TOY_MAKER);
+        source.setImage(TOY_IMAGE);
+        source.setPrice(TOY_PRICE);
 
         String content = objectMapper.writeValueAsString(source);
 
@@ -111,6 +117,6 @@ public class ToyControllerWebTest {
         mockMvc.perform(delete("/products/100"))
                 .andExpect(status().isNotFound());
 
-        verify(toyService).deleteProduct(100L);
+        verify(toyService).deleteProduct(NOT_EXISTED_ID);
     }
 }

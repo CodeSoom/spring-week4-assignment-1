@@ -4,3 +4,7 @@
 #  jpa:
 #    hibernate:
 #      ddl-auto: update
+server:
+  servlet:
+    encoding:
+      force-response: true
