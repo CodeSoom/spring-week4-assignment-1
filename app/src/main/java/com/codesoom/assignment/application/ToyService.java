@@ -5,9 +5,11 @@ import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ToyService {
     private final ToyRepository toyRepository;
 
