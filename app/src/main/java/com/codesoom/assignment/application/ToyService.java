@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,17 @@ public class ToyService {
     }
 
     public Toy getProduct(Long id) {
-        return toyRepository.find(id);
+        return toyRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Toy deleteProduct(Long id) {
-        Toy toy = toyRepository.find(id);
+        Toy toy = toyRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
-        return toyRepository.remove(toy);
+        toyRepository.delete(toy);
+
+        return toy;
     }
 
     public Toy createProduct(Toy source) {
@@ -40,7 +45,8 @@ public class ToyService {
     }
 
     public Toy updateProduct(Long id, Toy source) {
-        Toy toy = toyRepository.find(id);
+        Toy toy = toyRepository.findById(id)
+                    .orElseThrow(() -> new ProductNotFoundException(id));
 
         toy.setName(source.getName());
         toy.setMaker(source.getMaker());
