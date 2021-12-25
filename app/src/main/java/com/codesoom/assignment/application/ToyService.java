@@ -1,51 +1,46 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.ToyRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ToyService {
-    private List<Toy> toys = new ArrayList<>();
-    private Long newId = 0L;
+    private final ToyRepository toyRepository;
+
+    public ToyService(ToyRepository toyRepository) {
+        this.toyRepository = toyRepository;
+    }
 
     public List<Toy> getProducts() {
-        return toys;
+        return toyRepository.findAll();
     }
 
     public Toy getProduct(Long id) {
-        return toys.stream()
-                .filter(toy -> toy.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        return toyRepository.find(id);
     }
 
     public Toy deleteProduct(Long id) {
-        Toy toy = getProduct(id);
-        toys.remove(toy);
+        Toy toy = toyRepository.find(id);
 
-        return toy;
+        return toyRepository.remove(toy);
     }
 
     public Toy createProduct(Toy source) {
         Toy toy = new Toy();
 
-        toy.setId(generatedId());
         toy.setName(source.getName());
         toy.setMaker(source.getMaker());
         toy.setPrice(source.getPrice());
         toy.setImage(source.getImage());
 
-        toys.add(toy);
-
-        return toy;
+        return toyRepository.save(toy);
     }
 
     public Toy updateProduct(Long id, Toy source) {
-        Toy toy = getProduct(id);
+        Toy toy = toyRepository.find(id);
 
         toy.setName(source.getName());
         toy.setMaker(source.getMaker());
@@ -53,10 +48,5 @@ public class ToyService {
         toy.setPrice(source.getPrice());
 
         return toy;
-    }
-
-    public Long generatedId() {
-        newId += 1;
-        return newId;
     }
 }

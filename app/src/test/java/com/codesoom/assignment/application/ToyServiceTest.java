@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.ToyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,9 @@ class ToyServiceTest {
 
     @BeforeEach
     void setUp() {
-        toyService = new ToyService();
+        ToyRepository toyRepository = new ToyRepository();
+
+        toyService = new ToyService(toyRepository);
 
         Toy toy = new Toy();
         toy.setName(TOY_NAME);
