@@ -70,7 +70,7 @@ class ProductServiceTest {
 
             for (int i = 0; i < products.size(); i++) {
                 Product product = products.get(i);
-                assertThat(product.equals(testProducts.get(i))).isEqualTo(true);
+                assertThat(product).isEqualTo(testProducts.get(i));
             }
         }
     }
@@ -96,7 +96,7 @@ class ProductServiceTest {
             @DisplayName("해당하는 id의 product를 리턴합니다.")
             void it_returns_product() {
                 Product product = productService.getProductById(exist_id);
-                assertThat(product.equals(product1)).isEqualTo(true);
+                assertThat(product).isEqualTo(product1);
             }
         }
 
@@ -135,7 +135,7 @@ class ProductServiceTest {
         @Test
         @DisplayName("요청한 내용으로 저장된 product를 리턴합니다.")
         void it_returns_new_product() {
-            assertThat(newProduct.equals(product1)).isEqualTo(true);
+            assertThat(newProduct).isEqualTo(product1);
         }
     }
 
@@ -159,7 +159,7 @@ class ProductServiceTest {
             @DisplayName("해당하는 id의 product를 주어진 요청대로 수정하여 리턴합니다.")
             void it_returns_product() {
                 Product updatedProduct = productService.updateProduct(exist_id, product2);
-                assertThat(updatedProduct.equals(product2)).isEqualTo(true);
+                assertThat(updatedProduct).isEqualTo(product2);
             }
         }
 
@@ -227,6 +227,7 @@ class ProductServiceTest {
             void it_throw_ProductNotFoundException() {
                 assertThatThrownBy(() -> productService.deleteById(not_exist_id))
                         .isInstanceOf(ProductNotFoundException.class);
+
             }
         }
     }
