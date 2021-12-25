@@ -89,7 +89,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("등록된 Product 정보를 리턴한다.")
             void it_return_product() {
-                product = productController.view(1L).get();
+                product = productController.view(1L);
 
                 assertThat(product.getName()).isEqualTo(PRODUCT_NAME + 1);
                 assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER + 1);
@@ -159,7 +159,7 @@ class ProductControllerTest {
 
                 productController.update(source, 1L);
 
-                product = productController.view(1L).get();
+                product = productController.view(1L);
 
                 assertThat(product.getName()).isEqualTo(UPDATE_POSTFIX + PRODUCT_NAME);
                 assertThat(product.getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
