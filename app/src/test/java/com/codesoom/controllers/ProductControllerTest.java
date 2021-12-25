@@ -1,6 +1,7 @@
 package com.codesoom.controllers;
 
 import com.codesoom.application.ProductService;
+import com.codesoom.controllers.ProductController;
 import com.codesoom.domain.Product;
 import com.codesoom.domain.ProductRepository;
 import com.codesoom.exception.ProductNotFoundException;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -91,8 +91,8 @@ class ProductControllerTest {
             void it_return_product() {
                 product = productController.view(1L).get();
 
-                assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
-                assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
+                assertThat(product.getName()).isEqualTo(PRODUCT_NAME + 1);
+                assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER + 1);
                 assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
                 assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL);
             }
@@ -106,6 +106,30 @@ class ProductControllerTest {
             @DisplayName("Product를 찾을 수 없다는 예외를 던진다.")
             void it_throw_ProductNotFoundException() {
                 assertThatThrownBy(() -> productController.view(0L)).isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST 요청은")
+    class Describe_post {
+        Product product;
+
+        @Nested
+        @DisplayName("Product가 주어진다면")
+        class Context_with_new_product {
+            @BeforeEach
+            void setUp() {
+                product = productService.createProduct(getProduct(1));
+            }
+
+            @Test
+            @DisplayName("Product를 저장하고 리턴한다.")
+            void it_return_status_created() {
+                assertThat(product.getName()).isEqualTo(PRODUCT_NAME + 1);
+                assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER + 1);
+                assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+                assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL);
             }
         }
     }
