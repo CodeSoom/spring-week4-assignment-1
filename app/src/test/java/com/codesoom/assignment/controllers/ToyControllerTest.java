@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.services.ToyService;
+import com.codesoom.assignment.application.ToyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
