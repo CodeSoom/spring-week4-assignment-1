@@ -3,6 +3,8 @@ package com.codesoom.domain;
 import org.checkerframework.checker.signature.qual.Identifier;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 
 /**
@@ -13,7 +15,8 @@ public class Product {
     /**
      * 상품 아이디
      */
-    @Identifier
+    @Id
+    @GeneratedValue
     private Long id;
     /**
      * 상품 이름
@@ -42,7 +45,7 @@ public class Product {
     }
 
     /**
-     * id를 상품 객체에 담는다
+     * id를 상품 객체에 담는다.
      *
      * @param id 상품 id
      */
@@ -60,7 +63,7 @@ public class Product {
     }
 
     /**
-     * 이름을 상품 객체에 담는다
+     * 이름을 상품 객체에 담는다.
      *
      * @param name 상품 이름
      */
