@@ -31,7 +31,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProductControllerWebTest {
@@ -65,7 +64,6 @@ public class ProductControllerWebTest {
         contentProducts = objectMapper.writeValueAsString(products);
         contentProduct = objectMapper.writeValueAsString(product1);
     }
-
 
     @Nested
     @DisplayName("/products 로 GET 요청을 보내면")
@@ -121,7 +119,7 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("NOT_FOUND(404) 상태를 리턴합니다.")
+            @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
             void it_responses_404() throws Exception {
                 mockMvc.perform(get("/products/" + NOT_EXIST_ID))
                         .andExpect(status().isNotFound());
@@ -148,7 +146,6 @@ public class ProductControllerWebTest {
                     .andExpect(content().string(contentProduct));
         }
     }
-
 
     @Nested
     @DisplayName("/products/{id} 로 PATCH 요청을 보내면")
@@ -188,7 +185,7 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("NOT_FOUND(404) 상태를 리턴합니다.")
+            @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
             void it_responses_404() throws Exception {
                 mockMvc.perform(patch("/products/" + NOT_EXIST_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
