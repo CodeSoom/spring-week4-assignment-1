@@ -86,7 +86,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("등록된 Product 정보를 리턴한다.")
             void it_return_product() {
-                product = productService.getProduct(1L).get();
+                product = productService.getProduct(1L);
 
                 assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
                 assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
@@ -149,12 +149,12 @@ class ProductServiceTest {
 
                 productService.updateProduct(source, 1L);
 
-                Optional<Product> product = productService.getProduct(1L);
+                Product product = productService.getProduct(1L);
 
-                assertThat(product.get().getName()).isEqualTo(UPDATE_POSTFIX + PRODUCT_NAME);
-                assertThat(product.get().getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
-                assertThat(product.get().getImageUrl()).isEqualTo(UPDATE_POSTFIX + PRODUCT_IMAGE_URL);
-                assertThat(product.get().getPrice()).isEqualTo(NEW_PRICE);
+                assertThat(product.getName()).isEqualTo(UPDATE_POSTFIX + PRODUCT_NAME);
+                assertThat(product.getMaker()).isEqualTo(UPDATE_POSTFIX + PRODUCT_MAKER);
+                assertThat(product.getImageUrl()).isEqualTo(UPDATE_POSTFIX + PRODUCT_IMAGE_URL);
+                assertThat(product.getPrice()).isEqualTo(NEW_PRICE);
             }
         }
 
