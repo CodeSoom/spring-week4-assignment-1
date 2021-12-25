@@ -1,11 +1,21 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.services.ToyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /*
 * TODO
@@ -15,71 +25,107 @@ import static org.assertj.core.api.Assertions.assertThat;
 *  4. delete(id) 등록된 장난감 삭제
 * */
 class ToyControllerTest {
+    private ToyController toyController;
     private ToyService toyService;
+
     private static final String TOY_NAME = "test 장난감";
-    private static final String CREATE_PREFIX = "new";
+    private static final String UPDATE_PREFIX = "new";
     private static final String TOY_MAKER = "애옹이네 장난감 가게";
     private static final Integer TOY_PRICE = 5000;
     private static final String TOY_IMAGE = "someUrl";
+    private static final Long NOT_EXISTED_ID = 100L;
 
     @BeforeEach
     void setUp() {
-        toyService = new ToyService();
+        toyService = mock(ToyService.class);
 
         Toy toy = new Toy();
-        toy.setName(TOY_NAME);
 
-        toyService.createProduct(toy);
+        toy.setName(TOY_NAME);
+        toy.setMaker(TOY_MAKER);
+        toy.setPrice(TOY_PRICE);
+        toy.setImage(TOY_IMAGE);
+
+        List<Toy> toys = new ArrayList<>();
+        toys.add(toy);
+
+        given(toyService.getProducts()).willReturn(toys);
+        given(toyService.getProduct(1L)).willReturn(toy);
+        given(toyService.getProduct(NOT_EXISTED_ID)).willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
+        given(toyService.updateProduct(eq(NOT_EXISTED_ID), any(Toy.class)))
+                .willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
+        given(toyService.deleteProduct(NOT_EXISTED_ID)).willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
+
+        toyController = new ToyController(toyService);
     }
 
     @Test
     void products() {
         assertThat(toyService.getProducts()).isNotEmpty();
+
+        verify(toyService).getProducts();
     }
 
     @Test
-    void product() {
-        Toy find = toyService.getProduct(1L);
+    void productWithExistedId() {
+        Toy toy = toyController.product(1L);
 
-        assertThat(find.getName()).isEqualTo(TOY_NAME);
+        assertThat(toy.getName()).isEqualTo(TOY_NAME);
+
+        verify(toyService).getProduct(1L);
     }
 
     @Test
-    void create() {
+    void productWithNotExistedId() {
+        assertThatThrownBy(() -> toyController.product(NOT_EXISTED_ID))
+                .isInstanceOf(ProductNotFoundException.class);
+
+        verify(toyService).getProduct(NOT_EXISTED_ID);
+    }
+
+    @Test
+    void createNewProduct() {
         Toy newToy = new Toy();
+        newToy.setName(TOY_NAME);
 
-        newToy.setName(CREATE_PREFIX + TOY_NAME);
-        newToy.setMaker(TOY_MAKER);
-        newToy.setPrice(TOY_PRICE);
-        newToy.setImage(TOY_IMAGE);
+        toyController.create(newToy);
 
-        Toy createdToy = toyService.createProduct(newToy);
-
-        assertThat(createdToy.getName()).isEqualTo(CREATE_PREFIX + TOY_NAME);
-        assertThat(createdToy.getMaker()).isEqualTo(TOY_MAKER);
-        assertThat(createdToy.getPrice()).isEqualTo(TOY_PRICE);
-        assertThat(createdToy.getImage()).isEqualTo(TOY_IMAGE);
+        verify(toyService).createProduct(newToy);
     }
 
     @Test
-    void update() {
+    void updateProductWithExistedId() {
         Toy source = new Toy();
+        source.setName(UPDATE_PREFIX + TOY_NAME);
 
-        source.setName("Update" + TOY_NAME);
+        toyController.update(1L, source);
 
-        Toy updatedToy = toyService.updateProduct(1L, source);
-
-        assertThat(updatedToy.getName()).isEqualTo("Update" + TOY_NAME);
+        verify(toyService).updateProduct(1L, source);
     }
 
     @Test
-    void delete() {
-        int oldSize = toyService.getProducts().size();
+    void updateProductWithNotExistedId() {
+        Toy source = new Toy();
+        source.setName(UPDATE_PREFIX + TOY_NAME);
 
-        toyService.deleteProduct(1L);
+        assertThatThrownBy(() -> toyController.update(NOT_EXISTED_ID, source))
+                .isInstanceOf(ProductNotFoundException.class);
 
-        int newSize = toyService.getProducts().size();
+        verify(toyService).updateProduct(NOT_EXISTED_ID, source);
+    }
 
-        assertThat(newSize - oldSize).isEqualTo(-1);
+    @Test
+    void deleteProductWithExistedId() {
+        toyController.delete(1L);
+
+        verify(toyService).deleteProduct(1L);
+    }
+
+    @Test
+    void deleteProductWithNotExistedId() {
+        assertThatThrownBy(() -> toyController.delete(NOT_EXISTED_ID))
+                .isInstanceOf(ProductNotFoundException.class);
+
+        verify(toyService).deleteProduct(NOT_EXISTED_ID);
     }
 }
