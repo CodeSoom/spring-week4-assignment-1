@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 상품을 관리하기 위한 클래스
+ * 상품을 관리합니다.
  */
 @Service
 public class ProductService {
