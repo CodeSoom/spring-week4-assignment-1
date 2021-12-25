@@ -83,18 +83,20 @@ class ProductControllerTest {
             @Test
             @DisplayName("Product를 생성하고 리턴한다.")
             void it_return_product(){
-                int oldSize = controller.list().size();
+                List<Product> products = controller.list();
+
+                int oldSize = products.size();
 
                 Product product = new Product();
                 product.setMaker(PRODUCT_MAKER2);
 
                 controller.create(product);
 
-                int newSize = controller.list().size();
+                int newSize = products.size();
 
                 assertThat(newSize - oldSize).isEqualTo(1);
-                assertThat(controller.list().get(1).getId()).isEqualTo(2L);
-                assertThat(controller.list().get(1).getMaker()).isEqualTo(PRODUCT_MAKER2);
+                assertThat(newSize).isEqualTo(2L);
+                assertThat(products.get(1).getMaker()).isEqualTo(PRODUCT_MAKER2);
             }
         }
     }
