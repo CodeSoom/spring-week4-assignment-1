@@ -1,4 +1,3 @@
-
 package com.codesoom.assignment;
 
 import org.junit.jupiter.api.Test;

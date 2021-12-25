@@ -36,7 +36,7 @@ class ProductServiceTest {
         productService = new ProductService(productRepository);
     }
 
-    private List<Product> getProducts() {
+    private List<Product> createProducts() {
         List<Product> products = new ArrayList<>();
 
         Product product = new Product();
@@ -46,7 +46,7 @@ class ProductServiceTest {
         return products;
     }
 
-    private Product getProduct() {
+    private Product createProduct() {
         List<Product> products = new ArrayList<>();
 
         Product product = new Product();
@@ -65,7 +65,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = getProducts();
+                List<Product> products = createProducts();
                 given(productRepository.findAll()).willReturn(products);
             }
 
@@ -109,7 +109,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                Product product = getProduct();
+                Product product = createProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
@@ -125,7 +125,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("Product를 찾을 수 없는 id가 주어지면")
+        @DisplayName("존재하지 않는 Product의 id가 주어지면")
         class Context_withInvalid_id{
 
             @BeforeEach
@@ -202,7 +202,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                Product product = getProduct();
+                Product product = createProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
@@ -226,7 +226,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                Product product = getProduct();
+                Product product = createProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
@@ -253,7 +253,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                Product product = getProduct();
+                Product product = createProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
@@ -273,7 +273,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                Product product = getProduct();
+                Product product = createProduct();
                 given(productRepository.findById(1L)).willReturn(Optional.of(product));
             }
 
