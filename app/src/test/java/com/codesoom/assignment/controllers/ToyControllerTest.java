@@ -38,6 +38,13 @@ class ToyControllerTest {
     }
 
     @Test
+    void product() {
+        Toy find = toyService.getProduct(1L);
+
+        assertThat(find.getName()).isEqualTo(TOY_NAME);
+    }
+
+    @Test
     void create() {
         Toy newToy = new Toy();
 
@@ -55,10 +62,14 @@ class ToyControllerTest {
     }
 
     @Test
-    void product() {
-        Toy find = toyService.getProduct(1L);
+    void update() {
+        Toy source = new Toy();
 
-        assertThat(find.getName()).isEqualTo(TOY_NAME);
+        source.setName("Update" + TOY_NAME);
+
+        Toy updatedToy = toyService.updateProduct(1L, source);
+
+        assertThat(updatedToy.getName()).isEqualTo("Update" + TOY_NAME);
     }
 
     @Test

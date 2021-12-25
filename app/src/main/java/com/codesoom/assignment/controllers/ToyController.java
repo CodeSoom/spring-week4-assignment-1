@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,15 +31,20 @@ public class ToyController {
         return toyService.getProducts();
     }
 
+    @GetMapping("{id}")
+    public Toy product(@PathVariable Long id) {
+        return toyService.getProduct(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Toy create(@RequestBody Toy toy) {
         return toyService.createProduct(toy);
     }
 
-    @GetMapping("{id}")
-    public Toy product(@PathVariable Long id) {
-        return toyService.getProduct(id);
+    @RequestMapping(value = "{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
+    public Toy update(@PathVariable Long id, @RequestBody Toy toy) {
+        return toyService.updateProduct(id, toy);
     }
 
     @DeleteMapping("{id}")

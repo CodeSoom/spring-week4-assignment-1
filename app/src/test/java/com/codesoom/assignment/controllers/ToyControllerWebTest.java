@@ -18,11 +18,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
@@ -43,6 +42,7 @@ public class ToyControllerWebTest {
     private static final String TOY_MAKER = "애옹이네 장난감 가게";
     private static final Integer TOY_PRICE = 5000;
     private static final String TOY_IMAGE = "someUrl";
+    private static final String UPDATE_PREFIX = "Update";
 
     @BeforeEach
     void setUp() {
@@ -55,6 +55,8 @@ public class ToyControllerWebTest {
         given(toyService.getProduct(1L)).willReturn(toy);
         given(toyService.getProduct(NOT_EXISTED_ID)).willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
         given(toyService.deleteProduct(NOT_EXISTED_ID)).willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
+        given(toyService.updateProduct(eq(NOT_EXISTED_ID), any(Toy.class)))
+                .willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
     }
 
     @Test
@@ -118,5 +120,39 @@ public class ToyControllerWebTest {
                 .andExpect(status().isNotFound());
 
         verify(toyService).deleteProduct(NOT_EXISTED_ID);
+    }
+
+    @Test
+    void updateProductWithExistedId() throws Exception {
+        Toy source = new Toy();
+        source.setName(UPDATE_PREFIX + TOY_NAME);
+
+        String content = objectMapper.writeValueAsString(source);
+
+        mockMvc.perform(
+                put("/products/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        )
+                .andExpect(status().isOk());
+
+        verify(toyService).updateProduct(eq(1L), any(Toy.class));
+    }
+
+    @Test
+    void updateProductWithNotExistedId() throws Exception {
+        Toy source = new Toy();
+        source.setName(UPDATE_PREFIX + TOY_NAME);
+
+        String content = objectMapper.writeValueAsString(source);
+
+        mockMvc.perform(
+                        put("/products/100")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content)
+                )
+                .andExpect(status().isNotFound());
+
+        verify(toyService).updateProduct(eq(100L), any(Toy.class));
     }
 }
