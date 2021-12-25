@@ -28,10 +28,24 @@ public class ProductServiceTest {
 
     private ProductRepository productRepository;
 
+    List<Product> products = new ArrayList<>();
+
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository, new ModelMapper());
+
+        Product product = Product.builder()
+                .name("테스트 제품")
+                .maker("테스트 메이커")
+                .price(1000)
+                .image("http://test.com/test.jpg")
+                .build();
+
+        IntStream.range(0, 5).forEach(i -> {
+            product.setId(Long.valueOf(i));
+            products.add(product);
+        });
     }
 
     @Nested
@@ -42,13 +56,11 @@ public class ProductServiceTest {
         @DisplayName("등록된 Product가 있다면")
         class Context_has_product {
 
-            final int givenProductsCount = 5;
+            int givenProductsCount;
 
             @BeforeEach
             void prepare() {
-                List<Product> products = new ArrayList<>();
-                IntStream.range(0, givenProductsCount).forEach((i) -> products.add(getTestProduct()));
-
+                givenProductsCount = products.size();
                 given(productRepository.findAll()).willReturn(products);
             }
 
@@ -90,7 +102,7 @@ public class ProductServiceTest {
 
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(givenId)).willReturn(Optional.of(getTestProduct()));
+                given(productRepository.findById(givenId)).willReturn(Optional.of(products.get(0)));
             }
 
             @Test
@@ -129,11 +141,12 @@ public class ProductServiceTest {
         @DisplayName("등록할 Product가 주어진다면")
         class Context_with_product {
 
-            Product givenProduct = getTestProduct();
+            Product givenProduct;
             Long givenId = 1L;
 
             @BeforeEach
             void prepare() {
+                givenProduct = products.get(0);
                 given(productRepository.save(any(Product.class))).will(invocation -> {
                     Product product =  invocation.getArgument(0);
                     product.setId(givenId);
@@ -181,11 +194,12 @@ public class ProductServiceTest {
         class Context_with_id_and_product {
 
             Long givenId = 1L;
-            Product givenSource = getProductToBeUpdated();
+            Product givenProduct;
 
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(givenId)).willReturn(Optional.of(getTestProduct()));
+                givenProduct = products.get(0);
+                given(productRepository.findById(givenId)).willReturn(Optional.of(products.get(0)));
                 given(productRepository.save(any(Product.class))).will(args -> {
                     Product product = args.getArgument(0);
                     product.setId(givenId);
@@ -196,34 +210,35 @@ public class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 Product를 수정하고, 리턴한다.")
             void it_update_product_return_product() {
-                Product updatedProduct = productService.updateProduct(givenId, givenSource);
+                Product updatedProduct = productService.updateProduct(givenId, givenProduct);
 
                 verify(productRepository).findById(givenId);
 
-                assertThat(updatedProduct.getName()).isEqualTo(givenSource.getName());
+                assertThat(updatedProduct.getName()).isEqualTo(givenProduct.getName());
             }
         }
         @Nested
         @DisplayName("등록되지 않은 Product의 id 와 Product가 있다면 ")
         class Context_with_invalid_id_and_product {
 
-            Long givenInvalidId = 100L;
+            Long givenInvalidId;
 
             @BeforeEach
             void prepare() {
+                givenInvalidId = Long.valueOf(products.size() + 1);
                 given(productRepository.findById(givenInvalidId)).willReturn(Optional.empty());
             }
 
             @Test
             @DisplayName("Product를 찾을 수 없다는 내용의 예외를 던진다.")
             void it_return_productNotFoundException() {
-                assertThatThrownBy(() -> productService.updateProduct(givenInvalidId, getTestProduct())).isInstanceOf(ProductNotFoundException.class);
+                assertThatThrownBy(() -> productService.updateProduct(givenInvalidId, products.get(0))).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
 
     @Nested
-    @DisplayName("deleteProduct 메소드")
+    @DisplayName("deleteProduct 메소드는")
     class Describe_deleteProduct {
 
         @Nested
@@ -234,7 +249,7 @@ public class ProductServiceTest {
 
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(givenProductId)).willReturn(Optional.of(getTestProduct()));
+                given(productRepository.findById(givenProductId)).willReturn(Optional.of(products.get(0)));
             }
 
             @Test
@@ -261,23 +276,5 @@ public class ProductServiceTest {
                 verify(productRepository).findById(givenProductInvalidId);
             }
         }
-    }
-
-    private Product getTestProduct() {
-        return Product.builder()
-                .name("테스트 제품")
-                .maker("테스트 메이커")
-                .price(1000)
-                .image("http://test.com/test.jpg")
-                .build();
-    }
-
-    private Product getProductToBeUpdated() {
-        return Product.builder()
-                .name("업데이트 제품")
-                .maker("업데이트 메이커")
-                .price(2000)
-                .image("http://update.com/update.jpg")
-                .build();
     }
 }
