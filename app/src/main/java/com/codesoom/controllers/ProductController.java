@@ -2,6 +2,8 @@ package com.codesoom.controllers;
 
 import com.codesoom.application.ProductService;
 import com.codesoom.domain.Product;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +20,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 상품에 대한 HTTP 요청의 처리를 한다.
+ * 상품에 대한 HTTP 요청의 처리를 담당한다.
  */
+
 @RestController
 @RequestMapping("/products")
 @CrossOrigin
