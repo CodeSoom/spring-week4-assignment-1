@@ -62,4 +62,14 @@ class ToyServiceTest {
 
         assertThat(newSize - oldSize).isEqualTo(-1);
     }
+
+    @Test
+    void updateProductWithExistedId() {
+        Toy source = new Toy();
+        source.setName("Update" + TOY_NAME);
+
+        Toy updatedToy = toyService.updateProduct(1L, source);
+
+        assertThat(updatedToy.getName()).isEqualTo("Update" + TOY_NAME);
+    }
 }

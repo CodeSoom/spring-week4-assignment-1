@@ -44,6 +44,17 @@ public class ToyService {
         return toy;
     }
 
+    public Toy updateProduct(Long id, Toy source) {
+        Toy toy = getProduct(id);
+
+        toy.setName(source.getName());
+        toy.setMaker(source.getMaker());
+        toy.setImage(source.getImage());
+        toy.setPrice(source.getPrice());
+
+        return toy;
+    }
+
     public Long generatedId() {
         newId += 1;
         return newId;
