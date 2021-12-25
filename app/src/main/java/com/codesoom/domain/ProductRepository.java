@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * 상품을 관리하는 기능
+ * 상품 데이터를 관리합니다.
+ * 추상화한 상품 데이터 접근 기능을 제공합니다.
  */
 @Repository
 public class ProductRepository {
@@ -35,7 +36,7 @@ public class ProductRepository {
     public Optional<Product> find(Long id) {
         Optional<Product> product = findProduct(id);
         if (!product.isPresent()) {
-            throw new ProductNotFoundException("요청한 " + id + "의 Product를 찾지 못했습니다..");
+            throw new ProductNotFoundException("요청한 " + id + "의 Product를 찾지 못했습니다.");
         }
         return product;
     }
