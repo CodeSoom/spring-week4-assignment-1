@@ -33,7 +33,7 @@ public class ProductService {
      * @param id 상품 id
      * @return 해당하는 상품
      */
-    public Optional<Product> getProduct(Long id) {
+    public Product getProduct(Long id) {
         return productRepository.find(id);
     }
 
@@ -54,25 +54,25 @@ public class ProductService {
      * @param source 수정할 상품
      * @return 수정된 상품
      */
-    public Optional<Product> updateProduct(Product source, Long id) {
-        Optional<Product> product = productRepository.find(id);
+    public Product updateProduct(Product source, Long id) {
+        Product product = productRepository.find(id);
 
-        product.get().setName(source.getName());
-        product.get().setPrice(source.getPrice());
-        product.get().setMaker(source.getMaker());
-        product.get().setImageUrl(source.getImageUrl());
+        product.setName(source.getName());
+        product.setPrice(source.getPrice());
+        product.setMaker(source.getMaker());
+        product.setImageUrl(source.getImageUrl());
 
         return product;
     }
 
     /**
      * id에 해당하는 상품을 삭제하고 남은 목록을 반환합니다.
-     *
+     *:
      * @param id 삭제할 상품id
      * @return 삭제 후 남은 상품 목록
      */
     public List<Product> deleteProduct(Long id) {
-        Optional<Product> product = productRepository.find(id);
+        Product product = productRepository.find(id);
 
         productRepository.remove(product);
         return getProducts();
