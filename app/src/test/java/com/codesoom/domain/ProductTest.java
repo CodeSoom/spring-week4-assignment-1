@@ -33,7 +33,15 @@ class ProductTest {
             assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
             assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
             assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
-            product.setImageUrl(PRODUCT_IMAGE_URL);
+            assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL);
+
+            assertThat(product.toString())
+                    .isEqualTo("Product{" +
+                            "id=1, name='" + PRODUCT_NAME + '\'' +
+                            ", maker='" + PRODUCT_MAKER + '\'' +
+                            ", price=" + PRODUCT_PRICE +
+                            ", imageUrl='" + PRODUCT_IMAGE_URL + '\'' +
+                            '}');
         }
     }
 }
