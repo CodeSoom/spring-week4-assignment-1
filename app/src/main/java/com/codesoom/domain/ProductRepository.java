@@ -35,9 +35,7 @@ public class ProductRepository {
      */
     public Product find(Long id) {
        Product product = findProduct(id);
-        if (product == null) {
-            throw new ProductNotFoundException("요청한 " + id + "의 Product를 찾지 못했습니다.");
-        }
+
         return product;
     }
 
@@ -75,7 +73,7 @@ public class ProductRepository {
         if (id == null) {
             throw new IllegalArgumentException("id가 null이므로 Product를 찾을 수 없습니다.");
         }
-        return Optional.ofNullable(products.get(id)).orElse(null);
+        return Optional.ofNullable(products.get(id)).orElseThrow(() -> new ProductNotFoundException("요청한 " + id + "의 Product를 찾지 못했습니다."));
     }
 
     /**
