@@ -19,5 +19,6 @@ class ProductTest {
                 .build();
 
         assertThat(product).isNotNull();
+        assertThat(product.getName()).isEqualTo("제품");
     }
 }

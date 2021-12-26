@@ -98,7 +98,7 @@ public class ProductServiceTest {
         @DisplayName("등록된 Product의 id 값이 주어진다면")
         class Context_with_id {
 
-            private Long givenId = 1L;
+            Long givenId = 1L;
 
             @BeforeEach
             void prepare() {
@@ -148,7 +148,7 @@ public class ProductServiceTest {
             void prepare() {
                 givenProduct = products.get(0);
                 given(productRepository.save(any(Product.class))).will(invocation -> {
-                    Product product =  invocation.getArgument(0);
+                    Product product = invocation.getArgument(0);
                     product.setId(givenId);
                     return product;
                 });
@@ -199,7 +199,7 @@ public class ProductServiceTest {
             @BeforeEach
             void prepare() {
                 givenProduct = products.get(0);
-                given(productRepository.findById(givenId)).willReturn(Optional.of(products.get(0)));
+                given(productRepository.findById(givenId)).willReturn(Optional.of(givenProduct));
                 given(productRepository.save(any(Product.class))).will(args -> {
                     Product product = args.getArgument(0);
                     product.setId(givenId);
