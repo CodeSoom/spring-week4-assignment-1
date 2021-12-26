@@ -108,7 +108,6 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                productService.createProduct(product1);
                 notExistId = product2.getId();
             }
 
