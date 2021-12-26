@@ -61,7 +61,7 @@ class ProductServiceTest {
         }
 
         @Test
-        @DisplayName("저장되어 있는 product 리스트를 응답합니다.")
+        @DisplayName("저장되어 있는 product 리스트를 리턴합니다.")
         void it_returns_products() {
 
             List<Product> products = productService.getProducts();
@@ -93,7 +93,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("해당하는 id의 product를 응답합니다.")
+            @DisplayName("해당하는 id의 product를 리턴합니다.")
             void it_returns_product() {
                 Product product = productService.getProductById(existId);
                 assertThat(product).isEqualTo(product1);
@@ -133,7 +133,7 @@ class ProductServiceTest {
         }
 
         @Test
-        @DisplayName("요청한 내용으로 저장된 product를 응답합니다.")
+        @DisplayName("요청한 내용으로 저장된 product를 리턴합니다.")
         void it_returns_new_product() {
             assertThat(newProduct).isEqualTo(product1);
         }
@@ -156,7 +156,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("해당하는 id의 product를 주어진 요청대로 수정하여 응답합니다.")
+            @DisplayName("해당하는 id의 product를 주어진 요청대로 수정하여 리턴합니다.")
             void it_returns_product() {
                 Product updatedProduct = productService.updateProduct(existId, product2);
                 assertThat(updatedProduct).isEqualTo(product2);
