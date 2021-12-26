@@ -169,21 +169,12 @@ class ProductControllerTest {
         @DisplayName("Product가 주어진다면")
         class Context_with_product {
 
-            final Long givenId = 1L;
             Product givenProduct;
 
             @BeforeEach
             void prepare() {
                 givenProduct = products.get(0);
-                when(productService.createProduct(any(Product.class)))
-                        .then((arg) -> {
-                            Optional<Product> source = Optional.of(arg.getArgument(0, Product.class));
-
-                            Product product = source.orElseThrow(() -> new NullPointerException());
-                            product.setId(givenId);
-
-                            return product;
-                        });
+                given(productService.createProduct(any(Product.class))).willReturn(givenProduct);
             }
 
             @Test
@@ -193,7 +184,6 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productToContent(givenProduct)))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.id").value(givenId))
                         .andExpect(jsonPath("$.name").value(givenProduct.getName()))
                         .andDo(print());
             }
@@ -227,11 +217,14 @@ class ProductControllerTest {
             @BeforeEach
             void prepare() {
                 givenProduct = products.get(0);
-                when(productService.updateProduct(eq(givenId), any(Product.class)))
-                        .then(arg -> {
-                            Product product = arg.getArgument(1, Product.class);
+                givenProduct.setName("업데이트 제품");
 
-                            product.setId(givenId);
+                given(productService.updateProduct(eq(givenId), any(Product.class)))
+                        .will(invocation -> {
+                            Long id = invocation.getArgument(0);
+                            Product product = invocation.getArgument(1);
+
+                            product.setId(id);
                             return product;
                         });
             }
