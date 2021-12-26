@@ -3,7 +3,6 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductNotFoundException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -31,18 +30,13 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-
+        productRepository.deleteAll();
         productService = new ProductService(productRepository);
 
         product1 = new Product(0L, "catTower", "samsung", 35900L, "https://thumbnail14.coupangcdn.com/thumbnails/remote/712x712ex/image/retail/images/451976858609946-e5186418-5f5e-4f4c-bccc-a59ac573d029.jpg");
         product2 = new Product(1L, "catBall", "love cat", 8000L, "http://mstatic1.e-himart.co.kr/contents/goods/00/05/96/13/20/0005961320__TB10__M_640_640.jpg");
     }
-
-    @AfterEach
-    public void afterEach() {
-        productRepository.deleteAll();
-    }
-
+    
     @Nested
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts {
