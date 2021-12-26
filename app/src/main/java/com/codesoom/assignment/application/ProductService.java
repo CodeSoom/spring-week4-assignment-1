@@ -39,8 +39,10 @@ public class ProductService {
      * @return 일치하는 id의 상품
      */
     public Product getProduct(Long id) {
+        String format = "아이디 [%d]에 해당하는 상품을 찾지 못했습니다.";
+
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format("아이디 [%d]에 해당하는 상품을 찾지 못했습니다.", id)));
+                .orElseThrow(() -> new ProductNotFoundException(String.format(format, id)));
     }
 
     /**
@@ -66,8 +68,10 @@ public class ProductService {
      * @return 수정된 상품
      */
     public Product updateProduct(Long id, Product source) {
+        String format = "아이디 [%d]에 해당하는 상품을 찾지 못했으므로, 상품을 수정하지 못했습니다.";
+
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format("아이디 [%d]에 해당하는 상품을 찾지 못했으므로, 상품을 수정하지 못했습니다.", id)));
+                .orElseThrow(() -> new ProductNotFoundException(String.format(format, id)));
 
         product.update(
                 source.getName(),
@@ -84,8 +88,10 @@ public class ProductService {
      * @param id 삭제할 상품 id
      */
     public void deleteProduct(Long id) {
+        String format = "아이디 [%d]에 해당하는 상품을 찾지 못했으므로 상품을 삭제하지 못했습니다.";
+
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format("아이디 [%d]에 해당하는 상품을 찾지 못했으므로 상품을 삭제하지 못했습니다.", id)));
+                .orElseThrow(() -> new ProductNotFoundException(String.format(format, id)));
 
         productRepository.delete(product);
     }
