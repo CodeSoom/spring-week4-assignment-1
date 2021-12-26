@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ProductService 클래스")
 class ProductServiceTest {
@@ -98,6 +98,10 @@ class ProductServiceTest {
         @Nested
         @DisplayName("id에 해당하는 Product가 존재하지 않으면")
         class Context_when_product_isnot_exist {
+            @BeforeEach
+            void setUp() {
+                productService.deleteProduct(0L);
+            }
 
             @Test
             @DisplayName("Product를 찾을 수 없다는 예외를 던진다.")
