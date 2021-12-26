@@ -91,17 +91,17 @@ public class ProductControllerWebTest {
         @DisplayName("만약 조회하는 id의 product가 존재한다면")
         class Context_with_exist_id {
 
-            private final Long EXIST_ID = 0L;
+            private final Long existId = 0L;
 
             @BeforeEach
             void setUp() {
-                given(productService.getProductById(EXIST_ID)).willReturn(product1);
+                given(productService.getProductById(existId)).willReturn(product1);
             }
 
             @Test
             @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
             void it_responses_200_and_product_by_json_type() throws Exception {
-                mockMvc.perform(get("/products/" + EXIST_ID))
+                mockMvc.perform(get("/products/" + existId))
                         .andExpect(status().isOk())
                         .andExpect(content().string(contentProduct));
             }
@@ -111,17 +111,17 @@ public class ProductControllerWebTest {
         @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
         class Context_with_not_exist_id {
 
-            private final Long NOT_EXIST_ID = 100L;
+            private final Long notExistId = 100L;
 
             @BeforeEach
             void setUp() {
-                given(productService.getProductById(NOT_EXIST_ID)).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+                given(productService.getProductById(notExistId)).willThrow(new ProductNotFoundException(notExistId));
             }
 
             @Test
             @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
             void it_responses_404() throws Exception {
-                mockMvc.perform(get("/products/" + NOT_EXIST_ID))
+                mockMvc.perform(get("/products/" + notExistId))
                         .andExpect(status().isNotFound());
             }
         }
@@ -155,17 +155,17 @@ public class ProductControllerWebTest {
         @DisplayName("만약 조회하는 id의 product가 존재한다면")
         class Context_with_exist_id {
 
-            private final Long EXIST_ID = 0L;
+            private final Long existId = 0L;
 
             @BeforeEach
             void setUp() {
-                given(productService.updateProduct(eq(EXIST_ID), any(Product.class))).willReturn(product1);
+                given(productService.updateProduct(eq(existId), any(Product.class))).willReturn(product1);
             }
 
             @Test
             @DisplayName("OK(200)과 해당하는 id의 product를 주어진 요청대로 수정하고 json 형식으로 리턴합니다.")
             void it_responses_200_and_updated_product_by_json_type() throws Exception {
-                mockMvc.perform(patch("/products/" + EXIST_ID)
+                mockMvc.perform(patch("/products/" + existId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(contentProduct))
                         .andExpect(status().isOk())
@@ -177,17 +177,17 @@ public class ProductControllerWebTest {
         @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
         class Context_with_not_exist_id {
 
-            private final Long NOT_EXIST_ID = 100L;
+            private final Long notExistId = 100L;
 
             @BeforeEach
             void setUp() {
-                given(productService.updateProduct(eq(NOT_EXIST_ID), any(Product.class))).willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+                given(productService.updateProduct(eq(notExistId), any(Product.class))).willThrow(new ProductNotFoundException(notExistId));
             }
 
             @Test
             @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
             void it_responses_404() throws Exception {
-                mockMvc.perform(patch("/products/" + NOT_EXIST_ID)
+                mockMvc.perform(patch("/products/" + notExistId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(contentProduct))
                         .andExpect(status().isNotFound());
@@ -203,17 +203,17 @@ public class ProductControllerWebTest {
         @DisplayName("만약 조회하는 id의 product가 존재한다면")
         class Context_with_exist_id {
 
-            private final Long EXIST_ID = 0L;
+            private final Long existId = 0L;
 
             @BeforeEach
             void setUp() {
-                willDoNothing().given(productService).deleteById(EXIST_ID);
+                willDoNothing().given(productService).deleteById(existId);
             }
 
             @Test
             @DisplayName("OK(200) 상태를 리턴합니다.")
             void it_responses_200() throws Exception {
-                mockMvc.perform(delete("/products/" + EXIST_ID))
+                mockMvc.perform(delete("/products/" + existId))
                         .andExpect(status().isOk());
             }
         }
@@ -222,17 +222,17 @@ public class ProductControllerWebTest {
         @DisplayName("만약 조회하는 id의 product가 존재하지 않는다면")
         class Context_with_not_exist_id {
 
-            private final Long NOT_EXIST_ID = 100L;
+            private final Long notExistId = 100L;
 
             @BeforeEach
             void setUp() {
-                willThrow(new ProductNotFoundException(NOT_EXIST_ID)).given(productService).deleteById(NOT_EXIST_ID);
+                willThrow(new ProductNotFoundException(notExistId)).given(productService).deleteById(notExistId);
             }
 
             @Test
             @DisplayName("NOT_FOUND(404) 상태를 리턴합니다.")
             void it_responses_404() throws Exception {
-                mockMvc.perform(delete("/products/" + NOT_EXIST_ID))
+                mockMvc.perform(delete("/products/" + notExistId))
                         .andExpect(status().isNotFound());
             }
         }
