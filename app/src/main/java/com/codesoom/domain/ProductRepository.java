@@ -63,10 +63,11 @@ public class ProductRepository {
     }
 
     /**
-     * id에 해당하는 상품을 찾고 있다면 상품을 없다면 null을 반환한다.
+     * id에 해당하는 상품이 있다면 상품을 리턴하고 없다면 찾을 수 없다는 예외를 던진다.
      *
      * @param id 상품 아이디
      * @return id에 해당하는 상품
+     * @exception ProductNotFoundException
      */
     private Product findProduct(Long id) {
 
