@@ -75,7 +75,7 @@ public class ProductControllerWebTest {
         }
 
         @Test
-        @DisplayName("OK(200)과 저장되어 있는 product 리스트를 json 형식으로 리턴합니다.")
+        @DisplayName("OK(200)과 저장되어 있는 product 리스트를 json 형식으로 응답합니다.")
         void it_responses_200_and_product_list_by_json_type() throws Exception {
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk())
@@ -99,7 +99,7 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 리턴합니다.")
+            @DisplayName("OK(200)과 해당하는 id의 product를 json 형식으로 응답합니다.")
             void it_responses_200_and_product_by_json_type() throws Exception {
                 mockMvc.perform(get("/products/" + existId))
                         .andExpect(status().isOk())
@@ -137,7 +137,7 @@ public class ProductControllerWebTest {
         }
 
         @Test
-        @DisplayName("Created(201)과 요청에 따라 생성한 product를 json 형식으로 리턴합니다.")
+        @DisplayName("Created(201)과 요청에 따라 생성한 product를 json 형식으로 응답합니다.")
         void it_responses_created_and_product_by_json_type() throws Exception {
             mockMvc.perform(post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -163,7 +163,7 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("OK(200)과 해당하는 id의 product를 주어진 요청대로 수정하고 json 형식으로 리턴합니다.")
+            @DisplayName("OK(200)과 해당하는 id의 product를 주어진 요청대로 수정하고 json 형식으로 응답합니다.")
             void it_responses_200_and_updated_product_by_json_type() throws Exception {
                 mockMvc.perform(patch("/products/" + existId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -211,7 +211,7 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("NO_CONTENT(204) 상태를 리턴합니다.")
+            @DisplayName("NO_CONTENT(204) 상태를 응답합니다.")
             void it_responses_204() throws Exception {
                 mockMvc.perform(delete("/products/" + existId))
                         .andExpect(status().isNoContent());
@@ -230,7 +230,7 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("NOT_FOUND(404) 상태를 리턴합니다.")
+            @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
             void it_responses_404() throws Exception {
                 mockMvc.perform(delete("/products/" + notExistId))
                         .andExpect(status().isNotFound());

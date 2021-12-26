@@ -29,7 +29,7 @@ class ProductTest {
         }
 
         @Test
-        @DisplayName("요청받은 product로 수정된 product를 리턴한다.")
+        @DisplayName("요청받은 product로 수정된 product를 응답한다.")
         void it_returns_product_that_update_by_request_product() {
             assertThat(product1.getName()).isEqualTo(product2.getName());
             assertThat(product1.getMaker()).isEqualTo(product2.getMaker());
