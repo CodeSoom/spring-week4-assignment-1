@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
 
 class ProductControllerTest {
 
@@ -52,23 +53,10 @@ class ProductControllerTest {
             @DisplayName("등록된 모든 Product를 리턴한다")
             void It_return_list(){
                 List<Product> products = controller.list();
+
                 assertThat(products).hasSize(1);
                 assertThat(products.get(0).getMaker()).isEqualTo(PRODUCT_MAKER);
 
-            }
-        }
-
-        @Nested
-        @DisplayName("Product가 등록되어 있지 않다면")
-        class Context_have_not_product{
-
-            @Test
-            @DisplayName("비어 있는 리스트를 리턴한다.")
-            void it_return_products(){
-                List<Product> products = controller.list();
-                controller.delete(VALID_ID);
-
-                assertThat(products).isEmpty();
             }
         }
     }

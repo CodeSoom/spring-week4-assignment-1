@@ -39,20 +39,15 @@ class ProductServiceTest {
     private List<Product> createProducts() {
         List<Product> products = new ArrayList<>();
 
-        Product product = new Product();
-        product.setMaker(PRODUCT_NAME);
+        Product product = createProduct();
 
         products.add(product);
         return products;
     }
 
     private Product createProduct() {
-        List<Product> products = new ArrayList<>();
-
-        Product product = new Product();
+        Product product =new Product();
         product.setMaker(PRODUCT_NAME);
-
-        products.add(product);
         return product;
     }
 
@@ -88,8 +83,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepareProduct(){
-                List<Product> products = productService.getProducts();
-                products.forEach(product -> productService.deleteProduct(product.getId()));
+                given(productRepository.findAll()).willReturn(new ArrayList<>());
             }
 
             @Test
