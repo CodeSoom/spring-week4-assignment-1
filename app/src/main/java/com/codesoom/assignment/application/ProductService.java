@@ -18,7 +18,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     /**
-     * 주어진 의존성 객체를 사용하여 ProductService 객체를 생성합니다.
+     * 상품 서비스 객체를 생성합니다.
      * @param productRepository 상품 repository
      */
     public ProductService(ProductRepository productRepository) {
