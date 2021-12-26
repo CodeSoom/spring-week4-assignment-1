@@ -9,30 +9,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductController.class)
-@AutoConfigureMockMvc
 @DisplayName("ProductController Web 테스트")
 class ProductControllerWebTest {
     @Autowired
@@ -45,6 +45,9 @@ class ProductControllerWebTest {
     private ProductService productService;
 
     @Autowired
+    private WebApplicationContext wac;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private static final String PRODUCT_NAME = "고양이 장남감";
@@ -52,6 +55,14 @@ class ProductControllerWebTest {
     private static final BigDecimal PRODUCT_PRICE = BigDecimal.valueOf(10000);
     private static final String PRODUCT_IMAGE_URL = "test.jpg";
 
+    @BeforeEach
+    void setUp() {
+        productController = new ProductController(productService);
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .alwaysDo(print())
+                .build();
+    }
 
     @Nested
     @DisplayName("GET 요청은")
@@ -65,7 +76,7 @@ class ProductControllerWebTest {
             void setUp() {
                 List<Product> products = new ArrayList<>();
 
-                for (int i = 1; i < productCount; i++) {
+                for (int i = 0; i < productCount; i++) {
                     productController.create(getProduct(i));
                     products.add(getProduct(i));
                 }
@@ -75,12 +86,10 @@ class ProductControllerWebTest {
             @Test
             @DisplayName("전체 리스트를 리턴한다.")
             void it_return_list() throws Exception {
-                mockMvc.perform(get("/products")
-                                .accept(MediaType.APPLICATION_JSON_UTF8))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(PRODUCT_NAME + 1)));
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk());
 
-                verify(productController.list());
+                 //verify(productService).getProducts();
             }
         }
 
@@ -91,46 +100,31 @@ class ProductControllerWebTest {
             void setUp() {
                 List<Product> products = productController.list();
                 products.forEach(product -> productController.delete(product.getId()));
-
-                given(null).willReturn(null);
             }
 
             @Test
             @DisplayName("빈 리스트를 리턴한다.")
             void it_return_list() throws Exception {
+                given(productService.getProducts()).willReturn(new ArrayList<>());
+
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("[]")));
+                        .andExpect(content().string(containsString("")));
 
-                verify(productController.list());
+                // verify(productService).getProducts();
             }
         }
 
         @Nested
         @DisplayName("등록된 id 값이 주어졌을때")
         class Context_when_product_is_exist {
-            Product product;
-
-            @BeforeEach
-            void setUp() {
-                product = getProduct(0);
-
-                productController.create(getProduct(1));
-                given(productController.view(1L)).willReturn(Optional.of(product));
-            }
-
             @Test
             @DisplayName("등록된 Product 정보를 리턴한다.")
             void it_return_product() throws Exception {
+                mockMvc.perform(get("/products/" + 1L))
+                        .andExpect(status().isOk());
 
-                mockMvc.perform(get("/products/1"))
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(PRODUCT_NAME + 1)))
-                        .andExpect(content().string(containsString(PRODUCT_MAKER + 1)))
-                        .andExpect(content().string(containsString(String.valueOf(PRODUCT_PRICE))))
-                        .andExpect(content().string(containsString(PRODUCT_IMAGE_URL)));
-
-                verify(productController.view(1L));
+                verify(productService).getProduct(1L);
             }
         }
 
@@ -140,8 +134,8 @@ class ProductControllerWebTest {
 
             @BeforeEach
             void setUp() {
-                given(productController.view(0L))
-                        .willThrow(new ProductNotFoundException("요청한 0의 Product를 찾지 못했습니다."));
+                given(productService.getProduct(0L))
+                        .willThrow(ProductNotFoundException.class);
             }
 
             @Test
@@ -150,7 +144,7 @@ class ProductControllerWebTest {
                 mockMvc.perform(get("/products/0"))
                         .andExpect(status().isNotFound());
 
-                verify(productController.view(0L));
+                verify(productService).getProduct(0L);
             }
         }
     }
@@ -178,8 +172,6 @@ class ProductControllerWebTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(product))
                         .andExpect(status().isCreated());
-
-                verify(productController).create(any(Product.class));
             }
         }
     }
@@ -214,10 +206,15 @@ class ProductControllerWebTest {
             @Test
             @DisplayName("id에 해당하는 Product를 찾을 수 없어 수정할 수 없다고 예외를 던진다.")
             void it_throw_ProductNotFoundException() throws Exception {
-                mockMvc.perform(patch("/products/0")
+                given(productService.updateProduct(any(Product.class), eq(100L)))
+                        .willThrow(ProductNotFoundException.class);
+
+                mockMvc.perform(patch("/products/100")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(product))
                         .andExpect(status().isNotFound());
+
+                verify(productService).updateProduct(any(Product.class), eq(100L));
             }
         }
     }
@@ -247,8 +244,13 @@ class ProductControllerWebTest {
             @Test
             @DisplayName("id에 해당하는 Product를 찾을 수 없어 삭제할 수 없다고 예외를 던진다.")
             void it_return_products() throws Exception {
-                mockMvc.perform(delete("/products/0"))
+                given(productService.deleteProduct(0L))
+                        .willThrow(ProductNotFoundException.class);
+
+                mockMvc.perform(delete("/products/" + 0L))
                         .andExpect(status().isNotFound());
+
+                verify(productService).deleteProduct(0L);
             }
         }
     }
