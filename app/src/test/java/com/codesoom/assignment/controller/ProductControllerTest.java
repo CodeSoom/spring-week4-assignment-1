@@ -144,11 +144,10 @@ class ProductControllerTest {
         @DisplayName("등록되지 않은 Product의 id가 주어진다면")
         class Context_with_invaild_id {
 
-            Long givenInvalidId;
+            Long givenInvalidId = 9999L;
 
             @BeforeEach
             void prepare() {
-                givenInvalidId = Long.valueOf(products.size() + 1);
                 given(productService.getProduct(givenInvalidId)).willThrow(new ProductNotFoundException(givenInvalidId));
             }
 

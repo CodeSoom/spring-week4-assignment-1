@@ -221,11 +221,10 @@ public class ProductServiceTest {
         @DisplayName("등록되지 않은 Product의 id 와 Product가 있다면 ")
         class Context_with_invalid_id_and_product {
 
-            Long givenInvalidId;
+            Long givenInvalidId = 9999L;
 
             @BeforeEach
             void prepare() {
-                givenInvalidId = Long.valueOf(products.size() + 1);
                 given(productRepository.findById(givenInvalidId)).willReturn(Optional.empty());
             }
 
