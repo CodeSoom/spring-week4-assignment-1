@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controller;
 
-
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import org.springframework.http.HttpStatus;
@@ -49,9 +48,9 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         productService.deleteById(id);
     }
-
 
 }

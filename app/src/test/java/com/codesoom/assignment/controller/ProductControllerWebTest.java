@@ -211,10 +211,10 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("OK(200) 상태를 리턴합니다.")
-            void it_responses_200() throws Exception {
+            @DisplayName("NO_CONTENT(204) 상태를 리턴합니다.")
+            void it_responses_204() throws Exception {
                 mockMvc.perform(delete("/products/" + existId))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isNoContent());
             }
         }
 
