@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductTestCase;
 import com.codesoom.assignment.dto.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -49,20 +49,20 @@ public class ProductControllerWebTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private List<Product> products;
+    private Product product0;
     private Product product1;
-    private Product product2;
     private String contentProducts;
     private String contentProduct;
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
 
-        product1 = new Product(0L, "catTower", "samsung", 1000L, "product1.jpg");
-        product2 = new Product(1L, "catBall", "lg", 2000L, "product2.jpg");
-        products = Arrays.asList(product1, product2);
+        products = ProductTestCase.getTestProducts(2);
+        product0 = products.get(0);
+        product1 = products.get(1);
 
         contentProducts = objectMapper.writeValueAsString(products);
-        contentProduct = objectMapper.writeValueAsString(product1);
+        contentProduct = objectMapper.writeValueAsString(product0);
     }
 
     @Nested
@@ -95,7 +95,7 @@ public class ProductControllerWebTest {
 
             @BeforeEach
             void setUp() {
-                given(productService.getProductById(existId)).willReturn(product1);
+                given(productService.getProductById(existId)).willReturn(product0);
             }
 
             @Test
@@ -133,7 +133,7 @@ public class ProductControllerWebTest {
 
         @BeforeEach
         void setUp() {
-            given(productService.createProduct(any(Product.class))).willReturn(product1);
+            given(productService.createProduct(any(Product.class))).willReturn(product0);
         }
 
         @Test
@@ -159,7 +159,7 @@ public class ProductControllerWebTest {
 
             @BeforeEach
             void setUp() {
-                given(productService.updateProduct(eq(existId), any(Product.class))).willReturn(product1);
+                given(productService.updateProduct(eq(existId), any(Product.class))).willReturn(product0);
             }
 
             @Test

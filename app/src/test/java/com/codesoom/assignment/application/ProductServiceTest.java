@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.domain.ProductTestCase;
 import com.codesoom.assignment.dto.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,18 +26,19 @@ class ProductServiceTest {
     @Autowired
     private ProductRepository productRepository;
 
+    private Product product0;
     private Product product1;
-    private Product product2;
 
     @BeforeEach
     void setUp() {
         productRepository.deleteAll();
         productService = new ProductService(productRepository);
 
-        product1 = new Product(0L, "catTower", "samsung", 35900L, "https://thumbnail14.coupangcdn.com/thumbnails/remote/712x712ex/image/retail/images/451976858609946-e5186418-5f5e-4f4c-bccc-a59ac573d029.jpg");
-        product2 = new Product(1L, "catBall", "love cat", 8000L, "http://mstatic1.e-himart.co.kr/contents/goods/00/05/96/13/20/0005961320__TB10__M_640_640.jpg");
+        List<Product> products = ProductTestCase.getTestProducts(2);
+        product0 = products.get(0);
+        product1 = products.get(1);
     }
-    
+
     @Nested
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts {
@@ -46,8 +48,8 @@ class ProductServiceTest {
         @BeforeEach
         void setUp() {
             testProducts = new ArrayList<>();
+            testProducts.add(product0);
             testProducts.add(product1);
-            testProducts.add(product2);
 
             for (Product testProduct : testProducts) {
                 productService.createProduct(testProduct);
@@ -82,7 +84,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                givenProduct = productService.createProduct(product1);
+                givenProduct = productService.createProduct(product0);
                 existId = givenProduct.getId();
             }
 
@@ -90,7 +92,7 @@ class ProductServiceTest {
             @DisplayName("해당하는 id의 product를 리턴합니다.")
             void it_returns_product() {
                 Product product = productService.getProductById(existId);
-                assertThat(product).isEqualTo(product1);
+                assertThat(product).isEqualTo(product0);
             }
         }
 
@@ -102,7 +104,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                notExistId = product2.getId();
+                notExistId = product1.getId();
             }
 
             @Test
@@ -122,13 +124,13 @@ class ProductServiceTest {
 
         @BeforeEach
         void setUp() {
-            newProduct = productService.createProduct(product1);
+            newProduct = productService.createProduct(product0);
         }
 
         @Test
         @DisplayName("요청한 내용으로 저장된 product를 리턴합니다.")
         void it_returns_new_product() {
-            assertThat(newProduct).isEqualTo(product1);
+            assertThat(newProduct).isEqualTo(product0);
         }
     }
 
@@ -144,15 +146,15 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product givenProduct = productService.createProduct(product1);
+                Product givenProduct = productService.createProduct(product0);
                 existId = givenProduct.getId();
             }
 
             @Test
             @DisplayName("해당하는 id의 product를 주어진 요청대로 수정하여 리턴합니다.")
             void it_returns_product() {
-                Product updatedProduct = productService.updateProduct(existId, product2);
-                assertThat(updatedProduct).isEqualTo(product2);
+                Product updatedProduct = productService.updateProduct(existId, product1);
+                assertThat(updatedProduct).isEqualTo(product1);
             }
         }
 
@@ -164,14 +166,14 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                productService.createProduct(product1);
-                notExistId = product2.getId();
+                productService.createProduct(product0);
+                notExistId = product1.getId();
             }
 
             @Test
             @DisplayName("ProductNotFoundException란 예외를 던집니다.")
             void it_throw_ProductNotFoundException() {
-                assertThatThrownBy(() -> productService.updateProduct(notExistId, product2))
+                assertThatThrownBy(() -> productService.updateProduct(notExistId, product1))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -189,7 +191,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product givenProduct = productService.createProduct(product1);
+                Product givenProduct = productService.createProduct(product0);
                 existId = givenProduct.getId();
             }
 
@@ -210,7 +212,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product givenProduct = productService.createProduct(product1);
+                Product givenProduct = productService.createProduct(product0);
                 notExistId = givenProduct.getId();
                 productService.deleteById(notExistId);
             }
