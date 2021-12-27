@@ -44,7 +44,7 @@ class ProductServiceTest {
         products.add(product);
 
         given(productRepository.findAll()).willReturn(products);
-        given(productRepository.findById(1L)).willReturn(Optional.of(product));
+        given(productRepository.findById(productId)).willReturn(Optional.of(product));
     }
 
     @DisplayName("getProducts는 저장하고 있는 상품 목록을 리턴한다")
