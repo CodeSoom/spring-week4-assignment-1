@@ -37,6 +37,7 @@ public class ProductService {
      * 주어진 id와 일치하는 상품을 반환합니다.
      * @param id 상품 id
      * @return 일치하는 id의 상품
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     public Product getProduct(Long id) {
         String format = "아이디 [%d]에 해당하는 상품을 찾지 못했습니다.";
@@ -66,6 +67,7 @@ public class ProductService {
      * @param id 수정할 상품 id
      * @param source 수정할 상품 source
      * @return 수정된 상품
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     public Product updateProduct(Long id, Product source) {
         String format = "아이디 [%d]에 해당하는 상품을 찾지 못했으므로, 상품을 수정하지 못했습니다.";
@@ -86,6 +88,7 @@ public class ProductService {
     /**
      * 주어진 id의 상품을 삭제합니다.
      * @param id 삭제할 상품 id
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     public void deleteProduct(Long id) {
         String format = "아이디 [%d]에 해당하는 상품을 찾지 못했으므로 상품을 삭제하지 못했습니다.";
