@@ -23,6 +23,8 @@ public class ProductControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
     public ErrorResponse productNotFoundExceptionHandler(ProductNotFoundException productNotFoundException) {
-        return new ErrorResponse(productNotFoundException.getMessage());
+        return ErrorResponse.builder()
+                .message(productNotFoundException.getMessage())
+                .build();
     }
 }
