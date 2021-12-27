@@ -47,10 +47,7 @@ public class ToyService {
     public Toy updateProduct(Long id, Toy source) {
         Toy toy = findToy(id);
 
-        toy.setName(source.getName());
-        toy.setMaker(source.getMaker());
-        toy.setImage(source.getImage());
-        toy.setPrice(source.getPrice());
+        toy.change(source);
 
         return toy;
     }

@@ -64,4 +64,11 @@ public class Toy {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public void change(Toy source) {
+        this.name = source.getName();
+        this.maker = source.getMaker();
+        this.price = source.getPrice();
+        this.image = source.getImage();
+    }
 }

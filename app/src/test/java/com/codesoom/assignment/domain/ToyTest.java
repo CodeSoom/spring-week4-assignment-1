@@ -24,4 +24,20 @@ class ToyTest {
         assertThat(toy.getPrice()).isEqualTo(TOY_PRICE);
         assertThat(toy.getImage()).isEqualTo(TOY_IMAGE);
     }
+
+    @Test
+    void change() {
+        Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+        toy.setId(1L);
+
+        Toy source = new Toy("고양이 인형", "갈갈이네", 10000, "testurl");
+
+        toy.change(source);
+
+        assertThat(toy.getId()).isEqualTo(1L);
+        assertThat(toy.getName()).isEqualTo("고양이 인형");
+        assertThat(toy.getMaker()).isEqualTo("갈갈이네");
+        assertThat(toy.getPrice()).isEqualTo(10000);
+        assertThat(toy.getImage()).isEqualTo("testurl");
+    }
 }
