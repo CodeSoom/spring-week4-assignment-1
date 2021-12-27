@@ -4,6 +4,8 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-// 내부에서 어떤것들을 쓴다는 것에 대한 의존관계를 알 수 있는 테스트
+@DisplayName("ToyService test")
 class ToyServiceTest {
     private ToyService toyService;
 
@@ -36,106 +38,185 @@ class ToyServiceTest {
         toyRepository = mock(ToyRepository.class);
         toyService = new ToyService(toyRepository);
 
-        setUpFixtures();
-        setUpSaveToy();
-    }
-
-    void setUpFixtures() {
-        List<Toy> toys = new ArrayList<>();
-
         Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
-
-        toys.add(toy);
-        given(toyRepository.findAll()).willReturn(toys);
         given(toyRepository.findById(1L)).willReturn(Optional.of(toy));
-        given(toyRepository.findById(NOT_EXISTED_ID)).willReturn(Optional.empty());
-
+        given(toyRepository.findById(NOT_EXISTED_ID))
+                .willThrow(new ProductNotFoundException(NOT_EXISTED_ID));
     }
 
-    void setUpSaveToy() {
-        // mocking 한 toyRepository.save의 반환 결과가 입력한 값을 돌려준다고 정의함.
-        given(toyRepository.save(any(Toy.class))).will(invocation -> {
-            Toy toy = invocation.getArgument(0);
-            toy.setId(2L);
-            return toy;
-        });
+    @Nested
+    @DisplayName("Get products")
+    class GetProducts {
+        @Nested
+        @DisplayName("when products existed")
+        class whenToysExisted {
+
+            @BeforeEach()
+            void setUp() {
+                List<Toy> toys = new ArrayList<>();
+                Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+
+                toys.add(toy);
+                given(toyRepository.findAll()).willReturn(toys);
+            }
+
+            @Test
+            @DisplayName("getProducts not empty")
+            void getProductsWithExistedToys() {
+                List<Toy> toys = toyService.getProducts();
+
+                verify(toyRepository).findAll();
+
+                assertThat(toys).isNotEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("when products not existed")
+        class whenToysNotExisted {
+
+            @Test
+            @DisplayName("getProducts is empty")
+            void getProductsWithNotExistedToys() {
+                given(toyRepository.findAll()).willReturn(List.of());
+
+                List<Toy> toys = toyService.getProducts();
+
+                verify(toyRepository).findAll();
+
+                assertThat(toys).isEmpty();
+            }
+        }
     }
 
-    @Test
-    void getProducts() {
-        List<Toy> toys = toyService.getProducts();
+    @Nested
+    @DisplayName("Get product")
+    class GetProduct {
 
-        verify(toyRepository).findAll();
+        @Nested
+        @DisplayName("when id is existed")
+        class whenIdIsExisted {
 
-        assertThat(toys).hasSize(1);
+            @Test
+            @DisplayName("return product")
+            void getProductWithExistedId() {
+                Toy toy = toyService.getProduct(1L);
+                assertThat(toy.getName()).isEqualTo(TOY_NAME);
 
-        Toy toy = toys.get(0);
-        assertThat(toy.getName()).isEqualTo(TOY_NAME);
+                verify(toyRepository).findById(1L);
+            }
+        }
+
+        @Nested
+        @DisplayName("when id is not existed")
+        class whenIdIsNotExisted {
+
+            @Test
+            @DisplayName("occur ProductNotFoundException")
+            void getProductWithNotExistedId() {
+                assertThatThrownBy(() -> toyService.getProduct(NOT_EXISTED_ID))
+                    .isInstanceOf(ProductNotFoundException.class);
+
+                verify(toyRepository).findById(NOT_EXISTED_ID);
+            }
+        }
     }
 
-    @Test
-    void getProductWithExistedId() {
-        Toy toy = toyService.getProduct(1L);
+    @Nested
+    @DisplayName("Create product")
+    class CreateProduct {
 
-        assertThat(toy.getName()).isEqualTo(TOY_NAME);
+        @BeforeEach
+        void setUpSaveToy() {
+            given(toyRepository.save(any(Toy.class))).will(invocation -> {
+                Toy toy = invocation.getArgument(0);
+                toy.setId(2L);
+                return toy;
+            });
+        }
 
-        verify(toyRepository).findById(1L);
+        @Test
+        @DisplayName("return created toy")
+        void createProduct() {
+            Toy source = new Toy(TOY_NAME + CREATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+
+            Toy toy = toyService.createProduct(source);
+
+            verify(toyRepository).save(any(Toy.class));
+
+            assertThat(toy.getId()).isEqualTo(2L);
+            assertThat(toy.getName()).isEqualTo(TOY_NAME + CREATE_POSTFIX);
+        }
     }
 
-    @Test
-    void getProductWithNotExistedId() {
-        assertThatThrownBy(() -> toyService.getProduct(NOT_EXISTED_ID))
-                .isInstanceOf(ProductNotFoundException.class);
+    @Nested
+    @DisplayName("Update product")
+    class UpdateProduct {
 
-        verify(toyRepository).findById(NOT_EXISTED_ID);
+        @Nested
+        @DisplayName("when id is existed")
+        class whenIdIsExisted {
+
+            @Test
+            @DisplayName("return updated toy")
+            void updateProductWithExistedId() {
+                Toy source = new Toy(TOY_NAME + UPDATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+
+                Toy updatedToy = toyService.updateProduct(1L, source);
+
+                verify(toyRepository).findById(1L);
+
+                assertThat(updatedToy.getName()).isEqualTo(TOY_NAME + UPDATE_POSTFIX);
+            }
+        }
+
+        @Nested
+        @DisplayName("when id is not existed")
+        class whenIdIsNotExisted {
+
+            @Test
+            @DisplayName("occur ProductNotFoundException")
+            void updateProductWithNotExistedId() {
+                Toy source = new Toy(TOY_NAME + UPDATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+
+                assertThatThrownBy(() -> toyService.updateProduct(NOT_EXISTED_ID, source))
+                        .isInstanceOf(ProductNotFoundException.class);
+
+                verify(toyRepository).findById(NOT_EXISTED_ID);
+            }
+        }
     }
 
-    @Test
-    void createProduct() {
-        Toy source = new Toy(TOY_NAME + CREATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+    @Nested
+    @DisplayName("Delete product")
+    class DeleteProduct {
 
-        Toy toy = toyService.createProduct(source);
+        @Nested
+        @DisplayName("when id is existed")
+        class whenIdIsExisted {
 
-        verify(toyRepository).save(any(Toy.class));
+            @Test
+            @DisplayName("success delete product")
+            void deleteProductWithExistedId() {
+                toyService.deleteProduct(1L);
 
-        assertThat(toy.getId()).isEqualTo(2L);
-        assertThat(toy.getName()).isEqualTo(TOY_NAME + CREATE_POSTFIX);
-    }
+                verify(toyRepository).findById(1L);
+                verify(toyRepository).delete(any(Toy.class));
+            }
+        }
 
-    @Test
-    void updateProductWithExistedId() {
-        Toy source = new Toy(TOY_NAME + UPDATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+        @Nested
+        @DisplayName("when id is not existed")
+        class whenIdIsNotExisted {
 
-        Toy updatedToy = toyService.updateProduct(1L, source);
+            @Test
+            @DisplayName("occur ProductNotFoundException")
+            void deleteProductWithNotExistedId() {
+                assertThatThrownBy(() -> toyService.deleteProduct(NOT_EXISTED_ID))
+                        .isInstanceOf(ProductNotFoundException.class);
 
-        verify(toyRepository).findById(1L);
-
-        assertThat(updatedToy.getName()).isEqualTo(TOY_NAME + UPDATE_POSTFIX);
-    }
-
-    @Test
-    void updateProductWithNotExistedId() {
-        Toy source = new Toy(TOY_NAME + UPDATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
-
-        assertThatThrownBy(() -> toyService.updateProduct(NOT_EXISTED_ID, source))
-                .isInstanceOf(ProductNotFoundException.class);
-
-        verify(toyRepository).findById(NOT_EXISTED_ID);
-    }
-
-    @Test
-    void deleteProductWithExistedId() {
-        toyService.deleteProduct(1L);
-
-        verify(toyRepository).findById(1L);
-        verify(toyRepository).delete(any(Toy.class));
-    }
-
-    @Test
-    void deleteProductWithNotExistedId() {
-        assertThatThrownBy(() -> toyService.deleteProduct(NOT_EXISTED_ID))
-                .isInstanceOf(ProductNotFoundException.class);
-
-        verify(toyRepository).findById(NOT_EXISTED_ID);
+                verify(toyRepository).findById(NOT_EXISTED_ID);
+            }
+        }
     }
 }
