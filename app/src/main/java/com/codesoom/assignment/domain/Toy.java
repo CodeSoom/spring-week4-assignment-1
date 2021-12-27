@@ -18,6 +18,13 @@ public class Toy {
 
     private String image;
 
+    public Toy(String name, String maker, Integer price, String image) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.image = image;
+    }
+
     public Long getId() {
         return id;
     }

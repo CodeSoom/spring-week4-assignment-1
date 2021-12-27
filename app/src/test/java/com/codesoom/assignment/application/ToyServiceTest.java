@@ -43,11 +43,7 @@ class ToyServiceTest {
     void setUpFixtures() {
         List<Toy> toys = new ArrayList<>();
 
-        Toy toy = new Toy();
-        toy.setName(TOY_NAME);
-        toy.setMaker(TOY_MAKER);
-        toy.setPrice(TOY_PRICE);
-        toy.setImage(TOY_IMAGE);
+        Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         toys.add(toy);
         given(toyRepository.findAll()).willReturn(toys);
@@ -96,8 +92,7 @@ class ToyServiceTest {
 
     @Test
     void createProduct() {
-        Toy source = new Toy();
-        source.setName(TOY_NAME + CREATE_POSTFIX);
+        Toy source = new Toy(TOY_NAME + CREATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         Toy toy = toyService.createProduct(source);
 
@@ -109,8 +104,7 @@ class ToyServiceTest {
 
     @Test
     void updateProductWithExistedId() {
-        Toy source = new Toy();
-        source.setName(TOY_NAME + UPDATE_POSTFIX);
+        Toy source = new Toy(TOY_NAME + UPDATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         Toy updatedToy = toyService.updateProduct(1L, source);
 
@@ -121,8 +115,7 @@ class ToyServiceTest {
 
     @Test
     void updateProductWithNotExistedId() {
-        Toy source = new Toy();
-        source.setName(TOY_NAME + UPDATE_POSTFIX);
+        Toy source = new Toy(TOY_NAME + UPDATE_POSTFIX, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         assertThatThrownBy(() -> toyService.updateProduct(NOT_EXISTED_ID, source))
                 .isInstanceOf(ProductNotFoundException.class);

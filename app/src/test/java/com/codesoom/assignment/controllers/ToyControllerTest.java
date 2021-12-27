@@ -39,12 +39,7 @@ class ToyControllerTest {
     void setUp() {
         toyService = mock(ToyService.class);
 
-        Toy toy = new Toy();
-
-        toy.setName(TOY_NAME);
-        toy.setMaker(TOY_MAKER);
-        toy.setPrice(TOY_PRICE);
-        toy.setImage(TOY_IMAGE);
+        Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         List<Toy> toys = new ArrayList<>();
         toys.add(toy);
@@ -85,8 +80,7 @@ class ToyControllerTest {
 
     @Test
     void createNewProduct() {
-        Toy newToy = new Toy();
-        newToy.setName(TOY_NAME);
+        Toy newToy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         toyController.create(newToy);
 
@@ -95,8 +89,7 @@ class ToyControllerTest {
 
     @Test
     void updateProductWithExistedId() {
-        Toy source = new Toy();
-        source.setName(UPDATE_PREFIX + TOY_NAME);
+        Toy source = new Toy(UPDATE_PREFIX + TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         toyController.update(1L, source);
 
@@ -105,8 +98,7 @@ class ToyControllerTest {
 
     @Test
     void updateProductWithNotExistedId() {
-        Toy source = new Toy();
-        source.setName(UPDATE_PREFIX + TOY_NAME);
+        Toy source = new Toy(UPDATE_PREFIX + TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         assertThatThrownBy(() -> toyController.update(NOT_EXISTED_ID, source))
                 .isInstanceOf(ProductNotFoundException.class);

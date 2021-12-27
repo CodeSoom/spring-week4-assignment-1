@@ -46,8 +46,7 @@ public class ToyControllerWebTest {
 
     @BeforeEach
     void setUp() {
-        Toy toy = new Toy();
-        toy.setName(TOY_NAME);
+        Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
         List<Toy> toys = new ArrayList<>();
         toys.add(toy);
 
@@ -86,13 +85,8 @@ public class ToyControllerWebTest {
 
     @Test
     void createProduct() throws Exception {
-        Toy source = new Toy();
-
+        Toy source = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
         source.setId(1L);
-        source.setName(TOY_NAME);
-        source.setMaker(TOY_MAKER);
-        source.setImage(TOY_IMAGE);
-        source.setPrice(TOY_PRICE);
 
         String content = objectMapper.writeValueAsString(source);
 
@@ -124,8 +118,7 @@ public class ToyControllerWebTest {
 
     @Test
     void updateProductWithExistedId() throws Exception {
-        Toy source = new Toy();
-        source.setName(UPDATE_PREFIX + TOY_NAME);
+        Toy source = new Toy(UPDATE_PREFIX + TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         String content = objectMapper.writeValueAsString(source);
 
@@ -141,8 +134,7 @@ public class ToyControllerWebTest {
 
     @Test
     void updateProductWithNotExistedId() throws Exception {
-        Toy source = new Toy();
-        source.setName(UPDATE_PREFIX + TOY_NAME);
+        Toy source = new Toy(UPDATE_PREFIX + TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
 
         String content = objectMapper.writeValueAsString(source);
 

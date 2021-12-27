@@ -15,13 +15,8 @@ class ToyTest {
 
     @Test
     void toyExample() {
-        Toy toy = new Toy();
-
+        Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
         toy.setId(1L);
-        toy.setName(TOY_NAME);
-        toy.setMaker(TOY_MAKER);
-        toy.setPrice(TOY_PRICE);
-        toy.setImage(TOY_IMAGE);
 
         assertThat(toy.getId()).isEqualTo(1L);
         assertThat(toy.getName()).isEqualTo(TOY_NAME);

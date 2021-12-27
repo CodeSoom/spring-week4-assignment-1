@@ -34,12 +34,12 @@ public class ToyService {
     }
 
     public Toy createProduct(Toy source) {
-        Toy toy = new Toy();
-
-        toy.setName(source.getName());
-        toy.setMaker(source.getMaker());
-        toy.setPrice(source.getPrice());
-        toy.setImage(source.getImage());
+        Toy toy = new Toy(
+            source.getName(),
+            source.getMaker(),
+            source.getPrice(),
+            source.getImage()
+        );
 
         return toyRepository.save(toy);
     }
