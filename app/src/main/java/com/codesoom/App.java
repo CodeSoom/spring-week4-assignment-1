@@ -1,4 +1,4 @@
-package com.codesoom.assignment;
+package com.codesoom;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
