@@ -22,13 +22,11 @@ public class ToyService {
     }
 
     public Toy getProduct(Long id) {
-        return toyRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        return findToy(id);
     }
 
     public Toy deleteProduct(Long id) {
-        Toy toy = toyRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        Toy toy = findToy(id);
 
         toyRepository.delete(toy);
 
@@ -47,8 +45,7 @@ public class ToyService {
     }
 
     public Toy updateProduct(Long id, Toy source) {
-        Toy toy = toyRepository.findById(id)
-                    .orElseThrow(() -> new ProductNotFoundException(id));
+        Toy toy = findToy(id);
 
         toy.setName(source.getName());
         toy.setMaker(source.getMaker());
@@ -56,5 +53,10 @@ public class ToyService {
         toy.setPrice(source.getPrice());
 
         return toy;
+    }
+
+    private Toy findToy(Long id) {
+        return toyRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
