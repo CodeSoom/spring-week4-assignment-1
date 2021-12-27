@@ -40,10 +40,11 @@ public class ProductService {
      * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     public Product getProduct(Long id) {
-        String format = "아이디 [%d]에 해당하는 상품을 찾지 못했습니다.";
 
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(format, id)));
+                .orElseThrow(() -> new ProductNotFoundException(
+                        String.format("아이디 [%d]에 해당하는 상품을 찾지 못했습니다.", id))
+                );
     }
 
     /**
@@ -70,10 +71,11 @@ public class ProductService {
      * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     public Product updateProduct(Long id, Product source) {
-        String format = "아이디 [%d]에 해당하는 상품을 찾지 못했으므로, 상품을 수정하지 못했습니다.";
-
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(format, id)));
+                .orElseThrow(() -> new ProductNotFoundException(
+                        String.format("아이디 [%d]에 해당하는 상품을 찾지 못했으므로, " +
+                                "상품을 수정하지 못했습니다.", id))
+                );
 
         product.update(
                 source.getName(),
@@ -91,10 +93,11 @@ public class ProductService {
      * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     public void deleteProduct(Long id) {
-        String format = "아이디 [%d]에 해당하는 상품을 찾지 못했으므로 상품을 삭제하지 못했습니다.";
-
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(String.format(format, id)));
+                .orElseThrow(() -> new ProductNotFoundException(
+                        String.format("아이디 [%d]에 해당하는 상품을 찾지 못했으므로 " +
+                                "상품을 삭제하지 못했습니다.", id))
+                );
 
         productRepository.delete(product);
     }
