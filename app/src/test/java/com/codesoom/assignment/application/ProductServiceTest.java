@@ -81,7 +81,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
+                given(productRepository.findById(eq(wrongId)))
+                        .willReturn(Optional.empty());
             }
 
             @Test
@@ -132,7 +133,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
+                given(productRepository.findById(eq(wrongId)))
+                        .willReturn(Optional.empty());
             }
 
             @Test
@@ -167,7 +169,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(productRepository.findById(eq(wrongId))).willThrow(ProductNotFoundException.class);
+                given(productRepository.findById(eq(wrongId)))
+                        .willReturn(Optional.empty());
             }
 
             @Test
