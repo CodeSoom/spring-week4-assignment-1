@@ -81,8 +81,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(productRepository.findById(eq(wrongId)))
-                        .willReturn(Optional.empty());
+                Product product = Product.createSaveProduct(PRODUCT_NAME, null, 0, null);
+                Product savedProduct = productRepository.save(product);
             }
 
             @Test
