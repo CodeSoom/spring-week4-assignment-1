@@ -1,0 +1,43 @@
+package com.codesoom.assignment.domain;
+
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/*
+* toy 도메인에 대한 간단한 예제를 작성한다는 느낌으로 테스트를 작성했다.
+* */
+class ToyTest {
+    private static final String TOY_NAME = "장난감 뱀";
+    private static final String TOY_MAKER = "애옹이네 장난감";
+    private static final Integer TOY_PRICE = 5000;
+    private static final String TOY_IMAGE = "someUrl";
+
+    @Test
+    void toyExample() {
+        Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+        toy.setId(1L);
+
+        assertThat(toy.getId()).isEqualTo(1L);
+        assertThat(toy.getName()).isEqualTo(TOY_NAME);
+        assertThat(toy.getMaker()).isEqualTo(TOY_MAKER);
+        assertThat(toy.getPrice()).isEqualTo(TOY_PRICE);
+        assertThat(toy.getImage()).isEqualTo(TOY_IMAGE);
+    }
+
+    @Test
+    void change() {
+        Toy toy = new Toy(TOY_NAME, TOY_MAKER, TOY_PRICE, TOY_IMAGE);
+        toy.setId(1L);
+
+        Toy source = new Toy("고양이 인형", "갈갈이네", 10000, "testurl");
+
+        toy.change(source);
+
+        assertThat(toy.getId()).isEqualTo(1L);
+        assertThat(toy.getName()).isEqualTo("고양이 인형");
+        assertThat(toy.getMaker()).isEqualTo("갈갈이네");
+        assertThat(toy.getPrice()).isEqualTo(10000);
+        assertThat(toy.getImage()).isEqualTo("testurl");
+    }
+}
