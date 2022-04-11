@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ *  고양이 장난감 엔티티
+ */
 @Entity
 public class CatToy {
 
