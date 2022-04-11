@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,10 @@ public class CatToyControllerTest {
 
     @BeforeEach
     void setUp() {
-        catToyController = new CatToyController(catToyRepository);
+
+        CatToyService catToyService = new CatToyService(catToyRepository);
+
+        catToyController = new CatToyController(catToyService);
     }
 
     @Nested

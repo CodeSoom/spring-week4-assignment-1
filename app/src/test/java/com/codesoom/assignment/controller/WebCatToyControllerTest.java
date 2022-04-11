@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ public class WebCatToyControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    CatToyRepository catToyRepository;
+    CatToyService catToyService;
 
     @Nested
     @DisplayName("GET - /products 요청시")
@@ -49,7 +50,7 @@ public class WebCatToyControllerTest {
                         .mapToObj(CatToy::new)
                         .collect(Collectors.toList());
 
-                given(catToyRepository.findAll()).willReturn(catToys);
+                given(catToyService.getCatToys()).willReturn(catToys);
             }
 
             @Test
