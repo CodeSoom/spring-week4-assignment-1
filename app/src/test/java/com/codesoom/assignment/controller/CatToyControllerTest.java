@@ -2,36 +2,40 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.dto.CatToySaveDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayName("CatToyController 클래스")
-@DataJpaTest
 public class CatToyControllerTest {
 
+    private static final String TEST_MAKER = "MAKER";
+    private static final Integer TEST_PRICE = 1000;
+    private static final String TEST_IMAGE_PATH = "/image/test.jpg";
+
+    @InjectMocks
     private CatToyController catToyController;
 
-    @Autowired
-    private CatToyRepository catToyRepository;
+    @Mock
+    private CatToyService catToyService;
 
     @BeforeEach
     void setUp() {
-
-        CatToyService catToyService = new CatToyService(catToyRepository);
-
-        catToyController = new CatToyController(catToyService);
     }
 
     @Nested
@@ -46,9 +50,11 @@ public class CatToyControllerTest {
 
             @BeforeEach
             void setUp() {
-                LongStream.rangeClosed(1, givenCount)
+                List<CatToy> catToys = LongStream.rangeClosed(1, givenCount)
                         .mapToObj(CatToy::new)
-                        .forEach(catToy -> catToyRepository.save(catToy));
+                        .collect(Collectors.toList());
+
+                given(catToyService.getCatToys()).willReturn(catToys);
             }
 
             @Test
@@ -68,19 +74,25 @@ public class CatToyControllerTest {
         @DisplayName("고양이 장난감 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
+            final CatToySaveDto source = new CatToySaveDto(TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
+
+            @BeforeEach
+            void setUp() {
+                CatToy catToy = new CatToy(1L, TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
+                given(catToyService.saveCatToy(source)).willReturn(catToy);
+            }
+
             @Test
             @DisplayName("고양이 장난감을 생성하고 리턴한다.")
             void it_save_and_return_catToy() {
 
-                CatToySaveDto catToySaveDto = new CatToySaveDto("MAKER", 1000, "/images/test.jpg");
-
-                CatToy catToy = catToyController.save(catToySaveDto);
+                CatToy catToy = catToyController.save(source);
 
                 assertAll(
                         () -> assertThat(catToy.getId()).isNotNull(),
-                        () -> assertThat(catToy.getMaker()).isEqualTo("MAKER"),
-                        () -> assertThat(catToy.getPrice()).isEqualTo(1000),
-                        () -> assertThat(catToy.getImagePath()).isEqualTo("/images/test.jpg")
+                        () -> assertThat(catToy.getMaker()).isEqualTo(TEST_MAKER),
+                        () -> assertThat(catToy.getPrice()).isEqualTo(TEST_PRICE),
+                        () -> assertThat(catToy.getImagePath()).isEqualTo(TEST_IMAGE_PATH)
                 );
             }
         }

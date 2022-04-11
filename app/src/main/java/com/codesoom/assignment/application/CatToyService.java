@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
+import com.codesoom.assignment.dto.CatToySaveDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,12 +21,16 @@ public class CatToyService {
     }
 
     /**
-     *  고양이 장난감 전체 목록을 리턴합니다.
+     * 고양이 장난감 전체 목록을 리턴합니다.
      */
     public List<CatToy> getCatToys() {
         Iterable<CatToy> source = catToyRepository.findAll();
         List<CatToy> catToys = new ArrayList<>();
         source.forEach(catToys::add);
         return catToys;
+    }
+
+    public CatToy saveCatToy(CatToySaveDto catToySaveDto) {
+        return null;
     }
 }

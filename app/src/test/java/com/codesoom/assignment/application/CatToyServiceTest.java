@@ -57,4 +57,15 @@ class CatToyServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("saveCatToy 메소드는")
+    class Describe_saveCatToy {
+
+        @Nested
+        @DisplayName("고양이 장난감 등록에 필요한 데이터가 주어진다면")
+        class Context_valid {
+
+        }
+    }
 }

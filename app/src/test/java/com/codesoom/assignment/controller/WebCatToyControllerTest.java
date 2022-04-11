@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.dto.CatToySaveDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -73,13 +75,19 @@ public class WebCatToyControllerTest {
         @DisplayName("고양이 장난감 등록에 필요한 데이터")
         class Context_valid {
 
+            @BeforeEach
+            void setUp() {
+                CatToy catToy = new CatToy(1L, "aaa", 1000, "/images/test.jpg");
+                given(catToyService.saveCatToy(any(CatToySaveDto.class))).willReturn(catToy);
+            }
+
             @Test
             @DisplayName("고양이 장난감을 등록하고 리턴한다.")
             void it_save_and_return_catToy() throws Exception {
 
                 mockMvc.perform(post("/products")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{}"))
+                                .content("{maker: \"maker\", price: 1000, \"/image/test.jpg\"}"))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("maker").exists())
