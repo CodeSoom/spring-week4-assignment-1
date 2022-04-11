@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.dto.CatToySaveDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +28,9 @@ public class CatToyController {
     @GetMapping
     public List<CatToy> list() {
         return catToyService.getCatToys();
+    }
+
+    public CatToy save(CatToySaveDto catToySaveDto) {
+        return null;
     }
 }

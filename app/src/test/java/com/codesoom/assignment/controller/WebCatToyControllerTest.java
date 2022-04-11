@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.CatToyService;
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -20,6 +20,7 @@ import java.util.stream.LongStream;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,4 +64,29 @@ public class WebCatToyControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("POST - /products 요청시")
+    class Describe_save {
+
+        @Nested
+        @DisplayName("고양이 장난감 등록에 필요한 데이터")
+        class Context_valid {
+
+            @Test
+            @DisplayName("고양이 장난감을 등록하고 리턴한다.")
+            void it_save_and_return_catToy() throws Exception {
+
+                mockMvc.perform(post("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{}"))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("maker").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imagePath").exists());
+            }
+        }
+    }
+
 }

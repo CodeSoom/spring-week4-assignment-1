@@ -26,4 +26,26 @@ public class CatToy {
     public CatToy(Long id) {
         this.id = id;
     }
+
+    public CatToy(String maker, Integer price, String imagePath) {
+        this.maker = maker;
+        this.price = price;
+        this.imagePath = imagePath;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
 }
