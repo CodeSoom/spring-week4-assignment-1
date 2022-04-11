@@ -1,6 +1,16 @@
 spring:
+  h2:
+    # h2 대시보드를 사용하기 위함
+    console:
+      enabled: true
+      path: /h2-console
   datasource:
     url: jdbc:h2:~/data/demo
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true # 실행되는 쿼리를 노출시킴
+    database-platform: org.hibernate.dialect.H2Dialect
