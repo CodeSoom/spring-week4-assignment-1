@@ -15,7 +15,7 @@ import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("고양이 장난감 Controller 유닛 테스트")
+@DisplayName("CatToyController 클래스")
 @DataJpaTest
 public class CatToyControllerTest {
 
@@ -33,11 +33,11 @@ public class CatToyControllerTest {
     }
 
     @Nested
-    @DisplayName("고양이 장난감 목록 조회 시")
+    @DisplayName("list 메소드는")
     class Describe_list {
 
         @Nested
-        @DisplayName("주어진 수 만큼")
+        @DisplayName("주어진 고양이 장난감 수 만큼")
         class Context_givenCount {
 
             final int givenCount = 10;
