@@ -1,23 +1,31 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.CatToyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("고양이 장난감 Controller 유닛 테스트")
+@DataJpaTest
 public class CatToyControllerTest {
 
     private CatToyController catToyController;
 
+    @Autowired
+    private CatToyRepository catToyRepository;
+
     @BeforeEach
     void setUp() {
-        catToyController = new CatToyController();
+        catToyController = new CatToyController(catToyRepository);
     }
 
     @Nested
@@ -32,7 +40,9 @@ public class CatToyControllerTest {
 
             @BeforeEach
             void setUp() {
-
+                LongStream.rangeClosed(1, givenCount)
+                        .mapToObj(CatToy::new)
+                        .forEach(catToy -> catToyRepository.save(catToy));
             }
 
             @Test

@@ -19,4 +19,8 @@ public class CatToy {
 
     public CatToy() {
     }
+
+    public CatToy(Long id) {
+        this.id = id;
+    }
 }
