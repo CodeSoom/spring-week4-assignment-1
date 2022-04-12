@@ -11,58 +11,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.LongStream;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("CatToyService 클래스")
-class ProductServiceTest {
+@DisplayName("ProductCommandService 클래스")
+class ProductCommandServiceTest {
 
     private static final String TEST_MAKER = "MAKER";
     private static final Integer TEST_PRICE = 1000;
     private static final String TEST_IMAGE_PATH = "/image/test.jpg";
 
     @InjectMocks
-    ProductService productService;
+    ProductCommandService productCommandService;
 
     @Mock
     ProductRepository productRepository;
-
-    @Nested
-    @DisplayName("getProducts 메소드는")
-    class Describe_getProducts {
-
-        @Nested
-        @DisplayName("주어진 상품 수 만큼")
-        class Context_hasProducts {
-
-            final int givenCount = 10;
-
-            @BeforeEach
-            void setUp() {
-                Iterable<Product> products = LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(Product::new)
-                        .collect(Collectors.toList());
-
-                given(productRepository.findAll()).willReturn(products);
-            }
-
-            @Test
-            @DisplayName("상품 목록을 리턴한다.")
-            void it_return_products() {
-
-                List<Product> products = productService.getProducts();
-
-                assertThat(products).hasSize(givenCount);
-            }
-        }
-    }
 
     @Nested
     @DisplayName("saveProduct 메소드는")
@@ -86,7 +52,7 @@ class ProductServiceTest {
             @DisplayName("상품을 등록하고 리턴한다.")
             void it_save_product_and_return() {
 
-                Product product = productService.saveProduct(source);
+                Product product = productCommandService.saveProduct(source);
 
                 assertAll(
                         () -> assertThat(product.getId()).isNotNull(),
@@ -97,4 +63,5 @@ class ProductServiceTest {
             }
         }
     }
+
 }

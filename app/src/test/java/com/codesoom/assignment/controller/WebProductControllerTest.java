@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -40,7 +42,10 @@ public class WebProductControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    ProductService productService;
+    private ProductCommandService productCommandService;
+
+    @MockBean
+    private ProductQueryService productQueryService;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -60,7 +65,7 @@ public class WebProductControllerTest {
                         .mapToObj(Product::new)
                         .collect(Collectors.toList());
 
-                given(productService.getProducts()).willReturn(products);
+                given(productQueryService.getProducts()).willReturn(products);
             }
 
             @Test
@@ -87,7 +92,7 @@ public class WebProductControllerTest {
             @BeforeEach
             void setUp() {
                 Product product = new Product(1L, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-                given(productService.saveProduct(any(Product.class))).willReturn(product);
+                given(productCommandService.saveProduct(any(Product.class))).willReturn(product);
             }
 
             @Test

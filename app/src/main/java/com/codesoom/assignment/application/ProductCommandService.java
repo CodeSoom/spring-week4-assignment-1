@@ -4,29 +4,16 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * 상품에 대한 요청을 처리합니다.
+ * 상품 변경에 대한 작업을 관리합니다.
  */
 @Service
-public class ProductService {
+public class ProductCommandService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductCommandService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-    }
-
-    /**
-     * 상품 전체 목록을 리턴합니다.
-     */
-    public List<Product> getProducts() {
-        Iterable<Product> source = productRepository.findAll();
-        List<Product> products = new ArrayList<>();
-        source.forEach(products::add);
-        return products;
     }
 
     /**

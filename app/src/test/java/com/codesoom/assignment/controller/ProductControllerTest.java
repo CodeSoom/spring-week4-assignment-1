@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,10 @@ public class ProductControllerTest {
     private ProductController productController;
 
     @Mock
-    private ProductService productService;
+    private ProductCommandService productCommandService;
+
+    @Mock
+    private ProductQueryService productQueryService;
 
     @BeforeEach
     void setUp() {
@@ -55,7 +59,7 @@ public class ProductControllerTest {
                         .mapToObj(Product::new)
                         .collect(Collectors.toList());
 
-                given(productService.getProducts()).willReturn(products);
+                given(productQueryService.getProducts()).willReturn(products);
             }
 
             @Test
@@ -80,7 +84,7 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 Product product = new Product(1L, TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
-                given(productService.saveProduct(any(Product.class))).willReturn(product);
+                given(productCommandService.saveProduct(any(Product.class))).willReturn(product);
             }
 
             @Test

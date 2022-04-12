@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,13 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductQueryService productQueryService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    private final ProductCommandService productCommandService;
+
+    public ProductController(ProductQueryService productQueryService, ProductCommandService productCommandService) {
+        this.productQueryService = productQueryService;
+        this.productCommandService = productCommandService;
     }
 
     /**
@@ -31,7 +35,7 @@ public class ProductController {
      */
     @GetMapping
     public List<Product> list() {
-        return productService.getProducts();
+        return productQueryService.getProducts();
     }
 
     /**
@@ -43,6 +47,6 @@ public class ProductController {
 
         Product product = productSaveDto.toEntity();
 
-        return productService.saveProduct(product);
+        return productCommandService.saveProduct(product);
     }
 }
