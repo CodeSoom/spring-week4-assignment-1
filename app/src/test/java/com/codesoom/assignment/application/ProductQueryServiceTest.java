@@ -7,29 +7,29 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
 @DisplayName("ProductQueryService 클래스")
 class ProductQueryServiceTest {
 
-    @InjectMocks
     ProductQueryService productQueryService;
 
-    @Mock
+    @Autowired
     ProductRepository productRepository;
+
+    @BeforeEach
+    void setUp() {
+        productQueryService = new ProductQueryService(productRepository);
+        productRepository.deleteAll();
+    }
 
     @Nested
     @DisplayName("getProducts 메소드는")
@@ -43,11 +43,9 @@ class ProductQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                Iterable<Product> products = LongStream.rangeClosed(1, givenCount)
+                LongStream.rangeClosed(1, givenCount)
                         .mapToObj(Product::new)
-                        .collect(Collectors.toList());
-
-                given(productRepository.findAll()).willReturn(products);
+                        .forEach(product -> productRepository.save(product));
             }
 
             @Test
@@ -65,29 +63,26 @@ class ProductQueryServiceTest {
     @DisplayName("getProduct 메소드는")
     class Describe_getProduct {
 
-        final Long productId = 1L;
-
-        final Long notExistsProductId = 100L;
+        Long productId;
 
         @Nested
         @DisplayName("주어진 아이디와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
-            final Product givenProduct = new Product(productId);
-
             @BeforeEach
             void setUp() {
-                given(productRepository.findById(productId)).willReturn(Optional.of(givenProduct));
-            }
-
-            Product subject() {
-                return productQueryService.getProduct(productId);
+                Product product = new Product("MAKER", 1000, "/images/test.jpg");
+                productRepository.save(product);
+                productId = product.getId();
             }
 
             @Test
             @DisplayName("상품을 리턴한다.")
             void it_return_product() {
-                assertThat(subject()).isEqualTo(givenProduct);
+
+                Product product = productQueryService.getProduct(productId);
+
+                assertThat(product.getId()).isEqualTo(productId);
             }
         }
 
@@ -95,10 +90,7 @@ class ProductQueryServiceTest {
         @DisplayName("주어진 아이디와 일치하는 상품이 없다면")
         class Context_notExistsProduct {
 
-            @BeforeEach
-            void setUp() {
-                given(productRepository.findById(notExistsProductId)).willThrow(ProductNotFoundException.class);
-            }
+            final Long notExistsProductId = 100L;
 
             @Test
             @DisplayName("예외를 던진다.")
