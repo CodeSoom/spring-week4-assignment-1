@@ -45,4 +45,12 @@ public class Toy {
         this.image = image;
     }
 
+    public Toy update(ToyDto toyDto) {
+        this.name = toyDto.getName();
+        this.maker = toyDto.getMaker();
+        this.price = toyDto.getPrice();
+        this.image = toyDto.getImage();
+        return this;
+    }
+
 }
