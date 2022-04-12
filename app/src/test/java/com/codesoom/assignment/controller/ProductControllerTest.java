@@ -1,28 +1,25 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductCommandService;
-import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductSaveDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
+@SpringBootTest
 @DisplayName("ProductController 클래스")
 public class ProductControllerTest {
 
@@ -30,21 +27,20 @@ public class ProductControllerTest {
     private static final Integer TEST_PRODUCT_PRICE = 1000;
     private static final String TEST_PRODUCT_IMAGE_PATH = "/image/test.jpg";
 
-    @InjectMocks
-    private ProductController productController;
+    @Autowired
+    ProductController productController;
 
-    @Mock
-    private ProductCommandService productCommandService;
-
-    @Mock
-    private ProductQueryService productQueryService;
+    @Autowired
+    ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
+        productRepository.deleteAll();
     }
 
     @Nested
     @DisplayName("list 메소드는")
+    @Transactional
     class Describe_list {
 
         @Nested
@@ -55,17 +51,16 @@ public class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                List<Product> products = LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(Product::new)
-                        .collect(Collectors.toList());
-
-                given(productQueryService.getProducts()).willReturn(products);
+                LongStream.rangeClosed(1, givenCount)
+                        .mapToObj(index -> new Product())
+                        .forEach(product -> productRepository.save(product));
             }
 
             @Test
             @DisplayName("상품 목록을 리턴한다.")
             void it_return_toys() {
                 List<Product> products = productController.list();
+
                 assertThat(products).hasSize(givenCount);
             }
         }
@@ -75,17 +70,17 @@ public class ProductControllerTest {
     @DisplayName("detail 메소드는")
     class Describe_detail {
 
-        final Long productId = 1L;
+        Long productId;
 
         @Nested
         @DisplayName("주어진 아이디와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
-            final Product product = new Product(productId, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-
             @BeforeEach
             void setUp() {
-                given(productQueryService.getProduct(productId)).willReturn(product);
+                Product product = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+                productRepository.save(product);
+                productId = product.getId();
             }
 
             @Test
@@ -108,12 +103,6 @@ public class ProductControllerTest {
         class Context_valid {
 
             final ProductSaveDto source = new ProductSaveDto(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-
-            @BeforeEach
-            void setUp() {
-                Product product = new Product(1L, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-                given(productCommandService.saveProduct(any(Product.class))).willReturn(product);
-            }
 
             @Test
             @DisplayName("상품을 생성하고 리턴한다.")
