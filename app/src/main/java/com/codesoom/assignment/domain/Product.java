@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @Entity
-public class Toy {
+public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,11 +33,11 @@ public class Toy {
     @Column
     private String image;
 
-    protected Toy() {
+    protected Product() {
     }
 
     @Builder
-    public Toy(Long id, String name, String maker, BigDecimal price, String image) {
+    public Product(Long id, String name, String maker, BigDecimal price, String image) {
         this.id = id;
         this.name = name;
         this.maker = maker;
@@ -45,11 +45,11 @@ public class Toy {
         this.image = image;
     }
 
-    public Toy update(ToyDto toyDto) {
-        this.name = toyDto.getName();
-        this.maker = toyDto.getMaker();
-        this.price = toyDto.getPrice();
-        this.image = toyDto.getImage();
+    public Product update(ProductDto productDto) {
+        this.name = productDto.getName();
+        this.maker = productDto.getMaker();
+        this.price = productDto.getPrice();
+        this.image = productDto.getImage();
         return this;
     }
 

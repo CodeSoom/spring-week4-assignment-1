@@ -1,9 +1,9 @@
 package com.codesoom.assignment.application;
 
 
-import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.domain.ToyDto;
-import com.codesoom.assignment.domain.ToyRepository;
+import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductDto;
+import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,23 +18,23 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ToyCreateServiceTest {
+public class ProductCreateServiceTest {
 
     @InjectMocks
-    private ToyCreateServiceImpl service;
+    private ProductCreateServiceImpl service;
 
     @Mock
-    private ToyRepository repository;
+    private ProductRepository repository;
 
     @DisplayName("장난감을 성공적으로 등록한다.")
     @Test
     void createToyTest() {
-        final ToyDto toyDto
-                = new ToyDto("name", "maker", BigDecimal.valueOf(2000), "image");
+        final ProductDto productDto
+                = new ProductDto("name", "maker", BigDecimal.valueOf(2000), "image");
 
-        service.create(toyDto);
+        service.create(productDto);
 
-        verify(repository).save(any(Toy.class));
+        verify(repository).save(any(Product.class));
     }
 
 }
