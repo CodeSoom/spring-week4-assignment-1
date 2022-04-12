@@ -44,7 +44,7 @@ class ProductQueryServiceTest {
             @BeforeEach
             void setUp() {
                 LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(Product::new)
+                        .mapToObj(index -> new Product())
                         .forEach(product -> productRepository.save(product));
             }
 
