@@ -1,8 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductCommandService;
-import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductSaveDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,24 +10,21 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = ProductController.class)
+@ActiveProfiles("test")
+@SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("상품에 대한 HTTP 요청")
 public class WebProductControllerTest {
@@ -40,13 +36,16 @@ public class WebProductControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
-    private ProductCommandService productCommandService;
+    @Autowired
+    ProductRepository productRepository;
 
-    @MockBean
-    private ProductQueryService productQueryService;
+    @Autowired
+    ObjectMapper objectMapper;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    @BeforeEach
+    void setUp() {
+        productRepository.deleteAll();
+    }
 
     @Nested
     @DisplayName("GET - /products 요청시")
@@ -60,11 +59,9 @@ public class WebProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                List<Product> products = LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(Product::new)
-                        .collect(Collectors.toList());
-
-                given(productQueryService.getProducts()).willReturn(products);
+                LongStream.rangeClosed(1, givenCount)
+                        .mapToObj(index -> new Product())
+                        .forEach(product -> productRepository.save(product));
             }
 
             @Test
@@ -82,17 +79,18 @@ public class WebProductControllerTest {
     @DisplayName("GET - /products/{productId} 요청시")
     class Describe_detail {
 
-        final Long productId = 1L;
+        Long productId;
 
         @Nested
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
-            final Product product = new Product(productId, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+            final Product product = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @BeforeEach
             void setUp() {
-                given(productQueryService.getProduct(productId)).willReturn(product);
+                productRepository.save(product);
+                productId = product.getId();
             }
 
             @Test
@@ -109,7 +107,6 @@ public class WebProductControllerTest {
         }
     }
 
-
     @Nested
     @DisplayName("POST - /products 요청시")
     class Describe_save {
@@ -119,12 +116,6 @@ public class WebProductControllerTest {
         class Context_valid {
 
             final ProductSaveDto source = new ProductSaveDto(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-
-            @BeforeEach
-            void setUp() {
-                Product product = new Product(1L, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-                given(productCommandService.saveProduct(any(Product.class))).willReturn(product);
-            }
 
             @Test
             @DisplayName("상품을 등록하고 응답한다. [200]")
