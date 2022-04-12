@@ -1,14 +1,14 @@
 package com.codesoom.assignment.domain;
 
 import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.domain.entity.ProductRepository;
+import com.codesoom.assignment.models.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("ProductRepository 에서")
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 class ProductRepositoryTest {
     private static final String PRODUCT_NAME = "상품1";
@@ -28,7 +27,6 @@ class ProductRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;
-
 
     /**
      * 여러개의 Product 를 생성해 등록합니다.

@@ -1,6 +1,5 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.models;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,7 +37,10 @@ public class Product {
     @Column
     private String imageUrl;
 
-    protected Product() {};
+    protected Product() {
+    }
+
+    ;
 
     private Product(Builder builder) {
         name = builder.name;
