@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,14 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
-@DataJpaTest
+@SpringBootTest
 @DisplayName("ProductServiceImpl 에서")
 class ProductServiceTest {
     private static final String PRODUCT_NAME = "상품1";
@@ -28,11 +30,8 @@ class ProductServiceTest {
 
     private static final String UPDATE_PRODUCT_NAME = "상품1000";
 
-    @Mock
-    private ProductRepository productRepository;
-
-    @InjectMocks
-    private ProductService productService = new ProductService(productRepository);
+    @Autowired
+    private ProductService productService;
 
     /**
      * 여러개의 Product 를 생성해 등록합니다.
@@ -61,7 +60,12 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 createProduct(createProductSize);
-                productRepository.deleteAll();
+                productService.deleteAll();
+            }
+
+            @AfterEach
+            void tearDown() {
+                productService.deleteAll();
             }
 
             @Test
@@ -82,6 +86,11 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 createProduct(createProductSize);
+            }
+
+            @AfterEach
+            void tearDown() {
+                productService.deleteAll();
             }
 
             @Test
