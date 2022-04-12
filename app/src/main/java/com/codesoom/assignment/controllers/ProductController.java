@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.CatToyService;
-import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.domain.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,44 +18,44 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/catToys")
+@RequestMapping("/products")
 @CrossOrigin
-public class CatToyController {
-    private final CatToyService catToyService;
+public class ProductController {
+    private final ProductService productService;
 
-    public CatToyController(CatToyService catToyService) {
-        this.catToyService = catToyService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     @GetMapping
-    public List<CatToy> list() {
-        return catToyService.getCatToys();
+    public List<Product> list() {
+        return productService.getProducts();
     }
 
     @GetMapping("{id}")
-    public CatToy detail(@PathVariable Long id) {
-        return catToyService.getCatToy(id);
+    public Product detail(@PathVariable Long id) {
+        return productService.getProduct(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CatToy create(@RequestBody CatToy catToy) {
-        return catToyService.createCatToy(catToy);
+    public Product create(@RequestBody Product product) {
+        return productService.createProduct(product);
     }
 
     @PutMapping("{id}")
-    public CatToy update(@PathVariable Long id, @RequestBody CatToy catToy) {
-        return catToyService.updateCatToy(id, catToy);
+    public Product update(@PathVariable Long id, @RequestBody Product product) {
+        return productService.updateProduct(id, product);
     }
 
     @PatchMapping("{id}")
-    public CatToy patch(@PathVariable Long id, @RequestBody CatToy catToy) {
-        return catToyService.updateCatToy(id, catToy);
+    public Product patch(@PathVariable Long id, @RequestBody Product product) {
+        return productService.updateProduct(id, product);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        catToyService.deleteCatToy(id);
+        productService.deleteProduct(id);
     }
 }

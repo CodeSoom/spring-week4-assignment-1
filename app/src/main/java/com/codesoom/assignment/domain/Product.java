@@ -1,11 +1,18 @@
 package com.codesoom.assignment.domain;
 
-public class CatToy {
-    Long id;
-    String name;
-    String maker;
-    Long price;
-    String imagePath;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+public class Product {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+    private String maker;
+    private Long price;
+    private String imagePath;
 
     public Long getId() {
         return id;
