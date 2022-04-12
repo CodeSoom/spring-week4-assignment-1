@@ -28,6 +28,21 @@ class ProductRepositoryTest {
         this.productRepository = new InMemoryProductRepository();
     }
 
+    /**
+     * 여러개의 Product 를 생성해 등록합니다.
+     * @param createProuctSize 생성할 Product의 갯수
+     */
+    private void createProduct(long createProuctSize) {
+        for (long i = 0; i <= createProuctSize; i++) {
+            Product product = new Product();
+            product.setName(PRODUCT_NAME);
+            product.setMaker(PRODUCT_MAKER);
+            product.setPrice(PRODUCT_PRICE);
+            product.setImageUrl(PRODUCT_IMAGE_URL);
+            productRepository.save(product);
+        }
+    }
+
     @Nested
     @DisplayName("findAll 메소드를 호출할 때")
     class Describe_readAll_of_product {
@@ -39,14 +54,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                for (int i = 0; i < createProductSize; i++) {
-                    Product product = new Product();
-                    product.setName(PRODUCT_NAME);
-                    product.setMaker(PRODUCT_MAKER);
-                    product.setPrice(PRODUCT_PRICE);
-                    product.setImageUrl(PRODUCT_IMAGE_URL);
-                    productRepository.save(product);
-                }
+                createProduct(createProductSize);
             }
 
             @AfterEach
@@ -71,14 +79,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                for (int i = 0; i < createProductSize; i++) {
-                    Product product = new Product();
-                    product.setName(PRODUCT_NAME);
-                    product.setMaker(PRODUCT_MAKER);
-                    product.setPrice(PRODUCT_PRICE);
-                    product.setImageUrl(PRODUCT_IMAGE_URL);
-                    productRepository.save(product);
-                }
+                createProduct(createProductSize);
                 productRepository.deleteAll();
             }
 
@@ -99,17 +100,13 @@ class ProductRepositoryTest {
     class Describe_read_of_product {
 
         @Nested
-        @DisplayName("Id 에 맞는 상품이 존재할 경우")
+        @DisplayName("Id 와 동일한 상품이 존재할 경우")
         class Context_with_product {
+            final long createProductSize = 3L;
 
             @BeforeEach
             void setUp() {
-                Product product = new Product();
-                product.setName(PRODUCT_NAME);
-                product.setMaker(PRODUCT_MAKER);
-                product.setPrice(PRODUCT_PRICE);
-                product.setImageUrl(PRODUCT_IMAGE_URL);
-                productRepository.save(product);
+                createProduct(createProductSize);
             }
 
             @AfterEach
@@ -126,21 +123,15 @@ class ProductRepositoryTest {
                 assertThat(product).isNotNull();
             }
         }
+
         @Nested
-        @DisplayName("Id 에 맞는 상품이 존재하지 않을 경우")
+        @DisplayName("Id 와 동일한 상품이 존재하지 않을 경우")
         class Context_without_product {
             final long createProductSize = 3L;
 
             @BeforeEach
             void setUp() {
-                for (long i = 0; i < createProductSize; i++) {
-                    Product product = new Product();
-                    product.setName(PRODUCT_NAME);
-                    product.setMaker(PRODUCT_MAKER);
-                    product.setPrice(PRODUCT_PRICE);
-                    product.setImageUrl(PRODUCT_IMAGE_URL);
-                    productRepository.save(product);
-                }
+                createProduct(createProductSize);
                 productRepository.deleteAll();
             }
 
