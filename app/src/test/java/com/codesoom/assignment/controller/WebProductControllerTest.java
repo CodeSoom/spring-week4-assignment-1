@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.CatToyService;
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.dto.CatToySaveDto;
+import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductSaveDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,38 +26,38 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = CatToyController.class)
+@WebMvcTest(controllers = ProductController.class)
 @AutoConfigureMockMvc
-@DisplayName("고양이 장난감에 대한 HTTP 요청")
-public class WebCatToyControllerTest {
+@DisplayName("상품에 대한 HTTP 요청")
+public class WebProductControllerTest {
 
     @Autowired
     MockMvc mockMvc;
 
     @MockBean
-    CatToyService catToyService;
+    ProductService productService;
 
     @Nested
     @DisplayName("GET - /products 요청시")
     class Describe_list {
 
         @Nested
-        @DisplayName("고양이 장난감 상품 수 만큼")
+        @DisplayName("상품 수 만큼")
         class Context_givenCount {
 
             final int givenCount = 10;
 
             @BeforeEach
             void setUp() {
-                List<CatToy> catToys = LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(CatToy::new)
+                List<Product> products = LongStream.rangeClosed(1, givenCount)
+                        .mapToObj(Product::new)
                         .collect(Collectors.toList());
 
-                given(catToyService.getCatToys()).willReturn(catToys);
+                given(productService.getProducts()).willReturn(products);
             }
 
             @Test
-            @DisplayName("고양이 장난감 상품을 응답한다. [200]")
+            @DisplayName("상품 목록을 응답한다. [200]")
             void it_response_products_and_http_status_200() throws Exception {
 
                 mockMvc.perform(get("/products"))
@@ -72,17 +72,17 @@ public class WebCatToyControllerTest {
     class Describe_save {
 
         @Nested
-        @DisplayName("고양이 장난감 등록에 필요한 데이터")
+        @DisplayName("상품 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
             @BeforeEach
             void setUp() {
-                CatToy catToy = new CatToy(1L, "aaa", 1000, "/images/test.jpg");
-                given(catToyService.saveCatToy(any(CatToySaveDto.class))).willReturn(catToy);
+                Product product = new Product(1L, "aaa", 1000, "/images/test.jpg");
+                given(productService.saveProduct(any(ProductSaveDto.class))).willReturn(product);
             }
 
             @Test
-            @DisplayName("고양이 장난감을 등록하고 리턴한다.")
+            @DisplayName("상품을 등록하고 응답한다. [200]")
             void it_save_and_return_catToy() throws Exception {
 
                 mockMvc.perform(post("/products")

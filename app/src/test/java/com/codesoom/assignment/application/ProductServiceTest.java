@@ -1,7 +1,7 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyRepository;
+import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,50 +20,50 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("CatToyService 클래스")
-class CatToyServiceTest {
+class ProductServiceTest {
 
     @InjectMocks
-    CatToyService catToyService;
+    ProductService productService;
 
     @Mock
-    CatToyRepository catToyRepository;
+    ProductRepository productRepository;
 
     @Nested
-    @DisplayName("getCatToys 메소드는")
-    class Describe_getCatToys {
+    @DisplayName("getProducts 메소드는")
+    class Describe_getProducts {
 
         @Nested
-        @DisplayName("주어진 고양이 장난감 수 만큼")
-        class Context_hasCatToys {
+        @DisplayName("주어진 상품 수 만큼")
+        class Context_hasProducts {
 
             final int givenCount = 10;
 
             @BeforeEach
             void setUp() {
-                Iterable<CatToy> catToys = LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(CatToy::new)
+                Iterable<Product> products = LongStream.rangeClosed(1, givenCount)
+                        .mapToObj(Product::new)
                         .collect(Collectors.toList());
 
-                given(catToyRepository.findAll()).willReturn(catToys);
+                given(productRepository.findAll()).willReturn(products);
             }
 
             @Test
             @DisplayName("고양이 장난감 목록을 리턴한다.")
-            void it_return_catToys() {
+            void it_return_products() {
 
-                List<CatToy> catToys = catToyService.getCatToys();
+                List<Product> products = productService.getProducts();
 
-                assertThat(catToys).hasSize(givenCount);
+                assertThat(products).hasSize(givenCount);
             }
         }
     }
 
     @Nested
-    @DisplayName("saveCatToy 메소드는")
-    class Describe_saveCatToy {
+    @DisplayName("saveProduct 메소드는")
+    class Describe_saveProduct {
 
         @Nested
-        @DisplayName("고양이 장난감 등록에 필요한 데이터가 주어진다면")
+        @DisplayName("상품 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
         }

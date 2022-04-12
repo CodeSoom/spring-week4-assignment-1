@@ -6,10 +6,10 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 /**
- * 고양이 장난감 엔티티
+ * 상품 엔티티
  */
 @Entity
-public class CatToy {
+public class Product {
 
     @Id
     @GeneratedValue
@@ -21,18 +21,18 @@ public class CatToy {
 
     private String imagePath;
 
-    public CatToy() {
+    public Product() {
     }
 
-    public CatToy(Long id) {
+    public Product(Long id) {
         this(id, null, null, null);
     }
 
-    public CatToy(String maker, Integer price, String imagePath) {
+    public Product(String maker, Integer price, String imagePath) {
         this(null, maker, price, imagePath);
     }
 
-    public CatToy(Long id, String maker, Integer price, String imagePath) {
+    public Product(Long id, String maker, Integer price, String imagePath) {
         this.id = id;
         this.maker = maker;
         this.price = price;
@@ -59,8 +59,8 @@ public class CatToy {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CatToy catToy = (CatToy) o;
-        return Objects.equals(id, catToy.id) && Objects.equals(maker, catToy.maker) && Objects.equals(price, catToy.price) && Objects.equals(imagePath, catToy.imagePath);
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(maker, product.maker) && Objects.equals(price, product.price) && Objects.equals(imagePath, product.imagePath);
     }
 
     @Override
