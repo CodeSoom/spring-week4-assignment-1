@@ -28,4 +28,8 @@ public class ProductQueryService {
         source.forEach(products::add);
         return products;
     }
+
+    public Product getProduct(Long productId) {
+        return null;
+    }
 }

@@ -88,6 +88,13 @@ public class WebProductControllerTest {
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
+            final Product product = new Product(productId, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+
+            @BeforeEach
+            void setUp() {
+                given(productQueryService.getProduct(productId)).willReturn(product);
+            }
+
             @Test
             @DisplayName("상품 정보를 응답한다. [200]")
             void it_response_product() throws Exception {

@@ -4,7 +4,6 @@ import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -81,6 +80,13 @@ public class ProductControllerTest {
         @Nested
         @DisplayName("주어진 아이디와 일치하는 상품이 있다면")
         class Context_existsProduct {
+
+            final Product product = new Product(productId, TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
+
+            @BeforeEach
+            void setUp() {
+                given(productQueryService.getProduct(productId)).willReturn(product);
+            }
 
             @Test
             @DisplayName("상품 데이터를 리턴한다.")
