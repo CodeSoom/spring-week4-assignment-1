@@ -18,6 +18,7 @@ import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,7 +80,7 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 Product product = new Product(1L, TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
-                given(productService.saveProduct(source)).willReturn(product);
+                given(productService.saveProduct(any(Product.class))).willReturn(product);
             }
 
             @Test

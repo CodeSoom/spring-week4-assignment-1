@@ -2,7 +2,6 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductSaveDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,8 +29,10 @@ public class ProductService {
         return products;
     }
 
-    public Product saveProduct(ProductSaveDto productSaveDto) {
-        Product product = productSaveDto.toEntity();
+    /**
+     * 상품을 저장하고 리턴합니다.
+     */
+    public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
 }

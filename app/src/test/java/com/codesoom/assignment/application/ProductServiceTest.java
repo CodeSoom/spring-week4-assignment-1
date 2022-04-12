@@ -2,7 +2,6 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductSaveDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -73,7 +72,7 @@ class ProductServiceTest {
         @DisplayName("상품 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
-            final ProductSaveDto source = new ProductSaveDto(TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
+            final Product source = new Product(TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
 
             @BeforeEach
             void setUp() {

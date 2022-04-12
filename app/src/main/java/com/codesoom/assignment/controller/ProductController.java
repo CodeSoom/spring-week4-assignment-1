@@ -39,6 +39,9 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Product save(ProductSaveDto productSaveDto) {
-        return productService.saveProduct(productSaveDto);
+
+        Product product = productSaveDto.toEntity();
+
+        return productService.saveProduct(product);
     }
 }

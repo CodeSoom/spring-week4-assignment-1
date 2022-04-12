@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductSaveDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -78,7 +77,7 @@ public class WebProductControllerTest {
             @BeforeEach
             void setUp() {
                 Product product = new Product(1L, "aaa", 1000, "/images/test.jpg");
-                given(productService.saveProduct(any(ProductSaveDto.class))).willReturn(product);
+                given(productService.saveProduct(any(Product.class))).willReturn(product);
             }
 
             @Test
