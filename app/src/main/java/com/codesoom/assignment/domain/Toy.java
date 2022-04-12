@@ -1,7 +1,12 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 
@@ -9,10 +14,11 @@ import java.math.BigDecimal;
 /**
  * 장난감 엔티티
  */
+@Getter
 @Entity
 public class Toy {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -30,55 +36,13 @@ public class Toy {
     protected Toy() {
     }
 
-    private Toy(Builder builder) {
-        this.name = builder.name;
-        this.maker = builder.maker;
-        this.price = builder.price;
-        this.image = builder.image;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getMaker() {
-        return maker;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public static class Builder {
-
-        private String name;
-        private String maker;
-        private BigDecimal price;
-        private String image;
-
-        public Builder(String name, String maker, BigDecimal price) {
-            this.name = name;
-            this.maker = maker;
-            this.price = price;
-        }
-
-        public Builder image(String image) {
-            this.image = image;
-            return this;
-        }
-
-        public Toy build() {
-            return new Toy(this);
-        }
-
+    @Builder
+    public Toy(Long id, String name, String maker, BigDecimal price, String image) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.image = image;
     }
 
 }

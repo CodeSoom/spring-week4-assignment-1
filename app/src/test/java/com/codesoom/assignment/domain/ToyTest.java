@@ -23,14 +23,15 @@ public class ToyTest {
     @DisplayName("Builder 패턴으로 장난감 엔티티를 생성할 수 있다.")
     @Test
     void createWithBuilderTest() {
-        assertThat(new Toy.Builder(TOY_NAME, TOY_MAKER, TOY_PRICE).image(TOY_IMG_URL)
-                        .build()).isNotNull();
+        assertThat(
+                Toy.builder().name(TOY_NAME).maker(TOY_MAKER).price(TOY_PRICE).image(TOY_IMG_URL).build()
+        ).isNotNull();
     }
 
     @DisplayName("getter는 각 필드의 값을 반환한다.")
     @Test
     void getterTest() {
-        Toy toy = new Toy.Builder(TOY_NAME, TOY_MAKER, TOY_PRICE).image(TOY_IMG_URL).build();
+        Toy toy = Toy.builder().name(TOY_NAME).maker(TOY_MAKER).price(TOY_PRICE).image(TOY_IMG_URL).build();
 
         assertThat(toy.getId()).isEqualTo(1L);
         assertThat(toy.getName()).isEqualTo(TOY_NAME);

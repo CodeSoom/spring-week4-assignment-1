@@ -27,7 +27,12 @@ public class ToyDto {
     }
 
     public Toy toEntity() {
-        return new Toy.Builder(this.name, this.maker, this.price).image(this.image).build();
+        return Toy.builder()
+                .name(name)
+                .maker(maker)
+                .price(price)
+                .image(image)
+                .build();
     }
 
 }
