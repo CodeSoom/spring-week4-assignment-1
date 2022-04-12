@@ -22,6 +22,18 @@ public class ProductSaveDto {
         this.imagePath = imagePath;
     }
 
+    public String getMaker() {
+        return maker;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public Product toEntity() {
         return new Product(maker, price, imagePath);
     }
