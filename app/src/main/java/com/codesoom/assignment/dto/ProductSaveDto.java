@@ -1,5 +1,7 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.Product;
+
 import java.beans.ConstructorProperties;
 
 /**
@@ -18,5 +20,9 @@ public class ProductSaveDto {
         this.maker = maker;
         this.price = price;
         this.imagePath = imagePath;
+    }
+
+    public Product toEntity() {
+        return new Product(maker, price, imagePath);
     }
 }

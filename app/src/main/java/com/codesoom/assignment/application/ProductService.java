@@ -31,6 +31,7 @@ public class ProductService {
     }
 
     public Product saveProduct(ProductSaveDto productSaveDto) {
-        return null;
+        Product product = productSaveDto.toEntity();
+        return productRepository.save(product);
     }
 }
