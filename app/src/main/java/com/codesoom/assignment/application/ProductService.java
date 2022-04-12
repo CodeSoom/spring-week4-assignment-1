@@ -1,20 +1,45 @@
 package com.codesoom.assignment.application;
 
-
+import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-public interface ProductService {
-    List<Product> getProductList();
+@Service
+@Transactional
+public class ProductServiceImpl implements ProductService {
+    private ProductRepository productRepository;
 
-    Product getProduct(Long id);
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
-    Product createProduct(ProductDto productDto);
+    @Override
+    public List<Product> getProductList() {
+        return productRepository.findAll();
+    }
 
-    Product updateProduct(Long id, ProductDto productDto);
+    @Override
+    public Product getProduct(Long id) {
+        return null;
+    }
 
-    void deleteProduct(Long id);
+    @Override
+    public Product createProduct(ProductDto productDto) {
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(Long id, ProductDto productDto) {
+        return null;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+
+    }
 }
-
