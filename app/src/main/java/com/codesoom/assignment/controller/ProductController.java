@@ -46,7 +46,7 @@ public class ProductController {
     @PostMapping
     public Product save(@RequestBody ProductSaveDto productSaveDto) {
 
-        final Product product = productSaveDto.toEntity();
+        final Product product = productSaveDto.toProduct();
 
         return productCommandService.saveProduct(product);
     }

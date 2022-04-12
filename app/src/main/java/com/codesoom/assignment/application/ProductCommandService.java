@@ -5,7 +5,7 @@ import com.codesoom.assignment.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 
 /**
- * 상품 변경에 대한 작업을 관리합니다.
+ * 상품 정보의 변경을 책임집니다.
  */
 @Service
 public class ProductCommandService {

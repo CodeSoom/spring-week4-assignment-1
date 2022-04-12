@@ -32,6 +32,7 @@ public class ProductQueryService {
 
     public Product getProduct(final Long productId) {
 
-        return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+        return productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
     }
 }

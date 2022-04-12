@@ -34,7 +34,7 @@ public class ProductSaveDto {
         return imagePath;
     }
 
-    public Product toEntity() {
+    public Product toProduct() {
         return new Product(maker, price, imagePath);
     }
 }
