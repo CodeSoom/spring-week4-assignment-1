@@ -38,5 +38,15 @@ public class Product {
     @Column
     public String imageUrl;
 
-
+    @Override
+    public String toString() {
+        return String.format(
+                "{ id = %s name = %s, maker = %s, price = %s, imageUrl = %s}",
+                id,
+                name,
+                maker,
+                price,
+                imageUrl
+        );
+    }
 }
