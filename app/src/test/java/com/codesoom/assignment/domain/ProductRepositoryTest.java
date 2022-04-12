@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ProductRepository 에서")
 class ProductRepositoryTest {
@@ -29,8 +30,8 @@ class ProductRepositoryTest {
     class Describe_read_of_product {
 
         @Nested
-        @DisplayName("정상적으로 등록되었을 경우")
-        class Context_with_create {
+        @DisplayName("상품이 존재할 경우")
+        class Context_with_product {
 
             @BeforeEach
             void setUp() {
@@ -55,6 +56,32 @@ class ProductRepositoryTest {
 
                 assertThat(product).isNotNull();
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("상품이 존재하지 않을 경우")
+    class Context_without_product {
+        final long createProductSize = 3L;
+
+        @BeforeEach
+        void setUp() {
+            for (long i = 0; i < createProductSize; i++) {
+                Product product = new Product();
+                product.setName(PRODUCT_NAME);
+                product.setMaker(PRODUCT_MAKER);
+                product.setPrice(PRODUCT_PRICE);
+                product.setImageUrl(PRODUCT_IMAGE_URL);
+                productRepository.save(product);
+            }
+            productRepository.deleteAll();
+        }
+
+        @Test
+        @DisplayName("ProductNotFoundException을 던진다")
+        void it_throw_productNotFoundException() {
+            assertThatThrownBy(() -> productRepository.findById(1L))
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 }
