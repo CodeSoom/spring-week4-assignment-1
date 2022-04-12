@@ -49,4 +49,8 @@ public class ProductController {
 
         return productCommandService.saveProduct(product);
     }
+
+    public Product detail(Long productId) {
+        return null;
+    }
 }

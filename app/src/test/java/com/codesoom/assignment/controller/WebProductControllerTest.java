@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -78,6 +77,31 @@ public class WebProductControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("GET - /products/{productId} 요청시")
+    class Describe_detail {
+
+        final Long productId = 1L;
+
+        @Nested
+        @DisplayName("{productId} 와 일치하는 상품이 있다면")
+        class Context_existsProduct {
+
+            @Test
+            @DisplayName("상품 정보를 응답한다. [200]")
+            void it_response_product() throws Exception {
+                mockMvc.perform(get("/products/{productId}", productId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("maker").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imagePath").exists());
+            }
+        }
+    }
+
 
     @Nested
     @DisplayName("POST - /products 요청시")

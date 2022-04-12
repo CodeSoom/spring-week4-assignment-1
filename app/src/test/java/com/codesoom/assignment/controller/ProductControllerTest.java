@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -67,6 +68,27 @@ public class ProductControllerTest {
             void it_return_toys() {
                 List<Product> products = productController.list();
                 assertThat(products).hasSize(givenCount);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("detail 메소드는")
+    class Describe_detail {
+
+        final Long productId = 1L;
+
+        @Nested
+        @DisplayName("주어진 아이디와 일치하는 상품이 있다면")
+        class Context_existsProduct {
+
+            @Test
+            @DisplayName("상품 데이터를 리턴한다.")
+            void it_return_product() {
+
+                Product product = productController.detail(productId);
+
+                assertThat(product.getId()).isEqualTo(productId);
             }
         }
     }
