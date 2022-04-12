@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 
 import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.ToyDto;
 import com.codesoom.assignment.domain.ToyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ToyCreateServiceTest {
@@ -25,11 +29,12 @@ public class ToyCreateServiceTest {
     @DisplayName("장난감을 성공적으로 등록한다.")
     @Test
     void createToyTest() {
-        final ToyDto toyDto = new ToyDto(name, maker, price, image);
+        final ToyDto toyDto
+                = new ToyDto("name", "maker", BigDecimal.valueOf(2000), "image");
 
         service.create(toyDto);
 
-        verify(repository.save(any(Toy.class)));
+        verify(repository).save(any(Toy.class));
     }
 
 }
