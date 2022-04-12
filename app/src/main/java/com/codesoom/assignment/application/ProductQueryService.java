@@ -30,7 +30,7 @@ public class ProductQueryService {
         return products;
     }
 
-    public Product getProduct(Long productId) {
+    public Product getProduct(final Long productId) {
 
         return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
     }

@@ -19,7 +19,7 @@ public class ProductCommandService {
     /**
      * 상품을 저장하고 리턴합니다.
      */
-    public Product saveProduct(Product product) {
+    public Product saveProduct(final Product product) {
         return productRepository.save(product);
     }
 }

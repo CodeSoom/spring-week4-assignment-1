@@ -20,9 +20,9 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("ProductCommandService 클래스")
 class ProductCommandServiceTest {
 
-    private static final String TEST_MAKER = "MAKER";
-    private static final Integer TEST_PRICE = 1000;
-    private static final String TEST_IMAGE_PATH = "/image/test.jpg";
+    private static final String TEST_PRODUCT_MAKER = "MAKER";
+    private static final Integer TEST_PRODUCT_PRICE = 1000;
+    private static final String TEST_PRODUCT_IMAGE_PATH = "/image/test.jpg";
 
     @InjectMocks
     ProductCommandService productCommandService;
@@ -38,12 +38,12 @@ class ProductCommandServiceTest {
         @DisplayName("상품 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
-            final Product source = new Product(TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
+            final Product source = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @BeforeEach
             void setUp() {
 
-                Product product = new Product(1L, TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
+                Product product = new Product(1L, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
                 given(productRepository.save(any(Product.class))).willReturn(product);
             }
@@ -56,12 +56,11 @@ class ProductCommandServiceTest {
 
                 assertAll(
                         () -> assertThat(product.getId()).isNotNull(),
-                        () -> assertThat(product.getMaker()).isEqualTo(TEST_MAKER),
-                        () -> assertThat(product.getPrice()).isEqualTo(TEST_PRICE),
-                        () -> assertThat(product.getImagePath()).isEqualTo(TEST_IMAGE_PATH)
+                        () -> assertThat(product.getMaker()).isEqualTo(TEST_PRODUCT_MAKER),
+                        () -> assertThat(product.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
+                        () -> assertThat(product.getImagePath()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
                 );
             }
         }
     }
-
 }

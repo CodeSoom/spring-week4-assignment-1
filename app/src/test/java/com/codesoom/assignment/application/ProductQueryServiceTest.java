@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ProductQueryServiceTest 클래스")
+@DisplayName("ProductQueryService 클래스")
 class ProductQueryServiceTest {
 
     @InjectMocks
