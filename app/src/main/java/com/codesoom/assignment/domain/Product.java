@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,26 +18,65 @@ import javax.persistence.Id;
 @Entity
 public class Product {
 
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @Setter
     @Column
-    public String name;
+    private String name;
 
     @Setter
     @Column
-    public String maker;
+    private String maker;
 
     @Setter
     @Column
-    public Integer price;
+    private Integer price;
 
     @Setter
     @Column
-    public String imageUrl;
+    private String imageUrl;
+
+    protected Product() {};
+
+    private Product(Builder builder) {
+        name = builder.name;
+        maker = builder.maker;
+        price = builder.price;
+        imageUrl = builder.imageUrl;
+    }
+
+    public static class Builder {
+        // Required parameters(필수 인자)
+        private final int price;
+        private final String name;
+
+        // Optional parameters - 선택적 인자는 기본값으로 초기화
+        private String maker = "";
+        private String imageUrl = "";
+
+        public Builder(int price, String name) {
+            this.price = price;
+            this.name = name;
+        }
+
+        public Builder maker(String val) {
+            maker = val;
+            return this;
+        }
+
+        public Builder imageUrl(String val) {
+            imageUrl = val;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(this);
+        }
+
+    }
+
 
     @Override
     public String toString() {

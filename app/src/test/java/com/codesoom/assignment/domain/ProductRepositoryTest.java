@@ -36,11 +36,11 @@ class ProductRepositoryTest {
      */
     private void createProduct(long createProuctSize) {
         for (long i = 0; i < createProuctSize; i++) {
-            Product product = new Product();
-            product.setName(PRODUCT_NAME);
-            product.setMaker(PRODUCT_MAKER);
-            product.setPrice(PRODUCT_PRICE);
-            product.setImageUrl(PRODUCT_IMAGE_URL);
+            Product product = new Product
+                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                    .maker(PRODUCT_MAKER)
+                    .imageUrl(PRODUCT_IMAGE_URL)
+                    .build();
             productRepository.save(product);
         }
     }
@@ -99,7 +99,7 @@ class ProductRepositoryTest {
         @DisplayName("Id 와 동일한 상품이 존재하지 않을 경우")
         class Context_without_product {
             final long createProductSize = 3L;
-            final long productId = 2L;
+            final long productId = 1L;
 
             @BeforeEach
             void setUp() {
@@ -148,11 +148,11 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                Product product = new Product();
-                product.setName(PRODUCT_NAME);
-                product.setMaker(PRODUCT_MAKER);
-                product.setPrice(PRODUCT_PRICE);
-                product.setImageUrl(PRODUCT_IMAGE_URL);
+                Product product = new Product
+                        .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                        .maker(PRODUCT_MAKER)
+                        .imageUrl(PRODUCT_IMAGE_URL)
+                        .build();
                 createdProduct = productRepository.save(product);
             }
 
@@ -166,7 +166,7 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("상품을 수정하는 경우")
-        class Context_update_of_product {
+        class Context_with_update_of_product {
             final long createProductSize = 2L;
             final long productId = 1L;
             private Product updatedProduct;
@@ -187,6 +187,33 @@ class ProductRepositoryTest {
                 assertThat(updatedProduct).isNotNull();
                 assertThat(updatedProduct.getId()).isEqualTo(productId);
                 assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메소드를 호출할 때")
+    class Describe_delete_of_product {
+
+        @Nested
+        @DisplayName("삭제할 상품이 있다면")
+        class Context_with_delete_of_product {
+            final long createProductSize = 3L;
+            final long productId = 2L;
+
+            @BeforeEach
+            void setUp() {
+                createProduct(createProductSize);
+            }
+
+            @Test
+            @DisplayName("삭제를 진행한다")
+            void it_delete_product() {
+                Optional<Product> product = productRepository.findById(productId);
+                product.ifPresent(value -> productRepository.delete(value));
+
+                // TODO: 삭제 후 검증 로직 필요
+
             }
         }
     }
