@@ -6,17 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
-@ExtendWith(MockitoExtension.class)
+@DataJpaTest
 @DisplayName("ProductCommandService 클래스")
 class ProductCommandServiceTest {
 
@@ -24,11 +20,16 @@ class ProductCommandServiceTest {
     private static final Integer TEST_PRODUCT_PRICE = 1000;
     private static final String TEST_PRODUCT_IMAGE_PATH = "/image/test.jpg";
 
-    @InjectMocks
     ProductCommandService productCommandService;
 
-    @Mock
+    @Autowired
     ProductRepository productRepository;
+
+    @BeforeEach
+    void setUp() {
+        productCommandService = new ProductCommandService(productRepository);
+        productRepository.deleteAll();
+    }
 
     @Nested
     @DisplayName("saveProduct 메소드는")
@@ -39,14 +40,6 @@ class ProductCommandServiceTest {
         class Context_valid {
 
             final Product source = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-
-            @BeforeEach
-            void setUp() {
-
-                Product product = new Product(1L, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-
-                given(productRepository.save(any(Product.class))).willReturn(product);
-            }
 
             @Test
             @DisplayName("상품을 등록하고 리턴한다.")
