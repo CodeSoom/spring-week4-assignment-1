@@ -55,7 +55,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("고양이 장난감 목록을 리턴한다.")
+            @DisplayName("상품 목록을 리턴한다.")
             void it_return_products() {
 
                 List<Product> products = productService.getProducts();
