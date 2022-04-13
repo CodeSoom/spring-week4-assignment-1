@@ -1,5 +1,8 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ProductDto;
+import org.springframework.util.StringUtils;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -87,5 +90,15 @@ public class Product {
         public Product build() {
             return new Product(this);
         }
+    }
+
+    /**
+     * ProductDto의 각 필드 값이 존재한다면 ProductDto의 값으로 Product의 필드를 수정한다.
+     * */
+    public void modify(ProductDto productDto) {
+        if(!StringUtils.isEmpty(productDto.getName())) { this.name = productDto.getName();}
+        if(!StringUtils.isEmpty(productDto.getMaker())) { this.maker = productDto.getMaker();}
+        if(productDto.getPrice() != null) { this.price = productDto.getPrice();}
+        if(!StringUtils.isEmpty(productDto.getImageUrl())) { this.imageUrl = productDto.getImageUrl();}
     }
 }
