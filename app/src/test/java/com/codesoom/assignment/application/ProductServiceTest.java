@@ -173,4 +173,10 @@ class ProductServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("updateProduct 메소드에서")
+    class Describe_of_update_product {
+
+    }
+
 }
