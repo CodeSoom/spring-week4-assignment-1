@@ -200,6 +200,17 @@ class ProductControllerTest {
 
                 }
             }
+
+            @Nested
+            @DisplayName("id 와 일치하는 물품이 존재하지 않을 때")
+            class Context_not_exist_matched_product {
+
+                @Test
+                @DisplayName("예외를 발생시킨다.")
+                void it_throws_not_found_exception() {
+
+                }
+            }
         }
 
         @Nested
