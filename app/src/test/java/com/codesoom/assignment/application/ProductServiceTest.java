@@ -12,15 +12,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.will;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@DisplayName("ProductServiceImpl 에서")
 @ExtendWith(MockitoExtension.class)
+@DataJpaTest
+@DisplayName("ProductServiceImpl 에서")
 class ProductServiceTest {
     private static final String PRODUCT_NAME = "상품1";
     private static final String PRODUCT_MAKER = "메이커1";
@@ -29,27 +36,11 @@ class ProductServiceTest {
 
     private static final String UPDATE_PRODUCT_NAME = "상품1000";
 
-    @InjectMocks
-    private ProductService productService;
-
     @Mock
     private ProductRepository productRepository;
 
-    /**
-     * 여러개의 Product 를 생성해 등록합니다.
-     *
-     * @param createProuctSize 생성할 Product의 갯수
-     */
-    private void createProduct(long createProuctSize) {
-        for (long i = 0; i < createProuctSize; i++) {
-            ProductDto productDto = new ProductDto
-                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                    .maker(PRODUCT_MAKER)
-                    .imageUrl(PRODUCT_IMAGE_URL)
-                    .build();
-            productService.createProduct(productDto);
-        }
-    }
+    @InjectMocks
+    private ProductService productService;
 
     @Nested
     @DisplayName("모든 Product 객체를 불러올 때")
@@ -58,17 +49,11 @@ class ProductServiceTest {
         @Nested
         @DisplayName("Product 객체가 없을 경우")
         class Context_without_product {
-            final int createProductSize = 1;
+            private final List<Product> products = new ArrayList<>();
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
-                productService.deleteAll();
-            }
-
-            @AfterEach
-            void tearDown() {
-                productService.deleteAll();
+                given(productRepository.findAll()).willReturn(products);
             }
 
             @Test
@@ -84,23 +69,30 @@ class ProductServiceTest {
         @Nested
         @DisplayName("Product 객체가 있을 경우")
         class Context_with_product {
-            final int createProductSize = 3;
+            final int createProductsize = 3;
+            private final List<Product> products = new ArrayList<>();
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
-            }
-
-            @AfterEach
-            void tearDown() {
-                productService.deleteAll();
+                for (int i = 0; i < createProductsize; i++) {
+                    ProductDto productDto = new ProductDto
+                            .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                            .maker(PRODUCT_MAKER)
+                            .imageUrl(PRODUCT_IMAGE_URL)
+                            .build();
+                    products.add(productDto.toEntity());
+                }
+                given(productRepository.findAll()).willReturn(products);
             }
 
             @Test
             @DisplayName("Product 객체가 포함된 배열을 리턴한다")
             void it_returns_list_of_product() {
                 List<Product> products = productService.getProductList();
-                assertThat(products).hasSize((int) createProductSize);
+
+                verify(productRepository, times(1)).findAll();
+                assertThat(products).isNotEmpty();
+                assertThat(products).hasSize(createProductsize);
             }
         }
     }

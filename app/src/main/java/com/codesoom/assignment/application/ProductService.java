@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductService {
-    private final ProductRepository productRepository;
+    private ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -35,7 +35,6 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-
     }
 
     public void deleteAll() {
