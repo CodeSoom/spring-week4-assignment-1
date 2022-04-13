@@ -15,12 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("ProductRepositoryTest 는")
 class ProductRepositoryTest {
 
-    private final ProductRepository productRepository;
-
     @Autowired
-    public ProductRepositoryTest(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private ProductRepository productRepository;
 
     @Nested
     @DisplayName("findAll() 매소드는")

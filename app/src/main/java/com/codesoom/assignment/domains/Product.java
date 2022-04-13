@@ -29,16 +29,11 @@ public class Product {
 
     public Product() { }
 
-    public Product(Long productId, Category category, String name, String maker, Integer price, String image) {
-        this.productId = productId;
+    public Product(Category category, String name, String maker, Integer price, String image) {
         this.category = category;
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.image = image;
-    }
-
-    public Long getProductId() {
-        return productId;
     }
 }
