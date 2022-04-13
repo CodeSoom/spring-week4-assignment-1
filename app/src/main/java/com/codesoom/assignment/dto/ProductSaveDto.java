@@ -7,17 +7,25 @@ import java.beans.ConstructorProperties;
  */
 public class ProductSaveDto implements ProductSaveRequest {
 
+    private final String name;
+
     private final String maker;
 
     private final Integer price;
 
     private final String imagePath;
 
-    @ConstructorProperties({"maker", "price", "imagePath"})
-    public ProductSaveDto(String maker, Integer price, String imagePath) {
+    @ConstructorProperties({"name", "maker", "price", "imagePath"})
+    public ProductSaveDto(String name, String maker, Integer price, String imagePath) {
+        this.name = name;
         this.maker = maker;
         this.price = price;
         this.imagePath = imagePath;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

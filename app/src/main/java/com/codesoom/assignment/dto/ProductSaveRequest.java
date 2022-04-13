@@ -7,6 +7,8 @@ import com.codesoom.assignment.domain.Product;
  */
 public interface ProductSaveRequest {
 
+    String getName();
+
     String getMaker();
 
     Integer getPrice();
@@ -17,6 +19,6 @@ public interface ProductSaveRequest {
      * 상품 인스턴스로 변환해 리턴합니다.
      */
     default Product toProduct() {
-        return new Product(getMaker(), getPrice(), getImagePath());
+        return new Product(getName(), getMaker(), getPrice(), getImagePath());
     }
 }

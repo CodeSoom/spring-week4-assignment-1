@@ -12,6 +12,8 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    private String name;
+
     private String maker;
 
     private Integer price;
@@ -21,16 +23,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id) {
-        this(id, null, null, null);
-    }
-
-    public Product(String maker, Integer price, String imagePath) {
-        this(null, maker, price, imagePath);
-    }
-
-    public Product(Long id, String maker, Integer price, String imagePath) {
-        this.id = id;
+    public Product(String name, String maker, Integer price, String imagePath) {
+        this.name = name;
         this.maker = maker;
         this.price = price;
         this.imagePath = imagePath;
@@ -38,6 +32,10 @@ public class Product {
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getMaker() {
@@ -71,6 +69,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return String.format("CatToy{id=%s, maker=%s, price=%d, imagePath=%s}", id, maker, price, imagePath);
+        return String.format(
+                "CatToy{id=%s, name=%s, maker=%s, price=%d, imagePath=%s}", id, name, maker, price, imagePath);
     }
 }

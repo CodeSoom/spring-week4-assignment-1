@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("ProductController 클래스")
 public class ProductControllerTest {
 
+    private static final String TEST_PRODUCT_NAME = "NAME";
     private static final String TEST_PRODUCT_MAKER = "MAKER";
     private static final Integer TEST_PRODUCT_PRICE = 1000;
     private static final String TEST_PRODUCT_IMAGE_PATH = "/image/test.jpg";
@@ -82,7 +83,8 @@ public class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                Product product = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+                final Product product =
+                        new Product(TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
                 productRepository.save(product);
                 productId = product.getId();
             }
@@ -120,7 +122,8 @@ public class ProductControllerTest {
         @DisplayName("상품 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
-            final ProductSaveDto source = new ProductSaveDto(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+            final ProductSaveDto source =
+                    new ProductSaveDto(TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @Test
             @DisplayName("상품을 생성하고 리턴한다.")

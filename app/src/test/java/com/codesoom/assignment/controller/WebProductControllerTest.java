@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("상품에 대한 HTTP 요청")
 public class WebProductControllerTest {
 
+    private static final String TEST_PRODUCT_NAME = "NAME";
     private static final String TEST_PRODUCT_MAKER = "MAKER";
     private static final Integer TEST_PRODUCT_PRICE = 10000;
     private static final String TEST_PRODUCT_IMAGE_PATH = "/images/test.jpg";
@@ -86,7 +87,9 @@ public class WebProductControllerTest {
 
             Long productId;
 
-            final Product product = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+            final Product product = new Product(
+                    TEST_PRODUCT_NAME,TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH
+            );
 
             @BeforeEach
             void setUp() {
@@ -131,7 +134,8 @@ public class WebProductControllerTest {
         @DisplayName("상품 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
-            final ProductSaveDto source = new ProductSaveDto(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+            final ProductSaveDto source = new ProductSaveDto(
+                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @Test
             @DisplayName("상품을 등록하고 응답한다. [200]")
@@ -142,6 +146,7 @@ public class WebProductControllerTest {
                                 .content(objectMapper.writeValueAsString(source)))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").value(TEST_PRODUCT_NAME))
                         .andExpect(jsonPath("maker").value(TEST_PRODUCT_MAKER))
                         .andExpect(jsonPath("price").value(TEST_PRODUCT_PRICE))
                         .andExpect(jsonPath("imagePath").value(TEST_PRODUCT_IMAGE_PATH));

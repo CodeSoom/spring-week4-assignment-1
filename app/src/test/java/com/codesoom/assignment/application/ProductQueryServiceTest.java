@@ -71,7 +71,7 @@ class ProductQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = new Product("MAKER", 1000, "/images/test.jpg");
+                Product product = new Product("NAME", "MAKER", 1000, "/images/test.jpg");
                 productRepository.save(product);
                 productId = product.getId();
             }

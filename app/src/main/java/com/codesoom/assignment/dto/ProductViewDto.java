@@ -27,6 +27,10 @@ public class ProductViewDto {
         return product.getId();
     }
 
+    public String getName() {
+        return product.getName();
+    }
+
     public String getMaker() {
         return product.getMaker();
     }

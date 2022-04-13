@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("ProductCommandService 클래스")
 class ProductCommandServiceTest {
 
+    private static final String TEST_PRODUCT_NAME = "NAME";
     private static final String TEST_PRODUCT_MAKER = "MAKER";
     private static final Integer TEST_PRODUCT_PRICE = 1000;
     private static final String TEST_PRODUCT_IMAGE_PATH = "/image/test.jpg";
@@ -43,6 +44,12 @@ class ProductCommandServiceTest {
         class Context_valid {
 
             final ProductSaveRequest saveRequest = new ProductSaveRequest() {
+
+                @Override
+                public String getName() {
+                    return TEST_PRODUCT_NAME;
+                }
+
                 @Override
                 public String getMaker() {
                     return TEST_PRODUCT_MAKER;
@@ -67,6 +74,7 @@ class ProductCommandServiceTest {
 
                 assertAll(
                         () -> assertThat(product.getId()).isNotNull(),
+                        () -> assertThat(product.getName()).isEqualTo(TEST_PRODUCT_NAME),
                         () -> assertThat(product.getMaker()).isEqualTo(TEST_PRODUCT_MAKER),
                         () -> assertThat(product.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
                         () -> assertThat(product.getImagePath()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
