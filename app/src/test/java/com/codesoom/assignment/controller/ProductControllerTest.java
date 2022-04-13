@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductSaveDto;
+import com.codesoom.assignment.dto.ProductViewDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -89,9 +90,9 @@ public class ProductControllerTest {
             @DisplayName("상품 데이터를 리턴한다.")
             void it_return_product() {
 
-                Product product = productController.detail(productId);
+                ProductViewDto productViewDto = productController.detail(productId);
 
-                assertThat(product.getId()).isEqualTo(productId);
+                assertThat(productViewDto.getId()).isEqualTo(productId);
             }
         }
 
@@ -124,13 +125,13 @@ public class ProductControllerTest {
             @DisplayName("상품을 생성하고 리턴한다.")
             void it_save_and_return_product() {
 
-                Product product = productController.save(source);
+                ProductViewDto productViewDto = productController.save(source);
 
                 assertAll(
-                        () -> assertThat(product.getId()).isNotNull(),
-                        () -> assertThat(product.getMaker()).isEqualTo(TEST_PRODUCT_MAKER),
-                        () -> assertThat(product.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
-                        () -> assertThat(product.getImagePath()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
+                        () -> assertThat(productViewDto.getId()).isNotNull(),
+                        () -> assertThat(productViewDto.getMaker()).isEqualTo(TEST_PRODUCT_MAKER),
+                        () -> assertThat(productViewDto.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
+                        () -> assertThat(productViewDto.getImagePath()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
                 );
             }
         }

@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
+import com.codesoom.assignment.dto.ProductViewDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,21 +45,23 @@ public class ProductController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Product save(@RequestBody ProductSaveDto productSaveDto) {
+    public ProductViewDto save(@RequestBody ProductSaveDto productSaveDto) {
 
         final Product product = productSaveDto.toProduct();
 
-        return productCommandService.saveProduct(product);
+        productCommandService.saveProduct(product);
+
+        return ProductViewDto.from(product);
     }
 
     /**
      * 상품 상세 정보를 리턴합니다.
      */
     @GetMapping("/{productId}")
-    public Product detail(@PathVariable Long productId) {
+    public ProductViewDto detail(@PathVariable Long productId) {
 
         final Product product = productQueryService.getProduct(productId);
 
-        return product;
+        return ProductViewDto.from(product);
     }
 }
