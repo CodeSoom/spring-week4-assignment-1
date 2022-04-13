@@ -43,7 +43,7 @@ class ProductServiceTest {
     private ProductService productService;
 
     @Nested
-    @DisplayName("모든 Product 객체를 불러올 때")
+    @DisplayName("getProductList 메소드에서")
     class Describe_of_readAll_products {
 
         @Nested
@@ -95,5 +95,11 @@ class ProductServiceTest {
                 assertThat(products).hasSize(createProductsize);
             }
         }
+    }
+
+    @Nested
+    @DisplayName("getProduct 메소드에서")
+    class Describe_of_read_product {
+
     }
 }
