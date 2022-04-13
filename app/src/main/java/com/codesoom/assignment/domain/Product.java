@@ -1,6 +1,9 @@
 package com.codesoom.assignment.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.math.BigDecimal;
 
 @Entity
