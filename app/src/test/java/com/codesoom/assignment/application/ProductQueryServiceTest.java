@@ -63,11 +63,11 @@ class ProductQueryServiceTest {
     @DisplayName("getProduct 메소드는")
     class Describe_getProduct {
 
-        Long productId;
-
         @Nested
         @DisplayName("주어진 아이디와 일치하는 상품이 있다면")
         class Context_existsProduct {
+
+            Long productId;
 
             @BeforeEach
             void setUp() {

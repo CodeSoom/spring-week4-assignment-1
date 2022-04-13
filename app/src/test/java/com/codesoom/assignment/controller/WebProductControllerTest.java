@@ -80,11 +80,11 @@ public class WebProductControllerTest {
     @DisplayName("GET - /products/{productId} 요청시")
     class Describe_detail {
 
-        Long productId;
-
         @Nested
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
+            
+            Long productId;
 
             final Product product = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
