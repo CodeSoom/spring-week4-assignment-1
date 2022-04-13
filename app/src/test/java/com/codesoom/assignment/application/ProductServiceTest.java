@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @SpringBootTest
@@ -100,11 +102,11 @@ class ProductServiceTest {
     @Nested
     @DisplayName("getProduct 메소드에서")
     class Describe_of_read_product {
+        final int createProductSize = 3;
 
         @Nested
         @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
         class Context_with_valid_id {
-            final int createProductSize = 3;
             final long productId = 2;
 
             @BeforeEach
@@ -121,5 +123,24 @@ class ProductServiceTest {
                 assertThat(product.getId()).isEqualTo(productId);
             }
         }
+
+        @Nested
+        @DisplayName("찾는 Id와 동일한 Product가 존재하지 않을 경우")
+        class Context_with_invalid_id {
+            final long productId = 2;
+
+            @BeforeEach
+            void setUp() {
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productService.getProduct(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
+
 }
