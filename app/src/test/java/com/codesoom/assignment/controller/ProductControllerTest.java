@@ -135,7 +135,7 @@ public class ProductControllerTest {
                         () -> assertThat(productViewDto.getId()).isNotNull(),
                         () -> assertThat(productViewDto.getMaker()).isEqualTo(TEST_PRODUCT_MAKER),
                         () -> assertThat(productViewDto.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
-                        () -> assertThat(productViewDto.getImagePath()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
+                        () -> assertThat(productViewDto.getImageUrl()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
                 );
             }
         }

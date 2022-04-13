@@ -39,7 +39,7 @@ public class ProductViewDto {
         return product.getPrice();
     }
 
-    public String getImagePath() {
+    public String getImageUrl() {
         return product.getImagePath();
     }
 }

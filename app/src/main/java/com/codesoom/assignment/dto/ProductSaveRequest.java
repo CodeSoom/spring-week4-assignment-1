@@ -13,12 +13,12 @@ public interface ProductSaveRequest {
 
     Integer getPrice();
 
-    String getImagePath();
+    String getImageUrl();
 
     /**
      * 상품 인스턴스로 변환해 리턴합니다.
      */
     default Product toProduct() {
-        return new Product(getName(), getMaker(), getPrice(), getImagePath());
+        return new Product(getName(), getMaker(), getPrice(), getImageUrl());
     }
 }

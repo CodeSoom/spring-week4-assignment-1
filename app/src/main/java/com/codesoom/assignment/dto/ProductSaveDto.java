@@ -13,14 +13,14 @@ public class ProductSaveDto implements ProductSaveRequest {
 
     private final Integer price;
 
-    private final String imagePath;
+    private final String imageUrl;
 
-    @ConstructorProperties({"name", "maker", "price", "imagePath"})
-    public ProductSaveDto(String name, String maker, Integer price, String imagePath) {
+    @ConstructorProperties({"name", "maker", "price", "imageUrl"})
+    public ProductSaveDto(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imagePath = imagePath;
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ProductSaveDto implements ProductSaveRequest {
     }
 
     @Override
-    public String getImagePath() {
-        return imagePath;
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

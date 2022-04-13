@@ -61,7 +61,7 @@ class ProductCommandServiceTest {
                 }
 
                 @Override
-                public String getImagePath() {
+                public String getImageUrl() {
                     return TEST_PRODUCT_IMAGE_PATH;
                 }
             };

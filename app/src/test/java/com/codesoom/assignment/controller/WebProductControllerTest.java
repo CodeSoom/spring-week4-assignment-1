@@ -106,7 +106,7 @@ public class WebProductControllerTest {
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("maker").exists())
                         .andExpect(jsonPath("price").exists())
-                        .andExpect(jsonPath("imagePath").exists());
+                        .andExpect(jsonPath("imageUrl").exists());
             }
         }
 
@@ -149,7 +149,7 @@ public class WebProductControllerTest {
                         .andExpect(jsonPath("name").value(TEST_PRODUCT_NAME))
                         .andExpect(jsonPath("maker").value(TEST_PRODUCT_MAKER))
                         .andExpect(jsonPath("price").value(TEST_PRODUCT_PRICE))
-                        .andExpect(jsonPath("imagePath").value(TEST_PRODUCT_IMAGE_PATH));
+                        .andExpect(jsonPath("imageUrl").value(TEST_PRODUCT_IMAGE_PATH));
             }
         }
     }
