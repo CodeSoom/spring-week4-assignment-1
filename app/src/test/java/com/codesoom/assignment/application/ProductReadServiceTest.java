@@ -2,73 +2,73 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 
-@ExtendWith(MockitoExtension.class)
-public class ProductReadServiceTest {
+@DisplayName("ProductReadServiceImpl 클래스")
+public class ProductReadServiceTest extends ServiceTest {
 
-    @InjectMocks
     private ProductReadServiceImpl service;
 
-    @Mock
+    @Autowired
     private ProductRepository repository;
 
-    private static final Long EXIST_ID = 1L;
-    private static final Long NOT_EXIST_ID = 100L;
-
-    private static final Product SAVED_PRODUCT_1
-            = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
-    private static final Product SAVED_PRODUCT_2
-            = Product.builder().name("곰돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
-
-    private static final List<Product> PRODUCTS = List.of(SAVED_PRODUCT_1, SAVED_PRODUCT_2);
-
-    @DisplayName("findAll은 모든 장난감을 반환한다.")
-    @Test
-    void findAllTest() {
-        given(repository.findAll()).willReturn(PRODUCTS);
-
-        List<Product> products = service.findAll();
-
-        verify(repository).findAll();
-        assertThat(products).isNotEmpty();
-        assertThat(products).hasSize(2);
+    @BeforeEach
+    void setup() {
+        this.service = new ProductReadServiceImpl(repository);
     }
 
-    @DisplayName("findById는 id에 해당하는 장난감을 반환한다.")
-    @Test
-    void findByIdTest() {
-        given(repository.findById(eq(EXIST_ID))).willReturn(Optional.of(SAVED_PRODUCT_1));
+    @DisplayName("findById 메서드는")
+    @Nested
+    class Describe_find_by_id {
 
-        Product product = service.findById(EXIST_ID);
+        private final Product SAVED_PRODUCT = Product.builder()
+                .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
+                .build();
 
-        assertThat(product).isNotNull();
-        assertThat(product.getName()).isEqualTo(SAVED_PRODUCT_1.getName());
-    }
+        @BeforeEach
+        void setup() {
+            repository.save(SAVED_PRODUCT);
+        }
 
-    @DisplayName("findById는 존재하지 않는 id로 조회할 경우 예외를 던진다.")
-    @Test
-    void findByNotExistIdTest() {
-        given(repository.findById(eq(NOT_EXIST_ID))).willReturn(Optional.empty());
+        @AfterEach
+        void cleanup() {
+            repository.deleteAll();
+        }
 
-        assertThatThrownBy(() -> service.findById(NOT_EXIST_ID))
-                .isInstanceOf(ProductNotFoundException.class);
+        @DisplayName("존재하는 상품 id가 주어진다면")
+        @Nested
+        class Context_with_exist_id {
+            @DisplayName("성공적으로 상품을 조회한다.")
+            @Test
+            void will_return_found_product() {
+                final Product product = service.findById(SAVED_PRODUCT.getId());
+
+                assertThat(product).isNotNull();
+                assertThat(product.getId()).isEqualTo(SAVED_PRODUCT.getId());
+            }
+        }
+
+        @DisplayName("존재하지 않는 상품 id가 주어진다면")
+        @Nested
+        class Context_with_not_exist_id {
+            @DisplayName("예외를 던진다.")
+            @Test
+            void will_throw_exception() {
+                assertThatThrownBy(() -> service.findById(100L))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
 }

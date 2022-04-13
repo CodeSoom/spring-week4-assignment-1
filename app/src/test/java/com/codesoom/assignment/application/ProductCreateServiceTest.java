@@ -16,30 +16,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DisplayName("ProductCreateServiceImpl 클래스")
-public class ProductCreateServiceTest  {
+public class ProductCreateServiceTest extends ServiceTest {
+
+    private ProductCreateServiceImpl service;
+
+    @Autowired
+    private ProductRepository repository;
+
+    @BeforeEach
+    void setup() {
+        this.service = new ProductCreateServiceImpl(repository);
+    }
+
+    @AfterEach
+    void cleanup() {
+        repository.deleteAll();
+    }
 
     @DisplayName("create 메서드는")
     @Nested
-    class Describe_create extends ServiceTest {
-
-        private ProductCreateServiceImpl service;
-
-        @Autowired
-        private ProductRepository repository;
-
-        @BeforeEach
-        void setup() {
-            this.service = new ProductCreateServiceImpl(repository);
-        }
-
-        @AfterEach
-        void cleanup() {
-            repository.deleteAll();
-        }
-
+    class Describe_create  {
         @DisplayName("상품을 등록하고, 등록 된 상품을 반환한다.")
         @Test
-        void createProduct() {
+        void will_return_saved_product() {
             //given
             final ProductDto productDto
                     = new ProductDto("name", "maker", BigDecimal.valueOf(2000), "image");

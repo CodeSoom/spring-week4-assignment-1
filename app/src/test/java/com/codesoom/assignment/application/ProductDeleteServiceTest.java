@@ -1,55 +1,72 @@
 package com.codesoom.assignment.application;
 
-
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 
-@ExtendWith(MockitoExtension.class)
-public class ProductDeleteServiceTest {
+@DisplayName("ProductDeleteServiceImpl 클래스")
+public class ProductDeleteServiceTest extends ServiceTest {
 
-    @InjectMocks
     private ProductDeleteServiceImpl service;
 
-    @Mock
+    @Autowired
     private ProductRepository repository;
 
-    private static final Long EXIST_ID = 1L;
-    private static final Long NOT_EXIST_ID = 100L;
-
-    private static final Product PRODUCT
-            = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
-
-    @DisplayName("delete는 id에 해당하는 상품을 삭제한다.")
-    @Test
-    void deleteTest() {
-        given(repository.findById(eq(EXIST_ID))).willReturn(Optional.of(PRODUCT));
-
-        service.deleteById(EXIST_ID);
-        verify(repository).delete(eq(PRODUCT));
+    @BeforeEach
+    void setup() {
+        this.service = new ProductDeleteServiceImpl(repository);
     }
 
-    @DisplayName("delete는 존재하지 않는 상품을 삭제할 경우 예외를 던진다.")
-    @Test
-    void deleteWithNotExistId() {
-        given(repository.findById(eq(NOT_EXIST_ID))).willReturn(Optional.empty());
+    @DisplayName("deleteById 메서드는")
+    @Nested
+    class Describe_delete_by_id {
 
-        assertThatThrownBy(() -> service.deleteById(NOT_EXIST_ID))
-                .isInstanceOf(ProductNotFoundException.class);
+        private final Product SAVED_PRODUCT = Product.builder()
+                .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
+                .build();
+
+        @BeforeEach
+        void setup() {
+            repository.save(SAVED_PRODUCT);
+        }
+
+        @AfterEach
+        void cleanup() {
+            repository.deleteAll();
+        }
+
+        @DisplayName("존재하는 상품 id가 주어진다면")
+        @Nested
+        class Context_with_exist_id {
+            @DisplayName("성공적으로 상품을 삭제한다.")
+            @Test
+            void will_delete_product() {
+                service.deleteById(SAVED_PRODUCT.getId());
+                assertThat(repository.findById(SAVED_PRODUCT.getId())).isEmpty();
+            }
+        }
+
+        @DisplayName("존재하지 않는 상품 id가 주어진다면")
+        @Nested
+        class Context_with_not_exist_id {
+            @DisplayName("예외를 던진다.")
+            @Test
+            void will_throw_exception() {
+                assertThatThrownBy(() -> service.deleteById(100L))
+                    .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
 }
