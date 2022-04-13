@@ -70,6 +70,10 @@ public class ProductController {
         return ProductViewDto.from(product);
     }
 
+    /**
+     * 상품을 삭제합니다.
+     * @param productId 삭제할 상품 아이디
+     */
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{productId}")
     public void delete(@PathVariable Long productId) {
