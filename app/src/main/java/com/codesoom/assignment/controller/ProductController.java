@@ -47,9 +47,7 @@ public class ProductController {
     @PostMapping
     public ProductViewDto save(@RequestBody ProductSaveDto productSaveDto) {
 
-        final Product product = productSaveDto.toProduct();
-
-        productCommandService.saveProduct(product);
+        final Product product = productCommandService.saveProduct(productSaveDto);
 
         return ProductViewDto.from(product);
     }
