@@ -26,6 +26,7 @@ class ProductServiceTest {
     private static final String PRODUCT_IMAGE_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F9941A1385B99240D2E";
 
     private static final String UPDATE_PRODUCT_NAME = "상품1000";
+    private static final Integer UPDATE_PRODUCT_PRICE = 100;
 
     @Autowired
     private ProductService productService;
@@ -176,7 +177,38 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메소드에서")
     class Describe_of_update_product {
+        final int createProductSize = 4;
 
+        @BeforeEach
+        void setUp() {
+            createProduct(createProductSize);
+        }
+
+        @Nested
+        @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
+        class Context_with_valid_id {
+            private Product updatedProduct;
+            final long productId = 2;
+
+            @BeforeEach
+            void setUp() {
+                ProductDto productDto = new ProductDto
+                        .Builder(UPDATE_PRODUCT_PRICE, UPDATE_PRODUCT_NAME)
+                        .build();
+                Product product = productService.getProduct(productId);
+                updatedProduct = productService
+                        .updateProduct(product.getId(), productDto);
+            }
+
+            @Test
+            @DisplayName("업데이트 된 객체를 반환한다")
+            void it_return_updated_product() {
+
+                assertThat(updatedProduct).isNotNull();
+                assertThat(updatedProduct.getPrice()).isEqualTo(UPDATE_PRODUCT_PRICE);
+                assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
+            }
+        }
     }
 
 }

@@ -32,7 +32,12 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductDto productDto) {
-        return null;
+        Product product = getProduct(id);
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setMaker(productDto.getMaker());
+        product.setImageUrl(productDto.getImageUrl());
+        return productRepository.save(product);
     }
 
     public void deleteProduct(Long id) {
