@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductSaveDto;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @ActiveProfiles("test")
@@ -90,6 +92,20 @@ public class ProductControllerTest {
                 Product product = productController.detail(productId);
 
                 assertThat(product.getId()).isEqualTo(productId);
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 아이디와 일치하는 상품이 없다면")
+        class Context_notExistsProduct {
+
+            final Long notExistsProductId = 999L;
+
+            @Test
+            @DisplayName("예외를 던진다.")
+            void it_throw_exception() {
+                assertThatThrownBy(() -> productController.detail(notExistsProductId))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }

@@ -20,6 +20,7 @@ import java.util.stream.LongStream;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -103,6 +104,21 @@ public class WebProductControllerTest {
                         .andExpect(jsonPath("maker").exists())
                         .andExpect(jsonPath("price").exists())
                         .andExpect(jsonPath("imagePath").exists());
+            }
+        }
+
+        @Nested
+        @DisplayName("{productId} 와 일치하는 상품이 없다면")
+        class Context_notExistsProduct {
+
+            final Long notExistsProductId = 999L;
+
+            @Test
+            @DisplayName("NotFound 를 응답한다. [404]")
+            void it_response_400() throws Exception {
+                mockMvc.perform(get("/products/{productId}", notExistsProductId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
             }
         }
     }
