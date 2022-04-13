@@ -147,6 +147,30 @@ class ProductServiceTest {
     @DisplayName("createProduct 메소드에서")
     class Describe_of_create_product {
 
+        @Nested
+        @DisplayName("상품이 옳바르게 생성 된 경우")
+        class Context_with_create_product {
+            private ProductDto productDto;
+
+            @BeforeEach
+            void setUp() {
+                productDto = new ProductDto
+                        .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                        .maker(PRODUCT_MAKER)
+                        .imageUrl(PRODUCT_IMAGE_URL)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("생성된 Product 객체를 반환한다")
+            void it_return_created_product() {
+                Product product = productService.createProduct(productDto);
+
+                assertThat(product).isNotNull();
+                assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+                assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+            }
+        }
     }
 
 }
