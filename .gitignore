@@ -25,4 +25,4 @@ Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
 
-/app/out/*
+.class
