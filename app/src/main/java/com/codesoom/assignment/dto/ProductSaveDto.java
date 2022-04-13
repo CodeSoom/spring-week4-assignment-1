@@ -1,13 +1,11 @@
 package com.codesoom.assignment.dto;
 
-import com.codesoom.assignment.domain.Product;
-
 import java.beans.ConstructorProperties;
 
 /**
  * 상품 등록에 필요한 데이터를 정의합니다.
  */
-public class ProductSaveDto {
+public class ProductSaveDto implements ProductSaveRequest {
 
     private final String maker;
 
@@ -22,19 +20,18 @@ public class ProductSaveDto {
         this.imagePath = imagePath;
     }
 
+    @Override
     public String getMaker() {
         return maker;
     }
 
+    @Override
     public Integer getPrice() {
         return price;
     }
 
+    @Override
     public String getImagePath() {
         return imagePath;
-    }
-
-    public Product toProduct() {
-        return new Product(maker, price, imagePath);
     }
 }
