@@ -37,10 +37,8 @@ public class Product {
     @Column
     private String imageUrl;
 
-    protected Product() {
-    }
+    protected Product() {}
 
-    ;
 
     private Product(Builder builder) {
         name = builder.name;

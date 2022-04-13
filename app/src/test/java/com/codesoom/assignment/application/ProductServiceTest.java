@@ -13,15 +13,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 @DisplayName("ProductServiceImpl 에서")
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
     private static final String PRODUCT_NAME = "상품1";
     private static final String PRODUCT_MAKER = "메이커1";
@@ -30,11 +29,15 @@ class ProductServiceTest {
 
     private static final String UPDATE_PRODUCT_NAME = "상품1000";
 
-    @Autowired
+    @InjectMocks
     private ProductService productService;
+
+    @Mock
+    private ProductRepository productRepository;
 
     /**
      * 여러개의 Product 를 생성해 등록합니다.
+     *
      * @param createProuctSize 생성할 Product의 갯수
      */
     private void createProduct(long createProuctSize) {
@@ -55,7 +58,7 @@ class ProductServiceTest {
         @Nested
         @DisplayName("Product 객체가 없을 경우")
         class Context_without_product {
-            final long createProductSize = 1L;
+            final int createProductSize = 1;
 
             @BeforeEach
             void setUp() {
@@ -81,7 +84,7 @@ class ProductServiceTest {
         @Nested
         @DisplayName("Product 객체가 있을 경우")
         class Context_with_product {
-            final long createProductSize = 3L;
+            final int createProductSize = 3;
 
             @BeforeEach
             void setUp() {

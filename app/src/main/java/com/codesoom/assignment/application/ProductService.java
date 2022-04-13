@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -26,7 +26,8 @@ public class ProductService {
     }
 
     public Product createProduct(ProductDto productDto) {
-        return productRepository.save(productDto.toEntity());
+        Product product = productRepository.save(productDto.toEntity());
+        return product;
     }
 
     public Product updateProduct(Long id, ProductDto productDto) {

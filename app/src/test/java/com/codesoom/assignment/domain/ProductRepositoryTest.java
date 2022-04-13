@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.models.Product;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,8 +33,8 @@ class ProductRepositoryTest {
      * 여러개의 Product 를 생성해 등록합니다.
      * @param createProuctSize 생성할 Product의 갯수
      */
-    private void createProduct(long createProuctSize) {
-        for (long i = 0; i < createProuctSize; i++) {
+    private void createProduct(int createProuctSize) {
+        for (int i = 0; i < createProuctSize; i++) {
             Product product = new Product
                     .Builder(PRODUCT_PRICE, PRODUCT_NAME)
                     .maker(PRODUCT_MAKER)
@@ -46,16 +47,21 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("findAll 메소드를 호출할 때")
     class Describe_readAll_of_product {
+        final int createProductSize = 4;
+
+        @BeforeEach
+        void setUp() {
+            createProduct(createProductSize);
+        }
+
+        @AfterEach
+        void tearDown() {
+            productRepository.deleteAll();
+        }
 
         @Nested
         @DisplayName("상품이 존재할 경우")
         class Context_with_products {
-            final long createProductSize = 4L;
-
-            @BeforeEach
-            void setUp() {
-                createProduct(createProductSize);
-            }
 
             @Test
             @DisplayName("상품이 존재하는 배열을 리턴합니다")
@@ -70,11 +76,9 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("상품이 존재하지 않을 경우")
         class Context_with_empty_list {
-            final long createProductSize = 3L;
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
                 productRepository.deleteAll();
             }
 
@@ -96,7 +100,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("Id 와 동일한 상품이 존재하지 않을 경우")
         class Context_without_product {
-            final long createProductSize = 3L;
+            final int createProductSize = 3;
             final long productId = 1L;
 
             @BeforeEach
@@ -117,7 +121,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("Id 와 동일한 상품이 존재할 경우")
         class Context_with_product {
-            final long createProductSize = 5L;
+            final int createProductSize = 5;
             final long productId = 1L;
 
             @BeforeEach
@@ -165,7 +169,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("상품을 수정하는 경우")
         class Context_with_update_of_product {
-            final long createProductSize = 2L;
+            final int createProductSize = 2;
             final long productId = 1L;
             private Product updatedProduct;
 
@@ -196,7 +200,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("삭제할 상품이 있다면")
         class Context_with_delete_of_product {
-            final long createProductSize = 3L;
+            final int createProductSize = 3;
             final long productId = 2L;
 
             @BeforeEach
