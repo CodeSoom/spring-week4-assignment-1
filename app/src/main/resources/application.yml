@@ -1,6 +1,20 @@
 spring:
+  h2.console.enabled: true
   datasource:
     url: jdbc:h2:~/data/demo
+    driver-class-name: org.h2.Driver
   jpa:
+    # 콘솔에 쿼리 출력
+    show-sql: true
     hibernate:
       ddl-auto: update
+      # MySQL 문법 적용
+      dialect: org.hibernate.dialect.MySQL57Dialect
+      storage-engine: innodb
+
+---
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:h2:~/data/test
+    driver-class-name: org.h2.Driver
