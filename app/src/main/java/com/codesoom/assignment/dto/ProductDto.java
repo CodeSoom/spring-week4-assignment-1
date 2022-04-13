@@ -17,6 +17,15 @@ public class ProductDto {
 
     private String imageUrl; // 상품 이미지 주소
 
+    public ProductDto() {}
+
+    public ProductDto(ProductDtoBuilder productDtoBuilder) {
+        this.name = productDtoBuilder.name;
+        this.maker = productDtoBuilder.maker;
+        this.price = productDtoBuilder.price;
+        this.imageUrl = productDtoBuilder.imageUrl;
+    }
+
     public String getName() {
         return name;
     }
@@ -33,12 +42,7 @@ public class ProductDto {
         return imageUrl;
     }
 
-    public ProductDto(ProductDtoBuilder productDtoBuilder) {
-        this.name = productDtoBuilder.name;
-        this.maker = productDtoBuilder.maker;
-        this.price = productDtoBuilder.price;
-        this.imageUrl = productDtoBuilder.imageUrl;
-    }
+
 
     public static class ProductDtoBuilder {
         private String name;
