@@ -32,7 +32,8 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductDto productDto) {
-        Product product = getProduct(id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
         product.setMaker(productDto.getMaker());

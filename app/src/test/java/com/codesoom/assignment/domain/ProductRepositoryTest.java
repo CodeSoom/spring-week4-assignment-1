@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ProductRepository 에서")
 @DataJpaTest
@@ -214,8 +215,8 @@ class ProductRepositoryTest {
                 Optional<Product> product = productRepository.findById(productId);
                 product.ifPresent(value -> productRepository.delete(value));
 
-                // TODO: 삭제 후 검증 로직 필요
-
+                Optional<Product> found = productRepository.findById(productId);
+                assertThat(found).isEmpty();
             }
         }
     }
