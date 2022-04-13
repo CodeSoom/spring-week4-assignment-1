@@ -69,7 +69,7 @@ class ProductRepositoryTest {
                 List<Product> products = productRepository.findAll();
 
                 assertThat(products).isNotEmpty();
-                assertThat(products).hasSize((int) createProductSize);
+                assertThat(products).hasSize(createProductSize);
             }
         }
 
