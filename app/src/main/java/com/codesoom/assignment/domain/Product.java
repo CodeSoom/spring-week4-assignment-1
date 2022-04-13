@@ -11,9 +11,6 @@ import javax.persistence.Id;
 import java.math.BigDecimal;
 
 
-/**
- * 장난감 엔티티
- */
 @Getter
 @Entity
 public class Product {

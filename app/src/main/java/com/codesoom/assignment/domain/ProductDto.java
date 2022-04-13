@@ -7,7 +7,8 @@ import java.math.BigDecimal;
 
 
 /**
- * 장난감 등록/수정 시 사용할 DTO 클래스 입니다.
+ * 상품 등록/수정 시 사용할 DTO 클래스 입니다.
+ * 고객이 입력한 정보를 받아 엔티티로 변환하는 역할을 담당합니다.
  */
 @Getter
 public class ProductDto {
