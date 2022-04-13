@@ -1,40 +1,55 @@
 package com.codesoom.assignment.application;
 
-
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
-@ExtendWith(MockitoExtension.class)
-public class ProductCreateServiceTest {
+@DisplayName("ProductCreateServiceImpl 클래스")
+public class ProductCreateServiceTest  {
 
-    @InjectMocks
-    private ProductCreateServiceImpl service;
+    @DisplayName("create 메서드는")
+    @Nested
+    class Describe_create extends ServiceTest {
 
-    @Mock
-    private ProductRepository repository;
+        private ProductCreateServiceImpl service;
 
-    @DisplayName("장난감을 성공적으로 등록한다.")
-    @Test
-    void createToyTest() {
-        final ProductDto productDto
-                = new ProductDto("name", "maker", BigDecimal.valueOf(2000), "image");
+        @Autowired
+        private ProductRepository repository;
 
-        service.create(productDto);
+        @BeforeEach
+        void setup() {
+            this.service = new ProductCreateServiceImpl(repository);
+        }
 
-        verify(repository).save(any(Product.class));
+        @AfterEach
+        void cleanup() {
+            repository.deleteAll();
+        }
+
+        @DisplayName("상품을 등록하고, 등록 된 상품을 반환한다.")
+        @Test
+        void createProduct() {
+            //given
+            final ProductDto productDto
+                    = new ProductDto("name", "maker", BigDecimal.valueOf(2000), "image");
+
+            //when
+            final Product product = service.create(productDto);
+
+            //then
+            assertThat(repository.findById(product.getId())).isNotEmpty();
+        }
     }
 
 }
