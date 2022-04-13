@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 상품에 대한 HTTP 요청을 처리합니다.
@@ -37,8 +38,13 @@ public class ProductController {
      * 상품 전체 목록을 리턴합니다.
      */
     @GetMapping
-    public List<Product> list() {
-        return productQueryService.getProducts();
+    public List<ProductViewDto> list() {
+
+        List<Product> products = productQueryService.getProducts();
+
+        return products.stream()
+                .map(ProductViewDto::from)
+                .collect(Collectors.toList());
     }
 
     /**

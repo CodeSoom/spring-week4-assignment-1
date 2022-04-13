@@ -64,7 +64,7 @@ public class ProductControllerTest {
             @Test
             @DisplayName("상품 목록을 리턴한다.")
             void it_return_toys() {
-                List<Product> products = productController.list();
+                List<ProductViewDto> products = productController.list();
 
                 assertThat(products).hasSize(givenCount);
             }
