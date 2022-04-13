@@ -30,6 +30,12 @@ public class ProductQueryService {
         return products;
     }
 
+    /**
+     * 상품을 리턴합니다.
+     *
+     * @param productId 상품 아이디
+     * @throws ProductNotFoundException 상품을 찾을 수 없을 때 던집니다.
+     */
     public Product getProduct(final Long productId) {
 
         return productRepository.findById(productId)

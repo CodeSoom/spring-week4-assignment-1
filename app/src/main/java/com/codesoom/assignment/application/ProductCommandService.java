@@ -26,4 +26,12 @@ public class ProductCommandService {
 
         return productRepository.save(product);
     }
+
+    /**
+     * 상품을 삭제 합니다.
+     * @param product 삭제할 상품
+     */
+    public void deleteProduct(Product product) {
+        productRepository.delete(product);
+    }
 }

@@ -6,6 +6,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
 import com.codesoom.assignment.dto.ProductViewDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,7 +64,12 @@ public class ProductController {
         return ProductViewDto.from(product);
     }
 
-    public void delete(Long notExistsProductId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{productId}")
+    public void delete(@PathVariable Long productId) {
 
+        final Product product = productQueryService.getProduct(productId);
+
+        productCommandService.deleteProduct(product);
     }
 }
