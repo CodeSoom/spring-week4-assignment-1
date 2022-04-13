@@ -22,7 +22,6 @@ class ProductServiceTest {
 
     private ProductService productService;
 
-    private Long PRODUCT_TEST_ID = 0L;
     private Long NOT_SAVED_ID = 100L;
     private static final String TEST_PRODUCT_MAKER = "MAKER";
     private static final String TEST_PRODUCT_NAME = "NAME";
@@ -41,8 +40,7 @@ class ProductServiceTest {
                         .price(TEST_PRODUCT_PRICE)
                         .imageUrl(TEST_PRODUCT_IMAGE_URL)
                         .build();
-        Product product = productService.create(productDto);
-        PRODUCT_TEST_ID = product.getId();
+        productService.create(productDto);
     }
 
     @Test
@@ -60,15 +58,23 @@ class ProductServiceTest {
         @DisplayName("아이디가 상품 목록에 존재한다면")
         class Context_with_a_valid_id {
 
+            private Long productId;
+
+            @BeforeEach
+            void prepareProduct() {
+                ProductDto productInfo = new ProductDto.ProductDtoBuilder()
+                                                    .name(TEST_PRODUCT_NAME)
+                                                    .build();
+                Product product = productService.create(productInfo);
+                productId = product.getId();
+            }
+
             @Test
             @DisplayName("상품을 찾아서 반환한다.")
             void it_returns_a_product() {
-                Product foundProduct = productService.getProductById(PRODUCT_TEST_ID);
+                Product foundProduct = productService.getProductById(productId);
                 assertThat(foundProduct).isNotNull();
                 assertThat(foundProduct.getName()).isEqualTo(TEST_PRODUCT_NAME);
-                assertThat(foundProduct.getMaker()).isEqualTo(TEST_PRODUCT_MAKER);
-                assertThat(foundProduct.getPrice().intValue()).isEqualTo(BigDecimal.TEN.intValue());
-                assertThat(foundProduct.getImageUrl()).isEqualTo(TEST_PRODUCT_IMAGE_URL);
             }
         }
 
@@ -122,10 +128,19 @@ class ProductServiceTest {
         @Nested
         @DisplayName("아이디가 상품 목록에 존재한다면")
         class Context_with_a_valid_id {
+
+            private Long productId;
+
+            @BeforeEach
+            void prepareProduct() {
+                Product product = productService.create(new ProductDto());
+                productId = product.getId();
+            }
+
             @Test
             @DisplayName("상품을 수정하여 반환한다.")
             void it_returns_a_updated_product() {
-                Product product = productService.updateProduct(PRODUCT_TEST_ID, resource);
+                Product product = productService.updateProduct(productId, resource);
                 assertThat(product.getName()).isEqualTo(updatedName);
             }
         }
@@ -149,15 +164,24 @@ class ProductServiceTest {
         @Nested
         @DisplayName("아이디가 상품 목록에 존재한다면")
         class Context_with_a_valid_id {
+
+            private Long productId;
+
+            @BeforeEach
+            void prepareProduct() {
+                Product product = productService.create(new ProductDto());
+                productId = product.getId();
+            }
+
             @Test
             @DisplayName("상품을 삭제한다.")
             void it_returns_a_deleted_product() {
                 int oldSize = productService.getProducts().size();
-                productService.deleteProduct(PRODUCT_TEST_ID);
+                productService.deleteProduct(productId);
 
                 int newSize = productService.getProducts().size();
 
-                assertThatThrownBy(() -> productService.getProductById(PRODUCT_TEST_ID))
+                assertThatThrownBy(() -> productService.getProductById(productId))
                     .isInstanceOf(ProductNotFoundException.class);
                 assertThat(newSize).isEqualTo(oldSize - 1);
             }
