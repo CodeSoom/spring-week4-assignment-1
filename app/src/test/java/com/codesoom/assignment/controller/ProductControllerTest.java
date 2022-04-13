@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -133,6 +134,50 @@ public class ProductControllerTest {
                         () -> assertThat(productViewDto.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
                         () -> assertThat(productViewDto.getImagePath()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
                 );
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메소드는")
+    class Describe_delete {
+
+        @Nested
+        @DisplayName("주어진 아이디 와 일치하는 상품이 있다면")
+        class Context_existsProduct {
+
+            Long productId;
+
+            @BeforeEach
+            void setUp() {
+                final Product product = new Product();
+                productRepository.save(product);
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("상품을 삭제한다.")
+            void it_success() {
+
+                productController.delete(productId);
+
+                Optional<Product> foundProduct = productRepository.findById(productId);
+                assertThat(foundProduct).isEqualTo(Optional.empty());
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 아이디 와 일치하는 상품이 있다면")
+        class Context_notExistsProduct {
+
+            final Long notExistsProductId = 999L;
+
+            @Test
+            @DisplayName("상품이 없다는 예외를 던진다.")
+            void it_throw_exception() {
+                assertThatThrownBy(
+                        () -> productController.delete(notExistsProductId)
+                ).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }

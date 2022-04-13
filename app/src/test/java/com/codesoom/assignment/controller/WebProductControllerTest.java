@@ -18,9 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.stream.LongStream;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,7 +83,7 @@ public class WebProductControllerTest {
         @Nested
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
-            
+
             Long productId;
 
             final Product product = new Product(TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
@@ -145,6 +145,48 @@ public class WebProductControllerTest {
                         .andExpect(jsonPath("maker").value(TEST_PRODUCT_MAKER))
                         .andExpect(jsonPath("price").value(TEST_PRODUCT_PRICE))
                         .andExpect(jsonPath("imagePath").value(TEST_PRODUCT_IMAGE_PATH));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE - /products/{productId}")
+    class Describe_delete {
+
+        @Nested
+        @DisplayName("{productId} 와 일치하는 상품이 있다면")
+        class Context_existsProduct {
+
+            Long productId;
+
+            @BeforeEach
+            void setUp() {
+                final Product product = new Product();
+                productRepository.save(product);
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("상품을 삭제하고 No Content 를 응답한다. [204]")
+            void it_response_204() throws Exception {
+                mockMvc.perform(delete("/products/{productId}", productId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("{productId} 와 일치하는 상품이 없다면")
+        class Context_notExistsProduct {
+
+            final Long notExistsProductId = 999L;
+
+            @Test
+            @DisplayName("Not Found 를 응답한다. [404]")
+            void it_response_404() throws Exception {
+                mockMvc.perform(delete("/products/{productId}", notExistsProductId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isNotFound());
             }
         }
     }
