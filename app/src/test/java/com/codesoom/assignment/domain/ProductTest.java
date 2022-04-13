@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import com.codesoom.assignment.dto.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -77,5 +78,63 @@ class ProductTest {
         assertThat(product.getMaker()).isEqualTo(productDto.getMaker());
         assertThat(product.getPrice()).isEqualTo(productDto.getPrice());
         assertThat(product.getImageUrl()).isEqualTo(productDto.getImageUrl());
+    }
+
+    @Test
+    @DisplayName("modify 메소드는 ProductDto를 받아 상품의 각 필드를 수정한다.")
+    void modifyWithInvalidValue() {
+
+        ProductDto productDto = new ProductDto.ProductDtoBuilder()
+                .build();
+
+        product.modify(productDto);
+
+        assertThat(product.getName()).isEqualTo(product.getName());
+        assertThat(product.getMaker()).isEqualTo(product.getMaker());
+        assertThat(product.getPrice()).isEqualTo(product.getPrice());
+        assertThat(product.getImageUrl()).isEqualTo(product.getImageUrl());
+    }
+
+    @Nested
+    @DisplayName("modify 메소드는")
+    class Describe_modify {
+
+        @Nested
+        @DisplayName("ProductDto의 각 필드가 존재하면")
+        class Context_with_valid_values {
+
+            @Test
+            @DisplayName("상품을 수정한다.")
+            void it_returns() {
+                ProductDto productDto = new ProductDto.ProductDtoBuilder()
+                        .name("modify name")
+                        .maker("modify maker")
+                        .price(BigDecimal.ONE)
+                        .imageUrl("/dir/test.png")
+                        .build();
+
+                product.modify(productDto);
+
+                assertThat(product.getName()).isEqualTo(productDto.getName());
+                assertThat(product.getMaker()).isEqualTo(productDto.getMaker());
+                assertThat(product.getPrice()).isEqualTo(productDto.getPrice());
+                assertThat(product.getImageUrl()).isEqualTo(productDto.getImageUrl());
+            }
+        }
+
+        @Nested
+        @DisplayName("ProductDto의 필드가 존재하지 않으면")
+        class Context_with_empty_values {
+
+            @Test
+            @DisplayName("상품을 수정하지 않는다.")
+            void it_returns() {
+                ProductDto productDto = new ProductDto();
+
+                product.modify(productDto);
+
+                assertThat(product).isSameAs(product).isEqualTo(product);
+            }
+        }
     }
 }
