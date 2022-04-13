@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
 import org.junit.jupiter.api.AfterEach;
@@ -8,26 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.will;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-@DataJpaTest
-@DisplayName("ProductServiceImpl 에서")
+
+@SpringBootTest
+@DisplayName("ProductService 에서")
 class ProductServiceTest {
     private static final String PRODUCT_NAME = "상품1";
     private static final String PRODUCT_MAKER = "메이커1";
@@ -36,11 +25,28 @@ class ProductServiceTest {
 
     private static final String UPDATE_PRODUCT_NAME = "상품1000";
 
-    @Mock
-    private ProductRepository productRepository;
-
-    @InjectMocks
+    @Autowired
     private ProductService productService;
+
+    /**
+     * 여러개의 Product 를 생성해 등록합니다.
+     * @param createProuctSize 생성할 Product의 갯수
+     */
+    void createProduct(int createProuctSize) {
+        for (int i = 0; i < createProuctSize; i++) {
+            ProductDto productDto = new ProductDto
+                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                    .maker(PRODUCT_MAKER)
+                    .imageUrl(PRODUCT_IMAGE_URL)
+                    .build();
+            productService.createProduct(productDto);
+        }
+    }
+
+    @AfterEach
+    void tearDown() {
+        productService.deleteAll();
+    }
 
     @Nested
     @DisplayName("getProductList 메소드에서")
@@ -49,11 +55,10 @@ class ProductServiceTest {
         @Nested
         @DisplayName("Product 객체가 없을 경우")
         class Context_without_product {
-            private final List<Product> products = new ArrayList<>();
 
             @BeforeEach
             void setUp() {
-                given(productRepository.findAll()).willReturn(products);
+                productService.deleteAll();
             }
 
             @Test
@@ -69,20 +74,16 @@ class ProductServiceTest {
         @Nested
         @DisplayName("Product 객체가 있을 경우")
         class Context_with_product {
-            final int createProductsize = 3;
-            private final List<Product> products = new ArrayList<>();
+            final int createProductSize = 3;
 
             @BeforeEach
             void setUp() {
-                for (int i = 0; i < createProductsize; i++) {
-                    ProductDto productDto = new ProductDto
-                            .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                            .maker(PRODUCT_MAKER)
-                            .imageUrl(PRODUCT_IMAGE_URL)
-                            .build();
-                    products.add(productDto.toEntity());
-                }
-                given(productRepository.findAll()).willReturn(products);
+                createProduct(createProductSize);
+            }
+
+            @AfterEach
+            void tearDown() {
+                productService.deleteAll();
             }
 
             @Test
@@ -90,9 +91,8 @@ class ProductServiceTest {
             void it_returns_list_of_product() {
                 List<Product> products = productService.getProductList();
 
-                verify(productRepository, times(1)).findAll();
                 assertThat(products).isNotEmpty();
-                assertThat(products).hasSize(createProductsize);
+                assertThat(products).hasSize(createProductSize);
             }
         }
     }
@@ -101,5 +101,25 @@ class ProductServiceTest {
     @DisplayName("getProduct 메소드에서")
     class Describe_of_read_product {
 
+        @Nested
+        @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
+        class Context_with_valid_id {
+            final int createProductSize = 3;
+            final long productId = 2;
+
+            @BeforeEach
+            void setUp() {
+                createProduct(createProductSize);
+            }
+
+            @Test
+            @DisplayName("찾은 Product를 반환한다")
+            void it_return_product() {
+                Product product = productService.getProduct(productId);
+
+                assertThat(product).isNotNull();
+                assertThat(product.getId()).isEqualTo(productId);
+            }
+        }
     }
 }

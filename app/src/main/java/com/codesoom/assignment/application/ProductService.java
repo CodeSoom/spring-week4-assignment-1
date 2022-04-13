@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
@@ -22,12 +23,12 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        return null;
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(ProductDto productDto) {
-        Product product = productRepository.save(productDto.toEntity());
-        return product;
+        return productRepository.save(productDto.toEntity());
     }
 
     public Product updateProduct(Long id, ProductDto productDto) {
