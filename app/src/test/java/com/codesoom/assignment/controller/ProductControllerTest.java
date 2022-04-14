@@ -149,18 +149,18 @@ public class ProductControllerTest {
     @DisplayName("replace 메소드는")
     class Describe_replace {
 
+        final ProductUpdateDto updateSource = new ProductUpdateDto(
+                TEST_PRODUCT_UPDATE_NAME,
+                TEST_PRODUCT_UPDATE_MAKER,
+                TEST_PRODUCT_UPDATE_PRICE,
+                TEST_PRODUCT_UPDATE_IMAGE_PATH);
+
         @Nested
         @DisplayName("주어진 아이디와 일치하는 상품이 있으면 대체될 상품 데이터로")
         class Context_existsProduct {
 
             final Product product = new Product(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-
-            final ProductUpdateDto updateSource = new ProductUpdateDto(
-                    TEST_PRODUCT_UPDATE_NAME,
-                    TEST_PRODUCT_UPDATE_MAKER,
-                    TEST_PRODUCT_UPDATE_PRICE,
-                    TEST_PRODUCT_UPDATE_IMAGE_PATH);
 
             Long productId;
 
@@ -183,6 +183,21 @@ public class ProductControllerTest {
                         () -> assertThat(productViewDto.getPrice()).isEqualTo(TEST_PRODUCT_UPDATE_PRICE),
                         () -> assertThat(productViewDto.getImageUrl()).isEqualTo(TEST_PRODUCT_UPDATE_IMAGE_PATH)
                 );
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 아이디와 일치하는 상품이 없다면")
+        class Context_notExistsProduct {
+
+            final Long notExistsProductId = 999L;
+
+            @Test
+            @DisplayName("예외를 던진다.")
+            void it_throw_exception() {
+                assertThatThrownBy(
+                        () -> productController.replace(notExistsProductId, updateSource)
+                ).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }

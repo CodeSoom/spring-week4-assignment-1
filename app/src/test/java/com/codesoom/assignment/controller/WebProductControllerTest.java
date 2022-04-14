@@ -124,7 +124,7 @@ public class WebProductControllerTest {
 
             @Test
             @DisplayName("NotFound 를 응답한다. [404]")
-            void it_response_400() throws Exception {
+            void it_response_404() throws Exception {
                 mockMvc.perform(get("/products/{productId}", notExistsProductId)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
@@ -164,18 +164,18 @@ public class WebProductControllerTest {
     @DisplayName("PUT - /products/{productId} 요청시")
     class Describe_replace {
 
+        final ProductUpdateDto updateDto = new ProductUpdateDto(
+                TEST_PRODUCT_UPDATE_NAME,
+                TEST_PRODUCT_UPDATE_MAKER,
+                TEST_PRODUCT_UPDATE_PRICE,
+                TEST_PRODUCT_UPDATE_IMAGE_PATH);
+
         @Nested
-        @DisplayName("대체될 상품이 있다면")
+        @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
             final Product product = new Product(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
-
-            final ProductUpdateDto updateDto = new ProductUpdateDto(
-                    TEST_PRODUCT_UPDATE_NAME,
-                    TEST_PRODUCT_UPDATE_MAKER,
-                    TEST_PRODUCT_UPDATE_PRICE,
-                    TEST_PRODUCT_UPDATE_IMAGE_PATH);
 
             Long productId;
 
@@ -193,13 +193,30 @@ public class WebProductControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(updateDto))
                         )
-                        .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("id").value(productId))
                         .andExpect(jsonPath("name").value(TEST_PRODUCT_UPDATE_NAME))
                         .andExpect(jsonPath("maker").value(TEST_PRODUCT_UPDATE_MAKER))
                         .andExpect(jsonPath("price").value(TEST_PRODUCT_UPDATE_PRICE))
                         .andExpect(jsonPath("imageUrl").value(TEST_PRODUCT_UPDATE_IMAGE_PATH));
+            }
+        }
+
+        @Nested
+        @DisplayName("{productId} 와 일치하는 상품이 없다면")
+        class Context_notExistsProduct {
+
+            final Long notExistsProductId = 999L;
+
+            @Test
+            @DisplayName("NotFound 를 응답한다. [404]")
+            void it_response_404() throws Exception {
+
+                mockMvc.perform(put("/products/{productId}", notExistsProductId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateDto))
+                        )
+                        .andExpect(status().isNotFound());
             }
         }
     }
