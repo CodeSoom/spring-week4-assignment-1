@@ -190,7 +190,33 @@ class ProductControllerTest {
     @Nested
     @DisplayName("update 메소드는")
     class Describe_of_update {
+        private Product product;
 
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
+
+        @Nested
+        @DisplayName("Id 에 맞는 제품을 업데이트 했을 경우")
+        class Context_with_valid_id {
+            private final long productId = product.getId();
+            private final ProductDto productDto = new ProductDto
+                    .Builder(UPDATE_PRODUCT_PRICE, UPDATE_PRODUCT_NAME)
+                    .maker(PRODUCT_MAKER)
+                    .imageUrl(PRODUCT_IMAGE_URL)
+                    .build();
+
+            @Test
+            @DisplayName("업데이트 된 제품을 반환한다")
+            void it_return_updated_product() {
+                Product updatedProduct = productController.update(productId, productDto);
+
+                assertThat(updatedProduct).isNotNull();
+                assertThat(updatedProduct.getPrice()).isEqualTo(UPDATE_PRODUCT_PRICE);
+                assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
+            }
+        }
     }
 
 }
