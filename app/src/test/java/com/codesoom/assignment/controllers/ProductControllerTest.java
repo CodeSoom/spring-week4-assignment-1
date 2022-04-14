@@ -217,6 +217,31 @@ class ProductControllerTest {
                 assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
             }
         }
+
+        @Nested
+        @DisplayName("Id 와 다른 제품을 업데이트 했을 경우")
+        class Context_with_invalid_id {
+            private Long productId;
+            private final ProductDto productDto = new ProductDto
+                    .Builder(UPDATE_PRODUCT_PRICE, UPDATE_PRODUCT_NAME)
+                    .maker(PRODUCT_MAKER)
+                    .imageUrl(PRODUCT_IMAGE_URL)
+                    .build();
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productController.update(productId, productDto))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+
+        }
     }
 
     @Nested
