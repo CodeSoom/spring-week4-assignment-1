@@ -215,8 +215,26 @@ class ProductServiceTest {
         @Nested
         @DisplayName("찾는 Id 와 동일한 Product가 존재하지 않을 경우")
         class Context_with_invalid_id {
-        }
+            private ProductDto productDto;
 
+            @BeforeEach
+            void setUp() {
+                productDto = new ProductDto
+                        .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                        .maker(PRODUCT_MAKER)
+                        .imageUrl(PRODUCT_IMAGE_URL)
+                        .build();
+
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productService.updateProduct(productId, productDto))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
 }
