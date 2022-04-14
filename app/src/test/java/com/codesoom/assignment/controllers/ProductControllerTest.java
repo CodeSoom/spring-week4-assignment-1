@@ -25,6 +25,9 @@ class ProductControllerTest {
     private static final Integer PRODUCT_PRICE = 100000;
     private static final String PRODUCT_IMAGE_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F9941A1385B99240D2E";
 
+    private static final String UPDATE_PRODUCT_NAME = "상품1000";
+    private static final Integer UPDATE_PRODUCT_PRICE = 100;
+
     @Autowired
     private ProductService productService;
     private ProductController productController;
@@ -182,6 +185,12 @@ class ProductControllerTest {
                 assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
             }
         }
+    }
+
+    @Nested
+    @DisplayName("update 메소드는")
+    class Describe_of_update {
+
     }
 
 }
