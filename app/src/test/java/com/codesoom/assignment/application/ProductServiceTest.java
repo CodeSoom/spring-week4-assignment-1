@@ -3,7 +3,6 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,7 +34,7 @@ class ProductServiceTest {
      * 여러개의 Product 를 생성해 등록합니다.
      * @param createProuctSize 생성할 Product의 갯수
      */
-    void createProduct(int createProuctSize) {
+    void createProducts(int createProuctSize) {
         for (int i = 0; i < createProuctSize; i++) {
             ProductDto productDto = new ProductDto
                     .Builder(PRODUCT_PRICE, PRODUCT_NAME)
@@ -105,7 +104,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
+                createProducts(createProductSize);
             }
 
             @Test
@@ -170,11 +169,11 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메소드에서")
     class Describe_of_update_product {
-        final int createProductSize = 4;
+        final int createProductSize = 2;
 
         @BeforeEach
         void setUp() {
-            createProduct(createProductSize);
+            createProducts(createProductSize);
         }
 
         @Nested
@@ -199,6 +198,12 @@ class ProductServiceTest {
                 assertThat(product.getPrice()).isEqualTo(UPDATE_PRODUCT_PRICE);
                 assertThat(product.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
             }
+        }
+
+        @Nested
+        @DisplayName("찾는 Id 와 동일한 Product가 존재하지 않을 경우")
+        class Context_with_invalid_id {
+
         }
     }
 

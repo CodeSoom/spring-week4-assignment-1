@@ -3,7 +3,6 @@ package com.codesoom.assignment.domain;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.models.Product;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ProductRepository 에서")
 @DataJpaTest
