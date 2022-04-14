@@ -115,7 +115,7 @@ class ProductCommandServiceTest {
                 }
 
                 @Override
-                public String getImagePath() {
+                public String getImageUrl() {
                     return TEST_PRODUCT_UPDATE_IMAGE_PATH;
                 }
             };
@@ -145,7 +145,6 @@ class ProductCommandServiceTest {
         }
     }
 
-
     @Nested
     @DisplayName("updateProduct 메소드는")
     class Describe_updateProduct {
@@ -174,7 +173,7 @@ class ProductCommandServiceTest {
                 }
 
                 @Override
-                public String getImagePath() {
+                public String getImageUrl() {
                     return "";
                 }
             };

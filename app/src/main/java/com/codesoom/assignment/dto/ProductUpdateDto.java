@@ -41,7 +41,7 @@ public class ProductUpdateDto implements ProductUpdateRequest {
     }
 
     @Override
-    public String getImagePath() {
+    public String getImageUrl() {
         return imageUrl;
     }
 }

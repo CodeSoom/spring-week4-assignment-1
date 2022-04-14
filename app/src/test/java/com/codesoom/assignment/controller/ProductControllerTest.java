@@ -174,14 +174,14 @@ public class ProductControllerTest {
             @DisplayName("상품을 대체하고 리턴한다.")
             void it_replace_and_return_product() {
 
-                final Product product = productController.replace(productId, updateSource);
+                final ProductViewDto productViewDto = productController.replace(productId, updateSource);
 
                 assertAll(
-                        () -> assertThat(product.getId()).isEqualTo(productId),
-                        () -> assertThat(product.getName()).isEqualTo(TEST_PRODUCT_UPDATE_NAME),
-                        () -> assertThat(product.getMaker()).isEqualTo(TEST_PRODUCT_UPDATE_MAKER),
-                        () -> assertThat(product.getPrice()).isEqualTo(TEST_PRODUCT_UPDATE_PRICE),
-                        () -> assertThat(product.getImagePath()).isEqualTo(TEST_PRODUCT_UPDATE_IMAGE_PATH)
+                        () -> assertThat(productViewDto.getId()).isEqualTo(productId),
+                        () -> assertThat(productViewDto.getName()).isEqualTo(TEST_PRODUCT_UPDATE_NAME),
+                        () -> assertThat(productViewDto.getMaker()).isEqualTo(TEST_PRODUCT_UPDATE_MAKER),
+                        () -> assertThat(productViewDto.getPrice()).isEqualTo(TEST_PRODUCT_UPDATE_PRICE),
+                        () -> assertThat(productViewDto.getImageUrl()).isEqualTo(TEST_PRODUCT_UPDATE_IMAGE_PATH)
                 );
             }
         }

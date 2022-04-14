@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -190,8 +191,9 @@ public class WebProductControllerTest {
 
                 mockMvc.perform(put("/products/{productId}", productId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .contentType(objectMapper.writeValueAsString(updateDto))
+                                .content(objectMapper.writeValueAsString(updateDto))
                         )
+                        .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("id").value(productId))
                         .andExpect(jsonPath("name").value(TEST_PRODUCT_UPDATE_NAME))
@@ -201,7 +203,6 @@ public class WebProductControllerTest {
             }
         }
     }
-
 
     @Nested
     @DisplayName("DELETE - /products/{productId}")

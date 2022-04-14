@@ -12,5 +12,5 @@ public interface ProductUpdateRequest {
 
     Integer getPrice();
 
-    String getImagePath();
+    String getImageUrl();
 }

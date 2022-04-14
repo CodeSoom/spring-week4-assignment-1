@@ -51,7 +51,7 @@ class ProductTest {
                     }
 
                     @Override
-                    public String getImagePath() {
+                    public String getImageUrl() {
                         return TEST_PRODUCT_UPDATE_IMAGE_PATH;
                     }
                 };
@@ -105,7 +105,7 @@ class ProductTest {
                     }
 
                     @Override
-                    public String getImagePath() {
+                    public String getImageUrl() {
                         return "";
                     }
                 };

@@ -60,7 +60,7 @@ public class Product {
         name = updateRequest.getName();
         maker = updateRequest.getMaker();
         price = updateRequest.getPrice();
-        imagePath = updateRequest.getImagePath();
+        imagePath = updateRequest.getImageUrl();
     }
 
     /**
@@ -80,8 +80,8 @@ public class Product {
             price = updateRequest.getPrice();
         }
 
-        if (StringUtils.hasText(updateRequest.getImagePath())) {
-            imagePath = updateRequest.getImagePath();
+        if (StringUtils.hasText(updateRequest.getImageUrl())) {
+            imagePath = updateRequest.getImageUrl();
         }
     }
 

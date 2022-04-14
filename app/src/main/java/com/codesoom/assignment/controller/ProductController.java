@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -84,7 +85,15 @@ public class ProductController {
         productCommandService.deleteProduct(product);
     }
 
-    public Product replace(Long productId, ProductUpdateDto updateSource) {
-        return null;
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{productId}")
+    public ProductViewDto replace(@PathVariable Long productId, @RequestBody ProductUpdateDto updateSource) {
+
+        final Product product = productQueryService.getProduct(productId);
+
+        productCommandService.replaceProduct(product, updateSource);
+
+        return ProductViewDto.from(product);
+
     }
 }
