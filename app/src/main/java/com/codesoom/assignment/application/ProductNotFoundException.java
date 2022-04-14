@@ -17,4 +17,8 @@ public class ProductNotFoundException extends RuntimeException{
         this(String.valueOf(HttpStatus.NOT_FOUND), id);
     }
 
+    public String getCode() {
+        return code;
+    }
+
 }
