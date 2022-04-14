@@ -14,6 +14,18 @@ public class Product {
     private Long price;
     private String imagePath;
 
+    public Product() {
+
+    }
+
+    public Product(String name, String maker, Long price, String imagePath) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imagePath = imagePath;
+    }
+
+
     public Long getId() {
         return id;
     }

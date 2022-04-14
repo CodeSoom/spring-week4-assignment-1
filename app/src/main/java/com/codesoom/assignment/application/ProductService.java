@@ -3,7 +3,6 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ public class ProductService {
 
     public List<Product> getProducts() {
 
-        return Lists.newArrayList( productRepository.findAll());
+        return productRepository.findAll();
     }
 
     public Product getProduct(Long id) {
