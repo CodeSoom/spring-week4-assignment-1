@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -45,6 +46,15 @@ class ProductServiceTest {
         }
     }
 
+    private Product createProduct() {
+        ProductDto productDto = new ProductDto
+                .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                .maker(PRODUCT_MAKER)
+                .imageUrl(PRODUCT_IMAGE_URL)
+                .build();
+        return productService.createProduct(productDto);
+    }
+
     @BeforeEach
     void tearDown() {
         productService.deleteAll();
@@ -79,7 +89,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
+                createProducts(createProductSize);
             }
 
             @Test
@@ -95,16 +105,16 @@ class ProductServiceTest {
     @Nested
     @DisplayName("getProduct 메소드에서")
     class Describe_of_read_product {
-        final int createProductSize = 3;
 
         @Nested
         @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
         class Context_with_valid_id {
-            final long productId = 2;
+            private Long productId;
 
             @BeforeEach
             void setUp() {
-                createProducts(createProductSize);
+                Product product = createProduct();
+                productId = product.getId();
             }
 
             @Test
@@ -120,10 +130,12 @@ class ProductServiceTest {
         @Nested
         @DisplayName("찾는 Id와 동일한 Product가 존재하지 않을 경우")
         class Context_with_invalid_id {
-            final long productId = 2;
+            private Long productId;
 
             @BeforeEach
             void setUp() {
+                Product product = createProduct();
+                productId = product.getId();
                 productService.deleteProduct(productId);
             }
 
@@ -169,17 +181,17 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메소드에서")
     class Describe_of_update_product {
-        final int createProductSize = 2;
+        private long productId;
 
         @BeforeEach
         void setUp() {
-            createProducts(createProductSize);
+            Product product = createProduct();
+            productId = product.getId();
         }
 
         @Nested
         @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
         class Context_with_valid_id {
-            final long productId = 2;
             private ProductDto productDto;
 
             @BeforeEach
@@ -203,8 +215,8 @@ class ProductServiceTest {
         @Nested
         @DisplayName("찾는 Id 와 동일한 Product가 존재하지 않을 경우")
         class Context_with_invalid_id {
-
         }
+
     }
 
 }
