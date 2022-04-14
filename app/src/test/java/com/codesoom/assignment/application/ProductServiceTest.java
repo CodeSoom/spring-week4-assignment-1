@@ -237,4 +237,11 @@ class ProductServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("deleteProduct 메소드에서")
+    class Describe_of_delete_product {
+
+    }
+
+
 }
