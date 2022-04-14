@@ -219,4 +219,10 @@ class ProductControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("delete 메소드는")
+    class Describe_of_delete {
+
+    }
+
 }
