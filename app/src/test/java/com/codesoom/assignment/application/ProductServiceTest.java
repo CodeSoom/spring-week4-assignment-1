@@ -241,15 +241,20 @@ class ProductServiceTest {
     @Nested
     @DisplayName("deleteProduct 메소드에서")
     class Describe_of_delete_product {
+        private Product product;
+
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
 
         @Nested
         @DisplayName("Id 에 맞는 Product가 있을 경우")
-        class Context_with_delete {
+        class Context_with_valid_id {
             private Long productId;
 
             @BeforeEach
             void setUp() {
-                Product product = createProduct();
                 productId = product.getId();
             }
 
@@ -262,7 +267,24 @@ class ProductServiceTest {
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
+
+        @Nested
+        @DisplayName("Id 에 맞는 Product가 없을 경우")
+        class Context_with_invalid_id {
+            private Long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productService.deleteProduct(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
-
-
 }
