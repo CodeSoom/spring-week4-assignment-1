@@ -14,7 +14,7 @@ public interface ProductReadService {
     List<Product> findAll();
 
     /**
-     * 식별자로 상품을 찾아 반환합니다. 만약 상품을 찾지 못하면 예외를 던집니다.
+     * 식별자로 상품을 찾아 반환합니다.
      *
      * @param id 상품의 식별자
      * @throws ProductNotFoundException 식별자와 매칭되는 상품을 찾지 못할 경우
