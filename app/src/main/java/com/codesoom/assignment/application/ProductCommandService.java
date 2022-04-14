@@ -33,11 +33,11 @@ public class ProductCommandService {
     /**
      * 상품을 교체하고 리턴합니다.
      * @param product 교체 대상 상품
-     * @param source 교체될 상품 데이터
+     * @param replaceSource 교체될 상품 데이터
      */
-    public Product replaceProduct(final Product product, final ProductUpdateRequest source) {
+    public Product replaceProduct(final Product product, final ProductUpdateRequest replaceSource) {
 
-        product.replace(source);
+        product.replace(replaceSource);
 
         return product;
     }
@@ -45,11 +45,11 @@ public class ProductCommandService {
     /**
      * 상품을 변경하고 리턴합니다.
      * @param product 변경 대상 상품
-     * @param source 변경할 상품 데이터
+     * @param updateSource 변경할 상품 데이터
      */
-    public Product updateProduct(final Product product, final ProductUpdateRequest source) {
+    public Product updateProduct(final Product product, final ProductUpdateRequest updateSource) {
 
-        product.update(source);
+        product.update(updateSource);
 
         return product;
     }

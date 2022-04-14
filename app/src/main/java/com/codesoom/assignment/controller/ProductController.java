@@ -89,15 +89,15 @@ public class ProductController {
     /**
      * 상품을 새로운 상픔으로 대체하고 리턴합니다.
      * @param productId - 대체될 상품 아이디
-     * @param updateSource - 대체할 데이터
+     * @param replaceSource - 대체할 데이터
      */
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{productId}")
-    public ProductViewDto replace(@PathVariable Long productId, @RequestBody ProductUpdateDto updateSource) {
+    public ProductViewDto replace(@PathVariable Long productId, @RequestBody ProductUpdateDto replaceSource) {
 
         final Product product = productQueryService.getProduct(productId);
 
-        productCommandService.replaceProduct(product, updateSource);
+        productCommandService.replaceProduct(product, replaceSource);
 
         return ProductViewDto.from(product);
 
