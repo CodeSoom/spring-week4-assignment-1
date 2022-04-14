@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @DisplayName("ProductController 에서")
@@ -129,6 +131,25 @@ class ProductControllerTest {
                 Product found = productController.detail(productId);
 
                 assertThat(found).isNotNull();
+            }
+        }
+
+        @Nested
+        @DisplayName("제품이 없을 경우")
+        class Context_with_invalid_id {
+            private long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productController.detail(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
