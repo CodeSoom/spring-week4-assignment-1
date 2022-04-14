@@ -29,6 +29,7 @@ import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_PRI
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -213,6 +214,67 @@ public class WebProductControllerTest {
             void it_response_404() throws Exception {
 
                 mockMvc.perform(put("/products/{productId}", notExistsProductId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateDto))
+                        )
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH - /products/{productId} 요청시")
+    class Describe_patch {
+
+        final ProductUpdateDto updateDto = new ProductUpdateDto(
+                TEST_PRODUCT_UPDATE_NAME,
+                "",
+                TEST_PRODUCT_UPDATE_PRICE,
+                TEST_PRODUCT_UPDATE_IMAGE_PATH);
+
+        @Nested
+        @DisplayName("{productId} 와 일치하는 상품이 있다면")
+        class Context_existsProduct {
+
+            final Product product = new Product(
+                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+
+            Long productId;
+
+            @BeforeEach
+            void setUp() {
+                productRepository.save(product);
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("상품을 수정하고 응답한다. [200]")
+            void it_replace_and_return_product() throws Exception {
+
+                mockMvc.perform(patch("/products/{productId}", productId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateDto))
+                        )
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("id").value(productId))
+                        .andExpect(jsonPath("name").value(TEST_PRODUCT_UPDATE_NAME))
+                        .andExpect(jsonPath("maker").value(TEST_PRODUCT_MAKER))
+                        .andExpect(jsonPath("price").value(TEST_PRODUCT_UPDATE_PRICE))
+                        .andExpect(jsonPath("imageUrl").value(TEST_PRODUCT_UPDATE_IMAGE_PATH));
+            }
+        }
+
+        @Nested
+        @DisplayName("{productId} 와 일치하는 상품이 없다면")
+        class Context_notExistsProduct {
+
+            final Long notExistsProductId = 999L;
+
+            @Test
+            @DisplayName("NotFound 를 응답한다. [404]")
+            void it_response_404() throws Exception {
+
+                mockMvc.perform(patch("/products/{productId}", notExistsProductId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(updateDto))
                         )
