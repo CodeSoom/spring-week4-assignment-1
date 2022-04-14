@@ -54,6 +54,7 @@ public class Product {
 
     /**
      * 상품 정보를 대체합니다.
+     *
      * @param updateRequest 대체될 상품 데이터
      */
     public void replace(ProductUpdateRequest updateRequest) {
@@ -65,6 +66,7 @@ public class Product {
 
     /**
      * 상품 정보를 변경합니다.
+     *
      * @param updateRequest 변경될 상품 데이터
      */
     public void update(ProductUpdateRequest updateRequest) {
@@ -105,6 +107,6 @@ public class Product {
     @Override
     public String toString() {
         return String.format(
-                "CatToy{id=%s, name=%s, maker=%s, price=%d, imagePath=%s}", id, name, maker, price, imagePath);
+                "Product{id=%s, name=%s, maker=%s, price=%d, imagePath=%s}", id, name, maker, price, imagePath);
     }
 }
