@@ -102,6 +102,10 @@ public class ProductController {
     @PatchMapping("/{productId}")
     public ProductViewDto update(@PathVariable Long productId, @RequestBody ProductUpdateDto updateSource) {
 
-        return null;
+        final Product product = productQueryService.getProduct(productId);
+
+        productCommandService.updateProduct(product, updateSource);
+
+        return ProductViewDto.from(product);
     }
 }
