@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -45,22 +44,6 @@ public class ProductControllerWebTest {
     private ProductService productService;
     private ProductController productController;
 
-
-    /**
-     * 여러개의 Product 를 생성해 등록합니다.
-     * @param createProuctSize 생성할 Product의 갯수
-     */
-    void createProducts(int createProuctSize) {
-        for (int i = 0; i < createProuctSize; i++) {
-            ProductDto productDto = new ProductDto
-                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                    .maker(PRODUCT_MAKER)
-                    .imageUrl(PRODUCT_IMAGE_URL)
-                    .build();
-            productService.createProduct(productDto);
-        }
-    }
-
     /**
      * 하나의 Product 를 생성해 등록합니다.
      * @return 생성한 Product를 리턴
@@ -81,7 +64,8 @@ public class ProductControllerWebTest {
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(productController)
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .addFilters(
+                        new CharacterEncodingFilter("UTF-8", true))
                 .alwaysExpect(content().contentType(APPLICATION_JSON))
                 .build();
     }
@@ -89,6 +73,12 @@ public class ProductControllerWebTest {
     @Nested
     @DisplayName("GET - /products")
     class Describe_of_GET {
+        private Product product;
+
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
 
         @Nested
         @DisplayName("Product 가 있을 경우")
@@ -96,7 +86,6 @@ public class ProductControllerWebTest {
             final List<Product> products = new ArrayList<>();
             @BeforeEach
             void setUp() {
-                Product product = createProduct();
                 products.add(product);
             }
 
@@ -106,7 +95,26 @@ public class ProductControllerWebTest {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content()
-                                .string(objectMapper.writeValueAsString(products)));
+                                .string(containsString(
+                                        objectMapper.writeValueAsString(products))));
+            }
+        }
+
+        @Nested
+        @DisplayName("Product가 없을 경우")
+        class Content_with_empty_list {
+            @BeforeEach
+            void setUp() {
+                productService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("빈 배열을 보여준다")
+            void it_returns_empty_list() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk())
+                        .andExpect(content()
+                                .string(containsString("[]")));
             }
         }
     }
