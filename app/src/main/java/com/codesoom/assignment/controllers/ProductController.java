@@ -32,4 +32,9 @@ public class ProductController {
         return this.productService.getProduct(id);
     }
 
+    @PostMapping
+    public Product create(@RequestBody ProductDto productDto) {
+        return this.productService.createProduct(productDto);
+    }
+
 }

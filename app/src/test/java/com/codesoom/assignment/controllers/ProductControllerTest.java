@@ -154,4 +154,10 @@ class ProductControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("create 메소드는")
+    class Describe_of_create {
+
+    }
+
 }
