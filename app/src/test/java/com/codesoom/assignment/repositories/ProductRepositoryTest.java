@@ -33,7 +33,31 @@ class ProductRepositoryTest {
             void it_returns_empty_list() {
                 List<Product> results = productRepository.findAll();
 
-                assertThat(results.size()).isEqualTo(0);
+                assertThat(results).hasSize(0);
+            }
+        }
+
+
+        @Nested
+        @DisplayName("고양이 장난감 물품이 1개라도 존재할 때")
+        class Context_exist_product extends ContextProductRepository {
+
+            private Product existed;
+
+            @BeforeEach
+            void setUp() {
+                productRepository.deleteAll();
+
+                this.existed = productRepository.save(generateFirstProduct());
+            }
+
+            @Test
+            @DisplayName("사이즈가 0인 빈 물품 리스트를 반환한다.")
+            void it_returns_empty_list() {
+                List<Product> results = productRepository.findAll();
+
+                assertThat(results).hasSize(1);
+                assertThat(results).contains(existed);
             }
         }
     }
