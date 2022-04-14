@@ -158,6 +158,30 @@ class ProductControllerTest {
     @DisplayName("create 메소드는")
     class Describe_of_create {
 
+        @Nested
+        @DisplayName("제품이 생성되었다면")
+        class Context_with_created {
+            private ProductDto productDto;
+
+            @BeforeEach
+            void setUp() {
+                productDto = new ProductDto
+                        .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                        .maker(PRODUCT_MAKER)
+                        .imageUrl(PRODUCT_IMAGE_URL)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("생성된 제품을 반환한다")
+            void it_return_created_product() {
+                Product product = productController.create(productDto);
+
+                assertThat(product).isNotNull();
+                assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+                assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+            }
+        }
     }
 
 }
