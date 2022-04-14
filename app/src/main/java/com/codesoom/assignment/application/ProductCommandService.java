@@ -2,8 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.domain.ProductSaveRequest;
 import com.codesoom.assignment.domain.ProductUpdateRequest;
-import com.codesoom.assignment.dto.ProductSaveRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +32,8 @@ public class ProductCommandService {
 
     /**
      * 상품을 교체하고 리턴합니다.
-     * @param product 교체 대상 상품
+     *
+     * @param product       교체 대상 상품
      * @param replaceSource 교체될 상품 데이터
      */
     public Product replaceProduct(final Product product, final ProductUpdateRequest replaceSource) {
@@ -44,7 +45,8 @@ public class ProductCommandService {
 
     /**
      * 상품을 변경하고 리턴합니다.
-     * @param product 변경 대상 상품
+     *
+     * @param product      변경 대상 상품
      * @param updateSource 변경할 상품 데이터
      */
     public Product updateProduct(final Product product, final ProductUpdateRequest updateSource) {
@@ -56,6 +58,7 @@ public class ProductCommandService {
 
     /**
      * 상품을 삭제 합니다.
+     *
      * @param product 삭제할 상품
      */
     public void deleteProduct(final Product product) {

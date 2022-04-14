@@ -2,8 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.domain.ProductSaveRequest;
 import com.codesoom.assignment.domain.ProductUpdateRequest;
-import com.codesoom.assignment.dto.ProductSaveRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

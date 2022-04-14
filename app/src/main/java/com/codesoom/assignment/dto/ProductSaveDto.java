@@ -1,5 +1,7 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.ProductSaveRequest;
+
 import java.beans.ConstructorProperties;
 
 /**
