@@ -86,6 +86,11 @@ public class ProductController {
         productCommandService.deleteProduct(product);
     }
 
+    /**
+     * 상품을 새로운 상픔으로 대체하고 리턴합니다.
+     * @param productId - 대체될 상품 아이디
+     * @param updateSource - 대체할 데이터
+     */
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{productId}")
     public ProductViewDto replace(@PathVariable Long productId, @RequestBody ProductUpdateDto updateSource) {
@@ -98,6 +103,11 @@ public class ProductController {
 
     }
 
+    /**
+     * 상품 일부를 수정하고 리턴합니다.
+     * @param productId 수정할 상품 아이디
+     * @param updateSource 수정할 데이터
+     */
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{productId}")
     public ProductViewDto update(@PathVariable Long productId, @RequestBody ProductUpdateDto updateSource) {
