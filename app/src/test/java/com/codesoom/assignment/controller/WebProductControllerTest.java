@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductSaveDto;
+import com.codesoom.assignment.dto.ProductUpdateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,10 +22,15 @@ import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_IMAGE_PATH
 import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_MAKER;
 import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_NAME;
 import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_PRICE;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_PRICE;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -137,7 +143,7 @@ public class WebProductControllerTest {
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @Test
-            @DisplayName("상품을 등록하고 응답한다. [200]")
+            @DisplayName("상품을 등록하고 응답한다. [201]")
             void it_save_and_return_product() throws Exception {
 
                 mockMvc.perform(post("/products")
@@ -152,6 +158,50 @@ public class WebProductControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("PUT - /products/{productId} 요청시")
+    class Describe_replace {
+
+        @Nested
+        @DisplayName("대체될 상품이 있다면")
+        class Context_existsProduct {
+
+            final Product product = new Product(
+                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+
+            final ProductUpdateDto updateDto = new ProductUpdateDto(
+                    TEST_PRODUCT_UPDATE_NAME,
+                    TEST_PRODUCT_UPDATE_MAKER,
+                    TEST_PRODUCT_UPDATE_PRICE,
+                    TEST_PRODUCT_UPDATE_IMAGE_PATH);
+
+            Long productId;
+
+            @BeforeEach
+            void setUp() {
+                productRepository.save(product);
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("상품을 대체하고 응답한다. [200]")
+            void it_replace_and_return_product() throws Exception {
+
+                mockMvc.perform(put("/products/{productId}", productId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .contentType(objectMapper.writeValueAsString(updateDto))
+                        )
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("id").value(productId))
+                        .andExpect(jsonPath("name").value(TEST_PRODUCT_UPDATE_NAME))
+                        .andExpect(jsonPath("maker").value(TEST_PRODUCT_UPDATE_MAKER))
+                        .andExpect(jsonPath("price").value(TEST_PRODUCT_UPDATE_PRICE))
+                        .andExpect(jsonPath("imageUrl").value(TEST_PRODUCT_UPDATE_IMAGE_PATH));
+            }
+        }
+    }
+
 
     @Nested
     @DisplayName("DELETE - /products/{productId}")

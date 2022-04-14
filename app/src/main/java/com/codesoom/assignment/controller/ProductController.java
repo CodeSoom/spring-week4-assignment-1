@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductSaveDto;
+import com.codesoom.assignment.dto.ProductUpdateDto;
 import com.codesoom.assignment.dto.ProductViewDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -81,5 +82,9 @@ public class ProductController {
         final Product product = productQueryService.getProduct(productId);
 
         productCommandService.deleteProduct(product);
+    }
+
+    public Product replace(Long productId, ProductUpdateDto updateSource) {
+        return null;
     }
 }

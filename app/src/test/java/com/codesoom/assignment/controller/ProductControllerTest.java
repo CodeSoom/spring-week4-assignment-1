@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductSaveDto;
+import com.codesoom.assignment.dto.ProductUpdateDto;
 import com.codesoom.assignment.dto.ProductViewDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,10 @@ import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_IMAGE_PATH
 import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_MAKER;
 import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_NAME;
 import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_PRICE;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -135,6 +140,48 @@ public class ProductControllerTest {
                         () -> assertThat(productViewDto.getMaker()).isEqualTo(TEST_PRODUCT_MAKER),
                         () -> assertThat(productViewDto.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
                         () -> assertThat(productViewDto.getImageUrl()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
+                );
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("replace 메소드는")
+    class Describe_replace {
+
+        @Nested
+        @DisplayName("주어진 아이디와 일치하는 상품이 있으면 대체될 상품 데이터로")
+        class Context_existsProduct {
+
+            final Product product = new Product(
+                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+
+            final ProductUpdateDto updateSource = new ProductUpdateDto(
+                    TEST_PRODUCT_UPDATE_NAME,
+                    TEST_PRODUCT_UPDATE_MAKER,
+                    TEST_PRODUCT_UPDATE_PRICE,
+                    TEST_PRODUCT_UPDATE_IMAGE_PATH);
+
+            Long productId;
+
+            @BeforeEach
+            void setUp() {
+                productRepository.save(product);
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("상품을 대체하고 리턴한다.")
+            void it_replace_and_return_product() {
+
+                final Product product = productController.replace(productId, updateSource);
+
+                assertAll(
+                        () -> assertThat(product.getId()).isEqualTo(productId),
+                        () -> assertThat(product.getName()).isEqualTo(TEST_PRODUCT_UPDATE_NAME),
+                        () -> assertThat(product.getMaker()).isEqualTo(TEST_PRODUCT_UPDATE_MAKER),
+                        () -> assertThat(product.getPrice()).isEqualTo(TEST_PRODUCT_UPDATE_PRICE),
+                        () -> assertThat(product.getImagePath()).isEqualTo(TEST_PRODUCT_UPDATE_IMAGE_PATH)
                 );
             }
         }
