@@ -1,7 +1,6 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.ProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ProductCreateServiceImpl implements ProductCreateService {
+public class ProductSaveServiceImpl implements ProductSaveService {
 
     private final ProductRepository repository;
 
     @Override
-    public Product create(ProductDto productDto) {
+    public Product saveProduct(ProductSaveRequest productDto) {
         return repository.save(productDto.toEntity());
     }
 

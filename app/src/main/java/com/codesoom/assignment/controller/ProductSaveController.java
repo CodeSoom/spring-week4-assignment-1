@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
 
-import com.codesoom.assignment.application.ProductCreateService;
+import com.codesoom.assignment.application.ProductSaveService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import org.springframework.http.HttpStatus;
@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ProductController
-public class ProductCreateController {
+public class ProductSaveController {
 
-    private final ProductCreateService service;
+    private final ProductSaveService service;
 
-    public ProductCreateController(ProductCreateService service) {
+    public ProductSaveController(ProductSaveService service) {
         this.service = service;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Product createProduct(@RequestBody ProductDto productDto) {
-        return service.create(productDto);
+    public Product saveProduct(@RequestBody ProductDto productDto) {
+        return service.saveProduct(productDto);
     }
 
 }

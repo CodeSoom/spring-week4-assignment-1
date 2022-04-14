@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.application.ProductSaveRequest;
 import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  * 고객이 입력한 정보를 받아 엔티티로 변환하는 역할을 담당합니다.
  */
 @Getter
-public class ProductDto {
+public class ProductDto implements ProductSaveRequest {
 
     @NotBlank
     private String name;
@@ -22,6 +23,9 @@ public class ProductDto {
     private BigDecimal price;
 
     private String image;
+
+    public ProductDto() {
+    }
 
     public ProductDto(String name, String maker, BigDecimal price, String image) {
         this.name = name;
