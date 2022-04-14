@@ -13,6 +13,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 import java.util.stream.LongStream;
 
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -71,7 +75,9 @@ class ProductQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = new Product("NAME", "MAKER", 1000, "/images/test.jpg");
+                Product product = new Product(
+                        TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+
                 productRepository.save(product);
                 productId = product.getId();
             }

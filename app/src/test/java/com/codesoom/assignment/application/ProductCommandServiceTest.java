@@ -13,22 +13,20 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_PRICE;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 @DisplayName("ProductCommandService 클래스")
 class ProductCommandServiceTest {
-
-    private static final String TEST_PRODUCT_NAME = "NAME";
-    private static final String TEST_PRODUCT_MAKER = "MAKER";
-    private static final Integer TEST_PRODUCT_PRICE = 1000;
-    private static final String TEST_PRODUCT_IMAGE_PATH = "/image/test.jpg";
-
-    private final String TEST_PRODUCT_UPDATE_NAME = "고양이장난감-1";
-    private final String TEST_PRODUCT_UPDATE_MAKER = "APPLE-1";
-    private final Integer TEST_PRODUCT_UPDATE_PRICE = 11000;
-    private final String TEST_PRODUCT_UPDATE_IMAGE_PATH = "/images/toy-1.png";
 
     ProductCommandService productCommandService;
 

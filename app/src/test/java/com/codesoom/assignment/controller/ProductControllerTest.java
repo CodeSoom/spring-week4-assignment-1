@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.LongStream;
 
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -26,11 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @SpringBootTest
 @DisplayName("ProductController 클래스")
 public class ProductControllerTest {
-
-    private static final String TEST_PRODUCT_NAME = "NAME";
-    private static final String TEST_PRODUCT_MAKER = "MAKER";
-    private static final Integer TEST_PRODUCT_PRICE = 1000;
-    private static final String TEST_PRODUCT_IMAGE_PATH = "/image/test.jpg";
 
     @Autowired
     ProductController productController;

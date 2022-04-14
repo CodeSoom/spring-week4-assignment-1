@@ -5,21 +5,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_PRICE;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_UPDATE_PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("Product Entity")
 class ProductTest {
-
-    private final String TEST_PRODUCT_NAME = "고양이장난감";
-    private final String TEST_PRODUCT_MAKER = "APPLE";
-    private final Integer TEST_PRODUCT_PRICE = 10000;
-    private final String TEST_PRODUCT_IMAGE_PATH = "/images/toy.png";
-
-    private final String TEST_PRODUCT_UPDATE_NAME = "고양이장난감-1";
-    private final String TEST_PRODUCT_UPDATE_MAKER = "APPLE-1";
-    private final Integer TEST_PRODUCT_UPDATE_PRICE = 11000;
-    private final String TEST_PRODUCT_UPDATE_IMAGE_PATH = "/images/toy-1.png";
 
     @Nested
     @DisplayName("replace 메소드는")

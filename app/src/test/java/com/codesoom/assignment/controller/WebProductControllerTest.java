@@ -17,6 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.stream.LongStream;
 
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_IMAGE_PATH;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_MAKER;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_NAME;
+import static com.codesoom.assignment.ProductTestFixture.TEST_PRODUCT_PRICE;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,11 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayName("상품에 대한 HTTP 요청")
 public class WebProductControllerTest {
-
-    private static final String TEST_PRODUCT_NAME = "NAME";
-    private static final String TEST_PRODUCT_MAKER = "MAKER";
-    private static final Integer TEST_PRODUCT_PRICE = 10000;
-    private static final String TEST_PRODUCT_IMAGE_PATH = "/images/test.jpg";
 
     @Autowired
     MockMvc mockMvc;
@@ -88,7 +87,7 @@ public class WebProductControllerTest {
             Long productId;
 
             final Product product = new Product(
-                    TEST_PRODUCT_NAME,TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH
+                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH
             );
 
             @BeforeEach
