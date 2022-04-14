@@ -2,6 +2,7 @@ package com.codesoom.assignment.domain;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +31,9 @@ public class Product {
     @Column
     private String image;
 
+    @Column(columnDefinition = "boolean default false")
+    private Boolean deleted;
+
     protected Product() {
     }
 
@@ -48,6 +52,10 @@ public class Product {
         this.price = productDto.getPrice();
         this.image = productDto.getImage();
         return this;
+    }
+
+    public void delete() {
+        this.deleted = Boolean.TRUE;
     }
 
 }
