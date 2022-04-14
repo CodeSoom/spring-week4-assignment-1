@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -89,5 +90,24 @@ public class ProductControllerWebTest {
     @DisplayName("GET - /products")
     class Describe_of_GET {
 
+        @Nested
+        @DisplayName("Product 가 있을 경우")
+        class Content_with_product_list {
+            final List<Product> products = new ArrayList<>();
+            @BeforeEach
+            void setUp() {
+                Product product = createProduct();
+                products.add(product);
+            }
+
+            @Test
+            @DisplayName("모든 Product를 보여준다")
+            void it_returns_product_list() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk())
+                        .andExpect(content()
+                                .string(objectMapper.writeValueAsString(products)));
+            }
+        }
     }
 }
