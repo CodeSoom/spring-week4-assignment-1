@@ -1,21 +1,13 @@
 package com.codesoom.assignment.contexts;
 
-import com.codesoom.assignment.controllers.ProductController;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+public abstract class ContextProductController extends ContextProduct {
 
-@AutoConfigureMockMvc
-public abstract class ContextProductController extends ContextProductService {
+    protected String productIdJsonString(Long productId) {
+        return String.format("\"productId\":%d", productId);
+    }
 
-    protected MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        this.mockMvc = MockMvcBuilders
-                .standaloneSetup(new ProductController(productService))
-                .build();
+    protected String productJsonString(Long productId, String productName) {
+        return String.format("{\"productId\":%d,\"name\":\"%s\"}", productId, productName);
     }
 
 }

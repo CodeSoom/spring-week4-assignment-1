@@ -1,8 +1,8 @@
 package com.codesoom.assignment.services;
 
-import com.codesoom.assignment.contexts.ContextProductController;
 import com.codesoom.assignment.contexts.ContextProductService;
 import com.codesoom.assignment.domains.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,12 +22,17 @@ class ProductServiceTest {
         @DisplayName("가게에 등록된 상품이 없을 때")
         class Context_no_exist_product extends ContextProductService {
 
+            @BeforeEach
+            void serUp() {
+                productRepository.deleteAll();
+            }
+
             @Test
             @DisplayName("사이즈가 0인 빈 리스트를 반환한다.")
             void it_returns_empty_list () {
                 List<Product> products = productService.getProducts();
 
-                assertThat(products.size()).isEqualTo(0);
+                assertThat(products).hasSize(0);
             }
         }
 
@@ -35,10 +40,22 @@ class ProductServiceTest {
         @DisplayName("등록된 고양이 물품이 1개 이상 존재하면")
         class Context_exist_product extends ContextProductService {
 
+            private Product existed;
+
+            @BeforeEach
+            void setUp() {
+                productRepository.deleteAll();
+
+                this.existed = productRepository.save(generateFirstProduct());
+            }
+
             @Test
             @DisplayName("사이즈가 0이상이고 등록된 물품 정보가 담긴 리스트를 반환한다. ")
             void it_returns_gt0_list() {
+                List<Product> products = productService.getProducts();
 
+                assertThat(products).hasSize(1);
+                assertThat(products.get(0)).isEqualTo(existed);
             }
         }
     }
