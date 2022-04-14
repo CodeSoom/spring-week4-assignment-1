@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,11 @@ public class ProductController {
     @PatchMapping("{id}")
     public Product update(@PathVariable long id, @RequestBody ProductDto productDto) {
         return this.productService.updateProduct(id, productDto);
+    }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable long id) {
+        this.productService.deleteProduct(id);
     }
 
 }

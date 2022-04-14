@@ -222,7 +222,32 @@ class ProductControllerTest {
     @Nested
     @DisplayName("delete 메소드는")
     class Describe_of_delete {
+        private Product product;
 
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
+
+        @Nested
+        @DisplayName("Id에 맞는 제품이 존재할 경우")
+        class Context_with_valid_id {
+            private Long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("해당 제품을 삭제한다")
+            void it_return_void_with_delete() {
+                productController.delete(productId);
+
+                assertThatThrownBy(() -> productService.getProduct(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
 }
