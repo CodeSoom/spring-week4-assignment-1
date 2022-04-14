@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 /**
  * 상품 등록/수정 시 사용할 DTO 클래스 입니다.
- * 고객이 입력한 정보를 받아 엔티티로 변환하는 역할을 담당합니다.
+ * 사용자가 입력한 정보를 받기 위해 컨트롤러에서만 사용합니다.
  */
 @Getter
 public class ProductDto implements ProductSaveRequest {
@@ -34,6 +34,7 @@ public class ProductDto implements ProductSaveRequest {
         this.image = image;
     }
 
+    @Override
     public Product toEntity() {
         return Product.builder()
                 .name(name)
