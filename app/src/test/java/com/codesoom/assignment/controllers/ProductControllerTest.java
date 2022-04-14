@@ -49,7 +49,7 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("list 메소드 는")
+    @DisplayName("list 메소드는")
     class Describe_of_list {
         final int createProductsize = 3;
 
@@ -88,6 +88,12 @@ class ProductControllerTest {
                 assertThat(products).isNotEmpty();
             }
         }
+
+    }
+
+    @Nested
+    @DisplayName("detail 메소드는")
+    class Describe_of_detail {
 
     }
 
