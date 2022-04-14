@@ -27,6 +27,8 @@ class ProductRepositoryTest {
 
     private static final String UPDATE_PRODUCT_NAME = "상품1000";
 
+    private static final int CREATE_PRODUCT_SIZE = 3;
+
     @Autowired
     private ProductRepository productRepository;
 
@@ -45,19 +47,18 @@ class ProductRepositoryTest {
         }
     }
 
+    @BeforeEach
+    void setUp() {
+        productRepository.deleteAll();
+    }
+
     @Nested
     @DisplayName("findAll 메소드를 호출할 때")
     class Describe_readAll_of_product {
-        final int createProductSize = 4;
 
         @BeforeEach
         void setUp() {
-            createProduct(createProductSize);
-        }
-
-        @AfterEach
-        void tearDown() {
-            productRepository.deleteAll();
+            createProduct(CREATE_PRODUCT_SIZE);
         }
 
         @Nested
@@ -70,7 +71,6 @@ class ProductRepositoryTest {
                 List<Product> products = productRepository.findAll();
 
                 assertThat(products).isNotEmpty();
-                assertThat(products).hasSize(createProductSize);
             }
         }
 
@@ -89,7 +89,6 @@ class ProductRepositoryTest {
                 List<Product> products = productRepository.findAll();
 
                 assertThat(products).isEmpty();
-                assertThat(products).hasSize(0);
             }
         }
     }
@@ -101,13 +100,18 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("Id 와 동일한 상품이 존재하지 않을 경우")
         class Context_without_product {
-            final int createProductSize = 3;
-            final long productId = 1L;
+            private Long productId;
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
-                productRepository.deleteById(productId);
+                Product product = new Product
+                        .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                        .maker(PRODUCT_MAKER)
+                        .imageUrl(PRODUCT_IMAGE_URL)
+                        .build();
+                Product createdProduct = productRepository.save(product);
+                productId = createdProduct.getId();
+                productRepository.deleteById(createdProduct.getId());
             }
 
             @Test

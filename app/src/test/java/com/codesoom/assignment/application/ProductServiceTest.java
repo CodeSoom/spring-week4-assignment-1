@@ -46,7 +46,7 @@ class ProductServiceTest {
         }
     }
 
-    @AfterEach
+    @BeforeEach
     void tearDown() {
         productService.deleteAll();
     }
@@ -70,7 +70,6 @@ class ProductServiceTest {
                 List<Product> products = productService.getProductList();
 
                 assertThat(products).isEmpty();
-                assertThat(products).hasSize(0);
             }
         }
 
@@ -84,18 +83,12 @@ class ProductServiceTest {
                 createProduct(createProductSize);
             }
 
-            @AfterEach
-            void tearDown() {
-                productService.deleteAll();
-            }
-
             @Test
             @DisplayName("Product 객체가 포함된 배열을 리턴한다")
             void it_returns_list_of_product() {
                 List<Product> products = productService.getProductList();
 
                 assertThat(products).isNotEmpty();
-                assertThat(products).hasSize(createProductSize);
             }
         }
     }
@@ -149,7 +142,7 @@ class ProductServiceTest {
     class Describe_of_create_product {
 
         @Nested
-        @DisplayName("상품이 옳바르게 생성 된 경우")
+        @DisplayName("상품이 생성된 경우")
         class Context_with_create_product {
             private ProductDto productDto;
 
@@ -187,26 +180,24 @@ class ProductServiceTest {
         @Nested
         @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
         class Context_with_valid_id {
-            private Product updatedProduct;
             final long productId = 2;
+            private ProductDto productDto;
 
             @BeforeEach
             void setUp() {
-                ProductDto productDto = new ProductDto
+                productDto = new ProductDto
                         .Builder(UPDATE_PRODUCT_PRICE, UPDATE_PRODUCT_NAME)
                         .build();
-                Product product = productService.getProduct(productId);
-                updatedProduct = productService
-                        .updateProduct(product.getId(), productDto);
             }
 
             @Test
             @DisplayName("업데이트 된 객체를 반환한다")
             void it_return_updated_product() {
+                Product product = productService.updateProduct(productId, productDto);
 
-                assertThat(updatedProduct).isNotNull();
-                assertThat(updatedProduct.getPrice()).isEqualTo(UPDATE_PRODUCT_PRICE);
-                assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
+                assertThat(product).isNotNull();
+                assertThat(product.getPrice()).isEqualTo(UPDATE_PRODUCT_PRICE);
+                assertThat(product.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
             }
         }
     }
