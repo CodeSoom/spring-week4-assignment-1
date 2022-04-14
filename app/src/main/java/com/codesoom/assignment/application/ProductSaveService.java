@@ -13,7 +13,7 @@ public interface ProductCreateService {
      * 상품을 생성합니다.
      *
      * @param productDto 사용자가 입력한 데이터
-     * @return 생성된 결과
+     * @return 생성된 상품
      */
     Product create(ProductDto productDto);
 
