@@ -29,10 +29,10 @@ public class ProductServiceMockTest {
 
     @DisplayName("ProductCreateServiceImpl 클래스")
     @Nested
-    class ProductCreateServiceTest {
+    class ProductSaveServiceTest {
 
         @InjectMocks
-        private ProductCreateServiceImpl service;
+        private ProductSaveServiceImpl service;
 
         @Mock
         private ProductRepository repository;
@@ -43,7 +43,7 @@ public class ProductServiceMockTest {
             final ProductDto productDto
                     = new ProductDto("name", "maker", BigDecimal.valueOf(2000), "image");
 
-            service.create(productDto);
+            service.saveProduct(productDto);
 
             verify(repository).save(any(Product.class));
         }

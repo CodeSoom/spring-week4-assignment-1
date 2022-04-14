@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductCreateServiceImpl;
+import com.codesoom.assignment.application.ProductSaveServiceImpl;
 import com.codesoom.assignment.domain.ProductDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,13 +16,13 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ProductCreateControllerTest {
+public class ProductSaveControllerTest {
 
     @InjectMocks
-    private ProductCreateController controller;
+    private ProductSaveController controller;
 
     @Mock
-    private ProductCreateServiceImpl service;
+    private ProductSaveServiceImpl service;
 
     @DisplayName("상품을 성공적으로 등록한다.")
     @Test
@@ -30,9 +30,9 @@ public class ProductCreateControllerTest {
         final ProductDto productDto
                 = new ProductDto("어쩌구", "어쩌구컴퍼니", BigDecimal.valueOf(2000), "url");
 
-        controller.createProduct(productDto);
+        controller.saveProduct(productDto);
 
-        verify(service).create(any(ProductDto.class));
+        verify(service).saveProduct(any(ProductDto.class));
     }
 
 }

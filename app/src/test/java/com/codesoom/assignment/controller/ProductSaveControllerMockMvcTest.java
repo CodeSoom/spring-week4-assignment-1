@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProductCreateControllerMockMvcTest {
+public class ProductSaveControllerMockMvcTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,8 +34,10 @@ public class ProductCreateControllerMockMvcTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final ProductDto PRODUCT_DTO
-            = new ProductDto("dog nose work toy", "miki international", BigDecimal.valueOf(2000), "url");
+    private static final ProductDto PRODUCT_DTO = new ProductDto("dog nose work toy",
+            "miki international",
+            BigDecimal.valueOf(2000),
+            "url");
 
     @AfterEach
     void cleanup() {

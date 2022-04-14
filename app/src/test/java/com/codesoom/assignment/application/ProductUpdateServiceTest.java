@@ -33,26 +33,28 @@ public class ProductUpdateServiceTest extends ServiceTest {
     @Nested
     class Describe_update {
 
-        private Long EXIST_ID;
-        private final Product OLD_PRODUCT
-                = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
         private final ProductDto PRODUCT_DTO
                 = new ProductDto("꿈돌이", "유령회사", BigDecimal.valueOf(5000), "");
-
-        @BeforeEach
-        void setup() {
-            final Product product = repository.save(OLD_PRODUCT);
-            this.EXIST_ID = product.getId();
-        }
-
-        @AfterEach
-        void cleanup() {
-            repository.deleteAll();
-        }
 
         @DisplayName("존재하는 상품 id와 변경 데이터가 주어진다면")
         @Nested
         class Context_with_exist_id {
+
+            private Long EXIST_ID;
+            private final Product OLD_PRODUCT
+                    = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
+
+            @BeforeEach
+            void setup() {
+                final Product product = repository.save(OLD_PRODUCT);
+                this.EXIST_ID = product.getId();
+            }
+
+            @AfterEach
+            void cleanup() {
+                repository.deleteAll();
+            }
+
             @DisplayName("상품을 성공적으로 변경한 뒤 변경 결과를 반환한다.")
             @Test
             void will_return_updated_product() {
