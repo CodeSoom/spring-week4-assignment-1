@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -241,6 +242,26 @@ class ProductServiceTest {
     @DisplayName("deleteProduct 메소드에서")
     class Describe_of_delete_product {
 
+        @Nested
+        @DisplayName("Id 에 맞는 Product가 있을 경우")
+        class Context_with_delete {
+            private Long productId;
+
+            @BeforeEach
+            void setUp() {
+                Product product = createProduct();
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("정상적으로 삭제를 한다")
+            void it_return_void() {
+                productService.deleteProduct(productId);
+
+                assertThatThrownBy(() -> productService.getProduct(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
 
