@@ -27,4 +27,9 @@ public class ProductController {
         return productService.getProductList();
     }
 
+    @GetMapping("{id}")
+    public Product detail(@PathVariable long id) {
+        return this.productService.getProduct(id);
+    }
+
 }

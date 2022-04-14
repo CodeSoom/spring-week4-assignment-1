@@ -48,6 +48,19 @@ class ProductControllerTest {
         }
     }
 
+    /**
+     * 하나의 Product 를 생성해 등록합니다.
+     * @return 생성한 Product를 리턴
+     */
+    private Product createProduct() {
+        ProductDto productDto = new ProductDto
+                .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                .maker(PRODUCT_MAKER)
+                .imageUrl(PRODUCT_IMAGE_URL)
+                .build();
+        return productService.createProduct(productDto);
+    }
+
     @Nested
     @DisplayName("list 메소드는")
     class Describe_of_list {
@@ -84,7 +97,6 @@ class ProductControllerTest {
             @DisplayName("Product 객체가 포함된 배열을 반환한다")
             void it_returns_product_list() {
                 List<Product> products = productController.list();
-
                 assertThat(products).isNotEmpty();
             }
         }
@@ -94,7 +106,31 @@ class ProductControllerTest {
     @Nested
     @DisplayName("detail 메소드는")
     class Describe_of_detail {
+        private Product product;
 
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
+
+        @Nested
+        @DisplayName("제품이 있을 경우")
+        class Context_with_product {
+            private long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("제품을 반환한다")
+            void it_return_product() {
+                Product found = productController.detail(productId);
+
+                assertThat(found).isNotNull();
+            }
+        }
     }
 
 }

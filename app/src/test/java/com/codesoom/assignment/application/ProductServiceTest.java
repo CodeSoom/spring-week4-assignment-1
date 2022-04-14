@@ -45,6 +45,10 @@ class ProductServiceTest {
         }
     }
 
+    /**
+     * 하나의 Product 를 생성해 등록합니다.
+     * @return 생성한 Product를 리턴
+     */
     private Product createProduct() {
         ProductDto productDto = new ProductDto
                 .Builder(PRODUCT_PRICE, PRODUCT_NAME)
