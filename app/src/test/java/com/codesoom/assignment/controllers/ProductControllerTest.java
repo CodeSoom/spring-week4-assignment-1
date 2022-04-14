@@ -74,7 +74,19 @@ class ProductControllerTest {
 
                 assertThat(products).isEmpty();
             }
+        }
 
+        @Nested
+        @DisplayName("Product 객체가 있을 경우")
+        class Context_with_product_list {
+
+            @Test
+            @DisplayName("Product 객체가 포함된 배열을 반환한다")
+            void it_returns_product_list() {
+                List<Product> products = productController.list();
+
+                assertThat(products).isNotEmpty();
+            }
         }
 
     }
