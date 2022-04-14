@@ -248,6 +248,25 @@ class ProductControllerTest {
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
+
+        @Nested
+        @DisplayName("Id에 맞는 제품이 존재하지 않을 경우")
+        class Context_with_invalid_id {
+            private Long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productController.delete(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
 }
