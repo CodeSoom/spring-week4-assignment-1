@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.domain.entity;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.entity.ProductRepository;

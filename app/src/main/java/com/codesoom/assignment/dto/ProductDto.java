@@ -11,7 +11,7 @@ public class ProductDto {
     private Integer price;
     private String imageUrl;
 
-    protected ProductDto() {};
+    protected ProductDto() {}
 
     private ProductDto(Builder builder) {
         name = builder.name;
