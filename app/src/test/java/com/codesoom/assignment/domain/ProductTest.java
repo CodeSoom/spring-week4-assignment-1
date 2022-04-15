@@ -10,10 +10,10 @@ class ProductTest {
     private static final String PRODUCT_MAKER = "야옹이";
     private static final int PRODUCT_PRICE = 20000;
     private static final String PRODUCT_IMAGE_URL = "https://pixabay.com/photos/cat-kitten-playful-pet-feline-5694895/";
-    private static final String PRODUCT_NAME_FOR_UPDATING = "장난감뱀";
-    private static final String PRODUCT_MAKER_FOR_UPDATING = "호랑이";
-    private static final int PRODUCT_PRICE_FOR_UPDATING = 30000;
-    private static final String PRODUCT_IMAGE_URL_FOR_UPDATING = "https://pixabay.com/photos/animal-close-up-cobra-outdoors-1836120/";
+    private static final String PRODUCT_NAME_UPDATED = "장난감뱀";
+    private static final String PRODUCT_MAKER_UPDATED = "호랑이";
+    private static final int PRODUCT_PRICE_UPDATED = 30000;
+    private static final String PRODUCT_IMAGE_URL_UPDATED = "https://pixabay.com/photos/animal-close-up-cobra-outdoors-1836120/";
     private Product product;
 
     @BeforeEach
@@ -44,8 +44,8 @@ class ProductTest {
 
     @Test
     void setName() {
-        product.setName(PRODUCT_NAME_FOR_UPDATING);
-        assertThat(product.getName()).isEqualTo(PRODUCT_NAME_FOR_UPDATING);
+        product.setName(PRODUCT_NAME_UPDATED);
+        assertThat(product.getName()).isEqualTo(PRODUCT_NAME_UPDATED);
     }
 
     @Test
@@ -55,8 +55,8 @@ class ProductTest {
 
     @Test
     void setMaker() {
-        product.setMaker(PRODUCT_MAKER_FOR_UPDATING);
-        assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER_FOR_UPDATING);
+        product.setMaker(PRODUCT_MAKER_UPDATED);
+        assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER_UPDATED);
     }
 
     @Test
@@ -66,8 +66,8 @@ class ProductTest {
 
     @Test
     void setPrice() {
-        product.setPrice(PRODUCT_PRICE_FOR_UPDATING);
-        assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE_FOR_UPDATING);
+        product.setPrice(PRODUCT_PRICE_UPDATED);
+        assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE_UPDATED);
     }
 
     @Test
@@ -77,7 +77,7 @@ class ProductTest {
 
     @Test
     void setImageUrl() {
-        product.setImageUrl(PRODUCT_IMAGE_URL_FOR_UPDATING);
-        assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL_FOR_UPDATING);
+        product.setImageUrl(PRODUCT_IMAGE_URL_UPDATED);
+        assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL_UPDATED);
     }
 }
