@@ -7,6 +7,7 @@ import com.codesoom.assignment.dto.ProductSaveDto;
 import com.codesoom.assignment.dto.ProductUpdateDto;
 import com.codesoom.assignment.dto.ProductViewDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 상품에 대한 HTTP 요청을 처리합니다.
  */
+@CrossOrigin(origins = "http://localhost:9000")
 @RestController
 @RequestMapping("/products")
 public class ProductController {
