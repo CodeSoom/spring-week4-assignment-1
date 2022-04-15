@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,10 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -41,32 +44,24 @@ public class ProductControllerWebTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
 
     /**
      * 하나의 Product 를 생성해 등록합니다.
      * @return 생성한 Product를 리턴
      */
     private Product createProduct() {
-        ProductDto productDto = new ProductDto
+        Product product = new Product
                 .Builder(PRODUCT_PRICE, PRODUCT_NAME)
                 .maker(PRODUCT_MAKER)
                 .imageUrl(PRODUCT_IMAGE_URL)
                 .build();
-        return productService.createProduct(productDto);
+        return productRepository.save(product);
     }
 
     @BeforeEach
     void setUp() {
-        ProductController productController = new ProductController(productService);
-        productService.deleteAll();
-
-        mockMvc = MockMvcBuilders
-                .standaloneSetup(productController)
-                .addFilters(
-                        new CharacterEncodingFilter("UTF-8", true))
-                .alwaysExpect(content().contentType(APPLICATION_JSON))
-                .build();
+        productRepository.deleteAll();
     }
 
     @Nested
@@ -104,7 +99,7 @@ public class ProductControllerWebTest {
         class Content_with_empty_list {
             @BeforeEach
             void setUp() {
-                productService.deleteAll();
+                productRepository.deleteAll();
             }
 
             @Test
@@ -121,6 +116,52 @@ public class ProductControllerWebTest {
     @Nested
     @DisplayName("GET - /products/{id}")
     class Describe_of_detail_product {
+        private Product product;
 
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
+
+        @Nested
+        @DisplayName("Product가 있을 경우")
+        class Context_with_product {
+            private long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("Id와 동일한 Product를 보여준다")
+            void it_return_product() throws Exception {
+                mockMvc.perform(get("/products/" + productId))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imageUrl").exists());
+            }
+        }
+
+        @Nested
+        @DisplayName("Product 가 없을 경우")
+        class Context_without_product {
+            private long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productRepository.delete(product);
+            }
+
+            @Test
+            @DisplayName("404 에러를 던진다")
+            void it_throw_productNotFoundException() throws Exception {
+                mockMvc.perform(get("/products/" + productId))
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 }
