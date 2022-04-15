@@ -7,6 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.math.BigDecimal;
@@ -14,11 +17,13 @@ import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("ProductQueryService 클래스")
 @DataJpaTest
+@ExtendWith(MockitoExtension.class)
 class ProductQueryServiceTest {
 
     @Autowired
     private ProductRepository productRepository;
 
+    @Mock
     private ProductQueryService productQueryService;
 
     private Long NOT_SAVED_ID = 100L;
@@ -43,7 +48,7 @@ class ProductQueryServiceTest {
     @Test
     @DisplayName("getProducts 메소드는 모든 상품의 목록을 반환한다.")
     void getProducts() {
-        assertThat(productQueryService.getProducts()).hasSize(1);
+        assertThat(productQueryService.getProducts()).isNotEmpty();
     }
 
     @Nested
