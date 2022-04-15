@@ -88,7 +88,6 @@ class ProductControllerTest {
                 assertThat(products).isNotEmpty();
             }
         }
-
     }
 
     @Nested
@@ -228,7 +227,6 @@ class ProductControllerTest {
                 assertThatThrownBy(() -> productController.update(productId, productDto))
                         .isInstanceOf(ProductNotFoundException.class);
             }
-
         }
     }
 
@@ -281,5 +279,4 @@ class ProductControllerTest {
             }
         }
     }
-
 }

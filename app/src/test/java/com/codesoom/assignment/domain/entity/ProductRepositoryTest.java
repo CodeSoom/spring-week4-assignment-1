@@ -49,7 +49,6 @@ class ProductRepositoryTest {
     @DisplayName("findAll 메소드를 호출할 때")
     class Describe_readAll_of_product {
 
-
         @Nested
         @DisplayName("상품이 존재할 경우")
         class Context_with_products {
@@ -214,5 +213,4 @@ class ProductRepositoryTest {
             }
         }
     }
-
 }

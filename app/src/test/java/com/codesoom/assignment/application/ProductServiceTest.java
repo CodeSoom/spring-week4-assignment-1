@@ -15,7 +15,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-
 @SpringBootTest
 @DisplayName("ProductService 에서")
 class ProductServiceTest {
@@ -29,21 +28,6 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
-
-    /**
-     * 여러개의 Product 를 생성해 등록합니다.
-     * @param createProuctSize 생성할 Product의 갯수
-     */
-    void createProducts(int createProuctSize) {
-        for (int i = 0; i < createProuctSize; i++) {
-            ProductDto productDto = new ProductDto
-                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                    .maker(PRODUCT_MAKER)
-                    .imageUrl(PRODUCT_IMAGE_URL)
-                    .build();
-            productService.createProduct(productDto);
-        }
-    }
 
     /**
      * 하나의 Product 를 생성해 등록합니다.
@@ -88,11 +72,10 @@ class ProductServiceTest {
         @Nested
         @DisplayName("Product 객체가 있을 경우")
         class Context_with_product {
-            final int createProductSize = 3;
 
             @BeforeEach
             void setUp() {
-                createProducts(createProductSize);
+                createProduct();
             }
 
             @Test

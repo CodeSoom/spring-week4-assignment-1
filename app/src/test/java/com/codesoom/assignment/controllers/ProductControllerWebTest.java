@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.models.Product;
@@ -303,7 +302,6 @@ public class ProductControllerWebTest {
                 mockMvc.perform(delete("/products/{id}", productId))
                         .andExpect(status().isNotFound());
             }
-
         }
     }
 }
