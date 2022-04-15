@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public Optional<Product> detail(@PathVariable Long id) {
+    public Product detail(@PathVariable Long id) {
         return productService.getProduct(id);
     }
 
@@ -45,6 +45,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         productService.deleteProduct(id);
     }

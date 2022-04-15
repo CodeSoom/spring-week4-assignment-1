@@ -1,5 +1,6 @@
 package com.codesoom.assignment.service;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.springframework.http.HttpStatus;
@@ -23,8 +24,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> getProduct(Long id) {
-        return productRepository.findById(id);
+    public Product getProduct(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> {
+            return new ProductNotFoundException();
+        });
+        return product;
     }
 
     public Product createProduct(Product product) {
@@ -32,11 +36,16 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
+        productRepository.findById(id).orElseThrow(() -> {
+            return new ProductNotFoundException();
+        });
         productRepository.deleteById(id);
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new HttpServerErrorException(HttpStatus.NOT_FOUND));
+        Product product = productRepository.findById(id).orElseThrow(() -> {
+            return new ProductNotFoundException();
+        });
         product.setName(source.getName());
         product.setMaker(source.getMaker());
         product.setPrice(source.getPrice());
