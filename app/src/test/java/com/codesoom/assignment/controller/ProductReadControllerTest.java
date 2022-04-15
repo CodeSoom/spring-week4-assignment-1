@@ -3,43 +3,48 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.application.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductReadServiceImpl;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
 
 
-@ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
+@SpringBootTest
 public class ProductReadControllerTest {
 
-    @InjectMocks
     private ProductReadController controller;
 
-    @Mock
+    @Autowired
     private ProductReadServiceImpl service;
+
+    @Autowired
+    private ProductRepository repository;
 
     private static final Product SAVED_PRODUCT = Product.builder()
             .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
             .build();
+
+    @BeforeEach
+    void setup() {
+        this.controller = new ProductReadController(service);
+        repository.deleteAll();
+    }
 
     @DisplayName("findAll 메서드는")
     @Nested
     class Describe_find_all {
         @BeforeEach
         void setup() {
-            final List<Product> products = List.of(SAVED_PRODUCT);
-            when(service.findAll()).thenReturn(products);
+            repository.save(SAVED_PRODUCT);
         }
 
         @DisplayName("전체 상품을 성공적으로 조회한다.")
@@ -57,17 +62,17 @@ public class ProductReadControllerTest {
         @Nested
         class Context_with_exist_id {
 
-            private final Long EXIST_ID = 1L;
+            private Long EXIST_ID;
 
             @BeforeEach
             void setup() {
-                when(service.findById(EXIST_ID)).thenReturn(SAVED_PRODUCT);
+                this.EXIST_ID = repository.save(SAVED_PRODUCT).getId();
             }
 
             @DisplayName("해당 상품을 반환한다.")
             @Test
             void will_return_found_product() {
-                assertThat(controller.getProductDetail(EXIST_ID)).isSameAs(SAVED_PRODUCT);
+                assertThat(controller.getProductDetail(EXIST_ID)).isNotNull();
             }
         }
 
@@ -79,7 +84,9 @@ public class ProductReadControllerTest {
 
             @BeforeEach
             void setup() {
-                when(service.findById(eq(NOT_EXIST_ID))).thenThrow(ProductNotFoundException.class);
+                if (repository.existsById(NOT_EXIST_ID)) {
+                    repository.deleteById(NOT_EXIST_ID);
+                }
             }
 
             @DisplayName("예외를 던진다.")
