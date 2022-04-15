@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controllers;
 
-
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.dto.ProductDto;
@@ -39,21 +38,6 @@ class ProductControllerTest {
     }
 
     /**
-     * 여러개의 Product 를 생성해 등록합니다.
-     * @param createProuctSize 생성할 Product의 갯수
-     */
-    void createProducts(int createProuctSize) {
-        for (int i = 0; i < createProuctSize; i++) {
-            ProductDto productDto = new ProductDto
-                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                    .maker(PRODUCT_MAKER)
-                    .imageUrl(PRODUCT_IMAGE_URL)
-                    .build();
-            productService.createProduct(productDto);
-        }
-    }
-
-    /**
      * 하나의 Product 를 생성해 등록합니다.
      * @return 생성한 Product를 리턴
      */
@@ -69,11 +53,10 @@ class ProductControllerTest {
     @Nested
     @DisplayName("list 메소드는")
     class Describe_of_list {
-        final int createProductsize = 3;
 
         @BeforeEach
         void setUp() {
-            createProducts(createProductsize);
+            createProduct();
         }
 
         @Nested

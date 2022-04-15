@@ -1,7 +1,6 @@
 package com.codesoom.assignment.domain.entity;
 
 import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.domain.entity.ProductRepository;
 import com.codesoom.assignment.models.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -54,14 +53,15 @@ class ProductRepositoryTest {
     @DisplayName("findAll 메소드를 호출할 때")
     class Describe_readAll_of_product {
 
-        @BeforeEach
-        void setUp() {
-            createProduct(CREATE_PRODUCT_SIZE);
-        }
 
         @Nested
         @DisplayName("상품이 존재할 경우")
         class Context_with_products {
+
+            @BeforeEach
+            void setUp() {
+                createProduct(CREATE_PRODUCT_SIZE);
+            }
 
             @Test
             @DisplayName("상품이 존재하는 배열을 리턴합니다")
@@ -109,7 +109,7 @@ class ProductRepositoryTest {
                         .build();
                 Product createdProduct = productRepository.save(product);
                 productId = createdProduct.getId();
-                productRepository.deleteById(createdProduct.getId());
+                productRepository.deleteById(productId);
             }
 
             @Test
@@ -149,21 +149,22 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("상품을 생성하는 경우")
         class Context_with_create_of_product {
-            private Product createdProduct;
+            private Product product;
 
             @BeforeEach
             void setUp() {
-                Product product = new Product
+                product = new Product
                         .Builder(PRODUCT_PRICE, PRODUCT_NAME)
                         .maker(PRODUCT_MAKER)
                         .imageUrl(PRODUCT_IMAGE_URL)
                         .build();
-                createdProduct = productRepository.save(product);
             }
 
             @Test
             @DisplayName("생성한 상품을 반환합니다")
             void it_return_new_product() {
+                Product createdProduct = productRepository.save(product);
+
                 assertThat(createdProduct).isNotNull();
                 assertThat(createdProduct.getPrice()).isEqualTo(PRODUCT_PRICE);
             }
@@ -174,21 +175,23 @@ class ProductRepositoryTest {
         class Context_with_update_of_product {
             final int createProductSize = 2;
             final long productId = 1L;
-            private Product updatedProduct;
+            private Product product;
 
             @BeforeEach
             void setUp() {
                 createProduct(createProductSize);
-                Optional<Product> product = productRepository.findById(productId);
-                if (product.isPresent()) {
-                    product.get().setName(UPDATE_PRODUCT_NAME);
-                    updatedProduct = productRepository.save(product.get());
+                Optional<Product> found = productRepository.findById(productId);
+                if (found.isPresent()) {
+                    found.get().setName(UPDATE_PRODUCT_NAME);
+                    product = found.get();
                 }
             }
 
             @Test
             @DisplayName("수정된 상품을 반환합니다")
             void it_return_updated_product() {
+                Product updatedProduct = productRepository.save(product);
+
                 assertThat(updatedProduct).isNotNull();
                 assertThat(updatedProduct.getId()).isEqualTo(productId);
                 assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);

@@ -59,7 +59,7 @@ class ProductServiceTest {
     }
 
     @BeforeEach
-    void tearDown() {
+    void setUp() {
         productService.deleteAll();
     }
 
