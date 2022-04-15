@@ -3,6 +3,7 @@ package com.codesoom.assignment.services;
 import com.codesoom.assignment.contexts.ContextProduct;
 import com.codesoom.assignment.domains.Product;
 import com.codesoom.assignment.dto.ProductReqDto;
+import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -88,10 +90,21 @@ class ProductServiceTest extends ContextProduct {
         @DisplayName("product id 에 맞는 물품이 존재할때")
         class Context_exist_matched_product {
 
+            private Long existProductId;
+
+            @BeforeEach
+            void setUp() {
+                Product exist = productRepository.save(catTower);
+                this.existProductId = exist.getProductId();
+            }
+
             @Test
             @DisplayName("id와 일치하는 물품을 반환한다.")
             void it_returns_matched_product() {
+                Product found = productService.getProduct(existProductId);
 
+                assertThat(found).isNotNull();
+                assertThat(found.getProductId()).isEqualTo(existProductId);
             }
 
         }
@@ -100,10 +113,21 @@ class ProductServiceTest extends ContextProduct {
         @DisplayName("product id 에 맞는 물품이 존재하지 않을 때")
         class Context_not_exist_matched_product {
 
+            private Long nonExistProductId;
+
+            @BeforeEach
+            void setUp() {
+                Product exist = productRepository.save(catTower);
+                this.nonExistProductId = exist.getProductId();
+
+                productRepository.deleteById(nonExistProductId);
+            }
+
             @Test
             @DisplayName("예외를 발생시킨다.")
             void it_throws_not_found_exception() {
-
+                assertThatThrownBy(() -> productService.getProduct(nonExistProductId))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
