@@ -117,4 +117,10 @@ public class ProductControllerWebTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("GET - /products/{id}")
+    class Describe_of_detail_product {
+
+    }
 }
