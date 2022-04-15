@@ -1,6 +1,10 @@
 package com.codesoom.assignment.domains;
 
 import com.codesoom.assignment.enums.Category;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +15,10 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Product {
 
     @Id
@@ -28,22 +36,12 @@ public class Product {
 
     private String image;
 
-    public Product() { }
-
     public Product(Category category, String name, String maker, Integer price, String image) {
         this.category = category;
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.image = image;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public String getName() {
-        return name;
     }
 
     @Override

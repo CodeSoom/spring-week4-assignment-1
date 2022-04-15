@@ -1,6 +1,7 @@
 package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.domains.Product;
+import com.codesoom.assignment.domains.ProductReqDto;
 import com.codesoom.assignment.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public Product create(ProductReqDto newProductInput) {
+        return productRepository.save(newProductInput.toProduct());
+    }
 }

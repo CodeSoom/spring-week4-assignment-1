@@ -2,8 +2,11 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.contexts.ContextProductController;
 import com.codesoom.assignment.domains.Product;
+import com.codesoom.assignment.domains.ProductReqDto;
 import com.codesoom.assignment.repositories.ProductRepository;
 import com.codesoom.assignment.services.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,11 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +43,10 @@ class ProductControllerTest {
         this.mockMvc = MockMvcBuilders
                 .standaloneSetup(new ProductController(productService))
                 .build();
+
+        productRepository.deleteAll();
     }
+
 
     @Nested
     @DisplayName("list() 매소드는")
@@ -47,11 +55,6 @@ class ProductControllerTest {
         @Nested
         @DisplayName("등록된 고양이 물품이 존재하지 않는다면")
         class Context_no_exist_product extends ContextProductController {
-
-            @BeforeEach
-            void setUp() {
-                productRepository.deleteAll();
-            }
 
             @Test
             @DisplayName("사이즈가 0인 빈 리스트를 반환한다.")
@@ -71,9 +74,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                productRepository.deleteAll();
-
-                this.existed = productRepository.save(generateFirstProduct());
+                this.existed = productRepository.save(generateCatTower());
             }
 
             @Test
@@ -144,10 +145,31 @@ class ProductControllerTest {
         @DisplayName("추가하려는 product 의 내용에 null 이나 공백이 없을 때")
         class Context_valid_input extends ContextProductController {
 
+            private final ProductReqDto newProductInput = ProductReqDto.builder()
+                    .name("캣타워")
+                    .maker("캣러버스")
+                    .price(5000)
+                    .image("https://cdn.imweb.me/thumbnail/20200825/b940aaa4583a4.jpg")
+                    .build();
+
+            private String request;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                ObjectMapper objectMapper = new ObjectMapper();
+                this.request = objectMapper.writeValueAsString(newProductInput);
+            }
+
             @Test
             @DisplayName("product 을 생성하고 생성된 product 를 반환한다.")
             void it_returns_created_product() throws Exception {
-
+                mockMvc.perform(post("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .content(request))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("")));
             }
         }
 

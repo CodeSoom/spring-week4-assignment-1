@@ -2,6 +2,7 @@ package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.contexts.ContextProductService;
 import com.codesoom.assignment.domains.Product;
+import com.codesoom.assignment.domains.ProductReqDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,7 +47,7 @@ class ProductServiceTest {
             void setUp() {
                 productRepository.deleteAll();
 
-                this.existed = productRepository.save(generateFirstProduct());
+                this.existed = productRepository.save(generateCatTower());
             }
 
             @Test
@@ -96,12 +97,24 @@ class ProductServiceTest {
 
         @Nested
         @DisplayName("새로운 product 생성 요청이 올 때")
-        class Context_valid_input {
+        class Context_valid_input extends ContextProductService {
+
+            private final ProductReqDto newProductInput = ProductReqDto.builder()
+                    .name("캣타워")
+                    .maker("캣러버스")
+                    .price(5000)
+                    .image("https://cdn.imweb.me/thumbnail/20200825/b940aaa4583a4.jpg")
+                    .build();
 
             @Test
             @DisplayName("product 을 생성하고 생성된 product 를 반환한다.")
             void it_returns_created_product() {
+                Product created = productService.create(newProductInput);
 
+                assertThat(created).isEqualTo(newProductInput);
+
+                List<Product> products = productService.getProducts();
+                assertThat(products).contains(created);
             }
         }
     }

@@ -48,7 +48,7 @@ class ProductRepositoryTest {
             void setUp() {
                 productRepository.deleteAll();
 
-                this.existed = productRepository.save(generateFirstProduct());
+                this.existed = productRepository.save(generateCatTower());
             }
 
             @Test
@@ -76,7 +76,7 @@ class ProductRepositoryTest {
             void setUp () {
                 productRepository.deleteAll();
 
-                Product saved = productRepository.save(generateFirstProduct());
+                Product saved = productRepository.save(generateCatTower());
                 this.productId = saved.getProductId();
             }
 
@@ -100,7 +100,7 @@ class ProductRepositoryTest {
             void setUp () {
                 productRepository.deleteAll();
 
-                Product saved = productRepository.save(generateFirstProduct());
+                Product saved = productRepository.save(generateCatTower());
                 this.productId = saved.getProductId();
                 productRepository.deleteById(productId);
             }
@@ -123,7 +123,7 @@ class ProductRepositoryTest {
         @DisplayName("올바른 형식의 Product 의 생성요청이 들어올때")
         class Context_validFormatProduct extends ContextProductRepository {
 
-            private final Product inputProduct = generateFirstProduct();
+            private final Product inputProduct = generateCatTower();
 
             @BeforeEach
             void setUp() {
@@ -155,7 +155,7 @@ class ProductRepositoryTest {
             void setUp() {
                 productRepository.deleteAll();
 
-                Product existProduct = productRepository.save(generateFirstProduct());
+                Product existProduct = productRepository.save(generateCatTower());
                 this.productId = existProduct.getProductId();
             }
 
