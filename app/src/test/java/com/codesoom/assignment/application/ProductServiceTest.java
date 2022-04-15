@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("ProductServiceTest 클래스")
+@DisplayName("ProductServiceTest 클래스의")
 public class ProductServiceTest {
     private static final String TEST_NAME = "testName";
     private static final String TEST_MAKER = "testMaker";
@@ -28,9 +28,15 @@ public class ProductServiceTest {
     private static final String CREATE_POSTFIX = "...";
     private static final String UPDATE_POSTFIX = "!!!";
 
+    private static final int PRODUCTS_MAX_SIZE = 5;
+    private static final Long VALID_PRODUCT_ID = 1L;
+    private static final Long INVALID_PRODUCT_ID = 100L;
+
     private ProductService productService;
 
     private ProductRepository productRepository;
+
+    private List<Product> products;
 
     @BeforeEach
     void setUp() {
@@ -38,189 +44,157 @@ public class ProductServiceTest {
 
         productService = new ProductService(productRepository);
 
-        setUpFixture();
-        setUpSaveCatToy();
-    }
+        products = new ArrayList<>();
 
-    void setUpFixture() {
-        List<Product> products = new ArrayList<>();
-
-        Product product = new Product();
-        product.setName(TEST_NAME);
-        product.setMaker(TEST_MAKER);
-        product.setPrice(TEST_PRICE);
-        product.setImagePath(TEST_IMAGE_PATH);
-
-        products.add(product);
+        Product product = null;
+        for(int i = 0; i < PRODUCTS_MAX_SIZE; i++) {
+            product = new Product(TEST_NAME + (i + 1),
+                    TEST_MAKER + (i + 1),
+                    TEST_PRICE + (i + 1),
+                    (i + 1) + TEST_IMAGE_PATH);
+            products.add(product);
+        }
 
         given(productRepository.findAll()).willReturn(products);
-
-        given(productRepository.findById(1L)).willReturn(Optional.of(product));
-        given(productRepository.findById(100L)).willReturn(Optional.empty());
-    }
-
-    void setUpSaveCatToy() {
-        given(productRepository.save(any(Product.class))).will(invocation -> {
-            Product product = invocation.getArgument(0);
-            product.setId(2L);
-            return product;
-        });
+        given(productRepository.findById(VALID_PRODUCT_ID))
+                .willReturn(Optional.of(products.get(VALID_PRODUCT_ID.intValue() - 1)));
+        given(productRepository.findById(INVALID_PRODUCT_ID))
+                .willReturn(Optional.empty());
     }
 
     @Nested
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts {
-        @Nested
-        @DisplayName("Product를 추가하기 전에는")
-        class Context_before_adding_product {
-            @BeforeEach
-            void setUp() {
-                given(productRepository.findAll()).willReturn(new ArrayList<>());
-            }
-            @Test
-            @DisplayName("비어있습니다.")
-            void getProductsWithEmpty() {
-                List<Product> products = productService.getProducts();
+        @Test
+        @DisplayName("Product를 추가하기 전에는 비어있습니다.")
+        void getProductsWithEmpty() {
+            given(productRepository.findAll()).willReturn(new ArrayList<>());
 
-                verify(productRepository).findAll();
+            List<Product> copy = productService.getProducts();
 
-                assertThat(products).isEmpty();
-            }
+            verify(productRepository).findAll();
+
+            assertThat(copy).isEmpty();
         }
 
-        @Nested
-        @DisplayName("Product를 5개 추가한 후에는")
-        class Context_after_adding_product {
-            final static int PRODUCTS_SIZE = 5;
-            @BeforeEach
-            void setUp() {
-                List<Product> products = new ArrayList<>();
+        @Test
+        @DisplayName("5개의 Product를 추가한 후에는 5개의 Product를 가집니다.")
+        void getProductsWithProducts() {
+            List<Product> copy = productService.getProducts();
 
-                Product product;
-                for(int i = 0; i < PRODUCTS_SIZE; i++) {
-                    product = new Product();
-                    product.setName(TEST_NAME + (i + 1));
-                    product.setMaker(TEST_MAKER + (i + 1));
-                    product.setPrice(TEST_PRICE + (i + 1));
-                    product.setImagePath((i + 1) + TEST_IMAGE_PATH);
-                    products.add(product);
-                }
+            verify(productRepository).findAll();
 
-                given(productRepository.findAll()).willReturn(products);
-            }
-            @Test
-            @DisplayName("Product를 5개 가지고 있습니다.")
-            void getProductsWithProducts() {
-                List<Product> products = productService.getProducts();
+            assertThat(copy).hasSize(5);
 
-                verify(productRepository).findAll();
-
-                assertThat(products).hasSize(5);
-
-                Product product;
-                for(int i = 0; i < PRODUCTS_SIZE; i++) {
-                    product = products.get(i);
-                    assertThat(product.getName()).isEqualTo(TEST_NAME + (i + 1));
-                }
+            for(int i = 0; i < PRODUCTS_MAX_SIZE; i++) {
+                assertThat(
+                        products.get(i).hasEqualContents(copy.get(i))
+                ).isTrue();
             }
         }
     }
 
     @Nested
-    @DisplayName("getProduct 메소드는 Products에 Product가 1개 있을 때")
+    @DisplayName("getProduct 메소드는")
     class Describe_getProduct {
-        final Long VALID_REQUEST_ID = 1L;
-        final Long INVALID_REQUEST_TASK_ID = 100L;
-        @BeforeEach
-        void setUp() {
-            List<Product> products = new ArrayList<>();
-
-            Product product = new Product();
-            product.setName(TEST_NAME);
-            product.setMaker(TEST_MAKER);
-            product.setPrice(TEST_PRICE);
-            product.setImagePath(TEST_IMAGE_PATH);
-
-            products.add(product);
-
-            given(productRepository.findById(VALID_REQUEST_ID))
-                    .willReturn(Optional.of(product));
-            given(productRepository.findById(INVALID_REQUEST_TASK_ID))
-                    .willReturn(Optional.empty());
-        }
         @Test
-        @DisplayName("id(1)에 해당하는 Product를 요청하면 Product를 반환합니다.")
+        @DisplayName("Products에 존재하는 Product의 id를 요청하면 해당 Product를 반환합니다.")
         void getProductWithExistedId() {
-            Product product = productService.getProduct(VALID_REQUEST_ID);
+            Product copy = productService.getProduct(VALID_PRODUCT_ID);
 
-            verify(productRepository).findById(VALID_REQUEST_ID);
+            verify(productRepository).findById(VALID_PRODUCT_ID);
 
-            assertThat(product.getName()).isEqualTo(TEST_NAME);
+            assertThat(products.get(VALID_PRODUCT_ID.intValue() - 1)
+                    .hasEqualContents(copy)).isTrue();
         }
 
         @Test
-        @DisplayName("id(100)에 해당하는 Product를 요청하면 TaskNotFoundException 예외를 던집니다.")
+        @DisplayName("Products에 존재하지 않는 Product의 id를 요청하면 예외를 발생시킵니다.")
         void getProductWithNotExistedId() {
-            assertThatThrownBy(() -> productService.getProduct(100L))
+            assertThatThrownBy(() -> productService.getProduct(INVALID_PRODUCT_ID))
                     .isInstanceOf(ProductNotFoundException.class);
 
-            verify(productRepository).findById(100L);
+            verify(productRepository).findById(INVALID_PRODUCT_ID);
         }
     }
 
-    @Test
-    void createCatToy() {
-        Product source = new Product();
-        source.setName(TEST_NAME + CREATE_POSTFIX);
-        source.setMaker(TEST_MAKER + CREATE_POSTFIX);
-        source.setPrice(TEST_PRICE + 1000L);
-        source.setImagePath(CREATE_POSTFIX + TEST_IMAGE_PATH);
+    @Nested
+    @DisplayName("createProduct 메소드는")
+    class Describe_createProduct {
+        private Product newProduct;
+        @BeforeEach
+        void setUp() {
+            newProduct = new Product(
+                    TEST_NAME + CREATE_POSTFIX,
+                    TEST_MAKER + CREATE_POSTFIX,
+                    TEST_PRICE + 1000L,
+                    CREATE_POSTFIX + TEST_IMAGE_PATH
+            );
+            given(productRepository.save(any(Product.class))).willReturn(newProduct);
+        }
+        @Test
+        @DisplayName("Products에 새로운 Product를 추가합니다.")
+        void createProduct() {
+            Product oldProduct = productService.createProduct(newProduct);
 
-        Product product = productService.createProduct(source);
+            verify(productRepository).save(any(Product.class));
 
-        verify(productRepository).save(any(Product.class));
-
-        assertThat(product.getId()).isEqualTo(2L);
-        assertThat(product.getName()).isEqualTo(TEST_NAME + CREATE_POSTFIX);
+            assertThat(oldProduct.hasEqualContents(newProduct)).isTrue();
+        }
     }
 
-    @Test
-    void updateCatToyWithExistedId() {
-        Product source = new Product();
-        source.setName(TEST_NAME + UPDATE_POSTFIX);
+    @Nested
+    @DisplayName("updateProduct 메소드는")
+    class Describe_updateProduct {
+        private Product source;
 
-        Product product = productService.updateProduct(1L, source);
+        @BeforeEach
+        void setUp() {
+            source = new Product(
+                    TEST_NAME + UPDATE_POSTFIX,
+                    TEST_MAKER + UPDATE_POSTFIX,
+                    TEST_PRICE + 2000L,
+                    UPDATE_POSTFIX + TEST_IMAGE_PATH
+            );
+        }
 
-        verify(productRepository).findById(1L);
+        @Test
+        @DisplayName("유효한 아이디가 있을 때는 해당 id의 Product 정보를 바꿉니다.")
+        void updateProductWithExistedId() {
+            Product updatedProduct = productService.updateProduct(VALID_PRODUCT_ID, source);
 
-        assertThat(product.getName()).isEqualTo(TEST_NAME + UPDATE_POSTFIX);
+            verify(productRepository).findById(VALID_PRODUCT_ID);
+
+            assertThat(updatedProduct.hasEqualContents(source)).isTrue();
+        }
+
+        @Test
+        void updateProductWithNotExistedId() {
+            assertThatThrownBy(() -> productService.updateProduct(INVALID_PRODUCT_ID, source))
+                    .isInstanceOf(ProductNotFoundException.class);
+
+            verify(productRepository).findById(INVALID_PRODUCT_ID);
+        }
     }
 
-    @Test
-    void updateCatToyWithNotExistedId() {
-        Product source = new Product();
-        source.setName(TEST_NAME + UPDATE_POSTFIX);
+    @Nested
+    @DisplayName("deleteProduct 메소드는")
+    class Describe_deleteProduct {
+        @Test
+        void deleteProductWithExistedId() {
+            productService.deleteProduct(VALID_PRODUCT_ID);
 
-        assertThatThrownBy(() -> productService.updateProduct(100L, source))
-                .isInstanceOf(ProductNotFoundException.class);
+            verify(productRepository).findById(VALID_PRODUCT_ID);
 
-        verify(productRepository).findById(100L);
-    }
+            verify(productRepository).delete(any(Product.class));
+        }
 
-    @Test
-    void deleteCatToyWithExistedId() {
-        productService.deleteProduct(1L);
+        @Test
+        void deleteProductWithNotExistedId() {
+            assertThatThrownBy(() -> productService.deleteProduct(INVALID_PRODUCT_ID))
+                    .isInstanceOf(ProductNotFoundException.class);
 
-        verify(productRepository).findById(1L);
-
-        verify(productRepository).delete(any(Product.class));
-    }
-
-    @Test
-    void deleteCatToyWithNotExistedId() {
-        assertThatThrownBy(() -> productService.deleteProduct(100L))
-                .isInstanceOf(ProductNotFoundException.class);
-
-        verify(productRepository).findById(100L);
+            verify(productRepository).findById(INVALID_PRODUCT_ID);
+        }
     }
 }

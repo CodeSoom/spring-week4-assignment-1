@@ -34,48 +34,47 @@ public class ProductControllerTest {
     private static final String CREATE_POSTFIX = "...";
     private static final String UPDATE_POSTFIX = "!!!";
 
+    private static final int PRODUCTS_MAX_SIZE = 5;
+    private static final Long VALID_PRODUCT_ID = 1L;
+    private static final Long INVALID_PRODUCT_ID = 100L;
+
 //    @InjectMocks
     private ProductController productController;
 
 //    @Mock
     private ProductService productService;
 
+    private List<Product> products;
+
     @BeforeEach
     void setUp() {
         productService = mock(ProductService.class);
 
-        List<Product> products = new ArrayList<>();
-        Product product = new Product(
-                TEST_NAME, TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
-        products.add(product);
-
-        given(productService.getProducts()).willReturn(products);
-
-        given(productService.getProduct(1L)).willReturn(product);
-
-        given(productService.getProduct(100L))
-                .willThrow(new ProductNotFoundException(100L));
-
-        given(productService.updateProduct(eq(100L), any(Product.class)))
-                .willThrow(new ProductNotFoundException(100L));
-
-        given(productService.deleteProduct(100L))
-                .willThrow(new ProductNotFoundException(100L));
-
         productController = new ProductController(productService);
+
+        products = new ArrayList<>();
+
+        Product product = null;
+        for(int i = 0; i < PRODUCTS_MAX_SIZE; i++) {
+            product = new Product(TEST_NAME + (i + 1),
+                    TEST_MAKER + (i + 1),
+                    TEST_PRICE + (i + 1),
+                    (i + 1) + TEST_IMAGE_PATH);
+            products.add(product);
+        }
     }
 
     @Test
     void create() {
-        Product product = new Product(
+        Product newProduct = new Product(
                 TEST_NAME + CREATE_POSTFIX,
                 TEST_MAKER + CREATE_POSTFIX,
                 TEST_PRICE + 1000L,
                 CREATE_POSTFIX + TEST_IMAGE_PATH);
 
-        productController.create(product);
+        productController.create(newProduct);
 
-       verify(productService).createProduct(product);
+        verify(productService).createProduct(newProduct);
     }
 
     @Test
@@ -89,6 +88,8 @@ public class ProductControllerTest {
 
     @Test
     void listWithSomeProducts() {
+        given(productService.getProducts()).willReturn(products);
+
         assertThat(productController.list()).isNotEmpty();
 
         verify(productService).getProducts();
@@ -96,60 +97,72 @@ public class ProductControllerTest {
 
     @Test
     void detailWithExistedId() {
-        Product product = productController.detail(1L);
+        given(productService.getProduct(VALID_PRODUCT_ID))
+                .willReturn(products.get(VALID_PRODUCT_ID.intValue() - 1));
 
-        verify(productService).getProduct(1L);
+        Product product = productController.detail(VALID_PRODUCT_ID);
+
+        verify(productService).getProduct(VALID_PRODUCT_ID);
 
         assertThat(product).isNotNull();
     }
 
     @Test
     void detailWithNotExistedId() {
-        assertThatThrownBy(() -> productController.detail(100L))
+        given(productService.getProduct(INVALID_PRODUCT_ID))
+                .willThrow(new ProductNotFoundException(INVALID_PRODUCT_ID));
+
+        assertThatThrownBy(() -> productController.detail(INVALID_PRODUCT_ID))
                 .isInstanceOf(ProductNotFoundException.class);
 
-        verify(productService).getProduct(100L);
+        verify(productService).getProduct(INVALID_PRODUCT_ID);
     }
 
     @Test
     void updateExistedId() {
-        Product product = new Product(
+        Product source = new Product(
                 TEST_NAME + UPDATE_POSTFIX,
                 TEST_MAKER + UPDATE_POSTFIX,
                 TEST_PRICE + 1000L,
                 UPDATE_POSTFIX + TEST_IMAGE_PATH);
 
-        productController.update(1L, product);
+        productController.update(VALID_PRODUCT_ID, source);
 
-        verify(productService).updateProduct(1L, product);
+        verify(productService).updateProduct(VALID_PRODUCT_ID, source);
     }
 
     @Test
     void updateNotExistedId() {
+        given(productService.updateProduct(eq(INVALID_PRODUCT_ID), any(Product.class)))
+                .willThrow(new ProductNotFoundException(INVALID_PRODUCT_ID));
+
         Product product = new Product(
                 TEST_NAME + UPDATE_POSTFIX,
                 TEST_MAKER + UPDATE_POSTFIX,
                 TEST_PRICE + 1000L,
                 UPDATE_POSTFIX + TEST_IMAGE_PATH);
 
-        assertThatThrownBy(() -> productController.update(100L, product))
+        assertThatThrownBy(() -> productController.update(INVALID_PRODUCT_ID, product))
                 .isInstanceOf(ProductNotFoundException.class);
 
-        verify(productService).updateProduct(100L, product);
+        verify(productService).updateProduct(INVALID_PRODUCT_ID, product);
     }
 
     @Test
     void deleteExistedId() {
-        productController.delete(1L);
+        productController.delete(VALID_PRODUCT_ID);
 
-        verify(productService).deleteProduct(1L);
+        verify(productService).deleteProduct(VALID_PRODUCT_ID);
     }
 
     @Test
     void deleteNotExistedId() {
-        assertThatThrownBy(() -> productController.delete(100L))
+        given(productService.deleteProduct(INVALID_PRODUCT_ID))
+                .willThrow(new ProductNotFoundException(INVALID_PRODUCT_ID));
+
+        assertThatThrownBy(() -> productController.delete(INVALID_PRODUCT_ID))
                 .isInstanceOf(ProductNotFoundException.class);
 
-        verify(productService).deleteProduct(100L);
+        verify(productService).deleteProduct(INVALID_PRODUCT_ID);
     }
 }

@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -25,7 +26,6 @@ public class Product {
         this.imagePath = imagePath;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -46,23 +46,27 @@ public class Product {
         return imagePath;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void changeProductInfo(Product source) {
+        name = source.getName();
+        maker = source.getMaker();
+        price = source.getPrice();
+        imagePath = source.getImagePath();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public String toString() {
+        return String.format(
+                "{id=%s, name=%s, maker=%s, price=%d, imagePath=%s}",
+                id, name, maker, price, imagePath);
     }
 
-    public void setMaker(String maker) {
-        this.maker = maker;
-    }
-
-    public void setPrice(Long price) {
-        this.price = price;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public boolean hasEqualContents(Product other) {
+        if(name.compareTo(other.getName()) == 0 &&
+        maker.compareTo(other.getMaker()) == 0 &&
+        price == other.getPrice() &&
+        imagePath.compareTo(other.getImagePath()) == 0) {
+            return true;
+        }
+        return false;
     }
 }

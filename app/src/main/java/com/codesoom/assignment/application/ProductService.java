@@ -29,12 +29,8 @@ public class ProductService {
     }
 
     public Product createProduct(Product source) {
-        Product product = new Product();
-
-        product.setName(source.getName());
-        product.setMaker(source.getMaker());
-        product.setPrice(source.getPrice());
-        product.setImagePath(source.getImagePath());
+        Product product = new Product(source.getName(),
+                source.getMaker(), source.getPrice(), source.getImagePath());
 
         return productRepository.save(product);
     }
@@ -43,10 +39,7 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        product.setName(source.getName());
-        product.setMaker(source.getMaker());
-        product.setPrice(source.getPrice());
-        product.setImagePath(source.getImagePath());
+        product.changeProductInfo(source);
 
         return product;
     }

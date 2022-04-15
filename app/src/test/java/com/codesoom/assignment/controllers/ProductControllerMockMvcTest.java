@@ -38,57 +38,36 @@ public class ProductControllerMockMvcTest {
     private static final String CREATE_POSTFIX = "...";
     private static final String UPDATE_POSTFIX = "!!!";
 
+    private static final int PRODUCTS_MAX_SIZE = 5;
+    private static final Long VALID_PRODUCT_ID = 1L;
+    private static final Long INVALID_PRODUCT_ID = 100L;
+
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
     private ProductService productService;
 
+    private List<Product> products;
+
     @BeforeEach
     void setUp() {
-        List<Product> products = new ArrayList<>();
-        Product product = new Product(
-                TEST_NAME, TEST_MAKER, TEST_PRICE, TEST_IMAGE_PATH);
-        products.add(product);
+        products = new ArrayList<>();
 
-        given(productService.getProducts()).willReturn(products);
-
-        given(productService.getProduct(1L)).willReturn(product);
-
-        given(productService.getProduct(100L))
-                .willThrow(new ProductNotFoundException(100L));
-
-        given(productService.updateProduct(eq(100L), any(Product.class)))
-                .willThrow(new ProductNotFoundException(100L));
-
-        given(productService.deleteProduct(100L))
-                .willThrow(new ProductNotFoundException(100L));
-
-        given(productService.createProduct(any(Product.class)))
-                .will(invocation ->  {
-                    Product updatedProduct = new Product(
-                            TEST_NAME + CREATE_POSTFIX,
-                            TEST_MAKER + CREATE_POSTFIX,
-                            TEST_PRICE + 1000L,
-                            CREATE_POSTFIX + TEST_IMAGE_PATH);
-
-                    return updatedProduct;
-                });
-
-        given(productService.updateProduct(eq(1L), any(Product.class)))
-                .will(invocation ->  {
-                    Product updatedProduct = new Product(
-                            TEST_NAME + UPDATE_POSTFIX,
-                            TEST_MAKER + UPDATE_POSTFIX,
-                            TEST_PRICE + 2000L,
-                            UPDATE_POSTFIX + TEST_IMAGE_PATH);
-
-                    return updatedProduct;
-                });
+        Product product = null;
+        for(int i = 0; i < PRODUCTS_MAX_SIZE; i++) {
+            product = new Product(TEST_NAME + (i + 1),
+                    TEST_MAKER + (i + 1),
+                    TEST_PRICE + (i + 1),
+                    (i + 1) + TEST_IMAGE_PATH);
+            products.add(product);
+        }
     }
 
     @Test
     void list() throws Exception {
+        given(productService.getProducts()).willReturn(products);
+
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(TEST_NAME)));
@@ -98,23 +77,46 @@ public class ProductControllerMockMvcTest {
 
     @Test
     void detailWithValidId() throws Exception {
+        given(productService.getProduct(VALID_PRODUCT_ID))
+                .willReturn(products.get(VALID_PRODUCT_ID.intValue() - 1));
+
         mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString(TEST_NAME)));
+                .andExpect(content().string(
+                        equalTo("{\"id\":null," +
+                                "\"name\":\"testName1\"," +
+                                "\"maker\":\"testMaker1\"," +
+                                "\"price\":5001," +
+                                "\"imagePath\":\"1testImagePath.jpg\"}")));
 
-        verify(productService).getProduct(1L);
+
+        verify(productService).getProduct(VALID_PRODUCT_ID);
     }
 
     @Test
     void detailWithInvalidId() throws Exception {
+        given(productService.getProduct(INVALID_PRODUCT_ID))
+                .willThrow(new ProductNotFoundException(INVALID_PRODUCT_ID));
+
         mockMvc.perform(get("/products/100"))
                 .andExpect(status().isNotFound());
 
-        verify(productService).getProduct(100L);
+        verify(productService).getProduct(INVALID_PRODUCT_ID);
     }
 
     @Test
     void create() throws Exception {
+        given(productService.createProduct(any(Product.class)))
+                .will(invocation ->  {
+                    Product newProduct = new Product(
+                            TEST_NAME + CREATE_POSTFIX,
+                            TEST_MAKER + CREATE_POSTFIX,
+                            TEST_PRICE + 1000L,
+                            CREATE_POSTFIX + TEST_IMAGE_PATH);
+
+                    return newProduct;
+                });
+
         mockMvc.perform(
                         post("/products")
                                 .contentType(MediaType.APPLICATION_JSON)//body 형식(JSON 형식)
@@ -134,6 +136,17 @@ public class ProductControllerMockMvcTest {
 
     @Test
     void updateExistedId() throws Exception {
+        given(productService.updateProduct(eq(VALID_PRODUCT_ID), any(Product.class)))
+                .will(invocation ->  {
+                    Product updatedProduct = new Product(
+                            TEST_NAME + UPDATE_POSTFIX,
+                            TEST_MAKER + UPDATE_POSTFIX,
+                            TEST_PRICE + 2000L,
+                            UPDATE_POSTFIX + TEST_IMAGE_PATH);
+
+                    return updatedProduct;
+                });
+
         mockMvc.perform(
                         patch("/products/1")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,12 +161,15 @@ public class ProductControllerMockMvcTest {
                                 "\"imagePath\":\"!!!testImagePath.jpg\"}")
                 ));
 
-        verify(productService).updateProduct(eq(1L), any(Product.class));
+        verify(productService).updateProduct(eq(VALID_PRODUCT_ID), any(Product.class));
 
     }
 
     @Test
     void updateNotExistedId() throws Exception {
+        given(productService.updateProduct(eq(INVALID_PRODUCT_ID), any(Product.class)))
+                .willThrow(new ProductNotFoundException(INVALID_PRODUCT_ID));
+
         mockMvc.perform(
                         patch("/products/100")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -162,7 +178,7 @@ public class ProductControllerMockMvcTest {
                 .andExpect(status().isNotFound());
 
 
-        verify(productService).updateProduct(eq(100L), any(Product.class));
+        verify(productService).updateProduct(eq(INVALID_PRODUCT_ID), any(Product.class));
     }
 
     @Test
@@ -170,14 +186,17 @@ public class ProductControllerMockMvcTest {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent());
 
-        verify(productService).deleteProduct(1L);
+        verify(productService).deleteProduct(VALID_PRODUCT_ID);
     }
 
     @Test
     void deleteNotExistedId() throws Exception {
+        given(productService.deleteProduct(INVALID_PRODUCT_ID))
+                .willThrow(new ProductNotFoundException(INVALID_PRODUCT_ID));
+
         mockMvc.perform(delete("/products/100"))
                 .andExpect(status().isNotFound());
 
-        verify(productService).deleteProduct(100L);
+        verify(productService).deleteProduct(INVALID_PRODUCT_ID);
     }
 }
