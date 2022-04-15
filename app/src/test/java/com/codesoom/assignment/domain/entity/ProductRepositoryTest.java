@@ -24,24 +24,20 @@ class ProductRepositoryTest {
 
     private static final String UPDATE_PRODUCT_NAME = "상품1000";
 
-    private static final int CREATE_PRODUCT_SIZE = 3;
-
     @Autowired
     private ProductRepository productRepository;
 
     /**
-     * 여러개의 Product 를 생성해 등록합니다.
-     * @param createProuctSize 생성할 Product의 갯수
+     * 하나의 Product 를 생성해 등록합니다.
+     * @return 생성된 Product를 반환
      */
-    private void createProduct(int createProuctSize) {
-        for (int i = 0; i < createProuctSize; i++) {
-            Product product = new Product
-                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                    .maker(PRODUCT_MAKER)
-                    .imageUrl(PRODUCT_IMAGE_URL)
-                    .build();
-            productRepository.save(product);
-        }
+    private Product createProduct() {
+        Product product = new Product
+                .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                .maker(PRODUCT_MAKER)
+                .imageUrl(PRODUCT_IMAGE_URL)
+                .build();
+        return productRepository.save(product);
     }
 
     @BeforeEach
@@ -60,7 +56,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                createProduct(CREATE_PRODUCT_SIZE);
+                createProduct();
             }
 
             @Test
@@ -94,6 +90,12 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("findById 메소드를 호출할 때")
     class Describe_read_of_product {
+        private Product product;
+
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
 
         @Nested
         @DisplayName("Id 와 동일한 상품이 존재하지 않을 경우")
@@ -102,13 +104,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                Product product = new Product
-                        .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                        .maker(PRODUCT_MAKER)
-                        .imageUrl(PRODUCT_IMAGE_URL)
-                        .build();
-                Product createdProduct = productRepository.save(product);
-                productId = createdProduct.getId();
+                productId = product.getId();
                 productRepository.deleteById(productId);
             }
 
@@ -124,12 +120,11 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("Id 와 동일한 상품이 존재할 경우")
         class Context_with_product {
-            final int createProductSize = 5;
-            final long productId = 1L;
+            private long productId;
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
+                productId = product.getId();
             }
 
             @Test
@@ -173,18 +168,12 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("상품을 수정하는 경우")
         class Context_with_update_of_product {
-            final int createProductSize = 2;
-            final long productId = 1L;
             private Product product;
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
-                Optional<Product> found = productRepository.findById(productId);
-                if (found.isPresent()) {
-                    found.get().setName(UPDATE_PRODUCT_NAME);
-                    product = found.get();
-                }
+                product = createProduct();
+                product.setName(UPDATE_PRODUCT_NAME);
             }
 
             @Test
@@ -193,7 +182,7 @@ class ProductRepositoryTest {
                 Product updatedProduct = productRepository.save(product);
 
                 assertThat(updatedProduct).isNotNull();
-                assertThat(updatedProduct.getId()).isEqualTo(productId);
+                assertThat(updatedProduct.getId()).isEqualTo(product.getId());
                 assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
             }
         }
@@ -206,12 +195,12 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("삭제할 상품이 있다면")
         class Context_with_delete_of_product {
-            final int createProductSize = 3;
-            final long productId = 2L;
+            private long productId;
 
             @BeforeEach
             void setUp() {
-                createProduct(createProductSize);
+                Product product = createProduct();
+                productId = product.getId();
             }
 
             @Test

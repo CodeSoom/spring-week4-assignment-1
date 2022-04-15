@@ -42,7 +42,6 @@ public class ProductControllerWebTest {
 
     @Autowired
     private ProductService productService;
-    private ProductController productController;
 
     /**
      * 하나의 Product 를 생성해 등록합니다.
@@ -59,7 +58,7 @@ public class ProductControllerWebTest {
 
     @BeforeEach
     void setUp() {
-        productController = new ProductController(productService);
+        ProductController productController = new ProductController(productService);
         productService.deleteAll();
 
         mockMvc = MockMvcBuilders
