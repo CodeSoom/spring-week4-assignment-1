@@ -1,19 +1,35 @@
 package com.codesoom.assignment.repositories;
 
-import com.codesoom.assignment.contexts.ContextProductRepository;
+import com.codesoom.assignment.contexts.ContextProduct;
 import com.codesoom.assignment.domains.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
+@Transactional
 @DisplayName("ProductRepositoryTest 의")
-class ProductRepositoryTest {
+class ProductRepositoryTest extends ContextProduct {
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    private final Product catTower = generateCatTower();
+
+    @BeforeEach
+    void setUp() {
+        productRepository.deleteAll();
+    }
+
 
     @Nested
     @DisplayName("findAll() 매소드는")
@@ -21,12 +37,7 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("고양이 장난감 물품이 존재하지 않을 때")
-        class Context_empty_product extends ContextProductRepository {
-
-            @BeforeEach
-            void setUp() {
-                productRepository.deleteAll();
-            }
+        class Context_empty_product {
 
             @Test
             @DisplayName("사이즈가 0인 빈 물품 리스트를 반환한다.")
@@ -40,15 +51,13 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("고양이 장난감 물품이 1개라도 존재할 때")
-        class Context_exist_product extends ContextProductRepository {
+        class Context_exist_product {
 
             private Product existed;
 
             @BeforeEach
             void setUp() {
-                productRepository.deleteAll();
-
-                this.existed = productRepository.save(generateCatTower());
+                this.existed = productRepository.save(catTower);
             }
 
             @Test
@@ -68,16 +77,13 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("id에 해당하는 고양이 물품이 존재할 때")
-        class Context_exist_product extends ContextProductRepository {
+        class Context_exist_product {
 
             private Long productId;
 
             @BeforeEach
-            void setUp () {
-                productRepository.deleteAll();
-
-                Product saved = productRepository.save(generateCatTower());
-                this.productId = saved.getProductId();
+            void setUp() {
+                this.productId = productRepository.save(catTower).getProductId();
             }
 
             @Test
@@ -92,16 +98,13 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("id에 해당하는 고양이 물품이 존재하지 않을때")
-        class Context_non_exist_product extends ContextProductRepository {
+        class Context_non_exist_product {
 
             private Long productId;
 
             @BeforeEach
             void setUp () {
-                productRepository.deleteAll();
-
-                Product saved = productRepository.save(generateCatTower());
-                this.productId = saved.getProductId();
+                this.productId = productRepository.save(catTower).getProductId();
                 productRepository.deleteById(productId);
             }
 
@@ -121,14 +124,9 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("올바른 형식의 Product 의 생성요청이 들어올때")
-        class Context_validFormatProduct extends ContextProductRepository {
+        class Context_validFormatProduct {
 
-            private final Product inputProduct = generateCatTower();
-
-            @BeforeEach
-            void setUp() {
-                productRepository.deleteAll();
-            }
+            private final Product inputProduct = catTower;
 
             @Test
             @DisplayName("신규 Product 를 생성한 뒤 반환한다.")
@@ -147,16 +145,13 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("특정 id에 해당하는 Product 가 존재할 때")
-        class Context_existMatchedProduct extends ContextProductRepository {
+        class Context_existMatchedProduct {
 
             private Long productId;
 
             @BeforeEach
             void setUp() {
-                productRepository.deleteAll();
-
-                Product existProduct = productRepository.save(generateCatTower());
-                this.productId = existProduct.getProductId();
+                this.productId = productRepository.save(catTower).getProductId();
             }
 
             @Test

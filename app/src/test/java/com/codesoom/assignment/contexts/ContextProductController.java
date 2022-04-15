@@ -1,23 +1,24 @@
 package com.codesoom.assignment.contexts;
 
+import com.codesoom.assignment.domains.Product;
 import com.codesoom.assignment.domains.ProductReqDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class ContextProductController extends ContextProduct {
 
-    protected String productIdJsonString(Long productId) {
-        return String.format("\"productId\":%d", productId);
+    private final ObjectMapper objectMapper;
+
+    public ContextProductController() {
+        objectMapper = new ObjectMapper();
     }
 
-    protected String productJsonString(Long productId, String productName) {
-        return String.format("{\"productId\":%d,\"name\":\"%s\"}", productId, productName);
+    protected String productJsonString(Product product) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(product);
     }
 
-    protected String catTowerJsonString(ProductReqDto newProductInputReq) {
-        return String.format("{\"name\":%s, \"maker\":%s, \"price\":%d, \"image\":%s}",
-                newProductInputReq.getName(),
-                newProductInputReq.getMaker(),
-                newProductInputReq.getPrice(),
-                newProductInputReq.getImage());
+    protected String productReqJsonString(ProductReqDto productReqDto) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(productReqDto);
     }
 
 }

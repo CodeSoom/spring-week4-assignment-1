@@ -1,19 +1,44 @@
 package com.codesoom.assignment.services;
 
-import com.codesoom.assignment.contexts.ContextProductService;
+import com.codesoom.assignment.contexts.ContextProduct;
 import com.codesoom.assignment.domains.Product;
 import com.codesoom.assignment.domains.ProductReqDto;
+import com.codesoom.assignment.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
+@Transactional
 @DisplayName("ProductServiceTest의 ")
-class ProductServiceTest {
+class ProductServiceTest extends ContextProduct {
+
+    private final ProductService productService;
+    private final ProductRepository productRepository;
+
+    private final Product catTower = generateCatTower();
+
+    @Autowired
+    ProductServiceTest(ProductService productService,
+                       ProductRepository productRepository) {
+        this.productService = productService;
+        this.productRepository = productRepository;
+    }
+
+
+    @BeforeEach
+    void serUp() {
+        productRepository.deleteAll();
+    }
+
 
     @Nested
     @DisplayName("getProducts() 매소드는 ")
@@ -21,12 +46,7 @@ class ProductServiceTest {
 
         @Nested
         @DisplayName("가게에 등록된 상품이 없을 때")
-        class Context_no_exist_product extends ContextProductService {
-
-            @BeforeEach
-            void serUp() {
-                productRepository.deleteAll();
-            }
+        class Context_no_exist_product {
 
             @Test
             @DisplayName("사이즈가 0인 빈 리스트를 반환한다.")
@@ -39,15 +59,13 @@ class ProductServiceTest {
 
         @Nested
         @DisplayName("등록된 고양이 물품이 1개 이상 존재하면")
-        class Context_exist_product extends ContextProductService {
+        class Context_exist_product {
 
             private Product existed;
 
             @BeforeEach
             void setUp() {
-                productRepository.deleteAll();
-
-                this.existed = productRepository.save(generateCatTower());
+                this.existed = productRepository.save(catTower);
             }
 
             @Test
@@ -97,21 +115,23 @@ class ProductServiceTest {
 
         @Nested
         @DisplayName("새로운 product 생성 요청이 올 때")
-        class Context_valid_input extends ContextProductService {
+        class Context_valid_input {
 
-            private final ProductReqDto newProductInput = ProductReqDto.builder()
-                    .name("캣타워")
-                    .maker("캣러버스")
-                    .price(5000)
-                    .image("https://cdn.imweb.me/thumbnail/20200825/b940aaa4583a4.jpg")
-                    .build();
+            private ProductReqDto newProductInput;
+
+            @BeforeEach
+            void setUp() {
+                this.newProductInput = generateCatTowerRequest();
+            }
 
             @Test
             @DisplayName("product 을 생성하고 생성된 product 를 반환한다.")
             void it_returns_created_product() {
                 Product created = productService.create(newProductInput);
 
-                assertThat(created).isEqualTo(newProductInput);
+                assertThat(created.getName()).isEqualTo(newProductInput.getName());
+                assertThat(created.getPrice()).isEqualTo(newProductInput.getPrice());
+                assertThat(created.getMaker()).isEqualTo(newProductInput.getMaker());
 
                 List<Product> products = productService.getProducts();
                 assertThat(products).contains(created);

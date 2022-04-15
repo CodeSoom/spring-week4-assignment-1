@@ -36,14 +36,6 @@ public class Product {
 
     private String image;
 
-    public Product(Category category, String name, String maker, Integer price, String image) {
-        this.category = category;
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.image = image;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

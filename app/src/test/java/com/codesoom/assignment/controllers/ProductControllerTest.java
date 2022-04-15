@@ -2,11 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.contexts.ContextProductController;
 import com.codesoom.assignment.domains.Product;
-import com.codesoom.assignment.domains.ProductReqDto;
 import com.codesoom.assignment.repositories.ProductRepository;
 import com.codesoom.assignment.services.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,6 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.filter.CharacterEncodingFilter;
+
+import javax.transaction.Transactional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,22 +27,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 @DisplayName("ProductControllerTest 의")
-class ProductControllerTest {
+class ProductControllerTest extends ContextProductController {
 
     @Autowired
     private ProductRepository productRepository;
 
-    private ProductService productService;
     private MockMvc mockMvc;
+    private final Product catTower = generateCatTower();
+
 
     @BeforeEach
     void setUp() {
-        this.productService = new ProductService(productRepository);
-
         this.mockMvc = MockMvcBuilders
-                .standaloneSetup(new ProductController(productService))
+                .standaloneSetup(new ProductController(new ProductService(productRepository)))
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .alwaysDo(print())
                 .build();
 
         productRepository.deleteAll();
@@ -54,13 +57,12 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("등록된 고양이 물품이 존재하지 않는다면")
-        class Context_no_exist_product extends ContextProductController {
+        class Context_no_exist_product {
 
             @Test
             @DisplayName("사이즈가 0인 빈 리스트를 반환한다.")
             void it_returns_empty_list() throws Exception {
                 mockMvc.perform(get("/products"))
-                        .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(content().string("[]"));
             }
@@ -68,24 +70,21 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("등록된 고양이 물품이 1개 이상 존재하면")
-        class Context_exist_product extends ContextProductController {
+        class Context_exist_product {
 
             private Product existed;
 
             @BeforeEach
             void setUp() {
-                this.existed = productRepository.save(generateCatTower());
+                this.existed = productRepository.save(catTower);
             }
 
             @Test
             @DisplayName("사이즈가 0이상이고 등록된 물품 정보가 담긴 리스트를 반환한다. ")
             void it_returns_gt0_list() throws Exception {
                 mockMvc.perform(get("/products"))
-                        .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(content().string(
-                                containsString(productJsonString(existed.getProductId(), existed.getName())))
-                        );
+                        .andExpect(content().string(containsString(productJsonString(existed))));
             }
         }
     }
@@ -97,7 +96,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("찾고자 하는 product id 가 1이상일 때")
-        class Context_id_gt1_product extends ContextProductController {
+        class Context_id_gt1_product {
 
             @Nested
             @DisplayName("product id 에 맞는 물품이 존재할때")
@@ -125,7 +124,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("찾고자 하는 product id 가 1미만일 때")
-        class Context_id_lt1_product extends ContextProductController {
+        class Context_id_lt1_product {
 
             @Test
             @DisplayName("예외를 발생시킨다.")
@@ -143,21 +142,15 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("추가하려는 product 의 내용에 null 이나 공백이 없을 때")
-        class Context_valid_input extends ContextProductController {
-
-            private final ProductReqDto newProductInput = ProductReqDto.builder()
-                    .name("캣타워")
-                    .maker("캣러버스")
-                    .price(5000)
-                    .image("https://cdn.imweb.me/thumbnail/20200825/b940aaa4583a4.jpg")
-                    .build();
+        class Context_valid_input {
 
             private String request;
+            private String response;
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                ObjectMapper objectMapper = new ObjectMapper();
-                this.request = objectMapper.writeValueAsString(newProductInput);
+                this.request = productReqJsonString(generateCatTowerRequest());
+                this.response = productJsonString(generateCatTowerWithId());
             }
 
             @Test
@@ -165,17 +158,15 @@ class ProductControllerTest {
             void it_returns_created_product() throws Exception {
                 mockMvc.perform(post("/products")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .characterEncoding("utf-8")
                                 .content(request))
-                        .andDo(print())
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("")));
+                        .andExpect(content().string(containsString(response)));
             }
         }
 
         @Nested
         @DisplayName("추가하려는 product 의 내용에 null 이나 공백이 있을 때")
-        class Context_invalid_input extends ContextProductController {
+        class Context_invalid_input {
 
             @Test
             @DisplayName("예외를 발생시킨다.")
@@ -192,7 +183,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("찾고자 하는 product id 가 1이상이고")
-        class Context_id_gt1_product extends ContextProductController {
+        class Context_id_gt1_product {
 
             @Nested
             @DisplayName("추가하려는 product 의 내용에 null 이나 공백이 없고")
@@ -223,7 +214,7 @@ class ProductControllerTest {
 
             @Nested
             @DisplayName("추가하려는 product 의 내용에 null 이나 공백이 있을 때")
-            class Context_invalid_input extends ContextProductController {
+            class Context_invalid_input {
 
                 @Test
                 @DisplayName("예외를 발생시킨다.")
@@ -237,7 +228,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("찾고자 하는 product id 가 1미만일 때")
-        class Context_id_lt1_product extends ContextProductController {
+        class Context_id_lt1_product {
 
             @Test
             @DisplayName("예외를 발생시킨다.")
@@ -282,7 +273,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("찾고자 하는 product id 가 1미만일 때")
-        class Context_id_lt1_product extends ContextProductController {
+        class Context_id_lt1_product {
 
             @Test
             @DisplayName("예외를 발생시킨다.")
