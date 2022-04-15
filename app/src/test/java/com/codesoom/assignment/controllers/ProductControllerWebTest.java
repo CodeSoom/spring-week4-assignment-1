@@ -192,6 +192,11 @@ public class ProductControllerWebTest {
                         .andExpect(jsonPath("imageUrl").exists());
             }
         }
+    }
+
+    @Nested
+    @DisplayName("PATCH - /products/{id} 요청시")
+    class Describe_of_patch {
 
     }
 }
