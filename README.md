@@ -74,8 +74,18 @@ $ npm test
 
 E2E테스트는 실제로 동작하는 서버와 실제로 동작하는 웹이 필요한 테스트하므로 서버가 동작하고, 웹 서버가 동작하고 있는 상태여야 올바르게 동작합니다.
 
-```bash
+설치
+```shell
 $ cd web
 $ npm install
+```
+
+웹 실행
+```shell
+$ npm run start
+```
+
+웹 테스트 - 다른 터미널창에서 실행
+```shell
 $ npm run e2e
 ```
