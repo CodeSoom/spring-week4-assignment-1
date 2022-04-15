@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @RequiredArgsConstructor
-@Service
 public class ProductSafeDeleteService implements ProductDeleteService {
 
     private final ProductRepository repository;
