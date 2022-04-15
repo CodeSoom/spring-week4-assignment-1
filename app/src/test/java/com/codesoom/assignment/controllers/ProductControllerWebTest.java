@@ -164,4 +164,10 @@ public class ProductControllerWebTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("POST - /products")
+    class Describe_of_create_product {
+
+    }
 }
