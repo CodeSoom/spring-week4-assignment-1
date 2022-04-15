@@ -16,7 +16,7 @@ public class ProductReadServiceImpl implements ProductReadService {
 
     @Override
     public List<Product> findAll() {
-        return (List<Product>) repository.findAll();
+        return repository.findAll();
     }
 
     @Override
