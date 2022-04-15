@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -65,7 +66,7 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("GET - /products")
+    @DisplayName("GET - /products 요청시")
     class Describe_of_GET {
         private Product product;
 
@@ -114,7 +115,7 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("GET - /products/{id}")
+    @DisplayName("GET - /products/{id} 요청시")
     class Describe_of_detail_product {
         private Product product;
 
@@ -124,7 +125,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("Product가 있을 경우")
+        @DisplayName("{id} 와 동일한 Product가 있을 경우")
         class Context_with_product {
             private long productId;
 
@@ -134,7 +135,7 @@ public class ProductControllerWebTest {
             }
 
             @Test
-            @DisplayName("Id와 동일한 Product를 보여준다")
+            @DisplayName("{id}와 동일한 Product를 보여준다")
             void it_return_product() throws Exception {
                 mockMvc.perform(get("/products/" + productId))
                         .andExpect(status().isOk())
@@ -146,7 +147,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("Product 가 없을 경우")
+        @DisplayName("{id}와 동일한 Product 가 없을 경우")
         class Context_without_product {
             private long productId;
 
@@ -166,8 +167,31 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("POST - /products")
+    @DisplayName("POST - /products 요청시")
     class Describe_of_create_product {
+
+        @Nested
+        @DisplayName("생성에 필요한 데이터가 주어진다면")
+        class Context_with_valid_body {
+            private final Product context = new Product
+                    .Builder(PRODUCT_PRICE, PRODUCT_NAME)
+                    .maker(PRODUCT_MAKER)
+                    .imageUrl(PRODUCT_IMAGE_URL)
+                    .build();
+
+            @Test
+            @DisplayName("상품을 등록하고 등록한 상품을 포함하여 응답한다")
+            void it_save_and_return_product() throws Exception {
+                mockMvc.perform(post("/products")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(context)))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("price").exists())
+                        .andExpect(jsonPath("imageUrl").exists());
+            }
+        }
 
     }
 }
