@@ -63,7 +63,14 @@ public class ProductDeleteServiceTest extends ServiceTest {
         @Nested
         class Context_with_not_exist_id {
 
-            private final Long NOT_EXIST_ID = -1L;
+            private final Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setup() {
+                if (repository.existsById(NOT_EXIST_ID)) {
+                    repository.deleteById(NOT_EXIST_ID);
+                }
+            }
 
             @DisplayName("예외를 던진다.")
             @Test

@@ -5,6 +5,7 @@ import com.codesoom.assignment.application.ProductReadServiceImpl;
 import com.codesoom.assignment.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,36 +29,66 @@ public class ProductReadControllerTest {
     @Mock
     private ProductReadServiceImpl service;
 
-    private static final Long EXIST_ID = 1L;
-    private static final Long NOT_EXIST_ID = 100L;
     private static final Product SAVED_PRODUCT = Product.builder()
             .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
             .build();
 
-    @DisplayName("전체 상품을 성공적으로 조회한다.")
-    @Test
-    void findAllTest() {
-        final List<Product> products = List.of(SAVED_PRODUCT);
-        when(service.findAll()).thenReturn(products);
+    @DisplayName("findAll 메서드는")
+    @Nested
+    class Describe_find_all {
+        @BeforeEach
+        void setup() {
+            final List<Product> products = List.of(SAVED_PRODUCT);
+            when(service.findAll()).thenReturn(products);
+        }
 
-        assertThat(controller.getProducts()).isNotEmpty();
+        @DisplayName("전체 상품을 성공적으로 조회한다.")
+        @Test
+        void findAllTest() {
+            assertThat(controller.getProducts()).isNotEmpty();
+        }
     }
 
-    @DisplayName("존재하는 id로 요청하면 해당 상품을 반환한다.")
-    @Test
-    void findByIdTest() {
-        when(service.findById(EXIST_ID)).thenReturn(SAVED_PRODUCT);
+    @DisplayName("findById 메서드는")
+    @Nested
+    class Describe_find_by_id {
 
-        assertThat(controller.getProductDetail(EXIST_ID)).isSameAs(SAVED_PRODUCT);
-    }
+        @DisplayName("존재하는 id로 조회 요청이 오면")
+        @Nested
+        class Context_with_exist_id {
 
-    @DisplayName("존재하지 않는 id로 요청하면 예외를 던진다.")
-    @Test
-    void findByNotExistIdTest() {
-        when(service.findById(eq(NOT_EXIST_ID))).thenThrow(ProductNotFoundException.class);
+            private final Long EXIST_ID = 1L;
 
-        assertThatThrownBy(() -> controller.getProductDetail(NOT_EXIST_ID))
-                .isInstanceOf(ProductNotFoundException.class);
+            @BeforeEach
+            void setup() {
+                when(service.findById(EXIST_ID)).thenReturn(SAVED_PRODUCT);
+            }
+
+            @DisplayName("해당 상품을 반환한다.")
+            @Test
+            void will_return_found_product() {
+                assertThat(controller.getProductDetail(EXIST_ID)).isSameAs(SAVED_PRODUCT);
+            }
+        }
+
+        @DisplayName("존재하지 않는 id로 조회 요청이 오면")
+        @Nested
+        class Context_with_not_exist_id {
+
+            private final Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setup() {
+                when(service.findById(eq(NOT_EXIST_ID))).thenThrow(ProductNotFoundException.class);
+            }
+
+            @DisplayName("예외를 던진다.")
+            @Test
+            void will_throw_not_found_exception() {
+                assertThatThrownBy(() -> controller.getProductDetail(NOT_EXIST_ID))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
 }

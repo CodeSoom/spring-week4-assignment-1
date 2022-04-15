@@ -23,28 +23,35 @@ public class ProductReadServiceTest extends ServiceTest {
     @Autowired
     private ProductRepository repository;
 
+    private Product SAVED_PRODUCT;
+
     @BeforeEach
     void setup() {
         this.service = new ProductReadServiceImpl(repository);
+        final Product product = Product.builder()
+                .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
+                .build();
+        SAVED_PRODUCT = repository.save(product);
+    }
+
+    @AfterEach
+    void cleanup() {
+        repository.deleteAll();
+    }
+
+    @DisplayName("findAll 메서드는")
+    @Nested
+    class Describe_find_all {
+        @DisplayName("저장된 모든 상품을 반환한다.")
+        @Test
+        void will_return_all_products() {
+            assertThat(service.findAll()).isNotEmpty();
+        }
     }
 
     @DisplayName("findById 메서드는")
     @Nested
     class Describe_find_by_id {
-
-        private final Product SAVED_PRODUCT = Product.builder()
-                .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                .build();
-
-        @BeforeEach
-        void setup() {
-            repository.save(SAVED_PRODUCT);
-        }
-
-        @AfterEach
-        void cleanup() {
-            repository.deleteAll();
-        }
 
         @DisplayName("존재하는 상품 id가 주어진다면")
         @Nested
@@ -62,10 +69,20 @@ public class ProductReadServiceTest extends ServiceTest {
         @DisplayName("존재하지 않는 상품 id가 주어진다면")
         @Nested
         class Context_with_not_exist_id {
+
+            private final Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setup() {
+                if (repository.existsById(NOT_EXIST_ID)) {
+                    repository.deleteById(NOT_EXIST_ID);
+                }
+            }
+
             @DisplayName("예외를 던진다.")
             @Test
             void will_throw_exception() {
-                assertThatThrownBy(() -> service.findById(100L))
+                assertThatThrownBy(() -> service.findById(NOT_EXIST_ID))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

@@ -68,10 +68,20 @@ public class ProductUpdateServiceTest extends ServiceTest {
         @DisplayName("존재하지 않는 상품 id와 변경 데이터가 주어진다면")
         @Nested
         class Context_with_not_exist_id {
+
+            private final Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setup() {
+                if (repository.existsById(NOT_EXIST_ID)) {
+                    repository.deleteById(NOT_EXIST_ID);
+                }
+            }
+
             @DisplayName("예외를 던진다.")
             @Test
             void will_throw_exception() {
-                assertThatThrownBy(() -> service.update(100L, PRODUCT_DTO))
+                assertThatThrownBy(() -> service.update(NOT_EXIST_ID, PRODUCT_DTO))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

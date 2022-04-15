@@ -71,13 +71,13 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
         class Context_with_exist_id {
 
             private Long EXIST_ID;
-            private final Product SAVED_PRODUCT = Product.builder()
-                    .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                    .build();
 
             @BeforeEach
             void setup() {
-                this.EXIST_ID = repository.save(SAVED_PRODUCT).getId();
+                final Product product = Product.builder()
+                        .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
+                        .build();
+                this.EXIST_ID = repository.save(product).getId();
             }
 
             @AfterEach
@@ -100,7 +100,14 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
         @Nested
         class Context_with_not_exist_id {
 
-            private Long NOT_EXIST_ID = 0L;
+            private Long NOT_EXIST_ID = 100L;
+
+            @BeforeEach
+            void setup() {
+                if (repository.existsById(NOT_EXIST_ID)) {
+                    repository.deleteById(NOT_EXIST_ID);
+                }
+            }
 
             @DisplayName("404 not found를 던진다.")
             @Test
@@ -110,4 +117,5 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
             }
         }
     }
+
 }
