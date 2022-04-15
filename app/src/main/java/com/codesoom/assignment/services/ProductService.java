@@ -1,7 +1,7 @@
 package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.domains.Product;
-import com.codesoom.assignment.domains.ProductReqDto;
+import com.codesoom.assignment.dto.ProductReqDto;
 import com.codesoom.assignment.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 

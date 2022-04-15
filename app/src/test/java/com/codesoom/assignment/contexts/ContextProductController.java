@@ -1,7 +1,7 @@
 package com.codesoom.assignment.contexts;
 
 import com.codesoom.assignment.domains.Product;
-import com.codesoom.assignment.domains.ProductReqDto;
+import com.codesoom.assignment.dto.ProductReqDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

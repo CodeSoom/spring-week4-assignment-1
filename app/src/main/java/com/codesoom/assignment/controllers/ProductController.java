@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers;
 
 
 import com.codesoom.assignment.domains.Product;
-import com.codesoom.assignment.domains.ProductReqDto;
+import com.codesoom.assignment.dto.ProductReqDto;
 import com.codesoom.assignment.services.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,6 @@ public class ProductController {
         this.productService = productService;
     }
 
-
     @GetMapping("")
     public List<Product> list() {
         return productService.getProducts();
@@ -30,6 +29,7 @@ public class ProductController {
 
     @PostMapping("")
     public Product add(@RequestBody ProductReqDto newProduct) {
+        newProduct.validation();
         return productService.create(newProduct);
     }
 

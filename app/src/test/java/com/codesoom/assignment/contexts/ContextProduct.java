@@ -1,7 +1,7 @@
 package com.codesoom.assignment.contexts;
 
 import com.codesoom.assignment.domains.Product;
-import com.codesoom.assignment.domains.ProductReqDto;
+import com.codesoom.assignment.dto.ProductReqDto;
 import com.codesoom.assignment.enums.Category;
 
 public abstract class ContextProduct {
@@ -39,6 +39,15 @@ public abstract class ContextProduct {
                 .maker(MAKER)
                 .price(CAT_TOWER_PRICE)
                 .image(CAT_TOWER_IMAGE)
+                .build();
+    }
+
+    protected ProductReqDto generateCatTowerBadRequest() {
+        return ProductReqDto.builder()
+                .name(null)
+                .maker(MAKER)
+                .price(CAT_TOWER_PRICE)
+                .image("")
                 .build();
     }
 

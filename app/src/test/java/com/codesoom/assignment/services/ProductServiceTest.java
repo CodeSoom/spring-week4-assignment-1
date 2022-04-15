@@ -2,7 +2,7 @@ package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.contexts.ContextProduct;
 import com.codesoom.assignment.domains.Product;
-import com.codesoom.assignment.domains.ProductReqDto;
+import com.codesoom.assignment.dto.ProductReqDto;
 import com.codesoom.assignment.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

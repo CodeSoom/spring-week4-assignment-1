@@ -43,6 +43,7 @@ class ProductControllerTest extends ContextProductController {
     void setUp() {
         this.mockMvc = MockMvcBuilders
                 .standaloneSetup(new ProductController(new ProductService(productRepository)))
+                .setControllerAdvice(ProductErrorAdvice.class)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
                 .build();
@@ -168,10 +169,20 @@ class ProductControllerTest extends ContextProductController {
         @DisplayName("추가하려는 product 의 내용에 null 이나 공백이 있을 때")
         class Context_invalid_input {
 
+            private String request;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                this.request = productReqJsonString(generateCatTowerBadRequest());
+            }
+
             @Test
             @DisplayName("예외를 발생시킨다.")
-            void it_throws_bad_request_exception() {
-
+            void it_throws_bad_request_exception() throws Exception {
+                mockMvc.perform(post("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(request))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
