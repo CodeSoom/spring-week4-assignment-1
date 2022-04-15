@@ -12,7 +12,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -36,16 +35,4 @@ public class Product {
 
     private String image;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(getProductId(), product.getProductId()) && category == product.category && Objects.equals(name, product.name) && Objects.equals(maker, product.maker) && Objects.equals(price, product.price) && Objects.equals(image, product.image);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getProductId(), category, name, maker, price, image);
-    }
 }

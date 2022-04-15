@@ -66,7 +66,7 @@ class ProductRepositoryTest extends ContextProduct {
                 List<Product> results = productRepository.findAll();
 
                 assertThat(results).hasSize(1);
-                assertThat(results).contains(existed);
+                assertThat(results.get(0).getProductId()).isEqualTo(existed.getProductId());
             }
         }
     }

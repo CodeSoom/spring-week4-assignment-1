@@ -74,7 +74,7 @@ class ProductServiceTest extends ContextProduct {
                 List<Product> products = productService.getProducts();
 
                 assertThat(products).hasSize(1);
-                assertThat(products.get(0)).isEqualTo(existed);
+                assertThat(products.get(0).getProductId()).isEqualTo(existed.getProductId());
             }
         }
     }
@@ -134,7 +134,7 @@ class ProductServiceTest extends ContextProduct {
                 assertThat(created.getMaker()).isEqualTo(newProductInput.getMaker());
 
                 List<Product> products = productService.getProducts();
-                assertThat(products).contains(created);
+                assertThat(products.get(0).getProductId()).isEqualTo(created.getProductId());
             }
         }
     }
