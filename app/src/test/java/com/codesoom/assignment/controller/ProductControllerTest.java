@@ -87,6 +87,20 @@ class ProductControllerTest {
         verify(service).getProduct(NOT_FOUND_ID);
     }
 
+    @Test
+    void createProduct() {
+        Product newProduct = new Product();
+        newProduct.setImage(IMAGE);
+        newProduct.setPrice(PRICE);
+        newProduct.setMaker(MAKER);
+        newProduct.setName(NAME);
+
+        Product product = controller.create(newProduct);
+
+        verify(service).createProduct(newProduct);
+        verifyProduct(product);
+    }
+
     private void verifyProduct(Product product) {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getMaker()).isEqualTo(MAKER);
