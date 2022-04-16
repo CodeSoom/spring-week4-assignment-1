@@ -34,4 +34,8 @@ public class ProductController {
     public Product update(long id, ProductDto productDto) {
         return service.updateProduct(id, productDto);
     }
+
+    public void remove(Product product) {
+        service.removeProduct(product);
+    }
 }
