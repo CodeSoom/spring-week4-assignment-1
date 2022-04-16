@@ -6,11 +6,11 @@
 
 고양이 장난감을 등록하고, 조회하고, 수정하고 삭제하는 기능이 있는 간단한 웹이 있습니다. 이 웹에서 사용할 REST API를 만들어주세요.
 
-* 고양이 장난감 목록 얻기 - `GET /products`
-* 고양이 장난감 상세 조회하기 - `GET /products/{id}`
-* 고양이 장난감 등록하기 - `POST /products`
-* 고양이 장난감 수정하기 - `PATCH /products/{id}`
-* 고양이 장난감 삭제하기 - `DELETE /products/{id}`
+* [ ] 고양이 장난감 목록 얻기 - `GET /products`
+* [ ] 고양이 장난감 상세 조회하기 - `GET /products/{id}`
+* [ ] 고양이 장난감 등록하기 - `POST /products`
+* [ ] 고양이 장난감 수정하기 - `PATCH /products/{id}`
+* [ ] 고양이 장난감 삭제하기 - `DELETE /products/{id}`
 
 ## 요구 사항
 
