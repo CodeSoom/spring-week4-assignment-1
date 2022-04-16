@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class ProductControllerTest {
 
@@ -46,7 +47,7 @@ class ProductControllerTest {
     @Test
     void getProducts() {
         List<Product> products = controller.list();
-
+        verify(service).getProducts();
         assertThat(products).isNotEmpty();
     }
 
@@ -55,7 +56,7 @@ class ProductControllerTest {
         given(service.getProducts()).willReturn(new ArrayList<>());
 
         List<Product> products = controller.list();
-
+        verify(service).getProducts();
         assertThat(products).isEmpty();
     }
 }
