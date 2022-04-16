@@ -3,7 +3,6 @@ package com.codesoom.assignment.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Objects;
 
 @Entity
 public class Product {
@@ -74,7 +73,7 @@ public class Product {
         return new ProductBuilder();
     }
 
-    public static class ProductBuilder  {
+    public static class ProductBuilder {
 
         private String name;
 
@@ -107,23 +106,6 @@ public class Product {
         public Product build() {
             return new Product(name, maker, price, imagePath);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Product product = (Product) o;
-        return Objects.equals(id, product.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 
     @Override
