@@ -14,10 +14,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+/**
+ * 단순 의존 관계를 테스트하기 위한 mock 테스트입니다.
+ */
 class ProductServiceTest {
     private ProductService service;
     private ProductRepository repository;
 
+    private Product PRODUCT;
     private final long ID = 1L;
     private final String MAKER = "KOREAN SHORT CAT";
     private final int PRICE = 20000;
@@ -35,17 +39,18 @@ class ProductServiceTest {
     private void setUpFixtures() {
         List<Product> products = new ArrayList<>();
 
-        Product product = new Product();
-        product.setId(ID);
-        product.setMaker(MAKER);
-        product.setPrice(PRICE);
-        product.setName(NAME);
-        product.setImage(IMAGE);
+        PRODUCT = new Product();
+        PRODUCT.setId(ID);
+        PRODUCT.setMaker(MAKER);
+        PRODUCT.setPrice(PRICE);
+        PRODUCT.setName(NAME);
+        PRODUCT.setImage(IMAGE);
 
-        products.add(product);
+        products.add(PRODUCT);
 
         given(repository.findAll()).willReturn(products);
-        given(repository.findById(ID)).willReturn(Optional.of(product));
+        given(repository.findById(ID)).willReturn(Optional.of(PRODUCT));
+        given(repository.save(PRODUCT)).willReturn(PRODUCT);
     }
 
     @Test
@@ -66,5 +71,17 @@ class ProductServiceTest {
         assertThat(product.getPrice()).isEqualTo(PRICE);
         assertThat(product.getImage()).isEqualTo(IMAGE);
         assertThat(product.getName()).isEqualTo(NAME);
+    }
+
+    @Test
+    void createProduct() {
+        Product newProduct = service.createProduct(PRODUCT);
+        verify(repository).save(PRODUCT);
+
+        assertThat(newProduct.getId()).isEqualTo(ID);
+        assertThat(newProduct.getMaker()).isEqualTo(MAKER);
+        assertThat(newProduct.getPrice()).isEqualTo(PRICE);
+        assertThat(newProduct.getImage()).isEqualTo(IMAGE);
+        assertThat(newProduct.getName()).isEqualTo(NAME);
     }
 }
