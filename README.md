@@ -2,6 +2,14 @@
 
 ![demo mov](https://user-images.githubusercontent.com/14071105/107855316-d688b300-6e64-11eb-99e7-833911002d49.gif)
 
+## TODO
+
+- [ ] Product Entity 레이어를 구현한다.
+- [ ] ProductService 와 ProductRepository 를 이용 mock 테스트 코드를 작성한다.
+- [ ] ProductController 와 ProductService 를 이용 mock 테스트 코드를 작성한다.
+- [ ] @SpringBootTest 를 이용하여 통합 테스트 코드를 작성한다.
+- [ ] 기타 생길 수 있는 예외 상황들에 대한 코드를 더 추가해본다.
+
 ## 과제 목표
 
 고양이 장난감을 등록하고, 조회하고, 수정하고 삭제하는 기능이 있는 간단한 웹이 있습니다. 이 웹에서 사용할 REST API를 만들어주세요.
