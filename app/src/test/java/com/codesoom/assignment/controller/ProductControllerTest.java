@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -57,6 +58,18 @@ class ProductControllerTest {
         given(service.createProduct(any(Product.class))).will(invocation -> {
             Product product = invocation.getArgument(0);
             product.setId(ID);
+            return product;
+        });
+        given(service.updateProduct(eq(ID), any(ProductDto.class))).will(invocation -> {
+            ProductDto productDto = invocation.getArgument(1);
+
+            Product product = new Product();
+            product.setId(ID);
+            product.setMaker(productDto.getMaker());
+            product.setPrice(productDto.getPrice());
+            product.setName(productDto.getName());
+            product.setImage(productDto.getImage());
+
             return product;
         });
     }
@@ -116,7 +129,7 @@ class ProductControllerTest {
 
         Product updateProduct = controller.update(ID, productDto);
 
-        verify(service).getProduct(ID);
+        verify(service).updateProduct(ID, productDto);
         verifyUpdateProduct(updateProduct);
     }
 
