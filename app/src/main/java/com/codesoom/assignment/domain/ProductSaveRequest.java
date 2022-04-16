@@ -16,14 +16,14 @@ public interface ProductSaveRequest {
     String getImageUrl();
 
     /**
-     * 상품 인스턴스 반환
+     * 상품 인스턴스 반환합니다.
      */
     default Product toProduct() {
         return ProductFactory.createNewProduct(getName(), getMaker(), getPrice(), getImageUrl());
     }
 
     /**
-     * 상품 등록 요청 인스턴스 생성
+     * 상품 등록 요청 인스턴스를 생성합니다.
      * @param name  상품명
      * @param maker  메이커
      * @param price 가격

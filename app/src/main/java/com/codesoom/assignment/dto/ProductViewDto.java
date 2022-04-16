@@ -14,7 +14,7 @@ public class ProductViewDto {
     }
 
     /**
-     * 상품을 받아 전송에 필요한 데이터 반환
+     * 상품을 받아 전송에 필요한 데이터를 반환합니다.
      *
      * @param product 상품 엔티티
      */

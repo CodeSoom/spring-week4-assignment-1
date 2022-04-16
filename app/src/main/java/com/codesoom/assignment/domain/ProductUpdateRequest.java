@@ -17,7 +17,7 @@ public interface ProductUpdateRequest {
     String getImageUrl();
 
     /**
-     * 상품을 대체하고 반환
+     * 상품을 대체하고 반환합니다.
      *
      * @param product 대상 상품
      */
@@ -29,7 +29,7 @@ public interface ProductUpdateRequest {
     }
 
     /**
-     * 상품 속성을 변경하고 반환
+     * 상품 속성을 변경하고 반환합니다.
      *
      * @param product 대상 상품
      */

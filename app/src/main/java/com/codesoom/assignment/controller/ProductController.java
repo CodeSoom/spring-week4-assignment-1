@@ -40,7 +40,7 @@ public class ProductController {
     }
 
     /**
-     * 상품 전체 목록 반환
+     * 상품 전체 목록을 반환합니다.
      */
     @GetMapping
     public List<ProductViewDto> list() {
@@ -53,7 +53,7 @@ public class ProductController {
     }
 
     /**
-     * 상품 생성 후 반환
+     * 상품 생성 후 반환합니다.
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -65,7 +65,7 @@ public class ProductController {
     }
 
     /**
-     * 상품 상세 정보 반환
+     * 상품 상세 정보 반환합니다.
      */
     @GetMapping("/{productId}")
     public ProductViewDto detail(@PathVariable Long productId) {
@@ -76,7 +76,7 @@ public class ProductController {
     }
 
     /**
-     * 상품 삭제
+     * 상품을 삭제합니다.
      *
      * @param productId 삭제할 상품 아이디
      */

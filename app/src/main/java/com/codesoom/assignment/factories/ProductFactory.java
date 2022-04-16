@@ -11,7 +11,7 @@ public class ProductFactory {
     }
 
     /**
-     * 새로운 상품 반환
+     * 새로운 상품을 반환합니다.
      *
      * @param name      상품명
      * @param maker     메이커
@@ -30,7 +30,7 @@ public class ProductFactory {
     }
 
     /**
-     * 비어있는 상품 반환
+     * 비어있는 상품 반환합니다.
      */
     public static Product createNullProduct() {
         return Product.builder().build();

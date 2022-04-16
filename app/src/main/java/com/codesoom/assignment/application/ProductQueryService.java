@@ -21,7 +21,7 @@ public class ProductQueryService {
     }
 
     /**
-     * 상품 전체 목록 반환
+     * 상품 전체 목록 반환합니다.
      */
     public List<Product> getProducts() {
         Iterable<Product> source = productRepository.findAll();
@@ -31,10 +31,10 @@ public class ProductQueryService {
     }
 
     /**
-     * 단일 상품 반환
+     * 단일 상품 반환합니다.
      *
      * @param productId 상품 아이디
-     * @throws ProductNotFoundException 상품을 찾을 수 없을 때 던집니다.
+     * @throws ProductNotFoundException 상품을 찾을 수 없는 경우
      */
     public Product getProduct(final Long productId) {
 
