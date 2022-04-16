@@ -47,28 +47,8 @@ class ProductCommandServiceTest {
         @DisplayName("상품 등록에 필요한 데이터가 주어진다면")
         class Context_valid {
 
-            final ProductSaveRequest saveRequest = new ProductSaveRequest() {
-
-                @Override
-                public String getName() {
-                    return TEST_PRODUCT_NAME;
-                }
-
-                @Override
-                public String getMaker() {
-                    return TEST_PRODUCT_MAKER;
-                }
-
-                @Override
-                public Integer getPrice() {
-                    return TEST_PRODUCT_PRICE;
-                }
-
-                @Override
-                public String getImageUrl() {
-                    return TEST_PRODUCT_IMAGE_PATH;
-                }
-            };
+            final ProductSaveRequest saveRequest = ProductSaveRequest.of(
+                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @Test
             @DisplayName("상품을 등록하고 리턴한다.")
