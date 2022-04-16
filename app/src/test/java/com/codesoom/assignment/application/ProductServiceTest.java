@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -89,11 +90,35 @@ class ProductServiceTest {
         verifyProduct(removeProduct);
     }
 
+    @Test
+    void updateProduct() {
+        ProductDto productDto = new ProductDto();
+        productDto.setName("updated" + PRODUCT.getName());
+        productDto.setImage("updated" + PRODUCT.getImage());
+        productDto.setMaker("updated" + PRODUCT.getMaker());
+        productDto.setPrice(1000 + PRODUCT.getPrice());
+
+
+        Product updateProduct = service.updateProduct(ID, productDto);
+
+        verify(repository).findById(ID);
+
+        verifyUpdateProduct(updateProduct);
+    }
+
     private void verifyProduct(Product product) {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
         assertThat(product.getImage()).isEqualTo(IMAGE);
         assertThat(product.getName()).isEqualTo(NAME);
+    }
+
+    private void verifyUpdateProduct(Product product) {
+        assertThat(product.getId()).isEqualTo(ID);
+        assertThat(product.getMaker()).isEqualTo("updated" + MAKER);
+        assertThat(product.getPrice()).isEqualTo(1000 + PRICE);
+        assertThat(product.getImage()).isEqualTo("updated" + IMAGE);
+        assertThat(product.getName()).isEqualTo("updated" + NAME);
     }
 }
