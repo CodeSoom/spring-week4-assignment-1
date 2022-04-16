@@ -33,7 +33,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,7 +69,7 @@ public class WebProductControllerTest {
             @BeforeEach
             void setUp() {
                 LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(index -> new Product())
+                        .mapToObj(index -> ProductFactory.getEmptyProduct())
                         .forEach(product -> productRepository.save(product));
             }
 
@@ -295,7 +294,9 @@ public class WebProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                final Product product = new Product();
+                final Product product = ProductFactory.getProduct(
+                        TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
+
                 productRepository.save(product);
                 productId = product.getId();
             }

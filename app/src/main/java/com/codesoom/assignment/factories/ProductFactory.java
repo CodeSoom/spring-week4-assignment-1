@@ -18,7 +18,17 @@ public class ProductFactory {
      * @return 상품
      */
     public static Product getProduct(String name, String maker, Integer price, String imagePath) {
-        return new Product(name, maker, price, imagePath);
+
+        return Product.builder()
+                .setName(name)
+                .setMaker(maker)
+                .setPrice(price)
+                .setImagePath(imagePath)
+                .build();
+    }
+
+    public static Product getEmptyProduct() {
+        return Product.builder().build();
     }
 
     /**

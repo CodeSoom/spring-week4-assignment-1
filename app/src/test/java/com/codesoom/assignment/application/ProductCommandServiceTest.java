@@ -196,7 +196,8 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                product = new Product();
+                product = ProductFactory.getProduct(
+                        TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
                 productRepository.save(product);
             }
 

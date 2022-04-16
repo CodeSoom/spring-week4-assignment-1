@@ -20,10 +20,10 @@ public class Product {
 
     private String imagePath;
 
-    public Product() {
+    protected Product() {
     }
 
-    public Product(String name, String maker, Integer price, String imagePath) {
+    private Product(String name, String maker, Integer price, String imagePath) {
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -68,6 +68,45 @@ public class Product {
     public Product changeImagePath(String imagePath) {
         this.imagePath = imagePath;
         return this;
+    }
+
+    public static ProductBuilder builder() {
+        return new ProductBuilder();
+    }
+
+    public static class ProductBuilder  {
+
+        private String name;
+
+        private String maker;
+
+        private Integer price;
+
+        private String imagePath;
+
+        public ProductBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ProductBuilder setMaker(String maker) {
+            this.maker = maker;
+            return this;
+        }
+
+        public ProductBuilder setPrice(Integer price) {
+            this.price = price;
+            return this;
+        }
+
+        public ProductBuilder setImagePath(String imagePath) {
+            this.imagePath = imagePath;
+            return this;
+        }
+
+        public Product build() {
+            return new Product(name, maker, price, imagePath);
+        }
     }
 
     @Override

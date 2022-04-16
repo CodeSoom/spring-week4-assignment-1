@@ -49,7 +49,7 @@ class ProductQueryServiceTest {
             @BeforeEach
             void setUp() {
                 LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(index -> new Product())
+                        .mapToObj(index -> ProductFactory.getEmptyProduct())
                         .forEach(product -> productRepository.save(product));
             }
 
