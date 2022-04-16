@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 상품 변경 작업
+ * 상품 변경 담당
  */
 @Transactional
 @Service

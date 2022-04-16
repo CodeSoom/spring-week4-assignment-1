@@ -2,7 +2,6 @@ package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Product;
 
-
 /**
  * 상품 데이터 전송에 필요한 데이터 정의
  */

@@ -16,7 +16,7 @@ public interface ProductSaveRequest {
     String getImageUrl();
 
     /**
-     * 상품 인스턴스 리턴
+     * 상품 인스턴스 반환
      */
     default Product toProduct() {
         return ProductFactory.getProduct(getName(), getMaker(), getPrice(), getImageUrl());

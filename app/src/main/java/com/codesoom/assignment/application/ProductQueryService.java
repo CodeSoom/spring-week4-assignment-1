@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 상품 조회 작업
+ * 상품 조회 담당
  */
 @Service
 public class ProductQueryService {
