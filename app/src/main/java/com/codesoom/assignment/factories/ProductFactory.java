@@ -9,8 +9,11 @@ import org.springframework.util.StringUtils;
  */
 public class ProductFactory {
 
+    private ProductFactory() {
+    }
+
     /**
-     * 상품을 생성합니다.
+     * 새로운 상품을 리턴합니다.
      * @param name  상품명
      * @param maker 메이커
      * @param price 가격
@@ -27,6 +30,9 @@ public class ProductFactory {
                 .build();
     }
 
+    /**
+     * 비어있는 상품을 리턴합니다.
+     */
     public static Product getEmptyProduct() {
         return Product.builder().build();
     }
