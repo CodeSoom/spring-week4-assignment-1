@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 
 import java.util.List;
 
@@ -14,5 +15,9 @@ public class ProductService {
 
     public List<Product> getProducts() {
         return repository.findAll();
+    }
+
+    public Product getProduct(Long id) {
+        return repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
