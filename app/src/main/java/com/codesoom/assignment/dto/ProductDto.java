@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class ProductDto {
-    private Long id;
     private String name;
     private String maker;
     private Integer price;
@@ -47,7 +46,6 @@ public class ProductDto {
         public ProductDto build() {
             return new ProductDto(this);
         }
-
     }
 
     public Product toEntity() {
@@ -56,7 +54,5 @@ public class ProductDto {
                 .maker(maker)
                 .imageUrl(imageUrl)
                 .build();
-
     }
-
 }

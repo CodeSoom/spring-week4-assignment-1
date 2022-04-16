@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public Product detail(@PathVariable long id) {
+    public Product detail(@PathVariable Long id) {
         return this.productService.getProduct(id);
     }
 
@@ -44,13 +44,13 @@ public class ProductController {
     }
 
     @PatchMapping("{id}")
-    public Product update(@PathVariable long id, @RequestBody ProductDto productDto) {
+    public Product update(@PathVariable Long id, @RequestBody ProductDto productDto) {
         return this.productService.updateProduct(id, productDto);
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable long id) {
+    public void delete(@PathVariable Long id) {
         this.productService.deleteProduct(id);
     }
 

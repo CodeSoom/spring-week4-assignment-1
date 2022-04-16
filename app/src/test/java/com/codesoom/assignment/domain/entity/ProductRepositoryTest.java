@@ -29,14 +29,11 @@ class ProductRepositoryTest {
 
     /**
      * 하나의 Product 를 생성해 등록합니다.
+     *
      * @return 생성된 Product를 반환
      */
     private Product createProduct() {
-        Product product = new Product
-                .Builder(PRODUCT_PRICE, PRODUCT_NAME)
-                .maker(PRODUCT_MAKER)
-                .imageUrl(PRODUCT_IMAGE_URL)
-                .build();
+        Product product = new Product.Builder(PRODUCT_PRICE, PRODUCT_NAME).maker(PRODUCT_MAKER).imageUrl(PRODUCT_IMAGE_URL).build();
         return productRepository.save(product);
     }
 
@@ -129,8 +126,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("상품을 반환한다")
             void it_return_product() {
-                Product product = productRepository.findById(productId)
-                        .orElseThrow(() -> new ProductNotFoundException(productId));
+                Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
                 assertThat(product).isNotNull();
             }
         }
