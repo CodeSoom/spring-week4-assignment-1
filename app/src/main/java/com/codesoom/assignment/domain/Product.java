@@ -12,14 +12,27 @@ public class Product {
     private Long id;
     private String name;
     private String maker;
-    private Long price;
+    private Integer price;
     private String imagePath;
 
     public Product() {
 
     }
 
-    public Product(String name, String maker, Long price, String imagePath) {
+    public Product(String name, String maker, Integer price) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+    }
+
+    public Product(long id, String name, String maker, Integer price) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+    }
+
+    public Product(String name, String maker, Integer price, String imagePath) {
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -38,7 +51,7 @@ public class Product {
         return maker;
     }
 
-    public Long getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
@@ -60,13 +73,20 @@ public class Product {
                 id, name, maker, price, imagePath);
     }
 
-    public boolean hasEqualContents(Product other) {
-        if(name.compareTo(other.getName()) == 0 &&
-        maker.compareTo(other.getMaker()) == 0 &&
-        price == other.getPrice() &&
-        imagePath.compareTo(other.getImagePath()) == 0) {
-            return true;
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) &&
+                Objects.equals(name, product.name) &&
+                Objects.equals(maker, product.maker) &&
+                Objects.equals(price, product.price) &&
+                Objects.equals(imagePath, product.imagePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, maker, price, imagePath);
     }
 }

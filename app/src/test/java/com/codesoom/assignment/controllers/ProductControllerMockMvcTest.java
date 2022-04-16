@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerMockMvcTest {
     private static final String TEST_NAME = "testName";
     private static final String TEST_MAKER = "testMaker";
-    private static final Long TEST_PRICE = 5000L;
+    private static final Integer TEST_PRICE = 5000;
     private static final String TEST_IMAGE_PATH = "testImagePath.jpg";
     private static final String CREATE_POSTFIX = "...";
     private static final String UPDATE_POSTFIX = "!!!";
@@ -111,7 +111,7 @@ public class ProductControllerMockMvcTest {
                     Product newProduct = new Product(
                             TEST_NAME + CREATE_POSTFIX,
                             TEST_MAKER + CREATE_POSTFIX,
-                            TEST_PRICE + 1000L,
+                            TEST_PRICE + 1000,
                             CREATE_POSTFIX + TEST_IMAGE_PATH);
 
                     return newProduct;
@@ -136,33 +136,60 @@ public class ProductControllerMockMvcTest {
 
     @Test
     void updateExistedId() throws Exception {
-        given(productService.updateProduct(eq(VALID_PRODUCT_ID), any(Product.class)))
-                .will(invocation ->  {
-                    Product updatedProduct = new Product(
-                            TEST_NAME + UPDATE_POSTFIX,
-                            TEST_MAKER + UPDATE_POSTFIX,
-                            TEST_PRICE + 2000L,
-                            UPDATE_POSTFIX + TEST_IMAGE_PATH);
 
-                    return updatedProduct;
+//        given(productService.updateProduct(eq(VALID_PRODUCT_ID), any(Product.class)))
+//                .will(invocation ->  {
+//                    Product updatedProduct = new Product(
+//                            TEST_NAME + UPDATE_POSTFIX,
+//                            TEST_MAKER + UPDATE_POSTFIX,
+//                            TEST_PRICE + 2000L,
+//                            UPDATE_POSTFIX + TEST_IMAGE_PATH);
+//
+//                    return updatedProduct;
+//                });
+
+
+//        mockMvc.perform(
+//                        patch("/products/1")
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content("{\"id\":1,\"name\":\"testName\"}")
+//                )
+//                .andExpect(status().isOk())
+//                .andExpect(content().string(
+//                        equalTo("{\"id\":null," +
+//                                "\"name\":\"testName!!!\"," +
+//                                "\"maker\":\"testMaker!!!\"," +
+//                                "\"price\":7000," +
+//                                "\"imagePath\":\"!!!testImagePath.jpg\"}")
+//                ));
+//
+//        verify(productService).updateProduct(eq(VALID_PRODUCT_ID), any(Product.class));
+
+
+        given(productService.updateProduct(eq(1L), any(Product.class)))
+                .will(invocation -> {
+                    Product source = invocation.getArgument(1);
+                    Long id = invocation.getArgument(0);
+                    return new Product(
+                            id,
+                            source.getName(),
+                            source.getMaker(),
+                            source.getPrice()
+                    );
                 });
 
         mockMvc.perform(
                         patch("/products/1")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"id\":1,\"name\":\"testName\"}")
+                                .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\",\"price\":6000}")
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string(
-                        equalTo("{\"id\":null," +
-                                "\"name\":\"testName!!!\"," +
-                                "\"maker\":\"testMaker!!!\"," +
-                                "\"price\":7000," +
-                                "\"imagePath\":\"!!!testImagePath.jpg\"}")
-                ));
+                .andExpect(content().string(containsString("쥐순이")))
+                .andExpect(content().string(containsString("냥이월드")))
+                .andExpect(content().string(containsString("6000")));
 
-        verify(productService).updateProduct(eq(VALID_PRODUCT_ID), any(Product.class));
-
+        verify(productService).updateProduct(eq(1L), any(Product.class));
     }
 
     @Test

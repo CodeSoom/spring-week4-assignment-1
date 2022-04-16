@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 public class ProductServiceTest {
     private static final String TEST_NAME = "testName";
     private static final String TEST_MAKER = "testMaker";
-    private static final Long TEST_PRICE = 5000L;
+    private static final Integer TEST_PRICE = 5000;
     private static final String TEST_IMAGE_PATH = "testImagePath.jpg";
     private static final String CREATE_POSTFIX = "...";
     private static final String UPDATE_POSTFIX = "!!!";
@@ -46,7 +46,7 @@ public class ProductServiceTest {
 
         products = new ArrayList<>();
 
-        Product product = null;
+        Product product;
         for(int i = 0; i < PRODUCTS_MAX_SIZE; i++) {
             product = new Product(TEST_NAME + (i + 1),
                     TEST_MAKER + (i + 1),
@@ -88,7 +88,7 @@ public class ProductServiceTest {
 
             for(int i = 0; i < PRODUCTS_MAX_SIZE; i++) {
                 assertThat(
-                        products.get(i).hasEqualContents(copy.get(i))
+                        products.get(i).equals(copy.get(i))
                 ).isTrue();
             }
         }
@@ -105,7 +105,7 @@ public class ProductServiceTest {
             verify(productRepository).findById(VALID_PRODUCT_ID);
 
             assertThat(products.get(VALID_PRODUCT_ID.intValue() - 1)
-                    .hasEqualContents(copy)).isTrue();
+                    .equals(copy)).isTrue();
         }
 
         @Test
@@ -127,7 +127,7 @@ public class ProductServiceTest {
             newProduct = new Product(
                     TEST_NAME + CREATE_POSTFIX,
                     TEST_MAKER + CREATE_POSTFIX,
-                    TEST_PRICE + 1000L,
+                    TEST_PRICE + 1000,
                     CREATE_POSTFIX + TEST_IMAGE_PATH
             );
             given(productRepository.save(any(Product.class))).willReturn(newProduct);
@@ -139,7 +139,7 @@ public class ProductServiceTest {
 
             verify(productRepository).save(any(Product.class));
 
-            assertThat(oldProduct.hasEqualContents(newProduct)).isTrue();
+            assertThat(oldProduct.equals(newProduct)).isTrue();
         }
     }
 
@@ -153,7 +153,7 @@ public class ProductServiceTest {
             source = new Product(
                     TEST_NAME + UPDATE_POSTFIX,
                     TEST_MAKER + UPDATE_POSTFIX,
-                    TEST_PRICE + 2000L,
+                    TEST_PRICE + 2000,
                     UPDATE_POSTFIX + TEST_IMAGE_PATH
             );
         }
@@ -165,7 +165,7 @@ public class ProductServiceTest {
 
             verify(productRepository).findById(VALID_PRODUCT_ID);
 
-            assertThat(updatedProduct.hasEqualContents(source)).isTrue();
+            assertThat(updatedProduct.equals(source)).isTrue();
         }
 
         @Test

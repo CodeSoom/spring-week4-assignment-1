@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 public class ProductControllerTest {
     private static final String TEST_NAME = "testName";
     private static final String TEST_MAKER = "testMaker";
-    private static final Long TEST_PRICE = 5000L;
+    private static final Integer TEST_PRICE = 5000;
     private static final String TEST_IMAGE_PATH = "testImagePath.jpg";
     private static final String CREATE_POSTFIX = "...";
     private static final String UPDATE_POSTFIX = "!!!";
@@ -69,7 +69,7 @@ public class ProductControllerTest {
         Product newProduct = new Product(
                 TEST_NAME + CREATE_POSTFIX,
                 TEST_MAKER + CREATE_POSTFIX,
-                TEST_PRICE + 1000L,
+                TEST_PRICE + 1000,
                 CREATE_POSTFIX + TEST_IMAGE_PATH);
 
         productController.create(newProduct);
@@ -123,7 +123,7 @@ public class ProductControllerTest {
         Product source = new Product(
                 TEST_NAME + UPDATE_POSTFIX,
                 TEST_MAKER + UPDATE_POSTFIX,
-                TEST_PRICE + 1000L,
+                TEST_PRICE + 1000,
                 UPDATE_POSTFIX + TEST_IMAGE_PATH);
 
         productController.update(VALID_PRODUCT_ID, source);
@@ -139,7 +139,7 @@ public class ProductControllerTest {
         Product product = new Product(
                 TEST_NAME + UPDATE_POSTFIX,
                 TEST_MAKER + UPDATE_POSTFIX,
-                TEST_PRICE + 1000L,
+                TEST_PRICE + 1000,
                 UPDATE_POSTFIX + TEST_IMAGE_PATH);
 
         assertThatThrownBy(() -> productController.update(INVALID_PRODUCT_ID, product))
