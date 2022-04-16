@@ -6,7 +6,6 @@ import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ProductService {
     private final ProductRepository repository;
