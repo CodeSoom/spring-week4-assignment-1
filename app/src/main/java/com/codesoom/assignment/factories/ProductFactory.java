@@ -51,7 +51,7 @@ public class ProductFactory {
             product.changeMaker(updateRequest.getMaker());
         }
 
-        if (updateRequest.getPrice() != null && updateRequest.getPrice() > 0) {
+        if (updateRequest.getPrice() != null) {
             product.changePrice(updateRequest.getPrice());
         }
 
