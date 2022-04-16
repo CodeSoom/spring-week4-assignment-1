@@ -49,7 +49,7 @@ class ProductQueryServiceTest {
             @BeforeEach
             void setUp() {
                 LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(index -> ProductFactory.getEmptyProduct())
+                        .mapToObj(index -> ProductFactory.createNullProduct())
                         .forEach(product -> productRepository.save(product));
             }
 
@@ -76,7 +76,7 @@ class ProductQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                final Product product = ProductFactory.getProduct(
+                final Product product = ProductFactory.createNewProduct(
                         TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
                 productRepository.save(product);

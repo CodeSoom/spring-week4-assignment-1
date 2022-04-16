@@ -76,7 +76,7 @@ class ProductCommandServiceTest {
         @DisplayName("대체할 상품이 저장소에 있다면")
         class Context_existsProduct {
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             final ProductUpdateRequest updateSource = new ProductUpdateRequest() {
@@ -134,7 +134,7 @@ class ProductCommandServiceTest {
         @DisplayName("변경할 상품이 저장소에 있다면")
         class Context_existsProduct {
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             final ProductUpdateRequest updateSource = new ProductUpdateRequest() {
@@ -196,7 +196,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                product = ProductFactory.getProduct(
+                product = ProductFactory.createNewProduct(
                         TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
                 productRepository.save(product);
             }

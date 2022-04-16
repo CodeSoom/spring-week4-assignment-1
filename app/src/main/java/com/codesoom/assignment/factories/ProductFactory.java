@@ -19,7 +19,7 @@ public class ProductFactory {
      * @param imagePath 이미지 경로
      * @return 상품
      */
-    public static Product getProduct(String name, String maker, Integer price, String imagePath) {
+    public static Product createNewProduct(String name, String maker, Integer price, String imagePath) {
 
         return Product.builder()
                 .setName(name)
@@ -32,7 +32,7 @@ public class ProductFactory {
     /**
      * 비어있는 상품 반환
      */
-    public static Product getEmptyProduct() {
+    public static Product createNullProduct() {
         return Product.builder().build();
     }
 }

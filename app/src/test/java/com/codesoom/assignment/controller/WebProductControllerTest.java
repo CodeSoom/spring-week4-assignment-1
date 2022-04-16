@@ -69,7 +69,7 @@ public class WebProductControllerTest {
             @BeforeEach
             void setUp() {
                 LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(index -> ProductFactory.getEmptyProduct())
+                        .mapToObj(index -> ProductFactory.createNullProduct())
                         .forEach(product -> productRepository.save(product));
             }
 
@@ -94,7 +94,7 @@ public class WebProductControllerTest {
 
             Long productId;
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @BeforeEach
@@ -174,7 +174,7 @@ public class WebProductControllerTest {
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             Long productId;
@@ -235,7 +235,7 @@ public class WebProductControllerTest {
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             Long productId;
@@ -294,7 +294,7 @@ public class WebProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                final Product product = ProductFactory.getProduct(
+                final Product product = ProductFactory.createNewProduct(
                         TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
                 productRepository.save(product);

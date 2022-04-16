@@ -62,7 +62,7 @@ public class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 LongStream.rangeClosed(1, givenCount)
-                        .mapToObj(index -> ProductFactory.getEmptyProduct())
+                        .mapToObj(index -> ProductFactory.createNullProduct())
                         .forEach(product -> productRepository.save(product));
             }
 
@@ -88,7 +88,7 @@ public class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                final Product product = ProductFactory.getProduct(
+                final Product product = ProductFactory.createNewProduct(
                         TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
                 productRepository.save(product);
                 productId = product.getId();
@@ -160,7 +160,7 @@ public class ProductControllerTest {
         @DisplayName("주어진 아이디와 일치하는 상품이 있으면 수정될 상품 데이터로")
         class Context_existsProduct {
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             Long productId;
@@ -218,7 +218,7 @@ public class ProductControllerTest {
         @DisplayName("주어진 아이디와 일치하는 상품이 있으면 대체될 상품 데이터로")
         class Context_existsProduct {
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             Long productId;
@@ -273,7 +273,7 @@ public class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                final Product product = ProductFactory.getProduct(
+                final Product product = ProductFactory.createNewProduct(
                         TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);;
                 productRepository.save(product);
                 productId = product.getId();

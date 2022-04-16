@@ -24,7 +24,7 @@ class ProductTest {
         @DisplayName("상품 속성을 포함한")
         class Context_valid {
 
-            final Product product = ProductFactory.getProduct(
+            final Product product = ProductFactory.createNewProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             String subject() {
