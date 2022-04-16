@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,7 @@ public class ProductController {
         this.service = service;
     }
 
+    @GetMapping("")
     public List<Product> list() {
         return service.getProducts();
     }
