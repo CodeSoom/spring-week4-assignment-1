@@ -16,18 +16,19 @@ public interface ProductSaveRequest {
     String getImageUrl();
 
     /**
-     * 상품 인스턴스로 변환해 리턴합니다.
+     * 상품 인스턴스 리턴
      */
     default Product toProduct() {
         return ProductFactory.getProduct(getName(), getMaker(), getPrice(), getImageUrl());
     }
 
     /**
-     * 상품 등록 요청 인스턴스를 리턴합니다.
+     * 상품 등록 요청 인스턴스 생성
      * @param name  상품명
      * @param maker  메이커
      * @param price 가격
      * @param imageUrl 이미지 URL
+     * @return 상품 등록 요청 데이터
      */
     static ProductSaveRequest of(String name, String maker, int price, String imageUrl) {
         return new ProductSaveRequest() {

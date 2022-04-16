@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 상품 정보의 변경을 책임집니다.
+ * 상품 변경 작업
  */
 @Transactional
 @Service
@@ -22,7 +22,7 @@ public class ProductCommandService {
     }
 
     /**
-     * 상품을 저장하고 리턴합니다.
+     * 상품 저장 후 반환
      */
     public Product saveProduct(final ProductSaveRequest productSaveRequest) {
 
@@ -32,7 +32,7 @@ public class ProductCommandService {
     }
 
     /**
-     * 상품을 교체하고 리턴합니다.
+     * 상품 교체 후 반환
      *
      * @param product       교체 대상 상품
      * @param replaceSource 교체될 상품 데이터
@@ -43,7 +43,7 @@ public class ProductCommandService {
     }
 
     /**
-     * 상품을 변경하고 리턴합니다.
+     * 상품 변경 후 반환
      *
      * @param product      변경 대상 상품
      * @param updateSource 변경할 상품 데이터
@@ -54,7 +54,7 @@ public class ProductCommandService {
     }
 
     /**
-     * 상품을 삭제 합니다.
+     * 상품 삭제
      *
      * @param product 삭제할 상품
      */

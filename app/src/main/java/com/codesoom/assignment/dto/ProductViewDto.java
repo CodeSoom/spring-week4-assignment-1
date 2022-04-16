@@ -4,7 +4,7 @@ import com.codesoom.assignment.domain.Product;
 
 
 /**
- * 상품 데이터 전송에 필요한 데이터를 정의합니다.
+ * 상품 데이터 전송에 필요한 데이터 정의
  */
 public class ProductViewDto {
 
@@ -15,7 +15,7 @@ public class ProductViewDto {
     }
 
     /**
-     * 상품을 받아 전송에 필요한 데이터를 리턴합니다.
+     * 상품을 받아 전송에 필요한 데이터 반환
      *
      * @param product 상품 엔티티
      */

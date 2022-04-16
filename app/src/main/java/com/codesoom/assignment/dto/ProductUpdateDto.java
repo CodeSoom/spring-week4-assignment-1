@@ -5,7 +5,7 @@ import com.codesoom.assignment.domain.ProductUpdateRequest;
 import java.beans.ConstructorProperties;
 
 /**
- * 상품 수정에 필요한 데이터를 정의합니다.
+ * 상품 수정에 필요한 데이터 정의
  */
 public class ProductUpdateDto implements ProductUpdateRequest {
 

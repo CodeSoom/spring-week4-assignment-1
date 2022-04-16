@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 상품에 대한 HTTP 요청을 처리합니다.
+ * 상품에 대한 HTTP 요청 처리
  */
 @CrossOrigin(origins = "http://localhost:9000")
 @RestController
@@ -40,7 +40,7 @@ public class ProductController {
     }
 
     /**
-     * 상품 전체 목록을 리턴합니다.
+     * 상품 전체 목록 반환
      */
     @GetMapping
     public List<ProductViewDto> list() {
@@ -53,7 +53,7 @@ public class ProductController {
     }
 
     /**
-     * 상품을 생성하고 리턴합니다.
+     * 상품 생성 후 반환
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -65,7 +65,7 @@ public class ProductController {
     }
 
     /**
-     * 상품 상세 정보를 리턴합니다.
+     * 상품 상세 정보 반환
      */
     @GetMapping("/{productId}")
     public ProductViewDto detail(@PathVariable Long productId) {
@@ -76,7 +76,8 @@ public class ProductController {
     }
 
     /**
-     * 상품을 삭제합니다.
+     * 상품 삭제
+     *
      * @param productId 삭제할 상품 아이디
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -89,8 +90,9 @@ public class ProductController {
     }
 
     /**
-     * 상품을 새로운 상픔으로 대체하고 리턴합니다.
-     * @param productId - 대체될 상품 아이디
+     * 상품을 새로운 상픔으로 대체하고 반환
+     *
+     * @param productId     - 대체될 상품 아이디
      * @param replaceSource - 대체할 데이터
      */
     @ResponseStatus(HttpStatus.OK)
@@ -106,8 +108,9 @@ public class ProductController {
     }
 
     /**
-     * 상품 일부를 수정하고 리턴합니다.
-     * @param productId 수정할 상품 아이디
+     * 상품 일부를 수정하고 반환
+     *
+     * @param productId    수정할 상품 아이디
      * @param updateSource 수정할 데이터
      */
     @ResponseStatus(HttpStatus.OK)

@@ -5,7 +5,7 @@ import com.codesoom.assignment.domain.ProductUpdateRequest;
 import org.springframework.util.StringUtils;
 
 /**
- * 상품 생성, 변경 담당
+ * 상품 생성 및 변경 담당
  */
 public class ProductFactory {
 
@@ -13,7 +13,7 @@ public class ProductFactory {
     }
 
     /**
-     * 새로운 상품을 리턴합니다.
+     * 새로운 상품 반환
      * @param name  상품명
      * @param maker 메이커
      * @param price 가격
@@ -31,14 +31,14 @@ public class ProductFactory {
     }
 
     /**
-     * 비어있는 상품을 리턴합니다.
+     * 비어있는 상품 반환
      */
     public static Product getEmptyProduct() {
         return Product.builder().build();
     }
 
     /**
-     * 상품 속성을 변경하고 리턴합니다.
+     * 상품 속성을 변경하고 반환
      * @param product 대상 상품
      * @param updateRequest 변경될 상품 데이터
      */
@@ -62,7 +62,7 @@ public class ProductFactory {
     }
 
     /**
-     * 상품을 대체하고 리턴합니다.
+     * 상품을 대체하고 반환
      * @param product 대상 상품
      * @param replaceSource 대체될 상품 데이터
      */

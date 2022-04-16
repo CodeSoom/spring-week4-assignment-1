@@ -5,7 +5,7 @@ import com.codesoom.assignment.domain.ProductSaveRequest;
 import java.beans.ConstructorProperties;
 
 /**
- * 상품 등록에 필요한 데이터를 정의합니다.
+ * 상품 등록에 필요한 데이터 정의
  */
 public class ProductSaveDto implements ProductSaveRequest {
 

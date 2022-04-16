@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 상품 조회에 대한 작업을 관리합니다.
+ * 상품 조회 작업
  */
 @Service
 public class ProductQueryService {
@@ -21,7 +21,7 @@ public class ProductQueryService {
     }
 
     /**
-     * 상품 전체 목록을 리턴합니다.
+     * 상품 전체 목록 반환
      */
     public List<Product> getProducts() {
         Iterable<Product> source = productRepository.findAll();
@@ -31,7 +31,7 @@ public class ProductQueryService {
     }
 
     /**
-     * 상품을 리턴합니다.
+     * 단일 상품 반환
      *
      * @param productId 상품 아이디
      * @throws ProductNotFoundException 상품을 찾을 수 없을 때 던집니다.
