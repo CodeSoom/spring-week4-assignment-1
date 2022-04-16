@@ -16,6 +16,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+// DONE: GET /tasks 여러 건 조회
+// DONE: GET /task 단 건 조회
+// TODO: POST /task 등록
+// TODO: PATCH /task 수정
+// TODO: DELETE /task 삭제
+
 class ProductControllerTest {
 
     ProductService service;
