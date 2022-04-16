@@ -18,7 +18,7 @@ public class ProductUpdateServiceImpl implements ProductUpdateService {
     @Override
     public Product update(Long id, ProductDto productDto) {
         Product product = repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
-        product.update(productDto);
+        product.update(productDto.product());
         return product;
     }
 

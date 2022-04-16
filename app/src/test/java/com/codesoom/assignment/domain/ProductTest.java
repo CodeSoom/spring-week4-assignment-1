@@ -45,7 +45,7 @@ public class ProductTest {
         Product product = Product.builder().name(TOY_NAME).maker(TOY_MAKER).price(TOY_PRICE).image(TOY_IMG_URL).build();
         final ProductDto productDto = new ProductDto(TOY_NAME + "ver2", TOY_MAKER, TOY_PRICE, TOY_IMG_URL);
 
-        product.update(productDto);
+        product.update(productDto.product());
 
         assertThat(product.getName()).isEqualTo(TOY_NAME + "ver2");
     }

@@ -46,11 +46,11 @@ public class Product {
         this.image = image;
     }
 
-    public Product update(ProductDto productDto) {
-        this.name = productDto.getName();
-        this.maker = productDto.getMaker();
-        this.price = productDto.getPrice();
-        this.image = productDto.getImage();
+    public Product update(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.image = product.getImage();
         return this;
     }
 
