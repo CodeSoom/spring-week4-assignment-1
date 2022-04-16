@@ -12,6 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -53,6 +54,11 @@ class ProductControllerTest {
         given(service.getProducts()).willReturn(products);
         given(service.getProduct(ID)).willReturn(PRODUCT);
         given(service.getProduct(NOT_FOUND_ID)).willThrow(ProductNotFoundException.class);
+        given(service.createProduct(any(Product.class))).will(invocation -> {
+            Product product = invocation.getArgument(0);
+            product.setId(ID);
+            return product;
+        });
     }
 
     @Test
@@ -96,7 +102,6 @@ class ProductControllerTest {
         newProduct.setName(NAME);
 
         Product product = controller.create(newProduct);
-
         verify(service).createProduct(newProduct);
         verifyProduct(product);
     }

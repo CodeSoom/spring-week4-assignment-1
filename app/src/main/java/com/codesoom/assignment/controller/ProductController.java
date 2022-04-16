@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+// TODO: Entity 오브젝트를 직접 쓰는 게 아닌 DTO 를 사용하는 것을 고려해보기
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -22,5 +24,9 @@ public class ProductController {
 
     public Product detail(Long id) {
         return service.getProduct(id);
+    }
+
+    public Product create(Product newProduct) {
+        return service.createProduct(newProduct);
     }
 }
