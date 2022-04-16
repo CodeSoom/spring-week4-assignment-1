@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @Utf8MockMvc
@@ -38,8 +39,9 @@ public class ProductControllerWebTest {
             @DisplayName("Product 가 존재하지 않을 때")
             class Context_zero_product {
                 @Test
-                @DisplayName("빈 리스트를 리턴한다.")
+                @DisplayName("200 OK, 빈 리스트를 리턴한다.")
                 void it_returns_empty_list() throws Exception {
+                    getRequest.andExpect(status().isOk());
                     getRequest.andExpect(content().string("[]"));
                 }
             }
