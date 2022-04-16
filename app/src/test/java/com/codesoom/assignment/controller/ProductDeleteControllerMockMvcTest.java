@@ -69,7 +69,7 @@ public class ProductDeleteControllerMockMvcTest extends ControllerTest {
                 }
             }
 
-            @DisplayName("예외를 던진다.")
+            @DisplayName("404 not found를 보낸다.")
             @Test
             void will_throw_not_found_exception() throws Exception {
                 mockMvc.perform(delete("/products/" + NOT_EXIST_ID))

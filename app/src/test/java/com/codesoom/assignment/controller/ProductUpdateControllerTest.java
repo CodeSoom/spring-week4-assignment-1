@@ -41,7 +41,7 @@ public class ProductUpdateControllerTest {
     @Nested
     class Describe_update {
 
-        private final ProductDto productDto
+        private final ProductDto productToUpdate
                 = new ProductDto("소쩍새", "유령회사", BigDecimal.valueOf(3000), "");
 
         @DisplayName("존재하는 상품의 수정 요청이 오면")
@@ -59,14 +59,14 @@ public class ProductUpdateControllerTest {
             @DisplayName("수정된 상품을 반환한다.")
             @Test
             void will_return_updated_product() {
-                Product product = controller.update(EXIST_ID, productDto);
+                Product product = controller.update(EXIST_ID, productToUpdate);
 
                 assertThat(product.getId()).isEqualTo(EXIST_ID);
-                assertThat(product.getName()).isEqualTo(productDto.getName());
+                assertThat(product.getName()).isEqualTo(productToUpdate.getName());
             }
         }
 
-        @DisplayName("존재하지 상품의 수정 요청이 오면")
+        @DisplayName("존재하지 않는 상품의 수정 요청이 오면")
         @Nested
         class Context_with_not_exist_id {
             private final Long NOT_EXIST_ID = 100L;
@@ -81,7 +81,7 @@ public class ProductUpdateControllerTest {
             @DisplayName("예외를 던진다.")
             @Test
             void will_return_updated_product() {
-                assertThatThrownBy(() -> controller.update(NOT_EXIST_ID, productDto))
+                assertThatThrownBy(() -> controller.update(NOT_EXIST_ID, productToUpdate))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

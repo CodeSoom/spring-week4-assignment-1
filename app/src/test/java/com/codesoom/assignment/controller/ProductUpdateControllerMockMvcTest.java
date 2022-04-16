@@ -41,7 +41,7 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
     @Nested
     class Describe_update {
 
-        private final ProductDto productDto
+        private final ProductDto productToUpdate
                 = new ProductDto("소쩍새", "유령회사", BigDecimal.valueOf(3000), "");
 
         @DisplayName("존재하는 상품의 수정 요청이 오면")
@@ -60,14 +60,14 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
             @Test
             void will_return_updated_product() throws Exception {
                 final MvcResult result = mockMvc.perform(patch("/products/" + EXIST_ID)
-                        .content(objectMapper.writeValueAsString(productDto))
+                        .content(objectMapper.writeValueAsString(productToUpdate))
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();
 
                 final Product product
                         = objectMapper.readValue(result.getResponse().getContentAsByteArray(), Product.class);
-                assertThat(product.getName()).isEqualTo(productDto.getName());
+                assertThat(product.getName()).isEqualTo(productToUpdate.getName());
             }
         }
 
@@ -83,11 +83,11 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
                 }
             }
 
-            @DisplayName("예외를 던진다.")
+            @DisplayName("404 not found를 응답한다.")
             @Test
             void will_return_updated_product() throws Exception{
                 mockMvc.perform(patch("/products/" + NOT_EXIST_ID)
-                        .content(objectMapper.writeValueAsString(productDto))
+                        .content(objectMapper.writeValueAsString(productToUpdate))
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
             }
