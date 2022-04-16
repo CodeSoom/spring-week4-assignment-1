@@ -36,6 +36,7 @@ class ProductControllerTest {
     private final int PRICE = 20000;
     private final String NAME = "CAT FISHING ROD";
     private final String IMAGE = "https://www.zoostore.de/media/image/product/4598/sm/katzenspielzeug-katzenangel-spielangel-zum-zusammenschrauben-mit-heuschrecke~2.jpg";
+    Product PRODUCT;
 
     @BeforeEach
     void setUp() {
@@ -44,7 +45,7 @@ class ProductControllerTest {
 
         List<Product> products = new ArrayList<>();
 
-        Product PRODUCT = new Product();
+        PRODUCT = new Product();
         PRODUCT.setId(ID);
         PRODUCT.setMaker(MAKER);
         PRODUCT.setPrice(PRICE);
@@ -131,6 +132,13 @@ class ProductControllerTest {
 
         verify(service).updateProduct(ID, productDto);
         verifyUpdateProduct(updateProduct);
+    }
+
+    @Test
+    void removeProduct() {
+        controller.remove(PRODUCT);
+
+        verify(service).removeProduct(PRODUCT);
     }
 
     private void verifyProduct(Product product) {
