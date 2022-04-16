@@ -19,4 +19,8 @@ public class ProductController {
     public List<Product> list() {
         return service.getProducts();
     }
+
+    public Product detail(Long ID) {
+        return null;
+    }
 }
