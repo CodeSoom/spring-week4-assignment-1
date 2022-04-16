@@ -16,7 +16,7 @@ public class ProductSaveServiceImpl implements ProductSaveService {
     @Transactional
     @Override
     public Product saveProduct(ProductSaveRequest saveRequest) {
-        return repository.save(saveRequest.product());
+        return repository.save(saveRequest);
     }
 
 }
