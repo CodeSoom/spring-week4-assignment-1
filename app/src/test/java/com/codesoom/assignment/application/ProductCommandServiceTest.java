@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.domain.ProductSaveRequest;
 import com.codesoom.assignment.domain.ProductUpdateRequest;
+import com.codesoom.assignment.factories.ProductFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -75,7 +76,7 @@ class ProductCommandServiceTest {
         @DisplayName("대체할 상품이 저장소에 있다면")
         class Context_existsProduct {
 
-            final Product product = new Product(
+            final Product product = ProductFactory.getProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             final ProductUpdateRequest updateSource = new ProductUpdateRequest() {
@@ -133,7 +134,7 @@ class ProductCommandServiceTest {
         @DisplayName("변경할 상품이 저장소에 있다면")
         class Context_existsProduct {
 
-            final Product product = new Product(
+            final Product product = ProductFactory.getProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             final ProductUpdateRequest updateSource = new ProductUpdateRequest() {

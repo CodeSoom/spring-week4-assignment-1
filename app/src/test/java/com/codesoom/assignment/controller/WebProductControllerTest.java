@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductSaveDto;
 import com.codesoom.assignment.dto.ProductUpdateDto;
+import com.codesoom.assignment.factories.ProductFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -94,9 +95,8 @@ public class WebProductControllerTest {
 
             Long productId;
 
-            final Product product = new Product(
-                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH
-            );
+            final Product product = ProductFactory.getProduct(
+                    TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             @BeforeEach
             void setUp() {
@@ -175,7 +175,7 @@ public class WebProductControllerTest {
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
-            final Product product = new Product(
+            final Product product = ProductFactory.getProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             Long productId;
@@ -236,7 +236,7 @@ public class WebProductControllerTest {
         @DisplayName("{productId} 와 일치하는 상품이 있다면")
         class Context_existsProduct {
 
-            final Product product = new Product(
+            final Product product = ProductFactory.getProduct(
                     TEST_PRODUCT_NAME, TEST_PRODUCT_MAKER, TEST_PRODUCT_PRICE, TEST_PRODUCT_IMAGE_PATH);
 
             Long productId;

@@ -1,7 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import org.springframework.util.StringUtils;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -52,39 +50,24 @@ public class Product {
         return imagePath;
     }
 
-    /**
-     * 상품 정보를 대체합니다.
-     *
-     * @param updateRequest 대체될 상품 데이터
-     */
-    public void replace(ProductUpdateRequest updateRequest) {
-        name = updateRequest.getName();
-        maker = updateRequest.getMaker();
-        price = updateRequest.getPrice();
-        imagePath = updateRequest.getImageUrl();
+    public Product changeName(String name) {
+        this.name = name;
+        return this;
     }
 
-    /**
-     * 상품 정보를 변경합니다.
-     *
-     * @param updateRequest 변경될 상품 데이터
-     */
-    public void update(ProductUpdateRequest updateRequest) {
-        if (StringUtils.hasText(updateRequest.getName())) {
-            name = updateRequest.getName();
-        }
+    public Product changeMaker(String maker) {
+        this.maker = maker;
+        return this;
+    }
 
-        if (StringUtils.hasText(updateRequest.getMaker())) {
-            maker = updateRequest.getMaker();
-        }
+    public Product changePrice(Integer price) {
+        this.price = price;
+        return this;
+    }
 
-        if (updateRequest.getPrice() != null && updateRequest.getPrice() > 0) {
-            price = updateRequest.getPrice();
-        }
-
-        if (StringUtils.hasText(updateRequest.getImageUrl())) {
-            imagePath = updateRequest.getImageUrl();
-        }
+    public Product changeImagePath(String imagePath) {
+        this.imagePath = imagePath;
+        return this;
     }
 
     @Override

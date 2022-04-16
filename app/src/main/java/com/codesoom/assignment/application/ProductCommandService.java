@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.domain.ProductSaveRequest;
 import com.codesoom.assignment.domain.ProductUpdateRequest;
+import com.codesoom.assignment.factories.ProductFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,9 +39,7 @@ public class ProductCommandService {
      */
     public Product replaceProduct(final Product product, final ProductUpdateRequest replaceSource) {
 
-        product.replace(replaceSource);
-
-        return product;
+        return ProductFactory.replaceProduct(product, replaceSource);
     }
 
     /**
@@ -51,9 +50,7 @@ public class ProductCommandService {
      */
     public Product updateProduct(final Product product, final ProductUpdateRequest updateSource) {
 
-        product.update(updateSource);
-
-        return product;
+        return ProductFactory.updateProduct(product, updateSource);
     }
 
     /**

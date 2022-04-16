@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.factories.ProductFactory;
+
 /**
  * 상품 등록 요청
  */
@@ -17,7 +19,7 @@ public interface ProductSaveRequest {
      * 상품 인스턴스로 변환해 리턴합니다.
      */
     default Product toProduct() {
-        return new Product(getName(), getMaker(), getPrice(), getImageUrl());
+        return ProductFactory.getProduct(getName(), getMaker(), getPrice(), getImageUrl());
     }
 
     /**
