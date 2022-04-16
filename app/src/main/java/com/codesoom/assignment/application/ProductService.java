@@ -24,4 +24,10 @@ public class ProductService {
     public Product createProduct(Product product) {
         return repository.save(product);
     }
+
+    public Product removeProduct(Product product) {
+        repository.delete(product);
+
+        return product;
+    }
 }

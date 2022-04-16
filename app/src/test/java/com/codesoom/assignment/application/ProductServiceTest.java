@@ -56,7 +56,9 @@ class ProductServiceTest {
     @Test
     void getProducts() {
         List<Product> products = service.getProducts();
+
         verify(repository).findAll();
+
         assertThat(products).hasSize(1);
     }
 
@@ -66,22 +68,32 @@ class ProductServiceTest {
 
         verify(repository).findById(ID);
 
-        assertThat(product.getId()).isEqualTo(ID);
-        assertThat(product.getMaker()).isEqualTo(MAKER);
-        assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImage()).isEqualTo(IMAGE);
-        assertThat(product.getName()).isEqualTo(NAME);
+        verifyProduct(product);
     }
 
     @Test
     void createProduct() {
         Product newProduct = service.createProduct(PRODUCT);
+
         verify(repository).save(PRODUCT);
 
-        assertThat(newProduct.getId()).isEqualTo(ID);
-        assertThat(newProduct.getMaker()).isEqualTo(MAKER);
-        assertThat(newProduct.getPrice()).isEqualTo(PRICE);
-        assertThat(newProduct.getImage()).isEqualTo(IMAGE);
-        assertThat(newProduct.getName()).isEqualTo(NAME);
+        verifyProduct(newProduct);
+    }
+
+    @Test
+    void deleteProduct() {
+        Product removeProduct = service.removeProduct(PRODUCT);
+
+        verify(repository).delete(PRODUCT);
+
+        verifyProduct(removeProduct);
+    }
+
+    private void verifyProduct(Product product) {
+        assertThat(product.getId()).isEqualTo(ID);
+        assertThat(product.getMaker()).isEqualTo(MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRICE);
+        assertThat(product.getImage()).isEqualTo(IMAGE);
+        assertThat(product.getName()).isEqualTo(NAME);
     }
 }

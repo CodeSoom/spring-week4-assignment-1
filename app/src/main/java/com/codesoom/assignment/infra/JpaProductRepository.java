@@ -13,4 +13,10 @@ public interface JpaProductRepository extends ProductRepository, CrudRepository<
 
     @Override
     Optional<Product> findById(Long id);
+
+    @Override
+    Product save(Product product);
+
+    @Override
+    void delete(Product product);
 }
