@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,6 @@ class ProductControllerTest {
     ProductService service;
     ProductController controller;
 
-    private Product PRODUCT;
     private final long ID = 1L;
     private final long NOT_FOUND_ID = 100000L;
     private final String MAKER = "KOREAN SHORT CAT";
@@ -43,7 +43,7 @@ class ProductControllerTest {
 
         List<Product> products = new ArrayList<>();
 
-        PRODUCT = new Product();
+        Product PRODUCT = new Product();
         PRODUCT.setId(ID);
         PRODUCT.setMaker(MAKER);
         PRODUCT.setPrice(PRICE);
@@ -106,11 +106,33 @@ class ProductControllerTest {
         verifyProduct(product);
     }
 
+    @Test
+    void updateProduct() {
+        ProductDto productDto = new ProductDto();
+        productDto.setName("updated" + NAME);
+        productDto.setImage("updated" + IMAGE);
+        productDto.setMaker("updated" + MAKER);
+        productDto.setPrice(1000 + PRICE);
+
+        Product updateProduct = controller.update(ID, productDto);
+
+        verify(service).getProduct(ID);
+        verifyUpdateProduct(updateProduct);
+    }
+
     private void verifyProduct(Product product) {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
         assertThat(product.getImage()).isEqualTo(IMAGE);
         assertThat(product.getName()).isEqualTo(NAME);
+    }
+
+    private void verifyUpdateProduct(Product product) {
+        assertThat(product.getId()).isEqualTo(ID);
+        assertThat(product.getMaker()).isEqualTo("updated" + MAKER);
+        assertThat(product.getPrice()).isEqualTo(1000 + PRICE);
+        assertThat(product.getImage()).isEqualTo("updated" + IMAGE);
+        assertThat(product.getName()).isEqualTo("updated" + NAME);
     }
 }
