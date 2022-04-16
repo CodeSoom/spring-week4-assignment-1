@@ -20,7 +20,7 @@ public class ProductController {
         return service.getProducts();
     }
 
-    public Product detail(Long ID) {
-        return null;
+    public Product detail(Long id) {
+        return service.getProduct(id);
     }
 }
