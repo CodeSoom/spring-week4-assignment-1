@@ -16,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,6 +82,47 @@ public class ProductControllerWebTest {
         }
 
         @Nested
+        @DisplayName("POST 요청을 받는다면")
+        class Context_with_post_request {
+            private final MockHttpServletRequestBuilder requestBuilder;
+
+            public Context_with_post_request() {
+                requestBuilder = post(rootPath);
+            }
+
+            @Nested
+            @DisplayName("Product 생성을 위해 필요한 정보를 받았을 때")
+            class Context_full_input {
+                ProductDto productDto;
+                Product product;
+
+                public Context_full_input() throws Exception {
+                    productDto = new ProductDto();
+
+                    productDto.setName("고양이 용품1");
+                    productDto.setPrice(2000);
+                    productDto.setMaker("중국산");
+                    productDto.setImage("대충 고양이용품 이미지");
+
+                    product = modelMapper.map(productDto, Product.class);
+                    product.setId(1L);
+                }
+
+                @Test
+                @DisplayName("201 CREATED, Product 를 추가한다.")
+                void it_creates_product() throws Exception {
+                    mockMvc.perform(
+                            requestBuilder
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(toJson(productDto)))
+                            .andExpect(status().isCreated())
+                            .andExpect(content().json(toJson(product)));
+                }
+
+            }
+        }
+
+        @Nested
         @DisplayName("경로에 path id 가 존재한다면")
         class Context_with_path_variable {
             private final String pathId = "1";
@@ -99,7 +138,7 @@ public class ProductControllerWebTest {
 
                 @Nested
                 @DisplayName("path id 를 가진 Product 가 존재한다면")
-                class Context_repository_has_path_id {
+                class Context_has_path_id {
                     Product savedProduct;
 
                     @BeforeEach
@@ -116,53 +155,55 @@ public class ProductControllerWebTest {
                     }
                 }
             }
-        }
-
-        @Nested
-        @DisplayName("POST 요청을 받는다면")
-        class Context_with_post_request {
-            private final MockHttpServletRequestBuilder requestBuilder;
-
-            public Context_with_post_request() {
-                requestBuilder = post(rootPath);
-            }
 
             @Nested
-            @DisplayName("name, maker, price, image 의 정보를 받았을 때")
-            class Context_full_input {
-                ResultActions resultActions;
-                ProductDto productDto;
-                Product product;
+            @DisplayName("PATCH 요청을 받았을 때")
+            class Context_with_patch_request {
+                private final MockHttpServletRequestBuilder requestBuilder;
 
-                public Context_full_input() throws Exception {
-                    productDto = new ProductDto();
-
-                    productDto.setName("고양이 용품1");
-                    productDto.setPrice(2000);
-                    productDto.setMaker("중국산");
-                    productDto.setImage("대충 고양이용품 이미지");
-
-                    resultActions = mockMvc.perform(
-                            requestBuilder
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(toJson(productDto))
-                    );
-
-                    product = modelMapper.map(productDto, Product.class);
-                    product.setId(1L);
+                public Context_with_patch_request() {
+                    requestBuilder = patch(rootPath);
                 }
 
-                @Test
-                @DisplayName("201 CREATED, Product 를 추가한다.")
-                void it_creates_product() throws Exception {
-                    resultActions
-                            .andExpect(status().isCreated())
-                            .andExpect(content().json(toJson(product)));
-                }
+                @Nested
+                @DisplayName("path id 를 가진 Product 가 존재하고")
+                class Context_has_path_id {
+                    Product savedProduct;
 
+                    public Context_has_path_id() {
+                        this.savedProduct = saveSampleProduct();
+                    }
+
+                    @Nested
+                    @DisplayName("Product 수정을 위해 필요한 정보를 받았을 때")
+                    class Context_full_input {
+                        ProductDto productDto;
+                        Product updateProduct;
+
+                        public Context_full_input() {
+                            final String updatedPrefix = "updated";
+                            productDto = new ProductDto();
+
+                            productDto.setName(updatedPrefix + savedProduct.getName());
+                            productDto.setPrice(1000 + savedProduct.getPrice());
+                            productDto.setMaker(updatedPrefix + savedProduct.getMaker());
+                            productDto.setImage(updatedPrefix + savedProduct.getImage());
+
+                            updateProduct = modelMapper.map(productDto, Product.class);
+                            updateProduct.setId(Long.parseLong(pathId));
+                        }
+
+                        @Test
+                        @DisplayName("수정된 Product 를 반환한다.")
+                        void it_returns_updated_product() throws Exception {
+                            mockMvc.perform(requestBuilder)
+                                    .andExpect(status().isOk())
+                                    .andExpect(content().json(toJson(updateProduct)));
+                        }
+                    }
+                }
             }
         }
-
     }
 
     public String toJson(Object object) throws JsonProcessingException {
