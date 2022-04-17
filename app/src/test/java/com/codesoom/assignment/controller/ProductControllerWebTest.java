@@ -131,19 +131,19 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("경로에 path id 가 존재하고, path id 를 가진 Product 가 존재한다면")
+        @DisplayName("경로에 path id 가 존재하고")
         class Context_with_path_variable {
-            private final String pathId;
-            private final Product savedProduct;
-
-            public Context_with_path_variable() {
-                savedProduct = saveSampleProduct();
-                this.pathId = String.valueOf(savedProduct.getId());
-            }
+            private String pathId;
+            private Product savedProduct;
 
             @Nested
             @DisplayName("path id 를 가진 Product 가 존재한다면")
-            class Context_has_path_id {
+            class Context_has_product_which_has_path_id {
+
+                public Context_has_product_which_has_path_id() {
+                    savedProduct = saveSampleProduct();
+                    pathId = String.valueOf(savedProduct.getId());
+                }
 
                 @Nested
                 @DisplayName("GET 요청을 받았을 때")
