@@ -51,9 +51,8 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
 
             @BeforeEach
             void setup() {
-                this.EXIST_ID = repository.save(Product.builder()
-                        .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                        .build()).getId();
+                this.EXIST_ID = repository.save(
+                        new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "")).getId();
             }
 
             @DisplayName("수정된 상품을 반환한다.")

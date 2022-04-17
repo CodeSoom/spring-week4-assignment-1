@@ -42,7 +42,7 @@ public class ProductUpdateServiceTest extends ServiceTest {
 
             private Long EXIST_ID;
             private final Product OLD_PRODUCT
-                    = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
+                    = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
 
             @BeforeEach
             void setup() {

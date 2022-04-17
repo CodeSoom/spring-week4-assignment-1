@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductDeleteServiceImpl;
 import com.codesoom.assignment.application.ProductNotFoundException;
+import com.codesoom.assignment.application.ProductSafeDeleteService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.*;
@@ -22,7 +22,7 @@ public class ProductDeleteControllerTest {
     private ProductDeleteController controller;
 
     @Autowired
-    private ProductDeleteServiceImpl service;
+    private ProductSafeDeleteService service;
 
     @Autowired
     private ProductRepository repository;
@@ -50,9 +50,8 @@ public class ProductDeleteControllerTest {
 
             @BeforeEach
             void setup() {
-                final Product product = Product.builder()
-                        .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                        .build();
+                final Product product
+                        = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
                 this.EXIST_ID = repository.save(product).getId();
             }
 

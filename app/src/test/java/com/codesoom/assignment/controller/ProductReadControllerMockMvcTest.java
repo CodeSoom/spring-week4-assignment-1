@@ -35,9 +35,8 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
     @Nested
     class Describe_find_all {
 
-        private final Product SAVED_PRODUCT = Product.builder()
-                .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                .build();
+        private final Product SAVED_PRODUCT
+                = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
 
         @BeforeEach
         void setup() {
@@ -74,9 +73,8 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
 
             @BeforeEach
             void setup() {
-                final Product product = Product.builder()
-                        .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                        .build();
+                final Product product
+                        = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
                 this.EXIST_ID = repository.save(product).getId();
             }
 

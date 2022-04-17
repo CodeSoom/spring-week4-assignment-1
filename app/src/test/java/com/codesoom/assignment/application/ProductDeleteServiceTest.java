@@ -15,17 +15,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
-@DisplayName("ProductDeleteServiceImpl 클래스")
+@DisplayName("ProductSafeDeleteService 클래스")
 public class ProductDeleteServiceTest extends ServiceTest {
 
-    private ProductDeleteServiceImpl service;
+    private ProductSafeDeleteService service;
 
     @Autowired
     private ProductRepository repository;
 
     @BeforeEach
     void setup() {
-        this.service = new ProductDeleteServiceImpl(repository);
+        this.service = new ProductSafeDeleteService(repository);
     }
 
     @DisplayName("deleteById 메서드는")
@@ -40,9 +40,8 @@ public class ProductDeleteServiceTest extends ServiceTest {
 
             @BeforeEach
             void setup() {
-                final Product product = Product.builder()
-                        .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                        .build();
+                final Product product
+                        = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
                 this.EXIST_ID = repository.save(product).getId();
             }
 

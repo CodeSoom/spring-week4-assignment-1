@@ -45,7 +45,7 @@ public class ProductServiceMockTest {
 
             service.saveProduct(productDto);
 
-            verify(repository).save(any(Product.class));
+            verify(repository).save(any(ProductSaveRequest.class));
         }
     }
 
@@ -63,9 +63,9 @@ public class ProductServiceMockTest {
         private final Long NOT_EXIST_ID = 100L;
 
         private final Product SAVED_PRODUCT_1
-                = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
+                = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
         private final Product SAVED_PRODUCT_2
-                = Product.builder().name("곰돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
+                = new Product("곰돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
 
         private final List<Product> PRODUCTS = List.of(SAVED_PRODUCT_1, SAVED_PRODUCT_2);
 
@@ -117,7 +117,7 @@ public class ProductServiceMockTest {
         private final Long NOT_EXIST_ID = 100L;
 
         private final Product OLD_PRODUCT_ENTITY
-                = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
+                = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
         private final String UPDATE_NAME = "꿈돌이";
 
         @DisplayName("장난감을 성공적으로 수정한다.")
@@ -148,7 +148,7 @@ public class ProductServiceMockTest {
     class ProductDeleteServiceTest {
 
         @InjectMocks
-        private ProductDeleteServiceImpl service;
+        private ProductSafeDeleteService service;
 
         @Mock
         private ProductRepository repository;
@@ -157,7 +157,7 @@ public class ProductServiceMockTest {
         private final Long NOT_EXIST_ID = 100L;
 
         private final Product PRODUCT
-                = Product.builder().name("쥐돌이").maker("어쩌구컴퍼니").price(BigDecimal.valueOf(3000)).build();
+                = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
 
         @DisplayName("delete는 id에 해당하는 상품을 삭제한다.")
         @Test

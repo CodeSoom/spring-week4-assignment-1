@@ -6,8 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+/**
+ * 존재하는 상품만 삭제합니다.
+ */
 @RequiredArgsConstructor
+@Service
 public class ProductSafeDeleteService implements ProductDeleteService {
 
     private final ProductRepository repository;
@@ -18,7 +21,7 @@ public class ProductSafeDeleteService implements ProductDeleteService {
         final Product product = repository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        product.delete();
+        repository.delete(product);
     }
 
 }

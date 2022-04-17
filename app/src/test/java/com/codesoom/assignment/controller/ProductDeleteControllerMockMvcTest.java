@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,9 +40,8 @@ public class ProductDeleteControllerMockMvcTest extends ControllerTest {
 
             @BeforeEach
             void setup() {
-                final Product product = Product.builder()
-                        .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                        .build();
+                final Product product
+                        = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
                 this.EXIST_ID = repository.save(product).getId();
             }
 
@@ -52,7 +49,7 @@ public class ProductDeleteControllerMockMvcTest extends ControllerTest {
             @Test
             void it_delete_product() throws Exception {
                 mockMvc.perform(delete("/products/" + EXIST_ID))
-                        .andExpect(status().isOk());
+                        .andExpect(status().isNoContent());
             }
         }
 

@@ -1,8 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,34 +26,39 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column
-    private String image;
-
-    @Column(columnDefinition = "boolean default false")
-    private Boolean deleted;
+    @Column(name = "IMAGE_URL")
+    private String imageUrl;
 
     protected Product() {
     }
 
-    @Builder
-    public Product(Long id, String name, String maker, BigDecimal price, String image) {
+    public Product(String name, String maker, BigDecimal price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public Product(Long id, String name, String maker, BigDecimal price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
     public Product update(Product product) {
         this.name = product.getName();
         this.maker = product.getMaker();
         this.price = product.getPrice();
-        this.image = product.getImage();
+        this.imageUrl = product.getImageUrl();
         return this;
     }
 
-    public void delete() {
-        this.deleted = Boolean.TRUE;
+    @Override
+    public String toString() {
+        return String.format("Product = { id: %s, name: %s, maker: %s, price: %s, image: %s }",
+                id, name, maker, price, imageUrl);
     }
 
 }

@@ -5,7 +5,7 @@ import com.codesoom.assignment.domain.Product;
 import java.math.BigDecimal;
 
 /**
- * 고객이 입력한 정보를 엔티티로 변환하는 역할을 담당합니다.
+ * 상품 정보 저장 요청.
  */
 public interface ProductSaveRequest {
 
@@ -15,15 +15,10 @@ public interface ProductSaveRequest {
 
     BigDecimal getPrice();
 
-    String getImage();
+    String getImageUrl();
 
     default Product product() {
-        return Product.builder()
-                .name(getName())
-                .maker(getMaker())
-                .price(getPrice())
-                .image(getImage())
-                .build();
+        return new Product(getName(), getMaker(), getPrice(), getImageUrl());
     }
 
 }

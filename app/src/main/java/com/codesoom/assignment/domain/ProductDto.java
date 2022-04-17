@@ -20,16 +20,16 @@ public class ProductDto implements ProductSaveRequest {
 
     private BigDecimal price;
 
-    private String image;
+    private String imageUrl;
 
     public ProductDto() {
     }
 
-    public ProductDto(String name, String maker, BigDecimal price, String image) {
+    public ProductDto(String name, String maker, BigDecimal price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -48,8 +48,8 @@ public class ProductDto implements ProductSaveRequest {
     }
 
     @Override
-    public String getImage() {
-        return this.image;
+    public String getImageUrl() {
+        return this.imageUrl;
     }
 
 }

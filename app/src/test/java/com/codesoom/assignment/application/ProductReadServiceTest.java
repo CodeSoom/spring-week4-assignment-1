@@ -28,9 +28,7 @@ public class ProductReadServiceTest extends ServiceTest {
     @BeforeEach
     void setup() {
         this.service = new ProductReadServiceImpl(repository);
-        final Product product = Product.builder()
-                .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-                .build();
+        final Product product = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
         SAVED_PRODUCT = repository.save(product);
     }
 

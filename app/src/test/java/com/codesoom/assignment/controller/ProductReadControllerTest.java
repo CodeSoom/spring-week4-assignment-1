@@ -29,9 +29,8 @@ public class ProductReadControllerTest {
     @Autowired
     private ProductRepository repository;
 
-    private static final Product SAVED_PRODUCT = Product.builder()
-            .name("키위새").maker("유령회사").price(BigDecimal.valueOf(3000)).image("")
-            .build();
+    private static final Product SAVED_PRODUCT
+            = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
 
     @BeforeEach
     void setup() {
