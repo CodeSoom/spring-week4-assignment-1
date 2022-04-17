@@ -3,9 +3,11 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.Utf8MockMvc;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,8 @@ public class ProductControllerWebTest {
     @Autowired MockMvc mockMvc;
     @Autowired ProductController controller;
     @Autowired ProductService service;
+    @Autowired ProductRepository repository;
+
     private final String productControllerPath = "/products";
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ModelMapper modelMapper = new ModelMapper();
@@ -45,10 +49,10 @@ public class ProductControllerWebTest {
         @Nested
         @DisplayName("GET 요청을 받는다면")
         class Context_with_get_request {
-            private final ResultActions resultActions;
+            MockHttpServletRequestBuilder requestBuilder;
 
-            public Context_with_get_request() throws Exception {
-                this.resultActions = mockMvc.perform(get(rootPath));
+            public Context_with_get_request() {
+                requestBuilder = get(rootPath);
             }
 
             @Nested
@@ -57,8 +61,36 @@ public class ProductControllerWebTest {
                 @Test
                 @DisplayName("200 OK, 빈 리스트를 리턴한다.")
                 void it_returns_empty_list() throws Exception {
-                    resultActions.andExpect(status().isOk());
-                    resultActions.andExpect(content().string("[]"));
+                    mockMvc.perform(requestBuilder)
+                            .andExpect(status().isOk())
+                            .andExpect(content().string("[]"));
+                }
+            }
+
+            @Nested
+            @DisplayName("Product 가 존재할 때")
+            class Context_one_product {
+                Product product;
+                Product savedProduct;
+
+                @BeforeEach
+                void setUp() {
+                    product = new Product();
+
+                    product.setName("고양이 용품1");
+                    product.setPrice(2000);
+                    product.setMaker("중국산");
+                    product.setImage("대충 고양이용품 이미지");
+
+                    savedProduct = repository.save(product);
+                }
+
+                @Test
+                @DisplayName("200 OK, Product 리스트를 리턴한다.")
+                void it_returns_empty_list() throws Exception {
+                    mockMvc.perform(requestBuilder)
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("[" + toJson(savedProduct) + "]"));
                 }
             }
 
