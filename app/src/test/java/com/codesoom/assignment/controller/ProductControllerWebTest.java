@@ -38,7 +38,7 @@ public class ProductControllerWebTest {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Nested
-    @DisplayName("루트 (/) 경로는")
+    @DisplayName(productControllerPath + " 경로는")
     class Describe_root_path {
         private final String rootPath = productControllerPath + "/";
 
@@ -81,7 +81,41 @@ public class ProductControllerWebTest {
                         .andExpect(content().string("[" + toJson(savedProduct) + "]"));
                 }
             }
+        }
 
+        @Nested
+        @DisplayName("경로에 path id 가 존재한다면")
+        class Context_with_path_variable {
+            private final String pathId = "1";
+
+            @Nested
+            @DisplayName("GET 요청을 받았을 때")
+            class Context_with_get_request {
+                MockHttpServletRequestBuilder requestBuilder;
+
+                public Context_with_get_request() {
+                    requestBuilder = get(rootPath + pathId);
+                }
+
+                @Nested
+                @DisplayName("path id 를 가진 Product 가 존재한다면")
+                class Context_repository_has_path_id {
+                    Product savedProduct;
+
+                    @BeforeEach
+                    void setUp() {
+                        savedProduct = saveSampleProduct();
+                    }
+
+                    @Test
+                    @DisplayName("Product 를 리턴한다.")
+                    void it_returns_product() throws Exception {
+                        mockMvc.perform(requestBuilder)
+                                .andExpect(status().isOk())
+                                .andExpect(content().json(toJson(savedProduct)));
+                    }
+                }
+            }
         }
 
         @Nested
