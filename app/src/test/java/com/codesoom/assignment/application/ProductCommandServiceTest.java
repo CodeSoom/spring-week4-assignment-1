@@ -109,19 +109,22 @@ class ProductCommandServiceTest {
                 productId = product.getId();
             }
 
+            Product subject() {
+                return productCommandService.replaceProduct(product, updateSource);
+            }
+
             @Test
             @DisplayName("상품 정보를 대체하고 리턴한다.")
             void it_replace_and_return_product() {
 
-                final Product replacedProduct = productCommandService.replaceProduct(product, updateSource);
-
-                assertAll(
-                        () -> assertThat(replacedProduct.getId()).isEqualTo(productId),
-                        () -> assertThat(replacedProduct.getName()).isEqualTo(TEST_PRODUCT_UPDATE_NAME),
-                        () -> assertThat(replacedProduct.getMaker()).isEqualTo(TEST_PRODUCT_UPDATE_MAKER),
-                        () -> assertThat(replacedProduct.getPrice()).isEqualTo(TEST_PRODUCT_UPDATE_PRICE),
-                        () -> assertThat(replacedProduct.getImagePath()).isEqualTo(TEST_PRODUCT_UPDATE_IMAGE_PATH)
-                );
+                final Product expectedProduct = ProductFactory.createNewProduct(
+                        productId,
+                        TEST_PRODUCT_UPDATE_NAME,
+                        TEST_PRODUCT_UPDATE_MAKER,
+                        TEST_PRODUCT_UPDATE_PRICE,
+                        TEST_PRODUCT_UPDATE_IMAGE_PATH);
+                
+                assertThat(subject()).isEqualTo(expectedProduct);
             }
         }
     }
@@ -167,19 +170,22 @@ class ProductCommandServiceTest {
                 productId = product.getId();
             }
 
+            Product subject() {
+                return productCommandService.updateProduct(product, updateSource);
+            }
+
             @Test
             @DisplayName("상품 정보를 변경하고 리턴한다.")
             void it_update_and_return_product() {
 
-                final Product updatedProduct = productCommandService.updateProduct(product, updateSource);
+                final Product expectedProduct = ProductFactory.createNewProduct(
+                        productId,
+                        TEST_PRODUCT_UPDATE_NAME,
+                        TEST_PRODUCT_UPDATE_MAKER,
+                        TEST_PRODUCT_PRICE,
+                        TEST_PRODUCT_IMAGE_PATH);
 
-                assertAll(
-                        () -> assertThat(updatedProduct.getId()).isEqualTo(productId),
-                        () -> assertThat(updatedProduct.getName()).isEqualTo(TEST_PRODUCT_UPDATE_NAME),
-                        () -> assertThat(updatedProduct.getMaker()).isEqualTo(TEST_PRODUCT_UPDATE_MAKER),
-                        () -> assertThat(updatedProduct.getPrice()).isEqualTo(TEST_PRODUCT_PRICE),
-                        () -> assertThat(updatedProduct.getImagePath()).isEqualTo(TEST_PRODUCT_IMAGE_PATH)
-                );
+                assertThat(subject()).isEqualTo(expectedProduct);
             }
         }
     }

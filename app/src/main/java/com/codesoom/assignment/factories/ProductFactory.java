@@ -20,8 +20,22 @@ public class ProductFactory {
      * @return 상품
      */
     public static Product createNewProduct(String name, String maker, Integer price, String imagePath) {
+        return createNewProduct(null, name, maker, price, imagePath);
+    }
 
+    /**
+     * 새로운 상품을 반환합니다.
+     *
+     * @param id        상품 ID
+     * @param name      상품명
+     * @param maker     메이커
+     * @param price     가격
+     * @param imagePath 이미지 경로
+     * @return 상품
+     */
+    public static Product createNewProduct(Long id, String name, String maker, Integer price, String imagePath) {
         return Product.builder()
+                .setId(id)
                 .setName(name)
                 .setMaker(maker)
                 .setPrice(price)

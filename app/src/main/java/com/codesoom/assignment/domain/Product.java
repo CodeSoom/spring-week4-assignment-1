@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 public class Product {
@@ -22,7 +23,8 @@ public class Product {
     protected Product() {
     }
 
-    private Product(String name, String maker, Integer price, String imagePath) {
+    private Product(Long id, String name, String maker, Integer price, String imagePath) {
+        this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -75,6 +77,8 @@ public class Product {
 
     public static class ProductBuilder {
 
+        private Long id;
+
         private String name;
 
         private String maker;
@@ -82,6 +86,11 @@ public class Product {
         private Integer price;
 
         private String imagePath;
+
+        public ProductBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
 
         public ProductBuilder setName(String name) {
             this.name = name;
@@ -104,8 +113,29 @@ public class Product {
         }
 
         public Product build() {
-            return new Product(name, maker, price, imagePath);
+            return new Product(id, name, maker, price, imagePath);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Product product = (Product) o;
+        return Objects.equals(id, product.id)
+                && Objects.equals(name, product.name)
+                && Objects.equals(maker, product.maker)
+                && Objects.equals(price, product.price)
+                && Objects.equals(imagePath, product.imagePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, maker, price, imagePath);
     }
 
     @Override
