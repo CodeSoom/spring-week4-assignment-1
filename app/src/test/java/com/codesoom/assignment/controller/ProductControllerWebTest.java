@@ -228,6 +228,29 @@ public class ProductControllerWebTest {
                     }
                 }
             }
+
+            @Nested
+            @DisplayName("path id 를 가진 Product 가 없다면")
+            class Context_doesnt_have_product_which_has_path_id {
+                private final String notFoundPathId = "10000";
+
+                @Nested
+                @DisplayName("GET 요청을 받았을 때")
+                class Context_with_get_request {
+                    MockHttpServletRequestBuilder requestBuilder;
+
+                    public Context_with_get_request() {
+                        requestBuilder = get(rootPath + notFoundPathId);
+                    }
+
+                    @Test
+                    @DisplayName("ProductNotFoundException 을 던진다.")
+                    void it_returns_product() throws Exception {
+                        mockMvc.perform(requestBuilder)
+                                .andExpect(status().isNotFound());
+                    }
+                }
+            }
         }
     }
 
