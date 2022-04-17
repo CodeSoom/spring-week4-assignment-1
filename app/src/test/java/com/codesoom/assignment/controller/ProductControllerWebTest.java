@@ -223,8 +223,7 @@ public class ProductControllerWebTest {
                     @DisplayName("Product 를 삭제하고, 삭제된 Product 를 리턴한다.")
                     void it_deletes_product() throws Exception {
                         mockMvc.perform(requestBuilder)
-                                .andExpect(status().isOk())
-                                .andExpect(content().json(toJson(savedProduct)));
+                                .andExpect(status().isNoContent());
                     }
                 }
             }

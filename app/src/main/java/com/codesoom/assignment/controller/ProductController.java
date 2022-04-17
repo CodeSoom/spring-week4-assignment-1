@@ -41,11 +41,10 @@ public class ProductController {
         return service.updateProduct(id, productDto);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}")
-    public Product remove(@PathVariable Long id) {
+    public void remove(@PathVariable Long id) {
         Product product = service.getProduct(id);
         service.removeProduct(product);
-
-        return product;
     }
 }
