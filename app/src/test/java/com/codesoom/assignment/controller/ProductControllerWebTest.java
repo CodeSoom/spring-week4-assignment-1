@@ -33,6 +33,10 @@ public class ProductControllerWebTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ModelMapper modelMapper = new ModelMapper();
 
+    public String toJson(Object object) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(object);
+    }
+
     @Nested
     @DisplayName("루트 (/) 경로는")
     class Describe_root_path {
@@ -87,7 +91,7 @@ public class ProductControllerWebTest {
                     resultActions = mockMvc.perform(
                             requestBuilder
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsBytes(productDto))
+                                    .content(toJson(productDto))
                     );
 
                     product = modelMapper.map(productDto, Product.class);
@@ -99,7 +103,7 @@ public class ProductControllerWebTest {
                 void it_creates_product() throws Exception {
                     resultActions
                             .andExpect(status().isCreated())
-                            .andExpect(content().json(objectMapper.writeValueAsString(product)));
+                            .andExpect(content().json(toJson(product)));
                 }
 
             }
