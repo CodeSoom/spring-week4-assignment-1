@@ -4,9 +4,8 @@ import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,7 +29,9 @@ public class ProductController {
         return service.getProduct(id);
     }
 
-    public Product create(ProductDto productDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    public Product create(@RequestBody ProductDto productDto) {
         return service.createProduct(productDto);
     }
 

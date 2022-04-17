@@ -65,7 +65,7 @@ public class ProductControllerWebTest {
         class Context_with_post_request {
             private final MockHttpServletRequestBuilder requestBuilder;
 
-            public Context_with_post_request() throws Exception {
+            public Context_with_post_request() {
                 requestBuilder = post(rootPath);
             }
 
@@ -91,6 +91,7 @@ public class ProductControllerWebTest {
                     );
 
                     product = modelMapper.map(productDto, Product.class);
+                    product.setId(1L);
                 }
 
                 @Test
