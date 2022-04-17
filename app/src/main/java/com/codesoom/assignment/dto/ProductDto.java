@@ -1,6 +1,7 @@
 package com.codesoom.assignment.dto;
 
 import lombok.Data;
+import lombok.Generated;
 
 /**
  * Domain Model 과 Presentation Layer 에서의 미스매치를 해결하기 위해 만들어진 DTO 이다.
@@ -10,6 +11,7 @@ import lombok.Data;
  * @link https://martinfowler.com/eaaCatalog/dataTransferObject.html
  */
 @Data
+@Generated
 public class ProductDto {
     private String name;
     private String maker;
