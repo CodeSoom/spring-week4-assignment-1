@@ -18,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,6 +46,11 @@ public class ProductControllerWebTest {
         @DisplayName("GET 요청을 받는다면")
         class Context_with_get_request {
             MockHttpServletRequestBuilder requestBuilder;
+
+            @BeforeEach
+            void setUp() {
+                repository.deleteAll();
+            }
 
             public Context_with_get_request() {
                 requestBuilder = get(rootPath);
@@ -96,7 +103,7 @@ public class ProductControllerWebTest {
                 ProductDto productDto;
                 Product product;
 
-                public Context_full_input() throws Exception {
+                public Context_full_input() {
                     productDto = new ProductDto();
 
                     productDto.setName("고양이 용품1");
@@ -105,7 +112,8 @@ public class ProductControllerWebTest {
                     productDto.setImage("대충 고양이용품 이미지");
 
                     product = modelMapper.map(productDto, Product.class);
-                    product.setId(1L);
+                    Long nextId = repository.getSequenceValue() + 1;
+                    product.setId(nextId);
                 }
 
                 @Test
@@ -123,27 +131,27 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("경로에 path id 가 존재한다면")
+        @DisplayName("경로에 path id 가 존재하고, path id 를 가진 Product 가 존재한다면")
         class Context_with_path_variable {
-            private final String pathId = "1";
+            private final String pathId;
+            private final Product savedProduct;
+
+            public Context_with_path_variable() {
+                savedProduct = saveSampleProduct();
+                this.pathId = String.valueOf(savedProduct.getId());
+            }
 
             @Nested
-            @DisplayName("GET 요청을 받았을 때")
-            class Context_with_get_request {
-                MockHttpServletRequestBuilder requestBuilder;
-
-                public Context_with_get_request() {
-                    requestBuilder = get(rootPath + pathId);
-                }
+            @DisplayName("path id 를 가진 Product 가 존재한다면")
+            class Context_has_path_id {
 
                 @Nested
-                @DisplayName("path id 를 가진 Product 가 존재한다면")
-                class Context_has_path_id {
-                    Product savedProduct;
+                @DisplayName("GET 요청을 받았을 때")
+                class Context_with_get_request {
+                    MockHttpServletRequestBuilder requestBuilder;
 
-                    @BeforeEach
-                    void setUp() {
-                        savedProduct = saveSampleProduct();
+                    public Context_with_get_request() {
+                        requestBuilder = get(rootPath + pathId);
                     }
 
                     @Test
@@ -154,24 +162,14 @@ public class ProductControllerWebTest {
                                 .andExpect(content().json(toJson(savedProduct)));
                     }
                 }
-            }
-
-            @Nested
-            @DisplayName("PATCH 요청을 받았을 때")
-            class Context_with_patch_request {
-                private final MockHttpServletRequestBuilder requestBuilder;
-
-                public Context_with_patch_request() {
-                    requestBuilder = patch(rootPath + pathId);
-                }
 
                 @Nested
-                @DisplayName("path id 를 가진 Product 가 존재하고")
-                class Context_has_path_id {
-                    Product savedProduct;
+                @DisplayName("PATCH 요청을 받았을 때")
+                class Context_with_patch_request {
+                    private final MockHttpServletRequestBuilder requestBuilder;
 
-                    public Context_has_path_id() {
-                        this.savedProduct = saveSampleProduct();
+                    public Context_with_patch_request() {
+                        requestBuilder = patch(rootPath + pathId);
                     }
 
                     @Nested
@@ -194,8 +192,15 @@ public class ProductControllerWebTest {
                         }
 
                         @Test
-                        @DisplayName("수정된 Product 를 반환한다.")
+                        @DisplayName("수정된 Product 를 리턴한다.")
                         void it_returns_updated_product() throws Exception {
+                            long count = repository.count();
+                            System.out.println("count = " + count);
+                            List<Product> all = repository.findAll();
+                            for (Product product : all) {
+                                System.out.println("product = " + product);
+                            }
+
                             mockMvc.perform(requestBuilder
                                             .contentType(MediaType.APPLICATION_JSON)
                                             .content(toJson(productDto)))
@@ -204,24 +209,14 @@ public class ProductControllerWebTest {
                         }
                     }
                 }
-            }
-
-            @Nested
-            @DisplayName("DELETE 요청을 받았을 때")
-            class Context_with_delete_request {
-                private final MockHttpServletRequestBuilder requestBuilder;
-
-                public Context_with_delete_request() {
-                    requestBuilder = delete(rootPath + pathId);
-                }
 
                 @Nested
-                @DisplayName("path id 를 가진 Product 가 존재한다면")
-                class Context_has_path_id {
-                    Product savedProduct;
+                @DisplayName("DELETE 요청을 받았을 때")
+                class Context_with_delete_request {
+                    private final MockHttpServletRequestBuilder requestBuilder;
 
-                    public Context_has_path_id() {
-                        this.savedProduct = saveSampleProduct();
+                    public Context_with_delete_request() {
+                        requestBuilder = delete(rootPath + pathId);
                     }
 
                     @Test
@@ -241,6 +236,8 @@ public class ProductControllerWebTest {
     }
 
     private Product saveSampleProduct() {
+        repository.deleteAll();
+
         Product product = new Product();
 
         product.setName("고양이 용품1");

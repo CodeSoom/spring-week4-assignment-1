@@ -1,6 +1,7 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.domain.Product;
+
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +16,9 @@ public interface ProductRepository {
     void delete(Product product);
 
     void deleteAll();
+
+    long count();
+
+    @Query(value = "SELECT nextval('item_id_seq')", nativeQuery = true)
+    Long getSequenceValue();
 }
