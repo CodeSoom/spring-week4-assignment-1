@@ -205,6 +205,34 @@ public class ProductControllerWebTest {
                     }
                 }
             }
+
+            @Nested
+            @DisplayName("DELETE 요청을 받았을 때")
+            class Context_with_delete_request {
+                private final MockHttpServletRequestBuilder requestBuilder;
+
+                public Context_with_delete_request() {
+                    requestBuilder = delete(rootPath + pathId);
+                }
+
+                @Nested
+                @DisplayName("path id 를 가진 Product 가 존재한다면")
+                class Context_has_path_id {
+                    Product savedProduct;
+
+                    public Context_has_path_id() {
+                        this.savedProduct = saveSampleProduct();
+                    }
+
+                    @Test
+                    @DisplayName("Product 를 삭제하고, 삭제된 Product 를 리턴한다.")
+                    void it_deletes_product() throws Exception {
+                        mockMvc.perform(requestBuilder)
+                                .andExpect(status().isOk())
+                                .andExpect(content().json(toJson(savedProduct)));
+                    }
+                }
+            }
         }
     }
 
