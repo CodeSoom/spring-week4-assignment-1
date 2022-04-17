@@ -37,10 +37,6 @@ public class ProductControllerWebTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ModelMapper modelMapper = new ModelMapper();
 
-    public String toJson(Object object) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(object);
-    }
-
     @Nested
     @DisplayName("루트 (/) 경로는")
     class Describe_root_path {
@@ -70,19 +66,11 @@ public class ProductControllerWebTest {
             @Nested
             @DisplayName("Product 가 존재할 때")
             class Context_one_product {
-                Product product;
                 Product savedProduct;
 
                 @BeforeEach
                 void setUp() {
-                    product = new Product();
-
-                    product.setName("고양이 용품1");
-                    product.setPrice(2000);
-                    product.setMaker("중국산");
-                    product.setImage("대충 고양이용품 이미지");
-
-                    savedProduct = repository.save(product);
+                    savedProduct = saveSampleProduct();
                 }
 
                 @Test
@@ -141,5 +129,20 @@ public class ProductControllerWebTest {
             }
         }
 
+    }
+
+    public String toJson(Object object) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(object);
+    }
+
+    private Product saveSampleProduct() {
+        Product product = new Product();
+
+        product.setName("고양이 용품1");
+        product.setPrice(2000);
+        product.setMaker("중국산");
+        product.setImage("대충 고양이용품 이미지");
+
+        return repository.save(product);
     }
 }
