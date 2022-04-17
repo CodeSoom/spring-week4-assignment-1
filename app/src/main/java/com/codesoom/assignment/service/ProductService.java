@@ -22,9 +22,10 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> {
-            return new ProductNotFoundException();
-        });
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new ProductNotFoundException();
+                });
         return product;
     }
 
@@ -33,16 +34,18 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        productRepository.findById(id).orElseThrow(() -> {
-            return new ProductNotFoundException();
-        });
+        productRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new ProductNotFoundException();
+                });
         productRepository.deleteById(id);
     }
 
     public Product updateProduct(Long id, Product source) {
-        Product product = productRepository.findById(id).orElseThrow(() -> {
-            return new ProductNotFoundException();
-        });
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new ProductNotFoundException();
+                });
         product.setName(source.getName());
         product.setMaker(source.getMaker());
         product.setPrice(source.getPrice());
