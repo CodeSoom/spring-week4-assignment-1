@@ -138,9 +138,9 @@ class ProductControllerTest {
 
     @Test
     void removeProduct() {
-        controller.remove(PRODUCT);
+        controller.remove(ID);
 
-        verify(service).removeProduct(PRODUCT);
+        verify(service).removeProduct(any(Product.class));
     }
 
     private void verifyProduct(Product product) {
