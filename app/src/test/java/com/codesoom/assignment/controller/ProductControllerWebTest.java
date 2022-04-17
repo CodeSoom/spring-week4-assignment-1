@@ -162,7 +162,7 @@ public class ProductControllerWebTest {
                 private final MockHttpServletRequestBuilder requestBuilder;
 
                 public Context_with_patch_request() {
-                    requestBuilder = patch(rootPath);
+                    requestBuilder = patch(rootPath + pathId);
                 }
 
                 @Nested
@@ -196,7 +196,9 @@ public class ProductControllerWebTest {
                         @Test
                         @DisplayName("수정된 Product 를 반환한다.")
                         void it_returns_updated_product() throws Exception {
-                            mockMvc.perform(requestBuilder)
+                            mockMvc.perform(requestBuilder
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(toJson(productDto)))
                                     .andExpect(status().isOk())
                                     .andExpect(content().json(toJson(updateProduct)));
                         }
