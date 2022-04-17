@@ -4,27 +4,27 @@
 
 ## TODO
 
-- [ ] Product Entity 레이어를 구현한다.
-- [ ] ProductService 와 ProductRepository 를 이용 mock 테스트 코드를 작성한다.
-- [ ] ProductController 와 ProductService 를 이용 mock 테스트 코드를 작성한다.
-- [ ] @SpringBootTest 를 이용하여 통합 테스트 코드를 작성한다.
+- [x] Product Entity 레이어를 구현한다.
+- [x] ProductService 와 ProductRepository 를 이용 mock 테스트 코드를 작성한다.
+- [x] ProductController 와 ProductService 를 이용 mock 테스트 코드를 작성한다.
+- [x] @SpringBootTest 를 이용하여 통합 테스트 코드를 작성한다.
 - [ ] 기타 생길 수 있는 예외 상황들에 대한 코드를 더 추가해본다.
 
 ## 과제 목표
 
 고양이 장난감을 등록하고, 조회하고, 수정하고 삭제하는 기능이 있는 간단한 웹이 있습니다. 이 웹에서 사용할 REST API를 만들어주세요.
 
-* [ ] 고양이 장난감 목록 얻기 - `GET /products`
-* [ ] 고양이 장난감 상세 조회하기 - `GET /products/{id}`
-* [ ] 고양이 장난감 등록하기 - `POST /products`
-* [ ] 고양이 장난감 수정하기 - `PATCH /products/{id}`
-* [ ] 고양이 장난감 삭제하기 - `DELETE /products/{id}`
+* [x] 고양이 장난감 목록 얻기 - `GET /products`
+* [x] 고양이 장난감 상세 조회하기 - `GET /products/{id}`
+* [x] 고양이 장난감 등록하기 - `POST /products`
+* [x] 고양이 장난감 수정하기 - `PATCH /products/{id}`
+* [x] 고양이 장난감 삭제하기 - `DELETE /products/{id}`
 
 ## 요구 사항
 
-- 테스트 커버리지 100%를 달성해야 합니다.
-- 모든 API 테스트를 통과해야 합니다.
-- 모든 E2E 테스트를 통과해야 합니다.
+- [x] 테스트 커버리지 100%를 달성해야 합니다.
+- [x] 모든 API 테스트를 통과해야 합니다.
+- [x] 모든 E2E 테스트를 통과해야 합니다.
 
 ## API 실행하기
 
