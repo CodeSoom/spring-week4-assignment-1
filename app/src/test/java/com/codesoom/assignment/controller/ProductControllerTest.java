@@ -6,6 +6,9 @@ import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,7 @@ class ProductControllerTest {
 
     ProductService service;
     ProductController controller;
+    ModelMapper modelMapper = new ModelMapper();
 
     private final long ID = 1L;
     private final long NOT_FOUND_ID = 100000L;
@@ -53,8 +57,9 @@ class ProductControllerTest {
         given(service.getProducts()).willReturn(products);
         given(service.getProduct(ID)).willReturn(PRODUCT);
         given(service.getProduct(NOT_FOUND_ID)).willThrow(ProductNotFoundException.class);
-        given(service.createProduct(any(Product.class))).will(invocation -> {
-            Product product = invocation.getArgument(0);
+        given(service.createProduct(any(ProductDto.class))).will(invocation -> {
+            ProductDto productDto = invocation.getArgument(0);
+            Product product = modelMapper.map(productDto, Product.class);
             product.setId(ID);
             return product;
         });
@@ -106,14 +111,14 @@ class ProductControllerTest {
 
     @Test
     void createProduct() {
-        Product newProduct = new Product();
+        ProductDto newProduct = new ProductDto();
         newProduct.setImage(IMAGE);
         newProduct.setPrice(PRICE);
         newProduct.setMaker(MAKER);
         newProduct.setName(NAME);
 
         Product product = controller.create(newProduct);
-        verify(service).createProduct(newProduct);
+        verify(service).createProduct(any(ProductDto.class));
         verifyProduct(product);
     }
 

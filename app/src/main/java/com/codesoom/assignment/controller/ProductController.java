@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +30,8 @@ public class ProductController {
         return service.getProduct(id);
     }
 
-    public Product create(Product newProduct) {
-        return service.createProduct(newProduct);
+    public Product create(ProductDto productDto) {
+        return service.createProduct(productDto);
     }
 
     public Product update(long id, ProductDto productDto) {

@@ -5,12 +5,14 @@ import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -23,6 +25,7 @@ class ProductServiceTest {
     private ProductRepository repository;
 
     private Product PRODUCT;
+    private ProductDto PRODUCT_DTO;
     private final long ID = 1L;
     private final String MAKER = "KOREAN SHORT CAT";
     private final int PRICE = 20000;
@@ -32,7 +35,7 @@ class ProductServiceTest {
     @BeforeEach
     void setUp() {
         repository = mock(ProductRepository.class);
-        service = new ProductService(repository);
+        service = new ProductService(repository, new ModelMapper());
 
         setUpFixtures();
     }
@@ -49,9 +52,19 @@ class ProductServiceTest {
 
         products.add(PRODUCT);
 
+        PRODUCT_DTO = new ProductDto();
+        PRODUCT_DTO.setMaker(MAKER);
+        PRODUCT_DTO.setPrice(PRICE);
+        PRODUCT_DTO.setName(NAME);
+        PRODUCT_DTO.setImage(IMAGE);
+
         given(repository.findAll()).willReturn(products);
         given(repository.findById(ID)).willReturn(Optional.of(PRODUCT));
-        given(repository.save(PRODUCT)).willReturn(PRODUCT);
+        given(repository.save(any(Product.class))).will((invocation -> {
+            Product product = invocation.getArgument(0);
+            product.setId(ID);
+            return product;
+        }));
     }
 
     @Test
@@ -74,10 +87,8 @@ class ProductServiceTest {
 
     @Test
     void createProduct() {
-        Product newProduct = service.createProduct(PRODUCT);
-
-        verify(repository).save(PRODUCT);
-
+        Product newProduct = service.createProduct(PRODUCT_DTO);
+        verify(repository).save(any(Product.class));
         verifyProduct(newProduct);
     }
 
