@@ -109,7 +109,7 @@ public class ProductControllerWebTest {
                     productDto.setName("고양이 용품1");
                     productDto.setPrice(2000);
                     productDto.setMaker("중국산");
-                    productDto.setImage("대충 고양이용품 이미지");
+                    productDto.setImageUrl("대충 고양이용품 이미지");
 
                     product = modelMapper.map(productDto, Product.class);
                     Long nextId = repository.getSequenceValue() + 1;
@@ -185,7 +185,7 @@ public class ProductControllerWebTest {
                             productDto.setName(updatedPrefix + savedProduct.getName());
                             productDto.setPrice(1000 + savedProduct.getPrice());
                             productDto.setMaker(updatedPrefix + savedProduct.getMaker());
-                            productDto.setImage(updatedPrefix + savedProduct.getImage());
+                            productDto.setImageUrl(updatedPrefix + savedProduct.getImageUrl());
 
                             updateProduct = modelMapper.map(productDto, Product.class);
                             updateProduct.setId(Long.parseLong(pathId));
@@ -266,7 +266,7 @@ public class ProductControllerWebTest {
         product.setName("고양이 용품1");
         product.setPrice(2000);
         product.setMaker("중국산");
-        product.setImage("대충 고양이용품 이미지");
+        product.setImageUrl("대충 고양이용품 이미지");
 
         return repository.save(product);
     }

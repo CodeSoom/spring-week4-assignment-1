@@ -7,15 +7,12 @@ import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -51,7 +48,7 @@ class ProductControllerTest {
         PRODUCT.setMaker(MAKER);
         PRODUCT.setPrice(PRICE);
         PRODUCT.setName(NAME);
-        PRODUCT.setImage(IMAGE);
+        PRODUCT.setImageUrl(IMAGE);
         products.add(PRODUCT);
 
         given(service.getProducts()).willReturn(products);
@@ -71,7 +68,7 @@ class ProductControllerTest {
             product.setMaker(productDto.getMaker());
             product.setPrice(productDto.getPrice());
             product.setName(productDto.getName());
-            product.setImage(productDto.getImage());
+            product.setImageUrl(productDto.getImageUrl());
 
             return product;
         });
@@ -112,7 +109,7 @@ class ProductControllerTest {
     @Test
     void createProduct() {
         ProductDto newProduct = new ProductDto();
-        newProduct.setImage(IMAGE);
+        newProduct.setImageUrl(IMAGE);
         newProduct.setPrice(PRICE);
         newProduct.setMaker(MAKER);
         newProduct.setName(NAME);
@@ -126,7 +123,7 @@ class ProductControllerTest {
     void updateProduct() {
         ProductDto productDto = new ProductDto();
         productDto.setName("updated" + NAME);
-        productDto.setImage("updated" + IMAGE);
+        productDto.setImageUrl("updated" + IMAGE);
         productDto.setMaker("updated" + MAKER);
         productDto.setPrice(1000 + PRICE);
 
@@ -147,7 +144,7 @@ class ProductControllerTest {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImage()).isEqualTo(IMAGE);
+        assertThat(product.getImageUrl()).isEqualTo(IMAGE);
         assertThat(product.getName()).isEqualTo(NAME);
     }
 
@@ -155,7 +152,7 @@ class ProductControllerTest {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getMaker()).isEqualTo("updated" + MAKER);
         assertThat(product.getPrice()).isEqualTo(1000 + PRICE);
-        assertThat(product.getImage()).isEqualTo("updated" + IMAGE);
+        assertThat(product.getImageUrl()).isEqualTo("updated" + IMAGE);
         assertThat(product.getName()).isEqualTo("updated" + NAME);
     }
 }

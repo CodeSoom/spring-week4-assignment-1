@@ -48,7 +48,7 @@ class ProductServiceTest {
         PRODUCT.setMaker(MAKER);
         PRODUCT.setPrice(PRICE);
         PRODUCT.setName(NAME);
-        PRODUCT.setImage(IMAGE);
+        PRODUCT.setImageUrl(IMAGE);
 
         products.add(PRODUCT);
 
@@ -56,7 +56,7 @@ class ProductServiceTest {
         PRODUCT_DTO.setMaker(MAKER);
         PRODUCT_DTO.setPrice(PRICE);
         PRODUCT_DTO.setName(NAME);
-        PRODUCT_DTO.setImage(IMAGE);
+        PRODUCT_DTO.setImageUrl(IMAGE);
 
         given(repository.findAll()).willReturn(products);
         given(repository.findById(ID)).willReturn(Optional.of(PRODUCT));
@@ -105,7 +105,7 @@ class ProductServiceTest {
     void updateProduct() {
         ProductDto productDto = new ProductDto();
         productDto.setName("updated" + PRODUCT.getName());
-        productDto.setImage("updated" + PRODUCT.getImage());
+        productDto.setImageUrl("updated" + PRODUCT.getImageUrl());
         productDto.setMaker("updated" + PRODUCT.getMaker());
         productDto.setPrice(1000 + PRODUCT.getPrice());
 
@@ -121,7 +121,7 @@ class ProductServiceTest {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImage()).isEqualTo(IMAGE);
+        assertThat(product.getImageUrl()).isEqualTo(IMAGE);
         assertThat(product.getName()).isEqualTo(NAME);
     }
 
@@ -129,7 +129,7 @@ class ProductServiceTest {
         assertThat(product.getId()).isEqualTo(ID);
         assertThat(product.getMaker()).isEqualTo("updated" + MAKER);
         assertThat(product.getPrice()).isEqualTo(1000 + PRICE);
-        assertThat(product.getImage()).isEqualTo("updated" + IMAGE);
+        assertThat(product.getImageUrl()).isEqualTo("updated" + IMAGE);
         assertThat(product.getName()).isEqualTo("updated" + NAME);
     }
 }

@@ -6,7 +6,6 @@ import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class ProductService {
         Product product = getProduct(id);
 
         product.setPrice(source.getPrice());
-        product.setImage(source.getImage());
+        product.setImageUrl(source.getImageUrl());
         product.setMaker(source.getMaker());
         product.setName(source.getName());
 
