@@ -7,9 +7,11 @@ import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductService {
     private final ProductRepository repository;
     private final ModelMapper modelMapper;
