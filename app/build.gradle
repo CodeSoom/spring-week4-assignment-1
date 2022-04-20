@@ -47,6 +47,9 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.11.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
 
+    // ModelMapper for setting attributes of DTO from domain model object easily.
+    implementation 'org.modelmapper:modelmapper:3.1.0'
+
     // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
