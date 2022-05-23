@@ -34,7 +34,7 @@ class ToyControllerTest {
     class Describe_list {
         @Nested
         @DisplayName("만약 장난감이 존재하지 않는다면")
-        class Context_with_existing_task {
+        class Context_without_existing_toy {
             @BeforeEach
             void setUp() {
                 toys.clear();
