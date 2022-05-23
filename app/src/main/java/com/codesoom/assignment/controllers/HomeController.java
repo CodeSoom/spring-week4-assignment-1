@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.interfaces.Shop;
-import com.codesoom.assignment.models.ToyShop;
+import com.codesoom.assignment.domain.ToyShop;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

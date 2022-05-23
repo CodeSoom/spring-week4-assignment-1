@@ -1,4 +1,4 @@
-package com.codesoom.assignment.models;
+package com.codesoom.assignment.domain;
 
 import com.codesoom.assignment.interfaces.Shop;
 
