@@ -2,9 +2,11 @@ package com.codesoom.assignment.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.codesoom.assignment.dto.ProductDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -33,26 +35,14 @@ public class ToyStoreControllerTest {
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(productToString(source)))
+                        .content(productToString(source))
+                )
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("장난감 뱀")));
+                .andExpect(content().string(containsString("장난감 뱀")))
+                .andDo(print());
     }
 
     private String productToString(Object source) throws JsonProcessingException {
         return objectMapper.writeValueAsString(source);
-    }
-
-    public class ProductDto {
-        private String name;
-        private String maker;
-        private int price;
-        private String imageUrl;
-
-        public ProductDto(String name, String maker, int price, String imageUrl) {
-            this.name = name;
-            this.maker = maker;
-            this.price = price;
-            this.imageUrl = imageUrl;
-        }
     }
 }
