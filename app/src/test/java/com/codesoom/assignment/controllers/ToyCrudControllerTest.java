@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -25,6 +26,9 @@ class ToyCrudControllerTest {
     private final List<Product> toys = new LinkedList<>();
 
     private final Long TOY_ID = 1L;
+    private final String TOY_NAME = "Test Toy";
+    private final String PRODUCER_NAME = "Test Producer";
+    private final BigDecimal WON_VALUE = new BigDecimal(1000);
 
     @BeforeEach
     void setUp() {
@@ -81,14 +85,15 @@ class ToyCrudControllerTest {
     class Describe_detail {
         @BeforeEach
         void setUp() {
-            given(service.showById(TOY_ID)).willReturn(toyTesting());
+            given(service.showById(TOY_ID)).willReturn(Optional.of(toyTesting()));
         }
+
         @Test
         @DisplayName("Product Type 객체을 반환한다")
         void it_returns_toy() {
-            final Product actual = controller.detail(TOY_ID);
+            final Optional<Product> actual = controller.detail(TOY_ID);
 
-            assertThat(actual).isInstanceOf(Product.class);
+            assertThat(actual.get()).isInstanceOf(Product.class);
         }
     }
 

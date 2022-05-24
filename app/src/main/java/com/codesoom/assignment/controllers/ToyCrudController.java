@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
@@ -24,5 +25,10 @@ public class ToyCrudController implements CrudController {
     @Override
     public List<Product> list() {
         return service.showAll();
+    }
+
+    @Override
+    public Optional<Product> detail(Long id) {
+        return service.showById(id);
     }
 }
