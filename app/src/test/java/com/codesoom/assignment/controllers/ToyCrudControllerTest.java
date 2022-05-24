@@ -10,10 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 
-@DisplayName("ToyController 클래스")
-class ToyControllerTest {
+@DisplayName("ToyCrudController 클래스")
+class ToyCrudControllerTest {
     private CrudService service;
     private CrudController controller;
     private final List<Product> toys = new LinkedList<>();
@@ -38,7 +37,6 @@ class ToyControllerTest {
             @BeforeEach
             void setUp() {
                 toys.clear();
-                given(service.showToysAll()).willReturn(toys);
             }
 
             @Test
