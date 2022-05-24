@@ -3,7 +3,6 @@ package com.codesoom.assignment.dto;
 import com.codesoom.assignment.domain.Product;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class ProductDto {
@@ -21,8 +20,6 @@ public class ProductDto {
         this.price = price;
         this.imageUrl = imageUrl;
     }
-
-    protected ProductDto() {}
 
     public static ProductDto of(Product product) {
         return ProductDto.builder()
