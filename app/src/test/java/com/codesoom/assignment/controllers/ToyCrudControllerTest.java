@@ -1,13 +1,15 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.interfaces.CrudController;
-import com.codesoom.assignment.interfaces.Product;
-import com.codesoom.assignment.interfaces.CrudService;
+import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.ToyProducer;
+import com.codesoom.assignment.domain.Won;
+import com.codesoom.assignment.interfaces.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,7 +60,7 @@ class ToyCrudControllerTest {
         class Context_with_existing_toy {
             @BeforeEach
             void setUp() {
-                toys.add(new Product());
+                toys.add(toyTesting());
                 given(service.showAll()).willReturn(toys);
             }
 
@@ -70,5 +72,12 @@ class ToyCrudControllerTest {
                 assertThat(actual).isNotEmpty();
             }
         }
+    }
+
+    private Toy toyTesting() {
+        final Producer producer = new ToyProducer("Test Producer");
+        final Money money = new Won(new BigDecimal(1000));
+
+        return new Toy("Test Toy", producer, money);
     }
 }
