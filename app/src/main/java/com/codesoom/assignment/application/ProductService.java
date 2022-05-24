@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductCommandDto;
 import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +22,8 @@ public class ProductService {
     }
 
     public ProductDto updateProduct(Long id, ProductCommandDto productCommandDto) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id).
+                orElseThrow(() -> new ProductNotFoundException(id));
         product.update(
                 productCommandDto.getName(),
                 productCommandDto.getMaker(),
