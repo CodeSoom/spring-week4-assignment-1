@@ -89,7 +89,7 @@ class ToyCrudControllerTest {
         }
 
         @Test
-        @DisplayName("Product Type 객체을 반환한다")
+        @DisplayName("Product Type을 반환한다")
         void it_returns_toy() {
             final Optional<Product> actual = controller.detail(TOY_ID);
 
