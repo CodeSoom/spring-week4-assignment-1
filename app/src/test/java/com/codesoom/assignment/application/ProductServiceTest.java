@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 public class ProductServiceTest {
@@ -103,6 +104,24 @@ public class ProductServiceTest {
                 assertThat(updatedProduct.getMaker()).isEqualTo(UPDATE_MAKER);
                 assertThat(updatedProduct.getPrice()).isEqualTo(UPDATE_PRICE);
                 assertThat(updatedProduct.getImageUrl()).isEqualTo(UPDATE_IMAGE_URL);
+            }
+        }
+
+        @DataJpaTest
+        @Nested
+        @DisplayName("존재하지 않는 id가 주어지면")
+        class Context_with_non_existed_id {
+
+            @BeforeEach
+            void setUp() {
+                id = 100L;
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundExcpetion이 발생한다.")
+            void it_throws_product_not_found_exception() {
+                assertThatThrownBy(() -> productService.updateProduct(id, productCommandDto))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
