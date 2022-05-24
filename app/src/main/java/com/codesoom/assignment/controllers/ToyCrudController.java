@@ -3,13 +3,11 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.interfaces.CrudController;
 import com.codesoom.assignment.interfaces.CrudService;
 import com.codesoom.assignment.interfaces.Product;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -25,6 +23,6 @@ public class ToyCrudController implements CrudController {
     @GetMapping
     @Override
     public List<Product> list() {
-        return new LinkedList<>();
+        return service.showAll();
     }
 }
