@@ -24,6 +24,8 @@ class ToyCrudControllerTest {
     private CrudController controller;
     private final List<Product> toys = new LinkedList<>();
 
+    private final Long TOY_ID = 1L;
+
     @BeforeEach
     void setUp() {
         controller = new ToyCrudController(service);
@@ -71,6 +73,22 @@ class ToyCrudControllerTest {
 
                 assertThat(actual).isNotEmpty();
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("detail 메소드는")
+    class Describe_detail {
+        @BeforeEach
+        void setUp() {
+            given(service.showById(TOY_ID)).willReturn(toyTesting());
+        }
+        @Test
+        @DisplayName("Product Type 객체을 반환한다")
+        void it_returns_toy() {
+            final Product actual = controller.detail(TOY_ID);
+
+            assertThat(actual).isInstanceOf(Product.class);
         }
     }
 
