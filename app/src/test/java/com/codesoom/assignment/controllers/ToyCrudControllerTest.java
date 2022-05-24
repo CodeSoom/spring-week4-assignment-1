@@ -52,5 +52,23 @@ class ToyCrudControllerTest {
                 assertThat(actual).isEmpty();
             }
         }
+
+        @Nested
+        @DisplayName("만약 장난감이 존재한다면")
+        class Context_with_existing_toy {
+            @BeforeEach
+            void setUp() {
+                toys.add(new Product());
+                given(service.showAll()).willReturn(toys);
+            }
+
+            @Test
+            @DisplayName("비어 있지 않은 List를 반환한다")
+            void it_returns_not_empty_list() {
+                final List<Product> actual = controller.list();
+
+                assertThat(actual).isNotEmpty();
+            }
+        }
     }
 }
