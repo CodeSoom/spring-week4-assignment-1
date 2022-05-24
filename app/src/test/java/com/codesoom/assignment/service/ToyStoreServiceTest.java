@@ -2,10 +2,13 @@ package com.codesoom.assignment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.codesoom.assignment.model.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class ToyStoreServiceTest {
 
     @Autowired
