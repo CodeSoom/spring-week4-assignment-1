@@ -2,7 +2,9 @@ package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Product;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class ProductCommandDto {
     private String name;
     private String maker;
