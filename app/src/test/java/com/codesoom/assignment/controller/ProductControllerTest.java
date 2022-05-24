@@ -40,12 +40,13 @@ public class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product();
-        product.setId(PRODUCT_ID);
-        product.setName(PRODUCT_NAME);
-        product.setMaker(PRODUCT_MAKER);
-        product.setPrice(PRODUCT_PRICE);
-        product.setImageUrl(PRODUCT_IMAGE_URL);
+        product = Product.builder()
+                .id(PRODUCT_ID)
+                .name(PRODUCT_NAME)
+                .maker(PRODUCT_MAKER)
+                .price(PRODUCT_PRICE)
+                .imageUrl(PRODUCT_IMAGE_URL)
+                .build();
     }
 
     @Nested

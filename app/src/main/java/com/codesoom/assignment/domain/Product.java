@@ -1,10 +1,16 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@NoArgsConstructor
+@Getter
 public class Product {
     @Id
     @GeneratedValue
@@ -18,43 +24,12 @@ public class Product {
 
     private String imageUrl;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    @Builder
+    public Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getMaker() {
-        return maker;
-    }
-
-    public void setMaker(String maker) {
         this.maker = maker;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
         this.price = price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }
