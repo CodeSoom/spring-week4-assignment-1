@@ -1,7 +1,7 @@
 package com.codesoom.assignment.web;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createTask(product);
+    public ProductDto createProduct(@RequestBody ProductDto productDto) {
+        return productService.createTask(productDto);
     }
 }

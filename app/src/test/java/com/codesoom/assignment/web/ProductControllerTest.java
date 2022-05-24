@@ -1,7 +1,7 @@
 package com.codesoom.assignment.web;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,8 +32,9 @@ public class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
-    private Product product;
+    private ProductDto productDto;
 
+    public static final Long ID = 1L;
     public static final String NAME = "털뭉치";
     public static final String MAKER = "애옹이네 장난감";
     public static final int PRICE = 2000;
@@ -41,7 +42,7 @@ public class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product(NAME, MAKER, PRICE, IMAGE_URL);
+        productDto = new ProductDto(ID ,NAME, MAKER, PRICE, IMAGE_URL);
     }
 
     @Nested
@@ -51,7 +52,7 @@ public class ProductControllerTest {
         @BeforeEach
         void setUp() {
             given(productService.createTask(any()))
-                    .willReturn(product);
+                    .willReturn(productDto);
         }
 
         @Test
@@ -59,7 +60,7 @@ public class ProductControllerTest {
         void it_returns_created_product() throws Exception {
             mockMvc.perform(post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(productToString(product)))
+                            .content(objToString(productDto)))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.name").value(NAME))
                     .andExpect(jsonPath("$.maker").value(MAKER))
@@ -68,7 +69,7 @@ public class ProductControllerTest {
         }
     }
 
-    public String productToString(Product product) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(product);
+    public String objToString(Object object) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(object);
     }
 }
