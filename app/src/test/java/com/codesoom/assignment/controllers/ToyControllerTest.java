@@ -1,9 +1,9 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.ToyShopService;
-import com.codesoom.assignment.interfaces.HttpCrudController;
+import com.codesoom.assignment.application.ToyCrudService;
+import com.codesoom.assignment.interfaces.CrudController;
 import com.codesoom.assignment.interfaces.Product;
-import com.codesoom.assignment.interfaces.ShopService;
+import com.codesoom.assignment.interfaces.CrudService;
 import org.junit.jupiter.api.*;
 
 import java.util.LinkedList;
@@ -14,14 +14,14 @@ import static org.mockito.BDDMockito.given;
 
 @DisplayName("ToyController 클래스")
 class ToyControllerTest {
-    private ShopService service;
-    private HttpCrudController controller;
+    private CrudService service;
+    private CrudController controller;
     private final List<Product> toys = new LinkedList<>();
 
     @BeforeEach
     void setUp() {
-        service = new ToyShopService();
-        controller = new ToyController(service);
+        service = new ToyCrudService();
+        controller = new ToyCrudController(service);
     }
 
     @AfterEach
