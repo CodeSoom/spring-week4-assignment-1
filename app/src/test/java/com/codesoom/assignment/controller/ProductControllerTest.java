@@ -57,22 +57,30 @@ public class ProductControllerTest {
         @BeforeEach
         void setUp() {
             products = new ArrayList<>();
-            products.add(product);
-
-            given(productService.getProducts()).willReturn(products);
         }
 
-        @Test
-        @DisplayName("product 리스트를 반환한다")
-        void It_returns_product_list() throws Exception {
-            mockMvc.perform(get("/products"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].id").value(PRODUCT_ID))
-                    .andExpect(jsonPath("$[0].name").value(PRODUCT_NAME))
-                    .andExpect(jsonPath("$[0].maker").value(PRODUCT_MAKER))
-                    .andExpect(jsonPath("$[0].price").value(PRODUCT_PRICE));
+        @Nested
+        @DisplayName("만약 1개의 product가 저장된 경우")
+        class Context_if_one_product_stored {
+            @BeforeEach
+            void setUp() {
+                products.add(product);
 
-            verify(productService).getProducts();
+                given(productService.getProducts()).willReturn(products);
+            }
+
+            @Test
+            @DisplayName("1개의 Product가 저장되어있는 리스트를 반환한다")
+            void It_returns_list_contains_one_product() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$[0].id").value(PRODUCT_ID))
+                        .andExpect(jsonPath("$[0].name").value(PRODUCT_NAME))
+                        .andExpect(jsonPath("$[0].maker").value(PRODUCT_MAKER))
+                        .andExpect(jsonPath("$[0].price").value(PRODUCT_PRICE));
+
+                verify(productService).getProducts();
+            }
         }
     }
 }
