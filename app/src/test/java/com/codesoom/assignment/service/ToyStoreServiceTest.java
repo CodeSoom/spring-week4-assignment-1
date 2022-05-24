@@ -17,7 +17,13 @@ public class ToyStoreServiceTest {
     @DisplayName("`이름, 메이커, 가격, 이미지 URL`을 입력 받아 장난감 등록")
     @Test
     void addToyTest() {
-        Product product = toyStoreService.save("name", "maker", 5000, "abc.jpg");
+        Product sourceProduct = new Product();
+                sourceProduct.setName("name");
+        sourceProduct.setMaker("maker");
+        sourceProduct.setPrice(5000);
+        sourceProduct.setImageUrl("abc.jpg");
+
+        Product product = toyStoreService.save(sourceProduct);
 
         assertThat(product.getId()).isEqualTo(1L);
         assertThat(product.getName()).isEqualTo("name");

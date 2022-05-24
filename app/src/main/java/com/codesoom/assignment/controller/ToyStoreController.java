@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.model.Product;
+import com.codesoom.assignment.service.ToyStoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/products")
 public class ToyStoreController {
 
+    private ToyStoreService toyStoreService;
+
+    public ToyStoreController(ToyStoreService toyStoreService) {
+        this.toyStoreService = toyStoreService;
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto addProduct(@RequestBody ProductDto productDto) {
-        return productDto;
+    public Product addProduct(@RequestBody Product product) {
+
+        return toyStoreService.save(product);
     }
 }
