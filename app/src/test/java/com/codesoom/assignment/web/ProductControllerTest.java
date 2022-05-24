@@ -57,7 +57,7 @@ public class ProductControllerTest {
         @Test
         @DisplayName("생성된 product를 반환한다")
         void it_returns_created_product() throws Exception {
-            mockMvc.perform(post("/tasks")
+            mockMvc.perform(post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(productToString(product)))
                     .andExpect(status().isCreated())
