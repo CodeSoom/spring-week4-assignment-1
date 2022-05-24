@@ -98,9 +98,9 @@ class ToyCrudControllerTest {
     }
 
     private Toy toyTesting() {
-        final Producer producer = new ToyProducer("Test Producer");
-        final Money money = new Won(new BigDecimal(1000));
+        final Producer producer = new ToyProducer(PRODUCER_NAME);
+        final Money money = new Won(WON_VALUE);
 
-        return new Toy("Test Toy", producer, money);
+        return new Toy(TOY_NAME, producer, money);
     }
 }
