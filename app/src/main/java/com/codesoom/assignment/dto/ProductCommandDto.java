@@ -3,16 +3,16 @@ package com.codesoom.assignment.dto;
 import com.codesoom.assignment.domain.Product;
 import lombok.Builder;
 
-public class ProductSaveDto {
+public class ProductCommandDto {
     private String name;
     private String maker;
     private int price;
     private String imageUrl;
 
-    protected ProductSaveDto() {}
+    protected ProductCommandDto() {}
 
     @Builder
-    public ProductSaveDto(String name, String maker, int price, String imageUrl) {
+    public ProductCommandDto(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;

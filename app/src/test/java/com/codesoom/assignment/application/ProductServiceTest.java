@@ -1,8 +1,8 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.ProductCommandDto;
 import com.codesoom.assignment.dto.ProductDto;
-import com.codesoom.assignment.dto.ProductSaveDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,11 +33,11 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("createProduct 메소드는")
     class Describe_createProduct {
-        ProductSaveDto productSaveDto;
+        ProductCommandDto productCommandDto;
 
         @BeforeEach
         void setUp() {
-            productSaveDto = ProductSaveDto.builder()
+            productCommandDto = ProductCommandDto.builder()
                     .name(NAME)
                     .maker(MAKER)
                     .price(PRICE)
@@ -47,7 +47,7 @@ public class ProductServiceTest {
         @Test
         @DisplayName("생성된 product의 dto를 반환한다.")
         void it_returns_created_product() {
-            ProductDto newProduct = productService.createTask(productSaveDto);
+            ProductDto newProduct = productService.createTask(productCommandDto);
 
             assertThat(newProduct.getId()).isNotNull();
             assertThat(newProduct.getName()).isEqualTo(NAME);
@@ -56,5 +56,4 @@ public class ProductServiceTest {
             assertThat(newProduct.getImageUrl()).isEqualTo(IMAGE_URL);
         }
     }
-
 }
