@@ -119,6 +119,36 @@ class ProductRepositoryTest {
         }
     }
 
+    @Nested
+    @DisplayName("delete")
+    class Describe_delete {
+
+        @Nested
+        @DisplayName("저장된 상품이 주어진다면")
+        class Context_with_product {
+
+            @Test
+            @DisplayName("상품을 삭제한다")
+            void it_deletes_product() {
+                productRepository.delete(product);
+                assertThat(productRepository.findAll()).hasSize(0);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 상품이 주어진다면")
+        class Context_with_not_stored_product {
+
+            @Test
+            @DisplayName("상품을 삭제하지 않는다.")
+            void it_returns_product() {
+                Product notStoredProduct = new Product();
+                productRepository.delete(notStoredProduct);
+                assertThat(productRepository.findAll()).hasSize(1);
+            }
+        }
+    }
+
     private Product createProduct(String name) {
         return Product.builder()
                 .name(name)
