@@ -154,6 +154,7 @@ class ProductRepositoryTest {
                 .name(name)
                 .price(1)
                 .imageUrl("www")
+                .maker("maker")
                 .build();
     }
 }

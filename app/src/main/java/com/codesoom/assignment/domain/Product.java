@@ -23,12 +23,14 @@ public class Product {
     private String name;
     private int price;
     private String imageUrl;
+    private String maker;
 
     @Builder
-    public Product(Long id, String name, int price, String imageUrl) {
+    public Product(Long id, String name, int price, String imageUrl, String maker) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.maker = maker;
     }
 }
