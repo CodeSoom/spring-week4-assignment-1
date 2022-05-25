@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,13 +17,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ToyProductCrudServiceTest {
     private ToyRepository repository;
     private ProductCrudService service;
-    private List<Toy> toys;
+    private Toy toy;
+    private final Long TOY_ID = 2L;
     private final String TOY_NAME = "Test Toy";
     private final String PRODUCER_NAME = "Test Producer";
     private final BigDecimal WON_VALUE = new BigDecimal(1000);
 
     @BeforeEach
     void setUp() {
+        toy = new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
         repository = new InMemoryToyRepository();
         service = new ToyProductCrudService(repository);
     }
@@ -47,7 +50,7 @@ class ToyProductCrudServiceTest {
         class Context_with_existing_toy {
             @BeforeEach
             void setUp() {
-                repository.save(new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE));
+                repository.save(toy);
             }
 
             @Test
@@ -56,6 +59,27 @@ class ToyProductCrudServiceTest {
                 final List<Toy> actual = service.showAll();
 
                 assertThat(actual).isNotEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("showById 메소드는")
+    class Describe_showById {
+        @Nested
+        @DisplayName("존재하는 장난감에 대한 Id를 매개변수로 전달하면")
+        class Context_with_existing_toy {
+            @BeforeEach
+            void setUp() {
+                repository.save(toy);
+            }
+
+            @Test
+            @DisplayName("해당 장난감을 반환한다")
+            void it_returns_toy_() {
+                final Optional<Toy> actual = service.showById(TOY_ID);
+
+                assertThat(actual.get().id()).isEqualTo(toy.id());
             }
         }
     }
