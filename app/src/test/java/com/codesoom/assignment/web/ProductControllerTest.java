@@ -1,6 +1,7 @@
 package com.codesoom.assignment.web;
 
 import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.dto.ProductCommandRequest;
 import com.codesoom.assignment.dto.ProductResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,8 +36,9 @@ public class ProductControllerTest {
     private ProductService productService;
 
     private ProductResponse productResponse;
+    private ProductCommandRequest productCommandRequest;
 
-    public static final Long ID = 1L;
+    public static final Long VALID_ID = 1L;
     public static final String NAME = "털뭉치";
     public static final String MAKER = "애옹이네 장난감";
     public static final int PRICE = 2000;
@@ -42,7 +46,13 @@ public class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        productResponse = new ProductResponse(ID ,NAME, MAKER, PRICE, IMAGE_URL);
+        productCommandRequest = ProductCommandRequest.builder()
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .imageUrl(IMAGE_URL)
+                .build();
+        productResponse = new ProductResponse(VALID_ID, NAME, MAKER, PRICE, IMAGE_URL);
     }
 
     @Nested
@@ -66,6 +76,44 @@ public class ProductControllerTest {
                     .andExpect(jsonPath("$.maker").value(MAKER))
                     .andExpect(jsonPath("$.price").value(PRICE))
                     .andExpect(jsonPath("$.imageUrl").value(IMAGE_URL));
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products/{id} 요청이 오면")
+    class Describe_patch_product_by_id {
+
+        @Nested
+        @DisplayName("아이디가 존재하면")
+        class Context_when_id_exists {
+
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(VALID_ID), any(ProductCommandRequest.class)))
+                        .will(invocation -> {
+                            Long id = invocation.getArgument(0);
+                            ProductCommandRequest productCommandRequest = invocation.getArgument(1);
+                            return ProductResponse.builder()
+                                    .id(id)
+                                    .name(productCommandRequest.getName())
+                                    .price(productCommandRequest.getPrice())
+                                    .maker(productCommandRequest.getMaker())
+                                    .imageUrl(productCommandRequest.getImageUrl());
+                        });
+            }
+
+            @Test
+            @DisplayName("변경된 product를 반환한다.")
+            void it_returns_updated_product() throws Exception {
+                mockMvc.perform(patch("/products/{id}", VALID_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objToString(productCommandRequest)))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name").value(productCommandRequest.getName()))
+                        .andExpect(jsonPath("$.maker").value(productCommandRequest.getMaker()))
+                        .andExpect(jsonPath("$.price").value(productCommandRequest.getPrice()))
+                        .andExpect(jsonPath("$.imageUrl").value(productCommandRequest.getImageUrl()));
+            }
         }
     }
 
