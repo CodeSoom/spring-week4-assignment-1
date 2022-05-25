@@ -13,7 +13,7 @@ import java.util.Optional;
 public class ToyProductCrudService implements ProductCrudService {
     private final ToyRepository repository;
 
-    public ToyProductCrudService(InMemoryToyRepository repository) {
+    public ToyProductCrudService(ToyRepository repository) {
         this.repository = repository;
     }
 
