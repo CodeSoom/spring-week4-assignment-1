@@ -17,8 +17,7 @@ public class Product {
     private String imageURI;
 
     public Product() {}
-
-    @Builder
+    
     public Product(Long id, String name, String maker, Integer price, String imageURI) {
         this.id = id;
         this.name = name;
