@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public class ToyRepository implements ProductRepository {
     private final List<Product> products = new ArrayList<>();
-    private Long newId = 0L;R
+    private Long newId = 0L;
 
     @Override
     public List<Product> findAll() {
