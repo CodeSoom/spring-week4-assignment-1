@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DisplayName("ToyProductCrudService 클래스")
 class ToyProductCrudServiceTest {
@@ -75,11 +76,22 @@ class ToyProductCrudServiceTest {
             }
 
             @Test
-            @DisplayName("해당 장난감을 반환한다")
-            void it_returns_toy_() {
+            @DisplayName("매개변수로 전달한 Id를 가지고 있는 장난감을 반환한다")
+            void it_returns_toy_containing_that_id() {
                 final Optional<Toy> actual = service.showById(TOY_ID);
 
-                assertThat(actual.get().id()).isEqualTo(toy.id());
+                assertThat(actual.get().id()).isEqualTo(TOY_ID);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 장난감에 대한 Id를 매개변수로 전달하면")
+        class Context_without_existing_toy {
+            @Test
+            @DisplayName("예외를 발생시킨다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> service.showById(TOY_ID))
+                    .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
