@@ -2,8 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductCommandDto;
-import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.dto.ProductCommandRequest;
+import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,11 +38,11 @@ public class ProductServiceTest {
     @Nested
     @DisplayName("createProduct 메소드는")
     class Describe_createProduct {
-        ProductCommandDto productCommandDto;
+        ProductCommandRequest productCommandRequest;
 
         @BeforeEach
         void setUp() {
-            productCommandDto = ProductCommandDto.builder()
+            productCommandRequest = ProductCommandRequest.builder()
                     .name(NAME)
                     .maker(MAKER)
                     .price(PRICE)
@@ -52,7 +52,7 @@ public class ProductServiceTest {
         @Test
         @DisplayName("생성된 product의 dto를 반환한다.")
         void it_returns_created_product() {
-            ProductDto newProduct = productService.createTask(productCommandDto);
+            ProductResponse newProduct = productService.createTask(productCommandRequest);
 
             assertThat(newProduct.getId()).isNotNull();
             assertThat(newProduct.getName()).isEqualTo(NAME);
@@ -71,11 +71,11 @@ public class ProductServiceTest {
         private static final String UPDATE_IMAGE_URL = "https://www.catdrug.com/images/1234567";
 
         private Long id;
-        private ProductCommandDto productCommandDto;
+        private ProductCommandRequest productCommandRequest;
 
         @BeforeEach
         void setUp() {
-            productCommandDto = ProductCommandDto.builder()
+            productCommandRequest = ProductCommandRequest.builder()
                     .name(UPDATE_NAME)
                     .maker(UPDATE_MAKER)
                     .price(UPDATE_PRICE)
@@ -97,7 +97,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("product를 변경한다.")
             void it_updates_product() {
-                productService.updateProduct(id, productCommandDto);
+                productService.updateProduct(id, productCommandRequest);
 
                 Product updatedProduct = productRepository.findById(id).get();
 
@@ -121,7 +121,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("ProductNotFoundExcpetion이 발생한다.")
             void it_throws_product_not_found_exception() {
-                assertThatThrownBy(() -> productService.updateProduct(id, productCommandDto))
+                assertThatThrownBy(() -> productService.updateProduct(id, productCommandRequest))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

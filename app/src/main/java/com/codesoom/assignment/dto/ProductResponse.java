@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ProductDto {
+public class ProductResponse {
     private final Long id;
     private final String name;
     private final String maker;
@@ -13,7 +13,7 @@ public class ProductDto {
     private final String imageUrl;
 
     @Builder
-    public ProductDto(Long id, String name, String maker, int price, String imageUrl) {
+    public ProductResponse(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
@@ -21,8 +21,8 @@ public class ProductDto {
         this.imageUrl = imageUrl;
     }
 
-    public static ProductDto of(Product product) {
-        return ProductDto.builder()
+    public static ProductResponse of(Product product) {
+        return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .maker(product.getMaker())

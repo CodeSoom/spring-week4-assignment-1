@@ -1,8 +1,8 @@
 package com.codesoom.assignment.web;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.dto.ProductDto;
-import com.codesoom.assignment.dto.ProductCommandDto;
+import com.codesoom.assignment.dto.ProductResponse;
+import com.codesoom.assignment.dto.ProductCommandRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ProductDto createProduct(@RequestBody ProductCommandDto productCommandDto) {
-        return productService.createTask(productCommandDto);
+    public ProductResponse createProduct(@RequestBody ProductCommandRequest productCommandRequest) {
+        return productService.createTask(productCommandRequest);
     }
 }

@@ -1,7 +1,7 @@
 package com.codesoom.assignment.web;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.dto.ProductResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ public class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
-    private ProductDto productDto;
+    private ProductResponse productResponse;
 
     public static final Long ID = 1L;
     public static final String NAME = "털뭉치";
@@ -42,7 +42,7 @@ public class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        productDto = new ProductDto(ID ,NAME, MAKER, PRICE, IMAGE_URL);
+        productResponse = new ProductResponse(ID ,NAME, MAKER, PRICE, IMAGE_URL);
     }
 
     @Nested
@@ -52,7 +52,7 @@ public class ProductControllerTest {
         @BeforeEach
         void setUp() {
             given(productService.createTask(any()))
-                    .willReturn(productDto);
+                    .willReturn(productResponse);
         }
 
         @Test
@@ -60,7 +60,7 @@ public class ProductControllerTest {
         void it_returns_created_product() throws Exception {
             mockMvc.perform(post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(objToString(productDto)))
+                            .content(objToString(productResponse)))
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("$.name").value(NAME))
                     .andExpect(jsonPath("$.maker").value(MAKER))
