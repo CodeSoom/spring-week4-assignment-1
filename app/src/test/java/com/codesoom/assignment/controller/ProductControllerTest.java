@@ -19,7 +19,6 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -82,8 +81,6 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$[0].name").value(PRODUCT_NAME))
                         .andExpect(jsonPath("$[0].maker").value(PRODUCT_MAKER))
                         .andExpect(jsonPath("$[0].price").value(PRODUCT_PRICE));
-
-                verify(productService).getProducts();
             }
         }
 
