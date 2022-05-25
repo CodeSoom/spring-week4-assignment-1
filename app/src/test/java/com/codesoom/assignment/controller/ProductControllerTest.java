@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -10,14 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -96,6 +100,31 @@ public class ProductControllerTest {
             void It_returns_empty_list() throws Exception {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /products 요청 시")
+    class Describe_post_products {
+        @Nested
+        @DisplayName("유효한 product가 주어졌을 경우")
+        class Context_if_valid_product_given {
+            @BeforeEach
+            void setUp() {
+                given(productService.addProduct(any())).willReturn(product);
+            }
+
+            @Test
+            @DisplayName("product를 반환한다")
+            void It_returns_product() throws Exception {
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonRequest = objectMapper.writeValueAsString(product);
+
+                mockMvc.perform(post("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonRequest))
+                        .andExpect(status().isCreated());
             }
         }
     }
