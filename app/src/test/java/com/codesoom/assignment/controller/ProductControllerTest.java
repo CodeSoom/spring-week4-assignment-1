@@ -82,5 +82,21 @@ public class ProductControllerTest {
                 verify(productService).getProducts();
             }
         }
+
+        @Nested
+        @DisplayName("만약 product가 저장되지 않은 경우")
+        class Context_if_no_product_stored {
+            @BeforeEach
+            void setUp() {
+                given(productService.getProducts()).willReturn(products);
+            }
+
+            @Test
+            @DisplayName("비어있는 리스트를 반환한다")
+            void It_returns_empty_list() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk());
+            }
+        }
     }
 }
