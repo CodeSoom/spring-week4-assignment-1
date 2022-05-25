@@ -4,15 +4,16 @@ import com.codesoom.assignment.domain.Product;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.beans.ConstructorProperties;
+
 @Getter
 public class ProductCommandDto {
-    private String name;
-    private String maker;
-    private int price;
-    private String imageUrl;
+    private final String name;
+    private final String maker;
+    private final int price;
+    private final String imageUrl;
 
-    protected ProductCommandDto() {}
-
+    @ConstructorProperties({"name", "maker", "price", "imageUrl"})
     @Builder
     public ProductCommandDto(String name, String maker, int price, String imageUrl) {
         this.name = name;

@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Getter
 public class ProductDto {
-    private Long id;
-    private String name;
-    private String maker;
-    private int price;
-    private String imageUrl;
+    private final Long id;
+    private final String name;
+    private final String maker;
+    private final int price;
+    private final String imageUrl;
 
     @Builder
     public ProductDto(Long id, String name, String maker, int price, String imageUrl) {
