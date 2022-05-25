@@ -9,8 +9,13 @@ import java.util.*;
 @Repository
 @Primary
 public class InMemoryToyRepository implements ToyRepository {
-    private final Map<Long, Toy> toy_map = new HashMap<>();
-    private Long maxId = 1L;
+    private final Map<Long, Toy> toy_map;
+    private Long maxId;
+
+    public InMemoryToyRepository() {
+        toy_map = new HashMap<>();
+        maxId = 1L;
+    }
 
     @Override
     public List<Toy> findAll() {
