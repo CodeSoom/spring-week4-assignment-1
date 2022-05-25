@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.domain.InMemoryToyRepository;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -78,9 +78,9 @@ class ToyProductCrudServiceTest {
             @Test
             @DisplayName("매개변수로 전달한 Id를 가지고 있는 장난감을 반환한다")
             void it_returns_toy_containing_that_id() {
-                final Optional<Toy> actual = service.showById(TOY_ID);
+                final Toy actual = service.showById(TOY_ID);
 
-                assertThat(actual.get().id()).isEqualTo(TOY_ID);
+                assertThat(actual.id()).isEqualTo(TOY_ID);
             }
         }
 

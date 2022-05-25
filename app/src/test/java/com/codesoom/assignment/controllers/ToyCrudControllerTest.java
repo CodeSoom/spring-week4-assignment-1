@@ -84,15 +84,15 @@ class ToyCrudControllerTest {
     class Describe_detail {
         @BeforeEach
         void setUp() {
-            given(service.showById(TOY_ID)).willReturn(Optional.of(toyTesting()));
+            given(service.showById(TOY_ID)).willReturn(toyTesting());
         }
 
         @Test
         @DisplayName("Product Type을 반환한다")
         void it_returns_toy() {
-            final Optional<Toy> actual = controller.detail(TOY_ID);
+            final Toy actual = controller.detail(TOY_ID);
 
-            assertThat(actual.get()).isInstanceOf(Product.class);
+            assertThat(actual).isInstanceOf(Product.class);
         }
     }
 
