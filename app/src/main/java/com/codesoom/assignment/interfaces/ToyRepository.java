@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ToyRepository extends CrudRepository<Toy, Long> {
+public interface ToyRepository {
     List<Toy> findAll();
 
     Optional<Toy> findById(Long id);

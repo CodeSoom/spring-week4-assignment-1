@@ -1,9 +1,8 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.interfaces.CrudController;
-import com.codesoom.assignment.interfaces.CrudService;
-import com.codesoom.assignment.interfaces.Product;
+import com.codesoom.assignment.interfaces.ProductCrudController;
+import com.codesoom.assignment.interfaces.ProductCrudService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,10 +14,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/tasks")
 @CrossOrigin(origins = "http://localhost:3000")
-public class ToyCrudController implements CrudController {
-    private final CrudService service;
+public class ToyCrudController implements ProductCrudController {
+    private final ProductCrudService service;
 
-    public ToyCrudController(CrudService service) {
+    public ToyCrudController(ProductCrudService service) {
         this.service = service;
     }
 

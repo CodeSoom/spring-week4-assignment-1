@@ -29,6 +29,13 @@ public class Toy implements Product {
         this.money = money;
     }
 
+    public Toy(Long id, String name, ToyProducer producer, BigDecimal money) {
+        this.id = id;
+        this.name = name;
+        this.producer = producer;
+        this.money = money;
+    }
+
     public Long id() {
         return id;
     }
@@ -39,7 +46,7 @@ public class Toy implements Product {
     }
 
     @Override
-    public Producer producer() {
+    public ToyProducer producer() {
         return producer;
     }
 

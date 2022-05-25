@@ -2,7 +2,6 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
-import com.codesoom.assignment.domain.Won;
 import com.codesoom.assignment.interfaces.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,8 +20,8 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("ToyCrudController 클래스")
 class ToyCrudControllerTest {
     @Mock
-    private CrudService service;
-    private CrudController controller;
+    private ProductCrudService service;
+    private ProductCrudController controller;
     private final List<Toy> toys = new LinkedList<>();
 
     private final Long TOY_ID = 1L;
