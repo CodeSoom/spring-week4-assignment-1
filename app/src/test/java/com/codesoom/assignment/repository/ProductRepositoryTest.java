@@ -106,6 +106,19 @@ class ProductRepositoryTest {
         }
     }
 
+    @Nested
+    @DisplayName("save")
+    class Describe_save {
+
+        @DisplayName("상품을 저장하고 상품을 리턴한다")
+        @Test
+        void it_returns_product() {
+            Product newProduct = createProduct("new product");
+            Product savedProduct = productRepository.save(newProduct);
+            assertThat(savedProduct).isEqualTo(newProduct);
+        }
+    }
+
     private Product createProduct(String name) {
         return Product.builder()
                 .name(name)
@@ -113,5 +126,4 @@ class ProductRepositoryTest {
                 .imageUrl("www")
                 .build();
     }
-
 }
