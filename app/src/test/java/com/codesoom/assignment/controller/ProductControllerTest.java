@@ -102,6 +102,30 @@ public class ProductControllerTest {
     }
 
     @Nested
+    @DisplayName("GET /products/{id} 요청 시")
+    class Describe_get_products_by_id {
+        @Nested
+        @DisplayName("만약 유효한 id가 주어진 경우")
+        class Context_if_valid_id_given {
+            @BeforeEach
+            void setUp() {
+                given(productService.getProduct(PRODUCT_ID)).willReturn(product);
+            }
+
+            @Test
+            @DisplayName("product를 반환한다")
+            void It_returns_product() throws Exception {
+                mockMvc.perform(get("/products/{id}", PRODUCT_ID))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id").value(PRODUCT_ID))
+                        .andExpect(jsonPath("$.name").value(PRODUCT_NAME))
+                        .andExpect(jsonPath("$.maker").value(PRODUCT_MAKER))
+                        .andExpect(jsonPath("$.price").value(PRODUCT_PRICE));
+            }
+        }
+    }
+
+    @Nested
     @DisplayName("POST /products 요청 시")
     class Describe_post_products {
         @Nested
