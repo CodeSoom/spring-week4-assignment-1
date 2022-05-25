@@ -23,7 +23,7 @@ class ToyCrudControllerTest {
     @Mock
     private CrudService service;
     private CrudController controller;
-    private final List<Product> toys = new LinkedList<>();
+    private final List<Toy> toys = new LinkedList<>();
 
     private final Long TOY_ID = 1L;
     private final String TOY_NAME = "Test Toy";
@@ -55,7 +55,7 @@ class ToyCrudControllerTest {
             @Test
             @DisplayName("비어 있는 List를 반환한다")
             void it_returns_empty_list() {
-                final List<Product> actual = controller.list();
+                final List<Toy> actual = controller.list();
 
                 assertThat(actual).isEmpty();
             }
@@ -73,7 +73,7 @@ class ToyCrudControllerTest {
             @Test
             @DisplayName("비어 있지 않은 List를 반환한다")
             void it_returns_not_empty_list() {
-                final List<Product> actual = controller.list();
+                final List<Toy> actual = controller.list();
 
                 assertThat(actual).isNotEmpty();
             }
@@ -91,16 +91,13 @@ class ToyCrudControllerTest {
         @Test
         @DisplayName("Product Type을 반환한다")
         void it_returns_toy() {
-            final Optional<Product> actual = controller.detail(TOY_ID);
+            final Optional<Toy> actual = controller.detail(TOY_ID);
 
             assertThat(actual.get()).isInstanceOf(Product.class);
         }
     }
 
     private Toy toyTesting() {
-        final Producer producer = new ToyProducer(PRODUCER_NAME);
-        final Money money = new Won(WON_VALUE);
-
-        return new Toy(TOY_NAME, producer, money);
+        return new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
     }
 }

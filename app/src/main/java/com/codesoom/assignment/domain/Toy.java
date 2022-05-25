@@ -1,18 +1,36 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.interfaces.Money;
 import com.codesoom.assignment.interfaces.Producer;
 import com.codesoom.assignment.interfaces.Product;
 
-public class Toy implements Product {
-    private final String name;
-    private final Producer producer;
-    private final Money money;
+import javax.persistence.*;
+import java.math.BigDecimal;
 
-    public Toy(String name, Producer producer, Money money) {
+@Entity
+public class Toy implements Product {
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue
+    private Long id;
+
+    private String name;
+    @ManyToOne
+    @JoinColumn(name = "PRODUCER_ID")
+    private ToyProducer producer;
+    private BigDecimal money;
+
+
+    protected Toy() {
+    }
+
+    public Toy(String name, ToyProducer producer, BigDecimal money) {
         this.name = name;
         this.producer = producer;
         this.money = money;
+    }
+
+    public Long id() {
+        return id;
     }
 
     @Override
@@ -26,7 +44,7 @@ public class Toy implements Product {
     }
 
     @Override
-    public Money price() {
+    public BigDecimal price() {
         return money;
     }
 }

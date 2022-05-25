@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.interfaces.CrudController;
 import com.codesoom.assignment.interfaces.CrudService;
 import com.codesoom.assignment.interfaces.Product;
@@ -23,12 +24,12 @@ public class ToyCrudController implements CrudController {
 
     @GetMapping
     @Override
-    public List<Product> list() {
+    public List<Toy> list() {
         return service.showAll();
     }
 
     @Override
-    public Optional<Product> detail(Long id) {
+    public Optional<Toy> detail(Long id) {
         return service.showById(id);
     }
 }
