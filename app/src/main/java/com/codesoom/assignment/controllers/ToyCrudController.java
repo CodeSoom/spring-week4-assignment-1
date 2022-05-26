@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.controllers.dtos.ToyRequestDto;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.interfaces.ProductCrudController;
@@ -34,5 +35,11 @@ public class ToyCrudController implements ProductCrudController {
     public ToyResponseDto detail(Long id) {
         Toy toy = service.showById(id);
         return new ToyResponseDto(toy);
+    }
+
+    @Override
+    public ToyResponseDto create(ToyRequestDto requestDto) {
+        Toy toy = requestDto.toEntity();
+        return new ToyResponseDto(service.create(toy));
     }
 }
