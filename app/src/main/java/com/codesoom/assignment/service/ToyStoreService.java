@@ -27,4 +27,12 @@ public class ToyStoreService {
     public Product getProduct(long productId) {
         return toyStoreRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
     }
+
+    public Product deleteProduct(long productId) {
+         Product product = getProduct(productId);
+
+         toyStoreRepository.delete(product);
+
+         return product;
+    }
 }
