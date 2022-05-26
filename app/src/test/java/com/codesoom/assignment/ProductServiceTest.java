@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import com.codesoom.assignment.dto.ProductDTO;
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.repository.ProductRepository;
 import com.codesoom.assignment.service.ProductService;
@@ -45,6 +46,7 @@ public class ProductServiceTest {
 		Product product = new Product("test name", 1000, "test imageUrl", "test maker");
 		given(productRepository.findById(1)).willReturn(Optional.of(product));
 	}
+
 	@Nested
 	@DisplayName("createProduct 메소드는")
 	class createProductTest {
@@ -53,9 +55,10 @@ public class ProductServiceTest {
 		public void createProduct() {
 			Product product = new Product("test name", 1000, "test imageUrl", "test maker");
 			given(productRepository.findById(1)).willReturn(Optional.of(product));
-			productService.createProdut(product);
-			verify(productRepository).save(product);
-			assertThat(product.getName()).isEqualTo("test name");
+			productService.createProduct(
+				new ProductDTO.CreateProduct("test name", "test maker", 1000, "test imageUrl"));
+			verify(productRepository).save(any(Product.class));
+			assertThat(productRepository.findById(1).get().getName()).isEqualTo("test name");
 		}
 	}
 }
