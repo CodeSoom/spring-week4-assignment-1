@@ -129,23 +129,41 @@ public class ProductServiceTest {
 
     @Nested
     @DisplayName("getProduct 메소드는")
-    class Context_getProduct {
-        private Long id = 1L;
+    class Describe_getProduct {
 
-        public ProductResponse subject() {
-            productRepository.save(product);
-            return productService.getProduct(id);
+        @Nested
+        @DisplayName("존재하는 아이디가 주어지면")
+        class Context_with_exist_id {
+            Product givenProduct;
+            public ProductResponse subject() {
+                givenProduct = productRepository.save(product);
+                return productService.getProduct(givenProduct.getId());
+            }
+
+            @Test
+            @DisplayName("producctResponse를 반환한다.")
+            void it_returns_productResponse() {
+                ProductResponse productResponse = subject();
+
+                assertThat(productResponse.getId()).isEqualTo(givenProduct.getId());
+                assertThat(productResponse.getMaker()).isEqualTo(givenProduct.getMaker());
+                assertThat(productResponse.getImageUrl()).isEqualTo(givenProduct.getImageUrl());
+                assertThat(productResponse.getPrice()).isEqualTo(givenProduct.getPrice());
+                assertThat(productResponse.getName()).isEqualTo(givenProduct.getName());
+            }
         }
-        @Test
-        @DisplayName("producctResponse를 반환한다.")
-        void it_returns_productResponse() {
-            ProductResponse productResponse = subject();
 
-            assertThat(productResponse.getId()).isEqualTo(product.getId());
-            assertThat(productResponse.getMaker()).isEqualTo(product.getMaker());
-            assertThat(productResponse.getImageUrl()).isEqualTo(product.getImageUrl());
-            assertThat(productResponse.getPrice()).isEqualTo(product.getPrice());
-            assertThat(productResponse.getName()).isEqualTo(product.getName());
+        @Nested
+        @DisplayName("존재하지 않는 아이디가 주어지면")
+        class Context_with_non_exist_id {
+            private final Long INVALID_ID = 100L;
+
+            @DisplayName("ProductNotFoundException 예외를 던진다.")
+            @Test
+            void it_throws_product_not_found_exception() {
+                assertThatThrownBy(() -> productService.getProduct(INVALID_ID))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
         }
     }
 }
