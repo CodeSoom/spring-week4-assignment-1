@@ -106,7 +106,7 @@ public class ProductServiceTest {
 		public void updateProductsTest() {
 			ProductDTO.UpdateProduct source = new ProductDTO.UpdateProduct("update test name",
 				"update test maker", 3000, "update test imageUrl");
-			ProductDTO.UpdateProduct updateProduct = productService.updateProduct(1, source);
+			ProductDTO.Response updateProduct = productService.updateProduct(1, source);
 			verify(productRepository).findById(1);
 			assertThat(updateProduct.getName()).isEqualTo("update test name");
 		}

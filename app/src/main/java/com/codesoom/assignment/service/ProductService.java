@@ -43,9 +43,9 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ProductDTO.UpdateProduct updateProduct(int id, ProductDTO.UpdateProduct source) {
+	public ProductDTO.Response updateProduct(int id, ProductDTO.UpdateProduct source) {
 		Product product = productRepository.findById(id)
 			.orElseThrow(IllegalArgumentException::new);
-		return new ProductDTO.UpdateProduct(product.updateProduct(source));
+		return ProductDTO.Response.of(product.updateProduct(source));
 	}
 }
