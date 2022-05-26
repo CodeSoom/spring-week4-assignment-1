@@ -42,9 +42,14 @@ class ToyCrudControllerTest {
     @Nested
     @DisplayName("list 메소드는")
     class Describe_list {
+        private List<Toy> subject() {
+            return controller.list();
+        }
+
         @Nested
         @DisplayName("만약 장난감이 존재하지 않는다면")
         class Context_without_existing_toy {
+
             @BeforeEach
             void setUp() {
                 toys.clear();
@@ -54,7 +59,7 @@ class ToyCrudControllerTest {
             @Test
             @DisplayName("비어 있는 List를 반환한다")
             void it_returns_empty_list() {
-                final List<Toy> actual = controller.list();
+                final List<Toy> actual = subject();
 
                 assertThat(actual).isEmpty();
             }
@@ -72,7 +77,7 @@ class ToyCrudControllerTest {
             @Test
             @DisplayName("비어 있지 않은 List를 반환한다")
             void it_returns_not_empty_list() {
-                final List<Toy> actual = controller.list();
+                final List<Toy> actual = subject();
 
                 assertThat(actual).isNotEmpty();
             }
@@ -82,6 +87,10 @@ class ToyCrudControllerTest {
     @Nested
     @DisplayName("detail 메소드는")
     class Describe_detail {
+        private Toy subject() {
+            return controller.detail(TOY_ID);
+        }
+
         @BeforeEach
         void setUp() {
             given(service.showById(TOY_ID)).willReturn(toyTesting());
@@ -90,7 +99,7 @@ class ToyCrudControllerTest {
         @Test
         @DisplayName("Product Type을 반환한다")
         void it_returns_toy() {
-            final Toy actual = controller.detail(TOY_ID);
+            final Toy actual = subject();
 
             assertThat(actual).isInstanceOf(Product.class);
         }
