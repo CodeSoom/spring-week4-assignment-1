@@ -1,10 +1,10 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.interfaces.Producer;
 import com.codesoom.assignment.interfaces.Product;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Toy implements Product {
@@ -53,5 +53,20 @@ public class Toy implements Product {
     @Override
     public BigDecimal price() {
         return money;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Toy toy = (Toy) o;
+
+        return Objects.equals(id, toy.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
