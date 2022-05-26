@@ -34,7 +34,7 @@ class ToyListControllerTest {
     @BeforeEach
     void setUp() {
         toy = new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
-        controller = new ToyCrudController(service);
+        controller = new ToyListController(service);
     }
 
     @AfterEach

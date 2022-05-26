@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.interfaces.ProductCrudService;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
-import com.codesoom.assignment.controllers.interfaces.ProductCrudController;
+import com.codesoom.assignment.controllers.interfaces.ProductDetailController;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
 import org.junit.jupiter.api.*;
@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 class ToyDetailControllerTest {
     @Mock
     private ProductCrudService service;
-    private ProductCrudController controller;
+    private ProductDetailController controller;
     private Toy toy;
     private final List<Toy> toys = new LinkedList<>();
 
@@ -34,7 +34,7 @@ class ToyDetailControllerTest {
     @BeforeEach
     void setUp() {
         toy = new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
-        controller = new ToyCrudController(service);
+        controller = new ToyDetailController(service);
     }
 
     @AfterEach
