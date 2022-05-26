@@ -6,3 +6,4 @@ import com.codesoom.assignment.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product,Integer> {
 }
+
