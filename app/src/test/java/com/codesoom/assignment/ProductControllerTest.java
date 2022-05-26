@@ -42,13 +42,13 @@ public class ProductControllerTest {
 
 	@Nested
 	@DisplayName("/products URL 은")
-	class getProductsTest {
+	class productsTest {
 
 		@Nested
 		@DisplayName("get method 는")
-		class getMethod{
+		class getMethodTest {
 			@Test
-			@DisplayName("ProductDTO.Response list 를 반환한다")
+			@DisplayName("http status code 200 과 ProductDTO.Response List 를 반환한다")
 			void getProductsTest() {
 				ResponseEntity<List<ProductDTO.Response>> responses = productController.getProducts();
 
@@ -61,9 +61,9 @@ public class ProductControllerTest {
 
 		@Nested
 		@DisplayName("post method 는")
-		class postMethod{
+		class postMethodTest {
 			@Test
-			@DisplayName("ProductDTO.Response list 를 반환한다")
+			@DisplayName("http status code 200 과 ProductDTO.Response 를 반환한다")
 			void postProductsTest() {
 				ResponseEntity<List<ProductDTO.Response>> responses = productController.getProducts();
 
@@ -73,16 +73,34 @@ public class ProductControllerTest {
 				assertThat(responses.getBody().size()).isEqualTo(2);
 			}
 		}
+	}
 
+	@Nested
+	@DisplayName("/products/{id} URL 은")
+	class productsWithIdTest {
 		@Nested
 		@DisplayName("delete method 는")
-		class deleteMethod{
+		class deleteMethodTest {
 			@Test
-			@DisplayName("ProductDTO.Response list 를 반환한다")
+			@DisplayName("http status code 204 를 반환한다")
 			void deleteProductsTest() {
-				ResponseEntity<?> responses = productController.deleteProduct();
+				ResponseEntity<?> responses = productController.deleteProduct(1);
 
 				verify(productService).deleteProduct(1);
+
+				assertThat(responses.getStatusCode().value()).isEqualTo(204);
+			}
+		}
+
+		@Nested
+		@DisplayName("get method 는")
+		class getMethodTest {
+			@Test
+			@DisplayName("http status code 200 과 ProductDTO.Response 를 반환한다")
+			void deleteProductsTest() {
+				ResponseEntity<?> responses = productController.getProduct(1);
+
+				verify(productService).getProduct(1);
 
 				assertThat(responses.getStatusCode().value()).isEqualTo(204);
 			}
