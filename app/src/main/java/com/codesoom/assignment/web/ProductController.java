@@ -38,4 +38,10 @@ public class ProductController {
     public List<ProductResponse> getProducts() {
         return productService.getProducts();
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+    }
 }
