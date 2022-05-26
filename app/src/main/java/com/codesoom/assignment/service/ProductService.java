@@ -40,7 +40,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse updateProduct(Long id, Product product) {
+    public ProductResponse updateProduct(Long id, Product product) throws ProductNotFoundException {
         Product storedProduct = productRepository
                 .findById(id)
                 .orElseThrow(()-> new ProductNotFoundException("저장되지 않은 상품 id가 주어졌습니다."));
@@ -48,5 +48,14 @@ public class ProductService {
         Product updateProduct = product.update(storedProduct);
 
         return new ProductResponse(updateProduct);
+    }
+
+    @Transactional
+    public void deleteProduct(Long id) throws ProductNotFoundException {
+        Product product = productRepository
+                .findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("저장되지 않은 상품 id가 주어졌습니다."));
+
+        productRepository.delete(product);
     }
 }

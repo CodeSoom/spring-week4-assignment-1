@@ -130,4 +130,24 @@ class ProductServiceTest {
         verify(productRepository).findById(NOT_STORED_ID);
     }
 
+    @Test
+    @DisplayName("저장된 id로 상품을 삭제하면 상품을 삭제한다.")
+    void deleteProductWithStoredId() {
+        Long id = product1.getId();
+
+        given(productRepository.findById(id)).willReturn(Optional.of(product1));
+
+        productService.deleteProduct(id);
+
+        verify(productRepository).findById(id);
+        verify(productRepository).delete(any(Product.class));
+    }
+
+    @Test
+    @DisplayName("저장되지 않은 id로 상품을 삭제하면 ProductNotFoundException 예외를 던진다.")
+    void deleteProductWithNotStoredId() {
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProduct(NOT_STORED_ID));
+
+        verify(productRepository).findById(NOT_STORED_ID);
+    }
 }
