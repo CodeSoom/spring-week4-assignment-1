@@ -2,6 +2,7 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductResponse;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -25,6 +28,7 @@ class ProductServiceTest {
     private Product product2;
 
     private List<Product> products;
+    private final Long NOT_STORED_ID = 100L;
 
     @BeforeEach
     void setUp() {
@@ -75,4 +79,27 @@ class ProductServiceTest {
 
         verify(productRepository).findAll();
     }
+
+    @Test
+    @DisplayName("저장된 id로 상품을 조회하면 해당하는 상품을 리턴한다.")
+    void getProductWithExistingId() {
+        Long id = product1.getId();
+
+        given(productRepository.findById(id)).willReturn(Optional.of(product1));
+
+        ProductResponse productResponse = productService.getProduct(id);
+
+        verify(productRepository).findById(id);
+    }
+
+    @Test
+    @DisplayName("저장되지 않은 id로 상품을 조회하면 ProductNotFoundException 예외를 던진다")
+    void getProductWithNotStoredId() {
+        given(productRepository.findById(NOT_STORED_ID)).willReturn(Optional.empty());
+
+        assertThrows(ProductNotFoundException.class, () -> productService.getProduct(NOT_STORED_ID));
+
+        verify(productRepository).findById(NOT_STORED_ID);
+    }
+
 }

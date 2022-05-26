@@ -2,6 +2,7 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductResponse;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,13 @@ public class ProductService {
     public ProductResponse createProduct(Product product) {
         Product savedProduct = productRepository.save(product);
         return new ProductResponse(savedProduct);
+    }
+
+    public ProductResponse getProduct(Long id) {
+        Product product = productRepository.
+                findById(id).
+                orElseThrow(()-> new ProductNotFoundException("저장되지 않은 상품 id가 주어졌습니다."));
+
+        return new ProductResponse(product);
     }
 }
