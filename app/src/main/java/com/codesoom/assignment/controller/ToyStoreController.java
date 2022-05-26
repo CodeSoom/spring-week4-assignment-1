@@ -4,6 +4,7 @@ import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.service.ToyStoreService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,4 +40,11 @@ public class ToyStoreController {
     public Product getProduct(@PathVariable Long id) {
         return toyStoreService.getProduct(id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProduct(@PathVariable Long id) {
+        toyStoreService.deleteProduct(id);
+    }
+
 }

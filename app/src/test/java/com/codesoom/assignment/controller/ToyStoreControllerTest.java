@@ -118,7 +118,7 @@ public class ToyStoreControllerTest {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent());
 
-        verify(toyStoreService).getProduct(1L);
+        verify(toyStoreService).deleteProduct(1L);
     }
 
     @DisplayName("유효하지 않은 id로 장난감 삭제")
