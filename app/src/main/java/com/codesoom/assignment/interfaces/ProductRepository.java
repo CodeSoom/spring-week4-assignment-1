@@ -13,7 +13,7 @@ public interface ProductRepository {
 
     Product save(Product product);
 
-    Product update(Long id, Product product);
-
-    Product delete(Product product);
+//    Product update(Long id, Product product);
+//
+//    Product delete(Product product);
 }

@@ -19,34 +19,37 @@ public class ToyRepository implements ProductRepository {
 
     @Override
     public Optional<Product> findById(Long id) {
-        return products.stream()
-                .filter(product -> product.getId().equals(id))
-                .findFirst();
+//        return products.stream()
+//                .filter(product -> product.getId().equals(id))
+//                .findFirst();
+
+        return null;
     }
 
     @Override
     public Product save(Product source) {
-        Product product = new Product();
-        product.setId(generateId());
-        product.setName(source.getName());
-        product.setMaker(source.getMaker());
-        product.setPrice(source.getPrice());
-        product.setImageURI(source.getImageURI());
-
-        products.add(product);
-
-        return product;
-    }
-
-    @Override
-    public Product update(Long id, Product product) {
+//        Product product = new Product();
+//        product.setId(generateId());
+//        product.setName(source.getName());
+//        product.setMaker(source.getMaker());
+//        product.setPrice(source.getPrice());
+//        product.setImageURI(source.getImageURI());
+//
+//        products.add(product);
+//
+//        return product;
         return null;
     }
 
-    @Override
-    public Product delete(Product product) {
-        return null;
-    }
+//    @Override
+//    public Product update(Long id, Product product) {
+//        return null;
+//    }
+//
+//    @Override
+//    public Product delete(Product product) {
+//        return null;
+//    }
 
     private Long generateId() {
         newId += 1;

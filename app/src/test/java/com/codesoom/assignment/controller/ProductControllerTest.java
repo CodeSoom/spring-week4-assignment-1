@@ -95,4 +95,10 @@ class ProductControllerTest {
                     .andExpect(content().string(containsString("dogCompany")));
         }
     }
+
+    @Nested
+    @DisplayName("[PATCH] /products 요청에 대하여")
+    class Describe {
+
+    }
 }
