@@ -72,7 +72,7 @@ public class ToyStoreControllerTest {
 
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("1")))
+                .andExpect(content().string(containsString("\"id\":1")))
                 .andDo(print());
 
         verify(toyStoreService).getProducts();

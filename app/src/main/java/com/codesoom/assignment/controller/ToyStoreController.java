@@ -2,7 +2,9 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.service.ToyStoreService;
+import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,12 @@ public class ToyStoreController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product addProduct(@RequestBody Product product) {
-
         return toyStoreService.save(product);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Product> getProducts() {
+        return toyStoreService.getProducts();
     }
 }
