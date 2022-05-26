@@ -8,4 +8,6 @@ public interface ProductCrudService {
     List<Toy> showAll();
 
     Toy showById(Long id);
+
+    Toy create(Toy toy);
 }

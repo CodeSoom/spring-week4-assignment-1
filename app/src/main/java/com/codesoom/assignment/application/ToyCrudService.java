@@ -27,4 +27,9 @@ public class ToyCrudService implements ProductCrudService {
             .findFirst()
             .orElseThrow(ProductNotFoundException::new);
     }
+
+    @Override
+    public Toy create(Toy toy) {
+        return repository.save(toy);
+    }
 }
