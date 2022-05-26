@@ -89,12 +89,15 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("존재하는 id가 주어지면")
         class Context_with_existed_id {
-            private final Long VALID_ID = 1L;
             private Product updatedProduct;
 
             public ProductResponse subject() {
-                ProductResponse productResponse = productService.updateProduct(VALID_ID, productCommandRequest);
-                updatedProduct = productRepository.findById(VALID_ID).get();
+                Product savedProduct = productRepository.save(product);
+                Long id = savedProduct.getId();
+
+                ProductResponse productResponse = productService.updateProduct(id, productCommandRequest);
+
+                updatedProduct = productRepository.findById(id).get();
                 return productResponse;
             }
 
