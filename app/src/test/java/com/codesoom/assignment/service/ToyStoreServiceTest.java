@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.repository.ToyStoreRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,4 +49,19 @@ public class ToyStoreServiceTest {
 
     }
 
+    @DisplayName("등록된 장난감 비어있는 목록 조회")
+    @Test
+    void getEmptyProductsTest() {
+        List<Product> products = toyStoreService.getProducts();
+
+        assertThat(products).hasSize(0);
+    }
+
+    @DisplayName("등록된 장난감 비어있지 않은 목록 조회")
+    @Test
+    void getNotEmptyProductsTest() {
+        List<Product> products = toyStoreService.getProducts();
+
+        assertThat(products).hasSize(3);
+    }
 }
