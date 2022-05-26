@@ -18,11 +18,6 @@ public class ProductDTO {
 			this.price = price;
 			this.imageUrl = imageUrl;
 		}
-
-		public static CreateProduct of(Product product) {
-			return new CreateProduct( product.getName(), product.getMaker(), product.getPrice(),
-				product.getImageUrl());
-		}
 	}
 
 	@Getter
