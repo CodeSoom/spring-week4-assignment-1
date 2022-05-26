@@ -1,15 +1,19 @@
 package com.codesoom.assignment.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codesoom.assignment.dto.ProductDTO;
+import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.service.ProductService;
 
 @RestController
@@ -34,7 +38,12 @@ public class ProductController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getProduct(@PathVariable("id") int id) {
+	public ResponseEntity<ProductDTO.Response> getProduct(@PathVariable("id") int id) {
 		return ResponseEntity.ok(productService.getProduct(id));
+	}
+	@PostMapping
+	public ResponseEntity<ProductDTO.Response> createProduct(@RequestBody ProductDTO.CreateProduct createProduct) {
+		URI uri = URI.create("http://localhost:8080/products");
+		return ResponseEntity.created(uri).body(productService.createProduct(createProduct));
 	}
 }

@@ -37,7 +37,13 @@ public class ProductControllerTest {
 		ProductDTO.Response productTwo = ProductDTO.Response.of(
 			new Product("test name 2", 2000, "test imageUrl 2", "test maker 2"));
 
+
+		given(productService.createProduct(any(ProductDTO.CreateProduct.class))).will(invocation -> {
+			ProductDTO.CreateProduct createResponse = invocation.getArgument(0);
+			return ProductDTO.Response.of(new Product(createResponse));
+		});
 		given(productService.getProducts()).willReturn(Arrays.asList(productOne, productTwo));
+		given(productService.getProduct(1)).willReturn(productOne);
 	}
 
 	@Nested
@@ -65,12 +71,14 @@ public class ProductControllerTest {
 			@Test
 			@DisplayName("http status code 200 과 ProductDTO.Response 를 반환한다")
 			void postProductsTest() {
-				ResponseEntity<List<ProductDTO.Response>> responses = productController.getProducts();
+				ProductDTO.CreateProduct createProduct = new ProductDTO.CreateProduct("create test name 1",
+					"create test maker 1", 3000, "create test imageUrl 1");
+				ResponseEntity<ProductDTO.Response> response = productController.createProduct(createProduct);
 
-				verify(productService).getProducts();
+				verify(productService).createProduct(createProduct);
 
-				assertThat(responses.getStatusCode().value()).isEqualTo(200);
-				assertThat(responses.getBody().size()).isEqualTo(2);
+				assertThat(response.getStatusCode().value()).isEqualTo(201);
+				assertThat(response.getBody().getName()).isEqualTo("create test name 1");
 			}
 		}
 	}
@@ -96,13 +104,14 @@ public class ProductControllerTest {
 		@DisplayName("get method 는")
 		class getMethodTest {
 			@Test
-			@DisplayName("http status code 200 과 ProductDTO.Response 를 반환한다")
+			@DisplayName("http status code 200 과 해당 ID의 ProductDTO.Response 를 반환한다")
 			void deleteProductsTest() {
-				ResponseEntity<?> responses = productController.getProduct(1);
+				ResponseEntity<ProductDTO.Response> response = productController.getProduct(1);
 
 				verify(productService).getProduct(1);
 
-				assertThat(responses.getStatusCode().value()).isEqualTo(204);
+				assertThat(response.getStatusCode().value()).isEqualTo(200);
+				assertThat(response.getBody().getName()).isEqualTo("test name 1");
 			}
 		}
 	}
