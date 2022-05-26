@@ -97,6 +97,7 @@ public class ToyStoreControllerTest {
     @DisplayName("유효하지 않은 id로 장난감 조회 후 반환")
     @Test
     void getProductWithInValidIdTest() throws Exception {
+
         given(toyStoreService.getProduct(100L)).willThrow(new ProductNotFoundException(100L));
 
         mockMvc.perform(get("/products/100"))
