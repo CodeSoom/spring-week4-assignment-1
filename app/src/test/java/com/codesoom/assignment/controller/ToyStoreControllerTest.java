@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,18 +39,9 @@ public class ToyStoreControllerTest {
     @Test
     void addToyTest() throws Exception {
 
-        Product source = new Product();
-        source.setName("장난감 뱀");
-        source.setMaker("애옹이네 장난감");
-        source.setPrice(5000);
-        source.setImageUrl("abc_aaa.jpg");
+        Product source = new Product("장난감 뱀", "애옹이네 장난감", 5000, "abc_aaa.jpg");
 
-        Product savedSource = new Product();
-        savedSource.setId(1L);
-        savedSource.setName("장난감 뱀");
-        savedSource.setMaker("애옹이네 장난감");
-        savedSource.setPrice(5000);
-        savedSource.setImageUrl("abc_aaa.jpg");
+        Product savedSource = new Product("장난감 뱀", "애옹이네 장난감", 5000, "abc_aaa.jpg");
 
         given(toyStoreService.save(source)).willReturn(savedSource);
 

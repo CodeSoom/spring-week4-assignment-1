@@ -8,11 +8,7 @@ public class ProductTest {
 
     @Test
     void initializeProductTest() {
-        Product product = new Product();
-        product.setName("name");
-        product.setMaker("maker");
-        product.setPrice(5000);
-        product.setImageUrl("abc.jpg");
+        Product product = new Product("name", "maker", 5000, "abc.jpg");
 
         assertThat(product).isNotNull();
     }
