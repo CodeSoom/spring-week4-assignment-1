@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -93,11 +94,38 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("저장되지 않은 id로 상품을 조회하면 ProductNotFoundException 예외를 던진다")
+    @DisplayName("저장되지 않은 id로 상품을 조회하면 ProductNotFoundException 예외를 던진다.")
     void getProductWithNotStoredId() {
         given(productRepository.findById(NOT_STORED_ID)).willReturn(Optional.empty());
 
         assertThrows(ProductNotFoundException.class, () -> productService.getProduct(NOT_STORED_ID));
+
+        verify(productRepository).findById(NOT_STORED_ID);
+    }
+
+    @Test
+    @DisplayName("저장된 id로 상품을 업데이트하면 업데이트한 상품을 리턴한다.")
+    void updateProductWithExistingId() {
+        Long id = product1.getId();
+
+        given(productRepository.findById(id)).willReturn(Optional.of(product1));
+
+        ProductResponse updatedProduct = productService.updateProduct(id, product2);
+
+        verify(productRepository).findById(id);
+
+        assertAll(
+                () -> assertThat(updatedProduct.getProduct().getName()).isEqualTo(product2.getName()),
+                () -> assertThat(updatedProduct.getProduct().getMaker()).isEqualTo(product2.getMaker()),
+                () -> assertThat(updatedProduct.getProduct().getPrice()).isEqualTo(product2.getPrice()),
+                () -> assertThat(updatedProduct.getProduct().getImageUrl()).isEqualTo(product2.getImageUrl())
+        );
+    }
+
+    @Test
+    @DisplayName("저장되지 않은 id로 상품을 업데이트하면 ProductNotFoundException 예외를 던진다.")
+    void updateProductWithNotStoredId() {
+        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(NOT_STORED_ID, product1));
 
         verify(productRepository).findById(NOT_STORED_ID);
     }

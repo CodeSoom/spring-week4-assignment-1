@@ -33,4 +33,13 @@ public class Product {
         this.imageUrl = imageUrl;
         this.maker = maker;
     }
+
+    public Product update(Product product) {
+        this.name = product.getName();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
+        this.maker = product.getImageUrl();
+
+        return this;
+    }
 }
