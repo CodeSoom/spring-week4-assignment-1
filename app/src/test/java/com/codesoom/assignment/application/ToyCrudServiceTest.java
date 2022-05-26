@@ -99,8 +99,30 @@ class ToyCrudServiceTest {
             @DisplayName("예외를 발생시킨다")
             void it_throws_exception() {
                 assertThatThrownBy(() -> subject())
-                    .isInstanceOf(ProductNotFoundException.class);
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
+    }
+
+    @Nested
+    @DisplayName("create 메소드는")
+    class Describe_create {
+        private Toy subject() {
+            Toy toyWithoutId = toyTestingWithoutId();
+            return service.create(toyWithoutId);
+        }
+
+        @Test
+        @DisplayName("Id가 자동 생성된 Toy를 반환한다")
+        void it_returns_toy_with_generated_id() {
+            final Toy actual = subject();
+
+            assertThat(actual.id()).isNotNull();
+        }
+    }
+
+
+    private Toy toyTestingWithoutId() {
+        return new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
     }
 }
