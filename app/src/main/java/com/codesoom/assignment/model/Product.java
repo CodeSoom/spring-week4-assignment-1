@@ -28,7 +28,16 @@ public class Product {
 	@Column(name = "maker")
 	private String maker;
 
+
+
 	public Product() {
+	}
+
+	public Product(String name, int price, String imageUrl, String maker) {
+		this.name = name;
+		this.price = price;
+		this.imageUrl = imageUrl;
+		this.maker = maker;
 	}
 
 	public Product(ProductDTO.CreateProduct CreateProduct) {

@@ -8,14 +8,14 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
-import com.codesoom.assignment.dto.ProductDTO;
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.repository.ProductRepository;
 import com.codesoom.assignment.service.ProductService;
 
 @Nested
-@DisplayName("ProductService Å¬·¡½º´Â")
+@DisplayName("ProductService í´ë˜ìŠ¤ëŠ”")
 public class ProductServiceTest {
 	private ProductRepository productRepository;
 	private ProductService productService;
@@ -32,13 +32,14 @@ public class ProductServiceTest {
 	}
 
 	@Nested
-	@DisplayName("getProduct ¸Ş¼Òµå´Â")
+	@DisplayName("getProduct ë©”ì†Œë“œëŠ”")
 	class getProductTest {
-		@DisplayName("ÇØ´ç id ÀÇ product ¸¦ ¹İÈ¯")
-		public void createProduct() {
+		@Test
+		@DisplayName("í•´ë‹¹ id ì˜ product ë¥¼ ë°˜í™˜í•œë‹¤")
+		public void getProduct() {
 			Product product = productService.getProduct(1);
 			verify(productRepository).findById(1);
-			assertThat(productRepository.findById(1));
+			assertThat(product.getName()).isEqualTo("test name");
 		}
 	}
 }

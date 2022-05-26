@@ -12,6 +12,17 @@ public class ProductDTO {
 		private String maker;
 		private int price;
 		private String imageUrl;
+		public CreateProduct(String name, String maker, int price, String imageUrl) {
+			this.name = name;
+			this.maker = maker;
+			this.price = price;
+			this.imageUrl = imageUrl;
+		}
+
+		public static CreateProduct of(Product product) {
+			return new CreateProduct( product.getName(), product.getMaker(), product.getPrice(),
+				product.getImageUrl());
+		}
 	}
 
 	@Getter
