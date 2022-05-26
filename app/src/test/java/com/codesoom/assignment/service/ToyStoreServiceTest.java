@@ -142,4 +142,40 @@ public class ToyStoreServiceTest {
 
         verify(toyStoreRepository).findById(productId);
     }
+
+    @DisplayName("유효한 id로 장난감 정보 수정")
+    @Test
+    void updateProductWithValidId() {
+        long productId = 1L;
+
+        Product sourceProduct = new Product(productId, "name", "maker", 10000, "abcdefg.jpg");
+        Product updateProduct = new Product(productId, "nameChange", "maker", 10000, "abcdefg.jpg");
+
+        given(toyStoreRepository.findById(productId)).willReturn(Optional.of(sourceProduct));
+        given(toyStoreRepository.save(sourceProduct)).willReturn(updateProduct);
+
+        Product product = toyStoreService.updateProduct(updateProduct);
+
+        assertThat(product.getId()).isEqualTo(updateProduct.getId());
+        assertThat(product.getName()).isEqualTo(updateProduct.getName());
+
+        verify(toyStoreRepository).findById(productId);
+        verify(toyStoreRepository).save(any(Product.class));
+    }
+
+    @DisplayName("유효하지 않은 id로 장난감 정보 수정")
+    @Test
+    void updateProductWithInvalidId() {
+        long productId = 1000L;
+
+        Product sourceProduct = new Product(productId, "name", "maker", 10000, "abcdefg.jpg");
+
+        given(toyStoreRepository.findById(productId)).willThrow(new ProductNotFoundException(productId));
+
+        assertThatThrownBy(() -> {
+            toyStoreService.updateProduct(sourceProduct);
+        }).isInstanceOf(ProductNotFoundException.class);
+
+        verify(toyStoreRepository).findById(productId);
+    }
 }
