@@ -3,6 +3,7 @@ package com.codesoom.assignment.web;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.dto.ProductCommandRequest;
 import com.codesoom.assignment.dto.ProductResponse;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,7 @@ public class ProductControllerTest {
     private ProductCommandRequest productCommandRequest;
 
     public static final Long VALID_ID = 1L;
+    public static final Long INVALID_ID = 199L;
     public static final String NAME = "털뭉치";
     public static final String MAKER = "애옹이네 장난감";
     public static final int PRICE = 2000;
@@ -114,8 +116,27 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$.name").value(productCommandRequest.getName()))
                         .andExpect(jsonPath("$.maker").value(productCommandRequest.getMaker()))
                         .andExpect(jsonPath("$.price").value(productCommandRequest.getPrice()))
-                        .andExpect(jsonPath("$.imageUrl").value(productCommandRequest.getImageUrl()))
-                        .andDo(print());
+                        .andExpect(jsonPath("$.imageUrl").value(productCommandRequest.getImageUrl()));
+            }
+        }
+
+        @Nested
+        @DisplayName("id가 존재하지 않으면")
+        class Context_when_id_non_exists {
+
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(INVALID_ID), any()))
+                        .willThrow(new ProductNotFoundException(INVALID_ID));
+            }
+
+            @Test
+            @DisplayName("404 status를 응답한다.")
+            void it_responses_404_status() throws Exception {
+                mockMvc.perform(patch("/products/{id}", INVALID_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objToString(productCommandRequest)))
+                        .andExpect(status().isNotFound());
             }
         }
     }
