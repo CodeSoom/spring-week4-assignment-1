@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.ResponseEntity;
 
 import com.codesoom.assignment.controller.ProductController;
 import com.codesoom.assignment.dto.ProductDTO;
@@ -39,16 +41,52 @@ public class ProductControllerTest {
 	}
 
 	@Nested
-	@DisplayName("/products URL 의 get method 는")
+	@DisplayName("/products URL 은")
 	class getProductsTest {
-		@DisplayName("ProductDTO.Response list 를 반환한다")
-		void getProductsTest() {
-			List<ProductDTO.Response> responses = productController.getProducts();
 
-			verify(productService).getProducts();
+		@Nested
+		@DisplayName("get method 는")
+		class getMethod{
+			@Test
+			@DisplayName("ProductDTO.Response list 를 반환한다")
+			void getProductsTest() {
+				ResponseEntity<List<ProductDTO.Response>> responses = productController.getProducts();
 
-			assertThat(responses.size()).isEqualTo(2);
+				verify(productService).getProducts();
+
+				assertThat(responses.getStatusCode().value()).isEqualTo(200);
+				assertThat(responses.getBody().size()).isEqualTo(2);
+			}
+		}
+
+		@Nested
+		@DisplayName("post method 는")
+		class postMethod{
+			@Test
+			@DisplayName("ProductDTO.Response list 를 반환한다")
+			void postProductsTest() {
+				ResponseEntity<List<ProductDTO.Response>> responses = productController.getProducts();
+
+				verify(productService).getProducts();
+
+				assertThat(responses.getStatusCode().value()).isEqualTo(200);
+				assertThat(responses.getBody().size()).isEqualTo(2);
+			}
+		}
+
+		@Nested
+		@DisplayName("delete method 는")
+		class deleteMethod{
+			@Test
+			@DisplayName("ProductDTO.Response list 를 반환한다")
+			void deleteProductsTest() {
+				ResponseEntity<?> responses = productController.deleteProduct();
+
+				verify(productService).deleteProduct(1);
+
+				assertThat(responses.getStatusCode().value()).isEqualTo(204);
+			}
 		}
 	}
-
 }
+
