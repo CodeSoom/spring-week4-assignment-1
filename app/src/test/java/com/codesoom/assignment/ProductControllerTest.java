@@ -37,10 +37,13 @@ public class ProductControllerTest {
 		ProductDTO.Response productTwo = ProductDTO.Response.of(
 			new Product("test name 2", 2000, "test imageUrl 2", "test maker 2"));
 
-
 		given(productService.createProduct(any(ProductDTO.CreateProduct.class))).will(invocation -> {
 			ProductDTO.CreateProduct createResponse = invocation.getArgument(0);
 			return ProductDTO.Response.of(new Product(createResponse));
+		});
+		given(productService.updateProduct(any(int.class),any(ProductDTO.UpdateProduct.class))).will(invocation -> {
+			ProductDTO.UpdateProduct updateResponse = invocation.getArgument(1);
+			return ProductDTO.Response.of(new Product().updateProduct(updateResponse));
 		});
 		given(productService.getProducts()).willReturn(Arrays.asList(productOne, productTwo));
 		given(productService.getProduct(1)).willReturn(productOne);
@@ -92,11 +95,11 @@ public class ProductControllerTest {
 			@Test
 			@DisplayName("http status code 204 를 반환한다")
 			void deleteProductsTest() {
-				ResponseEntity<?> responses = productController.deleteProduct(1);
+				ResponseEntity<?> response = productController.deleteProduct(1);
 
 				verify(productService).deleteProduct(1);
 
-				assertThat(responses.getStatusCode().value()).isEqualTo(204);
+				assertThat(response.getStatusCode().value()).isEqualTo(204);
 			}
 		}
 
@@ -112,6 +115,22 @@ public class ProductControllerTest {
 
 				assertThat(response.getStatusCode().value()).isEqualTo(200);
 				assertThat(response.getBody().getName()).isEqualTo("test name 1");
+			}
+		}
+
+		@Nested
+		@DisplayName("update method 는")
+		class updateMethodTest {
+			@Test
+			@DisplayName("http status code 200 을 반환한다")
+			void updateProductsTest() {
+				ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
+					"update test maker 1", 1000, "update test imageUrl 1");
+				ResponseEntity<?> response = productController.updateProduct(1, updateProduct);
+
+				verify(productService).updateProduct(1, updateProduct);
+
+				assertThat(response.getStatusCode().value()).isEqualTo(200);
 			}
 		}
 	}
