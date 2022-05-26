@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.dto.ProductDTO.UpdateProduct;
 import com.codesoom.assignment.model.Product;
 
 import lombok.Getter;
@@ -12,6 +13,7 @@ public class ProductDTO {
 		private String maker;
 		private int price;
 		private String imageUrl;
+
 		public CreateProduct(String name, String maker, int price, String imageUrl) {
 			this.name = name;
 			this.maker = maker;
@@ -26,6 +28,18 @@ public class ProductDTO {
 		private String maker;
 		private int price;
 		private String imageUrl;
+
+		public UpdateProduct(Product product) {
+			this(product.getName(), product.getMaker(), product.getPrice(), product.getImageUrl());
+		}
+
+		public UpdateProduct(String name, String maker, int price, String imageUrl) {
+			this.name = name;
+			this.maker = maker;
+			this.price = price;
+			this.imageUrl = imageUrl;
+		}
+
 	}
 
 	@Getter

@@ -47,11 +47,12 @@ public class Product {
 		this.maker = CreateProduct.getMaker();
 	}
 
-	public void updateProduct(ProductDTO.UpdateProduct updateProduct) {
+	public Product updateProduct(ProductDTO.UpdateProduct updateProduct) {
 		this.name = updateProduct.getName();
 		this.price = updateProduct.getPrice();
 		this.imageUrl = updateProduct.getImageUrl();
 		this.maker = updateProduct.getMaker();
+		return this;
 	}
 }
 

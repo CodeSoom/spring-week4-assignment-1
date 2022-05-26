@@ -20,9 +20,8 @@ public class ProductService {
 			productRepository.findById(id).orElseThrow(IllegalArgumentException::new));
 	}
 
-	public void createProduct(ProductDTO.CreateProduct createProduct) {
-		Product product = new Product(createProduct);
-		productRepository.save(product);
+	public ProductDTO.Response createProduct(ProductDTO.CreateProduct createProduct) {
+		return ProductDTO.Response.of(productRepository.save(new Product(createProduct)));
 	}
 
 	public void deleteProduct(int id) {
@@ -34,6 +33,11 @@ public class ProductService {
 			.stream()
 			.map(product -> ProductDTO.Response.of(product))
 			.collect(Collectors.toList());
+	}
 
+	public ProductDTO.UpdateProduct updateProduct(int id, ProductDTO.UpdateProduct source) {
+		Product product = productRepository.findById(id)
+			.orElseThrow(IllegalArgumentException::new);
+		return new ProductDTO.UpdateProduct(product.updateProduct(source));
 	}
 }
