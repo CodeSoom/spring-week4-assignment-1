@@ -20,6 +20,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,7 +99,8 @@ public class ProductControllerTest {
                                     .name(productCommandRequest.getName())
                                     .price(productCommandRequest.getPrice())
                                     .maker(productCommandRequest.getMaker())
-                                    .imageUrl(productCommandRequest.getImageUrl());
+                                    .imageUrl(productCommandRequest.getImageUrl())
+                                    .build();
                         });
             }
 
@@ -112,7 +114,8 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$.name").value(productCommandRequest.getName()))
                         .andExpect(jsonPath("$.maker").value(productCommandRequest.getMaker()))
                         .andExpect(jsonPath("$.price").value(productCommandRequest.getPrice()))
-                        .andExpect(jsonPath("$.imageUrl").value(productCommandRequest.getImageUrl()));
+                        .andExpect(jsonPath("$.imageUrl").value(productCommandRequest.getImageUrl()))
+                        .andDo(print());
             }
         }
     }

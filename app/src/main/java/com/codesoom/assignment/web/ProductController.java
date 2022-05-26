@@ -20,4 +20,10 @@ public class ProductController {
     public ProductResponse createProduct(@RequestBody ProductCommandRequest productCommandRequest) {
         return productService.createTask(productCommandRequest);
     }
+
+    @PatchMapping("/{id}")
+    public ProductResponse updateProduct(@PathVariable Long id,
+                                         @RequestBody ProductCommandRequest productCommandRequest) {
+        return productService.updateProduct(id, productCommandRequest);
+    }
 }
