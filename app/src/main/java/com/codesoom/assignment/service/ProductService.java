@@ -12,12 +12,16 @@ public class ProductService {
 		this.productRepository = productRepository;
 	}
 
-	public Product getProduct(int i) {
-		return productRepository.findById(i).orElseThrow(IllegalArgumentException::new);
+	public Product getProduct(int id) {
+		return productRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 	}
 
 	public void createProduct(ProductDTO.CreateProduct createProduct) {
 		Product product = new Product(createProduct);
 		productRepository.save(product);
+	}
+
+	public void deleteProduct(int id) {
+		productRepository.deleteById(id);
 	}
 }

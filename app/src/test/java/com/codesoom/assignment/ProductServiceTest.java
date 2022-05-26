@@ -20,6 +20,8 @@ import com.codesoom.assignment.service.ProductService;
 public class ProductServiceTest {
 	private ProductRepository productRepository;
 	private ProductService productService;
+	private static Product TEST_PRODUCT_1 = new Product("test name 1", 1000, "test imageUrl 1", "test maker 1");
+	private static Product TEST_PRODUCT_2 = new Product("test name 2", 2000, "test imageUrl 2", "test maker 2");
 
 	@BeforeEach
 	void setUp() {
@@ -27,11 +29,11 @@ public class ProductServiceTest {
 		productService = new ProductService(productRepository);
 	}
 
-	void createProduct() {
-		Product product = new Product("test name", 1000, "test imageUrl", "test maker");
+	void createProduct(Product product) {
 		given(productRepository.findById(1)).willReturn(Optional.of(product));
 		productService.createProduct(
-			new ProductDTO.CreateProduct("test name", "test maker", 1000, "test imageUrl"));
+			new ProductDTO.CreateProduct(product.getName(), product.getMaker(), product.getPrice(),
+				product.getImageUrl()));
 	}
 
 	@Nested
@@ -39,11 +41,11 @@ public class ProductServiceTest {
 	class getProductTest {
 		@Test
 		@DisplayName("해당 id 의 product 를 반환한다")
-		public void getProduct() {
-			createProduct();
+		public void getProductTest() {
+			createProduct(TEST_PRODUCT_1);
 			Product product = productService.getProduct(1);
 			verify(productRepository).findById(1);
-			assertThat(product.getName()).isEqualTo("test name");
+			assertThat(product.getName()).isEqualTo("test name 1");
 		}
 	}
 
@@ -53,20 +55,37 @@ public class ProductServiceTest {
 		@Test
 		@DisplayName("product 를 DB 에 저장한다")
 		public void createProductTest() {
-			createProduct();
+			createProduct(TEST_PRODUCT_1);
 			verify(productRepository).save(any(Product.class));
-			assertThat(productRepository.findById(1).get().getName()).isEqualTo("test name");
+			assertThat(productRepository.findById(1).get().getName()).isEqualTo("test name 1");
 		}
 	}
 
 	@Nested
-	@DisplayName("delete 메소드는")
+	@DisplayName("deleteProduct 메소드는")
 	class deleteProductTest {
 		@Test
 		@DisplayName("product 를 DB 에서 제거한다")
-		public void deleteProduct() {
-			createProduct();
+		public void deleteProductTest() {
+			createProduct(TEST_PRODUCT_1);
 			productService.deleteProduct(1);
+
+			given(productRepository.findById(1)).willThrow(new IllegalArgumentException());
+			verify(productRepository).deleteById(1);
+
+			assertThatThrownBy(() -> productRepository.findById(1))
+				.isInstanceOf(IllegalArgumentException.class);
+		}
+	}
+
+	@Nested
+	@DisplayName("getProducts 메소드는")
+	class getProductsTest {
+		@Test
+		@DisplayName("product 를 전부 반환한다")
+		public void getProductsTest() {
+			createProduct(TEST_PRODUCT_1);
+			productService.getProducts();
 
 			given(productRepository.findById(1)).willThrow(new IllegalArgumentException());
 			verify(productRepository).deleteById(1);
