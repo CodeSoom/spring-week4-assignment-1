@@ -1,6 +1,7 @@
 package com.codesoom.assignment.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -79,5 +80,36 @@ public class ToyStoreServiceTest {
         verify(toyStoreRepository).findAll();
 
         assertThat(products).hasSize(3);
+    }
+
+    @DisplayName("유효한 id로 장난감 목록 조회")
+    @Test
+    void getProductWithValidId() {
+        long productId = 1L;
+
+        Product sourceProduct = new Product(productId, "name", "maker", 10000, "abcdefg.jpg");
+        toyStoreService.save(sourceProduct);
+
+        given(toyStoreService.getProduct(productId)).willReturn(sourceProduct);
+
+        Product product = toyStoreService.getProduct(productId);
+
+        verify(toyStoreRepository).findById(productId);
+
+        assertThat(product.getId()).isEqualTo(productId);
+    }
+
+    @DisplayName("유효하지 않은 id로 장난감 목록 조회")
+    @Test
+    void getProductWithInValidId() {
+        long productId = 1000L;
+
+        given(toyStoreService.getProduct(productId)).willThrow(ProductNotFoundException(productId));
+
+        verify(toyStoreRepository).findById(productId);
+
+        assertThatThrownBy(() -> {
+            toyStoreService.getProduct(productId);
+        }).isInstanceOf(ProductNotFoundException.class);
     }
 }
