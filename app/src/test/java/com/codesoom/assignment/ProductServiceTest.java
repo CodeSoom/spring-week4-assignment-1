@@ -25,9 +25,13 @@ public class ProductServiceTest {
 	void setUp() {
 		productRepository = mock(ProductRepository.class);
 		productService = new ProductService(productRepository);
+	}
 
-		createProduct();
-
+	void createProduct() {
+		Product product = new Product("test name", 1000, "test imageUrl", "test maker");
+		given(productRepository.findById(1)).willReturn(Optional.of(product));
+		productService.createProduct(
+			new ProductDTO.CreateProduct("test name", "test maker", 1000, "test imageUrl"));
 	}
 
 	@Nested
@@ -36,15 +40,11 @@ public class ProductServiceTest {
 		@Test
 		@DisplayName("해당 id 의 product 를 반환한다")
 		public void getProduct() {
+			createProduct();
 			Product product = productService.getProduct(1);
 			verify(productRepository).findById(1);
 			assertThat(product.getName()).isEqualTo("test name");
 		}
-	}
-
-	void createProduct() {
-		Product product = new Product("test name", 1000, "test imageUrl", "test maker");
-		given(productRepository.findById(1)).willReturn(Optional.of(product));
 	}
 
 	@Nested
@@ -52,13 +52,27 @@ public class ProductServiceTest {
 	class createProductTest {
 		@Test
 		@DisplayName("product 를 DB 에 저장한다")
-		public void createProduct() {
-			Product product = new Product("test name", 1000, "test imageUrl", "test maker");
-			given(productRepository.findById(1)).willReturn(Optional.of(product));
-			productService.createProduct(
-				new ProductDTO.CreateProduct("test name", "test maker", 1000, "test imageUrl"));
+		public void createProductTest() {
+			createProduct();
 			verify(productRepository).save(any(Product.class));
 			assertThat(productRepository.findById(1).get().getName()).isEqualTo("test name");
+		}
+	}
+
+	@Nested
+	@DisplayName("delete 메소드는")
+	class deleteProductTest {
+		@Test
+		@DisplayName("product 를 DB 에서 제거한다")
+		public void deleteProduct() {
+			createProduct();
+			productService.deleteProduct(1);
+
+			given(productRepository.findById(1)).willThrow(new IllegalArgumentException());
+			verify(productRepository).deleteById(1);
+
+			assertThatThrownBy(() -> productRepository.findById(1))
+				.isInstanceOf(IllegalArgumentException.class);
 		}
 	}
 }
