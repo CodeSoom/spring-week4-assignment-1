@@ -28,7 +28,8 @@ public class ToyController implements ProductController {
     @Override
     @GetMapping("/{id}")
     public Optional<Product> getProduct(@PathVariable Long id) {
-        return Optional.empty();
+        // 고민중
+        return Optional.ofNullable(productService.findProduct(id));
     }
 
     @Override
