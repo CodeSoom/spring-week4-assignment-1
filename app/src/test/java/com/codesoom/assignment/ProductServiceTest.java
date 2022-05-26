@@ -43,9 +43,9 @@ public class ProductServiceTest {
 		@DisplayName("해당 id 의 product 를 반환한다")
 		public void getProductTest() {
 			createProduct(TEST_PRODUCT_1);
-			Product product = productService.getProduct(1);
+			ProductDTO.Response response = productService.getProduct(1);
 			verify(productRepository).findById(1);
-			assertThat(product.getName()).isEqualTo("test name 1");
+			assertThat(response.getName()).isEqualTo("test name 1");
 		}
 	}
 
