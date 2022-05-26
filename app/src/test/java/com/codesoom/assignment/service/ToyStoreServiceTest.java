@@ -7,10 +7,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.repository.ToyStoreRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -56,7 +58,7 @@ public class ToyStoreServiceTest {
     void getEmptyProductsTest() {
         List<Product> productsSource = new ArrayList<>();
 
-        given(toyStoreService.getProducts()).willReturn(productsSource);
+        given(toyStoreRepository.findAll()).willReturn(productsSource);
 
         List<Product> products = toyStoreService.getProducts();
 
@@ -73,7 +75,7 @@ public class ToyStoreServiceTest {
         productsSource.add(new Product("name", "maker", 10000, "abcdefg.jpg"));
         productsSource.add(new Product("name", "maker", 10000, "abcdefg.jpg"));
 
-        given(toyStoreService.getProducts()).willReturn(productsSource);
+        given(toyStoreRepository.findAll()).willReturn(productsSource);
 
         List<Product> products = toyStoreService.getProducts();
 
@@ -88,9 +90,8 @@ public class ToyStoreServiceTest {
         long productId = 1L;
 
         Product sourceProduct = new Product(productId, "name", "maker", 10000, "abcdefg.jpg");
-        toyStoreService.save(sourceProduct);
 
-        given(toyStoreService.getProduct(productId)).willReturn(sourceProduct);
+        given(toyStoreRepository.findById(productId)).willReturn(Optional.of(sourceProduct));
 
         Product product = toyStoreService.getProduct(productId);
 
@@ -104,12 +105,12 @@ public class ToyStoreServiceTest {
     void getProductWithInValidId() {
         long productId = 1000L;
 
-        given(toyStoreService.getProduct(productId)).willThrow(ProductNotFoundException(productId));
-
-        verify(toyStoreRepository).findById(productId);
+        given(toyStoreRepository.findById(productId)).willThrow(new ProductNotFoundException(productId));
 
         assertThatThrownBy(() -> {
             toyStoreService.getProduct(productId);
         }).isInstanceOf(ProductNotFoundException.class);
+
+        verify(toyStoreRepository).findById(productId);
     }
 }
