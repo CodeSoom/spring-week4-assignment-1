@@ -25,8 +25,17 @@ public class ToyRepository implements ProductRepository {
     }
 
     @Override
-    public Product save(Product product) {
-        return null;
+    public Product save(Product source) {
+        Product product = new Product();
+        product.setId(generateId());
+        product.setName(source.getName());
+        product.setMaker(source.getMaker());
+        product.setPrice(source.getPrice());
+        product.setImageURI(source.getImageURI());
+
+        products.add(product);
+
+        return product;
     }
 
     @Override
@@ -37,5 +46,10 @@ public class ToyRepository implements ProductRepository {
     @Override
     public Product delete(Product product) {
         return null;
+    }
+
+    private Long generateId() {
+        newId += 1;
+        return newId;
     }
 }
