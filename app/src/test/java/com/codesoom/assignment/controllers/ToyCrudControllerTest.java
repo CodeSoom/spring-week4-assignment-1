@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.controllers.dtos.ToyRequestDto;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
@@ -14,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -110,13 +110,15 @@ class ToyCrudControllerTest {
     @DisplayName("create 메소드는")
     class Describe_create {
         private ToyResponseDto subject() {
-            ToyRequestDto requestDto = new RequestDto(toyTesting());
+            ToyRequestDto requestDto = new ToyRequestDto(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
             return controller.create(requestDto);
         }
 
         @BeforeEach
         void setUp() {
-            given(service.create(any(Toy.class)).willReturn(any(Toy.class)));
+            Toy toyWithoutId = toyTestingWithoutId();
+            Toy toy = toyTesting();
+            given(service.create(toyWithoutId)).willReturn(toy);
         }
 
         @Test
@@ -129,6 +131,10 @@ class ToyCrudControllerTest {
     }
 
     private Toy toyTesting() {
+        return new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
+    }
+
+    private Toy toyTestingWithoutId() {
         return new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
     }
 }
