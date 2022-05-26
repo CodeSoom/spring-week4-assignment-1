@@ -1,7 +1,6 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductRequest;
 import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,8 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductResponse createProduct(ProductRequest productRequest) {
-        Product savedProduct = productRepository.save(productRequest.getProduct());
-
+    public ProductResponse createProduct(Product product) {
+        Product savedProduct = productRepository.save(product);
         return new ProductResponse(savedProduct);
     }
 }
