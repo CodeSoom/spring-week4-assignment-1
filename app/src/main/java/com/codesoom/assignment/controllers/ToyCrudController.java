@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.interfaces.ProductCrudController;
 import com.codesoom.assignment.interfaces.ProductCrudService;
@@ -27,7 +28,8 @@ public class ToyCrudController implements ProductCrudController {
     }
 
     @Override
-    public Toy detail(Long id) {
-        return service.showById(id);
+    public ToyResponseDto detail(Long id) {
+        Toy toy = service.showById(id);
+        return new ToyResponseDto(toy);
     }
 }
