@@ -6,6 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -131,6 +132,42 @@ public class ToyStoreControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(toyStoreService).deleteProduct(100L);
+    }
+
+    @DisplayName("유효한 id로 장난감 등록 정보 수정")
+    @Test
+    void updateProductWithValidIdTest() throws Exception {
+
+        Product source = new Product(1L, "장난감 뱀", "애옹이네 장난감", 5000, "abc_aaa.jpg");
+        Product updatedSource = new Product(1L, "장난감 상어", "애옹이네 장난감", 5000, "abc_aaa.jpg");
+
+        given(toyStoreService.updateProduct(source)).willReturn(updatedSource);
+
+        mockMvc.perform(patch("/products/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productToString(source)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("장난감 상어")))
+                .andDo(print());
+
+        verify(toyStoreService).updateProduct(any(Product.class));
+    }
+
+    @DisplayName("유효하지 않은 id로 장난감 등록 정보 수정")
+    @Test
+    void updateProductWithInValidIdTest() throws Exception {
+
+        Product source = new Product(100L, "장난감 뱀", "애옹이네 장난감", 5000, "abc_aaa.jpg");
+
+        given(toyStoreService.updateProduct(source)).willThrow(new ProductNotFoundException(100L));
+
+        mockMvc.perform(patch("/products/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productToString(source)))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+
+        verify(toyStoreService).updateProduct(any(Product.class));
     }
 
     private String productToString(Object source) throws JsonProcessingException {
