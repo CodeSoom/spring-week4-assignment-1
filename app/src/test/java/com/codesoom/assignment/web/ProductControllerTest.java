@@ -147,6 +147,7 @@ public class ProductControllerTest {
         @DisplayName("id가 존재하면")
         class Context_when_id_exist {
             private final Long VALID_ID = 1L;
+
             @BeforeEach
             void setUp() {
                 given(productService.getProduct(VALID_ID))
@@ -163,6 +164,25 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$.maker").value(productResponse.getMaker()))
                         .andExpect(jsonPath("$.price").value(productResponse.getPrice()))
                         .andExpect(jsonPath("$.imageUrl").value(productResponse.getImageUrl()));
+            }
+        }
+
+        @Nested
+        @DisplayName("id가 존재하지 않으면")
+        class Context_when_id_non_exist {
+            private final Long INVALID_ID = 100L;
+
+            @BeforeEach
+            void setUp() {
+                given(productService.getProduct(INVALID_ID))
+                        .willThrow(new ProductNotFoundException(INVALID_ID));
+            }
+
+            @Test
+            @DisplayName("404 status를 응답한다.")
+            void it_responses_404_status() throws Exception {
+                mockMvc.perform(get("/products/{id}", INVALID_ID))
+                        .andExpect(status().isNotFound());
             }
         }
     }
