@@ -87,7 +87,7 @@ class ProductServiceTest {
 
         given(productRepository.findById(id)).willReturn(Optional.of(product1));
 
-        ProductResponse productResponse = productService.getProduct(id);
+        productService.getProduct(id);
 
         verify(productRepository).findById(id);
     }
