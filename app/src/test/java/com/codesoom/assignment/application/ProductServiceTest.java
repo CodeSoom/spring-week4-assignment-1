@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -200,7 +201,7 @@ public class ProductServiceTest {
                 Product savedProduct = productRepository.save(product);
                 Long id = savedProduct.getId();
 
-                productService.deletePrdocut(id);
+                productService.deleteProduct(id);
 
                 return productRepository.findById(id).get();
             }
@@ -208,7 +209,21 @@ public class ProductServiceTest {
             @Test
             @DisplayName("product를 삭제한다.")
             void it_deletes_product() {
-                assertThat(subject()).isNull();
+                assertThatThrownBy(() -> subject())
+                        .isInstanceOf(NoSuchElementException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 아이디가 주어지면")
+        class Context_with_non_exist_id {
+            private final Long INVALID_ID = 100L;
+
+            @Test
+            @DisplayName("ProductNotFoundException 예외를 던진다.")
+            void it_throws_product_not_found_exception() {
+                assertThatThrownBy(() -> productService.deleteProduct(INVALID_ID))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
