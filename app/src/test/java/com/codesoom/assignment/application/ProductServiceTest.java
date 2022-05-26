@@ -187,4 +187,29 @@ public class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("deleteProduct 메소드는")
+    class Describe_deleteProduct {
+
+        @Nested
+        @DisplayName("존재하는 아이디가 주어지면")
+        class Context_with_exist_id {
+
+            Product subject() {
+                Product savedProduct = productRepository.save(product);
+                Long id = savedProduct.getId();
+
+                productService.deletePrdocut(id);
+
+                return productRepository.findById(id).get();
+            }
+
+            @Test
+            @DisplayName("product를 삭제한다.")
+            void it_deletes_product() {
+                assertThat(subject()).isNull();
+            }
+        }
+    }
 }
