@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -141,7 +142,7 @@ public class ToyStoreControllerTest {
         Product source = new Product(1L, "장난감 뱀", "애옹이네 장난감", 5000, "abc_aaa.jpg");
         Product updatedSource = new Product(1L, "장난감 상어", "애옹이네 장난감", 5000, "abc_aaa.jpg");
 
-        given(toyStoreService.updateProduct(source)).willReturn(updatedSource);
+        given(toyStoreService.updateProduct(1L, source)).willReturn(updatedSource);
 
         mockMvc.perform(patch("/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -150,7 +151,7 @@ public class ToyStoreControllerTest {
                 .andExpect(content().string(containsString("장난감 상어")))
                 .andDo(print());
 
-        verify(toyStoreService).updateProduct(any(Product.class));
+        verify(toyStoreService).updateProduct(eq(1L), any(Product.class));
     }
 
     @DisplayName("유효하지 않은 id로 장난감 등록 정보 수정")
@@ -159,7 +160,7 @@ public class ToyStoreControllerTest {
 
         Product source = new Product(100L, "장난감 뱀", "애옹이네 장난감", 5000, "abc_aaa.jpg");
 
-        given(toyStoreService.updateProduct(source)).willThrow(new ProductNotFoundException(100L));
+        given(toyStoreService.updateProduct(100L, source)).willThrow(new ProductNotFoundException(100L));
 
         mockMvc.perform(patch("/products/100")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -167,7 +168,7 @@ public class ToyStoreControllerTest {
                 .andExpect(status().isNotFound())
                 .andDo(print());
 
-        verify(toyStoreService).updateProduct(any(Product.class));
+        verify(toyStoreService).updateProduct(eq(100L), any(Product.class));
     }
 
     private String productToString(Object source) throws JsonProcessingException {
