@@ -4,9 +4,11 @@ import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.domain.InMemoryToyRepository;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
-import com.codesoom.assignment.application.interfaces.ProductCrudService;
 import com.codesoom.assignment.domain.interfaces.ToyRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,12 +16,11 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-@DisplayName("ToyProductCrudService 클래스")
-class ToyCrudServiceTest {
+@DisplayName("ToyShowService 클래스")
+class ToyShowServiceTest {
     private ToyRepository repository;
-    private ProductCrudService service;
+    private ToyShowService service;
     private Toy toy;
-    private Toy toyWithoutId;
     private final Long TOY_ID = 2L;
     private final String TOY_NAME = "Test Toy";
     private final String PRODUCER_NAME = "Test Producer";
@@ -28,9 +29,8 @@ class ToyCrudServiceTest {
     @BeforeEach
     void setUp() {
         toy = new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
-        toyWithoutId = new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
         repository = new InMemoryToyRepository();
-        service = new ToyCrudService(repository);
+        service = new ToyShowService(repository);
     }
 
     @Nested
@@ -105,21 +105,4 @@ class ToyCrudServiceTest {
             }
         }
     }
-
-    @Nested
-    @DisplayName("create 메소드는")
-    class Describe_create {
-        private Toy subject() {
-            return service.create(toyWithoutId);
-        }
-
-        @Test
-        @DisplayName("Id가 자동 생성된 Toy를 반환한다")
-        void it_returns_toy_with_generated_id() {
-            final Toy actual = subject();
-
-            assertThat(actual.id()).isNotNull();
-        }
-    }
-
 }
