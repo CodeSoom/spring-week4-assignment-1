@@ -89,6 +89,7 @@ public class ProductControllerTest {
 	@Nested
 	@DisplayName("/products/{id} URL 은")
 	class productsWithIdTest {
+
 		@Nested
 		@DisplayName("delete method 는")
 		class deleteMethodTest {
@@ -126,11 +127,12 @@ public class ProductControllerTest {
 			void updateProductsTest() {
 				ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
 					"update test maker 1", 1000, "update test imageUrl 1");
-				ResponseEntity<?> response = productController.updateProduct(1, updateProduct);
+				ResponseEntity<ProductDTO.Response> response = productController.updateProduct(1, updateProduct);
 
 				verify(productService).updateProduct(1, updateProduct);
 
 				assertThat(response.getStatusCode().value()).isEqualTo(200);
+				assertThat(response.getBody().getName()).isEqualTo(updateProduct.getName());
 			}
 		}
 	}
