@@ -3,11 +3,20 @@ package com.codesoom.assignment.controller;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("ProductController Test")
 class ProductControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    private final Long ID = 1L;
 
     @Nested
     @DisplayName("GET /products")
@@ -19,8 +28,9 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 OK를 응답합니다..")
-            void httpStatus_200() {
-
+            void httpStatus_200() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk());
             }
         }
     }
@@ -35,8 +45,9 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 OK를 응답합니다.")
-            void httpStatus_200() {
-
+            void httpStatus_200() throws Exception {
+                mockMvc.perform(get("/products/" + ID))
+                        .andExpect(status().isOk());
             }
         }
     }
@@ -51,8 +62,12 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("201 CREATED를 응답합니다.")
-            void httpStatus_201() {
-
+            void httpStatus_201() throws Exception {
+                mockMvc.perform(
+                        post("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\" : \"고양이 생선\", \"price\" : 10000, \"maker\" : \"(주)애옹이네\", \"imagePath\" : \"image.png\"}")
+                        ).andExpect(status().isCreated());
             }
         }
     }
@@ -67,8 +82,12 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 CREATED를 응답합니다.")
-            void httpStatus_200() {
-
+            void httpStatus_200() throws Exception {
+                mockMvc.perform(
+                        patch("/products/" + ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\" : \"생선\", \"price\" : 15000, \"maker\" : \"(주)애옹이네\", \"imagePath\" : \"image.png\"}")
+                ).andExpect(status().isOk());
             }
         }
     }
@@ -83,8 +102,9 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("204 NO CONTENT를 응답합니다.")
-            void httpStatus_204() {
-
+            void httpStatus_204() throws Exception {
+                mockMvc.perform(delete("/products/" + ID))
+                        .andExpect(status().isNoContent());
             }
         }
     }
