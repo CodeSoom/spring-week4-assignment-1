@@ -17,16 +17,20 @@ class ProductServiceTest {
     private ProductService productService;
     private Long ID = 1L;
 
+    private Product registOneProduct() {
+        productService = new ProductService(new InMemoryProductRepository());
+
+        Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
+        return productService.regist(product);
+    }
+
     @Nested
     @DisplayName("장난감 목록 조회")
     class list {
 
         @BeforeEach
         void setUp() {
-            productService = new ProductService(new InMemoryProductRepository());
-
-            Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
-            productService.regist(product);
+            registOneProduct();
         }
 
         @Nested
@@ -52,10 +56,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("장난감 상세 정보를 반환합니다.")
             void detail() {
-                productService = new ProductService(new InMemoryProductRepository());
-
-                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
-                productService.regist(product);
+                Product product = registOneProduct();
 
                 assertThat(productService.findById(ID).equals(product)).isTrue();
             }
@@ -92,10 +93,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("동일한 정보로 장난감이 수정됩니다.")
             void modify() {
-                productService = new ProductService(new InMemoryProductRepository());
-
-                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
-                productService.regist(product);
+                Product product = registOneProduct();
                 product.changeName("고양이생선");
                 assertThat(productService.modify(product).equals(product)).isTrue();
             }
@@ -113,10 +111,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보가 삭제됩니다.")
             void delete() {
-                productService = new ProductService(new InMemoryProductRepository());
-
-                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
-                productService.regist(product);
+                registOneProduct();
                 productService.delete(ID);
                 assertThat(productService.findAll().size()).isEqualTo(0);
             }
