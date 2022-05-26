@@ -27,6 +27,14 @@ public class Product {
 
     }
 
+    public Product(long id, String name, String maker, int price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     public Long getId() {
         return id;
     }
