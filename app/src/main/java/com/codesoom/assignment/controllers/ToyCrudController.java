@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
@@ -23,8 +24,10 @@ public class ToyCrudController implements ProductCrudController {
 
     @GetMapping
     @Override
-    public List<Toy> list() {
-        return service.showAll();
+    public List<ToyResponseDto> list() {
+        return service.showAll().stream()
+                .map(ToyResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
