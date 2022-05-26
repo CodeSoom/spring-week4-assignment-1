@@ -1,6 +1,7 @@
 package com.codesoom.assignment.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.codesoom.assignment.dto.ProductDTO;
 import com.codesoom.assignment.model.Product;
@@ -28,6 +29,11 @@ public class ProductService {
 		productRepository.deleteById(id);
 	}
 
-	public List<ProductDTO> getProducts() {
+	public List<ProductDTO.Response> getProducts() {
+		return productRepository.findAll()
+			.stream()
+			.map(product -> ProductDTO.Response.of(product))
+			.collect(Collectors.toList());
+
 	}
 }
