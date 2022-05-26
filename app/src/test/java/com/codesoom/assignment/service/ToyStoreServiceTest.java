@@ -113,4 +113,33 @@ public class ToyStoreServiceTest {
 
         verify(toyStoreRepository).findById(productId);
     }
+
+    @DisplayName("유효한 id로 장난감 삭제")
+    @Test
+    void deleteProductWithValidId() {
+        long productId = 1L;
+
+        Product sourceProduct = new Product(productId, "name", "maker", 10000, "abcdefg.jpg");
+
+        given(toyStoreRepository.findById(productId)).willReturn(Optional.of(sourceProduct));
+
+        Product product = toyStoreService.deleteProduct(productId);
+
+        verify(toyStoreRepository).findById(productId);
+        verify(toyStoreRepository).delete(product);
+    }
+
+    @DisplayName("유효하지 않은 id로 장난감 삭제")
+    @Test
+    void deleteProductWithInValidId() {
+        long productId = 1000L;
+
+        given(toyStoreRepository.findById(productId)).willThrow(new ProductNotFoundException(productId));
+
+        assertThatThrownBy(() -> {
+            toyStoreService.deleteProduct(productId);
+        }).isInstanceOf(ProductNotFoundException.class);
+
+        verify(toyStoreRepository).findById(productId);
+    }
 }
