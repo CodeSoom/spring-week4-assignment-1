@@ -59,4 +59,9 @@ public class ProductService {
                 .map(ProductResponse::of)
                 .collect(Collectors.toList());
     }
+
+    public void deleteProduct(Long id) {
+        Product product = findByIdOrElseThrow(id);
+        productRepository.delete(product);
+    }
 }
