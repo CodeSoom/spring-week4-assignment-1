@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.service.ToyStoreService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -76,6 +77,32 @@ public class ToyStoreControllerTest {
                 .andDo(print());
 
         verify(toyStoreService).getProducts();
+    }
+
+    @DisplayName("유효한 id로 장난감 조회 후 반환")
+    @Test
+    void getProductWithValidIdTest() throws Exception {
+
+        Product product = new Product(1L, "name", "maker", 10000, "abcdefg.jpg");
+
+        given(toyStoreService.getProduct(1L)).willReturn(product);
+
+        mockMvc.perform(get("/products/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("abcdefg.jpg")));
+
+        verify(toyStoreService).getProduct(1L);
+    }
+
+    @DisplayName("유효하지 않은 id로 장난감 조회 후 반환")
+    @Test
+    void getProductWithInValidIdTest() throws Exception {
+        given(toyStoreService.getProduct(100L)).willThrow(new ProductNotFoundException(100L));
+
+        mockMvc.perform(get("/products/100"))
+                .andExpect(status().isNotFound());
+
+        verify(toyStoreService).getProduct(100L);
     }
 
     private String productToString(Object source) throws JsonProcessingException {
