@@ -34,13 +34,17 @@ class ToyProductCrudServiceTest {
     @Nested
     @DisplayName("showAll 메소드는")
     class Describe_showAll {
+        private List<Toy> subject() {
+            return service.showAll();
+        }
+
         @Nested
         @DisplayName("만약 장난감이 존재하지 않는다면")
         class Context_without_existing_toy {
             @Test
             @DisplayName("비어 있는 List를 반환한다")
             void it_returns_empty_list() {
-                final List<Toy> actual = service.showAll();
+                final List<Toy> actual = subject();
 
                 assertThat(actual).isEmpty();
             }
@@ -57,7 +61,7 @@ class ToyProductCrudServiceTest {
             @Test
             @DisplayName("비어 있지 않은 List를 반환한다")
             void it_returns_not_empty_list() {
-                final List<Toy> actual = service.showAll();
+                final List<Toy> actual = subject();
 
                 assertThat(actual).isNotEmpty();
             }
@@ -67,6 +71,10 @@ class ToyProductCrudServiceTest {
     @Nested
     @DisplayName("showById 메소드는")
     class Describe_showById {
+        private Toy subject() {
+            return service.showById(TOY_ID);
+        }
+
         @Nested
         @DisplayName("존재하는 장난감에 대한 Id를 매개변수로 전달하면")
         class Context_with_existing_toy {
@@ -78,7 +86,7 @@ class ToyProductCrudServiceTest {
             @Test
             @DisplayName("매개변수로 전달한 Id를 가지고 있는 장난감을 반환한다")
             void it_returns_toy_containing_that_id() {
-                final Toy actual = service.showById(TOY_ID);
+                final Toy actual = subject();
 
                 assertThat(actual.id()).isEqualTo(TOY_ID);
             }
@@ -90,7 +98,7 @@ class ToyProductCrudServiceTest {
             @Test
             @DisplayName("예외를 발생시킨다")
             void it_throws_exception() {
-                assertThatThrownBy(() -> service.showById(TOY_ID))
+                assertThatThrownBy(() -> subject())
                     .isInstanceOf(ProductNotFoundException.class);
             }
         }
