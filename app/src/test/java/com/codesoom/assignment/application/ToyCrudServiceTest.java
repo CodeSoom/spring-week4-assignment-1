@@ -19,6 +19,7 @@ class ToyCrudServiceTest {
     private ToyRepository repository;
     private ProductCrudService service;
     private Toy toy;
+    private Toy toyWithoutId;
     private final Long TOY_ID = 2L;
     private final String TOY_NAME = "Test Toy";
     private final String PRODUCER_NAME = "Test Producer";
@@ -26,7 +27,8 @@ class ToyCrudServiceTest {
 
     @BeforeEach
     void setUp() {
-        toy = new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
+        toy = new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
+        toyWithoutId = new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
         repository = new InMemoryToyRepository();
         service = new ToyCrudService(repository);
     }
@@ -108,7 +110,6 @@ class ToyCrudServiceTest {
     @DisplayName("create 메소드는")
     class Describe_create {
         private Toy subject() {
-            Toy toyWithoutId = toyTestingWithoutId();
             return service.create(toyWithoutId);
         }
 
@@ -121,8 +122,4 @@ class ToyCrudServiceTest {
         }
     }
 
-
-    private Toy toyTestingWithoutId() {
-        return new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
-    }
 }

@@ -23,15 +23,19 @@ class ToyCrudControllerTest {
     @Mock
     private ProductCrudService service;
     private ProductCrudController controller;
+    private Toy toy;
+    private Toy toyWithoutId;
     private final List<Toy> toys = new LinkedList<>();
 
-    private final Long TOY_ID = 1L;
+    private final Long TOY_ID = 2L;
     private final String TOY_NAME = "Test Toy";
     private final String PRODUCER_NAME = "Test Producer";
     private final BigDecimal WON_VALUE = new BigDecimal(1000);
 
     @BeforeEach
     void setUp() {
+        toy = new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
+        toyWithoutId = new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
         controller = new ToyCrudController(service);
     }
 
@@ -71,7 +75,7 @@ class ToyCrudControllerTest {
         class Context_with_existing_toy {
             @BeforeEach
             void setUp() {
-                toys.add(toyTesting());
+                toys.add(toy);
                 given(service.showAll()).willReturn(toys);
             }
 
@@ -94,7 +98,7 @@ class ToyCrudControllerTest {
 
         @BeforeEach
         void setUp() {
-            given(service.showById(TOY_ID)).willReturn(toyTesting());
+            given(service.showById(TOY_ID)).willReturn(toy);
         }
 
         @Test
@@ -116,8 +120,6 @@ class ToyCrudControllerTest {
 
         @BeforeEach
         void setUp() {
-            Toy toyWithoutId = toyTestingWithoutId();
-            Toy toy = toyTesting();
             given(service.create(toyWithoutId)).willReturn(toy);
         }
 
@@ -128,13 +130,5 @@ class ToyCrudControllerTest {
 
             assertThat(actual).isInstanceOf(ToyResponseDto.class);
         }
-    }
-
-    private Toy toyTesting() {
-        return new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
-    }
-
-    private Toy toyTestingWithoutId() {
-        return new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
     }
 }
