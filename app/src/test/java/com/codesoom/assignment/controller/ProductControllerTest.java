@@ -52,6 +52,7 @@ class ProductControllerTest {
 
         given(productService.findProducts()).willReturn(products);
         given(productService.createProduct(any())).willReturn(product);
+        given(productService.findProduct(PRODUCT_ID)).willReturn(product);
     }
 
     @Nested
@@ -79,6 +80,19 @@ class ProductControllerTest {
                     .andDo(print())
                     .andExpect(status().isCreated())
                     .andExpect(content().string(containsString(product.getMaker())));
+        }
+    }
+
+    @Nested
+    @DisplayName("[GET] /products/{id} 요청에 대해서")
+    class Describe_get_product_by_id {
+        @Test
+        @DisplayName("getProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
+        void It_returns_product() throws Exception {
+            mockMvc.perform(get("/products/{id}", product.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString("dogCompany")));
         }
     }
 }
