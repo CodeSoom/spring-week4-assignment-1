@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.interfaces.ProductCrudService;
+import com.codesoom.assignment.application.interfaces.ProductCreateService;
 import com.codesoom.assignment.controllers.dtos.ToyRequestDto;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.controllers.interfaces.ProductCreateController;
@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("ToyCreateController 클래스")
 class ToyCreateControllerTest {
     @Mock
-    private ProductCrudService service;
+    private ProductCreateService service;
     private ProductCreateController controller;
     private Toy toy;
     private Toy toyWithoutId;

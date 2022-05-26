@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.interfaces.ProductCrudService;
+import com.codesoom.assignment.application.interfaces.ProductCreateService;
 import com.codesoom.assignment.controllers.dtos.ToyRequestDto;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.controllers.interfaces.ProductCreateController;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tasks")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ToyCreateController implements ProductCreateController {
-    private final ProductCrudService service;
+    private final ProductCreateService service;
 
-    public ToyCreateController(ProductCrudService service) {
+    public ToyCreateController(ProductCreateService service) {
         this.service = service;
     }
 

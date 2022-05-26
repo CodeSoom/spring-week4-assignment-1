@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.interfaces.ProductCrudService;
+import com.codesoom.assignment.application.interfaces.ProductShowService;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.controllers.interfaces.ProductDetailController;
 import com.codesoom.assignment.domain.Toy;
@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("ToyDetailController 클래스")
 class ToyDetailControllerTest {
     @Mock
-    private ProductCrudService service;
+    private ProductShowService service;
     private ProductDetailController controller;
     private Toy toy;
     private final List<Toy> toys = new LinkedList<>();

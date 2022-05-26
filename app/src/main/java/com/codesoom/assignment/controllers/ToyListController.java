@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.interfaces.ProductCrudService;
+import com.codesoom.assignment.application.interfaces.ProductShowService;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.controllers.interfaces.ProductListController;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/tasks")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ToyListController implements ProductListController {
-    private final ProductCrudService service;
+    private final ProductShowService service;
 
-    public ToyListController(ProductCrudService service) {
+    public ToyListController(ProductShowService service) {
         this.service = service;
     }
 
