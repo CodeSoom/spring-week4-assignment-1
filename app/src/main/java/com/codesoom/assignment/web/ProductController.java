@@ -6,6 +6,8 @@ import com.codesoom.assignment.dto.ProductCommandRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/products")
 @RestController
 public class ProductController {
@@ -30,5 +32,10 @@ public class ProductController {
     @GetMapping("/{id}")
     public ProductResponse getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
+    }
+
+    @GetMapping
+    public List<ProductResponse> getProducts() {
+        return productService.getProducts();
     }
 }
