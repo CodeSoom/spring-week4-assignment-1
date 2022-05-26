@@ -30,13 +30,22 @@ public class ProductService {
      * @throws ProductNotFoundException id가 없을시 던지는 예외
      */
     public ProductResponse updateProduct(Long id, ProductCommandRequest productCommandRequest) {
-        Product product = productRepository.findById(id).
-                orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = findByIdOrElseThrow(id);
         product.update(
                 productCommandRequest.getName(),
                 productCommandRequest.getMaker(),
                 productCommandRequest.getPrice(),
                 productCommandRequest.getImageUrl());
         return ProductResponse.of(product);
+    }
+
+    public ProductResponse getProduct(Long id) {
+        Product product = findByIdOrElseThrow(id);
+        return ProductResponse.of(product);
+    }
+
+    private Product findByIdOrElseThrow(Long id) {
+        return productRepository.findById(id).
+                orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
