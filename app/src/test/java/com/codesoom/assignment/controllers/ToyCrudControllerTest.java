@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
 import com.codesoom.assignment.interfaces.*;
@@ -87,7 +88,7 @@ class ToyCrudControllerTest {
     @Nested
     @DisplayName("detail 메소드는")
     class Describe_detail {
-        private Toy subject() {
+        private ToyResponseDto subject() {
             return controller.detail(TOY_ID);
         }
 
@@ -97,11 +98,11 @@ class ToyCrudControllerTest {
         }
 
         @Test
-        @DisplayName("Product Type을 반환한다")
+        @DisplayName("ToyResponseDto 형태로 값을 반환한다")
         void it_returns_toy() {
-            final Toy actual = subject();
+            final ToyResponseDto actual = subject();
 
-            assertThat(actual).isInstanceOf(Product.class);
+            assertThat(actual).isInstanceOf(ToyResponseDto.class);
         }
     }
 
