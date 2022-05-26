@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -104,6 +105,32 @@ public class ToyStoreControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(toyStoreService).getProduct(100L);
+    }
+
+    @DisplayName("유효한 id로 장난감 삭제")
+    @Test
+    void deleteProductWithValidIdTest() throws Exception {
+
+        Product product = new Product(1L, "name", "maker", 10000, "abcdefg.jpg");
+
+        given(toyStoreService.deleteProduct(1L)).willReturn(product);
+
+        mockMvc.perform(delete("/products/1"))
+                .andExpect(status().isNoContent());
+
+        verify(toyStoreService).getProduct(1L);
+    }
+
+    @DisplayName("유효하지 않은 id로 장난감 삭제")
+    @Test
+    void deleteProductWithInValidIdTest() throws Exception {
+
+        given(toyStoreService.deleteProduct(100L)).willThrow(new ProductNotFoundException(100L));
+
+        mockMvc.perform(delete("/products/100"))
+                .andExpect(status().isNotFound());
+
+        verify(toyStoreService).deleteProduct(100L);
     }
 
     private String productToString(Object source) throws JsonProcessingException {
