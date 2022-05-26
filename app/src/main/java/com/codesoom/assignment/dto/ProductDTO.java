@@ -10,10 +10,13 @@ public class ProductDTO {
 
 	@Getter
 	public static class CreateProduct {
-		private final String name;
-		private final String maker;
-		private final int price;
-		private final String imageUrl;
+		private String name;
+		private String maker;
+		private int price;
+		private String imageUrl;
+
+		private CreateProduct() {
+		}
 
 		public CreateProduct(String name, String maker, int price, String imageUrl) {
 			this.name = name;
@@ -25,10 +28,13 @@ public class ProductDTO {
 
 	@Getter
 	public static class UpdateProduct {
-		private final String name;
-		private final String maker;
-		private final int price;
-		private final String imageUrl;
+		private String name;
+		private String maker;
+		private int price;
+		private String imageUrl;
+
+		private UpdateProduct() {
+		}
 
 		public UpdateProduct(Product product) {
 			this(product.getName(), product.getMaker(), product.getPrice(), product.getImageUrl());
@@ -45,12 +51,15 @@ public class ProductDTO {
 
 	@Getter
 	public static class Response {
-		private final int id;
-		private final String name;
-		private final String maker;
-		private final int price;
-		private final String imageUrl;
+		private  int id;
+		private  String name;
+		private  String maker;
+		private  int price;
+		private  String imageUrl;
 
+		private Response() {
+		}
+		
 		public Response(int id, String name, String maker, int price, String imageUrl) {
 			this.id = id;
 			this.name = name;
