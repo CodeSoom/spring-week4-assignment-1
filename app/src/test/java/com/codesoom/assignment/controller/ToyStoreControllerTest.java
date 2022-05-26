@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.codesoom.assignment.model.Product;
+import com.codesoom.assignment.repository.ToyStoreRepository;
 import com.codesoom.assignment.service.ToyStoreService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,6 +36,9 @@ public class ToyStoreControllerTest {
     @MockBean
     private ToyStoreService toyStoreService;
 
+    @MockBean
+    private ToyStoreRepository toyStoreRepository;
+
     @DisplayName("고양이 장난감 등록 후 등록된 정보 반환")
     @Test
     void addToyTest() throws Exception {
@@ -54,6 +58,7 @@ public class ToyStoreControllerTest {
                 .andDo(print());
 
         verify(toyStoreService).save(any(Product.class));
+        verify(toyStoreRepository).save(any(Product.class));
     }
 
     private String productToString(Object source) throws JsonProcessingException {

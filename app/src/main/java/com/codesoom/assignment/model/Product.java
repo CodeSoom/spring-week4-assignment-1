@@ -1,8 +1,15 @@
 package com.codesoom.assignment.model;
 
 import com.google.common.base.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
+@Entity
 public class Product {
+
+    @Id
+    @GeneratedValue
     private Long id;
     private String name;
     private String maker;
@@ -14,6 +21,10 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product() {
+
     }
 
     public Long getId() {

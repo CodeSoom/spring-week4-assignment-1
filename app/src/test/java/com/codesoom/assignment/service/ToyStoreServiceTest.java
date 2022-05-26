@@ -17,7 +17,7 @@ public class ToyStoreServiceTest {
     @DisplayName("`이름, 메이커, 가격, 이미지 URL`을 입력 받아 장난감 등록")
     @Test
     void addToyTest() {
-        Product sourceProduct = new Product("name","maker",5000,"abc.jpg");
+        Product sourceProduct = new Product("name", "maker", 5000, "abc.jpg");
 
         Product product = toyStoreService.save(sourceProduct);
 
