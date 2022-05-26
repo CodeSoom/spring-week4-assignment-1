@@ -25,9 +25,7 @@ public class ProductServiceTest {
 		productRepository = mock(ProductRepository.class);
 		productService = new ProductService(productRepository);
 
-		Product product = new Product("test name", 1000, "test imageUrl", "test maker");
-
-		given(productRepository.findById(1)).willReturn(Optional.of(product));
+		createProduct();
 
 	}
 
@@ -39,6 +37,24 @@ public class ProductServiceTest {
 		public void getProduct() {
 			Product product = productService.getProduct(1);
 			verify(productRepository).findById(1);
+			assertThat(product.getName()).isEqualTo("test name");
+		}
+	}
+
+	void createProduct() {
+		Product product = new Product("test name", 1000, "test imageUrl", "test maker");
+		given(productRepository.findById(1)).willReturn(Optional.of(product));
+	}
+	@Nested
+	@DisplayName("createProduct 메소드는")
+	class createProductTest {
+		@Test
+		@DisplayName("product 를 DB 에 저장한다")
+		public void createProduct() {
+			Product product = new Product("test name", 1000, "test imageUrl", "test maker");
+			given(productRepository.findById(1)).willReturn(Optional.of(product));
+			productService.createProdut(product);
+			verify(productRepository).save(product);
 			assertThat(product.getName()).isEqualTo("test name");
 		}
 	}
