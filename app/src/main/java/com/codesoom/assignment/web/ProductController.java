@@ -26,4 +26,9 @@ public class ProductController {
                                          @RequestBody ProductCommandRequest productCommandRequest) {
         return productService.updateProduct(id, productCommandRequest);
     }
+
+    @GetMapping("/{id}")
+    public ProductResponse getProduct(@PathVariable Long id) {
+        return productService.getProduct(id);
+    }
 }
