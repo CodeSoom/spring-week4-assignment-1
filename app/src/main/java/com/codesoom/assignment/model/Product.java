@@ -28,8 +28,6 @@ public class Product {
 	@Column(name = "maker")
 	private String maker;
 
-
-
 	public Product() {
 	}
 
@@ -40,11 +38,11 @@ public class Product {
 		this.maker = maker;
 	}
 
-	public Product(ProductDTO.CreateProduct CreateProduct) {
-		this.name = CreateProduct.getName();
-		this.price = CreateProduct.getPrice();
-		this.imageUrl = CreateProduct.getImageUrl();
-		this.maker = CreateProduct.getMaker();
+	public Product(ProductDTO.CreateProduct createProduct) {
+		this.name = createProduct.getName();
+		this.price = createProduct.getPrice();
+		this.imageUrl = createProduct.getImageUrl();
+		this.maker = createProduct.getMaker();
 	}
 
 	public Product updateProduct(ProductDTO.UpdateProduct updateProduct) {

@@ -41,7 +41,7 @@ public class ProductControllerTest {
 			ProductDTO.CreateProduct createResponse = invocation.getArgument(0);
 			return ProductDTO.Response.of(new Product(createResponse));
 		});
-		given(productService.updateProduct(any(int.class),any(ProductDTO.UpdateProduct.class))).will(invocation -> {
+		given(productService.updateProduct(any(int.class), any(ProductDTO.UpdateProduct.class))).will(invocation -> {
 			ProductDTO.UpdateProduct updateResponse = invocation.getArgument(1);
 			return ProductDTO.Response.of(new Product().updateProduct(updateResponse));
 		});

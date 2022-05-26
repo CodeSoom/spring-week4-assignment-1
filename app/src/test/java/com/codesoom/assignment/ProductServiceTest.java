@@ -51,7 +51,7 @@ public class ProductServiceTest {
 	class getProductTest {
 		@Test
 		@DisplayName("해당 id 의 product 를 반환한다")
-		public void getProductTest() {
+		void getProductTest() {
 			ProductDTO.Response response = productService.getProduct(1);
 			verify(productRepository).findById(1);
 			assertThat(response.getName()).isEqualTo("test name 1");
@@ -63,7 +63,7 @@ public class ProductServiceTest {
 	class createProductTest {
 		@Test
 		@DisplayName("product 를 DB 에 저장한다")
-		public void createProductTest() {
+		void createProductTest() {
 			ProductDTO.Response response = productService.createProduct(
 				new ProductDTO.CreateProduct("create test name", "create test maker", 3000, "create test imageUrl"));
 			verify(productRepository).save(any(Product.class));
@@ -76,7 +76,7 @@ public class ProductServiceTest {
 	class deleteProductTest {
 		@Test
 		@DisplayName("product 를 DB 에서 제거한다")
-		public void deleteProductTest() {
+		void deleteProductTest() {
 			productService.deleteProduct(1);
 
 			given(productRepository.findById(1)).willThrow(new IllegalArgumentException());
@@ -92,7 +92,7 @@ public class ProductServiceTest {
 	class getProductsTest {
 		@Test
 		@DisplayName("product 를 전부 반환한다")
-		public void getProductsTest() {
+		void getProductsTest() {
 			List<ProductDTO.Response> responseList = productService.getProducts();
 			assertThat(responseList.size()).isEqualTo(2);
 		}
@@ -103,7 +103,7 @@ public class ProductServiceTest {
 	class updateProductsTest {
 		@Test
 		@DisplayName("update 된 Product 를 반환한다")
-		public void updateProductsTest() {
+		void updateProductsTest() {
 			ProductDTO.UpdateProduct source = new ProductDTO.UpdateProduct("update test name",
 				"update test maker", 3000, "update test imageUrl");
 			ProductDTO.Response updateProduct = productService.updateProduct(1, source);
