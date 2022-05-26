@@ -19,9 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,7 +57,7 @@ public class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /products 요청이 오면")
+    @DisplayName("POST /products 요청은")
     class Describe_post_products {
 
         @BeforeEach
@@ -83,7 +81,7 @@ public class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("PATCH /products/{id} 요청이 오면")
+    @DisplayName("PATCH /products/{id} 요청은")
     class Describe_patch_product_by_id {
 
         @Nested
@@ -137,6 +135,34 @@ public class ProductControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objToString(productCommandRequest)))
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /products/{id} 요청은")
+    class Describe_get_products_by_id {
+
+        @Nested
+        @DisplayName("id가 존재하면")
+        class Context_when_id_exist {
+            private final Long VALID_ID = 1L;
+            @BeforeEach
+            void setUp() {
+                given(productService.getProduct(VALID_ID))
+                        .willReturn(productResponse);
+            }
+
+            @Test
+            @DisplayName("productResponse를 응답한다.")
+            void it_responses_productResponse() throws Exception {
+                mockMvc.perform(get("/products/{id}", VALID_ID))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id").value(productResponse.getId()))
+                        .andExpect(jsonPath("$.name").value(productResponse.getName()))
+                        .andExpect(jsonPath("$.maker").value(productResponse.getMaker()))
+                        .andExpect(jsonPath("$.price").value(productResponse.getPrice()))
+                        .andExpect(jsonPath("$.imageUrl").value(productResponse.getImageUrl()));
             }
         }
     }
