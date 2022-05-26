@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.interfaces.ToyRepository;
+import com.codesoom.assignment.domain.interfaces.ToyRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 

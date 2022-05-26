@@ -1,4 +1,4 @@
-package com.codesoom.assignment.interfaces;
+package com.codesoom.assignment.domain.interfaces;
 
 import java.math.BigDecimal;
 

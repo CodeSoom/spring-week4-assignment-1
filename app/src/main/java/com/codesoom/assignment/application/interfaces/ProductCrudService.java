@@ -1,4 +1,4 @@
-package com.codesoom.assignment.interfaces;
+package com.codesoom.assignment.application.interfaces;
 
 import com.codesoom.assignment.domain.Toy;
 

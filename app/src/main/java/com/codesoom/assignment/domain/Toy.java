@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.interfaces.Product;
+import com.codesoom.assignment.domain.interfaces.Product;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

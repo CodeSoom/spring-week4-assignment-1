@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.interfaces.Shop;
+import com.codesoom.assignment.domain.interfaces.Shop;
 
 public class ToyShop implements Shop {
     private final String name;

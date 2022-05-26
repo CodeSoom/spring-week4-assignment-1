@@ -2,8 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.interfaces.ProductCrudService;
-import com.codesoom.assignment.interfaces.ToyRepository;
+import com.codesoom.assignment.application.interfaces.ProductCrudService;
+import com.codesoom.assignment.domain.interfaces.ToyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

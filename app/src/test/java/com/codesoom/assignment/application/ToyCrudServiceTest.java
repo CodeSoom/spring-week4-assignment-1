@@ -4,8 +4,8 @@ import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.domain.InMemoryToyRepository;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
-import com.codesoom.assignment.interfaces.ProductCrudService;
-import com.codesoom.assignment.interfaces.ToyRepository;
+import com.codesoom.assignment.application.interfaces.ProductCrudService;
+import com.codesoom.assignment.domain.interfaces.ToyRepository;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;

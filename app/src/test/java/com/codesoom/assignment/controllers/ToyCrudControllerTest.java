@@ -1,10 +1,11 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.interfaces.ProductCrudService;
 import com.codesoom.assignment.controllers.dtos.ToyRequestDto;
 import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
+import com.codesoom.assignment.controllers.interfaces.ProductCrudController;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
-import com.codesoom.assignment.interfaces.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;

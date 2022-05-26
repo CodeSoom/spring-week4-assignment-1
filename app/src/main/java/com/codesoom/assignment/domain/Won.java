@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.interfaces.Money;
+import com.codesoom.assignment.domain.interfaces.Money;
 
 import java.math.BigDecimal;
 

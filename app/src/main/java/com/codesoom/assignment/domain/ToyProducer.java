@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.interfaces.Producer;
+import com.codesoom.assignment.domain.interfaces.Producer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
