@@ -62,7 +62,7 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("고양이 장난감을 등록하면")
-        class when_list_with_id {
+        class when_regist {
 
             @Test
             @DisplayName("201 CREATED를 응답합니다.")
