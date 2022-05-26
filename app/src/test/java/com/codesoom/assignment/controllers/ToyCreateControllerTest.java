@@ -19,8 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("ToyCrudController 클래스")
-class ToyCrudControllerTest {
+@DisplayName("ToyCreateController 클래스")
+class ToyCreateControllerTest {
     @Mock
     private ProductCrudService service;
     private ProductCrudController controller;
@@ -45,71 +45,6 @@ class ToyCrudControllerTest {
         toys.clear();
     }
 
-    @Nested
-    @DisplayName("list 메소드는")
-    class Describe_list {
-        private List<ToyResponseDto> subject() {
-            return controller.list();
-        }
-
-        @Nested
-        @DisplayName("만약 장난감이 존재하지 않는다면")
-        class Context_without_existing_toy {
-
-            @BeforeEach
-            void setUp() {
-                toys.clear();
-                given(service.showAll()).willReturn(toys);
-            }
-
-            @Test
-            @DisplayName("비어 있는 List를 반환한다")
-            void it_returns_empty_list() {
-                final List<ToyResponseDto> actual = subject();
-
-                assertThat(actual).isEmpty();
-            }
-        }
-
-        @Nested
-        @DisplayName("만약 장난감이 존재한다면")
-        class Context_with_existing_toy {
-            @BeforeEach
-            void setUp() {
-                toys.add(toy);
-                given(service.showAll()).willReturn(toys);
-            }
-
-            @Test
-            @DisplayName("비어 있지 않은 List를 반환한다")
-            void it_returns_not_empty_list() {
-                final List<ToyResponseDto> actual = subject();
-
-                assertThat(actual).isNotEmpty();
-            }
-        }
-    }
-
-    @Nested
-    @DisplayName("detail 메소드는")
-    class Describe_detail {
-        private ToyResponseDto subject() {
-            return controller.detail(TOY_ID);
-        }
-
-        @BeforeEach
-        void setUp() {
-            given(service.showById(TOY_ID)).willReturn(toy);
-        }
-
-        @Test
-        @DisplayName("ToyResponseDto 형태로 값을 반환한다")
-        void it_returns_responseDto() {
-            final ToyResponseDto actual = subject();
-
-            assertThat(actual).isInstanceOf(ToyResponseDto.class);
-        }
-    }
 
     @Nested
     @DisplayName("create 메소드는")
