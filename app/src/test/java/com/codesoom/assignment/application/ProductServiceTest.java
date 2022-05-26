@@ -14,7 +14,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DisplayName("ProductService Test")
 class ProductServiceTest {
 
-    ProductService productService;
+    private ProductService productService;
+    private Long ID = 1L;
 
     @Nested
     @DisplayName("장난감 목록 조회")
@@ -51,7 +52,12 @@ class ProductServiceTest {
             @Test
             @DisplayName("장난감 상세 정보를 반환합니다.")
             void detail() {
+                productService = new ProductService(new InMemoryProductRepository());
 
+                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
+                productService.regist(product);
+
+                assertThat(productService.findById(ID).equals(product)).isTrue();
             }
         }
     }
@@ -67,7 +73,10 @@ class ProductServiceTest {
             @Test
             @DisplayName("동일한 정보로 장난감이 등록됩니다.")
             void regist() {
+                productService = new ProductService(new InMemoryProductRepository());
 
+                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
+                assertThat(productService.regist(product).equals(product)).isTrue();
             }
         }
     }
@@ -83,7 +92,12 @@ class ProductServiceTest {
             @Test
             @DisplayName("동일한 정보로 장난감이 수정됩니다.")
             void modify() {
+                productService = new ProductService(new InMemoryProductRepository());
 
+                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
+                productService.regist(product);
+                product.changeName("고양이생선");
+                assertThat(productService.modify(product).equals(product)).isTrue();
             }
         }
     }
@@ -99,7 +113,12 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보가 삭제됩니다.")
             void delete() {
+                productService = new ProductService(new InMemoryProductRepository());
 
+                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
+                productService.regist(product);
+                productService.delete(ID);
+                assertThat(productService.findAll().size()).isEqualTo(0);
             }
         }
     }
