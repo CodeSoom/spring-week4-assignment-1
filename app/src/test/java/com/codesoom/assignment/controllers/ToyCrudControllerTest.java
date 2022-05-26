@@ -43,7 +43,7 @@ class ToyCrudControllerTest {
     @Nested
     @DisplayName("list 메소드는")
     class Describe_list {
-        private List<Toy> subject() {
+        private List<ToyResponseDto> subject() {
             return controller.list();
         }
 
@@ -60,7 +60,7 @@ class ToyCrudControllerTest {
             @Test
             @DisplayName("비어 있는 List를 반환한다")
             void it_returns_empty_list() {
-                final List<Toy> actual = subject();
+                final List<ToyResponseDto> actual = subject();
 
                 assertThat(actual).isEmpty();
             }
@@ -78,7 +78,7 @@ class ToyCrudControllerTest {
             @Test
             @DisplayName("비어 있지 않은 List를 반환한다")
             void it_returns_not_empty_list() {
-                final List<Toy> actual = subject();
+                final List<ToyResponseDto> actual = subject();
 
                 assertThat(actual).isNotEmpty();
             }
