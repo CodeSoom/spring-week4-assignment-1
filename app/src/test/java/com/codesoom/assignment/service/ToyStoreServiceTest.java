@@ -105,7 +105,7 @@ public class ToyStoreServiceTest {
     void getProductWithInValidId() {
         long productId = 1000L;
 
-        given(toyStoreRepository.findById(productId)).willThrow(new ProductNotFoundException(productId));
+        given(toyStoreRepository.findById(productId)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> {
             toyStoreService.getProduct(productId);
@@ -134,7 +134,7 @@ public class ToyStoreServiceTest {
     void deleteProductWithInValidId() {
         long productId = 1000L;
 
-        given(toyStoreRepository.findById(productId)).willThrow(new ProductNotFoundException(productId));
+        given(toyStoreRepository.findById(productId)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> {
             toyStoreService.deleteProduct(productId);
@@ -170,7 +170,7 @@ public class ToyStoreServiceTest {
 
         Product sourceProduct = new Product(productId, "name", "maker", 10000, "abcdefg.jpg");
 
-        given(toyStoreRepository.findById(productId)).willThrow(new ProductNotFoundException(productId));
+        given(toyStoreRepository.findById(productId)).willReturn(Optional.empty());
 
         assertThatThrownBy(() -> {
             toyStoreService.updateProduct(productId, sourceProduct);
