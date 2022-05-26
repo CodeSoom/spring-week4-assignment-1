@@ -120,7 +120,7 @@ public class ProductServiceTest {
             private final Long INVALID_ID = 100L;
 
             @Test
-            @DisplayName("ProductNotFoundExcpetion이 발생한다.")
+            @DisplayName("ProductNotFoundExcpetion 예외가 발생한다.")
             void it_throws_product_not_found_exception() {
                 assertThatThrownBy(() -> productService.updateProduct(INVALID_ID, productCommandRequest))
                         .isInstanceOf(ProductNotFoundException.class);
