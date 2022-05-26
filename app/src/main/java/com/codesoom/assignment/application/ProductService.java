@@ -25,12 +25,12 @@ public class ProductService {
     }
 
     /**
-     * 첫번째 인자로 받은 id가 없을 경우 ProductNotFoundException 발생하고
-     * id가 존재할 경우 두번 째 인자로 받은 productCommandRequest를 조회해 Product를 변경하는 메소드입니다.
+     *  id로 product를 조회해 productCommandRequest의 spec에 맞게 변경 후 변경한
+     *  product를 ProductResponse로 변환해 반환합니다.
      *
      * @param id 변경할 product id
      * @param productCommandRequest 변경사항을 담은 dto
-     * @throws ProductNotFoundException id가 없을시 던지는 예외
+     * @throws ProductNotFoundException id로 조회한 product가 없을 때 던지는 예외
      */
     public ProductResponse updateProduct(Long id, ProductCommandRequest productCommandRequest) {
         Product product = findByIdOrElseThrow(id);
@@ -42,15 +42,17 @@ public class ProductService {
         return ProductResponse.of(product);
     }
 
+    /**
+     * id로 product를 조회해 조회한 product를 ProductResponse를 변환해 리턴합니다.
+     *
+     * @param id 조회할 product id
+     * @throws ProductNotFoundException id로 조회한 product가 없을 때 던지는 예외
+     */
     public ProductResponse getProduct(Long id) {
         Product product = findByIdOrElseThrow(id);
         return ProductResponse.of(product);
     }
 
-    private Product findByIdOrElseThrow(Long id) {
-        return productRepository.findById(id).
-                orElseThrow(() -> new ProductNotFoundException(id));
-    }
 
     public List<ProductResponse> getProducts() {
         List<Product> products = productRepository.findAll();
@@ -60,8 +62,19 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * id로 product를 조회해 해당 product를 삭제합니다.
+     *
+     * @param id 삭제할 product id
+     * @throws ProductNotFoundException id로 조회한 product가 없을 때 던지는 예외
+     */
     public void deleteProduct(Long id) {
         Product product = findByIdOrElseThrow(id);
         productRepository.delete(product);
+    }
+
+    private Product findByIdOrElseThrow(Long id) {
+        return productRepository.findById(id).
+                orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
