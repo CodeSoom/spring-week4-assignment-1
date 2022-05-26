@@ -154,7 +154,7 @@ public class ToyStoreServiceTest {
         given(toyStoreRepository.findById(productId)).willReturn(Optional.of(sourceProduct));
         given(toyStoreRepository.save(sourceProduct)).willReturn(updateProduct);
 
-        Product product = toyStoreService.updateProduct(updateProduct);
+        Product product = toyStoreService.updateProduct(productId, updateProduct);
 
         assertThat(product.getId()).isEqualTo(updateProduct.getId());
         assertThat(product.getName()).isEqualTo(updateProduct.getName());
@@ -173,7 +173,7 @@ public class ToyStoreServiceTest {
         given(toyStoreRepository.findById(productId)).willThrow(new ProductNotFoundException(productId));
 
         assertThatThrownBy(() -> {
-            toyStoreService.updateProduct(sourceProduct);
+            toyStoreService.updateProduct(productId, sourceProduct);
         }).isInstanceOf(ProductNotFoundException.class);
 
         verify(toyStoreRepository).findById(productId);

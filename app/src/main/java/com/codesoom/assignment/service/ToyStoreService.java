@@ -36,10 +36,10 @@ public class ToyStoreService {
         return product;
     }
 
-    public Product updateProduct(Product sourceProduct) {
-        getProduct(sourceProduct.getId());
+    public Product updateProduct(Long id, Product sourceProduct) {
+        getProduct(id);
 
-        Product product = new Product(sourceProduct.getId(), sourceProduct.getName(), sourceProduct.getMaker(),
+        Product product = new Product(id, sourceProduct.getName(), sourceProduct.getMaker(),
                 sourceProduct.getPrice(),
                 sourceProduct.getImageUrl());
 
