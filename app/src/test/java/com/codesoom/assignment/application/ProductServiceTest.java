@@ -126,4 +126,26 @@ public class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("getProduct 메소드는")
+    class Context_getProduct {
+        private Long id = 1L;
+
+        public ProductResponse subject() {
+            productRepository.save(product);
+            return productService.getProduct(id);
+        }
+        @Test
+        @DisplayName("producctResponse를 반환한다.")
+        void it_returns_productResponse() {
+            ProductResponse productResponse = subject();
+
+            assertThat(productResponse.getId()).isEqualTo(product.getId());
+            assertThat(productResponse.getMaker()).isEqualTo(product.getMaker());
+            assertThat(productResponse.getImageUrl()).isEqualTo(product.getImageUrl());
+            assertThat(productResponse.getPrice()).isEqualTo(product.getPrice());
+            assertThat(productResponse.getName()).isEqualTo(product.getName());
+        }
+    }
 }
