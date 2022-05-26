@@ -70,7 +70,6 @@ public class ProductServiceTest {
         private static final int UPDATE_PRICE = 7000;
         private static final String UPDATE_IMAGE_URL = "https://www.catdrug.com/images/1234567";
 
-        private Long id;
         private ProductCommandRequest productCommandRequest;
 
         @BeforeEach
@@ -87,24 +86,24 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("존재하는 id가 주어지면")
         class Context_with_existed_id {
+            private final Long VALID_ID = 1L;
+            private Product updatedProduct;
 
-            @BeforeEach
-            void setUp() {
-                Product newProduct = productRepository.save(product);
-                id = newProduct.getId();
+            public ProductResponse subject() {
+                ProductResponse productResponse = productService.updateProduct(VALID_ID, productCommandRequest);
+                updatedProduct = productRepository.findById(VALID_ID).get();
+                return productResponse;
             }
 
             @Test
-            @DisplayName("product를 변경한다.")
-            void it_updates_product() {
-                productService.updateProduct(id, productCommandRequest);
+            @DisplayName("변경된 product의 dto 객체를 반환한다.")
+            void it_returns_updated_product() {
+                ProductResponse productResponse = subject();
 
-                Product updatedProduct = productRepository.findById(id).get();
-
-                assertThat(updatedProduct.getName()).isEqualTo(UPDATE_NAME);
-                assertThat(updatedProduct.getMaker()).isEqualTo(UPDATE_MAKER);
-                assertThat(updatedProduct.getPrice()).isEqualTo(UPDATE_PRICE);
-                assertThat(updatedProduct.getImageUrl()).isEqualTo(UPDATE_IMAGE_URL);
+                assertThat(productResponse.getName()).isEqualTo(updatedProduct.getName());
+                assertThat(productResponse.getMaker()).isEqualTo(updatedProduct.getMaker());
+                assertThat(productResponse.getPrice()).isEqualTo(updatedProduct.getPrice());
+                assertThat(productResponse.getImageUrl()).isEqualTo(updatedProduct.getImageUrl());
             }
         }
 
@@ -112,16 +111,12 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("존재하지 않는 id가 주어지면")
         class Context_with_non_existed_id {
-
-            @BeforeEach
-            void setUp() {
-                id = 100L;
-            }
+            private final Long INVALID_ID = 100L;
 
             @Test
             @DisplayName("ProductNotFoundExcpetion이 발생한다.")
             void it_throws_product_not_found_exception() {
-                assertThatThrownBy(() -> productService.updateProduct(id, productCommandRequest))
+                assertThatThrownBy(() -> productService.updateProduct(INVALID_ID, productCommandRequest))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -135,6 +130,7 @@ public class ProductServiceTest {
         @DisplayName("존재하는 아이디가 주어지면")
         class Context_with_exist_id {
             Product givenProduct;
+
             public ProductResponse subject() {
                 givenProduct = productRepository.save(product);
                 return productService.getProduct(givenProduct.getId());
