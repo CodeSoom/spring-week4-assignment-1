@@ -2,6 +2,8 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.repository.ToyStoreRepository;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,5 +17,9 @@ public class ToyStoreService {
 
     public Product save(Product product) {
         return toyStoreRepository.save(product);
+    }
+
+    public List<Product> getProducts() {
+        return toyStoreRepository.findAll();
     }
 }
