@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DisplayName("ToyProductCrudService 클래스")
-class ToyProductCrudServiceTest {
+class ToyCrudServiceTest {
     private ToyRepository repository;
     private ProductCrudService service;
     private Toy toy;
@@ -28,7 +28,7 @@ class ToyProductCrudServiceTest {
     void setUp() {
         toy = new Toy(TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
         repository = new InMemoryToyRepository();
-        service = new ToyProductCrudService(repository);
+        service = new ToyCrudService(repository);
     }
 
     @Nested

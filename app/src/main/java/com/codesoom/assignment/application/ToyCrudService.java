@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ToyProductCrudService implements ProductCrudService {
+public class ToyCrudService implements ProductCrudService {
     private final ToyRepository repository;
 
-    public ToyProductCrudService(ToyRepository repository) {
+    public ToyCrudService(ToyRepository repository) {
         this.repository = repository;
     }
 
