@@ -7,6 +7,9 @@ import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
@@ -47,5 +50,13 @@ public class ProductService {
     private Product findByIdOrElseThrow(Long id) {
         return productRepository.findById(id).
                 orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    public List<ProductResponse> getProducts() {
+        List<Product> products = productRepository.findAll();
+
+        return products.stream()
+                .map(ProductResponse::of)
+                .collect(Collectors.toList());
     }
 }
