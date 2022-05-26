@@ -22,6 +22,8 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -212,6 +214,43 @@ public class ProductControllerTest {
                     .andExpect(jsonPath("$[0].imageUrl").value(productResponse.getImageUrl()))
                     .andExpect(jsonPath("$[0].price").value(productResponse.getPrice()))
                     .andExpect(jsonPath("$[0].maker").value(productResponse.getMaker()));
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products/{id} 요청은")
+    class Describe_delete_products_by_id {
+
+        @Nested
+        @DisplayName("id가 존재하면")
+        class Context_when_id_exist {
+            private final Long VALID_ID = 1L;
+
+            @Test
+            @DisplayName("204 status를 응답한다.")
+            void it_responses_204_status() throws Exception {
+                mockMvc.perform(delete("/products/{id}", VALID_ID))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("id가 존재하지 않으면")
+        class Context_when_id_non_exist {
+            private final Long INVALID_ID = 100L;
+
+            @BeforeEach
+            void setUp() {
+                doThrow(new ProductNotFoundException(INVALID_ID))
+                        .when(productService).deleteProduct(INVALID_ID);
+            }
+
+            @Test
+            @DisplayName("404 status를 응답한다.")
+            void it_responses_404_status() throws Exception {
+                mockMvc.perform(delete("/products/{id}", INVALID_ID))
+                        .andExpect(status().isNotFound());
+            }
         }
     }
 
