@@ -29,10 +29,20 @@ public class ToyStoreService {
     }
 
     public Product deleteProduct(long productId) {
-         Product product = getProduct(productId);
+        Product product = getProduct(productId);
 
-         toyStoreRepository.delete(product);
+        toyStoreRepository.delete(product);
 
-         return product;
+        return product;
+    }
+
+    public Product updateProduct(Product sourceProduct) {
+        getProduct(sourceProduct.getId());
+
+        Product product = new Product(sourceProduct.getId(), sourceProduct.getName(), sourceProduct.getMaker(),
+                sourceProduct.getPrice(),
+                sourceProduct.getImageUrl());
+
+        return toyStoreRepository.save(product);
     }
 }
