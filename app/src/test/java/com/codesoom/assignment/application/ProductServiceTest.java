@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -159,6 +161,29 @@ public class ProductServiceTest {
             void it_throws_product_not_found_exception() {
                 assertThatThrownBy(() -> productService.getProduct(INVALID_ID))
                         .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("getProducts 메소드는")
+    class Describe_getProducts {
+
+        @Nested
+        @DisplayName("저장된 product가 있으면")
+        public class Context_when_there_is_saved_product {
+
+            @BeforeEach
+            void setUp() {
+                productRepository.save(product);
+            }
+
+            @Test
+            @DisplayName("저장된 productRespones list를 반환한다.")
+            void it_returns_productResponse_list() {
+                List<ProductResponse> products = productService.getProducts();
+
+                assertThat(products).isNotEmpty();
             }
         }
     }
