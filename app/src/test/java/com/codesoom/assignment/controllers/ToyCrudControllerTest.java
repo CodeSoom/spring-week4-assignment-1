@@ -12,9 +12,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,7 +99,29 @@ class ToyCrudControllerTest {
 
         @Test
         @DisplayName("ToyResponseDto 형태로 값을 반환한다")
-        void it_returns_toy() {
+        void it_returns_responseDto() {
+            final ToyResponseDto actual = subject();
+
+            assertThat(actual).isInstanceOf(ToyResponseDto.class);
+        }
+    }
+
+    @Nested
+    @DisplayName("create 메소드는")
+    class Describe_create {
+        private ToyResponseDto subject() {
+            ToyRequestDto requestDto = new RequestDto(toyTesting());
+            return controller.create(requestDto);
+        }
+
+        @BeforeEach
+        void setUp() {
+            given(service.create(any(Toy.class)).willReturn(any(Toy.class)));
+        }
+
+        @Test
+        @DisplayName("ToyResponseDto 형태로 값을 반환한다")
+        void it_returns_responseDto() {
             final ToyResponseDto actual = subject();
 
             assertThat(actual).isInstanceOf(ToyResponseDto.class);
