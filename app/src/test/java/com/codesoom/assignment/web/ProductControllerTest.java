@@ -16,6 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -184,6 +187,31 @@ public class ProductControllerTest {
                 mockMvc.perform(get("/products/{id}", INVALID_ID))
                         .andExpect(status().isNotFound());
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /products 요청은")
+    class Describe_get_products {
+
+        @BeforeEach
+        void setUp() {
+            List<ProductResponse> list = new ArrayList<>();
+            list.add(productResponse);
+            given(productService.getProducts())
+                    .willReturn(list);
+        }
+
+        @Test
+        @DisplayName("productResponse 리스트를 응답한다.")
+        void it_responses_product_response_list() throws Exception {
+            mockMvc.perform(get("/products"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$[0].id").value(productResponse.getId()))
+                    .andExpect(jsonPath("$[0].name").value(productResponse.getName()))
+                    .andExpect(jsonPath("$[0].imageUrl").value(productResponse.getImageUrl()))
+                    .andExpect(jsonPath("$[0].price").value(productResponse.getPrice()))
+                    .andExpect(jsonPath("$[0].maker").value(productResponse.getMaker()));
         }
     }
 
