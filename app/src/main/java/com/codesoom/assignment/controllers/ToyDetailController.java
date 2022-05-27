@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/products")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ToyDetailController implements ProductDetailController {
     private final ProductShowService service;

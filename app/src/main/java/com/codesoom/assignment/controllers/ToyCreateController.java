@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/products")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ToyCreateController implements ProductCreateController {
     private final ProductCreateService service;

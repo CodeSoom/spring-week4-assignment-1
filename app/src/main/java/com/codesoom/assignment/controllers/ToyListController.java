@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/products")
 @CrossOrigin(origins = "http://localhost:3000")
 public class ToyListController implements ProductListController {
     private final ProductShowService service;
