@@ -58,7 +58,7 @@ class ProductServiceTest {
             void detail() {
                 Product product = registOneProduct();
 
-                assertThat(productService.findById(ID).equals(product)).isTrue();
+                assertThat(productService.findById(ID)).isEqualTo(product);
             }
         }
     }
@@ -77,7 +77,7 @@ class ProductServiceTest {
                 productService = new ProductService(new InMemoryProductRepository());
 
                 Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
-                assertThat(productService.register(product).equals(product)).isTrue();
+                assertThat(productService.register(product)).isEqualTo(product);
             }
         }
     }
@@ -95,7 +95,7 @@ class ProductServiceTest {
             void modify() {
                 Product product = registOneProduct();
                 product.changeName("고양이생선");
-                assertThat(productService.modify(product).equals(product)).isTrue();
+                assertThat(productService.modify(product)).isEqualTo(product);
             }
         }
     }
