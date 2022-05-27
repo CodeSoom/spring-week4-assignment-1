@@ -16,8 +16,7 @@ public interface ProductDeleteService {
      * 매개변수로 전달 받은 id에 해당하는 Toy 엔티티를 반환
      * <p>
      * @param id Toy 엔티티의 Id에 해당
-     * @return Toy 엔티티
      * </p>
      */
-    Toy deleteBy(Long id);
+    void deleteBy(Long id);
 }
