@@ -19,7 +19,8 @@ public class ToyService implements ProductService {
 
     @Override
     public List<Product> findProducts() {
-        return productRepository.findAll();
+        List<Product> products = productRepository.findAll();
+        return products;
     }
 
     @Override
@@ -37,9 +38,9 @@ public class ToyService implements ProductService {
 //    public Product updateProduct(Long id, Product product) {
 //        return null;
 //    }
-//
-//    @Override
-//    public Product deleteProduct(Product product) {
-//        return null;
-//    }
+
+    @Override
+    public void deleteProduct(Long id) {
+        productRepository.delete(id);
+    }
 }
