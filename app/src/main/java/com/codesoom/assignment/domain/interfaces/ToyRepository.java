@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Toy 엔티티에 대한 영속적인 CRUD 작업
+ * '장난감' 저장소 인터페이스
  * <p>
  * All Known Implementing Classes:
  * InMemoryToyRepository
@@ -14,24 +14,24 @@ import java.util.Optional;
  */
 public interface ToyRepository {
     /**
-     * 모든 Toy 객체를 List의 형태로 불러온다
+     * 모든 장난감을 반환한다
      * <p>
-     * @return Toy 엔티티 객체를 내부 요소로 하는 List Collection 객체
+     * @return 장난감 엔티티를 내부 요소로 하는 List 콜렉션
      * </p>
      */
     List<Toy> findAll();
 
     /**
-     * 매개변수로 전달 받은 id에 해당하는 Toy 객체를 불러온다
+     * id에 해당하는 장난감을 반환한다
      * <p>
-     * @param id Toy의 Id에 해당
-     * @return Optional<Toy> Toy 엔티티
+     * @param id 장난감의 id
+     * @return Optional<Toy> 장난감 타입
      * </p>
      */
     Optional<Toy> findById(Long id);
 
     /**
-     * Toy 엔티티 객체 저장
+     * 장난감을 저장한다
      * <p>
      * @param toy Toy 엔티티 객체
      * @return Toy 엔티티 객체
@@ -40,18 +40,18 @@ public interface ToyRepository {
     Toy save(Toy toy);
 
     /**
-     * Toy 엔티티 객체 삭제
+     * 장난감을 삭제한다
      * <p>
-     * @param id Toy 객체의 Id에 해당하는 객체
+     * @param id 장난감의 id
      * </p>
      */
     void deleteById(Long id);
 
     /**
-     * 매개변수로 전달 받은 id에 해당하는 Toy 객체의 존재 여부를 알려준다
+     * id에 해당하는 장난감의 존재여부를 알려준다
      * <p>
-     * @param id Toy 객체의 Id에 해당
-     * @return id에 해당하는 Toy 객체가 존재하면 True, 존재하지 않으면 False를 반환
+     * @param id 장난감의 id
+     * @return 장난감의 존재여부
      * </p>
      */
     boolean existsById(Long id);
