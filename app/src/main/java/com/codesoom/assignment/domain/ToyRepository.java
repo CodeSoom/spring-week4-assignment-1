@@ -19,11 +19,9 @@ public class ToyRepository implements ProductRepository {
 
     @Override
     public Optional<Product> findById(Long id) {
-//        return products.stream()
-//                .filter(product -> product.getId().equals(id))
-//                .findFirst();
-
-        return null;
+        return products.stream()
+                .filter(product -> product.getId().equals(id))
+                .findFirst();
     }
 
     @Override
@@ -45,11 +43,11 @@ public class ToyRepository implements ProductRepository {
 //    public Product update(Long id, Product product) {
 //        return null;
 //    }
-//
-//    @Override
-//    public Product delete(Product product) {
-//        return null;
-//    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
 
     private Long generateId() {
         newId += 1;
