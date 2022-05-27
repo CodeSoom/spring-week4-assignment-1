@@ -4,9 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 테스트 시에만 사용하기 위한 in memory repository
@@ -15,22 +13,23 @@ import java.util.Optional;
 @Repository
 public class InMemoryProductRepository implements ProductRepository{
 
-    private Long id = 0L;
-    private List<Product> products = new ArrayList<Product>();
+    private Long maxId = 0L;
+    private Map<Long, Product> products = new HashMap<>();
 
     private Long generateId() {
-        this.id += 1L;
-        return this.id;
+        this.maxId += 1;
+        return this.maxId;
     }
 
     @Override
     public List<Product> findAll() {
-        return products;
+        return new ArrayList<>(products.values());
     }
 
     @Override
     public Optional<Product> findById(Long id) {
-        return products.stream()
+
+        return products.values().stream()
                 .filter(product -> product.checkMyId(id))
                 .findFirst();
     }
@@ -38,17 +37,17 @@ public class InMemoryProductRepository implements ProductRepository{
     @Override
     public Product save(Product product) {
         if (product.isRegistered()) {
-            Product updatedProject = products.stream().filter(source -> source.equals(product)).findFirst().orElseThrow();
-            updatedProject.changeProduct(product);
-            return updatedProject;
+            products.put(product.id(), product);
+            return product;
         }
+
         Product createdProduct = Product.creatNewProduct(generateId(), product);
-        products.add(createdProduct);
+        products.put(createdProduct.id(), createdProduct);
         return createdProduct;
     }
 
     @Override
     public void delete(Product product) {
-        products.remove(product);
+        products.remove(product.id());
     }
 }

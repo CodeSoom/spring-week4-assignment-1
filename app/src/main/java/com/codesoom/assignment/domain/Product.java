@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -12,21 +11,21 @@ public class Product {
     private BigDecimal price;
     private String imagePath;
 
-    public Product() {
 
-    }
-
-    public Product(String name, BigDecimal price, String maker, String imagePath) {
+    public Product(Long id, String name, BigDecimal price, String maker, String imagePath) {
+        this.id = id;
         this.name = name;
         this.price = price;
         this.maker = maker;
         this.imagePath = imagePath;
     }
 
+    public Long id() {
+        return this.id;
+    }
+
     public static Product creatNewProduct(Long id, Product product) {
-        Product newProduct = new Product(product.name, product.price, product.maker, product.imagePath);
-        newProduct.id = id;
-        return newProduct;
+        return new Product(id, product.name, product.price, product.maker, product.imagePath);
     }
 
     public boolean checkMyId(Long id) {
@@ -42,22 +41,6 @@ public class Product {
         this.price = product.price;
         this.maker = product.maker;
         this.imagePath = product.imagePath;
-    }
-
-    public void changeName(String name) {
-        this.name = name;
-    }
-
-    public void changeMaker(String maker) {
-        this.maker = maker;
-    }
-
-    public void changePrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void changeImagePath(String imagePath) {
-        this.imagePath = imagePath;
     }
 
     @Override

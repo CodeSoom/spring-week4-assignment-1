@@ -18,13 +18,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 class ProductServiceTest {
 
     private ProductService productService;
-    private final Long ID = 1L;
+    private final Long ID = 0L;
     private final Long INVALID_ID = 100L;
 
     private Product registOneProduct() {
         productService = new ProductService(new InMemoryProductRepository());
 
-        Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
+        Product product = new Product(ID, "고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
         return productService.register(product);
     }
 
@@ -100,7 +100,7 @@ class ProductServiceTest {
             void register() {
                 productService = new ProductService(new InMemoryProductRepository());
 
-                Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
+                Product product = new Product(ID, "고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
                 assertThat(productService.register(product)).isEqualTo(product);
             }
         }
@@ -118,8 +118,8 @@ class ProductServiceTest {
             @DisplayName("동일한 정보로 장난감이 수정됩니다.")
             void modify() {
                 Product product = registOneProduct();
-                product.changeName("고양이생선");
-                assertThat(productService.modify(ID, product)).isEqualTo(product);
+                Product changedProduct = new Product(ID, "고양이 생선", BigDecimal.valueOf(20000), "(주)애옹이네", "image.png");
+                assertThat(productService.modify(ID, changedProduct)).isEqualTo(changedProduct);
             }
         }
 
@@ -131,7 +131,7 @@ class ProductServiceTest {
             @DisplayName("ToyNotFound 예외가 발생합니다.")
             void modify() {
                 productService = new ProductService(new InMemoryProductRepository());
-                Product product = Product.creatNewProduct(ID, new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png"));
+                Product product = Product.creatNewProduct(ID, new Product(ID, "고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png"));
 
                 assertThatThrownBy(() -> productService.modify(INVALID_ID, product)).isInstanceOf(ToyNotFoundException.class);
             }
