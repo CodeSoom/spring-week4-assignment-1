@@ -13,14 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -72,15 +72,21 @@ public class ProductControllerTest {
                 given(productService.getProducts()).willReturn(products);
             }
 
-            @Test
+            @Nested
             @DisplayName("1개의 Product가 저장되어있는 리스트를 반환한다")
-            void It_returns_list_contains_one_product() throws Exception {
-                mockMvc.perform(get("/products"))
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$[0].id").value(PRODUCT_ID))
-                        .andExpect(jsonPath("$[0].name").value(PRODUCT_NAME))
-                        .andExpect(jsonPath("$[0].maker").value(PRODUCT_MAKER))
-                        .andExpect(jsonPath("$[0].price").value(PRODUCT_PRICE));
+            class It_returns_list_contains_one_product {
+                ResultActions subject() throws Exception {
+                    return mockMvc.perform(get("/products"));
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isOk())
+                            .andExpect(jsonPath("$[0].id").value(PRODUCT_ID))
+                            .andExpect(jsonPath("$[0].name").value(PRODUCT_NAME))
+                            .andExpect(jsonPath("$[0].maker").value(PRODUCT_MAKER))
+                            .andExpect(jsonPath("$[0].price").value(PRODUCT_PRICE));
+                }
             }
         }
 
@@ -92,11 +98,17 @@ public class ProductControllerTest {
                 given(productService.getProducts()).willReturn(products);
             }
 
-            @Test
+            @Nested
             @DisplayName("비어있는 리스트를 반환한다")
-            void It_returns_empty_list() throws Exception {
-                mockMvc.perform(get("/products"))
-                        .andExpect(status().isOk());
+            class It_returns_empty_list {
+                ResultActions subject() throws Exception {
+                    return mockMvc.perform(get("/products"));
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isOk());
+                }
             }
         }
     }
@@ -112,15 +124,21 @@ public class ProductControllerTest {
                 given(productService.getProduct(PRODUCT_ID)).willReturn(product);
             }
 
-            @Test
+            @Nested
             @DisplayName("product를 반환한다")
-            void It_returns_product() throws Exception {
-                mockMvc.perform(get("/products/{id}", PRODUCT_ID))
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.id").value(PRODUCT_ID))
-                        .andExpect(jsonPath("$.name").value(PRODUCT_NAME))
-                        .andExpect(jsonPath("$.maker").value(PRODUCT_MAKER))
-                        .andExpect(jsonPath("$.price").value(PRODUCT_PRICE));
+            class It_returns_product {
+                ResultActions subject() throws Exception {
+                    return mockMvc.perform(get("/products/{id}", PRODUCT_ID));
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isOk())
+                            .andExpect(jsonPath("$.id").value(PRODUCT_ID))
+                            .andExpect(jsonPath("$.name").value(PRODUCT_NAME))
+                            .andExpect(jsonPath("$.maker").value(PRODUCT_MAKER))
+                            .andExpect(jsonPath("$.price").value(PRODUCT_PRICE));
+                }
             }
         }
     }
@@ -136,16 +154,22 @@ public class ProductControllerTest {
                 given(productService.addProduct(any())).willReturn(product);
             }
 
-            @Test
+            @Nested
             @DisplayName("product를 반환한다")
-            void It_returns_product() throws Exception {
-                ObjectMapper objectMapper = new ObjectMapper();
-                String jsonRequest = objectMapper.writeValueAsString(product);
+            class It_returns_product {
+                ResultActions subject() throws Exception {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonRequest = objectMapper.writeValueAsString(product);
 
-                mockMvc.perform(post("/products")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(jsonRequest))
-                        .andExpect(status().isCreated());
+                    return mockMvc.perform(post("/products")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonRequest));
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isCreated());
+                }
             }
         }
     }
