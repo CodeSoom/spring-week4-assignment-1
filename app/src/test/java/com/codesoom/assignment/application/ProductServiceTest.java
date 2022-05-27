@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.exception.ToyNotFoundException;
 import com.codesoom.assignment.repository.InMemoryProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +81,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("ToyNotFoundException 예외가 발생합니다.")
             void detail() {
-                assertThatThrownBy(() -> productService.findById(INVALID_ID)).isInstanceOf(new ToyNotFoundException());
+                assertThatThrownBy(() -> productService.findById(INVALID_ID)).isInstanceOf(ToyNotFoundException.class);
             }
         }
     }
@@ -130,7 +131,7 @@ class ProductServiceTest {
             void modify() {
                 Product product = Product.creatNewProduct(INVALID_ID, new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png"));
 
-                assertThatThrownBy(() -> productService.modify(product)).isInstanceOf(new ToyNotFoundException());
+                assertThatThrownBy(() -> productService.modify(product)).isInstanceOf(ToyNotFoundException.class);
             }
         }
     }
@@ -159,7 +160,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("ToyNotFound 예외가 발생합니다.")
             void delete() {
-                assertThatThrownBy(() -> productService.delete(INVALID_ID)).isInstanceOf(new ToyNotFoundException());
+                assertThatThrownBy(() -> productService.delete(INVALID_ID)).isInstanceOf(ToyNotFoundException.class);
             }
         }
     }
