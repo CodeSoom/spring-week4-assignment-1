@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface ProductController {
     
-    List<Product> getProducts();
+    List<Product> list();
 
-    Optional<Product> getProduct(Long id);
+    Product detail(Long id);
 
     Product create(Product product);
+
+    void delete(Long id);
 }
