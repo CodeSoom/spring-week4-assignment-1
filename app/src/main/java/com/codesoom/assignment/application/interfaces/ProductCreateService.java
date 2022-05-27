@@ -11,7 +11,7 @@ import com.codesoom.assignment.domain.Toy;
  */
 public interface ProductCreateService {
     /**
-     * Toy 엔티티 객체 생성
+     * Toy 엔티티 객체 생성하고, 생성된 객체를 반환한다.
      * <p>
      * @param toy Toy 객체
      * @return Toy 객체
