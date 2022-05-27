@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -20,16 +19,14 @@ public class ToyController implements ProductController {
 
     @Override
     @GetMapping
-    public List<Product> getProducts() {
-        List<Product> toys = productService.findProducts();
-        return toys;
+    public List<Product> list() {
+        return productService.findProducts();
     }
 
     @Override
     @GetMapping("/{id}")
-    public Optional<Product> getProduct(@PathVariable Long id) {
-        // 고민중g
-        return Optional.ofNullable(productService.findProduct(id));
+    public Product detail(@PathVariable Long id) {
+        return productService.findProduct(id);
     }
 
     @Override
@@ -37,5 +34,12 @@ public class ToyController implements ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(Product product) {
         return productService.createProduct(product);
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        productService.deleteProduct(id);
     }
 }
