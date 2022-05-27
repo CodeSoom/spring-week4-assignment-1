@@ -46,7 +46,7 @@ public class InMemoryToyRepository implements ToyRepository {
     @Override
     public boolean existsById(Long id) {
         return toy_map.values().stream()
-            .noneMatch(task -> Objects.equals(task.id(), id));
+                .allMatch(task -> Objects.equals(task.id(), id));
     }
 
     private Long idGenerated() {
