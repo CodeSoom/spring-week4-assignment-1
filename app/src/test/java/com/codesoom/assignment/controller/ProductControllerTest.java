@@ -1,5 +1,8 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.application.ToyService;
+import com.codesoom.assignment.error.NotFoundException;
+import com.codesoom.assignment.interfaces.ProductController;
 import com.codesoom.assignment.interfaces.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -51,32 +55,39 @@ class ProductControllerTest {
         products.add(product);
 
         given(productService.findProducts()).willReturn(products);
-        given(productService.createProduct(any())).willReturn(product);
-        given(productService.findProduct(PRODUCT_ID)).willReturn(product);
     }
 
     @Nested
     @DisplayName("[GET] /products 요청에 대해서")
     class Describe_list {
-        @Test
-        @DisplayName("getProducts 메서드는 product 의 리스트를 모두 반환한다.")
-        void It_returns_product_list() throws Exception {
-            mockMvc.perform(get("/products"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("dogCompany")));
+        @Nested
+        @DisplayName("등록된 product 가 있으면")
+        class Context_has_product {
+            @Test
+            @DisplayName("getProducts 메서드는 product 의 리스트를 모두 반환한다.")
+            void It_returns_product_list() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("dogCompany")));
+            }
         }
     }
 
     @Nested
     @DisplayName("[POST] /products 요청에 대해서")
     class Describe_save {
+        @BeforeEach
+        void setUp() {
+            given(productService.createProduct(any())).willReturn(product);
+        }
+
         @Test
         @DisplayName("createProduct 메서드는 product 의 리스트를 저장하고 반환한다.")
         void It_returns_status_created() throws Exception {
             mockMvc.perform(post("/products")
-                    .content(objectMapper.writeValueAsString(product))
-                    .contentType(MediaType.APPLICATION_JSON))
+                            .content(objectMapper.writeValueAsString(product))
+                            .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isCreated())
                     .andExpect(content().string(containsString(product.getMaker())));
@@ -86,19 +97,49 @@ class ProductControllerTest {
     @Nested
     @DisplayName("[GET] /products/{id} 요청에 대해서")
     class Describe_get_product_by_id {
-        @Test
-        @DisplayName("getProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
-        void It_returns_product() throws Exception {
-            mockMvc.perform(get("/products/{id}", product.getId()))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("dogCompany")));
+        @Nested
+        @DisplayName("요청하는 id 가 있으면")
+        class Context_when_exist_product_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.findProduct(PRODUCT_ID)).willReturn(product);
+            }
+
+            @Test
+            @DisplayName("getProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
+            void It_returns_product() throws Exception {
+                mockMvc.perform(get("/products/{id}", product.getId()))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("dogCompany")));
+            }
         }
+
+        @Nested
+        @DisplayName("요청하는 id 가 없으면")
+        class Context_when_not_exist_product_id {
+            private final Long UNKNOWN_PRODUCT_ID = 100L;
+
+            @BeforeEach
+            void setUp() {
+                given(productService.findProduct(UNKNOWN_PRODUCT_ID))
+                        .willThrow(new NotFoundException(UNKNOWN_PRODUCT_ID));
+            }
+
+            @Test
+            @DisplayName("getProduct 메서드는 NotFoundException 을 반환한다.")
+            void It_returns_NotFoundException() throws Exception {
+                mockMvc.perform(get("/products/{id}", UNKNOWN_PRODUCT_ID))
+                        .andDo(print())
+                        .andExpect(status().isNotFound());
+            }
+        }
+
     }
 
-    @Nested
-    @DisplayName("[PATCH] /products 요청에 대하여")
-    class Describe {
-
-    }
+//    @Nested
+//    @DisplayName("[PATCH] /products 요청에 대하여")
+//    class Describe {
+//
+//    }
 }
