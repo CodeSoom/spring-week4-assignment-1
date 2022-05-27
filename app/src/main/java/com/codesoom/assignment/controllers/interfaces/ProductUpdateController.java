@@ -6,7 +6,7 @@ import com.codesoom.assignment.controllers.dtos.ToyResponseDto;
 import java.util.List;
 
 /**
- * Product 타입에 대해 HTTP GET의 수정 요청을 받고, 처리결과를 응답으로 반환
+ * Product 타입에 대해 HTTP PATCH의 수정 요청을 받고, 처리결과를 응답으로 반환
  * <p>
  * All Known Implementing Classes:
  * ToyUpdateController
