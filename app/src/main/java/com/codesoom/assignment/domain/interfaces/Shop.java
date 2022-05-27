@@ -9,9 +9,9 @@ package com.codesoom.assignment.domain.interfaces;
  */
 public interface Shop {
     /**
-     * Shop 멤버변수 name 반환한다
+     * '가게'의 이름을 반환한다
      * <p>
-     * @return Shop 객체의 이름에 해당하는 문자열 반환
+     * @return '가게'의 이름에 해당하는 문자열을 반환한다
      * </p>
      */
     String name();

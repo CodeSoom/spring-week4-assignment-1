@@ -9,9 +9,9 @@ package com.codesoom.assignment.domain.interfaces;
  */
 public interface Producer {
     /**
-     * Producer 멤버변수 name 반환한다
+     * '생산자'의 이름을 반환한다
      * <p>
-     * @return Producer 객체의 이름에 해당하는 문자열 반환
+     * @return '생산자'의 이름을 문자열로 반환한다
      * </p>
      */
     String name();

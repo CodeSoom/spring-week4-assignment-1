@@ -3,7 +3,7 @@ package com.codesoom.assignment.application.interfaces;
 import com.codesoom.assignment.domain.Toy;
 
 /**
- * Product 타입 생성에 대한 비지니스 로직
+ * 상품 타입 생성에 대한 비지니스 로직을 처리한다
  * <p>
  * All Known Implementing Classes:
  * ToyCreateService

@@ -11,9 +11,9 @@ import java.math.BigInteger;
  */
 public interface Money {
     /**
-     * Money 멤버변수 value 반환한다
+     * '돈'의 가치를 반환한다
      * <p>
-     * @return Money 객체의 가치에 해당하는 BigDecimal 반환
+     * @return '돈'의 가치에 해당하는 타입을 반환한다
      * </p>
      */
     BigDecimal value();

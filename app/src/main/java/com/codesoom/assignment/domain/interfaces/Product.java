@@ -11,25 +11,25 @@ import java.math.BigDecimal;
  */
 public interface Product {
     /**
-     * Product의 멤버변수 name 반환한다
+     * '상품'의 이름을 반환한다
      * <p>
-     * @return Product 객체의 이름에 해당하는 문자열 반환
+     * @return '상품'의 이름에 해당하는 문자열을 반환한다
      * </p>
      */
     String name();
 
     /**
-     * Product의 멤버변수 producer 반환한다
+     * '상품'의 '생산자'를 반환한다
      * <p>
-     * @return Product 객체의 생산자에 해당하는 Producer 객체 반환
+     * @return '상품'의 '생산자'에 해당하는 타입을 반환한다
      * </p>
      */
     Producer producer();
 
     /**
-     * Product의 멤버변수 price 반환한다
+     * '상품'의 '가격'을 반환한다
      * <p>
-     * @return Product 객체의 가격 해당하는 BigDecimal 반환
+     * @return '상품'의 '가격'에 해당한는 타입을 반환한다
      * </p>
      */
     BigDecimal price();
