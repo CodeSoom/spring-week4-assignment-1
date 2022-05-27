@@ -25,13 +25,14 @@ public class InMemoryToyRepository implements ToyRepository {
     @Override
     public Optional<Toy> findById(Long id) {
         return toy_map.values().stream()
-            .filter(toy -> Objects.equals(toy.id(), id))
-            .findFirst();
+                .filter(toy -> Objects.equals(toy.id(), id))
+                .findFirst();
     }
 
     @Override
     public Toy save(Toy toy) {
-        Toy toySaving = new Toy(idGenerated(), toy.name(), toy.producer(), toy.price());
+        Long idSaving = (toy.id() == null) ? idGenerated() : toy.id();
+        Toy toySaving = new Toy(idSaving, toy.name(), toy.producer(), toy.price());
         toy_map.put(toySaving.id(), toySaving);
 
         return toySaving;
