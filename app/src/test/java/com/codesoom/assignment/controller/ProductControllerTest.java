@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductControllerTest {
     private static final Long PRODUCT_ID = 1L;
     private static final String PRODUCT_NAME = "고양이 낚시대";
+    private static final String UPDATE_PREFIX = "NEW ";
     private static final String PRODUCT_MAKER = "애옹이네 장난감";
     private static final int PRODUCT_PRICE = 5000;
     private static final String PRODUCT_IMAGE_URL = "http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg";
@@ -169,6 +171,78 @@ public class ProductControllerTest {
                 @Test
                 void test() throws Exception {
                     subject().andExpect(status().isCreated());
+                }
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PUT /products/{id} 요청 시")
+    class Describe_put_products_by_id {
+        @Nested
+        @DisplayName("만약 유효한 id와 product가 주어졌을 경우")
+        class Context_if_valid_id_and_product_given {
+            @BeforeEach
+            void setUp() {
+                product = Product.builder()
+                        .name(UPDATE_PREFIX + PRODUCT_NAME)
+                        .build();
+
+                given(productService.updateProduct(eq(PRODUCT_ID), any())).willReturn(product);
+            }
+
+            @Nested
+            @DisplayName("수정된 product를 반환한다")
+            class It_returns_updated_product {
+                ResultActions subject() throws Exception {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonRequest = objectMapper.writeValueAsString(product);
+
+                    return mockMvc.perform(put("/products/{id}", PRODUCT_ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonRequest));
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isOk())
+                            .andExpect(jsonPath("$.name").value(UPDATE_PREFIX + PRODUCT_NAME));
+                }
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products/{id} 요청 시")
+    class Describe_patch_products_by_id {
+        @Nested
+        @DisplayName("만약 유효한 id와 product가 주어졌을 경우")
+        class Context_if_valid_id_and_product_given {
+            @BeforeEach
+            void setUp() {
+                product = Product.builder()
+                        .name(UPDATE_PREFIX + PRODUCT_NAME)
+                        .build();
+
+                given(productService.updateProduct(eq(PRODUCT_ID), any())).willReturn(product);
+            }
+
+            @Nested
+            @DisplayName("수정된 product를 반환한다")
+            class It_returns_updated_product {
+                ResultActions subject() throws Exception {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonRequest = objectMapper.writeValueAsString(product);
+
+                    return mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonRequest));
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isOk())
+                            .andExpect(jsonPath("$.name").value(UPDATE_PREFIX + PRODUCT_NAME));
                 }
             }
         }
