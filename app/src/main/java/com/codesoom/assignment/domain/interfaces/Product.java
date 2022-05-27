@@ -13,7 +13,7 @@ public interface Product {
     /**
      * '상품'의 이름을 반환한다
      * <p>
-     * @return '상품'의 이름에 해당하는 문자열을 반환한다
+     * @return '상품'의 이름
      * </p>
      */
     String name();
@@ -21,7 +21,7 @@ public interface Product {
     /**
      * '상품'의 '생산자'를 반환한다
      * <p>
-     * @return '상품'의 '생산자'에 해당하는 타입을 반환한다
+     * @return '상품'의 생산자
      * </p>
      */
     Producer producer();
@@ -29,7 +29,7 @@ public interface Product {
     /**
      * '상품'의 '가격'을 반환한다
      * <p>
-     * @return '상품'의 '가격'에 해당한는 타입을 반환한다
+     * @return '상품'의 가격
      * </p>
      */
     BigDecimal price();

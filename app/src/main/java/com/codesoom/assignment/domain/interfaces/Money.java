@@ -13,7 +13,7 @@ public interface Money {
     /**
      * '돈'의 가치를 반환한다
      * <p>
-     * @return '돈'의 가치에 해당하는 타입을 반환한다
+     * @return '돈'의 가치
      * </p>
      */
     BigDecimal value();

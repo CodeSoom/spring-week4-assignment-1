@@ -11,7 +11,7 @@ public interface Producer {
     /**
      * '생산자'의 이름을 반환한다
      * <p>
-     * @return '생산자'의 이름을 문자열로 반환한다
+     * @return '생산자'의 이름
      * </p>
      */
     String name();

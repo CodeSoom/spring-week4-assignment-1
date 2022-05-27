@@ -11,7 +11,7 @@ public interface Shop {
     /**
      * '가게'의 이름을 반환한다
      * <p>
-     * @return '가게'의 이름에 해당하는 문자열을 반환한다
+     * @return '가게'의 이름
      * </p>
      */
     String name();
