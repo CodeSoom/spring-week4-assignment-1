@@ -21,13 +21,14 @@ class ToyUpdateServiceTest {
     private ToyUpdateService service;
     private Toy toy;
     private final Long TOY_ID = 2L;
+    private final String TOY_NAME = "Toy";
     private final String TOY_NAME_UPDATING = "Updating Toy";
     private final String PRODUCER_NAME = "Test Producer";
     private final BigDecimal WON_VALUE = new BigDecimal(1000);
 
     @BeforeEach
     void setUp() {
-        toy = new Toy(TOY_ID, TOY_NAME_UPDATING, new ToyProducer(PRODUCER_NAME), WON_VALUE);
+        toy = new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
         repository = new InMemoryToyRepository();
         service = new ToyUpdateService(repository);
     }
@@ -37,7 +38,8 @@ class ToyUpdateServiceTest {
     @DisplayName("update 메소드는")
     class Describe_update {
         private Toy subject() {
-            return service.update(TOY_ID, toy);
+            Toy toyUpdating = new Toy(TOY_ID, TOY_NAME_UPDATING, toy.producer(), toy.price());
+            return service.update(TOY_ID, toyUpdating);
         }
 
         @Nested
@@ -45,7 +47,6 @@ class ToyUpdateServiceTest {
         class Context_with_existing_toy {
             @BeforeEach
             void setUp() {
-                repository.existsById(TOY_ID);
                 repository.save(toy);
             }
 
