@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -10,6 +11,10 @@ public class Product {
     private String maker;
     private BigDecimal price;
     private String imagePath;
+
+    public Product() {
+
+    }
 
     public Product(String name, BigDecimal price, String maker, String imagePath) {
         this.name = name;

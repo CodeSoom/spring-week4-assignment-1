@@ -1,6 +1,7 @@
 package com.codesoom.assignment.repository;
 
 import com.codesoom.assignment.domain.Product;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Optional;
 /**
  * 테스트 시에만 사용하기 위한 in memory repository
  */
+@Primary
 @Repository
 public class InMemoryProductRepository implements ProductRepository{
 
