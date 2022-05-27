@@ -28,7 +28,7 @@ public class Product {
         return Long.compare(this.id, id) == 0 ? true : false;
     }
 
-    public boolean isRegisted() {
+    public boolean isRegistered() {
         return id == null ? false : true;
     }
 

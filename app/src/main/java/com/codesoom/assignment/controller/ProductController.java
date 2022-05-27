@@ -26,7 +26,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductDto regist(@RequestBody ProductDto productDto) {
+    public ProductDto register(@RequestBody ProductDto productDto) {
         return productDto;
     }
 

@@ -21,7 +21,7 @@ class ProductServiceTest {
         productService = new ProductService(new InMemoryProductRepository());
 
         Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
-        return productService.regist(product);
+        return productService.register(product);
     }
 
     @Nested
@@ -65,19 +65,19 @@ class ProductServiceTest {
 
     @Nested
     @DisplayName("장난감 등록")
-    class regist {
+    class register {
 
         @Nested
         @DisplayName("product 로 장난감을 등록하면")
-        class when_regist_with_product {
+        class when_register_with_product {
 
             @Test
             @DisplayName("동일한 정보로 장난감이 등록됩니다.")
-            void regist() {
+            void register() {
                 productService = new ProductService(new InMemoryProductRepository());
 
                 Product product = new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png");
-                assertThat(productService.regist(product).equals(product)).isTrue();
+                assertThat(productService.register(product).equals(product)).isTrue();
             }
         }
     }

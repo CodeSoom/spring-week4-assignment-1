@@ -40,7 +40,7 @@ public class InMemoryProductRepository implements ProductRepository{
 
     @Override
     public Product save(Product product) {
-        if (product.isRegisted()) {
+        if (product.isRegistered()) {
             Product updatedProject = products.stream().filter(source -> source.equals(product)).findFirst().orElseThrow();
             updatedProject.changeProduct(product);
             return updatedProject;

@@ -58,11 +58,11 @@ class ProductControllerTest {
 
     @Nested
     @DisplayName("POST /products")
-    class regist {
+    class register {
 
         @Nested
         @DisplayName("고양이 장난감을 등록하면")
-        class when_regist {
+        class when_register {
 
             @Test
             @DisplayName("201 CREATED를 응답합니다.")
