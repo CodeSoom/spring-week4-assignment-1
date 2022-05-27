@@ -13,17 +13,17 @@ import java.util.List;
  */
 public interface ProductShowService {
     /**
-     * 모든 Toy 엔티티를 List 형태로 보여준다
+     * 모든 Toy 엔티티를 List 형태로 반환
      * <p>
-     * @return Toy 엔티티를 내부 요소로 하는 List Collection 객체
+     * @return Toy 엔티티를 내부 요소로 하는 List Collection
      * </p>
      */
     List<Toy> showAll();
 
     /**
-     * 매개변수로 전달 받은 id에 해당하는 Toy 엔티티를 보여준다
+     * 매개변수로 전달 받은 id에 해당하는 Toy 엔티티를 반환
      * <p>
-     * @param id Toy 엔티티의 Id에 해당하는 객체
+     * @param id Toy 엔티티의 Id에 해당
      * @return Toy 엔티티
      * </p>
      */
