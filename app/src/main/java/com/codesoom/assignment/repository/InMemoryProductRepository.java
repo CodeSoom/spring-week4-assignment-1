@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 테스트 시에만 사용하기 위한 in memory repository
@@ -20,22 +21,16 @@ public class InMemoryProductRepository implements ProductRepository{
         return this.id;
     }
 
-    private Product findOne(Long id) {
-        // TODO 예외 처리 전략을 세운 후, Throw에 어떤 예외를 던질지 추가할 것.
-        return products.stream()
-                .filter(product -> product.checkMyId(id))
-                .findFirst()
-                .orElseThrow();
-    }
-
     @Override
     public List<Product> findAll() {
         return products;
     }
 
     @Override
-    public Product findById(Long id) {
-        return findOne(id);
+    public Optional<Product> findById(Long id) {
+        return products.stream()
+                .filter(product -> product.checkMyId(id))
+                .findFirst();
     }
 
     @Override
@@ -51,8 +46,7 @@ public class InMemoryProductRepository implements ProductRepository{
     }
 
     @Override
-    public void delete(Long id) {
-        Product deleteProduct = findOne(id);
-        products.remove(deleteProduct);
+    public void delete(Product product) {
+        products.remove(product);
     }
 }

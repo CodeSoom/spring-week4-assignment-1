@@ -81,6 +81,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("ToyNotFoundException 예외가 발생합니다.")
             void detail() {
+                productService = new ProductService(new InMemoryProductRepository());
                 assertThatThrownBy(() -> productService.findById(INVALID_ID)).isInstanceOf(ToyNotFoundException.class);
             }
         }
@@ -118,7 +119,7 @@ class ProductServiceTest {
             void modify() {
                 Product product = registOneProduct();
                 product.changeName("고양이생선");
-                assertThat(productService.modify(product)).isEqualTo(product);
+                assertThat(productService.modify(ID, product)).isEqualTo(product);
             }
         }
 
@@ -129,9 +130,10 @@ class ProductServiceTest {
             @Test
             @DisplayName("ToyNotFound 예외가 발생합니다.")
             void modify() {
-                Product product = Product.creatNewProduct(INVALID_ID, new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png"));
+                productService = new ProductService(new InMemoryProductRepository());
+                Product product = Product.creatNewProduct(ID, new Product("고양이 생선", BigDecimal.valueOf(10000), "(주)애옹이네", "image.png"));
 
-                assertThatThrownBy(() -> productService.modify(product)).isInstanceOf(ToyNotFoundException.class);
+                assertThatThrownBy(() -> productService.modify(INVALID_ID, product)).isInstanceOf(ToyNotFoundException.class);
             }
         }
     }
@@ -160,6 +162,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("ToyNotFound 예외가 발생합니다.")
             void delete() {
+                productService = new ProductService(new InMemoryProductRepository());
                 assertThatThrownBy(() -> productService.delete(INVALID_ID)).isInstanceOf(ToyNotFoundException.class);
             }
         }
