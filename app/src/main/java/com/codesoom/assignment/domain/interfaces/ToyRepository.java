@@ -16,7 +16,7 @@ public interface ToyRepository {
     /**
      * 모든 장난감을 반환한다
      * <p>
-     * @return 장난감 엔티티를 내부 요소로 하는 List 콜렉션
+     * @return 장난감을 내부 요소로 하는 List 콜렉션
      * </p>
      */
     List<Toy> findAll();
@@ -25,7 +25,7 @@ public interface ToyRepository {
      * id에 해당하는 장난감을 반환한다
      * <p>
      * @param id 장난감의 id
-     * @return Optional<Toy> 장난감 타입
+     * @return Optional<Toy> 장난감
      * </p>
      */
     Optional<Toy> findById(Long id);
@@ -33,8 +33,8 @@ public interface ToyRepository {
     /**
      * 장난감을 저장한다
      * <p>
-     * @param toy Toy 엔티티 객체
-     * @return Toy 엔티티 객체
+     * @param toy 장난감
+     * @return 장난감
      * </p>
      */
     Toy save(Toy toy);
