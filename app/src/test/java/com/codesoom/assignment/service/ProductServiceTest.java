@@ -65,7 +65,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품을 생성한다.")
+    @DisplayName("createProduct")
     void createProduct() {
         productService.createProduct(product1);
 
@@ -73,7 +73,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("모든 상품을 조회한다.")
+    @DisplayName("getProducts")
     void getProducts() {
         products.add(product1);
         products.add(product2);
