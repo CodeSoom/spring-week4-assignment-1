@@ -30,6 +30,7 @@ class ProductServiceTest {
 
     private List<Product> products;
     private final Long NOT_STORED_ID = 100L;
+    private final String PRODUCT_NAME = "name1";
 
     @BeforeEach
     void setUp() {
@@ -38,7 +39,7 @@ class ProductServiceTest {
 
         product1 = Product.builder()
                 .id(1L)
-                .name("name1")
+                .name(PRODUCT_NAME)
                 .price(1)
                 .imageUrl("url1")
                 .maker("maker1")
@@ -90,7 +91,9 @@ class ProductServiceTest {
     void getProductWithExistingId() {
         Long id = product1.getId();
 
-        productService.getProduct(id);
+        ProductResponse productResponse = productService.getProduct(id);
+
+        assertThat(productResponse.getProduct().getName()).isEqualTo(PRODUCT_NAME);
 
         verify(productRepository).findById(id);
     }
