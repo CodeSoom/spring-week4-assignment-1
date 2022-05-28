@@ -1,6 +1,7 @@
 package com.codesoom.assignment;
 
 import com.codesoom.assignment.controller.ProductController;
+import com.codesoom.assignment.controller.ProductNotFoundException;
 import com.codesoom.assignment.dto.ProductDTO;
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.service.ProductService;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.*;
 
 @Nested
@@ -48,11 +50,15 @@ public class ProductControllerTest {
         });
         given(productService.getProducts()).willReturn(Arrays.asList(productOne, productTwo));
         given(productService.getProduct(1)).willReturn(productOne);
+        given(productService.getProduct(1000)).willThrow(ProductNotFoundException.class);
+        given(productService.updateProduct(eq(1000), any(ProductDTO.UpdateProduct.class))).willThrow(ProductNotFoundException.class);
+        willThrow(ProductNotFoundException.class).given(productService).deleteProduct(1000);
+
     }
 
     @Nested
     @DisplayName("GET /products URL 은")
-    class getProductsTest {
+    class GetProductsTest {
 
         @Test
         @DisplayName("http status code 200 과 ProductDTO.Response List 를 반환한다")
@@ -67,7 +73,7 @@ public class ProductControllerTest {
 
     @Nested
     @DisplayName("POST /products URL 은")
-    class postMethodTest {
+    class PostMethodTest {
         @Test
         @DisplayName("http status code 201 과 ProductDTO.Response 를 반환한다")
         void postMethodTest() {
@@ -85,64 +91,132 @@ public class ProductControllerTest {
 
     @Nested
     @DisplayName("DELETE /products/{id}")
-    class deleteMethodTest {
-        @Test
-        @DisplayName("http status code 204 를 반환한다")
-        void deleteProductsTest() {
-            ResponseEntity<?> response = productController.deleteProduct(1);
+    class DeleteProductTest {
 
-            verify(productService).deleteProduct(1);
+        @Nested
+        @DisplayName("withValidIdTest")
+        class WithValidIdTest {
+            @Test
+            @DisplayName("http status code 204 를 반환한다")
+            void deleteWithValidIdTest() {
+                ResponseEntity<?> response = productController.deleteProduct(1);
 
-            assertThat(response.getStatusCode().value()).isEqualTo(204);
+                verify(productService).deleteProduct(1);
+
+                assertThat(response.getStatusCode().value()).isEqualTo(204);
+            }
+        }
+
+        @Nested
+        @DisplayName("withInValidIdTest")
+        class WithInValidIdTest {
+            @Test
+            @DisplayName("ProductNotFoundException 을 응답한다.")
+            void deleteWithInValidIdTest() {
+                assertThatThrownBy(() -> productController.deleteProduct(1000))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
         }
     }
 
     @Nested
-    @DisplayName("GET /products/{id}")
-    class getMethodTest {
-        @Test
-        @DisplayName("http status code 200 과 해당 ID의 ProductDTO.Response 를 반환한다")
-        void deleteProductsTest() {
-            ResponseEntity<ProductDTO.Response> response = productController.getProduct(1);
+    @DisplayName("GET /products/{id} URI 는")
+    class GetProductTest {
+        @Nested
+        @DisplayName("유효한 id 가 주어지면 ")
+        class WthValidIdTest {
+            @Test
+            @DisplayName("http status code 200 과 해당 ID의 ProductDTO.Response 를 응답한다.")
+            void GetProductWithValidIdTest() {
+                ResponseEntity<ProductDTO.Response> response = productController.getProduct(1);
 
-            verify(productService).getProduct(1);
+                verify(productService).getProduct(1);
 
-            assertThat(response.getStatusCode().value()).isEqualTo(200);
-            assertThat(response.getBody().getName()).isEqualTo("test name 1");
+                assertThat(response.getStatusCode().value()).isEqualTo(200);
+                assertThat(response.getBody().getName()).isEqualTo("test name 1");
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 id 가 주어지면 ")
+        class WithInvalidIdTest {
+            @Test
+            @DisplayName("ProductNotFoundException 을 응답한다.")
+            void GetProductWithInValidIdTest() {
+                assertThatThrownBy(() -> productController.getProduct(1000))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
         }
     }
 
+
     @Nested
-    @DisplayName("PUT /products/{id}")
-    class putMethodTest {
-        @Test
-        @DisplayName("http status code 200 을 반환한다")
-        void putProductsTest() {
-            ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
-                    "update test maker 1", 1000, "update test imageUrl 1");
-            ResponseEntity<ProductDTO.Response> response = productController.putProduct(1, updateProduct);
+    @DisplayName("PUT /products/{id} URI 는")
+    class PutProductTest {
+        @Nested
+        @DisplayName("유효한 id 가 주어지면")
+        class WithValidIdTest {
+            @Test
+            @DisplayName("http status code 200 을 반환한다")
+            void putProductWithValidIdTest() {
+                ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
+                        "update test maker 1", 1000, "update test imageUrl 1");
+                ResponseEntity<ProductDTO.Response> response = productController.putProduct(1, updateProduct);
 
-            verify(productService).updateProduct(1, updateProduct);
+                verify(productService).updateProduct(1, updateProduct);
 
-            assertThat(response.getStatusCode().value()).isEqualTo(200);
-            assertThat(response.getBody().getName()).isEqualTo(updateProduct.getName());
+                assertThat(response.getStatusCode().value()).isEqualTo(200);
+                assertThat(response.getBody().getName()).isEqualTo(updateProduct.getName());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 id 가 주어지면")
+        class WithInValidIdTest {
+            @Test
+            @DisplayName("ProductNotFound 를 응답한다.")
+            void putProductWithInValidIdTest() {
+                ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
+                        "update test maker 1", 1000, "update test imageUrl 1");
+
+                assertThatThrownBy(() -> productController.putProduct(1000, updateProduct))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
         }
     }
 
     @Nested
     @DisplayName("PATCH /products/{id}")
-    class patchMethodTest {
-        @Test
-        @DisplayName("http status code 200 을 반환한다")
-        void putProductsTest() {
-            ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
-                    "update test maker 1", 1000, "update test imageUrl 1");
-            ResponseEntity<ProductDTO.Response> response = productController.patchProduct(1, updateProduct);
+    class PatchMethodTest {
 
-            verify(productService).updateProduct(1, updateProduct);
+        @Nested
+        @DisplayName("유효한 id 가 주어지면")
+        class WithValidIdTest {
+            @Test
+            @DisplayName("http status code 200 을 반환한다")
+            void patchProductWithValidIdTest() {
+                ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
+                        "update test maker 1", 1000, "update test imageUrl 1");
+                ResponseEntity<ProductDTO.Response> response = productController.patchProduct(1, updateProduct);
 
-            assertThat(response.getStatusCode().value()).isEqualTo(200);
-            assertThat(response.getBody().getName()).isEqualTo(updateProduct.getName());
+                verify(productService).updateProduct(1, updateProduct);
+
+                assertThat(response.getStatusCode().value()).isEqualTo(200);
+                assertThat(response.getBody().getName()).isEqualTo(updateProduct.getName());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 id 가 주어지면")
+        class WithInValidIdTest {
+            @Test
+            @DisplayName("ProductNotFound 를 응답한다.")
+            void patchProductWithInValidIdTest() {
+                ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
+                        "update test maker 1", 1000, "update test imageUrl 1");
+                assertThatThrownBy(() -> productController.patchProduct(1000, updateProduct))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
         }
     }
 }

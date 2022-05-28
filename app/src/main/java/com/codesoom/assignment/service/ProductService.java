@@ -1,5 +1,6 @@
 package com.codesoom.assignment.service;
 
+import com.codesoom.assignment.controller.ProductNotFoundException;
 import com.codesoom.assignment.dto.ProductDTO;
 import com.codesoom.assignment.model.Product;
 import com.codesoom.assignment.repository.ProductRepository;
@@ -20,7 +21,7 @@ public class ProductService {
     }
 
     public ProductDTO.Response getProduct(int id) {
-        return ProductDTO.Response.of(productRepository.findById(id).orElseThrow(IllegalArgumentException::new));
+        return ProductDTO.Response.of(productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException(id)));
     }
 
     @Transactional
@@ -40,7 +41,7 @@ public class ProductService {
 
     @Transactional
     public ProductDTO.Response updateProduct(int id, ProductDTO.UpdateProduct source) {
-        Product product = productRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Product product = productRepository.findById(id).orElseThrow(()-> new ProductNotFoundException(id));
         return ProductDTO.Response.of(product.updateProduct(source.getName(), source.getPrice(), source.getImageUrl(),
                 source.getMaker()));
     }
