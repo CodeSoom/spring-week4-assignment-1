@@ -1,8 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ToyService;
 import com.codesoom.assignment.error.NotFoundException;
-import com.codesoom.assignment.interfaces.ProductController;
 import com.codesoom.assignment.interfaces.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,12 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -90,7 +86,7 @@ class ProductControllerTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isCreated())
-                    .andExpect(content().string(containsString(product.getMaker())));
+                    .andExpect(content().string(containsString("dogCompany")));
         }
     }
 
@@ -137,9 +133,37 @@ class ProductControllerTest {
 
     }
 
-//    @Nested
-//    @DisplayName("[PATCH] /products 요청에 대하여")
-//    class Describe {
-//
-//    }
+    @Nested
+    @DisplayName("[PATCH] /products/{id} 요청에 대하여")
+    class Describe_update_product {
+        @Nested
+        @DisplayName("요청하는 id 가 있으면")
+        class Context_when_exist_product_id {
+            private final String PREFIX = "new_";
+
+            @BeforeEach
+            void setUp() {
+                product = new Product(product.getId(), PRODUCT_NAME, PREFIX + PRODUCT_MAKER, PRODUCT_PRICE, PRODUCT_URI);
+
+                given(productService.updateProduct(product.getId(), product)).willReturn(product);
+
+                System.out.println("productService.getMaker: " + productService.findProduct(product.getId()).getMaker());
+//                given(productService.findProducts()).willReturn(products);
+
+            }
+
+            @Test
+            @DisplayName("updateProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
+            void It_returns_patch_product() throws Exception {
+                System.out.println("maker: " + product.getMaker());
+
+                mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
+                                .content(objectMapper.writeValueAsString(product))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("new_dogCompany")));
+            }
+        }
+    }
 }
