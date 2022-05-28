@@ -53,14 +53,20 @@ class ProductServiceTest {
                 .build();
 
         products = new ArrayList<>();
+
+        given(productRepository.save(any(Product.class)))
+                .will(invocation -> invocation.<Product>getArgument(0));
+
+        given(productRepository.findAll()).willReturn(products);
+
+        given(productRepository.findById(product1.getId())).willReturn(Optional.of(product1));
+
+        given(productRepository.findById(NOT_STORED_ID)).willReturn(Optional.empty());
     }
 
     @Test
     @DisplayName("상품을 생성한다.")
     void createProduct() {
-        given(productRepository.save(any(Product.class)))
-                .will(invocation -> invocation.<Product>getArgument(0));
-
         productService.createProduct(product1);
 
         verify(productRepository).save(any(Product.class));
@@ -71,8 +77,6 @@ class ProductServiceTest {
     void getProducts() {
         products.add(product1);
         products.add(product2);
-
-        given(productRepository.findAll()).willReturn(products);
 
         List<ProductResponse> products = productService.getProducts();
 
@@ -86,8 +90,6 @@ class ProductServiceTest {
     void getProductWithExistingId() {
         Long id = product1.getId();
 
-        given(productRepository.findById(id)).willReturn(Optional.of(product1));
-
         productService.getProduct(id);
 
         verify(productRepository).findById(id);
@@ -96,8 +98,6 @@ class ProductServiceTest {
     @Test
     @DisplayName("저장되지 않은 id로 상품을 조회하면 ProductNotFoundException 예외를 던진다.")
     void getProductWithNotStoredId() {
-        given(productRepository.findById(NOT_STORED_ID)).willReturn(Optional.empty());
-
         assertThrows(ProductNotFoundException.class, () -> productService.getProduct(NOT_STORED_ID));
 
         verify(productRepository).findById(NOT_STORED_ID);
@@ -107,8 +107,6 @@ class ProductServiceTest {
     @DisplayName("저장된 id로 상품을 업데이트하면 업데이트한 상품을 리턴한다.")
     void updateProductWithExistingId() {
         Long id = product1.getId();
-
-        given(productRepository.findById(id)).willReturn(Optional.of(product1));
 
         ProductResponse updatedProduct = productService.updateProduct(id, product2);
 
@@ -134,8 +132,6 @@ class ProductServiceTest {
     @DisplayName("저장된 id로 상품을 삭제하면 상품을 삭제한다.")
     void deleteProductWithStoredId() {
         Long id = product1.getId();
-
-        given(productRepository.findById(id)).willReturn(Optional.of(product1));
 
         productService.deleteProduct(id);
 
