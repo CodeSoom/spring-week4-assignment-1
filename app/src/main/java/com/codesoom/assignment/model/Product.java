@@ -1,6 +1,5 @@
 package com.codesoom.assignment.model;
 
-import com.codesoom.assignment.dto.ProductDTO;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -37,15 +36,11 @@ public class Product {
         this.maker = maker;
     }
 
-    public Product(ProductDTO.CreateProduct createProduct) {
-		this(createProduct.getName(), createProduct.getPrice(), createProduct.getImageUrl(), createProduct.getMaker());
-    }
-
-    public Product updateProduct(ProductDTO.UpdateProduct updateProduct) {
-        this.name = updateProduct.getName();
-        this.price = updateProduct.getPrice();
-        this.imageUrl = updateProduct.getImageUrl();
-        this.maker = updateProduct.getMaker();
+    public Product updateProduct(String name, int price, String imageUrl, String maker) {
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.maker = maker;
         return this;
     }
 }
