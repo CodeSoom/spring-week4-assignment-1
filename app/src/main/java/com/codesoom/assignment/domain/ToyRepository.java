@@ -26,23 +26,22 @@ public class ToyRepository implements ProductRepository {
 
     @Override
     public Product save(Product source) {
-//        Product product = new Product();
-//        product.setId(generateId());
-//        product.setName(source.getName());
-//        product.setMaker(source.getMaker());
-//        product.setPrice(source.getPrice());
-//        product.setImageURI(source.getImageURI());
-//
-//        products.add(product);
-//
-//        return product;
-        return null;
+        Product product = new Product();
+        product.setId(generateId());
+        product.setName(source.getName());
+        product.setMaker(source.getMaker());
+        product.setPrice(source.getPrice());
+        product.setImageURI(source.getImageURI());
+
+        products.add(product);
+
+        return product;
     }
 
-//    @Override
-//    public Product update(Long id, Product product) {
-//        return null;
-//    }
+    @Override
+    public Product update(Product product) {
+        return null;
+    }
 
     @Override
     public void delete(Long id) {
