@@ -11,35 +11,41 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ToyController implements ProductController {
-    private final ProductService productService;
+    private final ProductService service;
 
-    public ToyController(ProductService productService) {
-        this.productService = productService;
+    public ToyController(ProductService service) {
+        this.service = service;
     }
 
     @Override
     @GetMapping
     public List<Product> list() {
-        return productService.findProducts();
+        return service.findProducts();
     }
 
     @Override
     @GetMapping("/{id}")
     public Product detail(@PathVariable Long id) {
-        return productService.findProduct(id);
+        return service.findProduct(id);
     }
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(Product product) {
-        return productService.createProduct(product);
+        return service.createProduct(product);
+    }
+
+    @Override
+    @PatchMapping("/{id}")
+    public Product update(@PathVariable Long id, @RequestBody Product product) {
+        return service.updateProduct(id, product);
     }
 
     @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        productService.deleteProduct(id);
+        service.deleteProduct(id);
     }
 }
