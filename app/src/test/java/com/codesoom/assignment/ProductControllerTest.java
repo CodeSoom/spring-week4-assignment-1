@@ -38,11 +38,13 @@ public class ProductControllerTest {
 
         given(productService.createProduct(any(ProductDTO.CreateProduct.class))).will(invocation -> {
             ProductDTO.CreateProduct createResponse = invocation.getArgument(0);
-            return ProductDTO.Response.of(new Product(createResponse));
+            return ProductDTO.Response.of(new Product(createResponse.getName(), createResponse.getPrice(),
+                    createResponse.getImageUrl(), createResponse.getMaker()));
         });
         given(productService.updateProduct(any(int.class), any(ProductDTO.UpdateProduct.class))).will(invocation -> {
             ProductDTO.UpdateProduct updateResponse = invocation.getArgument(1);
-            return ProductDTO.Response.of(new Product().updateProduct(updateResponse));
+            return ProductDTO.Response.of(new Product().updateProduct(updateResponse.getName(),
+                    updateResponse.getPrice(), updateResponse.getImageUrl(), updateResponse.getMaker()));
         });
         given(productService.getProducts()).willReturn(Arrays.asList(productOne, productTwo));
         given(productService.getProduct(1)).willReturn(productOne);
@@ -111,14 +113,31 @@ public class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("UPDATE /products/{id}")
-    class updateMethodTest {
+    @DisplayName("PUT /products/{id}")
+    class putMethodTest {
         @Test
         @DisplayName("http status code 200 을 반환한다")
-        void updateProductsTest() {
+        void putProductsTest() {
             ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
                     "update test maker 1", 1000, "update test imageUrl 1");
-            ResponseEntity<ProductDTO.Response> response = productController.updateProduct(1, updateProduct);
+            ResponseEntity<ProductDTO.Response> response = productController.putProduct(1, updateProduct);
+
+            verify(productService).updateProduct(1, updateProduct);
+
+            assertThat(response.getStatusCode().value()).isEqualTo(200);
+            assertThat(response.getBody().getName()).isEqualTo(updateProduct.getName());
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products/{id}")
+    class patchMethodTest {
+        @Test
+        @DisplayName("http status code 200 을 반환한다")
+        void putProductsTest() {
+            ProductDTO.UpdateProduct updateProduct = new ProductDTO.UpdateProduct("update test name 1",
+                    "update test maker 1", 1000, "update test imageUrl 1");
+            ResponseEntity<ProductDTO.Response> response = productController.patchProduct(1, updateProduct);
 
             verify(productService).updateProduct(1, updateProduct);
 
