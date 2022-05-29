@@ -1,8 +1,10 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductResponse;
 import com.codesoom.assignment.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +25,12 @@ public class ProductController {
     @GetMapping("{id}")
     public ProductResponse find(@PathVariable Long id) {
         return productService.getProduct(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductResponse create(@RequestBody Product product) {
+        return productService.createProduct(product);
     }
 
 }

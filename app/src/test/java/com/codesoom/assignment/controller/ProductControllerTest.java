@@ -20,8 +20,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
@@ -40,14 +42,23 @@ class ProductControllerTest {
     private final Long STORED_ID = 1L;
     private final Long NOT_STORED_ID = 100L;
     private final String STORED_NAME = "name1";
+    private final String NAME = "name";
 
     private List<ProductResponse> products;
+    private Product product;
     private ProductResponse productResponse1;
     private ProductResponse productResponse2;
 
     @BeforeEach
     void setUp() {
         products = new ArrayList<>();
+
+        product = new Product().builder()
+                .name(NAME)
+                .maker("maker")
+                .price(1)
+                .imageUrl("url")
+                .build();
 
         productResponse1 = new ProductResponse(
                 Product.builder()
@@ -162,4 +173,33 @@ class ProductControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("POST 요청은")
+    class Describe_POST {
+
+        @Nested
+        @DisplayName("상품이 주어지면")
+        class Context_with_product {
+
+            @BeforeEach
+            void setUp() {
+                given(productService.createProduct(any(Product.class)))
+                        .willReturn(productResponse1);
+            }
+
+            @Test
+            @DisplayName("생성된 상품과 상태코드 201을 응답한다")
+            void it_responds_created_product_and_status_code_201() throws Exception {
+                mockMvc.perform(post("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(product)))
+                        .andExpect(content().string(containsString(NAME)))
+                        .andExpect(status().isCreated());
+            }
+        }
+
+    }
+
 }
