@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -44,13 +45,14 @@ class ProductControllerTest {
     private final Integer PRODUCT_PRICE = 200000;
     private final String PRODUCT_URI = "https://media.nature.com/lw800/magazine-assets/d41586-020-01430-5/d41586-020-01430-5_17977552.jpg";
 
+    private final List<Product> products = new ArrayList<>();
+
     @BeforeEach
     void setUp() {
-        List<Product> products = new ArrayList<>();
         product = new Product(PRODUCT_ID, PRODUCT_NAME, PRODUCT_MAKER, PRODUCT_PRICE, PRODUCT_URI);
         products.add(product);
 
-        given(productService.findProducts()).willReturn(products);
+        given(productService.findAll()).willReturn(products);
     }
 
     @Nested
@@ -75,7 +77,7 @@ class ProductControllerTest {
     class Describe_save {
         @BeforeEach
         void setUp() {
-            given(productService.createProduct(any())).willReturn(product);
+            given(productService.save(any())).willReturn(product);
         }
 
         @Test
@@ -98,7 +100,7 @@ class ProductControllerTest {
         class Context_when_exist_product_id {
             @BeforeEach
             void setUp() {
-                given(productService.findProduct(PRODUCT_ID)).willReturn(product);
+                given(productService.findById(PRODUCT_ID)).willReturn(product);
             }
 
             @Test
@@ -118,7 +120,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(productService.findProduct(UNKNOWN_PRODUCT_ID))
+                given(productService.findById(UNKNOWN_PRODUCT_ID))
                         .willThrow(new NotFoundException(UNKNOWN_PRODUCT_ID));
             }
 
@@ -144,19 +146,14 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 product = new Product(product.getId(), PRODUCT_NAME, PREFIX + PRODUCT_MAKER, PRODUCT_PRICE, PRODUCT_URI);
+                products.add(product);
 
-                given(productService.updateProduct(product.getId(), product)).willReturn(product);
-
-                System.out.println("productService.getMaker: " + productService.findProduct(product.getId()).getMaker());
-//                given(productService.findProducts()).willReturn(products);
-
+                given(productService.update(eq(product.getId()), any())).willReturn(product);
             }
 
             @Test
             @DisplayName("updateProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
             void It_returns_patch_product() throws Exception {
-                System.out.println("maker: " + product.getMaker());
-
                 mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
                                 .content(objectMapper.writeValueAsString(product))
                                 .contentType(MediaType.APPLICATION_JSON))
