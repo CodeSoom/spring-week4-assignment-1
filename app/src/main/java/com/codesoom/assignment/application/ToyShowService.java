@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.application.interfaces.ProductShowService;
+import com.codesoom.assignment.domain.JpaToyRepository;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.interfaces.ToyRepository;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,9 @@ import java.util.List;
 
 @Service
 public class ToyShowService implements ProductShowService {
-    private final ToyRepository repository;
+    private final JpaToyRepository repository;
 
-    public ToyShowService(ToyRepository repository) {
+    public ToyShowService(JpaToyRepository repository) {
         this.repository = repository;
     }
 
