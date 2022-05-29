@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-@Primary
 public class InMemoryToyRepository implements ToyRepository {
     private final Map<Long, Toy> toy_map;
     private Long maxId;
