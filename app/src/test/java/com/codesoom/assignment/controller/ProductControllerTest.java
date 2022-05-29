@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductResponse;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 @DisplayName("ProductController 클래스")
@@ -38,6 +39,7 @@ class ProductControllerTest {
 
     private final Long STORED_ID = 1L;
     private final Long NOT_STORED_ID = 100L;
+    private final String STORED_NAME = "name1";
 
     private List<ProductResponse> products;
     private ProductResponse productResponse1;
@@ -49,8 +51,8 @@ class ProductControllerTest {
 
         productResponse1 = new ProductResponse(
                 Product.builder()
-                        .id(1L)
-                        .name("name1")
+                        .id(STORED_ID)
+                        .name(STORED_NAME)
                         .maker("maker1")
                         .price(1)
                         .imageUrl("url1")
@@ -114,6 +116,49 @@ class ProductControllerTest {
                                 .accept(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("$", hasSize(0)))
                         .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장된 상품 id가 주어진다면")
+        class Context_with_an_stored_product_id {
+
+            @BeforeEach
+            void setUp() {
+                given(productService.getProduct(STORED_ID))
+                        .willReturn(productResponse1);
+            }
+
+            @Test
+            @DisplayName("찾은 상품과 상태코드 200을 응답한다")
+            void it_responds_found_product_and_status_code_200() throws Exception {
+                mockMvc.perform(get("/products/{id}", STORED_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(content().string(containsString(STORED_NAME)))
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 id가 주어진다면")
+        class Context_with_an_not_stored_product_id {
+
+            @BeforeEach
+            void setUp() {
+                given(productService.getProduct(NOT_STORED_ID))
+                        .willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("에러 메시지와 상태코드 404를 응답한다")
+            void it_responds_error_and_status_code_404() throws Exception {
+                mockMvc.perform(get("/products/{id}", NOT_STORED_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isNotFound());
             }
         }
     }
