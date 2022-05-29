@@ -40,6 +40,7 @@ class ProductControllerTest {
     private Product product;
 
     private final Long PRODUCT_ID = 1L;
+    private final Long UNKNOWN_PRODUCT_ID = 100L;
     private final String PRODUCT_NAME = "dog";
     private final String PRODUCT_MAKER = "dogCompany";
     private final Integer PRODUCT_PRICE = 200000;
@@ -116,8 +117,6 @@ class ProductControllerTest {
         @Nested
         @DisplayName("요청하는 id 가 없으면")
         class Context_when_not_exist_product_id {
-            private final Long UNKNOWN_PRODUCT_ID = 100L;
-
             @BeforeEach
             void setUp() {
                 given(productService.findById(UNKNOWN_PRODUCT_ID))
@@ -160,6 +159,26 @@ class ProductControllerTest {
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("new_dogCompany")));
+            }
+        }
+
+        @Nested
+        @DisplayName("요청하는 id 가 없으면")
+        class Context_when_not_exist_product_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.update(eq(UNKNOWN_PRODUCT_ID), any()))
+                        .willThrow(new NotFoundException(UNKNOWN_PRODUCT_ID));
+            }
+
+            @Test
+            @DisplayName("updateProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
+            void It_returns_patch_product() throws Exception {
+                mockMvc.perform(patch("/products/{id}", UNKNOWN_PRODUCT_ID)
+                                .content(objectMapper.writeValueAsString(product))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isNotFound());
             }
         }
     }
