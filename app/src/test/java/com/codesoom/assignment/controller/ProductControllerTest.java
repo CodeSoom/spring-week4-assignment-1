@@ -71,6 +71,18 @@ class ProductControllerTest {
                         .andExpect(content().string(containsString("dogCompany")));
             }
         }
+
+        @Nested
+        @DisplayName("등록된 product 가 없으면")
+        class Context_has_not_product {
+            @Test
+            @DisplayName("getProducts 메서드는 NotFoundException 을 반환한다.")
+            void It_returns_NotFoundException() throws Exception {
+                mockMvc.perform(get("/products/{id}", UNKNOWN_PRODUCT_ID))
+                        .andDo(print())
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 
     @Nested
