@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.error.NotFoundException;
 import com.codesoom.assignment.interfaces.ProductRepository;
 import com.codesoom.assignment.interfaces.ProductService;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,37 +18,32 @@ public class ToyService implements ProductService {
     }
 
     @Override
-    public List<Product> findProducts() {
+    public List<Product> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Product findProduct(Long id) {
+    public Product findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id));
     }
 
     @Override
-    public Product createProduct(Product product) {
+    public Product save(Product product) {
         return repository.save(product);
     }
 
     @Override
-    public Product updateProduct(Long id, Product source) {
-        Product product = repository.findById(id)
+    public Product update(Long id, @NotNull Product newProduct) {
+        repository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id));
-
-        product.setId(source.getId());
-        product.setName(source.getName());
-        product.setMaker(source.getMaker());
-        product.setPrice(source.getPrice());
-        product.setImageURI(source.getImageURI());
-
-        return repository.update(product);
+        return repository.update(id, newProduct);
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public void delete(Long id) {
+        repository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id));
         repository.delete(id);
     }
 }

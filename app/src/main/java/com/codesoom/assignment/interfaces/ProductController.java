@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface ProductController {
     
-    List<Product> list();
+    List<Product> getProducts();
 
-    Product detail(Long id);
+    Product getProduct(Long id);
 
-    Product create(Product product);
+    Product createProduct(Product product);
 
-    Product update(Long id, Product product);
+    Product updateProduct(Long id, Product product);
 
-    void delete(Long id);
+    void deleteProduct(Long id);
 }

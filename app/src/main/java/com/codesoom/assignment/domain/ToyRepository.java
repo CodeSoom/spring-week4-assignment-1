@@ -3,49 +3,42 @@ package com.codesoom.assignment.domain;
 import com.codesoom.assignment.interfaces.ProductRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class ToyRepository implements ProductRepository {
-    private final List<Product> products = new ArrayList<>();
+    private static final Map<Long, Product> products = new HashMap<>();
     private Long newId = 0L;
 
     @Override
     public List<Product> findAll() {
-        return products;
+        return new ArrayList<>(products.values());
     }
 
     @Override
     public Optional<Product> findById(Long id) {
-        return products.stream()
-                .filter(product -> product.getId().equals(id))
-                .findFirst();
+        return Optional.ofNullable(products.get(id));
     }
 
     @Override
-    public Product save(Product source) {
-        Product product = new Product();
+    public Product save(Product product) {
         product.setId(generateId());
-        product.setName(source.getName());
-        product.setMaker(source.getMaker());
-        product.setPrice(source.getPrice());
-        product.setImageURI(source.getImageURI());
-
-        products.add(product);
+        products.put(product.getId(), product);
 
         return product;
     }
 
     @Override
-    public Product update(Product product) {
-        return null;
+    public Product update(Long id, Product newProduct) {
+        newProduct.setId(id);
+        products.put(newProduct.getId(), newProduct);
+
+        return newProduct;
     }
 
     @Override
     public void delete(Long id) {
-
+        products.remove(id);
     }
 
     private Long generateId() {
