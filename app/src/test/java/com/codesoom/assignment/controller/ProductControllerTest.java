@@ -84,16 +84,37 @@ class ProductControllerTest {
                 given(productService.getProducts())
                         .willReturn(products);
             }
+
+            @Test
+            @DisplayName("모든 상품 목록과 상태코드 200을 응답한다")
+            void it_responds_all_products_and_status_code_200() throws Exception {
+                mockMvc.perform(get("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$", hasSize(products.size())))
+                        .andExpect(status().isOk());
+            }
         }
 
-        @Test
-        @DisplayName("모든 상품 목록과 상태코드 200을 응답한다")
-        void it_responds_all_products_and_status_code_200() throws Exception {
-            mockMvc.perform(get("/products")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$", hasSize(products.size())))
-                    .andExpect(status().isOk());
+        @Nested
+        @DisplayName("저장된 상품이 없다면")
+        class Context_without_product {
+
+            @BeforeEach
+            void setUp() {
+                given(productService.getProducts())
+                        .willReturn(List.of());
+            }
+
+            @Test
+            @DisplayName("빈 리스트와 상태코드 200을 응답한다")
+            void it_responds_empty_list_and_status_code_200() throws Exception {
+                mockMvc.perform(get("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("$", hasSize(0)))
+                        .andExpect(status().isOk());
+            }
         }
     }
 }
