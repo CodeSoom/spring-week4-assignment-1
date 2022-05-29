@@ -1,14 +1,10 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
-import com.codesoom.assignment.domain.InMemoryToyRepository;
-import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.domain.ToyProducer;
-import com.codesoom.assignment.domain.interfaces.ToyRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import com.codesoom.assignment.domain.*;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,10 +12,15 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+@DataJpaTest
 @DisplayName("ToyShowService 클래스")
 class ToyShowServiceTest {
-    private ToyRepository repository;
+    @Autowired
+    private JpaToyRepository repository;
+    @Autowired
+    private JpaProducerRepository producerRepository;
     private ToyShowService service;
+    private ToyProducer toyProducer;
     private Toy toy;
     private final Long TOY_ID = 2L;
     private final String TOY_NAME = "Test Toy";
@@ -28,9 +29,15 @@ class ToyShowServiceTest {
 
     @BeforeEach
     void setUp() {
-        toy = new Toy(TOY_ID, TOY_NAME, new ToyProducer(PRODUCER_NAME), WON_VALUE);
-        repository = new InMemoryToyRepository();
+        toyProducer = new ToyProducer(PRODUCER_NAME);
+        toy = new Toy(TOY_ID, TOY_NAME, toyProducer, WON_VALUE);
         service = new ToyShowService(repository);
+    }
+
+    @AfterEach
+    void clear() {
+        repository.deleteAll();
+        producerRepository.deleteAll();
     }
 
     @Nested
@@ -57,6 +64,7 @@ class ToyShowServiceTest {
         class Context_with_existing_toy {
             @BeforeEach
             void setUp() {
+                producerRepository.save(toyProducer);
                 repository.save(toy);
             }
 
@@ -82,6 +90,7 @@ class ToyShowServiceTest {
         class Context_with_existing_toy {
             @BeforeEach
             void setUp() {
+                producerRepository.save(toyProducer);
                 repository.save(toy);
             }
 
