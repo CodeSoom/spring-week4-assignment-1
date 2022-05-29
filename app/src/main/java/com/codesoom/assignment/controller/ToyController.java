@@ -19,33 +19,34 @@ public class ToyController implements ProductController {
 
     @Override
     @GetMapping
-    public List<Product> list() {
-        return service.findProducts();
+    public List<Product> getProducts() {
+        return service.findAll();
     }
 
     @Override
     @GetMapping("/{id}")
-    public Product detail(@PathVariable Long id) {
-        return service.findProduct(id);
+    public Product getProduct(@PathVariable Long id) {
+        return service.findById(id);
     }
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(Product product) {
-        return service.createProduct(product);
+    public Product createProduct(@RequestBody Product product) {
+        return service.save(product);
     }
 
     @Override
-    @PatchMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        return service.updateProduct(id, product);
+    @RequestMapping(value = "/{id}",
+            method = {RequestMethod.PUT, RequestMethod.PATCH})
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product newProduct) {
+        return service.update(id, newProduct);
     }
 
     @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        service.deleteProduct(id);
+    public void deleteProduct(@PathVariable Long id) {
+        service.delete(id);
     }
 }
