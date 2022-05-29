@@ -1,10 +1,12 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.application.ToyService;
 import com.codesoom.assignment.error.NotFoundException;
 import com.codesoom.assignment.interfaces.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -163,7 +165,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("updateProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
+            @DisplayName("updateProduct 메서드는 NotFoundException 을 반환한다.")
             void It_returns_patch_product() throws Exception {
                 mockMvc.perform(patch("/products/{id}", PRODUCT_ID)
                                 .content(objectMapper.writeValueAsString(product))
@@ -189,6 +191,39 @@ class ProductControllerTest {
                 mockMvc.perform(patch("/products/{id}", UNKNOWN_PRODUCT_ID)
                                 .content(objectMapper.writeValueAsString(product))
                                 .contentType(MediaType.APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("[DELETE] /products/{id} 요청에 대하여")
+    class Describe_delete_product {
+        @Nested
+        @DisplayName("요청하는 id 가 있으면")
+        class Context_when_exist_product_id {
+            @Test
+            @DisplayName("deleteProduct 메서드는 요청하는 id 에 대한 product 를 반환한다.")
+            void It_delete_product() throws Exception {
+                mockMvc.perform(delete("/products/{id}", PRODUCT_ID))
+                        .andDo(print())
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("요청하는 id 가 없으면")
+        class Context_when_not_exist_product_id {
+            @BeforeEach
+            void setUp() {
+                Mockito.doThrow(new NotFoundException(UNKNOWN_PRODUCT_ID)).when(productService).delete(UNKNOWN_PRODUCT_ID);
+            }
+
+            @Test
+            @DisplayName("deleteProduct 메서드는 NotFoundException 을 반환한다.")
+            void It_returns_patch_product() throws Exception {
+                mockMvc.perform(delete("/products/{id}", UNKNOWN_PRODUCT_ID))
                         .andDo(print())
                         .andExpect(status().isNotFound());
             }
