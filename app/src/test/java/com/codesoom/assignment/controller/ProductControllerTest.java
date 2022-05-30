@@ -21,9 +21,11 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
@@ -199,7 +201,92 @@ class ProductControllerTest {
                         .andExpect(status().isCreated());
             }
         }
+    }
 
+    @Nested
+    @DisplayName("PATCH 요청은")
+    class Describe_PATCH {
+
+        @Nested
+        @DisplayName("존재하는 상품 id가 주어진다면")
+        class Context_with_an_existing_product_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(STORED_ID), any(Product.class)))
+                        .willReturn(productResponse1);
+            }
+
+            @Test
+            @DisplayName("수정된 상품과 상태코드 200을 응답한다")
+            void it_responds_the_updated_product_and_status_code_200() throws Exception {
+                mockMvc.perform(patch("/products/{id}", STORED_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(product)))
+                        .andExpect(content().string(containsString(NAME)))
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 상품 id가 주어진다면")
+        class Context_with_not_existing_product_id {
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(NOT_STORED_ID), any(Product.class)))
+                        .willThrow(new ProductNotFoundException());
+            }
+
+            @Test
+            @DisplayName("에러메시지와 상태코드 404를 응답한다")
+            void it_responds_the_error_message_and_status_code_404() throws Exception {
+                mockMvc.perform(patch("/products/{id}", NOT_STORED_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(product)))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE 요청은")
+    class Describe_DELETE {
+        @Nested
+        @DisplayName("존재하는 상품 id가 주어진다면")
+        class Context_with_an_existing_product_id {
+            @Test
+            @DisplayName("상태코드 204을 응답한다")
+            void it_responds_status_code_204() throws Exception {
+                mockMvc.perform(delete("/products/{id}", STORED_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 상품 id가 주어진다면")
+        class Context_with_not_existing_product_id {
+            @BeforeEach
+            void setUp() {
+                willThrow(new ProductNotFoundException())
+                        .given(productService).deleteProduct(NOT_STORED_ID);
+            }
+
+            @Test
+            @DisplayName("에러메시지와 상태코드 404를 응답한다")
+            void it_responds_the_error_message_and_status_code_404() throws Exception {
+                mockMvc.perform(delete("/products/{id}", NOT_STORED_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 
 }

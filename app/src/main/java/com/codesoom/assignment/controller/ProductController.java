@@ -33,4 +33,15 @@ public class ProductController {
         return productService.createProduct(product);
     }
 
+    @PatchMapping("{id}")
+    public ProductResponse update(@PathVariable Long id, @RequestBody Product product) {
+        return productService.updateProduct(id, product);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        productService.deleteProduct(id);
+    }
+
 }
