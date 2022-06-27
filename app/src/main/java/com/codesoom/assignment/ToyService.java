@@ -12,7 +12,7 @@ public class ToyService {
     }
 
     public Toy register(String name, String maker, int price, String imageUrl) {
-        toyRepository.save(new Toy(null, name, maker, price, imageUrl));
-        return new Toy(1L, name, maker, price, imageUrl);
+        Toy toy = toyRepository.save(new Toy(null, name, maker, price, imageUrl));
+        return toy;
     }
 }

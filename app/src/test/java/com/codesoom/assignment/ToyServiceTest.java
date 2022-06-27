@@ -35,7 +35,7 @@ public class ToyServiceTest {
 
         // THEN
         assertThat(toy).isNotNull();
-        assertThat(toy.getId()).isEqualTo(registered.getId());
+        assertThat(toy.getName()).isEqualTo(registered.getName());
         assertThat(toy.getMaker()).isEqualTo(registered.getMaker());
         assertThat(toy.getPrice()).isEqualTo(registered.getPrice());
         assertThat(toy.getImageUrl()).isEqualTo(registered.getImageUrl());
