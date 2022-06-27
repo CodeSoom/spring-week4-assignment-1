@@ -14,7 +14,7 @@ public class ToyServiceTest {
     }
 
     @Test
-    void getToyById() {
+    void getToyById_not_exist() {
         // GIVEN
         Long ID_NOT_EXISTS = Long.MAX_VALUE;
 
@@ -23,5 +23,21 @@ public class ToyServiceTest {
 
         // THEN
         assertThat(toy).isNull();
+    }
+
+    @Test
+    void getToyById_exist() {
+        // GIVEN
+        Toy registered = toyService.register("Toy 1", "maker 1", 1000, "url 1");
+
+        // WHEN
+        Toy toy = toyService.getToyById(registered.getId());
+
+        // THEN
+        assertThat(toy).isNotNull();
+        assertThat(toy.getId()).isEqualTo(registered.getId());
+        assertThat(toy.getMaker()).isEqualTo(registered.getMaker());
+        assertThat(toy.getPrice()).isEqualTo(registered.getPrice());
+        assertThat(toy.getImageUrl()).isEqualTo(registered.getImageUrl());
     }
 }
