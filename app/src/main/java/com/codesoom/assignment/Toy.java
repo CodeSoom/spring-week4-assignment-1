@@ -1,7 +1,7 @@
 package com.codesoom.assignment;
 
 public class Toy {
-    private final Long id;
+    private Long id;
     private final String name;
     private final String maker;
     private final int price;
@@ -33,5 +33,9 @@ public class Toy {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
