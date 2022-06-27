@@ -23,4 +23,8 @@ public class ToyRepository {
 
         return toy;
     }
+
+    public List<Toy> findAll() {
+        return toys;
+    }
 }
