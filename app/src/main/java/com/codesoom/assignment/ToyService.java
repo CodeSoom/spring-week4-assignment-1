@@ -30,4 +30,8 @@ public class ToyService {
         newToy.setId(savedToy.getId());
         return toyRepository.save(newToy);
     }
+
+    public void delete(Long id) throws ToyNotFoundException {
+        toyRepository.deleteById(id).orElseThrow(() -> new ToyNotFoundException(id));
+    }
 }

@@ -29,6 +29,16 @@ public class ToyRepository {
         return toys;
     }
 
+    public Optional<Toy> deleteById(Long id) {
+        for (Toy toy : toys) {
+            if (toy.getId() == id) {
+                return Optional.of(toy);
+            }
+        }
+
+        return Optional.empty();
+    }
+
     private long nextId() {
         return toys.size() + 1;
     }
