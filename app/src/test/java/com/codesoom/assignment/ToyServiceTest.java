@@ -200,7 +200,7 @@ public class ToyServiceTest {
 
             @Test
             @DisplayName("해당 Toy를 인자로 넘겨진 Toy의 정보로 업데이트하고, 업데이트된 Toy를 리턴한다")
-            void it_returns_updated_toy() {
+            void it_returns_updated_toy() throws ToyNotFoundException {
                 Toy newToy = randomToy();
                 Toy updated = toyService.update(targetToy.getId(), newToy);
 

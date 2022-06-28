@@ -23,4 +23,11 @@ public class ToyService {
     public List<Toy> getToys() {
         return toyRepository.findAll();
     }
+
+    public Toy update(Long id, Toy newToy) throws ToyNotFoundException {
+        Toy savedToy = toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
+
+        newToy.setId(savedToy.getId());
+        return toyRepository.save(newToy);
+    }
 }
