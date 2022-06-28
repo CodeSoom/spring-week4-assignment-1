@@ -1,5 +1,6 @@
 package com.codesoom.assignment;
 
+import com.codesoom.assignment.exceptions.ToyNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -115,7 +116,7 @@ public class ToyServiceTest {
 
             @Test
             @DisplayName("해당 Toy를 리턴한다")
-            void it_returns_according_toy() {
+            void it_returns_according_toy() throws ToyNotFoundException {
                 Toy foundToy = toyService.getToyById(toy.getId());
 
                 assertThat(foundToy).isEqualTo(toy);

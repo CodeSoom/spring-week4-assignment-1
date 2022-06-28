@@ -2,19 +2,20 @@ package com.codesoom.assignment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ToyRepository {
     List<Toy> toys = new ArrayList<>();
 
 
-    public Toy findById(long id) {
+    public Optional<Toy> findById(long id) {
         for (Toy toy : toys) {
             if (toy.getId() == id) {
-                return toy;
+                return Optional.of(toy);
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
     public Toy save(Toy toy) {
