@@ -190,7 +190,7 @@ public class ToyServiceTest {
 
         @Nested
         @DisplayName("인자로 넘겨진 ID에 해당하는 Toy를 찾으면")
-        class Context_normal {
+        class Context_toy_found {
             private Toy targetToy;
 
             @BeforeEach
@@ -205,6 +205,18 @@ public class ToyServiceTest {
                 Toy updated = toyService.update(targetToy.getId(), newToy);
 
                 assertThat(updated).isEqualTo(newToy);
+            }
+        }
+
+        @Nested
+        @DisplayName("인자로 넘겨진 ID에 해당하는 Toy를 찾지 못하면")
+        class Context_toy_not_found {
+            @Test
+            @DisplayName("404 Not Found Exception을 던진다.")
+            void it_throws_404_not_found_exception() {
+                long ID_NOT_EXISTS = Long.MAX_VALUE;
+                assertThatThrownBy(() -> toyService.update(ID_NOT_EXISTS, randomToy()))
+                        .isInstanceOf(ToyNotFoundException.class);
             }
         }
     }
