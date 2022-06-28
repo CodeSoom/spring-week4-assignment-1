@@ -7,8 +7,7 @@ public class Toy {
     private final int price;
     private final String imageUrl;
 
-    public Toy(Long id, String name, String maker, int price, String imageUrl) {
-        this.id = id;
+    public Toy(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;

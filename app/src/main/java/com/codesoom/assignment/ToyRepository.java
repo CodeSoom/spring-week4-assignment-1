@@ -18,7 +18,7 @@ public class ToyRepository {
     }
 
     public Toy save(Toy toy) {
-        toy.setId((long) (toys.size() + 1));
+        toy.setId(nextId());
         toys.add(toy);
 
         return toy;
@@ -26,5 +26,9 @@ public class ToyRepository {
 
     public List<Toy> findAll() {
         return toys;
+    }
+
+    private long nextId() {
+        return toys.size() + 1;
     }
 }

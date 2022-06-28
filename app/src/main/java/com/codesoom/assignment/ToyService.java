@@ -13,9 +13,9 @@ public class ToyService {
         return toyRepository.findById(id);
     }
 
-    public Toy register(String name, String maker, int price, String imageUrl) {
-        Toy toy = toyRepository.save(new Toy(null, name, maker, price, imageUrl));
-        return toy;
+    public Toy register(Toy toy) {
+        Toy savedToy = toyRepository.save(toy);
+        return savedToy;
     }
 
     public List<Toy> getToys() {
