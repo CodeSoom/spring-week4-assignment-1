@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ToyService 클래스")
 public class ToyServiceTest {
@@ -98,35 +99,39 @@ public class ToyServiceTest {
         }
     }
 
-    @Test
-    void getToys_not_exists() {
-        // GIVEN
+    @Nested
+    @DisplayName("getToyById 메소드는")
+    class Describe_getToyById {
 
-        // WHEN
-        List<Toy> toys = toyService.getToys();
+        @Nested
+        @DisplayName("인자로 넘긴 ID의 Toy를 발견하면")
+        class Context_found {
+            private Toy toy;
 
-        // THEN
-        assertThat(toys).isEmpty();
-    }
+            @BeforeEach
+            void setUp() {
+                toy = toyService.register(randomToy());
+            }
 
-    @Test
-    void getToys_exists() {
-        // GIVEN
-        Toy registered = toyService.register("Toy 1", "maker 1", 1000, "url 1");
-        Toy registered2 = toyService.register("Toy 2", "maker 2", 2000, "url 2");
+            @Test
+            @DisplayName("해당 Toy를 리턴한다")
+            void it_returns_according_toy() {
+                Toy foundToy = toyService.getToyById(toy.getId());
 
-        // WHEN
-        List<Toy> toys = toyService.getToys();
+                assertThat(foundToy).isEqualTo(toy);
+            }
+        }
 
-        // THEN
-        assertThat(toys).hasSize(2);
-        assertThat(toys.get(0).getName()).isEqualTo(registered.getName());
-        assertThat(toys.get(0).getMaker()).isEqualTo(registered.getMaker());
-        assertThat(toys.get(0).getPrice()).isEqualTo(registered.getPrice());
-        assertThat(toys.get(0).getImageUrl()).isEqualTo(registered.getImageUrl());
-        assertThat(toys.get(1).getName()).isEqualTo(registered2.getName());
-        assertThat(toys.get(1).getMaker()).isEqualTo(registered2.getMaker());
-        assertThat(toys.get(1).getPrice()).isEqualTo(registered2.getPrice());
-        assertThat(toys.get(1).getImageUrl()).isEqualTo(registered2.getImageUrl());
+        @Nested
+        @DisplayName("인자로 넘긴 ID의 Toy를 발견하지 못하면")
+        class Context_not_found {
+            @Test
+            @DisplayName("404 Not Found Exception을 던진다.")
+            void it_throws_404_not_found_exception() {
+                long ID_NOT_EXISTS = Long.MAX_VALUE;
+                assertThatThrownBy(() -> toyService.getToyById(ID_NOT_EXISTS))
+                        .isInstanceOf(ToyNotFoundException.class);
+            }
+        }
     }
 }
