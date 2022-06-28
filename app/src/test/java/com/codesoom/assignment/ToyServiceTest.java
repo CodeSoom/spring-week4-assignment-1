@@ -141,6 +141,7 @@ public class ToyServiceTest {
     @Nested
     @DisplayName("register 메소드는")
     class Describe_register {
+
         @Nested
         @DisplayName("정상적인 상황에서")
         class Context_normal {
@@ -179,6 +180,31 @@ public class ToyServiceTest {
 
                 Set<Long> ids = toys.stream().map(Toy::getId).collect(Collectors.toSet());
                 assertThat(ids).hasSize(testCase);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("update 메소드는")
+    class Describe_update {
+
+        @Nested
+        @DisplayName("인자로 넘겨진 ID에 해당하는 Toy를 찾으면")
+        class Context_normal {
+            private Toy targetToy;
+
+            @BeforeEach
+            void setUp() {
+                targetToy = toyService.register(randomToy());
+            }
+
+            @Test
+            @DisplayName("해당 Toy를 인자로 넘겨진 Toy의 정보로 업데이트하고, 업데이트된 Toy를 리턴한다")
+            void it_returns_updated_toy() {
+                Toy newToy = randomToy();
+                Toy updated = toyService.update(targetToy.getId(), newToy);
+
+                assertThat(updated).isEqualTo(newToy);
             }
         }
     }
