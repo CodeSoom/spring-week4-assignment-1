@@ -220,4 +220,41 @@ public class ToyServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("delete 메소드는")
+    class Describe_delete {
+
+            @Nested
+            @DisplayName("인자로 넘겨진 ID에 해당하는 Toy를 찾으면")
+            class Context_toy_found {
+                private Toy targetToy;
+
+                @BeforeEach
+                void setUp() {
+                    targetToy = toyService.register(randomToy());
+                }
+
+                @Test
+                @DisplayName("해당 Toy를 삭제한다")
+                void it_returns_deleted_toy() throws ToyNotFoundException {
+                    toyService.delete(targetToy.getId());
+
+                    assertThatThrownBy(() -> toyService.getToyById(targetToy.getId()))
+                            .isInstanceOf(ToyNotFoundException.class);
+                }
+            }
+
+            @Nested
+            @DisplayName("인자로 넘겨진 ID에 해당하는 Toy를 찾지 못하면")
+            class Context_toy_not_found {
+                @Test
+                @DisplayName("404 Not Found Exception을 던진다.")
+                void it_throws_404_not_found_exception() {
+                    long ID_NOT_EXISTS = Long.MAX_VALUE;
+                    assertThatThrownBy(() -> toyService.delete(ID_NOT_EXISTS))
+                            .isInstanceOf(ToyNotFoundException.class);
+                }
+            }
+    }
 }
