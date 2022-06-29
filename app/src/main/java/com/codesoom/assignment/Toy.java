@@ -42,7 +42,6 @@ public class Toy {
         return imageUrl;
     }
 
-    // overrides equals and hashCode
     @Override
     public boolean equals(Object o) {
         if (o == this) {
