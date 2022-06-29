@@ -14,12 +14,11 @@ public abstract class BaseProductTest {
     protected static final String MAKER_NAME = "sample maker";
     protected static final String ERROR_MSG = "Product not found";
 
-    protected Product supplyDummyTask() {
+    protected Product supplyDummyProduct() {
 
         ProductDto productDto = new ProductDto(PRODUCT_NAME, MAKER_NAME, PRODUCT_PRICE, IMAGE_URL);
-        Product product = new Product(productDto);
 
-        return product;
+        return new Product(productDto);
     }
 
     protected String supplyErrorMSG(Long id){

@@ -46,4 +46,13 @@ public class Product {
     public String getImageURL() {
         return imageURL;
     }
+
+    public Product update(Product p) {
+        name = p.name;
+        maker = p.maker;
+        price = p.price;
+        imageURL = p.imageURL;
+
+        return this;
+    }
 }
