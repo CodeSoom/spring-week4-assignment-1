@@ -88,7 +88,7 @@ public class ToyServiceTest {
 
             @DisplayName("n개의 Toy만이 들어있는 리스트를 반환한다.")
             @ParameterizedTest
-            @ValueSource(ints = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20})
+            @ValueSource(ints = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20})
             void it_returns_list_of_n_toys(int testCase) {
                 setUp(testCase);
 

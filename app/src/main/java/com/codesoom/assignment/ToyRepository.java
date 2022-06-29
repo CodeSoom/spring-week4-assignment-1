@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class ToyRepository {
     Map<Long, Toy> toys = new ConcurrentHashMap();
@@ -23,7 +24,9 @@ public class ToyRepository {
     }
 
     public List<Toy> findAll() {
-        return new ArrayList<>(toys.values());
+        return new ArrayList<>(this.toys.values()).stream()
+                .sorted((t1, t2) -> t1.getId().compareTo(t2.getId()))
+                .collect(Collectors.toList());
     }
 
     public Optional<Toy> deleteById(Long id) {
