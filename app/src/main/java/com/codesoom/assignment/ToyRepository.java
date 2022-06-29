@@ -7,7 +7,6 @@ import java.util.Optional;
 public class ToyRepository {
     List<Toy> toys = new ArrayList<>();
 
-
     public Optional<Toy> findById(long id) {
         for (Toy toy : toys) {
             if (toy.getId() == id) {
@@ -19,10 +18,10 @@ public class ToyRepository {
     }
 
     public Toy save(Toy toy) {
-        toy.setId(nextId());
-        toys.add(toy);
+        Toy toyEntity = new Toy(nextId(), toy.getName(), toy.getMaker(), toy.getPrice(), toy.getImageUrl());
+        toys.add(toyEntity);
 
-        return toy;
+        return toyEntity;
     }
 
     public List<Toy> findAll() {

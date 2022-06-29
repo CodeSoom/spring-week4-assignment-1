@@ -7,6 +7,14 @@ public class Toy {
     private final int price;
     private final String imageUrl;
 
+    public Toy(Long id, String name, String maker, int price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     public Toy(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
@@ -34,7 +42,19 @@ public class Toy {
         return imageUrl;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // overrides equals and hashCode
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Toy)) {
+            return false;
+        }
+
+        Toy t = (Toy) o;
+
+        return name.equals(t.name) && maker.equals(t.maker) && price == t.price && imageUrl.equals(t.imageUrl);
     }
 }

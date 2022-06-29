@@ -27,8 +27,8 @@ public class ToyService {
     public Toy update(Long id, Toy newToy) throws ToyNotFoundException {
         Toy savedToy = toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
 
-        newToy.setId(savedToy.getId());
-        return toyRepository.save(newToy);
+        Toy updatedToy = new Toy(savedToy.getId(), newToy.getName(), newToy.getMaker(), newToy.getPrice(), newToy.getImageUrl());
+        return toyRepository.save(updatedToy);
     }
 
     public void delete(Long id) throws ToyNotFoundException {
