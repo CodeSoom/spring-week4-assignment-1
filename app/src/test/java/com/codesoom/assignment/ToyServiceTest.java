@@ -204,6 +204,7 @@ public class ToyServiceTest {
                 Toy newToy = randomToy();
                 Toy updated = toyService.update(targetToy.getId(), newToy);
 
+                assertThat(updated.getId()).isEqualTo(targetToy.getId());
                 assertThat(updated).isEqualTo(newToy);
             }
         }

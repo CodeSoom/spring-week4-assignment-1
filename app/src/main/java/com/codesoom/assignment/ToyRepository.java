@@ -23,6 +23,12 @@ public class ToyRepository {
         return toyEntity;
     }
 
+    public Toy update(Toy toy) {
+        toys.put(toy.getId(), toy);
+
+        return toy;
+    }
+
     public List<Toy> findAll() {
         return new ArrayList<>(this.toys.values()).stream()
                 .sorted((t1, t2) -> t1.getId().compareTo(t2.getId()))

@@ -47,10 +47,10 @@ public class ToyService {
      * @throws ToyNotFoundException - 인자로 넘어온 ID를 가진 Toy가 없는 경우
      */
     public Toy update(Long id, Toy newToy) throws ToyNotFoundException {
-        Toy savedToy = toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
+        Toy target = toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
 
-        Toy updatedToy = new Toy(savedToy.getId(), newToy.getName(), newToy.getMaker(), newToy.getPrice(), newToy.getImageUrl());
-        return toyRepository.save(updatedToy);
+        Toy updatedToy = new Toy(target.getId(), newToy.getName(), newToy.getMaker(), newToy.getPrice(), newToy.getImageUrl());
+        return toyRepository.update(updatedToy);
     }
 
     /**
