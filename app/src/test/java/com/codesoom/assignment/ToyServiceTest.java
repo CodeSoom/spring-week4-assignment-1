@@ -46,7 +46,7 @@ public class ToyServiceTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                List<Toy> toys = toyService.getToys();
+                final List<Toy> toys = toyService.getToys();
 
                 assertThat(toys).hasSize(0);
             }
@@ -66,7 +66,7 @@ public class ToyServiceTest {
             @Test
             @DisplayName("1개의 Toy만이 들어있는 리스트를 반환한다.")
             void it_returns_list_of_one_toy() {
-                List<Toy> toys = toyService.getToys();
+                final List<Toy> toys = toyService.getToys();
 
                 assertThat(toys).hasSize(1);
                 assertThat(toys.get(0)).isEqualTo(toy);
@@ -92,7 +92,7 @@ public class ToyServiceTest {
             void it_returns_list_of_n_toys(int testCase) {
                 setUp(testCase);
 
-                List<Toy> toys = toyService.getToys();
+                final List<Toy> toys = toyService.getToys();
 
                 assertThat(toys).hasSize(testCase);
                 for (int i = 0; i < testCase; i++) {
@@ -176,7 +176,7 @@ public class ToyServiceTest {
             @ValueSource(ints = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20})
             void it_returns_all_different_ids(int testCase) {
                 registerMultipleToys(testCase);
-                List<Toy> toys = toyService.getToys();
+                final List<Toy> toys = toyService.getToys();
 
                 Set<Long> ids = toys.stream().map(Toy::getId).collect(Collectors.toSet());
                 assertThat(ids).hasSize(testCase);
