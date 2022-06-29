@@ -9,8 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest extends BaseProductTest {
     @InjectMocks
     private ProductService productService;
@@ -27,16 +30,18 @@ class ProductServiceTest extends BaseProductTest {
     private ProductRepository productRepositoryMock;
 
 
-
     @Nested
     @DisplayName("createProduct 메소드는")
     class Discribe_createProduct {
         @Test
         @DisplayName("Product 를 생성하고 리턴한다")
         void it_create_return_product() {
-            Product product = supplyDummyTask();
+            Product product = supplyDummyProduct();
+            Product created = productService.createProduct(product);
 
-            assertThat(productService.createProduct(product)).usingRecursiveComparison().isEqaulTo(product);
+            assertThat(created).usingRecursiveComparison()
+                    .ignoringFields("id")
+                    .isEqualTo(product);
         }
     }
 
@@ -50,12 +55,12 @@ class ProductServiceTest extends BaseProductTest {
             @BeforeEach
             void setUp() {
                 when(productRepositoryMock.findById(anyLong()))
-                        .thenReturn(Optional.of(product));
+                        .thenReturn(Optional.of(supplyDummyProduct()));
             }
 
             @Test
             @DisplayName("찾은 프러덕트를 리턴한다")
-            void it_returns_found_product(){
+            void it_returns_found_product() {
                 assertThat(productService.detailProduct(PRODUCT_ID)).isInstanceOf(Product.class);
             }
         }
@@ -74,14 +79,14 @@ class ProductServiceTest extends BaseProductTest {
         @DisplayName("저장된 프러덕트가 있다면")
         class Context_can_find_product {
             @BeforeEach
-            void setUp(){
+            void setUp() {
                 when(productRepositoryMock.findAll())
-                        .thenReturn(Lists.newArrayList(supplyDummyTask()));
+                        .thenReturn(Lists.newArrayList(supplyDummyProduct()));
             }
 
             @Test
             @DisplayName("프러덕트의 리스트를 리턴한다")
-            void it_returns_product_list(){
+            void it_returns_product_list() {
                 assertThat(productService.listProduct())
                         .isNotEmpty();
             }
@@ -92,7 +97,7 @@ class ProductServiceTest extends BaseProductTest {
         class Context_cannot_find_product {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
-            void it_returns_product_list(){
+            void it_returns_product_list() {
                 assertThat(productService.listProduct())
                         .isEmpty();
             }
@@ -125,9 +130,9 @@ class ProductServiceTest extends BaseProductTest {
             @DisplayName("멤버 변수들을 업데이트한다")
             void it_updates_member_variable() {
                 Product newProduct = new Product();
-                Product targetProduct = new Product();
+                Long id = PRODUCT_ID;
 
-                Product updateProduct = targetProduct.update(newProduct);
+                Product updateProduct = productService.updateProduct(id, newProduct);
 
                 assertThat(updateProduct).usingRecursiveComparison().isEqualTo(newProduct);
             }
