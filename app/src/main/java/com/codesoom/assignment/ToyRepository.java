@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class ToyRepository {
+    private AtomicLong idCounter = new AtomicLong(); // default value is 0
     Map<Long, Toy> toys = new ConcurrentHashMap();
 
     public Optional<Toy> findById(long id) {
@@ -29,6 +31,6 @@ public class ToyRepository {
     }
 
     private long nextId() {
-        return toys.size() + 1;
+        return idCounter.incrementAndGet();
     }
 }
