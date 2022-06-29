@@ -1,14 +1,14 @@
 package com.codesoom.assignment;
 
+import com.codesoom.assignment.util.IdGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class ToyRepository {
-    private AtomicLong idCounter = new AtomicLong(); // default value is 0
     Map<Long, Toy> toys = new ConcurrentHashMap();
 
     public Optional<Toy> findById(long id) {
@@ -16,7 +16,7 @@ public class ToyRepository {
     }
 
     public Toy save(Toy toy) {
-        Toy toyEntity = new Toy(nextId(), toy.getName(), toy.getMaker(), toy.getPrice(), toy.getImageUrl());
+        Toy toyEntity = new Toy(IdGenerator.next(), toy.getName(), toy.getMaker(), toy.getPrice(), toy.getImageUrl());
         toys.put(toyEntity.getId(), toyEntity);
 
         return toyEntity;
@@ -28,9 +28,5 @@ public class ToyRepository {
 
     public Optional<Toy> deleteById(Long id) {
         return Optional.ofNullable(toys.remove(id));
-    }
-
-    private long nextId() {
-        return idCounter.incrementAndGet();
     }
 }
