@@ -1,6 +1,7 @@
 package com.codesoom.assignment;
 
 import com.codesoom.assignment.util.IdGenerator;
+import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,32 +11,32 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class ToyRepository {
-    Map<Long, Toy> toys = new ConcurrentHashMap();
+    Map<Long, Product> products = new ConcurrentHashMap();
 
-    public Optional<Toy> findById(long id) {
-        return Optional.ofNullable(toys.get(id));
+    public Optional<Product> findById(long id) {
+        return Optional.ofNullable(products.get(id));
     }
 
-    public Toy save(Toy toy) {
-        Toy toyEntity = new Toy(IdGenerator.next(), toy.getName(), toy.getMaker(), toy.getPrice(), toy.getImageUrl());
-        toys.put(toyEntity.getId(), toyEntity);
+    public Product save(Product product) {
+        Product productEntity = new Product(IdGenerator.next(), product.getName(), product.getMaker(), product.getPrice(), product.getImageUrl());
+        products.put(productEntity.getId(), productEntity);
 
-        return toyEntity;
+        return productEntity;
     }
 
-    public Toy update(Toy toy) {
-        toys.put(toy.getId(), toy);
+    public Product update(Product product) {
+        products.put(product.getId(), product);
 
-        return toy;
+        return product;
     }
 
-    public List<Toy> findAll() {
-        return new ArrayList<>(this.toys.values()).stream()
+    public List<Product> findAll() {
+        return new ArrayList<>(this.products.values()).stream()
                 .sorted((t1, t2) -> t1.getId().compareTo(t2.getId()))
                 .collect(Collectors.toList());
     }
 
-    public Optional<Toy> deleteById(Long id) {
-        return Optional.ofNullable(toys.remove(id));
+    public Optional<Product> deleteById(Long id) {
+        return Optional.ofNullable(products.remove(id));
     }
 }

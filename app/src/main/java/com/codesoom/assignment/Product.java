@@ -1,13 +1,13 @@
 package com.codesoom.assignment;
 
-public class Toy {
+public class Product {
     private Long id;
     private final String name;
     private final String maker;
     private final int price;
     private final String imageUrl;
 
-    public Toy(Long id, String name, String maker, int price, String imageUrl) {
+    public Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
@@ -15,7 +15,7 @@ public class Toy {
         this.imageUrl = imageUrl;
     }
 
-    public Toy(String name, String maker, int price, String imageUrl) {
+    public Product(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -48,11 +48,11 @@ public class Toy {
             return true;
         }
 
-        if (!(o instanceof Toy)) {
+        if (!(o instanceof Product)) {
             return false;
         }
 
-        Toy t = (Toy) o;
+        Product t = (Product) o;
 
         return name.equals(t.name)
                 && maker.equals(t.maker)

@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ToyService 클래스")
-public class ToyServiceTest {
+public class ProductServiceTest {
     private ToyService toyService;
 
     @BeforeEach
@@ -25,9 +25,9 @@ public class ToyServiceTest {
         toyService = new ToyService();
     }
 
-    private Toy randomToy() {
+    private Product randomToy() {
         int randomNumber = (int) (Math.random() * 1000);
-        return new Toy(
+        return new Product(
                 "Toy" + randomNumber,
                 "Maker" + randomNumber,
                 randomNumber,
@@ -46,43 +46,43 @@ public class ToyServiceTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                final List<Toy> toys = toyService.getToys();
+                final List<Product> products = toyService.getToys();
 
-                assertThat(toys).hasSize(0);
+                assertThat(products).hasSize(0);
             }
         }
 
         @Nested
         @DisplayName("1개의 toy만 등록되어 있다면")
         class Context_one_toy {
-            private Toy toy;
+            private Product product;
 
             @BeforeEach
             void setUp() {
-                toy = randomToy();
-                toyService.register(toy);
+                product = randomToy();
+                toyService.register(product);
             }
 
             @Test
             @DisplayName("1개의 Toy만이 들어있는 리스트를 반환한다.")
             void it_returns_list_of_one_toy() {
-                final List<Toy> toys = toyService.getToys();
+                final List<Product> products = toyService.getToys();
 
-                assertThat(toys).hasSize(1);
-                assertThat(toys.get(0)).isEqualTo(toy);
+                assertThat(products).hasSize(1);
+                assertThat(products.get(0)).isEqualTo(product);
             }
         }
 
         @Nested
         @DisplayName("n개 이상의 toy가 등록되어 있다면")
         class Context_multiple_toys {
-            private List<Toy> expectedToys = new ArrayList<>();
+            private List<Product> expectedProducts = new ArrayList<>();
 
             void setUp(int testCase) {
                 for (int i = 0; i < testCase; i++) {
-                    Toy randomToy = randomToy();
-                    expectedToys.add(randomToy);
-                    toyService.register(randomToy);
+                    Product randomProduct = randomToy();
+                    expectedProducts.add(randomProduct);
+                    toyService.register(randomProduct);
                 }
             }
 
@@ -92,11 +92,11 @@ public class ToyServiceTest {
             void it_returns_list_of_n_toys(int testCase) {
                 setUp(testCase);
 
-                final List<Toy> toys = toyService.getToys();
+                final List<Product> products = toyService.getToys();
 
-                assertThat(toys).hasSize(testCase);
+                assertThat(products).hasSize(testCase);
                 for (int i = 0; i < testCase; i++) {
-                    assertThat(toys.get(i)).isEqualTo(this.expectedToys.get(i));
+                    assertThat(products.get(i)).isEqualTo(this.expectedProducts.get(i));
                 }
             }
         }
@@ -104,24 +104,24 @@ public class ToyServiceTest {
 
     @Nested
     @DisplayName("getToyById 메소드는")
-    class Describe_getToyById {
+    class Describe_getProductById {
 
         @Nested
         @DisplayName("인자로 넘긴 ID의 Toy를 발견하면")
         class Context_found {
-            private Toy toy;
+            private Product product;
 
             @BeforeEach
             void setUp() {
-                toy = toyService.register(randomToy());
+                product = toyService.register(randomToy());
             }
 
             @Test
             @DisplayName("해당 Toy를 리턴한다")
             void it_returns_according_toy() throws ToyNotFoundException {
-                Toy foundToy = toyService.getToyById(toy.getId());
+                Product foundProduct = toyService.getToyById(product.getId());
 
-                assertThat(foundToy).isEqualTo(toy);
+                assertThat(foundProduct).isEqualTo(product);
             }
         }
 
@@ -145,19 +145,19 @@ public class ToyServiceTest {
         @Nested
         @DisplayName("정상적인 상황에서")
         class Context_normal {
-            private Toy toy;
+            private Product product;
 
             @BeforeEach
             void setUp() {
-                toy = randomToy();
+                product = randomToy();
             }
 
             @Test
             @DisplayName("인자로 넘겨진 Toy를 등록하고, 등록된 Toy를 리턴한다")
             void it_returns_registered_toy() {
-                Toy registeredToy = toyService.register(toy);
+                Product registeredProduct = toyService.register(product);
 
-                assertThat(registeredToy).isEqualTo(toy);
+                assertThat(registeredProduct).isEqualTo(product);
             }
         }
 
@@ -166,8 +166,8 @@ public class ToyServiceTest {
         class Context_multiple_tasks {
             void registerMultipleToys(int testCase) {
                 for (int i = 0; i < testCase; i++) {
-                    Toy randomToy = randomToy();
-                    toyService.register(randomToy);
+                    Product randomProduct = randomToy();
+                    toyService.register(randomProduct);
                 }
             }
 
@@ -176,9 +176,9 @@ public class ToyServiceTest {
             @ValueSource(ints = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20})
             void it_returns_all_different_ids(int testCase) {
                 registerMultipleToys(testCase);
-                final List<Toy> toys = toyService.getToys();
+                final List<Product> products = toyService.getToys();
 
-                Set<Long> ids = toys.stream().map(Toy::getId).collect(Collectors.toSet());
+                Set<Long> ids = products.stream().map(Product::getId).collect(Collectors.toSet());
                 assertThat(ids).hasSize(testCase);
             }
         }
@@ -191,21 +191,21 @@ public class ToyServiceTest {
         @Nested
         @DisplayName("인자로 넘겨진 ID에 해당하는 Toy를 찾으면")
         class Context_toy_found {
-            private Toy targetToy;
+            private Product targetProduct;
 
             @BeforeEach
             void setUp() {
-                targetToy = toyService.register(randomToy());
+                targetProduct = toyService.register(randomToy());
             }
 
             @Test
             @DisplayName("해당 Toy를 인자로 넘겨진 Toy의 정보로 업데이트하고, 업데이트된 Toy를 리턴한다")
             void it_returns_updated_toy() throws ToyNotFoundException {
-                Toy newToy = randomToy();
-                Toy updated = toyService.update(targetToy.getId(), newToy);
+                Product newProduct = randomToy();
+                Product updated = toyService.update(targetProduct.getId(), newProduct);
 
-                assertThat(updated.getId()).isEqualTo(targetToy.getId());
-                assertThat(updated).isEqualTo(newToy);
+                assertThat(updated.getId()).isEqualTo(targetProduct.getId());
+                assertThat(updated).isEqualTo(newProduct);
             }
         }
 
@@ -229,19 +229,19 @@ public class ToyServiceTest {
             @Nested
             @DisplayName("인자로 넘겨진 ID에 해당하는 Toy를 찾으면")
             class Context_toy_found {
-                private Toy targetToy;
+                private Product targetProduct;
 
                 @BeforeEach
                 void setUp() {
-                    targetToy = toyService.register(randomToy());
+                    targetProduct = toyService.register(randomToy());
                 }
 
                 @Test
                 @DisplayName("해당 Toy를 삭제한다")
                 void it_returns_deleted_toy() throws ToyNotFoundException {
-                    toyService.delete(targetToy.getId());
+                    toyService.delete(targetProduct.getId());
 
-                    assertThatThrownBy(() -> toyService.getToyById(targetToy.getId()))
+                    assertThatThrownBy(() -> toyService.getToyById(targetProduct.getId()))
                             .isInstanceOf(ToyNotFoundException.class);
                 }
             }
