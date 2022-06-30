@@ -1,7 +1,6 @@
 package com.codesoom.assignment;
 
 import com.codesoom.assignment.util.IdGenerator;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class ToyRepository {
+public class ProductRepository {
     Map<Long, Product> products = new ConcurrentHashMap();
 
     public Optional<Product> findById(long id) {

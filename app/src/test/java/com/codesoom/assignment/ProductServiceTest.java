@@ -18,11 +18,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("ToyService 클래스")
 public class ProductServiceTest {
-    private ToyService toyService;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
-        toyService = new ToyService();
+        productService = new ProductService();
     }
 
     private Product randomToy() {
@@ -46,7 +46,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                final List<Product> products = toyService.getToys();
+                final List<Product> products = productService.getToys();
 
                 assertThat(products).hasSize(0);
             }
@@ -60,13 +60,13 @@ public class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 product = randomToy();
-                toyService.register(product);
+                productService.register(product);
             }
 
             @Test
             @DisplayName("1개의 Toy만이 들어있는 리스트를 반환한다.")
             void it_returns_list_of_one_toy() {
-                final List<Product> products = toyService.getToys();
+                final List<Product> products = productService.getToys();
 
                 assertThat(products).hasSize(1);
                 assertThat(products.get(0)).isEqualTo(product);
@@ -82,7 +82,7 @@ public class ProductServiceTest {
                 for (int i = 0; i < testCase; i++) {
                     Product randomProduct = randomToy();
                     expectedProducts.add(randomProduct);
-                    toyService.register(randomProduct);
+                    productService.register(randomProduct);
                 }
             }
 
@@ -92,7 +92,7 @@ public class ProductServiceTest {
             void it_returns_list_of_n_toys(int testCase) {
                 setUp(testCase);
 
-                final List<Product> products = toyService.getToys();
+                final List<Product> products = productService.getToys();
 
                 assertThat(products).hasSize(testCase);
                 for (int i = 0; i < testCase; i++) {
@@ -113,13 +113,13 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                product = toyService.register(randomToy());
+                product = productService.register(randomToy());
             }
 
             @Test
             @DisplayName("해당 Toy를 리턴한다")
             void it_returns_according_toy() throws ToyNotFoundException {
-                Product foundProduct = toyService.getToyById(product.getId());
+                Product foundProduct = productService.getToyById(product.getId());
 
                 assertThat(foundProduct).isEqualTo(product);
             }
@@ -132,7 +132,7 @@ public class ProductServiceTest {
             @DisplayName("404 Not Found Exception을 던진다.")
             void it_throws_404_not_found_exception() {
                 long ID_NOT_EXISTS = Long.MAX_VALUE;
-                assertThatThrownBy(() -> toyService.getToyById(ID_NOT_EXISTS))
+                assertThatThrownBy(() -> productService.getToyById(ID_NOT_EXISTS))
                         .isInstanceOf(ToyNotFoundException.class);
             }
         }
@@ -155,7 +155,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("인자로 넘겨진 Toy를 등록하고, 등록된 Toy를 리턴한다")
             void it_returns_registered_toy() {
-                Product registeredProduct = toyService.register(product);
+                Product registeredProduct = productService.register(product);
 
                 assertThat(registeredProduct).isEqualTo(product);
             }
@@ -167,7 +167,7 @@ public class ProductServiceTest {
             void registerMultipleToys(int testCase) {
                 for (int i = 0; i < testCase; i++) {
                     Product randomProduct = randomToy();
-                    toyService.register(randomProduct);
+                    productService.register(randomProduct);
                 }
             }
 
@@ -176,7 +176,7 @@ public class ProductServiceTest {
             @ValueSource(ints = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20})
             void it_returns_all_different_ids(int testCase) {
                 registerMultipleToys(testCase);
-                final List<Product> products = toyService.getToys();
+                final List<Product> products = productService.getToys();
 
                 Set<Long> ids = products.stream().map(Product::getId).collect(Collectors.toSet());
                 assertThat(ids).hasSize(testCase);
@@ -195,14 +195,14 @@ public class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                targetProduct = toyService.register(randomToy());
+                targetProduct = productService.register(randomToy());
             }
 
             @Test
             @DisplayName("해당 Toy를 인자로 넘겨진 Toy의 정보로 업데이트하고, 업데이트된 Toy를 리턴한다")
             void it_returns_updated_toy() throws ToyNotFoundException {
                 Product newProduct = randomToy();
-                Product updated = toyService.update(targetProduct.getId(), newProduct);
+                Product updated = productService.update(targetProduct.getId(), newProduct);
 
                 assertThat(updated.getId()).isEqualTo(targetProduct.getId());
                 assertThat(updated).isEqualTo(newProduct);
@@ -216,7 +216,7 @@ public class ProductServiceTest {
             @DisplayName("404 Not Found Exception을 던진다.")
             void it_throws_404_not_found_exception() {
                 long ID_NOT_EXISTS = Long.MAX_VALUE;
-                assertThatThrownBy(() -> toyService.update(ID_NOT_EXISTS, randomToy()))
+                assertThatThrownBy(() -> productService.update(ID_NOT_EXISTS, randomToy()))
                         .isInstanceOf(ToyNotFoundException.class);
             }
         }
@@ -233,15 +233,15 @@ public class ProductServiceTest {
 
                 @BeforeEach
                 void setUp() {
-                    targetProduct = toyService.register(randomToy());
+                    targetProduct = productService.register(randomToy());
                 }
 
                 @Test
                 @DisplayName("해당 Toy를 삭제한다")
                 void it_returns_deleted_toy() throws ToyNotFoundException {
-                    toyService.delete(targetProduct.getId());
+                    productService.delete(targetProduct.getId());
 
-                    assertThatThrownBy(() -> toyService.getToyById(targetProduct.getId()))
+                    assertThatThrownBy(() -> productService.getToyById(targetProduct.getId()))
                             .isInstanceOf(ToyNotFoundException.class);
                 }
             }
@@ -253,7 +253,7 @@ public class ProductServiceTest {
                 @DisplayName("404 Not Found Exception을 던진다.")
                 void it_throws_404_not_found_exception() {
                     long ID_NOT_EXISTS = Long.MAX_VALUE;
-                    assertThatThrownBy(() -> toyService.delete(ID_NOT_EXISTS))
+                    assertThatThrownBy(() -> productService.delete(ID_NOT_EXISTS))
                             .isInstanceOf(ToyNotFoundException.class);
                 }
             }

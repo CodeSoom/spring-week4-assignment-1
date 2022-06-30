@@ -4,11 +4,11 @@ import com.codesoom.assignment.exceptions.ToyNotFoundException;
 
 import java.util.List;
 
-public class ToyService {
-    private ToyRepository toyRepository;
+public class ProductService {
+    private ProductRepository productRepository;
 
-    public ToyService() {
-        toyRepository = new ToyRepository();
+    public ProductService() {
+        productRepository = new ProductRepository();
     }
 
     /**
@@ -18,7 +18,7 @@ public class ToyService {
      * @throws ToyNotFoundException - 인자로 넘어온 ID를 가진 Toy가 없는 경우
      */
     public Product getToyById(long id) throws ToyNotFoundException {
-        return toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
+        return productRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
     }
 
     /**
@@ -27,7 +27,7 @@ public class ToyService {
      * @return Toy - 저장된 Toy, ID 필드가 추가된채로 리턴된다.
      */
     public Product register(Product product) {
-        Product savedProduct = toyRepository.save(product);
+        Product savedProduct = productRepository.save(product);
         return savedProduct;
     }
 
@@ -36,7 +36,7 @@ public class ToyService {
      * @return List<Toy> - 저장된 모든 Toy들을 리스트 형태로 리턴한다.
      */
     public List<Product> getToys() {
-        return toyRepository.findAll();
+        return productRepository.findAll();
     }
 
     /**
@@ -47,10 +47,10 @@ public class ToyService {
      * @throws ToyNotFoundException - 인자로 넘어온 ID를 가진 Toy가 없는 경우
      */
     public Product update(Long id, Product newProduct) throws ToyNotFoundException {
-        Product target = toyRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
+        Product target = productRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
 
         Product updatedProduct = new Product(target.getId(), newProduct.getName(), newProduct.getMaker(), newProduct.getPrice(), newProduct.getImageUrl());
-        return toyRepository.update(updatedProduct);
+        return productRepository.update(updatedProduct);
     }
 
     /**
@@ -59,6 +59,6 @@ public class ToyService {
      * @throws ToyNotFoundException - 인자로 넘어온 ID를 가진 Toy가 없는 경우
      */
     public void delete(Long id) throws ToyNotFoundException {
-        toyRepository.deleteById(id).orElseThrow(() -> new ToyNotFoundException(id));
+        productRepository.deleteById(id).orElseThrow(() -> new ToyNotFoundException(id));
     }
 }
