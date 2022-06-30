@@ -49,7 +49,7 @@ public class ProductService {
     public Product update(Long id, Product newProduct) throws ToyNotFoundException {
         Product target = productRepository.findById(id).orElseThrow(() -> new ToyNotFoundException(id));
 
-        Product updatedProduct = new Product(target.getId(), newProduct.getName(), newProduct.getMaker(), newProduct.getPrice(), newProduct.getImageUrl());
+        Product updatedProduct = new Product(target.getId(), Category.TOY, newProduct.getName(), newProduct.getMaker(), newProduct.getPrice(), newProduct.getImageUrl());
         return productRepository.update(updatedProduct);
     }
 

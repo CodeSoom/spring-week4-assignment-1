@@ -17,7 +17,7 @@ public class ProductRepository {
     }
 
     public Product save(Product product) {
-        Product productEntity = new Product(IdGenerator.next(), product.getName(), product.getMaker(), product.getPrice(), product.getImageUrl());
+        Product productEntity = new Product(IdGenerator.next(), Category.TOY, product.getName(), product.getMaker(), product.getPrice(), product.getImageUrl());
         products.put(productEntity.getId(), productEntity);
 
         return productEntity;

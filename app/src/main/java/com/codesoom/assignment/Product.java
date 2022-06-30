@@ -2,20 +2,23 @@ package com.codesoom.assignment;
 
 public class Product {
     private Long id;
+    private final Category category;
     private final String name;
     private final String maker;
     private final int price;
     private final String imageUrl;
 
-    public Product(Long id, String name, String maker, int price, String imageUrl) {
+    public Product(Long id, Category category, String name, String maker, int price, String imageUrl) {
         this.id = id;
+        this.category = category;
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
     }
 
-    public Product(String name, String maker, int price, String imageUrl) {
+    public Product(Category category, String name, String maker, int price, String imageUrl) {
+        this.category = category;
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -24,6 +27,10 @@ public class Product {
 
     public Long getId() {
         return id;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public String getName() {
@@ -54,7 +61,8 @@ public class Product {
 
         Product t = (Product) o;
 
-        return name.equals(t.name)
+        return category.equals(t.category)
+                && name.equals(t.name)
                 && maker.equals(t.maker)
                 && price == t.price
                 && imageUrl.equals(t.imageUrl);

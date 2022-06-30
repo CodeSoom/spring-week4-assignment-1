@@ -28,6 +28,7 @@ public class ProductServiceTest {
     private Product randomToy() {
         int randomNumber = (int) (Math.random() * 1000);
         return new Product(
+                Category.TOY,
                 "Toy" + randomNumber,
                 "Maker" + randomNumber,
                 randomNumber,
