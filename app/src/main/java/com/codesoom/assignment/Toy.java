@@ -54,6 +54,9 @@ public class Toy {
 
         Toy t = (Toy) o;
 
-        return name.equals(t.name) && maker.equals(t.maker) && price == t.price && imageUrl.equals(t.imageUrl);
+        return name.equals(t.name)
+                && maker.equals(t.maker)
+                && price == t.price
+                && imageUrl.equals(t.imageUrl);
     }
 }
