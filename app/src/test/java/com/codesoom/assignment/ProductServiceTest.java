@@ -1,6 +1,6 @@
 package com.codesoom.assignment;
 
-import com.codesoom.assignment.exceptions.ToyNotFoundException;
+import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -119,7 +119,7 @@ public class ProductServiceTest {
 
             @Test
             @DisplayName("해당 Toy를 리턴한다")
-            void it_returns_according_toy() throws ToyNotFoundException {
+            void it_returns_according_toy() throws ProductNotFoundException {
                 Product foundProduct = productService.getToyById(product.getId());
 
                 assertThat(foundProduct).isEqualTo(product);
@@ -134,7 +134,7 @@ public class ProductServiceTest {
             void it_throws_404_not_found_exception() {
                 long ID_NOT_EXISTS = Long.MAX_VALUE;
                 assertThatThrownBy(() -> productService.getToyById(ID_NOT_EXISTS))
-                        .isInstanceOf(ToyNotFoundException.class);
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
@@ -201,7 +201,7 @@ public class ProductServiceTest {
 
             @Test
             @DisplayName("해당 Toy를 인자로 넘겨진 Toy의 정보로 업데이트하고, 업데이트된 Toy를 리턴한다")
-            void it_returns_updated_toy() throws ToyNotFoundException {
+            void it_returns_updated_toy() throws ProductNotFoundException {
                 Product newProduct = randomToy();
                 Product updated = productService.update(targetProduct.getId(), newProduct);
 
@@ -218,7 +218,7 @@ public class ProductServiceTest {
             void it_throws_404_not_found_exception() {
                 long ID_NOT_EXISTS = Long.MAX_VALUE;
                 assertThatThrownBy(() -> productService.update(ID_NOT_EXISTS, randomToy()))
-                        .isInstanceOf(ToyNotFoundException.class);
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
@@ -239,11 +239,11 @@ public class ProductServiceTest {
 
                 @Test
                 @DisplayName("해당 Toy를 삭제한다")
-                void it_returns_deleted_toy() throws ToyNotFoundException {
+                void it_returns_deleted_toy() throws ProductNotFoundException {
                     productService.delete(targetProduct.getId());
 
                     assertThatThrownBy(() -> productService.getToyById(targetProduct.getId()))
-                            .isInstanceOf(ToyNotFoundException.class);
+                            .isInstanceOf(ProductNotFoundException.class);
                 }
             }
 
@@ -255,7 +255,7 @@ public class ProductServiceTest {
                 void it_throws_404_not_found_exception() {
                     long ID_NOT_EXISTS = Long.MAX_VALUE;
                     assertThatThrownBy(() -> productService.delete(ID_NOT_EXISTS))
-                            .isInstanceOf(ToyNotFoundException.class);
+                            .isInstanceOf(ProductNotFoundException.class);
                 }
             }
     }
