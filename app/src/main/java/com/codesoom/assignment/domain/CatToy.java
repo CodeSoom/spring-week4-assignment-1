@@ -1,10 +1,15 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Getter;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
+@Getter
 public class CatToy {
     @Id
     private String name;
@@ -12,7 +17,7 @@ public class CatToy {
     private Integer price;
     private String url;
 
-    public CatToy() {
+    protected CatToy() {
     }
 
     public CatToy(String name, String maker, Integer price, String url) {
