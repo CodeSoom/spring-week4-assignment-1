@@ -30,6 +30,6 @@ public class CatToyController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CatToy get(@PathVariable("id") Long id) {
-        return new CatToy(1L, "고양이", "허먼밀러", 90000, "url");
+        return toyService.findById(id);
     }
 }

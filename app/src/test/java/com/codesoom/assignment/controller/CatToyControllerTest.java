@@ -81,8 +81,8 @@ public class CatToyControllerTest {
 
                 mockMvc.perform(get("/toys/1"))
                         .andExpect(jsonPath("$.id").value(GIVEN_ID))
-                        .andExpect(jsonPath("$.maker").value(GIVEN_MAKER))
                         .andExpect(jsonPath("$.name").value(GIVEN_TOY_NAME))
+                        .andExpect(jsonPath("$.maker").value(GIVEN_MAKER))
                         .andExpect(jsonPath("$.price").value(GIVEN_PRICE))
                         .andExpect(jsonPath("$.url").value(GIVEN_URL))
                         .andExpect(status().isOk());

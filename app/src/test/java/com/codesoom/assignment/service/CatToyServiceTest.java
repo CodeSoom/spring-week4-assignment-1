@@ -11,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -19,6 +21,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("CatToyService 클래스의")
 public class CatToyServiceTest {
+    public static final long GIVEN_ID = 1L;
     private ToyService toyService;
 
     @Mock
@@ -40,7 +43,7 @@ public class CatToyServiceTest {
             }
 
             CatToy prepareResult() {
-                return new CatToy(1L, "뱀", "아디다스", 3000, "url");
+                return new CatToy(GIVEN_ID, "뱀", "아디다스", 3000, "url");
             }
 
             @Test
@@ -53,19 +56,26 @@ public class CatToyServiceTest {
                 verify(catToyRepository).save(prepareRequest().toCatToy());
             }
         }
+    }
 
+    @Nested
+    @DisplayName("findById 메소드는")
+    class Describe_findById {
         @Nested
-        @DisplayName("주어진 장난감의 이름이 이미 있다면")
-        class Context_exists_toyName {
-            CatToyDto prepare() {
-                return new CatToyDto("뱀", "아디다스", 3000, "url");
+        @DisplayName("주어진 식별자를 가진 장난감이 있다면")
+        class Context_with_toy {
+            Optional<CatToy> prepareResult() {
+                return Optional.of(new CatToy(GIVEN_ID, "뱀", "아디다스", 3000, "url"));
             }
 
             @Test
-            @DisplayName("예외를 던진다")
-            void It_returns_exception() {
-                assertThatThrownBy(() -> toyService.create(prepare()))
-                        .isInstanceOf(RuntimeException.class);
+            @DisplayName("장난감을 리턴한다")
+            void It_returns_toy() {
+                given(catToyRepository.findById(GIVEN_ID)).willReturn(prepareResult());
+
+                assertThat(toyService.findById(GIVEN_ID)).isEqualTo(prepareResult().get());
+
+                verify(catToyRepository).findById(GIVEN_ID);
             }
         }
     }
