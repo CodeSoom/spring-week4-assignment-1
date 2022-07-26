@@ -1,6 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.CatToyDto;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -33,18 +35,37 @@ public class CatToyServiceTest {
         @Nested
         @DisplayName("장난감이 주어지면")
         class Context_with_catToy {
-            CatToy prepare() {
-                return new CatToy("뱀", "아디다스", 3000, "url");
+            CatToyDto prepareRequest() {
+                return new CatToyDto("뱀", "아디다스", 3000, "url");
+            }
+
+            CatToy prepareResult() {
+                return new CatToy(1L, "뱀", "아디다스", 3000, "url");
             }
 
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToy_and_save() {
-                given(catToyRepository.save(prepare())).willReturn(prepare());
+                given(catToyRepository.save(prepareRequest().toCatToy())).willReturn(prepareResult());
 
-                assertThat(toyService.create(prepare())).isEqualTo(prepare());
+                assertThat(toyService.create(prepareRequest())).isEqualTo(prepareResult());
 
-                verify(catToyRepository).save(prepare());
+                verify(catToyRepository).save(prepareRequest().toCatToy());
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 장난감의 이름이 이미 있다면")
+        class Context_exists_toyName {
+            CatToyDto prepare() {
+                return new CatToyDto("뱀", "아디다스", 3000, "url");
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void It_returns_exception() {
+                assertThatThrownBy(() -> toyService.create(prepare()))
+                        .isInstanceOf(RuntimeException.class);
             }
         }
     }

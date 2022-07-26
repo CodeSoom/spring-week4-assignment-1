@@ -1,7 +1,8 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.CatToyDto;
 
 public interface ToyService {
-    CatToy create(CatToy catToy);
+    CatToy create(CatToyDto catToyDto);
 }

@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.CatToyDto;
 import com.codesoom.assignment.service.ToyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class CatToyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CatToy create(@RequestBody CatToy catToy) {
-        return toyService.create(catToy);
+    public CatToy create(@RequestBody CatToyDto catToyDto) {
+        return toyService.create(catToyDto);
     }
 }

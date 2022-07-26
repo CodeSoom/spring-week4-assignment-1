@@ -1,7 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import lombok.Getter;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +17,13 @@ public class CatToy {
     private String url;
 
     protected CatToy() {
+    }
+
+    public CatToy(String name, String maker, Integer price, String url) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.url = url;
     }
 
     public CatToy(Long id, String name, String maker, Integer price, String url) {
