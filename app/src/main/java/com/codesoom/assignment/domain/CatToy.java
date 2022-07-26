@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Getter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +9,7 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
+@Getter
 public class CatToy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
