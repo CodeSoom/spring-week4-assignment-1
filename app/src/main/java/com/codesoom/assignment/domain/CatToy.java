@@ -19,6 +19,13 @@ public class CatToy {
 
     }
 
+    public CatToy(CatToy toy){
+        this.name = toy.getName();
+        this.maker = toy.getMaker();
+        this.price = toy.getPrice();
+        this.img_url = toy.getImg_url();
+    }
+    
     public CatToy(String name, String maker, Long price, String img_url) {
         this.name = name;
         this.maker = maker;
