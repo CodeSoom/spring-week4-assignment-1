@@ -29,13 +29,14 @@ public class CatToyRepositoryTest {
         @DisplayName("장난감이 주어지면")
         class Context_with_catToy {
             CatToy prepare() {
-                return new CatToy("뱀", "나이키", 5000, "url");
+                return new CatToy(null, "뱀", "나이키", 5000, "url");
             }
 
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToy_and_save() {
-                assertThat(catToyRepository.save(prepare())).isEqualTo(prepare());
+                assertThat(catToyRepository.save(prepare()))
+                        .isEqualTo(new CatToy(1L, "뱀", "나이키", 5000, "url"));
             }
         }
     }
