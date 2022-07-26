@@ -28,13 +28,13 @@ public class CatToyControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Nested
-    @DisplayName("create 메소드는")
+    @DisplayName("POST /toys 요청은")
     class Describe_create {
         @Nested
         @DisplayName("장난감이 주어지면")
         class Context_with_catToy {
             @Test
-            @DisplayName("장난감과 상태 코드 201을 리턴한다")
+            @DisplayName("장난감과 상태코드 201을 응답한다")
             void It_returns_catToy_and_statusCreated() throws Exception {
                 Map<String, String> input = new HashMap<>();
                 input.put("name", "고양이");
