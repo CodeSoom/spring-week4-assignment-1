@@ -29,7 +29,7 @@ class CatToyServiceTest {
         class Context_didNotCreateCatToy {
             @BeforeEach
             void prepare() {
-                repository.removeAll();
+                repository.deleteAll();
             }
 
             @Test

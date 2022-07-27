@@ -2,9 +2,11 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CatToyService {
     private final CatToyRepository repository;
 
@@ -13,6 +15,6 @@ public class CatToyService {
     }
 
     public List<CatToy> getList() {
-        return repository.getList();
+        return repository.findAll();
     }
 }

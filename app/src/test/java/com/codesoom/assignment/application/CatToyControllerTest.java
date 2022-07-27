@@ -30,7 +30,7 @@ public class CatToyControllerTest {
         class Context_didNotCreateCatToy {
             @BeforeEach
             void prepare() {
-                repository.removeAll();
+                repository.deleteAll();
             }
 
             @Test

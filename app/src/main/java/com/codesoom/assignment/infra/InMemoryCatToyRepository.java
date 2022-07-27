@@ -10,12 +10,12 @@ public class InMemoryCatToyRepository implements CatToyRepository {
     private final ArrayList<CatToy> catToys = new ArrayList();
 
     @Override
-    public List<CatToy> getList() {
+    public List<CatToy> findAll() {
         return catToys;
     }
 
     @Override
-    public void removeAll() {
+    public void deleteAll() {
         catToys.clear();
     }
 }

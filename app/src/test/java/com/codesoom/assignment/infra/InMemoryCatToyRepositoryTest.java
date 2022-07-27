@@ -26,13 +26,13 @@ class InMemoryCatToyRepositoryTest {
         class Context_didNotCreateCatToy {
             @BeforeEach
             void prepare() {
-                repository.removeAll();
+                repository.deleteAll();
             }
 
             @Test
             @DisplayName("빈 목록을 반환한다")
             void it_returnsEmptyList() {
-                assertThat(repository.getList()).isEmpty();
+                assertThat(repository.findAll()).isEmpty();
             }
         }
     }
