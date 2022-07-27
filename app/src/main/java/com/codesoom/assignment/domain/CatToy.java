@@ -10,6 +10,12 @@ public class CatToy {
     @GeneratedValue
     private Long id;
 
+    public CatToy() { }
+
+    public CatToy(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
