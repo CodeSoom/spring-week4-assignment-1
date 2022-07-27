@@ -16,6 +16,6 @@ public class InMemoryCatToyRepository implements CatToyRepository {
 
     @Override
     public void removeAll() {
-
+        catToys.clear();
     }
 }
