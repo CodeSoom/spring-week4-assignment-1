@@ -35,8 +35,10 @@ public class CatToyRepositoryTest {
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToy_and_save() {
-                assertThat(catToyRepository.save(prepare()))
-                        .isEqualTo(new CatToy(1L, "뱀", "나이키", 5000, "url"));
+                CatToy catToy = catToyRepository.save(prepare());
+
+                assertThat(catToy)
+                        .isEqualTo(new CatToy(catToy.getId(), "뱀", "나이키", 5000, "url"));
             }
         }
     }

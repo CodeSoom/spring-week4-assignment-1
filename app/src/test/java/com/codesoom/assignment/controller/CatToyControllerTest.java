@@ -97,7 +97,7 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("예외 메시지와 상태코드 404를 응답한다")
             void It_throws_exception() throws Exception {
-                mockMvc.perform(get("/toys/1"))
+                mockMvc.perform(get("/toys/100"))
                         .andExpect(jsonPath("$.message").isString())
                         .andExpect(status().isNotFound());
             }
