@@ -2,12 +2,12 @@ package com.codesoom.assignment.domain;
 
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
+import java.util.Optional;
 
-public abstract class CatToyRepository{
+public interface CatToyRepository extends CrudRepository<CatToy, Long> {
 
-    public abstract List<CatToy> findAll();
-    public abstract CatToy find(Long id);
-    public abstract CatToy save(CatToy toy);
-    public abstract CatToy delete(CatToy toy);
-
+    List<CatToy> findAll();
+    Optional<CatToy> findById(Long id);
+    CatToy save(CatToy toy);
+    void delete(CatToy toy);
 }
