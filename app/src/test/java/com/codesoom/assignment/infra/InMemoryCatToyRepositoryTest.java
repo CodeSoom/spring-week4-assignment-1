@@ -43,7 +43,7 @@ class InMemoryCatToyRepositoryTest {
         @DisplayName("저장된 고양이 장난감이 있을 때")
         class Context_didSaveCatToy {
             @BeforeEach
-            void perpare() {
+            void prepare() {
                 repository.save(new CatToy());
                 repository.save(new CatToy());
             }

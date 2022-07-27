@@ -6,4 +6,6 @@ public interface CatToyRepository {
     List<CatToy> findAll();
 
     void deleteAll();
+
+    CatToy save(CatToy catToy);
 }
