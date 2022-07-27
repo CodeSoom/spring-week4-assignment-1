@@ -25,8 +25,8 @@ class CatToyServiceTest {
     @DisplayName("getList 메소드는")
     class Describe_getList {
         @Nested
-        @DisplayName("생성된 고양이 장난감이 없을 때")
-        class Context_didNotCreateCatToy {
+        @DisplayName("저장된 고양이 장난감이 없을 때")
+        class Context_didNotSaveCatToy {
             @BeforeEach
             void prepare() {
                 repository.deleteAll();
