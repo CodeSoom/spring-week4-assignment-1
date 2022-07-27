@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.infra.InMemoryCatToyRepository;
 import com.codesoom.assignment.service.CatToyService;
@@ -10,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,6 +51,27 @@ public class CatToyControllerWebTest {
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk())
                     .andExpect(content().string("[]"));
+        }
+
+        @Nested
+        @DisplayName("저장된 고양이 장난감이 있을 때")
+        class Context_didSaveCatToy {
+            final int NUMBER_OF_TOY_LIST = 2;
+
+            @BeforeEach
+            void prepare() {
+                for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
+                    repository.save(new CatToy());
+                }
+            }
+
+            @Test
+            @DisplayName("OK status, 저장된 고양이 장난감 목록을 반환한다")
+            void it_returnsOkStatusAndEmptyList() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string("[{\"id\":1},{\"id\":2}]"));
+            }
         }
     }
 }
