@@ -1,6 +1,11 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.domain.CatToyRepository;
+import com.codesoom.assignment.exception.ToyExceptionHandler;
+import com.codesoom.assignment.service.CatToyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +34,25 @@ public class CatToyControllerTest {
     public static final String GIVEN_MAKER = "허먼밀러";
     public static final Integer GIVEN_PRICE = 90000;
     public static final String GIVEN_URL = "url";
-    public static final long GIVEN_ID = 1L;
-    @Autowired
+
     private MockMvc mockMvc;
+
+    @Autowired
+    private CatToyService catToyService;
+
+    @Autowired // 데이터를 초기화하기 위해 임시방편..ㅠ 과연 컨트롤러에서 알 필요없는 로직인 레포지토리를 쓰는게 맞을까하는 고민이 있습니다.
+    private CatToyRepository catToyRepository;
+
+    private CatToy givenToy = new CatToy(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(new CatToyController(catToyService))
+                .setControllerAdvice(ToyExceptionHandler.class)
+                .build();
+
+        catToyRepository.deleteAll();
+    }
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -78,11 +100,11 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감과 상태코드 200을 응답한다")
             void It_returns_catToy_and_statusOk() throws Exception {
-                createPerform(givenInput());
+                CatToy toy = catToyRepository.save(givenToy);
 
-                mockMvc.perform(get("/toys/" + GIVEN_ID))
+                mockMvc.perform(get("/toys/" + toy.getId()))
                         .andDo(print())
-                        .andExpect(jsonPath("$.id").value(GIVEN_ID))
+                        .andExpect(jsonPath("$.id").value(toy.getId()))
                         .andExpect(jsonPath("$.name").value(GIVEN_TOY_NAME))
                         .andExpect(jsonPath("$.maker").value(GIVEN_MAKER))
                         .andExpect(jsonPath("$.price").value(GIVEN_PRICE))
@@ -108,7 +130,7 @@ public class CatToyControllerTest {
     @DisplayName("GET /toys 요청은")
     class Describe_getAll {
         @Nested
-        @DisplayName("식별자를 가지는 장난감들이 있다면")
+        @DisplayName("장난감들이 있다면")
         class Context_with_toyList {
             @Test
             @DisplayName("장난감 목록과 상태코드 200을 응답한다")
@@ -119,6 +141,18 @@ public class CatToyControllerTest {
                 mockMvc.perform(get("/toys"))
                         .andExpect(jsonPath("$.[0]").exists())
                         .andExpect(jsonPath("$.[1]").exists())
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("장난감이 없다면")
+        class Context_without_toyList {
+            @Test
+            @DisplayName("빈 장난감 목록과 상태코드 200을 응답한다")
+            void It_returns_toyList() throws Exception {
+                mockMvc.perform(get("/toys"))
+                        .andExpect(jsonPath("$").isEmpty())
                         .andExpect(status().isOk());
             }
         }

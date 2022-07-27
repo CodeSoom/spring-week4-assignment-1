@@ -28,6 +28,8 @@ public class CatToyServiceTest extends ToyTestHelper {
     @BeforeEach
     void setUp() {
         toyService = new CatToyService(catToyRepository);
+
+        catToyRepository.deleteAll();
     }
 
     @Nested
@@ -86,7 +88,7 @@ public class CatToyServiceTest extends ToyTestHelper {
     class Describe_findAll {
         @Nested
         @DisplayName("장난감 목록이 주어진다면")
-        class Context_toyList {
+        class Context_with_toyList {
             void prepare() {
                 catToyRepository.save(givenToyDto.toCatToy());
                 catToyRepository.save(givenToyDto.toCatToy());
@@ -98,6 +100,16 @@ public class CatToyServiceTest extends ToyTestHelper {
                 prepare();
 
                 assertThat(toyService.findAll()).hasSize(ROOF_COUNT);
+            }
+        }
+
+        @Nested
+        @DisplayName("장난감 목록이 없다면")
+        class Context_without_toyList {
+            @Test
+            @DisplayName("장난감 목록을 리턴한다")
+            void It_returns_toyList() {
+                assertThat(toyService.findAll()).isEmpty();
             }
         }
     }

@@ -73,5 +73,15 @@ public class CatToyRepositoryTest extends ToyTestHelper {
                 assertThat(catToyRepository.findAll()).hasSize(2);
             }
         }
+
+        @Nested
+        @DisplayName("장난감 목록이 없다면")
+        class Context_without_toyList {
+            @Test
+            @DisplayName("장난감 목록을 리턴한다")
+            void It_returns_toyList() {
+                assertThat(catToyRepository.findAll()).isEmpty();
+            }
+        }
     }
 }
