@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryCatToyRepository implements CatToyRepository {
+    private final ArrayList<CatToy> catToys = new ArrayList();
 
     @Override
     public List<CatToy> getList() {
-        return new ArrayList();
+        return catToys;
     }
 
     @Override
