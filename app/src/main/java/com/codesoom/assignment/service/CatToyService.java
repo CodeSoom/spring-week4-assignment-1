@@ -20,6 +20,6 @@ public class CatToyService implements ToyService {
 
     public CatToy findById(Long id) {
         return catToyRepository.findById(id)
-                .orElseThrow(CatToyNotFoundException::new);
+                .orElseThrow(() -> new CatToyNotFoundException("id " + id + "을 가진 장난감을 찾을 수 없습니다."));
     }
 }

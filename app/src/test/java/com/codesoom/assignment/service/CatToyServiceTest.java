@@ -3,24 +3,15 @@ package com.codesoom.assignment.service;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyDto;
 import com.codesoom.assignment.domain.CatToyRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("CatToyService 클래스의")
@@ -73,6 +64,17 @@ public class CatToyServiceTest {
                 CatToy given = prepare();
 
                 assertThat(toyService.findById(given.getId())).isEqualTo(new CatToy(given.getId(), "뱀", "아디다스", 3000, "url"));
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 식별자를 가진 장난감이 없다면")
+        class Context_without_toy {
+            @Test
+            @DisplayName("예외를 던진다")
+            void It_returns_toy() {
+                assertThatThrownBy(() -> toyService.findById(GIVEN_ID))
+                        .isInstanceOf(RuntimeException.class);
             }
         }
     }
