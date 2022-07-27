@@ -31,10 +31,7 @@ public class CatToyRepositoryTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToy_and_save() {
-                CatToy save = catToyRepository.save(givenToyDto.toCatToy());
-                System.out.println("save.getId() = " + save.getId());
-                assertThat(save)
-                        .isEqualTo(expectToy);
+                assertThat(catToyRepository.save(givenToyDto.toCatToy())).isEqualTo(expectToy);
             }
         }
     }
@@ -48,8 +45,8 @@ public class CatToyRepositoryTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 찾고 리턴한다")
             void It_returns_catToy_and_save() {
-                CatToy temp = catToyRepository.save(givenToyDto.toCatToy());
-                System.out.println("temp.getId() = " + temp.getId());
+                catToyRepository.save(givenToyDto.toCatToy());
+
                 assertThat(catToyRepository.findById(givenId).
                         orElseThrow()).isEqualTo(expectToy);
             }
