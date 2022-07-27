@@ -2,11 +2,16 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.service.CatToyService;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/products")
+@CrossOrigin
 public class CatToyController {
     private final CatToyService service;
 
@@ -14,6 +19,7 @@ public class CatToyController {
         this.service = service;
     }
 
+    @GetMapping
     public List<CatToy> getList() {
         return service.getList();
     }
