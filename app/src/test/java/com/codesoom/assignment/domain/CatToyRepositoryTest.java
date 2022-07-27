@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-
+import com.codesoom.assignment.ToyTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayName("CatToyRepository 클래스의")
-public class CatToyRepositoryTest {
+public class CatToyRepositoryTest extends ToyTestHelper {
 
     @Autowired
     private CatToyRepository catToyRepository;
@@ -28,17 +28,30 @@ public class CatToyRepositoryTest {
         @Nested
         @DisplayName("장난감이 주어지면")
         class Context_with_catToy {
-            CatToy prepare() {
-                return new CatToy(null, "뱀", "나이키", 5000, "url");
-            }
-
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToy_and_save() {
-                CatToy catToy = catToyRepository.save(prepare());
+                CatToy save = catToyRepository.save(givenToyDto.toCatToy());
+                System.out.println("save.getId() = " + save.getId());
+                assertThat(save)
+                        .isEqualTo(expectToy);
+            }
+        }
+    }
 
-                assertThat(catToy)
-                        .isEqualTo(new CatToy(catToy.getId(), "뱀", "나이키", 5000, "url"));
+    @Nested
+    @DisplayName("findById 메소드는")
+    class Describe_findById {
+        @Nested
+        @DisplayName("식별자와 같은 장난감이 주어지면")
+        class Context_with_ToyWithId {
+            @Test
+            @DisplayName("장난감을 찾고 리턴한다")
+            void It_returns_catToy_and_save() {
+                CatToy temp = catToyRepository.save(givenToyDto.toCatToy());
+                System.out.println("temp.getId() = " + temp.getId());
+                assertThat(catToyRepository.findById(givenId).
+                        orElseThrow()).isEqualTo(expectToy);
             }
         }
     }
