@@ -67,4 +67,24 @@ class CatToyServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("save 메소드는")
+    class Describe_save {
+        @Nested
+        @DisplayName("필수 값들을 가지고 있는 장난감으로 요청했을 때")
+        class Context_withToyHasRequiredFields {
+            final CatToy toyWithRequiredFields = new CatToy("name", "maker", 999999);
+
+            @DisplayName("저장된 장난감을 반환한다")
+            void it_returnsSavedToy() {
+                CatToy result = service.save(toyWithRequiredFields);
+
+                assertThat(result.getId()).isEqualTo(1L);
+                assertThat(result.getName()).isEqualTo("name");
+                assertThat(result.getMaker()).isEqualTo("maker");
+                assertThat(result.getPrice()).isEqualTo(999999);
+            }
+        }
+    }
 }
