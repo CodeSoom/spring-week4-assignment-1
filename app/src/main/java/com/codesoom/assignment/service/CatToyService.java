@@ -6,6 +6,9 @@ import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+
 @Service
 public class CatToyService implements ToyService {
     private final CatToyRepository catToyRepository;
@@ -21,5 +24,9 @@ public class CatToyService implements ToyService {
     public CatToy findById(Long id) {
         return catToyRepository.findById(id)
                 .orElseThrow(() -> new CatToyNotFoundException("id " + id + "을 가진 장난감을 찾을 수 없습니다."));
+    }
+
+    public List<CatToy> findAll() {
+        return catToyRepository.findAll();
     }
 }

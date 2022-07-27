@@ -31,7 +31,8 @@ public class CatToyRepositoryTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToy_and_save() {
-                assertThat(catToyRepository.save(givenToyDto.toCatToy())).isEqualTo(expectToy);
+                assertThat(catToyRepository.save(givenToyDto.toCatToy()))
+                        .isEqualTo(expectToy);
             }
         }
     }
@@ -49,6 +50,27 @@ public class CatToyRepositoryTest extends ToyTestHelper {
 
                 assertThat(catToyRepository.findById(givenId).
                         orElseThrow()).isEqualTo(expectToy);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findAll 메소드는")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("장난감 목록이 주어지면")
+        class Context_with_toyList {
+            void prepare() {
+                catToyRepository.save(givenToyDto.toCatToy());
+                catToyRepository.save(givenToyDto.toCatToy());
+            }
+
+            @Test
+            @DisplayName("장난감 목록을 리턴한다")
+            void It_returns_toyList() {
+                prepare();
+
+                assertThat(catToyRepository.findAll()).hasSize(2);
             }
         }
     }

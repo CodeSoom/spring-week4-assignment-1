@@ -46,8 +46,8 @@ public class CatToyControllerTest {
 
     private ResultActions createPerform(Object input) throws Exception {
         return mockMvc.perform(post("/toys")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(input)));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(input)));
     }
 
     @Nested
@@ -100,6 +100,26 @@ public class CatToyControllerTest {
                 mockMvc.perform(get("/toys/100"))
                         .andExpect(jsonPath("$.message").isString())
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /toys 요청은")
+    class Describe_getAll {
+        @Nested
+        @DisplayName("식별자를 가지는 장난감들이 있다면")
+        class Context_with_toyList {
+            @Test
+            @DisplayName("장난감 목록과 상태코드 200을 응답한다")
+            void It_returns_toyList() throws Exception {
+                createPerform(givenInput());
+                createPerform(givenInput());
+
+                mockMvc.perform(get("/toys"))
+                        .andExpect(jsonPath("$.[0]").exists())
+                        .andExpect(jsonPath("$.[1]").exists())
+                        .andExpect(status().isOk());
             }
         }
     }

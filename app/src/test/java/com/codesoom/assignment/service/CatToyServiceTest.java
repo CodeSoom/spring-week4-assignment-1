@@ -1,5 +1,6 @@
 package com.codesoom.assignment.service;
 
+import com.codesoom.assignment.ToyTestHelper;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyDto;
 import com.codesoom.assignment.domain.CatToyRepository;
@@ -15,13 +16,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("CatToyService 클래스의")
-public class CatToyServiceTest {
+public class CatToyServiceTest extends ToyTestHelper {
     public static final long GIVEN_ID = 1L;
-
-    private ToyService toyService;
+    public static final int ROOF_COUNT = 2;
 
     @Autowired
     private CatToyRepository catToyRepository;
+
+    private ToyService toyService;
 
     @BeforeEach
     void setUp() {
@@ -75,6 +77,27 @@ public class CatToyServiceTest {
             void It_returns_toy() {
                 assertThatThrownBy(() -> toyService.findById(GIVEN_ID))
                         .isInstanceOf(RuntimeException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findAll 메소드는")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("장난감 목록이 주어진다면")
+        class Context_toyList {
+            void prepare() {
+                catToyRepository.save(givenToyDto.toCatToy());
+                catToyRepository.save(givenToyDto.toCatToy());
+            }
+
+            @Test
+            @DisplayName("장난감 목록을 리턴한다")
+            void It_returns_toyList() {
+                prepare();
+
+                assertThat(toyService.findAll()).hasSize(ROOF_COUNT);
             }
         }
     }

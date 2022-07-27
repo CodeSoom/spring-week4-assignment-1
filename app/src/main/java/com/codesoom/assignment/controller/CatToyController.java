@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/toys")
 public class CatToyController {
@@ -31,5 +33,11 @@ public class CatToyController {
     @ResponseStatus(HttpStatus.OK)
     public CatToy get(@PathVariable("id") Long id) {
         return toyService.findById(id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<CatToy> getAll() {
+        return toyService.findAll();
     }
 }
