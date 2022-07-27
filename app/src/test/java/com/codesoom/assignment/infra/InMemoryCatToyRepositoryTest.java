@@ -42,10 +42,13 @@ class InMemoryCatToyRepositoryTest {
         @Nested
         @DisplayName("저장된 고양이 장난감이 있을 때")
         class Context_didSaveCatToy {
+            final int NUMBER_OF_TOY_LIST = 2;
+
             @BeforeEach
             void prepare() {
-                repository.save(new CatToy());
-                repository.save(new CatToy());
+                for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
+                    repository.save(new CatToy());
+                }
             }
 
             @Test
@@ -55,7 +58,7 @@ class InMemoryCatToyRepositoryTest {
                 CatToy toy1 = result.get(0);
                 CatToy toy2 = result.get(1);
 
-                assertThat(result).hasSize(2);
+                assertThat(result).hasSize(NUMBER_OF_TOY_LIST);
                 assertThat(toy1.getId()).isEqualTo(1L);
                 assertThat(toy2.getId()).isEqualTo(2L);
             }
