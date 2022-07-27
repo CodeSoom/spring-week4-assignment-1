@@ -47,7 +47,7 @@ class InMemoryCatToyRepositoryTest {
             @BeforeEach
             void prepare() {
                 for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
-                    repository.save(new CatToy());
+                    repository.save(new CatToy("name", "maker", 999999));
                 }
             }
 

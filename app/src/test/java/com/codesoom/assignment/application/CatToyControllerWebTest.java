@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -67,8 +66,8 @@ public class CatToyControllerWebTest {
 
             @BeforeEach
             void prepare() {
-                for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
-                    repository.save(new CatToy());
+                for (int i = 1; i <= NUMBER_OF_TOY_LIST; i++) {
+                    repository.save(new CatToy((long) i));
                 }
             }
 
