@@ -18,6 +18,7 @@ class CatToyServiceTest {
     private final String FIXTURE_NAME = "name";
     private final String FIXTURE_MAKER = "maker";
     private final int FIXTURE_PRICE = 10000;
+    private final String FIXTURE_IMAGE_URL = "http://localhost:8080/snake";
 
     private CatToyRepository repository;
     private CatToyService service;
@@ -55,7 +56,7 @@ class CatToyServiceTest {
             void prepare() {
                 IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
                         .mapToObj(value -> {
-                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value);
+                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
                         })
                         .forEach(catToy -> {
                             repository.save(catToy);
@@ -75,6 +76,7 @@ class CatToyServiceTest {
                             assertThat(catToy.getName()).isEqualTo(FIXTURE_NAME + index);
                             assertThat(catToy.getMaker()).isEqualTo(FIXTURE_MAKER + index);
                             assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
+                            assertThat(catToy.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + index);
                         });
             }
         }
@@ -86,7 +88,7 @@ class CatToyServiceTest {
         @Nested
         @DisplayName("필수 값들을 가지고 있는 장난감으로 요청했을 때")
         class Context_withToyHasRequiredFields {
-            final CatToy toyWithRequiredFields = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE);
+            final CatToy toyWithRequiredFields = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
 
             @Test
             @DisplayName("저장된 장난감을 반환한다")
@@ -97,6 +99,7 @@ class CatToyServiceTest {
                 assertThat(result.getName()).isEqualTo(FIXTURE_NAME);
                 assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER);
                 assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE);
+                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
             }
         }
     }

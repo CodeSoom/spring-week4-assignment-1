@@ -96,7 +96,7 @@ class InMemoryCatToyRepositoryTest {
                 assertThat(result.getName()).isEqualTo(FIXTURE_NAME);
                 assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER);
                 assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE);
-                assertThat(result.getPrice()).isEqualTo(FIXTURE_IMAGE_URL);
+                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
             }
         }
 
@@ -126,7 +126,7 @@ class InMemoryCatToyRepositoryTest {
                                     assertThat(catToy.getName()).isEqualTo(FIXTURE_NAME + index);
                                     assertThat(catToy.getMaker()).isEqualTo(FIXTURE_MAKER + index);
                                     assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
-                                    assertThat(catToy.getPrice()).isEqualTo(FIXTURE_IMAGE_URL + index);
+                                    assertThat(catToy.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + index);
                                 });
             }
         }

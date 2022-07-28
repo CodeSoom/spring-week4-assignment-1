@@ -19,6 +19,7 @@ public class CatToyControllerTest {
     private final String FIXTURE_NAME = "name";
     private final String FIXTURE_MAKER = "maker";
     private final int FIXTURE_PRICE = 10000;
+    private final String FIXTURE_IMAGE_URL = "http://localhost:8080/snake";
 
     private CatToyRepository repository;
     private CatToyController controller;
@@ -57,7 +58,7 @@ public class CatToyControllerTest {
             void prepare() {
                 IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
                         .mapToObj(value -> {
-                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value);
+                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
                         })
                         .forEach(catToy -> {
                             repository.save(catToy);
@@ -77,6 +78,7 @@ public class CatToyControllerTest {
                             assertThat(catToy.getName()).isEqualTo(FIXTURE_NAME + index);
                             assertThat(catToy.getMaker()).isEqualTo(FIXTURE_MAKER + index);
                             assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
+                            assertThat(catToy.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + index);
                         });
             }
         }

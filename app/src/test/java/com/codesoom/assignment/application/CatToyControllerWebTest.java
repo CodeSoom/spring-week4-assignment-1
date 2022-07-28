@@ -26,6 +26,7 @@ public class CatToyControllerWebTest {
     private final String FIXTURE_NAME = "name";
     private final String FIXTURE_MAKER = "maker";
     private final int FIXTURE_PRICE = 10000;
+    private final String FIXTURE_IMAGE_URL = "http://localhost:8080/snake";
 
     private CatToyRepository repository;
     private MockMvc mockMvc;
@@ -73,7 +74,7 @@ public class CatToyControllerWebTest {
             void prepare() {
                 IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
                         .mapToObj(value -> {
-                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value);
+                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
                         })
                         .forEach(catToy -> {
                             repository.save(catToy);
@@ -85,7 +86,7 @@ public class CatToyControllerWebTest {
             void it_returnsOkStatusAndEmptyList() throws Exception {
                 List<CatToy> expectedToys = IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
                     .mapToObj(value -> {
-                        return new CatToy((long) value, FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value);
+                        return new CatToy((long) value, FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
                     })
                     .collect(Collectors.toList());
 
