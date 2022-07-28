@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -15,7 +16,7 @@ public class CatToyService {
         this.catToyRepository = catToyRepository;
     }
 
-    public List<CatToy> getCatToys(){
+    public Collection<CatToy> getCatToys(){
         return catToyRepository.findAll();
     }
 
@@ -39,15 +40,21 @@ public class CatToyService {
 
         CatToy toy = getToys(id);
 
-
-        if(!source.getName().isBlank())
+        if( source.getName() != null && !source.getName().isBlank()) {
             toy.setName(source.getName());
+        }
 
-        if(!source.getMaker().isBlank())
+        if(source.getMaker() != null && !source.getMaker().isBlank()) {
             toy.setMaker(source.getMaker());
+        }
 
-        if(!source.getImg_url().isBlank())
+        if(source.getPrice() != null){
+            toy.setPrice(source.getPrice());
+        }
+
+        if(source.getImg_url() != null && source.getImg_url().isBlank()) {
             toy.setImg_url(source.getImg_url());
+        }
 
         return catToyRepository.save(toy);
     }
