@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.service.CatToyService;
 import org.springframework.http.HttpStatus;

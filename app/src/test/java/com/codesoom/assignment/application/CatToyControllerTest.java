@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.infra.InMemoryCatToyRepository;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
