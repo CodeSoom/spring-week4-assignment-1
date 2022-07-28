@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.ToyNotFoundException;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +34,22 @@ public interface CatToyRepository {
      * @return 저장된 장난감
      */
     CatToy save(CatToy catToy);
+
+    /**
+     * 장난감 정보를 업데이트 합니다.
+     * @param toyId 장난감 식별자
+     * @param newToy 새로운 장난감
+     * @return 업데이트 된 장난감
+     */
+    default CatToy update(Long toyId, CatToy newToy) {
+        CatToy result = findById(toyId)
+                .orElseThrow(() -> new ToyNotFoundException(toyId));
+
+        result.setName(newToy.getName());
+        result.setMaker(newToy.getMaker());
+        result.setPrice(newToy.getPrice());
+        result.setImageURL(newToy.getImageURL());
+
+        return result;
+    }
 }

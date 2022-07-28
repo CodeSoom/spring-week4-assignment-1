@@ -1,5 +1,6 @@
 package com.codesoom.assignment.infra;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 
