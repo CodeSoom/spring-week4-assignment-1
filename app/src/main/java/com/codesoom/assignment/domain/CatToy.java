@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.annotations.VisibleForTesting;
 
 import javax.persistence.Entity;
@@ -29,7 +31,11 @@ public class CatToy {
      * @param maker 장난감 메이커
      * @param price 장난감 가격
      */
-    public CatToy(String name, String maker, int price, String imageURL) {
+    @JsonCreator
+    public CatToy(@JsonProperty(value = "name", required = true) String name,
+                  @JsonProperty(value = "maker", required = true) String maker,
+                  @JsonProperty(value = "price", required = true) int price,
+                  @JsonProperty(value = "imageUrl") String imageURL) {
         this(null, name, maker, price, imageURL);
     }
 
@@ -47,6 +53,8 @@ public class CatToy {
         this.price = price;
         this.imageURL = imageURL;
     }
+
+    public CatToy() { }
 
     public Long getId() {
         return id;
