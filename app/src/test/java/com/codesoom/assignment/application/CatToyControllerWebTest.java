@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -188,7 +189,7 @@ public class CatToyControllerWebTest {
                 final CatToy requestToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
                 final String requestContent = writeValueAsString(requestToy);
 
-                mockMvc.perform(post("/products/1")
+                mockMvc.perform(patch("/products/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestContent))
                         .andExpect(status().isNotFound());
@@ -214,7 +215,7 @@ public class CatToyControllerWebTest {
                 final String requestContent = writeValueAsString(requestToy);
                 final String expectedContent = writeValueAsString(expectedToy);
 
-                mockMvc.perform(post("/products/1")
+                mockMvc.perform(patch("/products/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestContent))
                         .andExpect(status().isOk())
