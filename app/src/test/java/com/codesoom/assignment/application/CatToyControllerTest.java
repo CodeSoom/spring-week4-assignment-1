@@ -131,4 +131,51 @@ public class CatToyControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("update 메소드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("저장되지 않은 장난감의 Id로 요청했을 떄")
+        class Context_withIdOfNotSavedToy {
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("장난감을 찾을 수 없다는 예외를 던진다")
+            void it_returnsFoundToy() {
+                assertThrows(ToyNotFoundException.class, () -> {
+                    controller.update(1L, new CatToy());
+                });
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있는 장난감의 Id와 새로운 장난감을 파라미터로 요청했을 때")
+        class Context_withIdOfSavedToy {
+            private final CatToy savedCatToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+
+            @BeforeEach
+            void prepare() {
+                repository.save(savedCatToy);
+            }
+
+            @Test
+            @DisplayName("업데이트된 장난감을 반환한다")
+            void it_returnsFoundToy() {
+                final Long toyId = 1L;
+
+                CatToy newToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
+                CatToy result = controller.update(toyId, newToy);
+
+                assertThat(result.getId()).isEqualTo(toyId);
+                assertThat(result.getName()).isEqualTo(FIXTURE_NAME + 1);
+                assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER + 1);
+                assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE + 1);
+                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + 1);
+            }
+        }
+    }
 }
