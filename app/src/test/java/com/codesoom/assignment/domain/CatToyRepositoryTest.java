@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.ToyTestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,14 +11,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayName("CatToyRepository 클래스의")
-public class CatToyRepositoryTest extends ToyTestHelper {
+public class CatToyRepositoryTest {
 
     @Autowired
     private CatToyRepository catToyRepository;
 
+    public final Long givenId = 1L;
+    public final String givenToyName = "낚시물고기";
+    public final String givenMaker = "나이키";
+    public final Integer givenPrice = 5000;
+    public final String givenUrl = "url";
+
+    public final CatToyDto givenToyDto = new CatToyDto(givenToyName, givenMaker, givenPrice, givenUrl);
+
+    private CatToy givenExpectToy(Long givenId) {
+        return new CatToy(givenId, givenToyName, givenMaker, givenPrice, givenUrl);
+    }
+
     @BeforeEach
     void setUp() {
         assertThat(catToyRepository).isNotNull();
+        catToyRepository.deleteAll();
     }
 
     @Nested
@@ -31,8 +43,10 @@ public class CatToyRepositoryTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToy_and_save() {
-                assertThat(catToyRepository.save(givenToyDto.toCatToy()))
-                        .isEqualTo(expectToy);
+                CatToy toy = catToyRepository.save(givenToyDto.toCatToy());
+
+                assertThat(toy)
+                        .isEqualTo(givenExpectToy(toy.getId()));
             }
         }
     }
@@ -46,10 +60,10 @@ public class CatToyRepositoryTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 찾고 리턴한다")
             void It_returns_catToy_and_save() {
-                catToyRepository.save(givenToyDto.toCatToy());
+                CatToy toy = catToyRepository.save(givenToyDto.toCatToy());
 
-                assertThat(catToyRepository.findById(givenId).
-                        orElseThrow()).isEqualTo(expectToy);
+                assertThat(catToyRepository.findById(toy.getId()).
+                        orElseThrow()).isEqualTo(givenExpectToy(toy.getId()));
             }
         }
     }
@@ -81,6 +95,23 @@ public class CatToyRepositoryTest extends ToyTestHelper {
             @DisplayName("장난감 목록을 리턴한다")
             void It_returns_toyList() {
                 assertThat(catToyRepository.findAll()).isEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteById 메서드는")
+    class Describe_deleteById {
+        @Nested
+        @DisplayName("식별자를 가진 장난감이 있다면")
+        class Context_with_toy {
+            @Test
+            @DisplayName("장난감을 삭제한다")
+            void It_returns_trueDeleteToy() {
+                CatToy toy = catToyRepository.save(givenToyDto.toCatToy());
+                catToyRepository.deleteById(toy.getId());
+
+                assertThat(catToyRepository.findById(toy.getId()).orElse(null)).isNull();
             }
         }
     }

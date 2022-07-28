@@ -6,7 +6,6 @@ import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -28,5 +27,9 @@ public class CatToyService implements ToyService {
 
     public List<CatToy> findAll() {
         return catToyRepository.findAll();
+    }
+
+    public void deleteById(Long id) {
+        catToyRepository.deleteById(id);
     }
 }

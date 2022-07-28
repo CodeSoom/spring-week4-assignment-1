@@ -33,7 +33,7 @@ public class CatToyServiceTest extends ToyTestHelper {
     }
 
     @Nested
-    @DisplayName("create 메소드는")
+    @DisplayName("create 메서드는")
     class Describe_create {
         @Nested
         @DisplayName("장난감이 주어지면")
@@ -53,7 +53,7 @@ public class CatToyServiceTest extends ToyTestHelper {
     }
 
     @Nested
-    @DisplayName("findById 메소드는")
+    @DisplayName("findById 메서드는")
     class Describe_findById {
         @Nested
         @DisplayName("주어진 식별자를 가진 장난감이 있다면")
@@ -84,7 +84,7 @@ public class CatToyServiceTest extends ToyTestHelper {
     }
 
     @Nested
-    @DisplayName("findAll 메소드는")
+    @DisplayName("findAll 메서드는")
     class Describe_findAll {
         @Nested
         @DisplayName("장난감 목록이 주어진다면")
@@ -110,6 +110,24 @@ public class CatToyServiceTest extends ToyTestHelper {
             @DisplayName("장난감 목록을 리턴한다")
             void It_returns_toyList() {
                 assertThat(toyService.findAll()).isEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteById 메서드는")
+    class Describe_deleteById {
+        @Nested
+        @DisplayName("식별자를 가진 장난감이 있으면")
+        class Context_with_toy {
+            @Test
+            @DisplayName("장난감을 제거한다")
+            void It_returns_trueAndDeleteToy() {
+                CatToy catToy = toyService.create(givenToyDto);
+                toyService.deleteById(catToy.getId());
+
+                assertThatThrownBy(() -> toyService.findById(catToy.getId()))
+                        .isInstanceOf(RuntimeException.class);
             }
         }
     }

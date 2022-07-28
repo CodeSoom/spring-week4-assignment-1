@@ -172,7 +172,6 @@ public class CatToyControllerTest {
                 Map<String, Object> response = createAndConvertToMap(givenInput());
 
                 mockMvc.perform(delete("/toys/" + response.get("id")))
-                        .andExpect(jsonPath("$").isEmpty())
                         .andExpect(status().isNoContent());
             }
         }

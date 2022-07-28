@@ -28,4 +28,11 @@ public interface ToyService {
      * @return 장난감 목록
      */
     List<CatToy> findAll();
+
+    /**
+     * 주어진 식별자를 가진 장난감을 제거하고 삭제되었으면 true, 아니면 false 를 리턴한다.
+     *
+     * @param id 식별자
+     */
+    void deleteById(Long id);
 }
