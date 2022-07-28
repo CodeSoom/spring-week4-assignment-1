@@ -2,8 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
-import com.codesoom.assignment.exception.ToyExceptionHandler;
-import com.codesoom.assignment.service.CatToyService;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,11 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -35,26 +34,20 @@ public class CatToyControllerTest {
     public static final Integer GIVEN_PRICE = 90000;
     public static final String GIVEN_URL = "url";
 
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private CatToyService catToyService;
-
-    @Autowired // 데이터를 초기화하기 위해 임시방편..ㅠ 과연 컨트롤러에서 알 필요없는 로직인 레포지토리를 쓰는게 맞을까하는 고민이 있습니다.
     private CatToyRepository catToyRepository;
 
-    private CatToy givenToy = new CatToy(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new CatToyController(catToyService))
-                .setControllerAdvice(ToyExceptionHandler.class)
-                .build();
-
         catToyRepository.deleteAll();
     }
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private CatToy givenToy = new CatToy(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
 
     private Map<String, Object> givenInput() {
         Map<String, Object> input = new HashMap<>();
@@ -70,6 +63,16 @@ public class CatToyControllerTest {
         return mockMvc.perform(post("/toys")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input)));
+    }
+
+    private Map<String, Object> createAndConvertToMap(Object input) throws Exception {
+        return objectMapper.readValue(
+                createPerform(input)
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                new TypeReference<Map<String, Object>>() {}
+        );
     }
 
     @Nested
@@ -100,11 +103,10 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감과 상태코드 200을 응답한다")
             void It_returns_catToy_and_statusOk() throws Exception {
-                CatToy toy = catToyRepository.save(givenToy);
+                Map<String, Object> response = createAndConvertToMap(givenInput());
 
-                mockMvc.perform(get("/toys/" + toy.getId()))
-                        .andDo(print())
-                        .andExpect(jsonPath("$.id").value(toy.getId()))
+                mockMvc.perform(get("/toys/" + response.get("id")))
+                        .andExpect(jsonPath("$.id").value(response.get("id")))
                         .andExpect(jsonPath("$.name").value(GIVEN_TOY_NAME))
                         .andExpect(jsonPath("$.maker").value(GIVEN_MAKER))
                         .andExpect(jsonPath("$.price").value(GIVEN_PRICE))
@@ -119,7 +121,7 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("예외 메시지와 상태코드 404를 응답한다")
             void It_throws_exception() throws Exception {
-                mockMvc.perform(get("/toys/100"))
+                mockMvc.perform(get("/toys/" + Long.MIN_VALUE))
                         .andExpect(jsonPath("$.message").isString())
                         .andExpect(status().isNotFound());
             }
@@ -154,6 +156,24 @@ public class CatToyControllerTest {
                 mockMvc.perform(get("/toys"))
                         .andExpect(jsonPath("$").isEmpty())
                         .andExpect(status().isOk());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /toys/{id}")
+    class Describe_delete {
+        @Nested
+        @DisplayName("장난감이 주어지면")
+        class Context_with_toy {
+            @Test
+            @DisplayName("장난감을 제거하고 상태코드 204를 응답한다.")
+            void It_returns_NoContent() throws Exception {
+                Map<String, Object> response = createAndConvertToMap(givenInput());
+
+                mockMvc.perform(delete("/toys/" + response.get("id")))
+                        .andExpect(jsonPath("$").isEmpty())
+                        .andExpect(status().isNoContent());
             }
         }
     }
