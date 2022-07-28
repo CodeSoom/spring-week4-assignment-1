@@ -4,12 +4,14 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Collection;
+import java.util.Optional;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
-    private final List<Product> products = new ArrayList<>();
-    private final HashMap<Long, Product> catToyHashMap = new HashMap<>();
+    //private final List<Product> products = new ArrayList<>();
+    private final HashMap<Long, Product> productHashMap = new HashMap<>();
 
     private Long newId = 0L;
 
@@ -19,25 +21,24 @@ public class InMemoryProductRepository implements ProductRepository {
     }
     @Override
     public Collection<Product> findAll(){
-        return catToyHashMap.values();
+        return productHashMap.values();
     }
 
     @Override
     public Optional<Product> findById(Long id){
-        return products.stream()
-                .filter(catToy -> catToy.getId().equals(id))
-                .findFirst();
+        return Optional.of(productHashMap.get(id));
     }
 
     @Override
-    public Product save(Product toy){
-        toy.setId(generateId());
-        products.add(toy);
-        return toy;
+    public Product save(Product product){
+        product.setId(generateId());
+        productHashMap.put(product.getId(), product);
+        //products.add(product);
+        return product;
     }
 
     @Override
     public void delete(Product toy) {
-        products.remove(toy);
+        productHashMap.remove(toy);
     }
 }
