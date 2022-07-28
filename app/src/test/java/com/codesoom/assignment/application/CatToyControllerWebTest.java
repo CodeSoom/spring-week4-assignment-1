@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.infra.InMemoryCatToyRepository;
@@ -165,6 +166,58 @@ public class CatToyControllerWebTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(requestContent))
                         .andExpect(status().isCreated())
+                        .andExpect(content().string(expectedContent));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /products/{id} 요청은")
+    class Describe_update {
+        @Nested
+        @DisplayName("저장되지 않은 장난감의 Id로 요청했을 떄")
+        class Context_withIdOfNotSavedToy {
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("장난감을 찾을 수 없다는 예외를 던진다")
+            void it_returnsFoundToy() throws Exception {
+                final CatToy requestToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
+                final String requestContent = writeValueAsString(requestToy);
+
+                mockMvc.perform(post("/products/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있는 장난감의 Id와 새로운 장난감을 파라미터로 요청했을 때")
+        class Context_withIdOfSavedToy {
+            private final CatToy savedCatToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+
+            @BeforeEach
+            void prepare() {
+                repository.save(savedCatToy);
+            }
+
+            @Test
+            @DisplayName("업데이트된 장난감을 반환한다")
+            void it_returnsFoundToy() throws Exception {
+                final CatToy requestToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
+                final CatToy expectedToy = new CatToy(1L, FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
+
+                final String requestContent = writeValueAsString(requestToy);
+                final String expectedContent = writeValueAsString(expectedToy);
+
+                mockMvc.perform(post("/products/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent))
+                        .andExpect(status().isOk())
                         .andExpect(content().string(expectedContent));
             }
         }
