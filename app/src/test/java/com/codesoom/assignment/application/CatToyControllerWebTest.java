@@ -14,8 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,19 +67,28 @@ public class CatToyControllerWebTest {
         @Nested
         @DisplayName("저장된 고양이 장난감이 있을 때")
         class Context_didSaveCatToy {
+            final int NUMBER_OF_TOY_LIST = 3;
+
             @BeforeEach
             void prepare() {
-                repository.save(new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1));
-                repository.save(new CatToy(FIXTURE_NAME + 2, FIXTURE_MAKER + 2, FIXTURE_PRICE + 2));
+                IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
+                        .mapToObj(value -> {
+                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value);
+                        })
+                        .forEach(catToy -> {
+                            repository.save(catToy);
+                        });
             }
 
             @Test
             @DisplayName("OK status, 저장된 고양이 장난감 목록을 반환한다")
             void it_returnsOkStatusAndEmptyList() throws Exception {
-                final List<CatToy> expectedToys = List.of(
-                    new CatToy(1L, FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1),
-                    new CatToy(2L, FIXTURE_NAME + 2, FIXTURE_MAKER + 2, FIXTURE_PRICE + 2)
-                );
+                List<CatToy> expectedToys = IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
+                    .mapToObj(value -> {
+                        return new CatToy((long) value, FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value);
+                    })
+                    .collect(Collectors.toList());
+
                 final String expectedContent = writeValueAsString(expectedToys);
 
                 mockMvc.perform(get("/products"))
