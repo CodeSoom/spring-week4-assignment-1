@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -97,6 +98,33 @@ public class CatToyControllerWebTest {
                         .andExpect(content().string(expectedContent));
             }
         }
+    }
+
+    @Nested
+    @DisplayName("POST /products 요청은")
+    class Describe_postProducts {
+        @Nested
+        @DisplayName("고양이 장난감을 파라미터로 전달하면")
+        class Context_withCatToy {
+            private CatToy catToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+
+            @Test
+            @DisplayName("Created Status, 성공적으로 저장한 장난감을 반환한다")
+            void it_returnsCreatedStatusAndSavedToy() throws Exception {
+                final String content = writeValueAsString(catToy);
+
+                final CatToy expectedToy = new CatToy(1L, FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+                final String expectedContent = writeValueAsString(expectedToy);
+
+                mockMvc.perform(post("/products").content(content))
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string(expectedContent));
+            }
+        }
+    }
+
+    private String writeValueAsString(CatToy catToy) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(catToy);
     }
 
     private String writeValueAsString(List<CatToy> catToys) throws JsonProcessingException {
