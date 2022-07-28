@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,6 +81,52 @@ public class CatToyControllerTest {
                             assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
                             assertThat(catToy.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + index);
                         });
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findById 메소드는")
+    class Describe_findById {
+        @Nested
+        @DisplayName("저장되지 않은 장난감의 Id로 요청했을 떄")
+        class Context_withIdOfNotSavedToy {
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("장난감을 찾을 수 없다는 예외를 던진다")
+            void it_returnsFoundToy() {
+                assertThrows(ToyFoundException.class, () -> {
+                    service.getTask(1L);
+                });
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있는 장난감의 Id로 요청했을 떄")
+        class Context_withIdOfSavedToy {
+            private final CatToy savedCatToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+
+            @BeforeEach
+            void prepare() {
+                repository.save(savedCatToy);
+            }
+
+            @Test
+            @DisplayName("조회된 장난감을 반환한다")
+            void it_returnsFoundToy() {
+                final Long toyId = 1L;
+                CatToy result = controller.findById(toyId);
+
+                assertThat(result).isNotNull();
+                assertThat(result.getId()).isEqualTo(toyId);
+                assertThat(result.getName()).isEqualTo(FIXTURE_NAME);
+                assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER);
+                assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE);
+                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
             }
         }
     }
