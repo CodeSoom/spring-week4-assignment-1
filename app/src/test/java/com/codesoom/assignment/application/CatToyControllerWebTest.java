@@ -43,6 +43,7 @@ public class CatToyControllerWebTest {
         final CatToyController controller = new CatToyController(service);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
+                .setControllerAdvice(new CatToyErrorAdvice())
                 .build();
     }
 

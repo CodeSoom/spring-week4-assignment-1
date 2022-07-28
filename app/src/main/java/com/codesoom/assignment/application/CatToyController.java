@@ -29,7 +29,7 @@ public class CatToyController {
         return service.getList();
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{catToyId}")
     public CatToy findById(@PathVariable Long catToyId) {
         return service.findById(catToyId)
                 .orElseThrow(() -> new ToyNotFoundException(catToyId));
