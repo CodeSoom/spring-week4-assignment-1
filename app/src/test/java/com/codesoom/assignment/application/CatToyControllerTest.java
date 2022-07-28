@@ -15,6 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("CatToyController 테스트")
 public class CatToyControllerTest {
+    private final String FIXTURE_NAME = "name";
+    private final String FIXTURE_MAKER = "maker";
+    private final int FIXTURE_PRICE = 10000;
+
     private CatToyRepository repository;
     private CatToyController controller;
 
@@ -51,7 +55,7 @@ public class CatToyControllerTest {
             @BeforeEach
             void prepare() {
                 for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
-                    repository.save(new CatToy("name", "maker", 999999));
+                    repository.save(new CatToy(FIXTURE_NAME + i, FIXTURE_MAKER + i, FIXTURE_PRICE + i));
                 }
             }
 
@@ -59,12 +63,14 @@ public class CatToyControllerTest {
             @DisplayName("저장된 고양이 장난감 목록을 반환한다")
             void it_returnsSavedToyList() {
                 List<CatToy> result = controller.getList();
-                CatToy toy1 = result.get(0);
-                CatToy toy2 = result.get(1);
 
                 assertThat(result).hasSize(NUMBER_OF_TOY_LIST);
-                assertThat(toy1.getId()).isEqualTo(1L);
-                assertThat(toy2.getId()).isEqualTo(2L);
+
+                for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
+                    assertThat(result.get(i).getName()).isEqualTo(FIXTURE_NAME + i);
+                    assertThat(result.get(i).getMaker()).isEqualTo(FIXTURE_MAKER + i);
+                    assertThat(result.get(i).getPrice()).isEqualTo(FIXTURE_PRICE + i);
+                }
             }
         }
     }
