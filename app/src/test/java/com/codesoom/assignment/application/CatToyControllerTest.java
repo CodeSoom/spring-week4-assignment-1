@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("CatToyController 테스트")
 public class CatToyControllerTest {
@@ -99,8 +100,8 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감을 찾을 수 없다는 예외를 던진다")
             void it_returnsFoundToy() {
-                assertThrows(ToyFoundException.class, () -> {
-                    service.getTask(1L);
+                assertThrows(ToyNotFoundException.class, () -> {
+                    controller.findById(1L);
                 });
             }
         }
