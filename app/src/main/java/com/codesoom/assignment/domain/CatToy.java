@@ -21,14 +21,16 @@ public class CatToy {
 
     private int price;
 
+    private String imageURL;
+
     /**
      * 고양이 장난감 정보를 생성합니다.
      * @param name 장난감 이름
      * @param maker 장난감 메이커
      * @param price 장난감 가격
      */
-    public CatToy(String name, String maker, int price) {
-        this(null, name, maker, price);
+    public CatToy(String name, String maker, int price, String imageURL) {
+        this(null, name, maker, price, imageURL);
     }
 
     /**
@@ -38,11 +40,12 @@ public class CatToy {
      * @param maker 장난감 메이커
      * @param price 장난감 가격
      */
-    public CatToy(Long id, String name, String maker, int price) {
+    public CatToy(Long id, String name, String maker, int price, String imageURL) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
+        this.imageURL = imageURL;
     }
 
     public Long getId() {
@@ -75,5 +78,13 @@ public class CatToy {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 }
