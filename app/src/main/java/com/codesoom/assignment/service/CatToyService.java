@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.CatToyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CatToyService {
@@ -16,6 +17,10 @@ public class CatToyService {
 
     public List<CatToy> getList() {
         return repository.findAll();
+    }
+
+    public Optional<CatToy> findById(Long catToyId) {
+        return repository.findById(catToyId);
     }
 
     public CatToy save(CatToy newToy) {
