@@ -8,7 +8,6 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Setter
 public class Product {
 
     @Id
@@ -35,5 +34,12 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.img_url = img_url;
+    }
+
+    public void updateItem(Product product){
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.img_url = product.getImg_url();
     }
 }

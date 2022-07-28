@@ -34,27 +34,13 @@ public class ProductService {
      * - 특정 항목만 변경해도 업데이트가 되어야한다.
      * - 빈 항목이 있다면 업데이트 하지 않고 그대로 유지
      * - 항목이 알맞은 형식일 때만 업데이트해야한다. (price - long)
+     *
      */
     public Product updateToy(Long id, Product source){
 
         Product toy = getToys(id);
 
-        if( source.getName() != null && !source.getName().isBlank()) {
-            toy.setName(source.getName());
-        }
-
-        if(source.getMaker() != null && !source.getMaker().isBlank()) {
-            toy.setMaker(source.getMaker());
-        }
-
-        if(source.getPrice() != null){
-            toy.setPrice(source.getPrice());
-        }
-
-        if(source.getImg_url() != null && source.getImg_url().isBlank()) {
-            toy.setImg_url(source.getImg_url());
-        }
-
+        toy.updateItem(source);
         return productRepository.save(toy);
     }
 
