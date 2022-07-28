@@ -26,4 +26,8 @@ public class CatToyService {
     public CatToy save(CatToy newToy) {
         return repository.save(newToy);
     }
+
+    public CatToy update(Long toyId, CatToy newToy) {
+        return repository.update(toyId, newToy);
+    }
 }
