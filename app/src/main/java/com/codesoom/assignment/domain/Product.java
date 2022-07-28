@@ -10,6 +10,8 @@ import javax.persistence.Id;
 @Getter
 public class Product {
 
+
+
     @Id
     @GeneratedValue
     private Long id;
@@ -21,12 +23,15 @@ public class Product {
     public Product(){
 
     }
-
     public Product(Product toy){
         this.name = toy.getName();
         this.maker = toy.getMaker();
         this.price = toy.getPrice();
         this.img_url = toy.getImg_url();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Product(String name, String maker, Long price, String img_url) {
@@ -36,10 +41,10 @@ public class Product {
         this.img_url = img_url;
     }
 
-    public void updateItem(Product product){
-        this.name = product.getName();
-        this.maker = product.getMaker();
-        this.price = product.getPrice();
-        this.img_url = product.getImg_url();
+    public void updateItem(Product toy){
+        this.name = toy.getName();
+        this.maker = toy.getMaker();
+        this.price = toy.getPrice();
+        this.img_url = toy.getImg_url();
     }
 }

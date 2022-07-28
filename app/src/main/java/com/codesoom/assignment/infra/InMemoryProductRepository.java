@@ -31,9 +31,9 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Product save(Product product){
+
         product.setId(generateId());
         productHashMap.put(product.getId(), product);
-        //products.add(product);
         return product;
     }
 
