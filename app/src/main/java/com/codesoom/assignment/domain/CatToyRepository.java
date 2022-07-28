@@ -1,6 +1,7 @@
 package com.codesoom.assignment.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 고양이 장난감 정보를 관리하는 역할을 합니다.
@@ -12,6 +13,13 @@ public interface CatToyRepository {
      * @return 저장된 장난감 목록
      */
     List<CatToy> findAll();
+
+    /**
+     * id로 저장된 장난감을 찾습니다.
+     * @param catToyId 고양이 장난감 식별자
+     * @return 찾은 장난감을 반환합니다.
+     */
+    Optional<CatToy> findById(Long catToyId);
 
     /**
      * 모든 장난감 정보를 삭제합니다.
