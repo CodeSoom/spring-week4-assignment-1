@@ -45,10 +45,6 @@ public class CatToy {
         this.price = price;
     }
 
-    public CatToy(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
     }

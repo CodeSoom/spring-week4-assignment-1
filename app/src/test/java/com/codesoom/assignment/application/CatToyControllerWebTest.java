@@ -22,6 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("CatToyController Web")
 public class CatToyControllerWebTest {
+    private final String FIXTURE_NAME = "name";
+    private final String FIXTURE_MAKER = "maker";
+    private final int FIXTURE_PRICE = 10000;
+
     private CatToyRepository repository;
     private MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -62,19 +66,19 @@ public class CatToyControllerWebTest {
         @Nested
         @DisplayName("저장된 고양이 장난감이 있을 때")
         class Context_didSaveCatToy {
-            final int NUMBER_OF_TOY_LIST = 2;
-
             @BeforeEach
             void prepare() {
-                for (int i = 1; i <= NUMBER_OF_TOY_LIST; i++) {
-                    repository.save(new CatToy((long) i));
-                }
+                repository.save(new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1));
+                repository.save(new CatToy(FIXTURE_NAME + 2, FIXTURE_MAKER + 2, FIXTURE_PRICE + 2));
             }
 
             @Test
             @DisplayName("OK status, 저장된 고양이 장난감 목록을 반환한다")
             void it_returnsOkStatusAndEmptyList() throws Exception {
-                final List<CatToy> expectedToys = List.of(new CatToy(1L), new CatToy(2L));
+                final List<CatToy> expectedToys = List.of(
+                    new CatToy(1L, FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1),
+                    new CatToy(2L, FIXTURE_NAME + 2, FIXTURE_MAKER + 2, FIXTURE_PRICE + 2)
+                );
                 final String expectedContent = writeValueAsString(expectedToys);
 
                 mockMvc.perform(get("/products"))
