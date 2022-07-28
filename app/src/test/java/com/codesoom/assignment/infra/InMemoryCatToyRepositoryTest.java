@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -80,6 +81,52 @@ class InMemoryCatToyRepositoryTest {
     }
 
     @Nested
+    @DisplayName("findById 메소드는")
+    class Describe_findById {
+        @Nested
+        @DisplayName("저장되지 않은 장난감의 Id로 요청했을 떄")
+        class Context_withIdOfNotSavedToy {
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("null 값을 반환한다")
+            void it_returnsFoundToy() {
+                Optional<CatToy> result = repository.findById(1L);
+
+                assertThat(result).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있는 장난감의 Id로 요청했을 떄")
+        class Context_withIdOfSavedToy {
+            private final CatToy savedCatToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+
+            @BeforeEach
+            void prepare() {
+                repository.save(savedCatToy);
+            }
+
+            @Test
+            @DisplayName("조회된 장난감을 반환한다")
+            void it_returnsFoundToy() {
+                final Long toyId = 1L;
+                Optional<CatToy> result = repository.findById(toyId);
+
+                assertThat(result).isPresent();
+                assertThat(result.get().getId()).isEqualTo(toyId);
+                assertThat(result.get().getName()).isEqualTo(FIXTURE_NAME);
+                assertThat(result.get().getMaker()).isEqualTo(FIXTURE_MAKER);
+                assertThat(result.get().getPrice()).isEqualTo(FIXTURE_PRICE);
+                assertThat(result.get().getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
+            }
+        }
+    }
+
+    @Nested
     @DisplayName("save 메소드는")
     class Describe_save {
         @Nested
@@ -130,6 +177,5 @@ class InMemoryCatToyRepositoryTest {
                                 });
             }
         }
-
     }
 }
