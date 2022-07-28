@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,13 +51,17 @@ public class CatToyControllerTest {
         @Nested
         @DisplayName("저장된 고양이 장난감이 있을 때")
         class Context_didSaveCatToy {
-            final int NUMBER_OF_TOY_LIST = 2;
+            final int NUMBER_OF_TOY_LIST = 3;
 
             @BeforeEach
             void prepare() {
-                for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
-                    repository.save(new CatToy(FIXTURE_NAME + i, FIXTURE_MAKER + i, FIXTURE_PRICE + i));
-                }
+                IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
+                        .mapToObj(value -> {
+                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value);
+                        })
+                        .forEach(catToy -> {
+                            repository.save(catToy);
+                        });
             }
 
             @Test
@@ -66,11 +71,13 @@ public class CatToyControllerTest {
 
                 assertThat(result).hasSize(NUMBER_OF_TOY_LIST);
 
-                for (int i = 0; i < NUMBER_OF_TOY_LIST; i++) {
-                    assertThat(result.get(i).getName()).isEqualTo(FIXTURE_NAME + i);
-                    assertThat(result.get(i).getMaker()).isEqualTo(FIXTURE_MAKER + i);
-                    assertThat(result.get(i).getPrice()).isEqualTo(FIXTURE_PRICE + i);
-                }
+                IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
+                        .forEach(index -> {
+                            CatToy catToy = result.get(index - 1);
+                            assertThat(catToy.getName()).isEqualTo(FIXTURE_NAME + index);
+                            assertThat(catToy.getMaker()).isEqualTo(FIXTURE_MAKER + index);
+                            assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
+                        });
             }
         }
     }
