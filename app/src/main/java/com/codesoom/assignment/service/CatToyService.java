@@ -29,6 +29,14 @@ public class CatToyService implements ToyService {
         return catToyRepository.findAll();
     }
 
+    public CatToy update(Long id, CatToyDto dto) {
+        CatToy catToy = findById(id);
+
+        catToy.update(dto);
+
+        return catToy;
+    }
+
     public void deleteById(Long id) {
         catToyRepository.deleteById(id);
     }
