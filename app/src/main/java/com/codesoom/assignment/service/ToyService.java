@@ -35,4 +35,13 @@ public interface ToyService {
      * @param id 식별자
      */
     void deleteById(Long id);
+
+    /**
+     * 주어진 식별자를 가진 장난감을 주어진 변경 정보로 변경하고 리턴한다.
+     *
+     * @param id 식별자
+     * @param dto 변경할 정보
+     * @return 변경된 장난감
+     */
+    CatToy update(Long id, CatToyDto dto);
 }

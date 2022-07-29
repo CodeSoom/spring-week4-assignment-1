@@ -62,8 +62,7 @@ public class CatToyRepositoryTest {
             void It_returns_catToy_and_save() {
                 CatToy toy = catToyRepository.save(givenToyDto.toCatToy());
 
-                assertThat(catToyRepository.findById(toy.getId()).
-                        orElseThrow()).isEqualTo(givenExpectToy(toy.getId()));
+                assertThat(catToyRepository.findById(toy.getId()).get()).isEqualTo(givenExpectToy(toy.getId()));
             }
         }
     }

@@ -21,7 +21,7 @@ import java.util.Map;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayName("CatToyController 클래스의")
 public class CatToyControllerTest {
+    public static final String CHANGED = "변경된 ";
+    public static final Integer CHANGED_PRICE = 100;
     public static final String GIVEN_TOY_NAME = "고양이";
     public static final String GIVEN_MAKER = "허먼밀러";
     public static final Integer GIVEN_PRICE = 90000;
@@ -47,7 +49,7 @@ public class CatToyControllerTest {
         catToyRepository.deleteAll();
     }
 
-    private CatToy givenToy = new CatToy(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
+    private final CatToy givenToy = new CatToy(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
 
     private Map<String, Object> givenInput() {
         Map<String, Object> input = new HashMap<>();
@@ -55,6 +57,16 @@ public class CatToyControllerTest {
         input.put("maker", GIVEN_MAKER);
         input.put("price", GIVEN_PRICE);
         input.put("url", GIVEN_URL);
+
+        return input;
+    }
+
+    private Map<String, Object> givenChangeInput() {
+        Map<String, Object> input = new HashMap<>();
+        input.put("name", CHANGED + GIVEN_TOY_NAME);
+        input.put("maker", CHANGED + GIVEN_MAKER);
+        input.put("price", CHANGED_PRICE);
+        input.put("url", CHANGED + GIVEN_URL);
 
         return input;
     }
@@ -169,10 +181,34 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감을 제거하고 상태코드 204를 응답한다.")
             void It_returns_NoContent() throws Exception {
-                Map<String, Object> response = createAndConvertToMap(givenInput());
+                Map<String, Object> toy = createAndConvertToMap(givenInput());
 
-                mockMvc.perform(delete("/toys/" + response.get("id")))
+                mockMvc.perform(delete("/toys/" + toy.get("id")))
                         .andExpect(status().isNoContent());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("update 메소드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("주어진 식별자를 가진 장난감이 주어지면")
+        class Context_with_toy {
+            @Test
+            @DisplayName("장난감 정보를 변경 후 리턴하고 상태코드 200을 응답한다")
+            void It_returns_toyAndOk() throws Exception {
+                Map<String, Object> toy = createAndConvertToMap(givenToy);
+
+                mockMvc.perform(put("/toys/" + toy.get("id"))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(givenChangeInput())))
+                        .andExpect(jsonPath("$.id").value(toy.get("id")))
+                        .andExpect(jsonPath("$.name").value(CHANGED + GIVEN_TOY_NAME))
+                        .andExpect(jsonPath("$.maker").value(CHANGED + GIVEN_MAKER))
+                        .andExpect(jsonPath("$.price").value(CHANGED_PRICE))
+                        .andExpect(jsonPath("$.url").value(CHANGED + GIVEN_URL))
+                        .andExpect(status().isOk());
             }
         }
     }

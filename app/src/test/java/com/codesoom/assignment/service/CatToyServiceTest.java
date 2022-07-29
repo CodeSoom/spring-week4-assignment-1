@@ -131,4 +131,21 @@ public class CatToyServiceTest extends ToyTestHelper {
             }
         }
     }
+
+    @Nested
+    @DisplayName("update 메서드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("식별자를 가진 장난감과 변경할 정보가 있다면")
+        class Context_with_toyWithIdAndChangeData {
+            @Test
+            @DisplayName("변경된 정보를 가진 장난감을 리턴한다")
+            void It_returns_ChangedToy() {
+                CatToy catToy = toyService.create(givenToyDto);
+
+                assertThat(toyService.update(catToy.getId(), givenToyToChangeDto))
+                        .isEqualTo(changedToy(catToy.getId()));
+            }
+        }
+    }
 }

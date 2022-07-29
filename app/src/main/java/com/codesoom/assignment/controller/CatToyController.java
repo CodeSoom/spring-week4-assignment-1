@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -40,6 +41,12 @@ public class CatToyController {
     @ResponseStatus(HttpStatus.OK)
     public Collection<CatToy> getAll() {
         return toyService.findAll();
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CatToy update(@PathVariable("id") Long id, @RequestBody CatToyDto dto) {
+        return toyService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")

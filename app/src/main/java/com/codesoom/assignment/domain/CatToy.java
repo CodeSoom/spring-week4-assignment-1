@@ -37,6 +37,13 @@ public class CatToy {
         this.url = url;
     }
 
+    public void update(CatToyDto dto) {
+        this.name = dto.getName();
+        this.maker = dto.getMaker();
+        this.price = dto.getPrice();
+        this.url = dto.getUrl();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
