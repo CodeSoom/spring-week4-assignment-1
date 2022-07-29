@@ -17,9 +17,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 @DisplayName("CatToyService 클래스의")
 public class CatToyServiceTest extends ToyTestHelper {
-    public static final long GIVEN_ID = 1L;
-    public static final int ROOF_COUNT = 2;
-
     @Autowired
     private CatToyRepository catToyRepository;
 
@@ -38,16 +35,12 @@ public class CatToyServiceTest extends ToyTestHelper {
         @Nested
         @DisplayName("장난감이 주어지면")
         class Context_with_catToy {
-            CatToy prepare() {
-                return toyService.create(new CatToyDto("뱀", "아디다스", 3000, "url"));
-            }
-
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
-            void It_returns_catToy_and_save() {
-                CatToy given = prepare();
+            void It_returns_catToyAndSave() {
+                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
 
-                assertThat(given).isEqualTo(new CatToy(given.getId(), "뱀", "아디다스", 3000, "url"));
+                assertThat(catToy).isEqualTo(ToyTestHelper.createdToy(catToy.getId()));
             }
         }
     }
@@ -57,17 +50,13 @@ public class CatToyServiceTest extends ToyTestHelper {
     class Describe_findById {
         @Nested
         @DisplayName("주어진 식별자를 가진 장난감이 있다면")
-        class Context_with_toy {
-            CatToy prepare() {
-                return toyService.create(new CatToyDto("뱀", "아디다스", 3000, "url"));
-            }
-
+        class Context_with_toyWithId {
             @Test
             @DisplayName("장난감을 리턴한다")
             void It_returns_toy() {
-                CatToy given = prepare();
+                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
 
-                assertThat(toyService.findById(given.getId())).isEqualTo(new CatToy(given.getId(), "뱀", "아디다스", 3000, "url"));
+                assertThat(toyService.findById(catToy.getId())).isEqualTo(createdToy(catToy.getId()));
             }
         }
 
@@ -76,8 +65,8 @@ public class CatToyServiceTest extends ToyTestHelper {
         class Context_without_toy {
             @Test
             @DisplayName("예외를 던진다")
-            void It_returns_toy() {
-                assertThatThrownBy(() -> toyService.findById(GIVEN_ID))
+            void It_throws_exception() {
+                assertThatThrownBy(() -> toyService.findById(ToyTestHelper.impossibleId))
                         .isInstanceOf(RuntimeException.class);
             }
         }
@@ -90,8 +79,8 @@ public class CatToyServiceTest extends ToyTestHelper {
         @DisplayName("장난감 목록이 주어진다면")
         class Context_with_toyList {
             void prepare() {
-                catToyRepository.save(givenToyDto.toCatToy());
-                catToyRepository.save(givenToyDto.toCatToy());
+                toyService.create(ToyTestHelper.toyToCreateDto);
+                toyService.create(ToyTestHelper.toyToCreateDto);
             }
 
             @Test
@@ -99,7 +88,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             void It_returns_toyList() {
                 prepare();
 
-                assertThat(toyService.findAll()).hasSize(ROOF_COUNT);
+                assertThat(toyService.findAll()).hasSize(2);
             }
         }
 
@@ -123,7 +112,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 제거한다")
             void It_returns_trueAndDeleteToy() {
-                CatToy catToy = toyService.create(givenToyDto);
+                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
                 toyService.deleteById(catToy.getId());
 
                 assertThatThrownBy(() -> toyService.findById(catToy.getId()))
@@ -141,9 +130,9 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("변경된 정보를 가진 장난감을 리턴한다")
             void It_returns_ChangedToy() {
-                CatToy catToy = toyService.create(givenToyDto);
+                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
 
-                assertThat(toyService.update(catToy.getId(), givenToyToChangeDto))
+                assertThat(toyService.update(catToy.getId(), ToyTestHelper.toyToChangeDto))
                         .isEqualTo(changedToy(catToy.getId()));
             }
         }

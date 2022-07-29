@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyDto;
 
 public class ToyTestHelper {
+    public static final Long impossibleId = -1L;
     private static final String givenToyName = "낚시물고기";
     private static final String givenMaker = "나이키";
     private static final Integer givenPrice = 5000;
