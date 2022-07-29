@@ -15,16 +15,16 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Collection<Product> getProducts(){
+    public Collection<Product> getProducts() {
         return productRepository.findAll();
     }
 
-    public Product getToys(Long id){
+    public Product getToys(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() ->new ProductNotFoundException(id));
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
-    public Product createToy(Product source){
+    public Product createToy(Product source) {
 
         return productRepository.save(source);
     }
@@ -34,9 +34,8 @@ public class ProductService {
      * - 특정 항목만 변경해도 업데이트가 되어야한다.
      * - 빈 항목이 있다면 업데이트 하지 않고 그대로 유지
      * - 항목이 알맞은 형식일 때만 업데이트해야한다. (price - long)
-     *
      */
-    public Product updateToy(Long id, Product source){
+    public Product updateToy(Long id, Product source) {
 
         Product toy = getToys(id);
 
@@ -44,7 +43,7 @@ public class ProductService {
         return productRepository.save(toy);
     }
 
-    public Product deleteToy(Long id){
+    public Product deleteToy(Long id) {
         Product toy = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
         productRepository.delete(toy);
