@@ -30,7 +30,7 @@ public class ProductController {
 
     @GetMapping
     public Collection<Product> list(){
-        return productService.getCatToys();
+        return productService.getProducts();
     }
 
     @GetMapping("{id}")

@@ -41,7 +41,7 @@ public class Product {
         this.img_url = img_url;
     }
 
-    public void updateItem(Product toy){
+    public void updateProduct(Product toy){
         this.name = toy.getName();
         this.maker = toy.getMaker();
         this.price = toy.getPrice();

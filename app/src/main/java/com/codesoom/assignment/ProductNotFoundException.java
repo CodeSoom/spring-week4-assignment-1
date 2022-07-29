@@ -1,8 +1,8 @@
 package com.codesoom.assignment;
 
-public class CatToyNotFoundException extends RuntimeException {
+public class ProductNotFoundException extends RuntimeException {
 
-    public  CatToyNotFoundException(Long id) {
+    public ProductNotFoundException(Long id) {
         super("Task not found:" + id);
     }
 }

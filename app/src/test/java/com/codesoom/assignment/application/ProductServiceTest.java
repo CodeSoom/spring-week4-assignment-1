@@ -17,25 +17,23 @@ import static org.mockito.Mockito.verify;
 class ProductServiceTest {
 
     private ProductService productService;
-    private ProductRepository catToyRepository;
+    private ProductRepository productRepository;
     private static final String TOY_NAME = "test";
     @BeforeEach
     void setUp(){
-        catToyRepository = mock(ProductRepository.class);
-        productService = new ProductService(catToyRepository);
+        productRepository = mock(ProductRepository.class);
+        productService = new ProductService(productRepository);
 
         Product toy = new Product();
-        toy.setName(TOY_NAME);
-
         productService.createToy(toy);
     }
 
     @Test
     void getTasks(){
-        given(catToyRepository.findAll()).willReturn(new ArrayList<>());
-        Collection<Product> products = productService.getCatToys();
+        given(productRepository.findAll()).willReturn(new ArrayList<>());
+        Collection<Product> products = productService.getProducts();
 
-        verify(catToyRepository).findAll();
+        verify(productRepository).findAll();
 
 //        assertThat(catToys).hasSize(1);
 //        CatToy toy = catToys.get(0);

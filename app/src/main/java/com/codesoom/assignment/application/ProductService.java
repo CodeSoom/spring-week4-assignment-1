@@ -15,7 +15,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Collection<Product> getCatToys(){
+    public Collection<Product> getProducts(){
         return productRepository.findAll();
     }
 
@@ -40,7 +40,7 @@ public class ProductService {
 
         Product toy = getToys(id);
 
-        toy.updateItem(source);
+        toy.updateProduct(source);
         return productRepository.save(toy);
     }
 

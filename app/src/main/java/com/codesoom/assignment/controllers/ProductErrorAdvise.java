@@ -12,7 +12,7 @@ public class ProductErrorAdvise {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
     public ErrorResponse handleNotFound(){
-        return new ErrorResponse("Task not  found");
+        return new ErrorResponse("Product not found");
 
     }
 }
