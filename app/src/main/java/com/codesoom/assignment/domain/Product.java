@@ -3,15 +3,15 @@ package com.codesoom.assignment.domain;
 import lombok.Getter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 @Getter
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private Long Id;
+
     private String name;
     private String maker;
     private Long price;
