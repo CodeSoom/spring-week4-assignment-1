@@ -43,6 +43,15 @@ public class ProductService {
         return productRepository.save(toy);
     }
 
+    /**
+     * 해당 ID가 존재하는 장난감이 있다면 삭제,
+     * 만약 해당 ID가 존재하지 않는 장난감을 삭제하려고 한다면, 예외 처리
+     * 
+     * @throw NotFoundException
+     * @param id
+     * @return 삭제하려는 장난감
+     */
+
     public Product deleteToy(Long id) {
         Product toy = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
