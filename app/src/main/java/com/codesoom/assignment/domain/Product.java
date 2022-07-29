@@ -1,19 +1,16 @@
 package com.codesoom.assignment.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 @Getter
 public class Product {
-
-
-
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String maker;
@@ -28,10 +25,6 @@ public class Product {
         this.maker = toy.getMaker();
         this.price = toy.getPrice();
         this.img_url = toy.getImg_url();
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Product(String name, String maker, Long price, String img_url) {

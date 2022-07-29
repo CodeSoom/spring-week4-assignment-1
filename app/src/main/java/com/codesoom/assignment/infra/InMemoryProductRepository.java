@@ -13,12 +13,6 @@ public class InMemoryProductRepository implements ProductRepository {
 
     private final HashMap<Long, Product> productHashMap = new HashMap<>();
 
-    private Long newId = 0L;
-
-    private Long generateId(){
-        newId += 1;
-        return newId;
-    }
     @Override
     public Collection<Product> findAll(){
         return productHashMap.values();
@@ -31,8 +25,6 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Product save(Product product){
-
-        product.setId(generateId());
         productHashMap.put(product.getId(), product);
         return product;
     }
