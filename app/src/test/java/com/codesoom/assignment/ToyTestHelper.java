@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.CatToyDto;
 
 public class ToyTestHelper {
     public static final Long IMPOSSIBLE_ID = -1L;
+    public static final Long POSSIBLE_ID = 100L;
     public static final String GIVEN_TOY_NAME = "낚시물고기";
     public static final String GIVEN_MAKER = "나이키";
     public static final Integer GIVEN_PRICE = 5000;
@@ -18,6 +19,8 @@ public class ToyTestHelper {
     public static final CatToyDto TOY_TO_CREATE_DTO = new CatToyDto(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
 
     public static final CatToyDto TOY_TO_CHANGE_DTO = new CatToyDto(CHANGED_TOY_NAME, CHANGED_MAKER, CHANGED_PRICE, CHANGED_URL);
+
+    public static final CatToy MADE_TOY = new CatToy(POSSIBLE_ID, GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
 
     public static CatToy createdToy(Long id) {
         return new CatToy(id, GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
