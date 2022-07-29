@@ -18,11 +18,11 @@ public class ToyTestHelper {
 
     public static final CatToyDto toyToChangeDto = new CatToyDto(changedToyName, changedMaker, changedPrice, changedUrl);
 
-    public CatToy createdToy(Long id) {
-        return new CatToy(id, changedToyName, changedMaker, changedPrice, changedUrl);
+    public static CatToy createdToy(Long id) {
+        return new CatToy(id, givenToyName, givenMaker, givenPrice, givenUrl);
     }
 
-    public CatToy changedToy(Long id) {
+    public static CatToy changedToy(Long id) {
         return new CatToy(id, changedToyName, changedMaker, changedPrice, changedUrl);
     }
 }
