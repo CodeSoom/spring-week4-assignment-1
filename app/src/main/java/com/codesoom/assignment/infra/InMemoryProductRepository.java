@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public class InMemoryProductRepository implements ProductRepository {
-    //private final List<Product> products = new ArrayList<>();
+
     private final HashMap<Long, Product> productHashMap = new HashMap<>();
 
     private Long newId = 0L;
