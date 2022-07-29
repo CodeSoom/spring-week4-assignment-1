@@ -4,26 +4,26 @@ import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyDto;
 
 public class ToyTestHelper {
-    public static final Long impossibleId = -1L;
-    public static final String givenToyName = "낚시물고기";
-    public static final String givenMaker = "나이키";
-    public static final Integer givenPrice = 5000;
-    public static final String givenUrl = "url";
+    public static final Long IMPOSSIBLE_ID = -1L;
+    public static final String GIVEN_TOY_NAME = "낚시물고기";
+    public static final String GIVEN_MAKER = "나이키";
+    public static final Integer GIVEN_PRICE = 5000;
+    public static final String GIVEN_URL = "url";
 
-    public static final String changedToyName = "변경된 낚시물고기";
-    public static final String changedMaker = "변경된 나이키";
-    public static final Integer changedPrice = 10;
-    public static final String changedUrl = "변경된 url";
+    public static final String CHANGED_TOY_NAME = "변경된 낚시물고기";
+    public static final String CHANGED_MAKER = "변경된 나이키";
+    public static final Integer CHANGED_PRICE = 10;
+    public static final String CHANGED_URL = "변경된 url";
 
-    public static final CatToyDto toyToCreateDto = new CatToyDto(givenToyName, givenMaker, givenPrice, givenUrl);
+    public static final CatToyDto TOY_TO_CREATE_DTO = new CatToyDto(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
 
-    public static final CatToyDto toyToChangeDto = new CatToyDto(changedToyName, changedMaker, changedPrice, changedUrl);
+    public static final CatToyDto TOY_TO_CHANGE_DTO = new CatToyDto(CHANGED_TOY_NAME, CHANGED_MAKER, CHANGED_PRICE, CHANGED_URL);
 
     public static CatToy createdToy(Long id) {
-        return new CatToy(id, givenToyName, givenMaker, givenPrice, givenUrl);
+        return new CatToy(id, GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
     }
 
     public static CatToy changedToy(Long id) {
-        return new CatToy(id, changedToyName, changedMaker, changedPrice, changedUrl);
+        return new CatToy(id, CHANGED_TOY_NAME, CHANGED_MAKER, CHANGED_PRICE, CHANGED_URL);
     }
 }

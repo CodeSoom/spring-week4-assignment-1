@@ -44,20 +44,20 @@ public class CatToyControllerTest {
 
     private Map<String, Object> givenInput() {
         Map<String, Object> input = new HashMap<>();
-        input.put("name", ToyTestHelper.givenToyName);
-        input.put("maker", ToyTestHelper.givenMaker);
-        input.put("price", ToyTestHelper.givenPrice);
-        input.put("url", ToyTestHelper.givenUrl);
+        input.put("name", ToyTestHelper.GIVEN_TOY_NAME);
+        input.put("maker", ToyTestHelper.GIVEN_MAKER);
+        input.put("price", ToyTestHelper.GIVEN_PRICE);
+        input.put("url", ToyTestHelper.GIVEN_URL);
 
         return input;
     }
 
     private Map<String, Object> givenChangeInput() {
         Map<String, Object> input = new HashMap<>();
-        input.put("name", ToyTestHelper.changedToyName);
-        input.put("maker", ToyTestHelper.changedMaker);
-        input.put("price", ToyTestHelper.changedPrice);
-        input.put("url", ToyTestHelper.changedUrl);
+        input.put("name", ToyTestHelper.CHANGED_TOY_NAME);
+        input.put("maker", ToyTestHelper.CHANGED_MAKER);
+        input.put("price", ToyTestHelper.CHANGED_PRICE);
+        input.put("url", ToyTestHelper.CHANGED_URL);
 
         return input;
     }
@@ -87,10 +87,10 @@ public class CatToyControllerTest {
             @DisplayName("장난감과 상태코드 201을 응답한다")
             void It_returns_catToy_and_statusCreated() throws Exception {
                 createPerform(givenInput())
-                        .andExpect(jsonPath("$.name").value(ToyTestHelper.givenToyName))
-                        .andExpect(jsonPath("$.maker").value(ToyTestHelper.givenMaker))
-                        .andExpect(jsonPath("$.price").value(ToyTestHelper.givenPrice))
-                        .andExpect(jsonPath("$.url").value(ToyTestHelper.givenUrl))
+                        .andExpect(jsonPath("$.name").value(ToyTestHelper.GIVEN_TOY_NAME))
+                        .andExpect(jsonPath("$.maker").value(ToyTestHelper.GIVEN_MAKER))
+                        .andExpect(jsonPath("$.price").value(ToyTestHelper.GIVEN_PRICE))
+                        .andExpect(jsonPath("$.url").value(ToyTestHelper.GIVEN_URL))
                         .andExpect(status().isCreated());
             }
         }
@@ -109,10 +109,10 @@ public class CatToyControllerTest {
 
                 mockMvc.perform(get("/toys/" + response.get("id")))
                         .andExpect(jsonPath("$.id").value(response.get("id")))
-                        .andExpect(jsonPath("$.name").value(ToyTestHelper.givenToyName))
-                        .andExpect(jsonPath("$.maker").value(ToyTestHelper.givenMaker))
-                        .andExpect(jsonPath("$.price").value(ToyTestHelper.givenPrice))
-                        .andExpect(jsonPath("$.url").value(ToyTestHelper.givenUrl))
+                        .andExpect(jsonPath("$.name").value(ToyTestHelper.GIVEN_TOY_NAME))
+                        .andExpect(jsonPath("$.maker").value(ToyTestHelper.GIVEN_MAKER))
+                        .andExpect(jsonPath("$.price").value(ToyTestHelper.GIVEN_PRICE))
+                        .andExpect(jsonPath("$.url").value(ToyTestHelper.GIVEN_URL))
                         .andExpect(status().isOk());
             }
         }
@@ -123,7 +123,7 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("예외 메시지와 상태코드 404를 응답한다")
             void It_throws_exception() throws Exception {
-                mockMvc.perform(get("/toys/" + ToyTestHelper.impossibleId))
+                mockMvc.perform(get("/toys/" + ToyTestHelper.IMPOSSIBLE_ID))
                         .andExpect(jsonPath("$.message").isString())
                         .andExpect(status().isNotFound());
             }
@@ -194,10 +194,10 @@ public class CatToyControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(givenChangeInput())))
                         .andExpect(jsonPath("$.id").value(toy.get("id")))
-                        .andExpect(jsonPath("$.name").value(ToyTestHelper.changedToyName))
-                        .andExpect(jsonPath("$.maker").value(ToyTestHelper.changedMaker))
-                        .andExpect(jsonPath("$.price").value(ToyTestHelper.changedPrice))
-                        .andExpect(jsonPath("$.url").value(ToyTestHelper.changedUrl))
+                        .andExpect(jsonPath("$.name").value(ToyTestHelper.CHANGED_TOY_NAME))
+                        .andExpect(jsonPath("$.maker").value(ToyTestHelper.CHANGED_MAKER))
+                        .andExpect(jsonPath("$.price").value(ToyTestHelper.CHANGED_PRICE))
+                        .andExpect(jsonPath("$.url").value(ToyTestHelper.CHANGED_URL))
                         .andExpect(status().isOk());
             }
         }

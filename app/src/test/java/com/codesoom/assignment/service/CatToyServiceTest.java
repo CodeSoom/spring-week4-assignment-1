@@ -2,7 +2,6 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.ToyTestHelper;
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyDto;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +37,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToyAndSave() {
-                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
 
                 assertThat(catToy).isEqualTo(ToyTestHelper.createdToy(catToy.getId()));
             }
@@ -54,7 +53,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 리턴한다")
             void It_returns_toy() {
-                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
 
                 assertThat(toyService.findById(catToy.getId())).isEqualTo(createdToy(catToy.getId()));
             }
@@ -66,7 +65,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("예외를 던진다")
             void It_throws_exception() {
-                assertThatThrownBy(() -> toyService.findById(ToyTestHelper.impossibleId))
+                assertThatThrownBy(() -> toyService.findById(ToyTestHelper.IMPOSSIBLE_ID))
                         .isInstanceOf(RuntimeException.class);
             }
         }
@@ -79,8 +78,8 @@ public class CatToyServiceTest extends ToyTestHelper {
         @DisplayName("장난감 목록이 주어진다면")
         class Context_with_toyList {
             void prepare() {
-                toyService.create(ToyTestHelper.toyToCreateDto);
-                toyService.create(ToyTestHelper.toyToCreateDto);
+                toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
+                toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
             }
 
             @Test
@@ -112,7 +111,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 제거한다")
             void It_returns_trueAndDeleteToy() {
-                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
                 toyService.deleteById(catToy.getId());
 
                 assertThatThrownBy(() -> toyService.findById(catToy.getId()))
@@ -130,9 +129,9 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("변경된 정보를 가진 장난감을 리턴한다")
             void It_returns_ChangedToy() {
-                CatToy catToy = toyService.create(ToyTestHelper.toyToCreateDto);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
 
-                assertThat(toyService.update(catToy.getId(), ToyTestHelper.toyToChangeDto))
+                assertThat(toyService.update(catToy.getId(), ToyTestHelper.TOY_TO_CHANGE_DTO))
                         .isEqualTo(changedToy(catToy.getId()));
             }
         }
