@@ -9,9 +9,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
 @DisplayName("CatToyService 클래스의")
@@ -24,8 +28,9 @@ public class CatToyServiceTest extends ToyTestHelper {
     @BeforeEach
     void setUp() {
         toyService = new CatToyService(catToyRepository);
-
-        catToyRepository.deleteAll();
+        System.out.println(toyService.findAll());
+//
+//        catToyRepository.deleteAll();
     }
 
     @Nested
@@ -77,6 +82,7 @@ public class CatToyServiceTest extends ToyTestHelper {
         @Nested
         @DisplayName("장난감 목록이 주어진다면")
         class Context_with_toyList {
+            @BeforeEach
             void prepare() {
                 toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
                 toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
@@ -85,8 +91,6 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감 목록을 리턴한다")
             void It_returns_toyList() {
-                prepare();
-
                 assertThat(toyService.findAll()).hasSize(2);
             }
         }
@@ -131,8 +135,17 @@ public class CatToyServiceTest extends ToyTestHelper {
             void It_returns_ChangedToy() {
                 CatToy catToy = toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
 
-                assertThat(toyService.update(catToy.getId(), ToyTestHelper.TOY_INFO_TO_CHANGE))
-                        .isEqualTo(changedToy(catToy.getId()));
+                CatToy changedToy = toyService.update(catToy.getId(), ToyTestHelper.TOY_INFO_TO_CHANGE);
+
+                CatToy expectToy = ToyTestHelper.changedToy(catToy.getId());
+
+                assertAll(
+                        () -> assertThat(changedToy.getId()).isEqualTo(expectToy.getId()),
+                        () -> assertThat(changedToy.getName()).isEqualTo(expectToy.getName()),
+                        () -> assertThat(changedToy.getMaker()).isEqualTo(expectToy.getMaker()),
+                        () -> assertThat(changedToy.getPrice()).isEqualTo(expectToy.getPrice()),
+                        () -> assertThat(changedToy.getImageUrl()).isEqualTo(expectToy.getImageUrl())
+                );
             }
         }
     }
