@@ -38,6 +38,8 @@ public class CatToyService implements ToyService {
     }
 
     public void deleteById(Long id) {
+        findById(id);
+
         catToyRepository.deleteById(id);
     }
 }

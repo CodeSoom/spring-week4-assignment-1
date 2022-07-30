@@ -179,6 +179,17 @@ public class CatToyControllerTest {
                         .andExpect(status().isNoContent());
             }
         }
+
+        @Nested
+        @DisplayName("주어진 식별자를 가진 장난감이 없으면")
+        class Context_without_toyWithId {
+            @Test
+            @DisplayName("상태코드 404를 응답한다")
+            void It_returns_Not_FOUND() throws Exception {
+                mockMvc.perform(delete("/products/" + ToyTestHelper.IMPOSSIBLE_ID))
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 
     @Nested
