@@ -61,6 +61,7 @@ public class CatToyRepositoryTest {
         @Nested
         @DisplayName("장난감 목록이 주어지면")
         class Context_with_toyList {
+            @BeforeEach
             void prepare() {
                 catToyRepository.save(ToyTestHelper.TOY_INFO_TO_CREATE.toCatToy());
                 catToyRepository.save(ToyTestHelper.TOY_INFO_TO_CREATE.toCatToy());
@@ -69,8 +70,6 @@ public class CatToyRepositoryTest {
             @Test
             @DisplayName("장난감 목록을 리턴한다")
             void It_returns_toyList() {
-                prepare();
-
                 assertThat(catToyRepository.findAll()).hasSize(2);
             }
         }
