@@ -25,7 +25,10 @@ public class CatToyTest {
     @DisplayName("update 메서드는 장난감을 변경한다")
     void updateChangeToy() {
         CatToy catToy = ToyTestHelper.MADE_TOY;
-        catToy.update(ToyTestHelper.TOY_INFO_TO_CHANGE);
+        catToy.update(ToyTestHelper.CHANGED_TOY_NAME,
+                        ToyTestHelper.CHANGED_MAKER,
+                        ToyTestHelper.CHANGED_PRICE,
+                        ToyTestHelper.CHANGED_URL);
 
         assertThat(catToy).isEqualTo(ToyTestHelper.changedToy(catToy.getId()));
     }

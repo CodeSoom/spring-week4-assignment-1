@@ -32,7 +32,7 @@ public class CatToyService implements ToyService {
     public CatToy update(Long id, ToyInfo dto) {
         CatToy catToy = findById(id);
 
-        catToy.update(dto);
+        catToy.update(dto.getName(), dto.getMaker(), dto.getPrice(), dto.getImageUrl());
 
         return catToy;
     }
