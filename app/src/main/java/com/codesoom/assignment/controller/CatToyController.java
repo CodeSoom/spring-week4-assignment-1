@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyDto;
+import com.codesoom.assignment.domain.ToyInfo;
 import com.codesoom.assignment.service.ToyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,8 +28,8 @@ public class CatToyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CatToy create(@RequestBody CatToyDto catToyDto) {
-        return toyService.create(catToyDto);
+    public CatToy create(@RequestBody ToyInfo toyInfo) {
+        return toyService.create(toyInfo);
     }
 
     @GetMapping("/{id}")
@@ -46,13 +46,13 @@ public class CatToyController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CatToy update(@PathVariable("id") Long id, @RequestBody CatToyDto dto) {
+    public CatToy update(@PathVariable("id") Long id, @RequestBody ToyInfo dto) {
         return toyService.update(id, dto);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CatToy patch(@PathVariable("id") Long id, @RequestBody CatToyDto dto) {
+    public CatToy patch(@PathVariable("id") Long id, @RequestBody ToyInfo dto) {
         return toyService.update(id, dto);
     }
 

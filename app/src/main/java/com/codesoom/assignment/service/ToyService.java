@@ -1,7 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyDto;
+import com.codesoom.assignment.domain.ToyInfo;
 
 import java.util.List;
 
@@ -9,10 +9,10 @@ public interface ToyService {
     /**
      * 장난감을 생성한다.
      *
-     * @param catToyDto 고양이 장난감 Dto
+     * @param toyInfo 고양이 장난감 Dto
      * @return 고양이 장난감
      */
-    CatToy create(CatToyDto catToyDto);
+    CatToy create(ToyInfo toyInfo);
 
     /**
      * 장난감을 조회한다.
@@ -43,5 +43,5 @@ public interface ToyService {
      * @param dto 변경할 정보
      * @return 변경된 장난감
      */
-    CatToy update(Long id, CatToyDto dto);
+    CatToy update(Long id, ToyInfo dto);
 }

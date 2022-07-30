@@ -1,7 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyDto;
+import com.codesoom.assignment.domain.ToyInfo;
 import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.exception.CatToyNotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ public class CatToyService implements ToyService {
         this.catToyRepository = catToyRepository;
     }
 
-    public CatToy create(CatToyDto catToyDto) {
-        return catToyRepository.save(catToyDto.toCatToy());
+    public CatToy create(ToyInfo toyInfo) {
+        return catToyRepository.save(toyInfo.toCatToy());
     }
 
     public CatToy findById(Long id) {
@@ -29,7 +29,7 @@ public class CatToyService implements ToyService {
         return catToyRepository.findAll();
     }
 
-    public CatToy update(Long id, CatToyDto dto) {
+    public CatToy update(Long id, ToyInfo dto) {
         CatToy catToy = findById(id);
 
         catToy.update(dto);

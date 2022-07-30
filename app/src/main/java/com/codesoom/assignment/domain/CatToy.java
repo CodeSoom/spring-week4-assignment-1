@@ -37,11 +37,11 @@ public class CatToy {
         this.imageUrl = imageUrl;
     }
 
-    public void update(CatToyDto dto) {
-        this.name = dto.getName();
-        this.maker = dto.getMaker();
-        this.price = dto.getPrice();
-        this.imageUrl = dto.getImageUrl();
+    public void update(ToyInfo toyInfo) {
+        this.name = toyInfo.getName();
+        this.maker = toyInfo.getMaker();
+        this.price = toyInfo.getPrice();
+        this.imageUrl = toyInfo.getImageUrl();
     }
 
     @Override

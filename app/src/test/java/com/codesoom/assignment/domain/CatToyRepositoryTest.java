@@ -30,7 +30,7 @@ public class CatToyRepositoryTest {
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToyAndSave() {
-                CatToy toy = catToyRepository.save(ToyTestHelper.TOY_TO_CREATE_DTO.toCatToy());
+                CatToy toy = catToyRepository.save(ToyTestHelper.TOY_INFO_TO_CREATE.toCatToy());
 
                 assertThat(toy)
                         .isEqualTo(ToyTestHelper.createdToy(toy.getId()));
@@ -47,7 +47,7 @@ public class CatToyRepositoryTest {
             @Test
             @DisplayName("장난감을 찾고 리턴한다")
             void It_returns_catToy_and_save() {
-                CatToy toy = catToyRepository.save(ToyTestHelper.TOY_TO_CREATE_DTO.toCatToy());
+                CatToy toy = catToyRepository.save(ToyTestHelper.TOY_INFO_TO_CREATE.toCatToy());
 
                 assertThat(catToyRepository.findById(toy.getId()).get())
                         .isEqualTo(ToyTestHelper.createdToy(toy.getId()));
@@ -62,8 +62,8 @@ public class CatToyRepositoryTest {
         @DisplayName("장난감 목록이 주어지면")
         class Context_with_toyList {
             void prepare() {
-                catToyRepository.save(ToyTestHelper.TOY_TO_CREATE_DTO.toCatToy());
-                catToyRepository.save(ToyTestHelper.TOY_TO_CREATE_DTO.toCatToy());
+                catToyRepository.save(ToyTestHelper.TOY_INFO_TO_CREATE.toCatToy());
+                catToyRepository.save(ToyTestHelper.TOY_INFO_TO_CREATE.toCatToy());
             }
 
             @Test
@@ -95,7 +95,7 @@ public class CatToyRepositoryTest {
             @Test
             @DisplayName("장난감을 삭제한다")
             void It_returns_trueDeleteToy() {
-                CatToy toy = catToyRepository.save(ToyTestHelper.TOY_TO_CREATE_DTO.toCatToy());
+                CatToy toy = catToyRepository.save(ToyTestHelper.TOY_INFO_TO_CREATE.toCatToy());
                 catToyRepository.deleteById(toy.getId());
 
                 assertThat(catToyRepository.findById(toy.getId()).isPresent()).isFalse();

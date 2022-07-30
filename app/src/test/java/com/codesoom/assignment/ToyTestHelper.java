@@ -1,7 +1,7 @@
 package com.codesoom.assignment;
 
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.domain.CatToyDto;
+import com.codesoom.assignment.domain.ToyInfo;
 
 public class ToyTestHelper {
     public static final Long IMPOSSIBLE_ID = -1L;
@@ -16,9 +16,9 @@ public class ToyTestHelper {
     public static final Integer CHANGED_PRICE = 10;
     public static final String CHANGED_URL = "변경된 url";
 
-    public static final CatToyDto TOY_TO_CREATE_DTO = new CatToyDto(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
+    public static final ToyInfo TOY_INFO_TO_CREATE = new ToyInfo(GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
 
-    public static final CatToyDto TOY_TO_CHANGE_DTO = new CatToyDto(CHANGED_TOY_NAME, CHANGED_MAKER, CHANGED_PRICE, CHANGED_URL);
+    public static final ToyInfo TOY_INFO_TO_CHANGE = new ToyInfo(CHANGED_TOY_NAME, CHANGED_MAKER, CHANGED_PRICE, CHANGED_URL);
 
     public static final CatToy MADE_TOY = new CatToy(POSSIBLE_ID, GIVEN_TOY_NAME, GIVEN_MAKER, GIVEN_PRICE, GIVEN_URL);
 

@@ -37,7 +37,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 저장하고 리턴한다")
             void It_returns_catToyAndSave() {
-                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
 
                 assertThat(catToy).isEqualTo(ToyTestHelper.createdToy(catToy.getId()));
             }
@@ -53,7 +53,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 리턴한다")
             void It_returns_toy() {
-                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
 
                 assertThat(toyService.findById(catToy.getId())).isEqualTo(createdToy(catToy.getId()));
             }
@@ -78,8 +78,8 @@ public class CatToyServiceTest extends ToyTestHelper {
         @DisplayName("장난감 목록이 주어진다면")
         class Context_with_toyList {
             void prepare() {
-                toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
-                toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
+                toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
+                toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
             }
 
             @Test
@@ -111,7 +111,7 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("장난감을 제거한다")
             void It_returns_trueAndDeleteToy() {
-                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
                 toyService.deleteById(catToy.getId());
 
                 assertThatThrownBy(() -> toyService.findById(catToy.getId()))
@@ -129,9 +129,9 @@ public class CatToyServiceTest extends ToyTestHelper {
             @Test
             @DisplayName("변경된 정보를 가진 장난감을 리턴한다")
             void It_returns_ChangedToy() {
-                CatToy catToy = toyService.create(ToyTestHelper.TOY_TO_CREATE_DTO);
+                CatToy catToy = toyService.create(ToyTestHelper.TOY_INFO_TO_CREATE);
 
-                assertThat(toyService.update(catToy.getId(), ToyTestHelper.TOY_TO_CHANGE_DTO))
+                assertThat(toyService.update(catToy.getId(), ToyTestHelper.TOY_INFO_TO_CHANGE))
                         .isEqualTo(changedToy(catToy.getId()));
             }
         }

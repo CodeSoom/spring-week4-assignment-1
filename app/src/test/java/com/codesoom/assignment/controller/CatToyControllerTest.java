@@ -82,13 +82,12 @@ public class CatToyControllerTest {
     @DisplayName("POST /products 요청은")
     class Describe_create {
         @Nested
-        @DisplayName("장난감이 주어지면")
-        class Context_with_catToy {
+        @DisplayName("장난감 정보가 주어지면")
+        class Context_with_toyInfo {
             @Test
             @DisplayName("장난감과 상태코드 201을 응답한다")
             void It_returns_catToy_and_statusCreated() throws Exception {
                 createPerform(givenInput())
-                        .andDo(print())
                         .andExpect(jsonPath("$.name").value(ToyTestHelper.GIVEN_TOY_NAME))
                         .andExpect(jsonPath("$.maker").value(ToyTestHelper.GIVEN_MAKER))
                         .andExpect(jsonPath("$.price").value(ToyTestHelper.GIVEN_PRICE))
