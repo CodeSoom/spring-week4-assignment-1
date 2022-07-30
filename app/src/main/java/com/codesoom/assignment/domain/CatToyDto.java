@@ -7,19 +7,19 @@ public class CatToyDto {
     private String name;
     private String maker;
     private Integer price;
-    private String url;
+    private String imageUrl;
 
     public CatToyDto() {
     }
 
-    public CatToyDto(String name, String maker, Integer price, String url) {
+    public CatToyDto(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.url = url;
+        this.imageUrl = imageUrl;
     }
 
     public CatToy toCatToy() {
-        return new CatToy(name, maker, price, url);
+        return new CatToy(name, maker, price, imageUrl);
     }
 }

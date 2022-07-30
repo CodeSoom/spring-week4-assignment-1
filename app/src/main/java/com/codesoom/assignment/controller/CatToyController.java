@@ -6,6 +6,7 @@ import com.codesoom.assignment.service.ToyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/toys")
+@RequestMapping("/products")
 public class CatToyController {
     private final ToyService toyService;
 
@@ -46,6 +47,12 @@ public class CatToyController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CatToy update(@PathVariable("id") Long id, @RequestBody CatToyDto dto) {
+        return toyService.update(id, dto);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CatToy patch(@PathVariable("id") Long id, @RequestBody CatToyDto dto) {
         return toyService.update(id, dto);
     }
 
