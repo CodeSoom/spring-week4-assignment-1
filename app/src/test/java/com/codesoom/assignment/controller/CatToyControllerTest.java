@@ -106,10 +106,10 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감과 상태코드 200을 응답한다")
             void It_returns_catToy_and_statusOk() throws Exception {
-                Map<String, Object> response = createAndConvertToMap(givenInput());
+                Map<String, Object> createdToy = createAndConvertToMap(givenInput());
 
-                mockMvc.perform(get("/products/" + response.get("id")))
-                        .andExpect(jsonPath("$.id").value(response.get("id")))
+                mockMvc.perform(get("/products/" + createdToy.get("id")))
+                        .andExpect(jsonPath("$.id").value(createdToy.get("id")))
                         .andExpect(jsonPath("$.name").value(ToyTestHelper.GIVEN_TOY_NAME))
                         .andExpect(jsonPath("$.maker").value(ToyTestHelper.GIVEN_MAKER))
                         .andExpect(jsonPath("$.price").value(ToyTestHelper.GIVEN_PRICE))
