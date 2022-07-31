@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,13 +56,15 @@ class CatToyServiceTest {
         class Context_didSaveCatToy {
             final int NUMBER_OF_TOY_LIST = 3;
 
+            final List<CatToy> savedToys = IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
+                    .mapToObj(value -> {
+                        return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
+                    })
+                    .collect(Collectors.toList());
+
             @BeforeEach
             void prepare() {
-                IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
-                        .mapToObj(value -> {
-                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
-                        })
-                        .forEach(catToy -> {
+                savedToys.forEach(catToy -> {
                             repository.save(catToy);
                         });
             }
@@ -75,11 +78,10 @@ class CatToyServiceTest {
 
                 IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
                         .forEach(index -> {
-                            CatToy catToy = result.get(index - 1);
-                            assertThat(catToy.getName()).isEqualTo(FIXTURE_NAME + index);
-                            assertThat(catToy.getMaker()).isEqualTo(FIXTURE_MAKER + index);
-                            assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
-                            assertThat(catToy.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + index);
+                            CatToy actual = result.get(index - 1);
+                            CatToy expected = savedToys.get(index - 1);
+
+                            assertThat(actual).isEqualTo(expected);
                         });
             }
         }
@@ -122,11 +124,7 @@ class CatToyServiceTest {
                 Optional<CatToy> result = service.findById(toyId);
 
                 assertThat(result).isPresent();
-                assertThat(result.get().getId()).isEqualTo(toyId);
-                assertThat(result.get().getName()).isEqualTo(FIXTURE_NAME);
-                assertThat(result.get().getMaker()).isEqualTo(FIXTURE_MAKER);
-                assertThat(result.get().getPrice()).isEqualTo(FIXTURE_PRICE);
-                assertThat(result.get().getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
+                assertThat(result.get()).isEqualTo(savedCatToy);
             }
         }
     }
@@ -144,11 +142,7 @@ class CatToyServiceTest {
             void it_returnsSavedToy() {
                 CatToy result = service.save(toyWithRequiredFields);
 
-                assertThat(result.getId()).isEqualTo(1L);
-                assertThat(result.getName()).isEqualTo(FIXTURE_NAME);
-                assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER);
-                assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE);
-                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
+                assertThat(result).isEqualTo(toyWithRequiredFields);
             }
         }
     }
@@ -190,12 +184,9 @@ class CatToyServiceTest {
 
                 CatToy newToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
                 CatToy result = service.update(toyId, newToy);
+                CatToy expected = new CatToy(toyId, FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
 
-                assertThat(result.getId()).isEqualTo(toyId);
-                assertThat(result.getName()).isEqualTo(FIXTURE_NAME + 1);
-                assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER + 1);
-                assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE + 1);
-                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + 1);
+                assertThat(result).isEqualTo(expected);
             }
         }
     }
