@@ -21,6 +21,7 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -221,6 +222,54 @@ public class CatToyControllerWebTest {
                                 .content(requestContent))
                         .andExpect(status().isOk())
                         .andExpect(content().string(expectedContent));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products/{id} 요청은")
+    class Describe_deleteById {
+        @Nested
+        @DisplayName("저장되지 않은 장난감의 Id로 요청했을 떄")
+        class Context_withIdOfNotSavedToy {
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("장난감을 찾을 수 없다는 예외를 던진다")
+            void it_returnsFoundToy() throws Exception {
+                final CatToy requestToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
+                final String requestContent = writeValueAsString(requestToy);
+
+                mockMvc.perform(delete("/products/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있는 장난감의 Id로 요청했을 때")
+        class Context_withIdOfSavedToy {
+            private final CatToy savedCatToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+
+            @BeforeEach
+            void prepare() {
+                repository.save(savedCatToy);
+            }
+
+            @Test
+            @DisplayName("No content status를 반환한다")
+            void it_returnsFoundToy() throws Exception {
+                final CatToy requestToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
+                final String requestContent = writeValueAsString(requestToy);
+
+                mockMvc.perform(delete("/products/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(requestContent))
+                        .andExpect(status().isNoContent());
             }
         }
     }

@@ -24,6 +24,12 @@ public interface CatToyRepository {
     Optional<CatToy> findById(Long catToyId);
 
     /**
+     * 요청한 Id의 장난감을 삭제합니다.
+     * @param toyId 장난감 식별자
+     */
+    void deleteById(Long toyId);
+
+    /**
      * 모든 장난감 정보를 삭제합니다.
      */
     void deleteAll();

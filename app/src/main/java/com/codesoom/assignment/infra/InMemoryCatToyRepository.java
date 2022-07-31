@@ -28,6 +28,13 @@ public class InMemoryCatToyRepository implements CatToyRepository {
     }
 
     @Override
+    public void deleteById(Long toyId) {
+        catToys.removeIf(catToy -> {
+            return catToy.getId().equals(toyId);
+        });
+    }
+
+    @Override
     public void deleteAll() {
         catToys.clear();
     }

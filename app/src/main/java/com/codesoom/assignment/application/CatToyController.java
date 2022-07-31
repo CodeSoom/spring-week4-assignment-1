@@ -6,6 +6,7 @@ import com.codesoom.assignment.service.CatToyFindService;
 import com.codesoom.assignment.service.CatToyEditService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,5 +50,11 @@ public class CatToyController {
     @RequestMapping(method = {RequestMethod.PATCH, RequestMethod.PUT}, path = "{toyId}")
     public CatToy update(@PathVariable Long toyId, @RequestBody CatToy newToy) {
         return editService.update(toyId, newToy);
+    }
+
+    @DeleteMapping("{toyId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long toyId) {
+        editService.deleteById(toyId);
     }
 }

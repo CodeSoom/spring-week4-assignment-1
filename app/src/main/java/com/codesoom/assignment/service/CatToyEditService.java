@@ -1,5 +1,6 @@
 package com.codesoom.assignment.service;
 
+import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,13 @@ public class CatToyEditService {
 
     public CatToy update(Long toyId, CatToy newToy) {
         return repository.update(toyId, newToy);
+    }
+
+    public void deleteById(Long toyId) {
+        if (repository.findById(toyId).isEmpty()) {
+            throw new ToyNotFoundException(toyId);
+        }
+
+        repository.deleteById(toyId);
     }
 }
