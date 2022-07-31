@@ -1,10 +1,10 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.infra.InMemoryCatToyRepository;
-import com.codesoom.assignment.service.CatToyService;
+import com.codesoom.assignment.service.CatToyFindService;
+import com.codesoom.assignment.service.CatToyEditService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,8 +41,9 @@ public class CatToyControllerWebTest {
     @BeforeEach
     void setup() {
         repository = new InMemoryCatToyRepository();
-        final CatToyService service = new CatToyService(repository);
-        final CatToyController controller = new CatToyController(service);
+        final CatToyFindService findService = new CatToyFindService(repository);
+        final CatToyEditService service = new CatToyEditService(repository);
+        final CatToyController controller = new CatToyController(findService, service);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .setControllerAdvice(new CatToyErrorAdvice())

@@ -4,23 +4,12 @@ import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class CatToyService {
+public class CatToyEditService {
     private final CatToyRepository repository;
 
-    public CatToyService(CatToyRepository repository) {
+    public CatToyEditService(CatToyRepository repository) {
         this.repository = repository;
-    }
-
-    public List<CatToy> getList() {
-        return repository.findAll();
-    }
-
-    public Optional<CatToy> findById(Long catToyId) {
-        return repository.findById(catToyId);
     }
 
     public CatToy save(CatToy newToy) {

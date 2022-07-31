@@ -4,7 +4,8 @@ import com.codesoom.assignment.ToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.domain.CatToyRepository;
 import com.codesoom.assignment.infra.InMemoryCatToyRepository;
-import com.codesoom.assignment.service.CatToyService;
+import com.codesoom.assignment.service.CatToyFindService;
+import com.codesoom.assignment.service.CatToyEditService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,8 +31,9 @@ public class CatToyControllerTest {
     @BeforeEach
     void setup() {
         repository = new InMemoryCatToyRepository();
-        CatToyService service = new CatToyService(repository);
-        controller = new CatToyController(service);
+        CatToyFindService findService = new CatToyFindService(repository);
+        CatToyEditService service = new CatToyEditService(repository);
+        controller = new CatToyController(findService, service);
     }
 
     @Nested
