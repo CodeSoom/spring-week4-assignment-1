@@ -69,7 +69,7 @@ public class CatToyControllerTest {
                 .content(objectMapper.writeValueAsString(input)));
     }
 
-    private Map<String, Object> createAndConvertToMap(Object input) throws Exception {
+    private Map<String, Object> createToy(Object input) throws Exception {
         return objectMapper.readValue(createPerform(input)
                                         .andReturn()
                                         .getResponse()
@@ -106,7 +106,7 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감과 상태코드 200을 응답한다")
             void It_returns_catToy_and_statusOk() throws Exception {
-                Map<String, Object> createdToy = createAndConvertToMap(givenInput());
+                Map<String, Object> createdToy = createToy(givenInput());
 
                 mockMvc.perform(get("/products/" + createdToy.get("id")))
                         .andExpect(jsonPath("$.id").value(createdToy.get("id")))
@@ -172,7 +172,7 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감을 제거하고 상태코드 204를 응답한다.")
             void It_returns_NoContent() throws Exception {
-                Map<String, Object> toy = createAndConvertToMap(givenInput());
+                Map<String, Object> toy = createToy(givenInput());
 
                 mockMvc.perform(delete("/products/" + toy.get("id")))
                         .andExpect(status().isNoContent());
@@ -200,7 +200,7 @@ public class CatToyControllerTest {
             @Test
             @DisplayName("장난감 정보를 변경 후 리턴하고 상태코드 200을 응답한다")
             void It_returns_toyAndOk() throws Exception {
-                Map<String, Object> toy = createAndConvertToMap(givenChangeInput());
+                Map<String, Object> toy = createToy(givenChangeInput());
 
                 mockMvc.perform(put("/products/" + toy.get("id"))
                                 .contentType(MediaType.APPLICATION_JSON)
