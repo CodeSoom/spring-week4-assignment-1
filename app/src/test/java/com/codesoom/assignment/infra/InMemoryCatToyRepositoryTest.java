@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -53,15 +54,17 @@ class InMemoryCatToyRepositoryTest {
         class Context_didSaveCatToy {
             final int NUMBER_OF_TOY_LIST = 3;
 
+            final List<CatToy> contextToys = IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
+                    .mapToObj(value -> {
+                        return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
+                    })
+                    .collect(Collectors.toList());
+
             @BeforeEach
             void prepare() {
-                IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
-                        .mapToObj(value -> {
-                            return new CatToy(FIXTURE_NAME + value, FIXTURE_MAKER + value, FIXTURE_PRICE + value, FIXTURE_IMAGE_URL + value);
-                        })
-                        .forEach(catToy -> {
-                            repository.save(catToy);
-                        });
+                contextToys.forEach(catToy -> {
+                    repository.save(catToy);
+                });
             }
 
             @Test
@@ -72,11 +75,10 @@ class InMemoryCatToyRepositoryTest {
 
                 IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
                         .forEach(index -> {
-                            CatToy catToy = result.get(index - 1);
-                            assertThat(catToy.getName()).isEqualTo(FIXTURE_NAME + index);
-                            assertThat(catToy.getMaker()).isEqualTo(FIXTURE_MAKER + index);
-                            assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
-                            assertThat(catToy.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + index);
+                            CatToy expectedElement = contextToys.get(index - 1);
+                            CatToy actualElement = result.get(index - 1);
+
+                            assertThat(actualElement).isEqualTo(expectedElement);
                         });
             }
         }
@@ -119,11 +121,7 @@ class InMemoryCatToyRepositoryTest {
                 Optional<CatToy> result = repository.findById(toyId);
 
                 assertThat(result).isPresent();
-                assertThat(result.get().getId()).isEqualTo(toyId);
-                assertThat(result.get().getName()).isEqualTo(FIXTURE_NAME);
-                assertThat(result.get().getMaker()).isEqualTo(FIXTURE_MAKER);
-                assertThat(result.get().getPrice()).isEqualTo(FIXTURE_PRICE);
-                assertThat(result.get().getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
+                assertThat(savedCatToy).isEqualTo(result.get());
             }
         }
     }
@@ -134,18 +132,14 @@ class InMemoryCatToyRepositoryTest {
         @Nested
         @DisplayName("고양이 장난감 정보를 전달했을 때")
         class Context_withCatToy {
-            CatToy catToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
+            CatToy contextToy = new CatToy(FIXTURE_NAME, FIXTURE_MAKER, FIXTURE_PRICE, FIXTURE_IMAGE_URL);
 
             @Test
             @DisplayName("저장에 성공한 장난감을 반환한다")
             void it_returnsSavedToy() {
-                CatToy result = repository.save(catToy);
+                CatToy result = repository.save(contextToy);
 
-                assertThat(result.getId()).isEqualTo(1L);
-                assertThat(result.getName()).isEqualTo(FIXTURE_NAME);
-                assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER);
-                assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE);
-                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL);
+                assertThat(result).isEqualTo(contextToy);
             }
         }
 
@@ -170,12 +164,10 @@ class InMemoryCatToyRepositoryTest {
 
                 IntStream.rangeClosed(1, NUMBER_OF_TOY_LIST)
                                 .forEach(index -> {
-                                    CatToy catToy = result.get(index - 1);
-                                    assertThat(catToy.getId()).isEqualTo(index);
-                                    assertThat(catToy.getName()).isEqualTo(FIXTURE_NAME + index);
-                                    assertThat(catToy.getMaker()).isEqualTo(FIXTURE_MAKER + index);
-                                    assertThat(catToy.getPrice()).isEqualTo(FIXTURE_PRICE + index);
-                                    assertThat(catToy.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + index);
+                                    CatToy expectedElement = requestToys.get(index - 1);
+                                    CatToy resultElement = result.get(index - 1);
+
+                                    assertThat(resultElement).isEqualTo(expectedElement);
                                 });
             }
         }
@@ -218,12 +210,9 @@ class InMemoryCatToyRepositoryTest {
 
                 CatToy newToy = new CatToy(FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
                 CatToy result = repository.update(toyId, newToy);
+                CatToy expected = new CatToy(toyId, FIXTURE_NAME + 1, FIXTURE_MAKER + 1, FIXTURE_PRICE + 1, FIXTURE_IMAGE_URL + 1);
 
-                assertThat(result.getId()).isEqualTo(toyId);
-                assertThat(result.getName()).isEqualTo(FIXTURE_NAME + 1);
-                assertThat(result.getMaker()).isEqualTo(FIXTURE_MAKER + 1);
-                assertThat(result.getPrice()).isEqualTo(FIXTURE_PRICE + 1);
-                assertThat(result.getImageURL()).isEqualTo(FIXTURE_IMAGE_URL + 1);
+                assertThat(result).isEqualTo(expected);
             }
         }
     }

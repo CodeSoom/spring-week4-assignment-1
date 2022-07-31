@@ -7,6 +7,7 @@ import com.google.common.annotations.VisibleForTesting;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Objects;
 
 /**
  * 고양이 장난감 정보를 담는 역할을 합니다.
@@ -94,5 +95,22 @@ public class CatToy {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CatToy catToy = (CatToy) o;
+        return id.equals(catToy.id)
+                && name.equals(catToy.name)
+                && price == catToy.price
+                && maker.equals(catToy.maker)
+                && Objects.equals(imageURL, catToy.imageURL);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, maker, price, imageURL);
     }
 }
