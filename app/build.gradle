@@ -59,7 +59,9 @@ dependencies {
 
     // Spring Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.h2database:h2'
+    // h2 버전에 따라 id를 자동 인식하지 못하는 문제가 있었음
+    // https://stackoverflow.com/questions/39094649/h2-database-null-not-allowed-for-column-id-when-inserting-record-using-jdbcte
+    runtimeOnly 'com.h2database:h2:1.4.200'
 
     // Spring Developer Tools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
