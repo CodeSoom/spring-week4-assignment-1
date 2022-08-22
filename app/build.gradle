@@ -88,6 +88,11 @@ jacoco {
 
 jacocoTestReport {
     dependsOn test
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: '**/com/codesoom/assignment/domain/CatToy.class')
+        }))
+    }
 }
 
 jacocoTestCoverageVerification {
