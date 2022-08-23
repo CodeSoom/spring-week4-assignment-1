@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.exception.ResourceNotFoundException;
 import com.codesoom.assignment.service.ProductService;
 import com.codesoom.assignment.domain.Product;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
-    private ProductService service;
+    private final ProductService service;
 
     public ProductController(ProductService service) {
         this.service = service;

@@ -24,8 +24,8 @@ public class ProductService{
     }
 
     public Product findById(Long id){
-        Optional<Product> product = repository.findById(id);
-        return product.orElseThrow(() -> new ResourceNotFoundException("상품이 존재하지 않습니다. id : " + id));
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("상품이 존재하지 않습니다. id : " + id));
     }
 
     public Product save(Product product){
