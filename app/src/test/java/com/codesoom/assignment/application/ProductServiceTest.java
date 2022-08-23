@@ -4,11 +4,14 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.repository.ProductJPARepository;
 import com.codesoom.assignment.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,46 +25,73 @@ class ProductServiceTest {
     private ProductJPARepository repository;
     private ProductService service;
 
-    @BeforeEach
-    void setUp(){
+    private final Long SIZE = 3L;
+    private final String TITLE = "proudct";
+    private final String MAKER = "maker";
+
+    public ProductServiceTest(){
         repository = mock(ProductJPARepository.class);
         service = new ProductService(repository);
     }
 
-    @Test
-    void getProducts(){
-        List<Product> products = new ArrayList<>();
-        Product product = new Product(1L , "첫번째 고양이" , "코드숨" , 10000 , null);
-        products.add(product);
-
-        given(repository.findAll()).willReturn(products);
-
-        List<Product> mockProducts = service.findAll();
-        assertThat(mockProducts).hasSize(1);
-        assertThat(mockProducts.get(0)).isEqualTo(product);
-
-        verify(repository).findAll();
+    Product addProduct(long number){
+        Product product = new Product(number , TITLE + number , MAKER + number , (int) number , null);
+        return product;
     }
 
-    @Test
-    void createProduct(){
-        Product product = new Product(1L , "첫번째 고양이" , "코드숨" , 10000 , null);
-        given(repository.save(product)).will(invocation -> {
-            return invocation.getArgument(0);
-        });
-
-        assertThat(service.save(product)).isEqualTo(product);
-
-        verify(repository).save(any(Product.class));
+    List<Product> addProducts(long size){
+        List<Product> prodcucts = new ArrayList<>();
+        for(long l = 1 ; l <= size ; l++){
+            prodcucts.add(addProduct(l));
+        }
+        return prodcucts;
     }
 
-    @Test
-    void deleteProduct(){
-//        given(repository.deleteById(100L)).willThrow(NullPointerException.class);
+    @Nested
+    @DisplayName("findAll 메소드는")
+    class Describe_FindAll{
 
-        assertThatThrownBy(() -> service.deleteById(100L))
-                .isInstanceOf(NullPointerException.class);
+        @Nested
+        @DisplayName("상품들이 있다면")
+        class Context_ExistedProducts{
 
-        verify(repository).deleteById(100L);
+            private List<Product> products;
+
+            @BeforeEach
+            void setUp(){
+                products = addProducts(SIZE);
+                given(repository.findAll()).willReturn(products);
+            }
+
+            @Test
+            @DisplayName("상품들을 List로 반환한다")
+            void It_ReturnJSON(){
+                assertThat(service.findAll()).hasSize(products.size());
+
+                verify(repository).findAll();
+            }
+        }
+
+        @Nested
+        @DisplayName("상품들이 없다면")
+        class Context_NotExistedProduct{
+
+            @BeforeEach
+            void setUp() {
+                given(repository.findAll()).willReturn(new ArrayList<>());
+            }
+
+            @Test
+            @DisplayName("빈 List를 반환한다")
+            void It_ReturnEmptyList(){
+                assertThat(service.findAll()).isEqualTo(new ArrayList<>());
+
+                verify(repository).findAll();
+            }
+        }
     }
+
+
+
+
 }
