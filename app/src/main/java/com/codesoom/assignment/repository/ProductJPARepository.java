@@ -1,4 +1,4 @@
-package com.codesoom.assignment.infra;
+package com.codesoom.assignment.repository;
 
 import com.codesoom.assignment.domain.Product;
 import org.springframework.data.repository.CrudRepository;

@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.service.ProductService;
 import com.codesoom.assignment.domain.Product;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

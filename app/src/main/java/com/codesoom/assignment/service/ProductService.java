@@ -1,7 +1,7 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.infra.ProductJPARepository;
+import com.codesoom.assignment.repository.ProductJPARepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
