@@ -31,8 +31,7 @@ public class ProductController {
 
     @GetMapping("{id}")
     public Product findProduct(@PathVariable Long id){
-        Optional<Product> find = service.findById(id);
-        return null;
+        return service.findById(id);
     }
 
     @PostMapping

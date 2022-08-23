@@ -1,6 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.exception.ResourceNotFoundException;
 import com.codesoom.assignment.repository.ProductJPARepository;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,9 @@ public class ProductService{
         return (List<Product>) repository.findAll();
     }
 
-    public Optional<Product> findById(Long id){
-        // TODO
-        // Product 못 찾았을 때 커스텀 예외 추가
-        return repository.findById(id);
+    public Product findById(Long id){
+        Optional<Product> product = repository.findById(id);
+        return product.orElseThrow(() -> new ResourceNotFoundException("상품이 존재하지 않습니다. id : " + id));
     }
 
     public Product save(Product product){
