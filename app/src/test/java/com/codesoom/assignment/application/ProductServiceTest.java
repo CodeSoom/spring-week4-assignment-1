@@ -37,8 +37,7 @@ class ProductServiceTest {
     }
 
     Product getNewProduct(long number){
-        Product product = new Product(number , TITLE + number , MAKER + number , (int) number , null);
-        return product;
+        return new Product(number , TITLE + number , MAKER + number , (int) number , null);
     }
 
     List<Product> getNewProducts(long size){
