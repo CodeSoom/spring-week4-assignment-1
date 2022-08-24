@@ -36,14 +36,14 @@ class ProductServiceTest {
         service = new ProductService(repository);
     }
 
-    Product getNewProduct(long number){
+    Product newProduct(long number){
         return new Product(number , TITLE + number , MAKER + number , (int) number , null);
     }
 
-    List<Product> getNewProducts(long size){
+    List<Product> newProducts(long size){
         List<Product> prodcucts = new ArrayList<>();
         for(long l = 1 ; l <= size ; l++){
-            prodcucts.add(getNewProduct(l));
+            prodcucts.add(newProduct(l));
         }
         return prodcucts;
     }
@@ -60,7 +60,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp(){
-                products = getNewProducts(SIZE);
+                products = newProducts(SIZE);
                 given(repository.findAll()).willReturn(products);
             }
 
@@ -132,7 +132,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                product = getNewProduct(existedResourceId);
+                product = newProduct(existedResourceId);
                 given(repository.findById(existedResourceId)).willReturn(Optional.ofNullable(product));
             }
 
