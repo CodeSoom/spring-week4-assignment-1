@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
+
 
 @ToString
 @Getter
@@ -19,7 +21,7 @@ public class ProductDTO {
     @JsonCreator
     public ProductDTO(@JsonProperty("name") String name,
                       @JsonProperty("maker") String maker,
-                      @JsonProperty("price")int price,
+                      @JsonProperty("price") int price,
                       @JsonProperty("fileName") String fileName) {
         this.name = name;
         this.maker = maker;
