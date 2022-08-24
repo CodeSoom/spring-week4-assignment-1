@@ -66,7 +66,7 @@ class ProductServiceTest {
 
             @Test
             @DisplayName("상품들을 List로 반환한다")
-            void It_ReturnJSON(){
+            void It_ReturnList(){
                 assertThat(service.findAll()).hasSize(products.size());
 
                 verify(repository).findAll();
@@ -144,5 +144,28 @@ class ProductServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("save 메소드는")
+    class Describe_Save{
 
+        @Nested
+        @DisplayName("엔티티가 null이 아니라면")
+        class Context_NotNullEntity{
+
+            private final Product product = newProduct(1);
+
+            @BeforeEach
+            void setUp() {
+                given(repository.save(product)).willReturn(product);
+            }
+
+            @Test
+            @DisplayName("저장한다")
+            void It_SaveResource(){
+                assertThat(service.save(product)).isEqualTo(product);
+
+                verify(repository).save(product);
+            }
+        }
+    }
 }
