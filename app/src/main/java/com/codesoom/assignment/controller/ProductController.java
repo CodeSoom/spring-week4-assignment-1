@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.dto.ProductDTO;
+import com.codesoom.assignment.service.ProductSearchService;
 import com.codesoom.assignment.service.ProductService;
 import com.codesoom.assignment.domain.Product;
 import lombok.extern.slf4j.Slf4j;
@@ -21,19 +22,21 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService service;
+    private final ProductSearchService searchService;
 
-    public ProductController(ProductService service) {
+    public ProductController(ProductService service , ProductSearchService searchService) {
         this.service = service;
+        this.searchService = searchService;
     }
 
     @GetMapping
     public List<Product> findAllProduct(){
-        return service.findAll();
+        return searchService.findAll();
     }
 
     @GetMapping("{id}")
     public Product findProduct(@PathVariable Long id){
-        return service.findById(id);
+        return searchService.findById(id);
     }
 
     @PostMapping
