@@ -4,12 +4,12 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDTO;
 import com.codesoom.assignment.exception.BadRequestException;
 import com.codesoom.assignment.exception.ResourceNotFoundException;
+import com.codesoom.assignment.service.ProductSearchService;
 import com.codesoom.assignment.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,7 @@ class ProductControllerTest {
 
     private ProductController controller;
     private ProductService service;
+    private ProductSearchService searchService;
 
     private final Long SIZE = 3L;
     private final String TITLE = "proudct";
@@ -33,7 +34,8 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
         service = mock(ProductService.class);
-        controller = new ProductController(service);
+        searchService = mock(ProductSearchService.class);
+        controller = new ProductController(service, searchService);
     }
 
     ProductDTO newDTO(long number){
@@ -65,7 +67,7 @@ class ProductControllerTest {
             @BeforeEach
             void setUp(){
                 products = newProducts(SIZE);
-                given(service.findAll()).willReturn(products);
+                given(searchService.findAll()).willReturn(products);
             }
 
             @Test
@@ -73,7 +75,7 @@ class ProductControllerTest {
             void It_ReturnList(){
                 assertThat(controller.findAllProduct()).hasSize(Math.toIntExact(SIZE));
 
-                verify(service).findAll();
+                verify(searchService).findAll();
             }
         }
 
@@ -85,7 +87,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(service.findAll()).willReturn(EmptyList);
+                given(searchService.findAll()).willReturn(EmptyList);
             }
 
             @Test
@@ -93,7 +95,7 @@ class ProductControllerTest {
             void It_ReturnJSON() {
                 assertThat(controller.findAllProduct()).isEqualTo(EmptyList);
 
-                verify(service).findAll();
+                verify(searchService).findAll();
             }
         }
     }
@@ -110,8 +112,8 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(service.findById(notExistedResourceId)).willThrow(ResourceNotFoundException.class);
-                given(service.findById(null)).willThrow(ResourceNotFoundException.class);
+                given(searchService.findById(notExistedResourceId)).willThrow(ResourceNotFoundException.class);
+                given(searchService.findById(null)).willThrow(ResourceNotFoundException.class);
             }
 
             @Test
@@ -120,12 +122,12 @@ class ProductControllerTest {
                 assertThatThrownBy(() -> controller.findProduct(null))
                         .isInstanceOf(ResourceNotFoundException.class);
 
-                verify(service).findById(null);
+                verify(searchService).findById(null);
 
                 assertThatThrownBy(() -> controller.findProduct(notExistedResourceId))
                         .isInstanceOf(ResourceNotFoundException.class);
 
-                verify(service).findById(notExistedResourceId);
+                verify(searchService).findById(notExistedResourceId);
             }
         }
 
@@ -139,15 +141,15 @@ class ProductControllerTest {
             @BeforeEach
             void setUp() {
                 product = newProduct(existedResourceId);
-                given(service.findById(existedResourceId)).willReturn(product);
+                given(searchService.findById(existedResourceId)).willReturn(product);
             }
 
             @Test
             @DisplayName("자원을 반환한다")
             void It_ReturnResource(){
-                assertThat(service.findById(existedResourceId)).isEqualTo(product);
+                assertThat(searchService.findById(existedResourceId)).isEqualTo(product);
 
-                verify(service).findById(existedResourceId);
+                verify(searchService).findById(existedResourceId);
             }
         }
     }
