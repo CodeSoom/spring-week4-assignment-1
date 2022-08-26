@@ -62,10 +62,15 @@ public class ProductService{
      */
     @Transactional
     public Product update(Long id , Product product){
-        // TODO
-        // 수정 정보 적용
-        Optional<Product> findProduct = repository.findById(id);
-        return product;
+        Optional<Product> optionalProduct = repository.findById(id);
+        optionalProduct
+                .orElseThrow(() -> new ResourceNotFoundException("상품이 존재하지 않습니다. id : " + id));
+        Product findProduct = optionalProduct.get();
+        findProduct.setName(product.getName());
+        findProduct.setMaker(product.getMaker());
+        findProduct.setPrice(product.getPrice());
+        findProduct.setFileName(product.getFileName());
+        return findProduct;
     }
 
     /**
