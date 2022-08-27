@@ -30,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> findAllProduct(){
+    public Iterable<Product> findAllProduct(){
         return searchService.findAll();
     }
 
