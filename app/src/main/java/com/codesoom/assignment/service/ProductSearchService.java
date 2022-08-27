@@ -17,7 +17,7 @@ public class ProductSearchService {
     /**
      * 모든 엔티티를 반환합니다
      *
-     * @return List<엔티티>
+     * @return Iterable<엔티티>
      */
     public Iterable<Product> findAll(){
         return repository.findAll();
