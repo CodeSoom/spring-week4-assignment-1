@@ -213,16 +213,22 @@ public class ProductServiceDITest {
         @DisplayName("{id}에 해당하는 자원이 있다면")
         class Context_ExistedId{
 
+            private final int id = 1;
+            private Product product;
+
             @BeforeEach
             void setUp() {
                 repositoryClear();
-
+                product = newProduct(id);
+                repository.save(product);
             }
 
             @Test
             @DisplayName("삭제한다")
             void It_Delete(){
-
+                assertThat(searchService.findAll()).hasSize(1);
+                service.deleteById((long)id);
+                assertThat(searchService.findAll()).hasSize(0);
             }
         }
     }
