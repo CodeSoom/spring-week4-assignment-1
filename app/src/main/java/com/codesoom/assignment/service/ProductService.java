@@ -39,12 +39,7 @@ public class ProductService{
         Optional<Product> optionalProduct = repository.findById(id);
         optionalProduct
                 .orElseThrow(() -> new ResourceNotFoundException("상품이 존재하지 않습니다. id : " + id));
-        Product findProduct = optionalProduct.get();
-        findProduct.setName(product.getName());
-        findProduct.setMaker(product.getMaker());
-        findProduct.setPrice(product.getPrice());
-        findProduct.setFileName(product.getFileName());
-        return findProduct;
+        return optionalProduct.get().updateProduct(product);
     }
 
     /**
