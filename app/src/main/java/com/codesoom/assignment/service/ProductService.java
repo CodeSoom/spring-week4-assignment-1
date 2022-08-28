@@ -36,10 +36,10 @@ public class ProductService{
      * @return 수정된 product
      */
     public Product update(Long id , Product product){
-        Optional<Product> optionalProduct = repository.findById(id);
-        optionalProduct
+        return repository
+                .findById(id);
+                .map(p -> p.updateProduct(product))
                 .orElseThrow(() -> new ResourceNotFoundException("상품이 존재하지 않습니다. id : " + id));
-        return optionalProduct.map(p -> p.updateProduct(product)).get();
     }
 
     /**
