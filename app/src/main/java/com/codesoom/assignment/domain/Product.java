@@ -1,4 +1,4 @@
-package com.codesoom.assignment.repository;
+package com.codesoom.assignment.domain;
 
 import lombok.Builder;
 import lombok.Getter;
