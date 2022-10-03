@@ -52,4 +52,13 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
     }
+
+    public Product modifyProduct(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
+
+        return this;
+    }
 }
