@@ -1,13 +1,13 @@
 package com.codesoom.assignment.controller;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
-import org.springframework.stereotype.Service;
 
 public class ProductDto {
 
     @Getter
-    @Service
+    @Setter
     @ToString
     public static class RequestParam {
         private Long id;
