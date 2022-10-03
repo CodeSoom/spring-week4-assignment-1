@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.controller.ProductDto;
 import com.codesoom.assignment.controller.ProductDtoMapper;
 import com.codesoom.assignment.domain.Product;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -75,6 +77,24 @@ class ProductServiceTest {
                 assertThat(actualProducts).hasSize(givenProducts.size());
             }
         }
+
+        @Nested
+        @DisplayName("데이터가 존재하지 않는다면")
+        class Context_with_empty_data {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findAll()).willReturn(new ArrayList<>());
+            }
+
+            @Test
+            @DisplayName("빈 데이터를 리턴한다")
+            void it_returns_empty_data() {
+                List<ProductInfo> actualProducts = productService.getProducts();
+
+                assertThat(actualProducts).hasSize(0);
+            }
+        }
+
     }
 
     @Nested
@@ -111,6 +131,22 @@ class ProductServiceTest {
                 assertThat(actualProduct.getPrice()).isEqualTo(givenProduct.getPrice());
             }
         }
+
+        @Nested
+        @DisplayName("유효하지않은 데이터가 주어지면")
+        class Context_with_invalid_id {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(any(Long.class))).willThrow(ProductNotFoundException.class);
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> productService.getProduct(100L)).isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+
     }
 
     @Nested
@@ -196,6 +232,31 @@ class ProductServiceTest {
                 assertThat(actualProduct.getPrice()).isEqualTo(12000L);
             }
         }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(any(Long.class))).willThrow(ProductNotFoundException.class);
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                ProductDto.RequestParam request = new ProductDto.RequestParam();
+                request.setId(100L);
+                request.setName("고양이 장난감100");
+                request.setMaker("삼성");
+                request.setPrice(10000L);
+                request.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
+
+                ProductDtoMapper mapper = new ProductDtoMapper();
+                ProductCommand.Register command = mapper.of(request);
+
+                assertThatThrownBy(() -> productService.updateProduct(command)).isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
     @Nested
@@ -226,7 +287,20 @@ class ProductServiceTest {
                 verify(productRepository).delete(givenProduct);
             }
         }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(any(Long.class))).willThrow(ProductNotFoundException.class);
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> productService.deleteProduct(100L)).isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
-
-
 }
