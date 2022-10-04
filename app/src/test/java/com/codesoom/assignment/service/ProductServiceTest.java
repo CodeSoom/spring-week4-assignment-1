@@ -1,6 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductJpaRepository;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,9 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductJpaRepository productJpaRepository;
 
 
     @DisplayName("findAll method")
@@ -66,8 +70,13 @@ class ProductServiceTest {
         @Nested
         class Context_one_product {
             private Product product = Product.builder().name("name").maker("maker").imageUrl("url").price(1000L).build();
-            private Product savedProduct = productService.save(product);
+            private Product savedProduct;
 
+            @BeforeEach
+            void before() {
+               productService.deleteAll();
+               savedProduct = productService.save(product);
+            }
 
             @DisplayName("returns a product")
             @Test
@@ -83,4 +92,6 @@ class ProductServiceTest {
             }
         }
     }
+
+
 }

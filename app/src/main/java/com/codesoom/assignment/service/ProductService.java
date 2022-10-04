@@ -19,7 +19,11 @@ public class ProductService {
     }
 
     public Product save(Product product) {
-        return null;
+        return productJpaRepository.save(product);
+    }
+
+    public void deleteAll() {
+        productJpaRepository.deleteAll();
     }
 
 }
