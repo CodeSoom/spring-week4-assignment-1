@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class ProductServiceTest {
@@ -59,4 +61,37 @@ class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("findById 메서드는")
+    class Describe_findById {
+        @Nested
+        @DisplayName("저장되어 있는 product의 id가 주어지면")
+        class Context_with_existing_product_id {
+            private Product testProduct;
+
+            @BeforeEach
+            void setUp() {
+                testProduct = productService.save(new Product("장난감1","M",1000,"http://image.com"));
+            }
+
+            @AfterEach
+            void after() {
+                productService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("요청에 맞는 product 객체를 리턴한다")
+            void it_returns_product() {
+                Product product = productService.findById(testProduct.getId());
+
+                assertThat(product.getId()).isEqualTo(testProduct.getId());
+                assertThat(product.getName()).isEqualTo(testProduct.getName());
+                assertThat(product.getMaker()).isEqualTo(testProduct.getMaker());
+                assertThat(product.getPrice()).isEqualTo(testProduct.getPrice());
+                assertThat(product.getImageUrl()).isEqualTo(testProduct.getImageUrl());
+            }
+        }
+    }
+
 }

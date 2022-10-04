@@ -22,6 +22,18 @@ public class Product {
     public Product() {
     }
 
+    public Product(Long id, String name, String maker, int price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public Product(String name, String maker, int price, String imageUrl) {
+        this(null, name, maker, price, imageUrl);
+    }
+
     public Long getId() {
         return id;
     }
@@ -42,11 +54,5 @@ public class Product {
         return imageUrl;
     }
 
-    public Product(Long id, String name, String maker, int price, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
+
 }
