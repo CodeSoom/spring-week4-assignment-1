@@ -6,6 +6,7 @@ import lombok.ToString;
 @lombok.Generated
 public class ProductCommand {
 
+    @lombok.Generated
     @Getter
     @Builder
     @ToString
