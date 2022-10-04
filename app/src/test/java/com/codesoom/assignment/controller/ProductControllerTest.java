@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.common.exception.InvalidParamException;
+import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.controller.ProductDto.RequestParam;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand.Register;
@@ -25,9 +26,12 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -64,21 +68,25 @@ class ProductControllerTest {
     @Nested
     @DisplayName("list[/products::GET] 메소드는")
     class Describe_list {
+        ResultActions subject() throws Exception {
+            return mockMvc.perform(get("/products"));
+        }
+
         @Nested
         @DisplayName("상품이 존재하면")
         class Context_with_products {
-            private List<ProductInfo> givenProducts = new ArrayList<>();
+            private final List<ProductInfo> givenProducts = new ArrayList<>();
 
             @BeforeEach
             void prepare() {
-                Product product1 = Product.builder()
+                final Product product1 = Product.builder()
                         .id(1L)
                         .name("고양이 장난감1")
                         .maker("삼성")
                         .price(10000L)
                         .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
                         .build();
-                Product product2 = Product.builder()
+                final Product product2 = Product.builder()
                         .id(2L)
                         .name("고양이 장난감2")
                         .maker("애플")
@@ -95,12 +103,31 @@ class ProductControllerTest {
             @Test
             @DisplayName("OK(200)와 모든 상품을 리턴한다")
             void it_returns_200_and_all_products() throws Exception {
-                ResultActions resultActions = mockMvc.perform(get("/products"));
-                ;
+                final ResultActions resultActions = subject();
 
                 resultActions.andExpect(status().isOk())
                         .andExpect(jsonPath("$[0].name").value(equalTo(givenProducts.get(0).getName())))
                         .andExpect(jsonPath("$[1].name").value(equalTo(givenProducts.get(1).getName())))
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayName("상품이 존재하지 않으면")
+        class Context_with_empty_db {
+            @BeforeEach
+            void prepare() {
+                given(productService.getProducts()).willReturn(new ArrayList<>());
+            }
+
+            @Test
+            @DisplayName("OK(200)와 빈 데이터를 리턴한다")
+            void it_return_200_and_empty_array() throws Exception {
+                final ResultActions resultActions = subject();
+
+                resultActions.andExpect(status().isOk())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(content().string("[]"))
                         .andDo(print());
             }
         }
@@ -109,6 +136,10 @@ class ProductControllerTest {
     @Nested
     @DisplayName("detail[/products/id::GET] 메소드는")
     class Describe_detail {
+        ResultActions subject(Long id) throws Exception {
+            return mockMvc.perform(get("/products/" + id));
+        }
+
         @Nested
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
@@ -117,7 +148,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void prepare() {
-                Product product = Product.builder()
+                final Product product = Product.builder()
                         .id(PRODUCT_ID)
                         .name("고양이 장난감1")
                         .maker("삼성")
@@ -127,13 +158,13 @@ class ProductControllerTest {
 
                 givenProduct = new ProductInfo(product);
 
-                given(productService.getProduct(any(Long.class))).willReturn(givenProduct);
+                given(productService.getProduct(PRODUCT_ID)).willReturn(givenProduct);
             }
 
             @Test
             @DisplayName("OK(200)와 요청한 상품을 리턴한다")
             void it_returns_200_and_searched_product() throws Exception {
-                ResultActions resultActions = mockMvc.perform(get("/products/" + PRODUCT_ID));
+                final ResultActions resultActions = subject(PRODUCT_ID);
 
                 resultActions.andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -144,6 +175,30 @@ class ProductControllerTest {
 
             }
         }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id {
+            private final Long PRODUCT_ID = 100L;
+
+            @BeforeEach
+            void prepare() {
+                given(productService.getProduct(PRODUCT_ID)).willThrow(new ProductNotFoundException(PRODUCT_ID));
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404)와 예외 메시지를 리턴한다")
+            void it_returns_404_and_message() throws Exception {
+                final ResultActions resultActions = subject(PRODUCT_ID);
+
+                resultActions.andExpect(status().isNotFound())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("message", containsString("요청하신 상품이 없습니다.")))
+                        .andDo(print());
+
+            }
+        }
+
     }
 
     @Nested
@@ -162,7 +217,7 @@ class ProductControllerTest {
                 givenRequest.setPrice(10000L);
                 givenRequest.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
 
-                Product product = Product.builder()
+                final Product product = Product.builder()
                         .id(1L)
                         .name("고양이 장난감1")
                         .maker("삼성")
@@ -170,7 +225,7 @@ class ProductControllerTest {
                         .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
                         .build();
 
-                ProductInfo givenProduct = new ProductInfo(product);
+                final ProductInfo givenProduct = new ProductInfo(product);
 
                 given(productService.createProduct(any(Register.class))).willReturn(givenProduct);
             }
@@ -178,7 +233,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("CREATED(201)와 등록된 상품을 리턴한다")
             void it_returns_201_and_registered_product() throws Exception {
-                ResultActions resultActions = mockMvc.perform(post("/products")
+                final ResultActions resultActions = mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(givenRequest)));
 
@@ -188,28 +243,63 @@ class ProductControllerTest {
                         .andDo(print());
             }
         }
+
+        @Nested
+        @DisplayName("입력필드 중 null이 있으면")
+        class Context_with_null {
+            private RequestParam givenRequest;
+
+            @BeforeEach
+            void prepare() {
+                givenRequest = new RequestParam();
+                givenRequest.setName(null);
+                givenRequest.setMaker(null);
+                givenRequest.setPrice(null);
+                givenRequest.setImageUrl(null);
+
+                given(productService.createProduct(any(Register.class))).willThrow(new InvalidParamException());
+            }
+
+            @Test
+            @DisplayName("BAD_REQUEST(400)을 리턴한다")
+            void it_returns_201_and_registered_product() throws Exception {
+                final ResultActions resultActions = mockMvc.perform(post("/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(givenRequest)));
+
+                resultActions.andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
     }
 
     @Nested
     @DisplayName("updateProduct[/products/id::PATCH] 메소드는")
     class Describe_updateProduct {
+        ResultActions subject(Long id, RequestParam request) throws Exception {
+            return mockMvc.perform(patch("/products/" + id)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)));
+        }
+
         @Nested
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
+            private final Long PRODUCT_ID = 1L;
             private RequestParam givenRequest;
             private ProductInfo modifiedProduct;
 
             @BeforeEach
             void prepare() {
                 givenRequest = new RequestParam();
-                givenRequest.setId(1L);
+                givenRequest.setId(PRODUCT_ID);
                 givenRequest.setName("고양이 장난감1");
                 givenRequest.setMaker("삼성");
                 givenRequest.setPrice(10000L);
                 givenRequest.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
 
-                Product product = Product.builder()
-                        .id(1L)
+                final Product product = Product.builder()
+                        .id(PRODUCT_ID)
                         .name("수정된 고양이 장난감1")
                         .maker("삼성")
                         .price(10000L)
@@ -224,9 +314,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("상품을 수정하고 OK(200)와 수정된 상품을 리턴한다")
             void it_returns_modified_product() throws Exception {
-                ResultActions resultActions = mockMvc.perform(patch("/products/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(givenRequest)));
+                final ResultActions resultActions = subject(PRODUCT_ID, givenRequest);
 
                 resultActions.andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -234,24 +322,88 @@ class ProductControllerTest {
                         .andDo(print());
             }
         }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id {
+            private final Long PRODUCT_ID = 100L;
+            private RequestParam givenRequest;
+
+            @BeforeEach
+            void prepare() {
+                givenRequest = new RequestParam();
+                givenRequest.setId(PRODUCT_ID);
+                givenRequest.setName("고양이 장난감1");
+                givenRequest.setMaker("삼성");
+                givenRequest.setPrice(10000L);
+                givenRequest.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
+
+                given(productService.updateProduct(any(Register.class))).willThrow(new ProductNotFoundException(PRODUCT_ID));
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404)와 예외 메시지를 리턴한다")
+            void it_returns_404_and_message() throws Exception {
+                ResultActions resultActions = subject(PRODUCT_ID, givenRequest);
+
+                resultActions.andExpect(status().isNotFound())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("message", containsString("요청하신 상품이 없습니다.")))
+                        .andDo(print());
+            }
+        }
+
     }
 
     @Nested
     @DisplayName("deleteProduct[/products/id::DELETE] 메소드는")
     class Describe_deleteProduct {
+        ResultActions subject(Long id) throws Exception {
+            return mockMvc.perform(delete("/products/" + id)
+                    .contentType(MediaType.APPLICATION_JSON));
+        }
+
         @Nested
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
+            private final Long PRODUCT_ID = 1L;
+
+            @BeforeEach
+            void prepare() {
+                doNothing().when(productService).deleteProduct(PRODUCT_ID);
+            }
+
             @Test
             @DisplayName("상품을 삭제하고 NO_CONTENT(204)를 리턴한다")
             void it_returns_204() throws Exception {
-                ResultActions resultActions = mockMvc.perform(delete("/products/1")
-                        .contentType(MediaType.APPLICATION_JSON));
+                final ResultActions resultActions = subject(PRODUCT_ID);
 
                 resultActions.andExpect(status().isNoContent())
                         .andDo(print());
             }
         }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id {
+            private final Long PRODUCT_ID = 100L;
+            @BeforeEach
+            void prepare() {
+                doThrow(new ProductNotFoundException(PRODUCT_ID)).when(productService).deleteProduct(PRODUCT_ID);
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404)와 예외 메시지를 리턴한다")
+            void it_returns_404_and_message() throws Exception {
+                final ResultActions resultActions = subject(PRODUCT_ID);
+
+                resultActions.andExpect(status().isNotFound())
+                        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("message", containsString("요청하신 상품이 없습니다.")))
+                        .andDo(print());
+            }
+        }
+
     }
 
 
