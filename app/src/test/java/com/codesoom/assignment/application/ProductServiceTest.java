@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.common.exception.InvalidParamException;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.controller.ProductDto;
 import com.codesoom.assignment.controller.ProductDtoMapper;
@@ -29,6 +30,8 @@ class ProductServiceTest {
     private ProductService productService;
 
     private ProductRepository productRepository;
+
+    private final String EXCEPTION_MESSAGE = "요청하신 상품이 없습니다.";
 
     @BeforeEach
     void setUp() {
@@ -137,7 +140,7 @@ class ProductServiceTest {
         class Context_with_invalid_id {
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(any(Long.class))).willThrow(ProductNotFoundException.class);
+                given(productRepository.findById(any(Long.class))).willThrow(new ProductNotFoundException(EXCEPTION_MESSAGE));
             }
 
             @Test
@@ -238,7 +241,7 @@ class ProductServiceTest {
         class Context_with_invalid_id {
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(any(Long.class))).willThrow(ProductNotFoundException.class);
+                given(productRepository.findById(any(Long.class))).willThrow(new ProductNotFoundException(EXCEPTION_MESSAGE));
             }
 
             @Test
@@ -293,7 +296,7 @@ class ProductServiceTest {
         class Context_with_invalid_id {
             @BeforeEach
             void prepare() {
-                given(productRepository.findById(any(Long.class))).willThrow(ProductNotFoundException.class);
+                given(productRepository.findById(any(Long.class))).willThrow(new ProductNotFoundException(EXCEPTION_MESSAGE));
             }
 
             @Test
