@@ -32,6 +32,4 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
     }
-
-
 }

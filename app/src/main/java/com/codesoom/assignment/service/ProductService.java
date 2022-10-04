@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Product
+ */
 @Service
 public class ProductService {
     private final ProductJpaRepository productJpaRepository;
@@ -18,6 +21,10 @@ public class ProductService {
         return productJpaRepository.findAll();
     }
 
+    public Product findById(Long id) {
+        return null;
+    }
+
     public Product save(Product product) {
         return productJpaRepository.save(product);
     }
@@ -25,5 +32,4 @@ public class ProductService {
     public void deleteAll() {
         productJpaRepository.deleteAll();
     }
-
 }

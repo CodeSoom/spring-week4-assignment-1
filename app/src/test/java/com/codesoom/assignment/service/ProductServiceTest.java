@@ -1,9 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.ProductJpaRepository;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,10 +26,11 @@ class ProductServiceTest {
     private ProductService productService;
 
 
+    private Product product1 = Product.builder().name("name").maker("maker").imageUrl("url").price(1000L).build();
+
     @DisplayName("findAll method")
     @Nested
     class Describe_findAll {
-
 
         @DisplayName("if nothing is added")
         @Nested
@@ -42,6 +41,7 @@ class ProductServiceTest {
                 productService.deleteAll();
 
             }
+
             @DisplayName("returns an empty list ")
             @Test
             void it_returns_empty() {
@@ -62,7 +62,7 @@ class ProductServiceTest {
             @DisplayName("returns a list of two products ")
             @Test
             void it_returns_empty() {
-                productService.save(Product.builder().name("name").maker("maker").imageUrl("url").build());
+                productService.save(product1);
                 productService.save(Product.builder().name("name2").maker("maker2").imageUrl("url2").build());
 
                 List<Product> all = productService.findAll();
@@ -82,7 +82,12 @@ class ProductServiceTest {
         @DisplayName("if one product is saved")
         @Nested
         class Context_one_product {
-            private Product product = Product.builder().name("name").maker("maker").imageUrl("url").price(1000L).build();
+            private Product product = Product.builder()
+                    .name("name")
+                    .maker("maker")
+                    .imageUrl("url")
+                    .price(1000L)
+                    .build();
             private Product savedProduct;
 
             @BeforeEach
@@ -112,5 +117,35 @@ class ProductServiceTest {
         }
     }
 
+    @DisplayName("findById Method")
+    @Nested
+    class Describe_findById {
+
+        @DisplayName("if a valid id is given,")
+        @Nested
+        class Context_one_product {
+
+            @BeforeEach
+            void before() {
+                productService.save(product1);
+            }
+
+            @AfterEach
+            void after() {
+                productService.deleteAll();
+            }
+
+            @DisplayName("returns the found task")
+            @Test
+            void it_returns_product() {
+                Product foundProduct = productService.findById(1L);
+                assertThat(foundProduct.getId()).isEqualTo(product1.getId());
+                assertThat(foundProduct.getImageUrl()).isEqualTo(product1.getImageUrl());
+                assertThat(foundProduct.getName()).isEqualTo(product1.getName());
+                assertThat(foundProduct.getMaker()).isEqualTo(product1.getMaker());
+                assertThat(foundProduct.getPrice()).isEqualTo(product1.getPrice());
+            }
+        }
+    }
 
 }
