@@ -19,6 +19,10 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * 전체 상품 목록을 리턴한다
+     * @return 전체 상품 목록
+     */
     @Override
     public List<ProductInfo> getProducts() {
         List<ProductInfo> result = new ArrayList<>();
@@ -28,17 +32,34 @@ public class ProductServiceImpl implements ProductService {
         return result;
     }
 
+    /**
+     * 상품ID에 해당하는 상품을 리턴한다.
+     * @param id 상품 ID
+     * @return 검색된 상품
+     * @throws ProductNotFoundException 상품이 없을 경우 발생하는 예외
+     */
     @Override
     public ProductInfo getProduct(Long id) {
         return new ProductInfo(productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id)));
     }
 
+    /**
+     * 새로운 상품을 추가하고 추가된 상품을 리턴한다.
+     * @param command 새로운 상품정보
+     * @return 추가된 상품
+     */
     @Override
     public ProductInfo createProduct(ProductCommand.Register command) {
         return new ProductInfo(productRepository.save(command.toEntity()));
     }
 
+    /**
+     * 상품을 수정하고 수정된 상품을 리턴한다.
+     * @param command 수정할 상품정보
+     * @return 수정된 상품
+     * @throws ProductNotFoundException 상품이 없을 경우 발생하는 예외
+     */
     @Override
     public ProductInfo updateProduct(ProductCommand.Register command) {
         Product product = command.toEntity();
@@ -48,6 +69,11 @@ public class ProductServiceImpl implements ProductService {
         return new ProductInfo(findProduct.modifyProduct(product));
     }
 
+    /**
+     * 상품ID에 해당하는 상품을 검색하고 해당 상품을 삭제한다.
+     * @param id 상품 ID
+     * @throws ProductNotFoundException 상품이 없을 경우 발생하는 예외
+     */
     @Override
     public void deleteProduct(Long id) {
         Product findProduct = productRepository.findById(id)
