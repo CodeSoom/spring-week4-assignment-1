@@ -40,11 +40,9 @@ public class Product {
             Long price,
             String imageUrl
     ) {
-//        if(id == null) throw new InvalidParamException("Product 생성자 id가 Null입니다.");
-        if(StringUtils.isEmpty(name)) throw new InvalidParamException("Product 생성자 name이 empty입니다.");
-        if(StringUtils.isEmpty(maker)) throw new InvalidParamException("Product 생성자 maker가 empty입니다.");
-        if(price == null) throw new InvalidParamException("Product 생성자 price가 Null입니다.");
-        if(StringUtils.isEmpty(imageUrl)) throw new InvalidParamException("Product 생성자 imageUrl이 empty입니다.");
+        if(StringUtils.isEmpty(name)) throw new InvalidParamException("이름이 비어있습니다.");
+        if(StringUtils.isEmpty(maker)) throw new InvalidParamException("제조사가 비어있습니다.");
+        if(price == null) throw new InvalidParamException("가격이 비어있습니다.");
 
         this.id = id;
         this.name = name;
