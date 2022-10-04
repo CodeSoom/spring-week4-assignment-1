@@ -2,7 +2,9 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductJpaRepository;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -25,17 +27,21 @@ class ProductServiceTest {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private ProductJpaRepository productJpaRepository;
-
 
     @DisplayName("findAll method")
     @Nested
     class Describe_findAll {
 
+
         @DisplayName("if nothing is added")
         @Nested
         class Context_no_product {
+
+            @BeforeEach
+            void setup() {
+                productService.deleteAll();
+
+            }
             @DisplayName("returns an empty list ")
             @Test
             void it_returns_empty() {
@@ -48,23 +54,30 @@ class ProductServiceTest {
         @Nested
         class Context_two_products {
 
-            @Before
+            @BeforeEach
             void setup() {
+                productService.deleteAll();
             }
 
-            @DisplayName("returns an empty list ")
+            @DisplayName("returns a list of two products ")
             @Test
             void it_returns_empty() {
+                productService.save(Product.builder().name("name").maker("maker").imageUrl("url").build());
+                productService.save(Product.builder().name("name2").maker("maker2").imageUrl("url2").build());
+
                 List<Product> all = productService.findAll();
-                assertThat(all.size()).isEqualTo(0);
+                assertThat(all.size()).isEqualTo(2);
             }
         }
     }
 
-
     @DisplayName("save method")
     @Nested
     class Describe_save {
+        @After
+        void after() {
+            productService.deleteAll();
+        }
 
         @DisplayName("if one product is saved")
         @Nested
@@ -74,14 +87,20 @@ class ProductServiceTest {
 
             @BeforeEach
             void before() {
-               productService.deleteAll();
-               savedProduct = productService.save(product);
+                savedProduct = productService.save(product);
+            }
+
+            @AfterEach
+            void after() {
+                productService.deleteAll();
             }
 
             @DisplayName("returns a product")
             @Test
             void it_returns_product() {
                 assertThat(savedProduct.getName()).isEqualTo(product.getName());
+                assertThat(savedProduct.getId()).isEqualTo(product.getId());
+                assertThat(savedProduct.getImageUrl()).isEqualTo(product.getImageUrl());
             }
 
             @DisplayName("returns a list of products ")
