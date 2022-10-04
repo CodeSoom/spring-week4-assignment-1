@@ -1,10 +1,8 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand.Register;
 import com.codesoom.assignment.domain.ProductInfo;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
