@@ -28,10 +28,11 @@ public interface ProductService {
 
     /**
      * 장난감을 수정하여 반환합니다.
+     * @Param id 수정할 장난감 아이디
      * @param product 수정할 장난감
      * @return 수정된 장난감
      */
-    Product update(Product product);
+    Product update(Long id, Product product);
 
     /**
      * 해당하는 아이디를 갖는 장난감을 삭제합니다.
