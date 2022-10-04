@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-@Transactional
+//@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
@@ -35,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductInfo getProduct(Long id) {
         return new ProductInfo(productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("요청하신 상품이 없습니다.")));
+                .orElseThrow(() -> new ProductNotFoundException("상품ID를 확인해주세요[" + id + "]")));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductInfo updateProduct(ProductCommand.Register command) {
         Product product = command.toEntity();
         Product findProduct = productRepository.findById(product.getId())
-                .orElseThrow(() -> new ProductNotFoundException("요청하신 상품이 없습니다."));
+                .orElseThrow(() -> new ProductNotFoundException("상품ID를 확인해주세요[" + product.getId() + "]"));
 
         return new ProductInfo(findProduct.modifyProduct(product));
     }
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         Product findProduct = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("요청하신 상품이 없습니다."));
+                .orElseThrow(() -> new ProductNotFoundException("상품ID를 확인해주세요[" + id + "]"));
 
         productRepository.delete(findProduct);
     }
