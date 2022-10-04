@@ -48,5 +48,15 @@ class ProductServiceTest {
                 assertThat(products.size()).isEqualTo(givenProducts.size());
             }
         }
+
+        @Nested
+        @DisplayName("저장되어 있는 product가 없을 때")
+        class Context_without_product {
+            @Test
+            @DisplayName("빈 값을 리턴한다")
+            void it_returns_empty() {
+                assertThat(productService.findAll()).isEmpty();
+            }
+        }
     }
 }
