@@ -5,6 +5,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
+@lombok.Generated
 public class ProductInfo {
     private final Long id;
 

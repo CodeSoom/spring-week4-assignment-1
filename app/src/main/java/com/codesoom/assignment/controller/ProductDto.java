@@ -3,7 +3,7 @@ package com.codesoom.assignment.controller;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
+@lombok.Generated
 public class ProductDto {
 
     @Getter
