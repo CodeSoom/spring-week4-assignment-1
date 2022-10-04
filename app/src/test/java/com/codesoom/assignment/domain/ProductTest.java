@@ -11,6 +11,7 @@ class ProductTest {
     private final String MAKER = "maker";
     private final Long PRICE = 1000L;
     private final String IMAGEURL = "imageurl";
+    
     @DisplayName("Product entity class")
     @Nested
     class Describe_product {

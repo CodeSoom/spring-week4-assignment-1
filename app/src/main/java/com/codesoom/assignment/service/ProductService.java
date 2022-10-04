@@ -15,6 +15,10 @@ public class ProductService {
     }
 
     public List<Product> findAll() {
+        return productJpaRepository.findAll();
+    }
+
+    public Product save(Product product) {
         return null;
     }
 
