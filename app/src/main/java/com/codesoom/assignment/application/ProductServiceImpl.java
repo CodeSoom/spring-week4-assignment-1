@@ -5,16 +5,12 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand;
 import com.codesoom.assignment.domain.ProductInfo;
 import com.codesoom.assignment.domain.ProductRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Service
-//@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
@@ -35,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductInfo getProduct(Long id) {
         return new ProductInfo(productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("상품ID를 확인해주세요[" + id + "]")));
+                .orElseThrow(() -> new ProductNotFoundException(id)));
     }
 
     @Override
@@ -47,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductInfo updateProduct(ProductCommand.Register command) {
         Product product = command.toEntity();
         Product findProduct = productRepository.findById(product.getId())
-                .orElseThrow(() -> new ProductNotFoundException("상품ID를 확인해주세요[" + product.getId() + "]"));
+                .orElseThrow(() -> new ProductNotFoundException(product.getId()));
 
         return new ProductInfo(findProduct.modifyProduct(product));
     }
@@ -55,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         Product findProduct = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("상품ID를 확인해주세요[" + id + "]"));
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.delete(findProduct);
     }
