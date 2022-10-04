@@ -30,5 +30,10 @@ class AppTest {
                     .andExpect(content().string("Server is OK"));
         }
 
+        @Test
+        void contextLoads() {
+            App.main(new String[]{});
+        }
+
     }
 }
