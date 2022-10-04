@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -20,6 +20,7 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
+    private Long INVALID_PRODUCT_ID = 0L;
 
     @Nested
     @DisplayName("findAll 메서드는")
@@ -72,7 +73,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                testProduct = productService.save(new Product("장난감1","M",1000,"http://image.com"));
+                testProduct = productService.save(new Product("장난감1", "M", 1000, "http://image.com"));
             }
 
             @AfterEach
@@ -92,6 +93,17 @@ class ProductServiceTest {
                 assertThat(product.getImageUrl()).isEqualTo(testProduct.getImageUrl());
             }
         }
-    }
 
+        @Nested
+        @DisplayName("저장되어 있지 않은 product id가 주어지면")
+        class Context_with_non_existent_product_id {
+            @Test
+            @DisplayName("제품을 찾을 수 없는 예외를 던진다")
+            void it_returns_exception() {
+                assertThatThrownBy(
+                        () -> productService.findById(INVALID_PRODUCT_ID)
+                ).isExactlyInstanceOf(ProductNotFoundException.class);
+            }
+        }
+    }
 }
