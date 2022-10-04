@@ -61,7 +61,6 @@ public class ToyRepositoryTest {
         }
     }
 
-
     @Nested
     @DisplayName("save 메소드는")
     class Describe_save {
@@ -82,15 +81,12 @@ public class ToyRepositoryTest {
         @Nested
         @DisplayName("id가 존재한다면")
         class Context_have_id {
-
             @Test
             @DisplayName("해당 id를 가진 toy객체를 삭제한다")
             void it_returns_toy() {
                 toyRepository.deleteById(1L);
                 assertThat(toyRepository.findAll()).hasSize(0);
-
             }
         }
     }
-
 }
