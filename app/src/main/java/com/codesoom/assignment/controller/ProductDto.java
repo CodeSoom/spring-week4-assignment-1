@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 @lombok.Generated
 public class ProductDto {
-
+    @lombok.Generated
     @Getter
     @Setter
     @ToString
