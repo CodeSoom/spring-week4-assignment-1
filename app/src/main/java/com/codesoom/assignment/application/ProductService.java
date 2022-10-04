@@ -7,7 +7,7 @@ import java.util.List;
 public interface ProductService {
 
     /**
-     * 해당하는 아이디의 장난감을 조회합니다.
+     * 장난감을 조회합니다.
      * @param id 장난감을 찾을 아이디
      * @return 찾은 장난감
      */
@@ -35,7 +35,7 @@ public interface ProductService {
     Product update(Long id, Product product);
 
     /**
-     * 해당하는 아이디를 갖는 장난감을 삭제합니다.
+     * 장난감을 삭제합니다.
      * @param id 삭제할 장난감 아이디
      */
     void deleteById(Long id);
