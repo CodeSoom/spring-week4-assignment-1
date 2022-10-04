@@ -35,7 +35,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                Product product1 = Product.builder()
+                final Product product1 = Product.builder()
                         .name("고양이장난감1")
                         .maker("삼성")
                         .price(50000L)
@@ -44,7 +44,7 @@ class ProductRepositoryTest {
 
                 givenProducts.add(productRepository.save(product1));
 
-                Product product2 = Product.builder()
+                final Product product2 = Product.builder()
                         .name("고양이장난감2")
                         .maker("애플")
                         .price(80000L)
@@ -57,10 +57,8 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("모든 장난감을 리턴한다")
             void it_returns_all_toy() {
-                List<Product> actualProducts = productRepository.findAll();
-                for (Product actualProduct : actualProducts) {
-                    System.out.println("actualProduct = " + actualProduct.toString());
-                }
+                final List<Product> actualProducts = productRepository.findAll();
+
                 assertThat(actualProducts).hasSize(givenProducts.size());
             }
         }
@@ -76,7 +74,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                Product product = Product.builder()
+                final Product product = Product.builder()
                         .name("고양이장난감1")
                         .maker("삼성")
                         .price(50000L)
@@ -89,7 +87,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("고양이 장난감을 찾아서 리턴한다")
             void it_returns_searched_cat_toy() {
-                Product actualProduct = productRepository.findById(givenProduct.getId()).orElse(null);
+                final Product actualProduct = productRepository.findById(givenProduct.getId()).orElse(null);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getId()).isEqualTo(givenProduct.getId());
@@ -124,7 +122,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("DB에 등록하고 등록된 장난감을 리턴한다")
             void it_returns_registered_cat_toy() {
-                Product actualProduct = productRepository.save(givenProduct);
+                final Product actualProduct = productRepository.save(givenProduct);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getPrice()).isEqualTo(givenProduct.getPrice());
@@ -142,7 +140,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                Product product = Product.builder()
+                final Product product = Product.builder()
                         .name("고양이장난감1")
                         .maker("삼성")
                         .price(50000L)
@@ -157,7 +155,7 @@ class ProductRepositoryTest {
             void it_returns_nothing() {
                 productRepository.delete(givenProduct);
 
-                Optional<Product> actualProduct = productRepository.findById(givenProduct.getId());
+                final Optional<Product> actualProduct = productRepository.findById(givenProduct.getId());
 
                 assertThat(actualProduct).isEmpty();
             }
@@ -181,11 +179,11 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("아무것도 하지않는다")
             void it_returns_nothing() {
-                Optional<Product> beforeProduct = productRepository.findById(givenProduct.getId());
+                final Optional<Product> beforeProduct = productRepository.findById(givenProduct.getId());
 
                 productRepository.delete(givenProduct);
 
-                Optional<Product> afterProduct = productRepository.findById(givenProduct.getId());
+                final Optional<Product> afterProduct = productRepository.findById(givenProduct.getId());
 
                 assertThat(beforeProduct).isEmpty();
                 assertThat(afterProduct).isEmpty();
