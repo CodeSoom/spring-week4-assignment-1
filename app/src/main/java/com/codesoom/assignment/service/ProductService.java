@@ -29,7 +29,8 @@ public class ProductService {
         return productJpaRepository.save(product);
     }
 
-    public void deleteAll() {
+    public List<Product> deleteAll() {
         productJpaRepository.deleteAll();
+        return productJpaRepository.findAll();
     }
 }
