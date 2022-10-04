@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/** 장난감 **/
 @Entity
 public class Product {
 
@@ -11,7 +12,7 @@ public class Product {
     @GeneratedValue
     private Long id;
 
-    /** 장난감 이름 **/
+    /** 이름 **/
     private String name;
 
     /** 가게 **/
@@ -27,6 +28,21 @@ public class Product {
     }
 
     public Product(String name, String maker, int price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    /**
+     * 장난감을 수정합니다.
+     *
+     * @param name 수정할 이름
+     * @param maker 수정할 가게
+     * @param price 수정할 가격
+     * @param imageUrl 수정할 이미지
+     */
+    public void update(String name, String maker, int price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
