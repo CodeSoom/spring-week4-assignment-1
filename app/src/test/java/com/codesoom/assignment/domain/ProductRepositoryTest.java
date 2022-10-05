@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.common.ProductFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,23 +36,8 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                final Product product1 = Product.builder()
-                        .name("고양이장난감1")
-                        .maker("삼성")
-                        .price(50000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                givenProducts.add(productRepository.save(product1));
-
-                final Product product2 = Product.builder()
-                        .name("고양이장난감2")
-                        .maker("애플")
-                        .price(80000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                givenProducts.add(productRepository.save(product2));
+                givenProducts.add(productRepository.save(ProductFactory.createProduct(1L)));
+                givenProducts.add(productRepository.save(ProductFactory.createProduct(2L)));
             }
 
             @Test
@@ -74,14 +60,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                final Product product = Product.builder()
-                        .name("고양이장난감1")
-                        .maker("삼성")
-                        .price(50000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                givenProduct = productRepository.save(product);
+                givenProduct = productRepository.save(ProductFactory.createProduct());
             }
 
             @Test
@@ -112,12 +91,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("새로운 고양이 장난감이 주어지면")
         class Context_with_new_cat_toy {
-            private final Product givenProduct = Product.builder()
-                    .name("고양이장난감1")
-                    .maker("삼성")
-                    .price(50000L)
-                    .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                    .build();
+            private final Product givenProduct = ProductFactory.createProduct();
 
             @Test
             @DisplayName("DB에 등록하고 등록된 장난감을 리턴한다")
@@ -140,14 +114,7 @@ class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                final Product product = Product.builder()
-                        .name("고양이장난감1")
-                        .maker("삼성")
-                        .price(50000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                givenProduct = productRepository.save(product);
+                givenProduct = productRepository.save(ProductFactory.createProduct());
             }
 
             @Test
@@ -164,17 +131,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("유효하지 않은 ID가 주어지면")
         class Context_with_non_existed_id {
-            private Product givenProduct;
-            @BeforeEach
-            void prepare() {
-                givenProduct = Product.builder()
-                        .id(100L)
-                        .name("고양이장난감1")
-                        .maker("삼성")
-                        .price(50000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-            }
+            private final Product givenProduct = ProductFactory.createProduct(100L);
 
             @Test
             @DisplayName("아무것도 하지않는다")

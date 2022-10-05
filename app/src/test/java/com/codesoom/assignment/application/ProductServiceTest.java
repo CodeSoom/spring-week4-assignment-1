@@ -131,7 +131,7 @@ class ProductServiceTest {
         @Nested
         @DisplayName("새로운 상품이 주어지면")
         class Context_with_new_product {
-            private final Product givenProduct = ProductFactory.createProduct(1L);
+            private final Product givenProduct = ProductFactory.createProduct();
 
             @BeforeEach
             void prepare() {

@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.common.ProductFactory;
 import com.codesoom.assignment.common.exception.InvalidParamException;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.controller.ProductDto.RequestParam;
@@ -79,23 +80,8 @@ class ProductControllerTest {
 
             @BeforeEach
             void prepare() {
-                final Product product1 = Product.builder()
-                        .id(1L)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-                final Product product2 = Product.builder()
-                        .id(2L)
-                        .name("고양이 장난감2")
-                        .maker("애플")
-                        .price(12000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                givenProducts.add(new ProductInfo(product1));
-                givenProducts.add(new ProductInfo(product2));
+                givenProducts.add(new ProductInfo(ProductFactory.createProduct(1L)));
+                givenProducts.add(new ProductInfo(ProductFactory.createProduct(2L)));
 
                 given(productService.getProducts()).willReturn(givenProducts);
             }
@@ -144,20 +130,10 @@ class ProductControllerTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private ProductInfo givenProduct;
+            private final ProductInfo givenProduct = new ProductInfo(ProductFactory.createProduct(1L));
 
             @BeforeEach
             void prepare() {
-                final Product product = Product.builder()
-                        .id(PRODUCT_ID)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                givenProduct = new ProductInfo(product);
-
                 given(productService.getProduct(PRODUCT_ID)).willReturn(givenProduct);
             }
 
@@ -207,26 +183,12 @@ class ProductControllerTest {
         @Nested
         @DisplayName("새로운 상품을 등록하면")
         class Context_with_new_product {
-            private RequestParam givenRequest;
+            private final ProductDtoMapper mapper = new ProductDtoMapper();
+            private final RequestParam givenRequest = ProductFactory.createRequestParam();
+            private final ProductInfo givenProduct = new ProductInfo(mapper.of(1L, givenRequest).toEntity());
 
             @BeforeEach
             void prepare() {
-                givenRequest = new RequestParam();
-                givenRequest.setName("고양이 장난감1");
-                givenRequest.setMaker("삼성");
-                givenRequest.setPrice(10000L);
-                givenRequest.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
-
-                final Product product = Product.builder()
-                        .id(1L)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                final ProductInfo givenProduct = new ProductInfo(product);
-
                 given(productService.createProduct(any(Register.class))).willReturn(givenProduct);
             }
 
@@ -286,28 +248,12 @@ class ProductControllerTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private RequestParam givenRequest;
-            private ProductInfo modifiedProduct;
+            private final ProductDtoMapper mapper = new ProductDtoMapper();
+            private final RequestParam givenRequest = ProductFactory.createRequestParam();
+            private final ProductInfo modifiedProduct = new ProductInfo(mapper.of(PRODUCT_ID, givenRequest).toEntity());
 
             @BeforeEach
             void prepare() {
-                givenRequest = new RequestParam();
-                givenRequest.setId(PRODUCT_ID);
-                givenRequest.setName("고양이 장난감1");
-                givenRequest.setMaker("삼성");
-                givenRequest.setPrice(10000L);
-                givenRequest.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
-
-                final Product product = Product.builder()
-                        .id(PRODUCT_ID)
-                        .name("수정된 고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
-                modifiedProduct = new ProductInfo(product);
-
                 given(productService.updateProduct(any(Register.class))).willReturn(modifiedProduct);
             }
 
@@ -327,17 +273,10 @@ class ProductControllerTest {
         @DisplayName("유효하지않은 ID가 주어지면")
         class Context_with_invalid_id {
             private final Long PRODUCT_ID = 100L;
-            private RequestParam givenRequest;
+            private final RequestParam givenRequest = ProductFactory.createRequestParam();
 
             @BeforeEach
             void prepare() {
-                givenRequest = new RequestParam();
-                givenRequest.setId(PRODUCT_ID);
-                givenRequest.setName("고양이 장난감1");
-                givenRequest.setMaker("삼성");
-                givenRequest.setPrice(10000L);
-                givenRequest.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
-
                 given(productService.updateProduct(any(Register.class))).willThrow(new ProductNotFoundException(PRODUCT_ID));
             }
 
@@ -405,6 +344,4 @@ class ProductControllerTest {
         }
 
     }
-
-
 }

@@ -1,5 +1,7 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.common.ProductFactory;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,14 +28,9 @@ class ProductDtoMapperTest {
             @Test
             @DisplayName("Register 객체를 리턴한다")
             void it_returns_register() {
-                final ProductDto.RequestParam request = new ProductDto.RequestParam();
-                request.setId(1L);
-                request.setName("테스트");
-                request.setMaker("테스트");
-                request.setPrice(1000L);
-                request.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
+                final Product product = ProductFactory.createProduct(1L);
 
-                final ProductCommand.Register actual = productDtoMapper.of(request);
+                final ProductCommand.Register actual = ProductFactory.of(product);
 
                 assertThat(actual).isInstanceOf(ProductCommand.Register.class);
             }
