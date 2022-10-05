@@ -162,9 +162,8 @@ class ProductServiceTest {
             @Test
             @DisplayName("필드가 null 인 경우 수정하지 않고, 값이 있는 경우 수정 후 리턴한다")
             void it_returns_partial_updated_product() {
-                Product updatedProduct = productService.updateProduct(requestProduct);
+                Product updatedProduct = productService.updateProduct(1L, requestProduct);
 
-                assertThat(updatedProduct.getId()).isEqualTo(requestProduct.getId());
                 assertThat(updatedProduct.getName()).isEqualTo(requestProduct.getName());
                 assertThat(updatedProduct.getMaker()).isEqualTo(savedProduct.getMaker());
                 assertThat(updatedProduct.getPrice()).isEqualTo(requestProduct.getPrice());

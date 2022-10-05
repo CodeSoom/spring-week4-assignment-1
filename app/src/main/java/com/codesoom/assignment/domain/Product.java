@@ -15,7 +15,7 @@ public class Product {
 
     private String maker;
 
-    private int price;
+    private Integer price;
 
     private String imageUrl;
 
@@ -46,7 +46,7 @@ public class Product {
         return maker;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
@@ -54,5 +54,19 @@ public class Product {
         return imageUrl;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public void setMaker(String maker) {
+        this.maker = maker;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

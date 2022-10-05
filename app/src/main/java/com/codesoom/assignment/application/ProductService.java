@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductService {
+
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -36,4 +37,30 @@ public class ProductService {
     public Product createProduct(Product requestProduct) {
         return productRepository.save(requestProduct);
     }
+
+
+    public Product updateProduct(Long id, Product requestProduct) {
+        String name = requestProduct.getName();
+        Integer price = requestProduct.getPrice();
+        String maker = requestProduct.getMaker();
+        String imageUrl = requestProduct.getImageUrl();
+
+        Product product = findById(id);
+
+        if (name != null) {
+            product.setName(name);
+        }
+        if (price != null) {
+            product.setPrice(price);
+        }
+        if (maker != null) {
+            product.setMaker(maker);
+        }
+        if (imageUrl != null) {
+            product.setImageUrl(imageUrl);
+        }
+
+        return productRepository.save(product);
+    }
+
 }
