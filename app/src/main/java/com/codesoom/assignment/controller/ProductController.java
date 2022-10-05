@@ -33,11 +33,13 @@ public class ProductController {
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<ProductInfo> list() {
         return productService.getProducts();
     }
 
     @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ProductInfo detail(@PathVariable Long id) {
         return productService.getProduct(id);
     }
@@ -50,6 +52,7 @@ public class ProductController {
     }
 
     @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ProductInfo updateProduct(@PathVariable Long id, @RequestBody ProductDto.RequestParam request) {
         Register command = productDtoMapper.of(id, request);
         return productService.updateProduct(command);
