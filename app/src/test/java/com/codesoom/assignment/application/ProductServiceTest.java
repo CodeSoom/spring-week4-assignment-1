@@ -240,5 +240,19 @@ class ProductServiceTest {
 
             }
         }
+
+        @Nested
+        @DisplayName("저장되어 있지 않는 product 의 id가 주어진다면 ")
+        class Context_with_non_existence_product_id {
+
+            @Test
+            @DisplayName("제품을 찾을 수 없는 예외를 던진다")
+            void it_delete_product() {
+                assertThatThrownBy(
+                        () -> productService.deleteProduct(INVALID_PRODUCT_ID)
+                ).isExactlyInstanceOf(ProductNotFoundException.class);
+
+            }
+        }
     }
 }
