@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.common.ProductFactory;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -44,6 +44,7 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepare() {
+
                 final Product product1 = ProductFactory.createProduct(1L);
                 final Product product2 = ProductFactory.createProduct(2L);
 
@@ -243,33 +244,5 @@ class ProductServiceTest {
             }
         }
     }
-
-    static class ProductFactory {
-        static Product createProduct(Long id) {
-            return Product.builder()
-                    .id(id)
-                    .name("고양이 장난감" + id)
-                    .maker("제조사" + id)
-                    .price(randomPrice())
-                    .imageUrl(UUID.randomUUID().toString() + ".png")
-                    .build();
-
-        }
-
-        static ProductCommand.Register of(Product product) {
-            ProductCommand.Register.RegisterBuilder register = ProductCommand.Register.builder();
-
-//            register.id(product.getId());
-            register.name(product.getName());
-            register.maker(product.getMaker());
-            register.price(product.getPrice());
-            register.imageUrl(product.getImageUrl());
-
-            return register.build();
-        }
-
-        static Long randomPrice() {
-            return (long) (Math.ceil((Math.random() * 10000 + 10000) / 1000) * 1000);
-        }
-    }
 }
+
