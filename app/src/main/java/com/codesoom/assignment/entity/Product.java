@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class Toy {
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -16,10 +16,10 @@ public class Toy {
     private Integer price;
     private String imageUrl;
 
-    public Toy() {
+    public Product() {
     }
 
-    public Toy(Long id, String brand, Integer price, String imageUrl) {
+    public Product(Long id, String brand, Integer price, String imageUrl) {
         this.id = id;
         this.brand = brand;
         this.price = price;
@@ -42,24 +42,28 @@ public class Toy {
         return imageUrl;
     }
 
-    public Toy updatebrand(String brand) {
-        return new Toy(this.id, brand, this.price, this.imageUrl);
+    public Product updatebrand(String brand) {
+        return new Product(this.id, brand, this.price, this.imageUrl);
     }
 
-    public Toy updatePrice(Integer price){
-        return new Toy(this.id, this.brand, price, this.imageUrl);
+    public Product updatePrice(Integer price){
+        return new Product(this.id, this.brand, price, this.imageUrl);
     }
 
-    public Toy updateImageUrl(String imageUrl){
-        return new Toy(this.id, this.brand, this.price, imageUrl);
+    public Product updateImageUrl(String imageUrl){
+        return new Product(this.id, this.brand, this.price, imageUrl);
     }
 
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Toy toy = (Toy) o;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Product toy = (Product) o;
         return id.equals(toy.id) && brand.equals(toy.brand) && price.equals(toy.price) && imageUrl.equals(toy.imageUrl);
     }
 
