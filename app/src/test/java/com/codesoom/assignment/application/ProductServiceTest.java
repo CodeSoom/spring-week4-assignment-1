@@ -23,8 +23,8 @@ class ProductServiceTest {
     private Long INVALID_PRODUCT_ID = 0L;
 
     @Nested
-    @DisplayName("findAll 메서드는")
-    class Describe_findAll {
+    @DisplayName("getProducts 메서드는")
+    class Describe_getProducts {
         @Nested
         @DisplayName("저장되어 있는 product가 여러 개 있을 때")
         class Context_with_products {
@@ -48,7 +48,7 @@ class ProductServiceTest {
                                 .imageUrl("http://images/2")
                                 .build()
                 );
-                givenProducts.forEach(product -> productService.save(product));
+                givenProducts.forEach(product -> productService.createProduct(product));
             }
 
             @AfterEach
@@ -59,33 +59,33 @@ class ProductServiceTest {
             @Test
             @DisplayName("모든 product 를 리턴한다")
             void it_returns_products() {
-                List<Product> products = productService.findAll();
+                List<Product> products = productService.getProducts();
                 assertThat(products.size()).isEqualTo(givenProducts.size());
             }
         }
 
         @Nested
-        @DisplayName("저장되어 있는 product가 없을 때")
+        @DisplayName("저장되어 있는 product 가 없을 때")
         class Context_without_product {
             @Test
             @DisplayName("빈 값을 리턴한다")
             void it_returns_empty() {
-                assertThat(productService.findAll()).isEmpty();
+                assertThat(productService.getProducts()).isEmpty();
             }
         }
     }
 
     @Nested
-    @DisplayName("findById 메서드는")
-    class Describe_findById {
+    @DisplayName("getProduct 메서드는")
+    class Describe_getProduct {
         @Nested
-        @DisplayName("저장되어 있는 product의 id가 주어지면")
+        @DisplayName("저장되어 있는 product 의 id가 주어지면")
         class Context_with_existing_product_id {
             private Product testProduct;
 
             @BeforeEach
             void setUp() {
-                testProduct = productService.save(
+                testProduct = productService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1")
@@ -104,7 +104,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("요청에 맞는 product 객체를 리턴한다")
             void it_returns_product() {
-                Product product = productService.findById(testProduct.getId());
+                Product product = productService.getProduct(testProduct.getId());
 
                 assertThat(product.getId()).isEqualTo(testProduct.getId());
                 assertThat(product.getName()).isEqualTo(testProduct.getName());
@@ -121,7 +121,7 @@ class ProductServiceTest {
             @DisplayName("제품을 찾을 수 없는 예외를 던진다")
             void it_returns_exception() {
                 assertThatThrownBy(
-                        () -> productService.findById(INVALID_PRODUCT_ID)
+                        () -> productService.getProduct(INVALID_PRODUCT_ID)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -298,12 +298,12 @@ class ProductServiceTest {
             @DisplayName("product 를 삭제한다")
             void it_delete_product() {
                 Long deleteId = savedProduct.getId();
-                assertThat(productService.findById(deleteId)).isNotNull();
+                assertThat(productService.getProduct(deleteId)).isNotNull();
 
                 productService.deleteProduct(deleteId);
 
                 assertThatThrownBy(
-                        () -> productService.findById(deleteId)
+                        () -> productService.getProduct(deleteId)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
             }
         }

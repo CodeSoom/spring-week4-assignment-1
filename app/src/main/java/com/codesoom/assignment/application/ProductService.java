@@ -18,19 +18,15 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> findAll() {
+    public List<Product> getProducts() {
         return productRepository.findAll();
-    }
-
-    public Product save(Product product) {
-        return productRepository.save(product);
     }
 
     public void deleteAll() {
         productRepository.deleteAll();
     }
 
-    public Product findById(Long id) {
+    public Product getProduct(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
@@ -38,14 +34,13 @@ public class ProductService {
         return productRepository.save(requestProduct);
     }
 
-
     public Product updateProduct(Long id, Product requestProduct) {
+        Product product = getProduct(id);
+
         String name = requestProduct.getName();
         Integer price = requestProduct.getPrice();
         String maker = requestProduct.getMaker();
         String imageUrl = requestProduct.getImageUrl();
-
-        Product product = findById(id);
 
         if (name != null) {
             product.setName(name);
@@ -64,7 +59,7 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        findById(id);
+        getProduct(id);
         productRepository.deleteById(id);
     }
 }
