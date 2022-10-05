@@ -1,5 +1,7 @@
 package com.codesoom.assignment.service;
 
+import com.codesoom.assignment.Exception.ErrorCode;
+import com.codesoom.assignment.Exception.ProductException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductJpaRepository;
 import org.springframework.stereotype.Service;
@@ -30,8 +32,11 @@ public class ProductService {
      * @param id the Long to find a product
      * @return Product entity; otherwise, throw an exception
      */
-    public Product findById(Long id) {
-        return null;
+    public Product findById(Long id) throws ProductException {
+        return productJpaRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND, ErrorCode.PRODUCT_NOT_FOUND.getDescription()));
     }
 
     /**

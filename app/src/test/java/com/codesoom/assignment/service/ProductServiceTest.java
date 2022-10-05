@@ -1,5 +1,7 @@
 package com.codesoom.assignment.service;
 
+import com.codesoom.assignment.Exception.ErrorCode;
+import com.codesoom.assignment.Exception.ProductException;
 import com.codesoom.assignment.domain.Product;
 import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest()
 @RunWith(SpringRunner.class)
@@ -25,7 +29,6 @@ class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
-
 
     private Product product1 = Product.builder()
             .name("name")
@@ -144,10 +147,11 @@ class ProductServiceTest {
         @DisplayName("if a valid id is given,")
         @Nested
         class Context_one_product {
+            Product product;
 
             @BeforeEach
             void before() {
-                productService.save(product1);
+                product = productService.save(product1);
             }
 
             @AfterEach
@@ -157,8 +161,8 @@ class ProductServiceTest {
 
             @DisplayName("returns the found task")
             @Test
-            void it_returns_product() {
-                Product foundProduct = productService.findById(1L);
+            void it_returns_product() throws ProductException {
+                Product foundProduct = productService.findById(product.getId());
 
                 assertThat(foundProduct.getId())
                         .isEqualTo(product1.getId());
@@ -170,6 +174,17 @@ class ProductServiceTest {
                         .isEqualTo(product1.getMaker());
                 assertThat(foundProduct.getPrice())
                         .isEqualTo(product1.getPrice());
+            }
+
+            @DisplayName("throws an exception if the invalid id is given")
+            @Test
+            void it_throws_exception() throws ProductException {
+                assertThatThrownBy(() -> {
+                    productService.findById(123L);
+                }).isInstanceOf(ProductException.class)
+                        .hasMessageContaining("not found");
+
+
             }
         }
     }
@@ -188,7 +203,6 @@ class ProductServiceTest {
                 productList.add(productService.save(product2));
             }
 
-
             @DisplayName("returns an empty list if everything is deleted")
             @Test
             void it_returns_empty() {
@@ -198,5 +212,4 @@ class ProductServiceTest {
             }
         }
     }
-
 }

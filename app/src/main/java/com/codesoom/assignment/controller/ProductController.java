@@ -15,5 +15,4 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-
 }
