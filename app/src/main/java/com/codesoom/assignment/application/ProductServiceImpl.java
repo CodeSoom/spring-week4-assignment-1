@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -26,11 +27,9 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<ProductInfo> getProducts() {
-        List<ProductInfo> result = new ArrayList<>();
-
-        productRepository.findAll().forEach(product -> result.add(new ProductInfo(product)));
-
-        return result;
+        return productRepository.findAll().stream()
+                .map(ProductInfo::new)
+                .collect(Collectors.toList());
     }
 
     /**
