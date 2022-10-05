@@ -192,5 +192,23 @@ class ProductServiceTest {
                 assertThat(updatedProduct.getImageUrl()).isEqualTo(requestProduct.getImageUrl());
             }
         }
+        @Nested
+        @DisplayName("저장되어 있지 않은 product의 id로 요청한 경우")
+        class Context_with_non_existence_id {
+            private Product requestProduct;
+
+            @BeforeEach
+            void setUp() {
+                requestProduct = new Product("장난감1after", "K", 3000, "http://image10.com");
+            }
+
+            @Test
+            @DisplayName("제품을 찾을 수 없는 예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(
+                        () -> productService.updateProduct(INVALID_PRODUCT_ID, requestProduct)
+                ).isExactlyInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 }
