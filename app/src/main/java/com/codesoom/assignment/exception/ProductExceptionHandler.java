@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * ProductController에서 발생하는 예외 처리를 담당합니다
+ * 예외가 발생할 경우 전달할 응답을 생성합니다
  */
 @RestControllerAdvice(basePackageClasses = ProductController.class)
 public class ProductExceptionHandler {
