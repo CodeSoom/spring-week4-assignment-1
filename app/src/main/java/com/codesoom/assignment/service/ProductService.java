@@ -30,7 +30,8 @@ public class ProductService {
     /**
      * searches a product given the id
      * @param id the Long to find a product
-     * @return Product entity; otherwise, throw an exception
+     * @return Product entity
+     * @throws 상품을 찾지 못한 경우
      */
     public Product findById(Long id) throws ProductException {
         return productJpaRepository

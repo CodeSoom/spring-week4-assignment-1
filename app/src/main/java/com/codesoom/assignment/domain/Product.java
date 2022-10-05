@@ -30,11 +30,11 @@ public class Product {
     private String imageUrl;
 
     /**
-     * returns a product instance using a builder pattern
-     * @param name String to be initialized
-     * @param maker String to be initialized
-     * @param price Long to be initialized
-     * @param imageUrl String to be initalized
+     * Constructs a product.
+     * @param name
+     * @param maker
+     * @param price
+     * @param imageUrl
      */
 
     @Builder

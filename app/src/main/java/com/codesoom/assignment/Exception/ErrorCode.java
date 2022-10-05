@@ -2,9 +2,6 @@ package com.codesoom.assignment.Exception;
 
 import lombok.Getter;
 
-/**
- * Describes error codes in the applications
- */
 @Getter
 public enum ErrorCode {
 
