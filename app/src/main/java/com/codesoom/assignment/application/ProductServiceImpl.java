@@ -6,6 +6,7 @@ import com.codesoom.assignment.domain.ProductCommand;
 import com.codesoom.assignment.domain.ProductInfo;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class ProductServiceImpl implements ProductService {
      * @param command 새로운 상품정보
      * @return 추가된 상품
      */
+    @Transactional
     @Override
     public ProductInfo createProduct(ProductCommand.Register command) {
         return new ProductInfo(productRepository.save(command.toEntity()));
@@ -60,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
      * @return 수정된 상품
      * @throws ProductNotFoundException 상품이 없을 경우 발생하는 예외
      */
+    @Transactional
     @Override
     public ProductInfo updateProduct(ProductCommand.Register command) {
         Product product = command.toEntity();
@@ -74,6 +77,7 @@ public class ProductServiceImpl implements ProductService {
      * @param id 상품 ID
      * @throws ProductNotFoundException 상품이 없을 경우 발생하는 예외
      */
+    @Transactional
     @Override
     public void deleteProduct(Long id) {
         Product findProduct = productRepository.findById(id)
