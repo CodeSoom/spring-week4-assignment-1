@@ -1,8 +1,6 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
-import com.codesoom.assignment.controller.ProductDto;
-import com.codesoom.assignment.controller.ProductDtoMapper;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand;
 import com.codesoom.assignment.domain.ProductInfo;
@@ -22,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductService 클래스")
 class ProductServiceTest {
