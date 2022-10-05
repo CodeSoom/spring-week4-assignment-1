@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Builder;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,16 +24,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String maker, int price, String imageUrl) {
+    @Builder
+    private Product(Long id, String name, String maker, int price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
-    }
-
-    public Product(String name, String maker, int price, String imageUrl) {
-        this(null, name, maker, price, imageUrl);
     }
 
     public Long getId() {

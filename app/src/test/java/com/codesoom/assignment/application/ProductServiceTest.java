@@ -33,8 +33,20 @@ class ProductServiceTest {
             @BeforeEach
             void setUp() {
                 givenProducts = List.of(
-                        new Product(null, "장난감1", "M", 1000, "http://images/1"),
-                        new Product(null, "장난감2", "K", 1000, "http://images/2")
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1")
+                                .maker("M")
+                                .price(1000)
+                                .imageUrl("http://images/1")
+                                .build(),
+                        Product.builder()
+                                .id(null)
+                                .name("장난감2")
+                                .maker("K")
+                                .price(1000)
+                                .imageUrl("http://images/2")
+                                .build()
                 );
                 givenProducts.forEach(product -> productService.save(product));
             }
@@ -73,7 +85,15 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                testProduct = productService.save(new Product("장난감1", "M", 1000, "http://image.com"));
+                testProduct = productService.save(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1")
+                                .maker("M")
+                                .price(1000)
+                                .imageUrl("http://images/1")
+                                .build()
+                );
             }
 
             @AfterEach
@@ -117,7 +137,13 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                requestProduct = new Product("장난감1", "M", 1000, "http://image.com");
+                requestProduct = Product.builder()
+                        .id(null)
+                        .name("장난감1")
+                        .maker("M")
+                        .price(1000)
+                        .imageUrl("http://images/1")
+                        .build();
             }
 
             @AfterEach
@@ -151,9 +177,23 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUp() {
-                requestProduct = new Product("장난감1after", null, 1000, null);
+                requestProduct = Product.builder()
+                        .id(null)
+                        .name("장난감1")
+                        .maker(null)
+                        .price(1000)
+                        .imageUrl(null)
+                        .build();
 
-                savedProduct = productService.createProduct(new Product("장난감1", "M", 2000, "http://image.com"));
+                savedProduct = productService.createProduct(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1")
+                                .maker("M")
+                                .price(2000)
+                                .imageUrl("http://image.com")
+                                .build()
+                );
             }
 
             @Test
@@ -169,16 +209,30 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("요청하는 product의 일부 필드가 모두 있는 경우")
+        @DisplayName("요청하는 product 의 필드가 모두 있는 경우")
         class Context_with_full_value {
             private Product requestProduct;
             private Product savedProduct;
 
             @BeforeEach
             void setUp() {
-                requestProduct = new Product("장난감1after", "K", 3000, "http://image10.com");
+                requestProduct = Product.builder()
+                        .id(null)
+                        .name("장난감1after")
+                        .maker("K")
+                        .price(3000)
+                        .imageUrl("http://image10.com")
+                        .build();
 
-                savedProduct = productService.createProduct(new Product("장난감1", "M", 2000, "http://image.com"));
+                savedProduct = productService.createProduct(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1")
+                                .maker("M")
+                                .price(2000)
+                                .imageUrl("http://image.com")
+                                .build()
+                );
             }
 
             @Test
@@ -194,13 +248,19 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("저장되어 있지 않은 product의 id로 요청한 경우")
+        @DisplayName("저장되어 있지 않은 product 의 id로 요청한 경우")
         class Context_with_non_existence_id {
             private Product requestProduct;
 
             @BeforeEach
             void setUp() {
-                requestProduct = new Product("장난감1after", "K", 3000, "http://image10.com");
+                requestProduct = Product.builder()
+                        .id(null)
+                        .name("장난감1after")
+                        .maker("K")
+                        .price(3000)
+                        .imageUrl("http://image10.com")
+                        .build();
             }
 
             @Test
@@ -217,13 +277,21 @@ class ProductServiceTest {
     @DisplayName("deleteProduct 메서드는")
     class Describe_deleteProduct {
         @Nested
-        @DisplayName("저장되어있는 product의 id가 주어진다면 ")
+        @DisplayName("저장되어있는 product 의 id가 주어진다면 ")
         class Context_with_existing_product_id {
             private Product savedProduct;
 
             @BeforeEach
             void setUp() {
-                savedProduct = productService.createProduct(new Product("장난감1", "M", 2000, "http://image.com"));
+                savedProduct = productService.createProduct(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1after")
+                                .maker("K")
+                                .price(3000)
+                                .imageUrl("http://image10.com")
+                                .build()
+                );
             }
 
             @Test
@@ -237,7 +305,6 @@ class ProductServiceTest {
                 assertThatThrownBy(
                         () -> productService.findById(deleteId)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
-
             }
         }
 
@@ -251,7 +318,6 @@ class ProductServiceTest {
                 assertThatThrownBy(
                         () -> productService.deleteProduct(INVALID_PRODUCT_ID)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
-
             }
         }
     }
