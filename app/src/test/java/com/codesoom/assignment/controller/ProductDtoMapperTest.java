@@ -62,13 +62,8 @@ class ProductDtoMapperTest {
             @DisplayName("Register 객체를 리턴한다")
             void it_returns_register() {
                 final Long id = 1L;
-                final ProductDto.RequestParam request = new ProductDto.RequestParam();
-                request.setName("테스트");
-                request.setMaker("테스트");
-                request.setPrice(1000L);
-                request.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
 
-                final ProductCommand.Register actual = productDtoMapper.of(id, request);
+                final ProductCommand.Register actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
 
                 assertThat(actual).isInstanceOf(ProductCommand.Register.class);
             }
@@ -96,13 +91,8 @@ class ProductDtoMapperTest {
             @DisplayName("Null을 리턴한다")
             void it_returns_null() {
                 final Long id = null;
-                final ProductDto.RequestParam request = new ProductDto.RequestParam();
-                request.setName("테스트");
-                request.setMaker("테스트");
-                request.setPrice(1000L);
-                request.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
 
-                final ProductCommand.Register actual = productDtoMapper.of(id, request);
+                final ProductCommand.Register actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
 
                 assertThat(actual).isNull();
             }
