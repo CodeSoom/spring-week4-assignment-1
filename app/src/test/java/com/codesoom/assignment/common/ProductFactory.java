@@ -1,5 +1,6 @@
 package com.codesoom.assignment.common;
 
+import com.codesoom.assignment.controller.ProductDto;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand;
 
@@ -30,10 +31,22 @@ public class ProductFactory {
         return product.build();
     }
 
+    public static ProductDto.RequestParam createRequestParam() {
+        ProductDto.RequestParam request = new ProductDto.RequestParam();
+        request.setName("고양이 장난감");
+        request.setMaker("제조사");
+        request.setPrice(randomPrice());
+        request.setImageUrl(UUID.randomUUID().toString() + ".png");
+
+        return request;
+    }
+
     public static ProductCommand.Register of(Product product) {
         ProductCommand.Register.RegisterBuilder register = ProductCommand.Register.builder();
 
-//            register.id(product.getId());
+        if (product.getId() != null) {
+            register.id(product.getId());
+        }
         register.name(product.getName());
         register.maker(product.getMaker());
         register.price(product.getPrice());
