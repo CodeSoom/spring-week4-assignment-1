@@ -47,14 +47,14 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductInfo registerProduct(@RequestBody ProductDto.RequestParam request) {
-        Register command = productDtoMapper.of(request);
+        final Register command = productDtoMapper.of(request);
         return productService.createProduct(command);
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductInfo updateProduct(@PathVariable Long id, @RequestBody ProductDto.RequestParam request) {
-        Register command = productDtoMapper.of(id, request);
+        final Register command = productDtoMapper.of(id, request);
         return productService.updateProduct(command);
     }
 
