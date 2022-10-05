@@ -108,10 +108,10 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("findByI 메서드는")
+    @DisplayName("createProduct 메서드는")
     class Describe_createProduct {
         @Nested
-        @DisplayName("product가 주어진다면")
+        @DisplayName("product 가 주어진다면")
         class Context_with_product {
             private Product requestProduct;
 
@@ -192,6 +192,7 @@ class ProductServiceTest {
                 assertThat(updatedProduct.getImageUrl()).isEqualTo(requestProduct.getImageUrl());
             }
         }
+
         @Nested
         @DisplayName("저장되어 있지 않은 product의 id로 요청한 경우")
         class Context_with_non_existence_id {
@@ -208,6 +209,35 @@ class ProductServiceTest {
                 assertThatThrownBy(
                         () -> productService.updateProduct(INVALID_PRODUCT_ID, requestProduct)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteProduct 메서드는")
+    class Describe_deleteProduct {
+        @Nested
+        @DisplayName("저장되어있는 product의 id가 주어진다면 ")
+        class Context_with_existing_product_id {
+            private Product savedProduct;
+
+            @BeforeEach
+            void setUp() {
+                savedProduct = productService.createProduct(new Product("장난감1", "M", 2000, "http://image.com"));
+            }
+
+            @Test
+            @DisplayName("product 를 삭제한다")
+            void it_delete_product() {
+                Long deleteId = savedProduct.getId();
+                assertThat(productService.findById(deleteId)).isNotNull();
+
+                productService.deleteProduct(deleteId);
+
+                assertThatThrownBy(
+                        () -> productService.findById(deleteId)
+                ).isExactlyInstanceOf(ProductNotFoundException.class);
+
             }
         }
     }
