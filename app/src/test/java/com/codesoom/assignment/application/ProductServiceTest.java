@@ -138,4 +138,38 @@ class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("updateProduct 메서드는")
+    class Describe_updateProduct {
+        private Product requestProduct;
+
+        @BeforeEach
+        void setUp() {
+            requestProduct = new Product("장난감1after", null, 1000, null);
+        }
+
+        @Nested
+        @DisplayName("요청하는 product의 일부 필드가 null 인 경우")
+        class Context_with_partial_value {
+            private Product savedProduct;
+
+            @BeforeEach
+            void setUp() {
+                savedProduct = productService.createProduct(new Product("장난감1", "M", 2000, "http://image.com"));
+            }
+
+            @Test
+            @DisplayName("필드가 null 인 경우 수정하지 않고, 값이 있는 경우 수정 후 리턴한다")
+            void it_returns_partial_updated_product() {
+                Product updatedProduct = productService.updateProduct(requestProduct);
+
+                assertThat(updatedProduct.getId()).isEqualTo(requestProduct.getId());
+                assertThat(updatedProduct.getName()).isEqualTo(requestProduct.getName());
+                assertThat(updatedProduct.getMaker()).isEqualTo(savedProduct.getMaker());
+                assertThat(updatedProduct.getPrice()).isEqualTo(requestProduct.getPrice());
+                assertThat(updatedProduct.getImageUrl()).isEqualTo(savedProduct.getImageUrl());
+            }
+        }
+    }
 }
