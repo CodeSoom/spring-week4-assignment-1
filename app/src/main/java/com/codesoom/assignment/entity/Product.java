@@ -8,6 +8,7 @@ import java.util.Objects;
 
 @Entity
 public class Toy {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

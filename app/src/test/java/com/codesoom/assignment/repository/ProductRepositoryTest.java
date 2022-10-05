@@ -15,19 +15,25 @@ public class ToyRepositoryTest {
     @Autowired
     private ToyRepository toyRepository;
 
-    @BeforeEach
-    void setUp() {
-        toyRepository.deleteAll();
-        Toy toy = new Toy(1L, "테스트1", 2000, "");
-        toyRepository.save(toy);
-    }
-
     @Nested
     @DisplayName("findAll 메소드는")
     class Describe_find_all {
+
+        @BeforeEach
+        void prepare() {
+            toyRepository.deleteAll();
+        }
+
         @Nested
         @DisplayName("저장된 toy가 있다면")
         class Context_have_toy {
+
+            @BeforeEach
+            void setUp() {
+                Toy toy = new Toy(1L, "테스트1", 2000, "");
+                toyRepository.save(toy);
+            }
+
             @Test
             @DisplayName("toyList를 리턴한다")
             void it_returns_toyList() {
@@ -40,9 +46,15 @@ public class ToyRepositoryTest {
     @DisplayName("findById 메소드는")
     class Describe_find_by_id {
 
+        @BeforeEach
+        void prepare() {
+            toyRepository.deleteAll();
+        }
+
         @Nested
         @DisplayName("id가 존재하지 않는다면")
-        class Context_have_no_id {
+        class Context_non_existent_id {
+
             @Test
             @DisplayName("비어있는 Optional을 리턴한다")
             void it_returns_empty_toyList() {
@@ -52,7 +64,14 @@ public class ToyRepositoryTest {
 
         @Nested
         @DisplayName("id가 존재한다면")
-        class Context_have_id {
+        class Context_existent_id {
+
+            @BeforeEach
+            void givenId() {
+                Toy toy = new Toy(1L, "테스트1", 2000, "");
+                toyRepository.save(toy);
+            }
+
             @Test
             @DisplayName("해당 id를 가진 toy객체를 리턴한다")
             void it_returns_toyList() {
@@ -64,9 +83,16 @@ public class ToyRepositoryTest {
     @Nested
     @DisplayName("save 메소드는")
     class Describe_save {
+
+        @BeforeEach
+        void prepare() {
+            toyRepository.deleteAll();
+        }
+
         @Nested
         @DisplayName("Toy객체가 주어질 때")
-        class Context_have_toy {
+        class Context_existent_toy {
+
             @Test
             @DisplayName("toy객체를 리턴한다")
             void it_returns_toy() {
@@ -78,9 +104,16 @@ public class ToyRepositoryTest {
     @Nested
     @DisplayName("deleteById 메소드는")
     class Describe_delete_by_id {
+
+        @BeforeEach
+        void prepare() {
+            toyRepository.deleteAll();
+        }
+
         @Nested
         @DisplayName("id가 존재한다면")
-        class Context_have_id {
+        class Context_existent_id {
+
             @Test
             @DisplayName("해당 id를 가진 toy객체를 삭제한다")
             void it_returns_toy() {

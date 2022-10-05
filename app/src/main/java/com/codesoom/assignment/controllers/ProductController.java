@@ -1,7 +1,8 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ToyService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/products")
@@ -18,4 +19,5 @@ public class ToyController {
     public ToyController(ToyService toyService) {
         this.toyService = toyService;
     }
+
 }
