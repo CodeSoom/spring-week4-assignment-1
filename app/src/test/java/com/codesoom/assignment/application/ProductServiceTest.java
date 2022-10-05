@@ -106,4 +106,36 @@ class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("findByI 메서드는")
+    class Describe_createProduct {
+        @Nested
+        @DisplayName("product가 주어진다면")
+        class Context_with_product {
+            private Product requestProduct;
+
+            @BeforeEach
+            void setUp() {
+                requestProduct = new Product("장난감1", "M", 1000, "http://image.com");
+            }
+
+            @AfterEach
+            void after() {
+                productService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("product를 저장하고 리턴한다")
+            void it_returns_product() {
+                Product savedProduct = productService.createProduct(requestProduct);
+
+                assertThat(savedProduct.getId()).isEqualTo(requestProduct.getId());
+                assertThat(savedProduct.getName()).isEqualTo(requestProduct.getName());
+                assertThat(savedProduct.getMaker()).isEqualTo(requestProduct.getMaker());
+                assertThat(savedProduct.getPrice()).isEqualTo(requestProduct.getPrice());
+                assertThat(savedProduct.getImageUrl()).isEqualTo(requestProduct.getImageUrl());
+            }
+        }
+    }
 }
