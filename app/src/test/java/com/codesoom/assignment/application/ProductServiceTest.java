@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,20 +47,8 @@ class ProductServiceTest {
 
             @BeforeEach
             void prepare() {
-                final Product product1 = Product.builder()
-                        .id(1L)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-                final Product product2 = Product.builder()
-                        .id(2L)
-                        .name("고양이 장난감2")
-                        .maker("애플")
-                        .price(12000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
+                final Product product1 = ProductFactory.createProduct(1L);
+                final Product product2 = ProductFactory.createProduct(2L);
 
                 givenProducts.add(product1);
                 givenProducts.add(product2);
@@ -71,8 +60,6 @@ class ProductServiceTest {
             @DisplayName("모든 상품을 리턴한다")
             void it_returns_all_products() {
                 final List<ProductInfo> actualProducts = productService.getProducts();
-
-                verify(productRepository).findAll();
 
                 assertThat(actualProducts).hasSize(givenProducts.size());
             }
@@ -104,18 +91,10 @@ class ProductServiceTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private Product givenProduct;
+            private final Product givenProduct = ProductFactory.createProduct(PRODUCT_ID);
 
             @BeforeEach
             void prepare() {
-                givenProduct = Product.builder()
-                        .id(PRODUCT_ID)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
                 given(productRepository.findById(PRODUCT_ID)).willReturn(Optional.of(givenProduct));
             }
 
@@ -123,8 +102,6 @@ class ProductServiceTest {
             @DisplayName("상품을 찾아 리턴한다")
             void it_returns_searched_product() {
                 final ProductInfo actualProduct = productService.getProduct(PRODUCT_ID);
-
-                verify(productRepository).findById(PRODUCT_ID);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getMaker()).isEqualTo(givenProduct.getMaker());
@@ -156,36 +133,19 @@ class ProductServiceTest {
         @Nested
         @DisplayName("새로운 상품이 주어지면")
         class Context_with_new_product {
-            private Product givenProduct;
+            private final Product givenProduct = ProductFactory.createProduct(1L);
 
             @BeforeEach
             void prepare() {
-                givenProduct = Product.builder()
-                        .id(1L)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
                 given(productRepository.save(any(Product.class))).willReturn(givenProduct);
             }
 
             @Test
             @DisplayName("DB에 등록하고 등록된 상품을 리턴한다")
             void it_returns_registered_product() {
-                final ProductDto.RequestParam request = new ProductDto.RequestParam();
-                request.setName("고양이 장난감1");
-                request.setMaker("삼성");
-                request.setPrice(10000L);
-                request.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
-
-                final ProductDtoMapper mapper = new ProductDtoMapper();
-                final ProductCommand.Register command = mapper.of(request);
+                final ProductCommand.Register command = ProductFactory.of(givenProduct);
 
                 final ProductInfo actualProduct = productService.createProduct(command);
-
-                verify(productRepository).save(any(Product.class));
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getMaker()).isEqualTo(givenProduct.getMaker());
@@ -201,18 +161,10 @@ class ProductServiceTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private Product givenProduct;
+            private final Product givenProduct = ProductFactory.createProduct(PRODUCT_ID);
 
             @BeforeEach
             void prepare() {
-                givenProduct = Product.builder()
-                        .id(PRODUCT_ID)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
                 given(productRepository.findById(any(Long.class))).willReturn(Optional.of(givenProduct));
             }
 
@@ -223,22 +175,25 @@ class ProductServiceTest {
                 final ProductCommand.Register.RegisterBuilder registerBuilder = ProductCommand.Register.builder();
                 System.out.println(registerBuilder.toString()); // jacoco테스트에서 RegisterBuilder toString가 계속 0%로 나와서 추가...
 
-                final ProductCommand.Register command = registerBuilder.id(PRODUCT_ID)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(12000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
+                final ProductCommand.Register command = registerBuilder
+                        .id(PRODUCT_ID)
+                        .name("수정_" + givenProduct.getName())
+                        .maker("수정_" + givenProduct.getMaker())
+                        .price(2000 + givenProduct.getPrice())
+                        .imageUrl("modified_" + givenProduct.getImageUrl())
                         .build();
 
                 final ProductInfo actualProduct = productService.updateProduct(command);
 
-                assertThat(actualProduct.getPrice()).isEqualTo(12000L);
+                assertThat(actualProduct.getPrice()).isEqualTo(command.getPrice());
             }
         }
 
         @Nested
         @DisplayName("유효하지않은 ID가 주어지면")
         class Context_with_invalid_id {
+            private final Long PRODUCT_ID = 100L;
+            private final Product givenProduct = ProductFactory.createProduct(PRODUCT_ID);
 
             @BeforeEach
             void prepare() {
@@ -248,15 +203,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                final ProductDto.RequestParam request = new ProductDto.RequestParam();
-                request.setId(100L);
-                request.setName("고양이 장난감100");
-                request.setMaker("삼성");
-                request.setPrice(10000L);
-                request.setImageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png");
-
-                final ProductDtoMapper mapper = new ProductDtoMapper();
-                final ProductCommand.Register command = mapper.of(request);
+                final ProductCommand.Register command = ProductFactory.of(givenProduct);
 
                 assertThatThrownBy(() -> productService.updateProduct(command)).isInstanceOf(ProductNotFoundException.class);
             }
@@ -270,18 +217,10 @@ class ProductServiceTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private Product givenProduct;
+            private final Product givenProduct = ProductFactory.createProduct(PRODUCT_ID);
 
             @BeforeEach
             void prepare() {
-                givenProduct = Product.builder()
-                        .id(PRODUCT_ID)
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build();
-
                 given(productRepository.findById(any(Long.class))).willReturn(Optional.of(givenProduct));
             }
 
@@ -289,8 +228,6 @@ class ProductServiceTest {
             @DisplayName("해당 상품을 삭제한다")
             void it_returns_nothing() {
                 productService.deleteProduct(PRODUCT_ID);
-
-                verify(productRepository).delete(givenProduct);
             }
         }
 
@@ -307,6 +244,35 @@ class ProductServiceTest {
             void it_throws_exception() {
                 assertThatThrownBy(() -> productService.deleteProduct(100L)).isInstanceOf(ProductNotFoundException.class);
             }
+        }
+    }
+
+    static class ProductFactory {
+        static Product createProduct(Long id) {
+            return Product.builder()
+                    .id(id)
+                    .name("고양이 장난감" + id)
+                    .maker("제조사" + id)
+                    .price(randomPrice())
+                    .imageUrl(UUID.randomUUID().toString() + ".png")
+                    .build();
+
+        }
+
+        static ProductCommand.Register of(Product product) {
+            ProductCommand.Register.RegisterBuilder register = ProductCommand.Register.builder();
+
+//            register.id(product.getId());
+            register.name(product.getName());
+            register.maker(product.getMaker());
+            register.price(product.getPrice());
+            register.imageUrl(product.getImageUrl());
+
+            return register.build();
+        }
+
+        static Long randomPrice() {
+            return (long) (Math.ceil((Math.random() * 10000 + 10000) / 1000) * 1000);
         }
     }
 }
