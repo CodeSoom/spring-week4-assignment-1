@@ -17,9 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -194,6 +195,129 @@ class ProductControllerTest {
                         .andExpect(jsonPath("$.price").value(requestProduct.getPrice()))
                         .andExpect(jsonPath("$.imageUrl").value(requestProduct.getImageUrl()));
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("updateProduct 메서드는")
+    class Describe_updateProduct {
+        @Nested
+        @DisplayName("요청하는 product의 일부 필드가 없는 경우")
+        class Context_with_partial_value {
+            private Product requestProduct;
+            private Product savedProduct;
+            private String requestBody;
+
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                requestProduct = Product.builder()
+                        .id(null)
+                        .name("장난감1")
+                        .maker(null)
+                        .price(1000)
+                        .imageUrl(null)
+                        .build();
+
+                savedProduct = productService.createProduct(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1")
+                                .maker("M")
+                                .price(2000)
+                                .imageUrl("http://image.com")
+                                .build()
+                );
+                requestBody = objectMapper.writeValueAsString(requestProduct);
+
+            }
+
+            @Test
+            @DisplayName("필드가 없는 경우 수정하지 않고, 값이 있는 경우 수정 후 리턴한다")
+            void it_returns_partial_updated_product() throws Exception {
+                mockMvc.perform(patch("/products/" + savedProduct.getId())
+                                .content(requestBody)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name").value(requestProduct.getName()))
+                        .andExpect(jsonPath("$.maker").value(savedProduct.getMaker()))
+                        .andExpect(jsonPath("$.price").value(requestProduct.getPrice()))
+                        .andExpect(jsonPath("$.imageUrl").value(savedProduct.getImageUrl()));
+            }
+        }
+
+        @Nested
+        @DisplayName("요청하는 product 의 필드가 모두 있는 경우")
+        class Context_with_full_value {
+            private Product requestProduct;
+            private Product savedProduct;
+            private String requestBody;
+
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                requestProduct = Product.builder()
+                        .id(null)
+                        .name("장난감1after")
+                        .maker("K")
+                        .price(3000)
+                        .imageUrl("http://image10.com")
+                        .build();
+
+                savedProduct = productService.createProduct(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1")
+                                .maker("M")
+                                .price(2000)
+                                .imageUrl("http://image.com")
+                                .build());
+
+                requestBody = objectMapper.writeValueAsString(requestProduct);
+
+            }
+
+            @Test
+            @DisplayName("모든 필드를 수정 후 리턴한다")
+            void it_returns_updated_product() throws Exception {
+                mockMvc.perform(patch("/products/" + savedProduct.getId())
+                                .content(requestBody)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name").value(requestProduct.getName()))
+                        .andExpect(jsonPath("$.maker").value(requestProduct.getMaker()))
+                        .andExpect(jsonPath("$.price").value(requestProduct.getPrice()))
+                        .andExpect(jsonPath("$.imageUrl").value(requestProduct.getImageUrl()));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("저장되어 있지 않은 product 의 id로 요청한 경우")
+    class Context_with_non_existence_id {
+        private Product requestProduct;
+        private String requestBody;
+
+        @BeforeEach
+        void setUp() throws JsonProcessingException {
+            requestProduct = Product.builder()
+                    .id(null)
+                    .name("장난감1after")
+                    .maker("K")
+                    .price(3000)
+                    .imageUrl("http://image10.com")
+                    .build();
+            requestBody = objectMapper.writeValueAsString(requestProduct);
+
+        }
+
+        @Test
+        @DisplayName("제품을 찾을 수 없는 예외를 던진다")
+        void it_throws_exception() throws Exception {
+            mockMvc.perform(patch("/products/" + INVALID_PRODUCT_ID)
+                            .content(requestBody)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound());
         }
     }
 }
