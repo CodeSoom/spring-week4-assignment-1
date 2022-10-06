@@ -2,8 +2,6 @@ package com.codesoom.assignment.repository;
 
 import com.codesoom.assignment.entity.Product;
 
-import java.util.List;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -65,14 +63,7 @@ public class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                Product source = new Product(1L, "테스트", 2000, "");
-                productRepository.save(source);
-                List<Product> all = productRepository.findAll();
-                for(Product p : all) {
-                    if (p.getId().equals(1L)){
-                        productRepository.deleteById(1L);
-                    }
-                }
+                productRepository.deleteAll();
             }
 
             @Test
