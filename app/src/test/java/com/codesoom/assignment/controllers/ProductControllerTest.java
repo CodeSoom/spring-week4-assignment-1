@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -24,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 class ProductControllerTest {
+    private Long INVALID_PRODUCT_ID = 0L;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -92,6 +93,57 @@ class ProductControllerTest {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
                         .andExpect(content().string("[]"));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("getProduct 메서드는")
+    class Describe_getProduct {
+        @Nested
+        @DisplayName("저장되어 있는 product 의 id가 주어지면")
+        class Context_with_existing_product_id {
+            private Product givenProduct;
+
+            @BeforeEach
+            void setUp() {
+                givenProduct = productService.createProduct(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1")
+                                .maker("M")
+                                .price(1000)
+                                .imageUrl("http://images/1")
+                                .build()
+                );
+            }
+
+            @AfterEach
+            void after() {
+                productService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("요청에 맞는 product 를 리턴한다")
+            void it_returns_product() throws Exception {
+                mockMvc.perform(get("/products/" + givenProduct.getId()))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id").value(givenProduct.getId()))
+                        .andExpect(jsonPath("$.name").value(givenProduct.getName()))
+                        .andExpect(jsonPath("$.maker").value(givenProduct.getMaker()))
+                        .andExpect(jsonPath("$.price").value(givenProduct.getPrice()))
+                        .andExpect(jsonPath("$.imageUrl").value(givenProduct.getImageUrl()));
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있지 않은 product id가 주어지면")
+        class Context_with_non_existent_product_id {
+            @Test
+            @DisplayName("제품을 찾을 수 없는 예외를 던진다")
+            void it_returns_exception() throws Exception {
+                mockMvc.perform(get("/products/" + INVALID_PRODUCT_ID))
+                        .andExpect(status().isNotFound());
             }
         }
     }
