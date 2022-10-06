@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
 import com.codesoom.assignment.domain.Product;
 import org.springframework.http.HttpStatus;
@@ -23,38 +24,40 @@ import java.util.List;
 @CrossOrigin
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductCommandService productCommandService;
+    private final ProductQueryService productQueryService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(ProductCommandService productCommandService, ProductQueryService productQueryService) {
+        this.productCommandService = productCommandService;
+        this.productQueryService = productQueryService;
     }
 
     @GetMapping
     public List<Product> getAll() {
-        return productService.getAll();
+        return productQueryService.getAll();
     }
 
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {
-        return productService.get(id);
+        return productQueryService.get(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@Valid @RequestBody ProductRequestDto requestDto) {
         Product product = requestDto.toEntity();
-        return productService.create(product);
+        return productCommandService.create(product);
     }
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
     public Product update(@PathVariable Long id, @Valid @RequestBody ProductRequestDto requestDto) {
         Product product = requestDto.toEntity();
-        return productService.update(id, product);
+        return productCommandService.update(id, product);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        productService.deleteById(id);
+        productCommandService.deleteById(id);
     }
 }

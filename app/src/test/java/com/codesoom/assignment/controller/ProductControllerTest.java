@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
@@ -49,21 +50,26 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductService productService;
+    private ProductQueryService productQueryService;
+
+    @MockBean
+    private ProductCommandService productCommandService;
 
     @BeforeEach
     void setUp() {
         Product product = getProduct();
 
-        given(productService.get(TEST_PRODUCT_ID)).willReturn(product);
+        given(productQueryService.get(TEST_PRODUCT_ID)).willReturn(product);
 
-        given(productService.get(WRONG_PRODUCT_ID)).willThrow(ProductNotFoundException.class);
+        given(productQueryService.get(WRONG_PRODUCT_ID)).willThrow(ProductNotFoundException.class);
 
-        given(productService.create(any(Product.class))).willReturn(product);
+        given(productQueryService.getAll()).willReturn(Collections.emptyList());
 
-        given(productService.update(eq(WRONG_PRODUCT_ID), any(Product.class))).willThrow(ProductNotFoundException.class);
+        given(productCommandService.create(any(Product.class))).willReturn(product);
 
-        given(productService.update(eq(TEST_PRODUCT_ID), any(Product.class))).willReturn(product);
+        given(productCommandService.update(eq(WRONG_PRODUCT_ID), any(Product.class))).willThrow(ProductNotFoundException.class);
+
+        given(productCommandService.update(eq(TEST_PRODUCT_ID), any(Product.class))).willReturn(product);
     }
 
     private Product getProduct() {
@@ -77,8 +83,6 @@ class ProductControllerTest {
     @Test
     @DisplayName("모든 상품 조회 요청이 들어오면 상품 목록과 함께 200 응답을 생성한다")
     void getAll_test() throws Exception {
-        given(productService.getAll()).willReturn(Collections.emptyList());
-
         mockMvc.perform(get("/products"))
                 .andExpect(content().string(toJsonString(Collections.emptyList())))
                 .andExpect(status().isOk());
@@ -102,9 +106,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 생성 요청이 들어오면 201 응답 코드를 생성한다")
     void createProduct_test() throws Exception {
-        final String productRequestJsonString = objectMapper.writeValueAsString(
-                new ProductRequestDto(name, maker, price, imageUrl)
-        );
+        final String productRequestJsonString = toJsonString(new ProductRequestDto(name, maker, price, imageUrl));
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,15 +121,13 @@ class ProductControllerTest {
         mockMvc.perform(delete("/products/{id}", TEST_PRODUCT_ID))
                 .andExpect(status().isNoContent());
 
-        verify(productService).deleteById(TEST_PRODUCT_ID);
+        verify(productCommandService).deleteById(TEST_PRODUCT_ID);
     }
 
     @Test
     @DisplayName("수정 가능한 id로 상품 수정 요청이 들어오면 수정된 상품 정보와 함께 200 응답 코드를 생성한다")
     void updateProduct_test() throws Exception {
-        final String productRequestJsonString = objectMapper.writeValueAsString(
-                new ProductRequestDto(name, maker, price, imageUrl)
-        );
+        final String productRequestJsonString = toJsonString(new ProductRequestDto(name, maker, price, imageUrl));
 
         mockMvc.perform(put("/products/{id}", TEST_PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -138,9 +138,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("수정 불가능한 id로 상품 수정 요청이 들어오면 404 응답 코드를 생성한다")
     void updateProduct_fail_test() throws Exception {
-        final String productRequestJsonString = objectMapper.writeValueAsString(
-                new ProductRequestDto(name, maker, price, imageUrl)
-        );
+        final String productRequestJsonString = toJsonString(new ProductRequestDto(name, maker, price, imageUrl));
 
         mockMvc.perform(put("/products/{id}", WRONG_PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
