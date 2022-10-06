@@ -3,9 +3,8 @@ package com.codesoom.assignment.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Objects;
 
-/** 장난감 **/
+/** 상품 **/
 @Entity
 public class Product {
 
@@ -36,7 +35,7 @@ public class Product {
     }
 
     /**
-     * 장난감을 수정합니다.
+     * 상품을 수정합니다.
      *
      * @param name 수정할 이름
      * @param maker 수정할 가게
@@ -68,26 +67,5 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Product)) {
-            return false;
-        }
-        Product product = (Product) o;
-        return price == product.price
-                && Objects.equals(id, product.id)
-                && Objects.equals(name, product.name)
-                && Objects.equals(maker, product.maker)
-                && Objects.equals(imageUrl, product.imageUrl);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, maker, price, imageUrl);
     }
 }
