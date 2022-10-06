@@ -9,7 +9,7 @@ import java.beans.ConstructorProperties;
 /**
  * 장난감 수정/생성 요청시 사용합니다
  */
-public class ProductRequestDto {
+public class ProductRequestDto implements ProductUpdateRequest {
 
     @NotEmpty(message = "이름은 필수값 입니다")
     private final String name;
@@ -31,18 +31,22 @@ public class ProductRequestDto {
         this.imageUrl = imageUrl;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getMaker() {
         return maker;
     }
 
+    @Override
     public int getPrice() {
         return price;
     }
 
+    @Override
     public String getImageUrl() {
         return imageUrl;
     }
