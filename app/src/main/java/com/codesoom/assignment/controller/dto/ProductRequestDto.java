@@ -20,7 +20,6 @@ public class ProductRequestDto implements ProductUpdateRequest {
     @NotNull(message = "가격은 필수값 입니다")
     private final Integer price;
 
-    @NotEmpty(message = "이미지는 필수값 입니다")
     private final String imageUrl;
 
     @ConstructorProperties({"name", "maker", "price", "imageUrl"})
