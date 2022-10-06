@@ -72,7 +72,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("빈 데이터를 리턴한다")
+            @DisplayName("빈 컬렉션을 리턴한다")
             void it_returns_empty_data() {
                 final List<ProductInfo> actualProducts = productService.getProducts();
 
