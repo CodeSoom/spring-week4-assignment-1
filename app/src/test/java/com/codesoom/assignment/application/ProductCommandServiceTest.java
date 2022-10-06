@@ -94,7 +94,15 @@ class ProductCommandServiceTest {
         @Nested
         @DisplayName("수정이 불가능한 경우")
         class Context_with_invalid_id {
-            private final Long invalidId = 1000L;
+            private Long invalidId;
+
+            @BeforeEach
+            void setUp() {
+                Product product = productCommandService.create(getProduct());
+                invalidId = product.getId();
+
+                productCommandService.deleteById(invalidId);
+            }
 
             @Test
             @DisplayName("예외를 던진다")
@@ -106,8 +114,8 @@ class ProductCommandServiceTest {
     }
 
     @Nested
-    @DisplayName("delete 메소드는")
-    class Describe_delete {
+    @DisplayName("deleteById 메소드는")
+    class Describe_deleteById {
 
         @Nested
         @DisplayName("삭제 가능한 id가 주어지면")
@@ -130,7 +138,15 @@ class ProductCommandServiceTest {
         @Nested
         @DisplayName("삭제 불가능한 id가 주어지면")
         class Context_with_invalid_id {
-            private final Long invalidId = 1000L;
+            private Long invalidId;
+
+            @BeforeEach
+            void setUp() {
+                Product product = productCommandService.create(getProduct());
+                invalidId = product.getId();
+
+                productCommandService.deleteById(invalidId);
+            }
 
             @Test
             @DisplayName("예외를 던진다")
