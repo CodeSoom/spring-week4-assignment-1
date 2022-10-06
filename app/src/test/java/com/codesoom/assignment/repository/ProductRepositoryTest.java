@@ -95,7 +95,7 @@ class ProductRepositoryTest {
     class Describe_findById {
 
         @Nested
-        @DisplayName("만약 조회 가능한 id가 주어지면")
+        @DisplayName("조회 가능한 id가 주어지면")
         class Context_with_valid_id {
             private Long id;
 
@@ -118,9 +118,17 @@ class ProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("만약 조회할 수 없는 id가 주어지면")
+        @DisplayName("조회할 수 없는 id가 주어지면")
         class Context_with_invalid_id {
-            private final Long invalidId = 1000L;
+            private Long invalidId;
+
+            @BeforeEach
+            void setUp() {
+                Product product = productRepository.save(new Product(name, maker, price, imageUrl));
+                invalidId = product.getId();
+
+                productRepository.delete(product);
+            }
 
             @Test
             @DisplayName("빈 값을 반환한다")
@@ -137,7 +145,7 @@ class ProductRepositoryTest {
     class Describe_deleteById {
 
         @Nested
-        @DisplayName("만약 삭제 가능한 id가 주어지면")
+        @DisplayName("삭제 가능한 id가 주어지면")
         class Context_with_valid_id {
             private Long id;
 
@@ -156,7 +164,7 @@ class ProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("만약 삭제 불가능한 id가 주어지면")
+        @DisplayName("삭제 불가능한 id가 주어지면")
         class Context_with_invalid_id {
             private Long invalidId;
 
