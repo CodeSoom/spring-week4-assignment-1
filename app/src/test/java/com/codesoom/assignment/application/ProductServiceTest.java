@@ -41,7 +41,7 @@ public class ProductServiceTest {
       @BeforeEach
       void prepare() {
         source = new Product(1L, "테스트", 2000, "");
-        productService.create(saved);
+        productService.create(source);
       }
 
       @Test
@@ -55,6 +55,7 @@ public class ProductServiceTest {
     @DisplayName("저장된 product가 없다면")
     class Context_non_existent_product {
 
+      @BeforeEach
       void removeAll() {
         productRepository.deleteAll();
       }
@@ -67,7 +68,6 @@ public class ProductServiceTest {
 
       }
     }
-
   }
 
     @Nested
@@ -87,8 +87,7 @@ public class ProductServiceTest {
         @Test
         @DisplayName("해당 id를 가진 Product객체를 리턴한다")
         void it_returns_product() {
-          assertThat(productService.findById(1L)).isEqualTo(saved);
-
+          assertThat(productService.findById(saved.getId())).isEqualTo(saved);
         }
       }
 
@@ -115,17 +114,16 @@ public class ProductServiceTest {
 
         @BeforeEach
         void prepare() {
-          source = new Product(1L, "테스트", 2000, "");
-          saved = productService.create(source);
+          saved = productService.create(new Product(1L, "테스트", 2000, ""));
         }
 
         @Test
         @DisplayName("해당 id를 가진 객체를 DB에서 삭제후 리턴한다")
         void it_returns_remove_product() {
           assertThat(productService.remove(1L)).isEqualTo(saved);
-
         }
       }
+
       @Nested
       @DisplayName("id가 존재하지 않는다면")
       class Context_non_existent_id {
@@ -135,7 +133,32 @@ public class ProductServiceTest {
         void it_returns_ProductNotFoundException() {
           assertThatThrownBy(() -> productService.findById(-1L)).isInstanceOf(
               ProductNotFoundException.class);
+        }
+      }
+    }
 
+    @Nested
+    @DisplayName("update 메소드는")
+    class Describe_update {
+
+      @Nested
+      @DisplayName("id와 변경할 정보가 담겨있는 product객체가 존재한다면")
+      class Context_existent_id {
+
+        Product update = new Product(null, "업데이트", 1000, "");
+
+        @BeforeEach
+        void prepare() {
+          source = new Product(1L, "테스트", 2000, "");
+          saved = productService.create(source);
+        }
+
+        @Test
+        @DisplayName("해당 id를 가진 Product객체의 정보를 update한후 리턴한다")
+        void it_returns_updated_product() {
+
+          Product updated = productService.update(saved.getId(), update);
+          assertThat(updated.getBrand()).isEqualTo(update.getBrand());
         }
       }
     }
