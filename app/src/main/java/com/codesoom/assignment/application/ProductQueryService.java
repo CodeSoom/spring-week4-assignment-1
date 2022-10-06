@@ -25,11 +25,11 @@ public class ProductQueryService {
      * 상품을 조회합니다.
      * @param id 상품을 찾을 아이디
      * @return 찾은 상품
-     * @throws ProductNotFoundException 해당하는 아이디가 존재하지 않는 경우
+     * @throws ProductNotFoundException 해당하는 아이디의 상품을 찾지 못한 경우
      */
     public Product get(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id + "에 해당하는 상ㅆ을 찾지 못했습니다."));
+                .orElseThrow(() -> new ProductNotFoundException(id + "에 해당하는 상품을 찾지 못했습니다."));
     }
 
     /**
