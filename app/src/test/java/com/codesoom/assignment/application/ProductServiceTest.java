@@ -45,11 +45,8 @@ class ProductServiceTest {
             @BeforeEach
             void prepare() {
 
-                final Product product1 = ProductFactory.createProduct(1L);
-                final Product product2 = ProductFactory.createProduct(2L);
-
-                givenProducts.add(product1);
-                givenProducts.add(product2);
+                givenProducts.add(ProductFactory.createProduct(1L));
+                givenProducts.add(ProductFactory.createProduct(2L));
 
                 given(productRepository.findAll()).willReturn(givenProducts);
             }
