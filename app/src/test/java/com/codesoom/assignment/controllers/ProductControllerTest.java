@@ -95,7 +95,7 @@ class ProductControllerTest {
         @DisplayName("저장되어 있는 product 가 없을 때")
         class Context_without_product {
             @Test
-            @DisplayName("빈 값을 리턴한다")
+            @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty() throws Exception {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
