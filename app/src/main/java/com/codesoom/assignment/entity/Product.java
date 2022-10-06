@@ -42,18 +42,17 @@ public class Product {
         return imageUrl;
     }
 
-    public Product updatebrand(String brand) {
-        return new Product(this.id, brand, this.price, this.imageUrl);
-    }
 
-    public Product updatePrice(Integer price){
-        return new Product(this.id, this.brand, price, this.imageUrl);
+    /**
+     * @param product
+     * @return the updated product
+     */
+    public Product updateProduct(Product product) {
+        this.brand = product.getBrand();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
+        return this;
     }
-
-    public Product updateImageUrl(String imageUrl){
-        return new Product(this.id, this.brand, this.price, imageUrl);
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -64,11 +63,16 @@ public class Product {
             return false;
         }
         Product toy = (Product) o;
-        return id.equals(toy.id) && brand.equals(toy.brand) && price.equals(toy.price) && imageUrl.equals(toy.imageUrl);
+        return id.equals(toy.id) &&
+            brand.equals(toy.brand) &&
+            price.equals(toy.price) &&
+            imageUrl.equals(toy.imageUrl);
+
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, brand, price, imageUrl);
     }
+
 }
