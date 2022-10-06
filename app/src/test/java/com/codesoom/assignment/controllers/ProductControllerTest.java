@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,6 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -318,6 +322,48 @@ class ProductControllerTest {
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound());
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteProduct 메서드는")
+    class Describe_deleteProduct {
+        @Nested
+        @DisplayName("저장되어있는 product 의 id가 주어진다면 ")
+        class Context_with_existing_product_id {
+            private Product savedProduct;
+
+            @BeforeEach
+            void setUp() {
+                savedProduct = productService.createProduct(
+                        Product.builder()
+                                .id(null)
+                                .name("장난감1after")
+                                .maker("K")
+                                .price(3000)
+                                .imageUrl("http://image10.com")
+                                .build()
+                );
+            }
+
+            @Test
+            @DisplayName("product 를 삭제한다")
+            void it_delete_product() throws Exception {
+                mockMvc.perform(delete("/products/" + savedProduct.getId()))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있지 않는 product 의 id가 주어진다면 ")
+        class Context_with_non_existence_product_id {
+
+            @Test
+            @DisplayName("제품을 찾을 수 없는 예외를 던진다")
+            void it_delete_product() throws Exception {
+                mockMvc.perform(delete("/products/" + INVALID_PRODUCT_ID))
+                        .andExpect(status().isNotFound());
+            }
         }
     }
 }
