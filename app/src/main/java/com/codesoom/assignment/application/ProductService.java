@@ -26,7 +26,7 @@ public class ProductService {
     }
 
     /**
-     * Create product.
+     * 매개변수로 받은 product객체를 db에 저장한다
      *
      * @param product the product
      * @return the product
@@ -36,7 +36,7 @@ public class ProductService {
     }
 
     /**
-     * Find by id product.
+     * id로 product객체를 찾아 리턴한다
      *
      * @param id the id
      * @return the product
@@ -46,7 +46,7 @@ public class ProductService {
     }
 
     /**
-     * Gets list.
+     * 저장된 product들을 list로 리턴한다
      *
      * @return the list
      */
@@ -55,7 +55,7 @@ public class ProductService {
     }
 
     /**
-     * Remove product.
+     * id로 찾은 product를 삭제한다
      *
      * @param id the id
      * @return the product
@@ -67,7 +67,8 @@ public class ProductService {
     }
 
     /**
-     * update product
+     * id로 product를 찾아
+     * 매개변수로 받은 product객체의 정보로 업데이트 한 후 리턴한다.
      *
      * @param id
      * @param product

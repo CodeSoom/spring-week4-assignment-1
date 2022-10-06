@@ -1,7 +1,7 @@
 package com.codesoom.assignment.exception;
 
 /**
- * The type Product not found exception.
+ * findById로 product를 찾지 못했을 때 발생하는 exception
  */
 public class ProductNotFoundException extends RuntimeException{
 
