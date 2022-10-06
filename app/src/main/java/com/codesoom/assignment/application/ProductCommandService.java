@@ -6,6 +6,8 @@ import com.codesoom.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 상품 생성/수정/삭제를 처리합니다
  */
@@ -49,7 +51,7 @@ public class ProductCommandService {
     }
 
     /**
-     * 상품을 삭제합니다.
+     * 상품 하나를 삭제합니다.
      * @param id 삭제할 상품 아이디
      * @throws ProductNotFoundException 삭제할 상품을 찾지 못한 경우
      */
@@ -58,5 +60,19 @@ public class ProductCommandService {
                 .orElseThrow(() -> new ProductNotFoundException(id + "에 해당하는 상품을 찾지 못해 삭제할 수 없습니다."));
 
         productRepository.delete(product);
+    }
+
+    /**
+     * 상품 여러 개를 삭제합니다.
+     * @param ids 삭제할 상품 아이디 목록
+     * @throws ProductNotFoundException 삭제할 상품을 찾지 못한 경우
+     */
+    public void deleteByIds(List<Long> ids) {
+        for (Long id : ids) {
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() -> new ProductNotFoundException(id + "에 해당하는 상품을 찾지 못해 삭제할 수 없습니다."));
+
+            productRepository.delete(product);
+        }
     }
 }
