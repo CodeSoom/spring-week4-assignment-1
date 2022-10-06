@@ -1,7 +1,6 @@
 package com.codesoom.assignment.domain;
 
 import com.codesoom.assignment.common.ProductFactory;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,35 +14,28 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("ProductRepository 클래스")
 @DataJpaTest
+@DisplayName("ProductRepository 클래스")
 class ProductRepositoryTest {
-    @Autowired
-    private ProductRepository productRepository;
-
-    @AfterEach
-    void clear() {
-        productRepository.deleteAll();
-    }
 
     @Nested
     @DisplayName("findAll 메소드는")
     class Describe_findAll {
         @Nested
         @DisplayName("데이터가 존재한다면")
-        class Context_with_existed_data {
+        class Context_with_existed_data extends JpaTest {
             private final List<Product> givenProducts = new ArrayList<>();
 
             @BeforeEach
             void prepare() {
-                givenProducts.add(productRepository.save(ProductFactory.createProduct(1L)));
-                givenProducts.add(productRepository.save(ProductFactory.createProduct(2L)));
+                givenProducts.add(getProductRepository().save(ProductFactory.createProduct(1L)));
+                givenProducts.add(getProductRepository().save(ProductFactory.createProduct(2L)));
             }
 
             @Test
             @DisplayName("모든 장난감을 리턴한다")
             void it_returns_all_toy() {
-                final List<Product> actualProducts = productRepository.findAll();
+                final List<Product> actualProducts = getProductRepository().findAll();
 
                 assertThat(actualProducts).hasSize(givenProducts.size());
             }
@@ -55,18 +47,18 @@ class ProductRepositoryTest {
     class Describe_findById {
         @Nested
         @DisplayName("유효한 ID가 주어지면")
-        class Context_with_existed_id {
+        class Context_with_existed_id extends JpaTest {
             private Product givenProduct;
 
             @BeforeEach
             void prepare() {
-                givenProduct = productRepository.save(ProductFactory.createProduct());
+                givenProduct = getProductRepository().save(ProductFactory.createProduct());
             }
 
             @Test
             @DisplayName("고양이 장난감을 찾아서 리턴한다")
             void it_returns_searched_cat_toy() {
-                final Product actualProduct = productRepository.findById(givenProduct.getId()).orElse(null);
+                final Product actualProduct = getProductRepository().findById(givenProduct.getId()).orElse(null);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getId()).isEqualTo(givenProduct.getId());
@@ -76,11 +68,11 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("유효하지 않은 ID가 주어지면")
-        class Context_with_non_existed_id {
+        class Context_with_non_existed_id extends JpaTest {
             @Test
             @DisplayName("Optional.empty()를 리턴한다")
             void it_returns_optional_empty() {
-                assertThat(productRepository.findById(100L)).isEmpty();
+                assertThat(getProductRepository().findById(100L)).isEmpty();
             }
         }
     }
@@ -90,13 +82,13 @@ class ProductRepositoryTest {
     class Describe_save {
         @Nested
         @DisplayName("새로운 고양이 장난감이 주어지면")
-        class Context_with_new_cat_toy {
+        class Context_with_new_cat_toy extends JpaTest {
             private final Product givenProduct = ProductFactory.createProduct();
 
             @Test
             @DisplayName("DB에 등록하고 등록된 장난감을 리턴한다")
             void it_returns_registered_cat_toy() {
-                final Product actualProduct = productRepository.save(givenProduct);
+                final Product actualProduct = getProductRepository().save(givenProduct);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getPrice()).isEqualTo(givenProduct.getPrice());
@@ -109,20 +101,20 @@ class ProductRepositoryTest {
     class Describe_delete {
         @Nested
         @DisplayName("유효한 ID가 주어지면")
-        class Context_with_existed_id {
+        class Context_with_existed_id extends JpaTest {
             private Product givenProduct;
 
             @BeforeEach
             void prepare() {
-                givenProduct = productRepository.save(ProductFactory.createProduct());
+                givenProduct = getProductRepository().save(ProductFactory.createProduct());
             }
 
             @Test
             @DisplayName("DB에서 삭제한다")
             void it_returns_nothing() {
-                productRepository.delete(givenProduct);
+                getProductRepository().delete(givenProduct);
 
-                final Optional<Product> actualProduct = productRepository.findById(givenProduct.getId());
+                final Optional<Product> actualProduct = getProductRepository().findById(givenProduct.getId());
 
                 assertThat(actualProduct).isEmpty();
             }
@@ -130,23 +122,31 @@ class ProductRepositoryTest {
 
         @Nested
         @DisplayName("유효하지 않은 ID가 주어지면")
-        class Context_with_non_existed_id {
+        class Context_with_non_existed_id extends JpaTest {
             private final Product givenProduct = ProductFactory.createProduct(100L);
 
             @Test
             @DisplayName("아무것도 하지않는다")
             void it_returns_nothing() {
-                final Optional<Product> beforeProduct = productRepository.findById(givenProduct.getId());
+                final Optional<Product> beforeProduct = getProductRepository().findById(givenProduct.getId());
 
-                productRepository.delete(givenProduct);
+                getProductRepository().delete(givenProduct);
 
-                final Optional<Product> afterProduct = productRepository.findById(givenProduct.getId());
+                final Optional<Product> afterProduct = getProductRepository().findById(givenProduct.getId());
 
                 assertThat(beforeProduct).isEmpty();
                 assertThat(afterProduct).isEmpty();
             }
         }
+    }
 
+    @DataJpaTest
+    class JpaTest {
+        @Autowired
+        ProductRepository productRepository;
 
+        public ProductRepository getProductRepository() {
+            return productRepository;
+        }
     }
 }
