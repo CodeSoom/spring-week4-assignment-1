@@ -2,6 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,11 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,6 +35,8 @@ class ProductControllerTest {
 
     @Autowired
     private ProductService productService;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Nested
     @DisplayName("GET /products getProducts 메서드는")
@@ -144,6 +151,48 @@ class ProductControllerTest {
             void it_returns_exception() throws Exception {
                 mockMvc.perform(get("/products/" + INVALID_PRODUCT_ID))
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("createProduct 메서드는")
+    class Describe_createProduct {
+        @Nested
+        @DisplayName("product 가 주어진다면")
+        class Context_with_product {
+            private Product requestProduct;
+            private String requestBody;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                requestProduct = Product.builder()
+                        .id(null)
+                        .name("장난감1")
+                        .maker("M")
+                        .price(1000)
+                        .imageUrl("http://images/1")
+                        .build();
+                requestBody = objectMapper.writeValueAsString(requestProduct);
+
+            }
+
+            @AfterEach
+            void after() {
+                productService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("product 를 저장하고 리턴한다")
+            void it_returns_product() throws Exception {
+                mockMvc.perform(post("/products")
+                                .content(requestBody)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.name").value(requestProduct.getName()))
+                        .andExpect(jsonPath("$.maker").value(requestProduct.getMaker()))
+                        .andExpect(jsonPath("$.price").value(requestProduct.getPrice()))
+                        .andExpect(jsonPath("$.imageUrl").value(requestProduct.getImageUrl()));
             }
         }
     }
