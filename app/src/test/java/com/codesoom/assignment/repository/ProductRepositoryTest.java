@@ -158,13 +158,54 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("만약 삭제 불가능한 id가 주어지면")
         class Context_with_invalid_id {
-            private final Long invalidId = 1000L;
+            private Long invalidId;
+
+            @BeforeEach
+            void setUp() {
+                Product product = productRepository.save(new Product(name, maker, price, imageUrl));
+                invalidId = product.getId();
+
+                productRepository.delete(product);
+            }
 
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
                 assertThatThrownBy(() -> productRepository.deleteById(invalidId))
                         .isInstanceOf(EmptyResultDataAccessException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("removeById 메소드는")
+    class Describe_removeById {
+
+        @Nested
+        @DisplayName("id가 주어지면")
+        class Context_with_id {
+            private Long id;
+            private Long invalidId;
+
+            @BeforeEach
+            void setUp() {
+                Product product1 = productRepository.save(new Product(name, maker, price, imageUrl));
+                id = product1.getId();
+
+                Product product2 = productRepository.save(new Product(name, maker, price, imageUrl));
+                invalidId = product2.getId();
+
+                productRepository.delete(product2);
+            }
+
+            @Test
+            @DisplayName("삭제를 수행하고 영향을 받은 행 수를 반환한다")
+            void it_returns_affected_row_count() {
+                int affectedRowCountById = productRepository.removeById(id);
+                int affectedRowCountByInvalidId = productRepository.removeById(invalidId);
+
+                assertThat(affectedRowCountById).isEqualTo(1);
+                assertThat(affectedRowCountByInvalidId).isEqualTo(0);
             }
         }
     }
