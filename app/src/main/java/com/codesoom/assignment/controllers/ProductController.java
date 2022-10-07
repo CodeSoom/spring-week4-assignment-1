@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.entity.Product;
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -10,31 +11,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
-/**
- * The type Product controller.
- */
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
     private final ProductService productService;
 
-    /**
-     * Instantiates a new Product controller.
-     *
-     * @param productService the product service
-     */
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     /**
-     * Gets product list.
-     *
-     * @return the product list
+     * ProductList를 리턴한다
+     * @return productList
      */
     @GetMapping
     public List<Product> getProductList() {
@@ -42,10 +34,10 @@ public class ProductController {
     }
 
     /**
-     * Gets by id.
+     * id로 product 객체를 찾는다
      *
-     * @param id the id
-     * @return the by id
+     * @param id
+     * @return id로 찾은 product 객체
      */
     @GetMapping("/{id}")
     public Product getById(@PathVariable Long id) {
@@ -53,22 +45,23 @@ public class ProductController {
     }
 
     /**
-     * Create product product.
+     * product 객체를 생성,db에 저장한다
      *
-     * @param source the source
-     * @return the product
+     * @param source
+     * @return 저장된 product 객체를 리턴한다
      */
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product source) {
         return productService.create(source);
     }
 
     /**
-     * Update product product.
+     * id로 찾은 product 객체의 정보를 업데이트 한다
      *
-     * @param id           the id
-     * @param updateSource the update source
-     * @return the product
+     * @param id
+     * @param updateSource
+     * @return 업데이트한 product 를 리턴한다
      */
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product updateSource) {
@@ -76,12 +69,13 @@ public class ProductController {
     }
 
     /**
-     * Delete product product.
+     * 해당 id를 가진 product 를 삭제한다
      *
-     * @param id the id
-     * @return the product
+     * @param id
+     * @return 삭제한 Product 를 리턴한다
      */
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Product deleteProduct(@PathVariable Long id) {
         return productService.remove(id);
     }
