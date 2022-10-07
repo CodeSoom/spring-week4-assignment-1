@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,7 @@ import javax.persistence.Id;
  * Represents a product Entity
  */
 
-@Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Product {
     @Id
@@ -28,6 +28,8 @@ public class Product {
     private Long price;
 
     private String imageUrl;
+
+
 
     /**
      * Constructs a product.
@@ -43,5 +45,26 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getMaker() {
+        return maker;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * controls any mapping to /products
  */
-
 @RestController
 public class ProductController {
 

@@ -49,6 +49,11 @@ public class ProductService {
         return productJpaRepository.save(product);
     }
 
+
+    public Product update(Product product){
+        return null;
+    }
+
     /**
      * deletes all data in the database.
      * @return an empty list; otherwise, a list with products
