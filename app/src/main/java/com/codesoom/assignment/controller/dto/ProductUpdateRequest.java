@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller.dto;
 
 /**
- * 상품을 수정하는 요청시 사용합니다
+ * 상품 수정 요청.
  */
 public interface ProductUpdateRequest {
 

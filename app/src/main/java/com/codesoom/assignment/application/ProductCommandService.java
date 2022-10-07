@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 상품 생성/수정/삭제를 처리합니다
+ * 상품 생성/수정/삭제를 처리합니다.
  */
 @Service
 @Transactional
