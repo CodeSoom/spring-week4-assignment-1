@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("ProductDtoMapper 클래스")
 class ProductDtoMapperTest {
 
-    private ProductDtoMapper productDtoMapper;
+    private ProductDtoMapperImpl productDtoMapper;
 
     @BeforeEach
     void setUp() {
-        productDtoMapper = new ProductDtoMapper();
+        productDtoMapper = new ProductDtoMapperImpl();
     }
 
     @Nested
@@ -59,13 +59,13 @@ class ProductDtoMapperTest {
         @DisplayName("유효한 요청 파라미터가 주어지면")
         class Context_with_valid_request_parameter {
             @Test
-            @DisplayName("Register 객체를 리턴한다")
+            @DisplayName("UpdateReq 객체를 리턴한다")
             void it_returns_register() {
                 final Long id = 1L;
 
-                final ProductCommand.Register actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
+                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
 
-                assertThat(actual).isInstanceOf(ProductCommand.Register.class);
+                assertThat(actual).isInstanceOf(ProductCommand.UpdateReq.class);
             }
         }
 
@@ -78,7 +78,7 @@ class ProductDtoMapperTest {
                 final Long id = null;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.Register actual = productDtoMapper.of(id, request);
+                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, request);
 
                 assertThat(actual).isNull();
             }
@@ -92,7 +92,7 @@ class ProductDtoMapperTest {
             void it_returns_null() {
                 final Long id = null;
 
-                final ProductCommand.Register actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
+                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
 
                 assertThat(actual).isNull();
             }
@@ -107,7 +107,7 @@ class ProductDtoMapperTest {
                 final Long id = 1L;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.Register actual = productDtoMapper.of(id, request);
+                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, request);
 
                 assertThat(actual).isNull();
             }

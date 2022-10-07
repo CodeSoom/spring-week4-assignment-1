@@ -10,7 +10,7 @@ public class ProductDto {
     @Setter
     @ToString
     public static class RequestParam {
-        private Long id;
+//        private Long id;
 
         private String name;
 

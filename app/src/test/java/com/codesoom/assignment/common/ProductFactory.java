@@ -42,17 +42,25 @@ public class ProductFactory {
     }
 
     public static ProductCommand.Register of(Product product) {
-        ProductCommand.Register.RegisterBuilder register = ProductCommand.Register.builder();
+        ProductCommand.Register.RegisterBuilder registerBuilder = ProductCommand.Register.builder();
 
-        if (product.getId() != null) {
-            register.id(product.getId());
-        }
-        register.name(product.getName());
-        register.maker(product.getMaker());
-        register.price(product.getPrice());
-        register.imageUrl(product.getImageUrl());
+        System.out.println(registerBuilder.toString());
 
-        return register.build();
+        return registerBuilder.name(product.getName())
+                .maker(product.getMaker())
+                .price(product.getPrice())
+                .imageUrl(product.getImageUrl())
+                .build();
+    }
+
+    public static ProductCommand.UpdateReq of(Long id, Product product) {
+        return ProductCommand.UpdateReq.builder()
+                .id(id)
+                .name(product.getName())
+                .maker(product.getMaker())
+                .price(product.getPrice())
+                .imageUrl(product.getImageUrl())
+                .build();
     }
 
     public static Long randomPrice() {

@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
 @lombok.Generated
 public class ProductCommand {
 
@@ -11,6 +12,30 @@ public class ProductCommand {
     @Builder
     @ToString
     public static class Register {
+        private final String name;
+
+        private final String maker;
+
+        private final Long price;
+
+        private final String imageUrl;
+
+        public Product toEntity() {
+            return Product.builder()
+                    .name(name)
+                    .maker(maker)
+                    .price(price)
+                    .imageUrl(imageUrl)
+                    .build();
+        }
+
+    }
+
+    @lombok.Generated
+    @Getter
+    @Builder
+    @ToString
+    public static class UpdateReq {
         private final Long id;
 
         private final String name;

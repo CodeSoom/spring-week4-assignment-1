@@ -1,20 +1,13 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.application.query;
 
-import com.codesoom.assignment.domain.ProductCommand;
 import com.codesoom.assignment.domain.ProductInfo;
 
 import java.util.List;
 
-public interface ProductCommandService {
+public interface ProductQueryService {
 
     List<ProductInfo> getProducts();
 
     ProductInfo getProduct(Long id);
-
-    ProductInfo createProduct(ProductCommand.Register command);
-
-    ProductInfo updateProduct(ProductCommand.UpdateReq command);
-
-    void deleteProduct(Long id);
 }
 

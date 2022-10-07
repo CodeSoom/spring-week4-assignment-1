@@ -1,40 +1,10 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.controller.ProductDto.RequestParam;
-import com.codesoom.assignment.domain.ProductCommand.Register;
-import com.codesoom.assignment.domain.ProductCommand.Register.RegisterBuilder;
-import org.springframework.stereotype.Component;
+import com.codesoom.assignment.domain.ProductCommand;
 
-@Component
-public class ProductDtoMapperImpl {
-    public Register of(RequestParam request) {
-        if (request == null) {
-            return null;
-        }
+public interface ProductDtoMapper {
+    ProductCommand.Register of(RequestParam request);
 
-        RegisterBuilder register = Register.builder();
-
-        register.id(request.getId());
-        register.name(request.getName());
-        register.maker(request.getMaker());
-        register.price(request.getPrice());
-        register.imageUrl(request.getImageUrl());
-
-        return register.build();
-    }
-
-    public Register of(Long id, RequestParam requestParam) {
-        if (id == null || requestParam == null) {
-            return null;
-        }
-
-        RegisterBuilder register = Register.builder();
-        register.id(id);
-        register.name(requestParam.getName());
-        register.maker(requestParam.getMaker());
-        register.price(requestParam.getPrice());
-        register.imageUrl(requestParam.getImageUrl());
-
-        return register.build();
-    }
+    ProductCommand.UpdateReq of(Long id, RequestParam requestParam);
 }
