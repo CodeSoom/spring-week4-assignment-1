@@ -49,8 +49,4 @@ public class ProductRequestDto implements ProductUpdateRequest {
     public String getImageUrl() {
         return imageUrl;
     }
-
-    public Product toEntity() {
-        return new Product(this.name, this.maker, this.price, this.imageUrl);
-    }
 }
