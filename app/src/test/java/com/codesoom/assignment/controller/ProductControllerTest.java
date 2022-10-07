@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
+import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -65,11 +66,11 @@ class ProductControllerTest {
 
         given(productQueryService.getAll()).willReturn(Collections.emptyList());
 
-        given(productCommandService.create(any(Product.class))).willReturn(product);
+        given(productCommandService.create(any(ProductUpdateRequest.class))).willReturn(product);
 
-        given(productCommandService.update(eq(WRONG_PRODUCT_ID), any(Product.class))).willThrow(ProductNotFoundException.class);
+        given(productCommandService.update(eq(WRONG_PRODUCT_ID), any(ProductUpdateRequest.class))).willThrow(ProductNotFoundException.class);
 
-        given(productCommandService.update(eq(TEST_PRODUCT_ID), any(Product.class))).willReturn(product);
+        given(productCommandService.update(eq(TEST_PRODUCT_ID), any(ProductUpdateRequest.class))).willReturn(product);
     }
 
     private Product getProduct() {

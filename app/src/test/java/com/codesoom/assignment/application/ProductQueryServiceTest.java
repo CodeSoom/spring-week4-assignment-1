@@ -1,5 +1,7 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.controller.dto.ProductRequestDto;
+import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
@@ -42,8 +44,8 @@ class ProductQueryServiceTest {
         productRepository.deleteAll();
     }
 
-    private Product getProduct() {
-        return new Product(name, maker, price, imageUrl);
+    private ProductUpdateRequest getProductRequest() {
+        return new ProductRequestDto(name, maker, price, imageUrl);
     }
 
     @Nested
@@ -57,7 +59,7 @@ class ProductQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProduct());
+                Product product = productCommandService.create(getProductRequest());
                 id = product.getId();
             }
 
@@ -110,7 +112,7 @@ class ProductQueryServiceTest {
             @BeforeEach
             void setUp() {
                 for (int i = 0; i < productSize; i++) {
-                    productCommandService.create(getProduct());
+                    productCommandService.create(getProductRequest());
                 }
             }
 

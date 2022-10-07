@@ -1,5 +1,7 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.controller.dto.ProductRequestDto;
+import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
@@ -41,8 +43,8 @@ class ProductCommandServiceTest {
         productRepository.deleteAll();
     }
 
-    private Product getProduct() {
-        return new Product(name, maker, price, imageUrl);
+    private ProductUpdateRequest getProductRequest() {
+        return new ProductRequestDto(name, maker, price, imageUrl);
     }
 
     @Nested
@@ -52,7 +54,7 @@ class ProductCommandServiceTest {
         @Test
         @DisplayName("상품을 생성해 반환한다")
         void it_returns_new_product() {
-            Product createdProduct = productCommandService.create(getProduct());
+            Product createdProduct = productCommandService.create(getProductRequest());
 
             assertThat(createdProduct).isNotNull();
             assertThat(createdProduct.getId()).isNotNull();
@@ -67,17 +69,17 @@ class ProductCommandServiceTest {
         @DisplayName("수정이 가능한 경우")
         class Context_with_valid_id {
             private Long id;
-            private Product source;
+            private ProductUpdateRequest source;
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProduct());
+                Product product = productCommandService.create(getProductRequest());
                 id = product.getId();
 
                 final String updatePrefix = "updated_";
                 final int updatedPrice = 20000;
 
-                source = new Product(updatePrefix + name,
+                source = new ProductRequestDto(updatePrefix + name,
                         updatePrefix + maker,
                         updatedPrice,
                         updatePrefix + imageUrl);
@@ -85,7 +87,7 @@ class ProductCommandServiceTest {
 
             @Test
             @DisplayName("수정된 상품을 반환한다")
-            void it_returns_updated_task() {
+            void it_returns_updated_product() {
                 Product updatedProduct = productCommandService.update(id, source);
 
                 assertThat(updatedProduct).isNotNull();
@@ -101,7 +103,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProduct());
+                Product product = productCommandService.create(getProductRequest());
                 invalidId = product.getId();
 
                 productCommandService.deleteById(invalidId);
@@ -110,7 +112,7 @@ class ProductCommandServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                assertThatThrownBy(() -> productCommandService.update(invalidId, getProduct()))
+                assertThatThrownBy(() -> productCommandService.update(invalidId, getProductRequest()))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -127,7 +129,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProduct());
+                Product product = productCommandService.create(getProductRequest());
                 id = product.getId();
             }
 
@@ -145,7 +147,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProduct());
+                Product product = productCommandService.create(getProductRequest());
                 invalidId = product.getId();
 
                 productCommandService.deleteById(invalidId);
@@ -173,7 +175,7 @@ class ProductCommandServiceTest {
             @BeforeEach
             void setUp() {
                 for (int i = 0; i < idSize; i++) {
-                    Product product = productCommandService.create(getProduct());
+                    Product product = productCommandService.create(getProductRequest());
                     ids.add(product.getId());
                 }
             }
@@ -194,7 +196,7 @@ class ProductCommandServiceTest {
             @BeforeEach
             void setUp() {
                 for (int i = 0; i < idSize; i++) {
-                    Product product = productCommandService.create(getProduct());
+                    Product product = productCommandService.create(getProductRequest());
                     ids.add(product.getId());
                 }
 

@@ -45,14 +45,12 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@Valid @RequestBody ProductRequestDto requestDto) {
-        Product product = requestDto.toEntity();
-        return productCommandService.create(product);
+        return productCommandService.create(requestDto);
     }
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
     public Product update(@PathVariable Long id, @Valid @RequestBody ProductRequestDto requestDto) {
-        Product product = requestDto.toEntity();
-        return productCommandService.update(id, product);
+        return productCommandService.update(id, requestDto);
     }
 
     @DeleteMapping("/{id}")
