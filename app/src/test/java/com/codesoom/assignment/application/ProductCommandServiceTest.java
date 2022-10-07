@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -170,7 +170,7 @@ class ProductCommandServiceTest {
         @DisplayName("삭제 가능한 id 목록이 주어지면")
         class Context_with_valid_id {
             private final int idSize = 3;
-            private final List<Long> ids = new ArrayList<>(idSize);
+            private final Set<Long> ids = new HashSet<>(idSize);
 
             @BeforeEach
             void setUp() {
@@ -191,7 +191,7 @@ class ProductCommandServiceTest {
         @DisplayName("id 목록중에 삭제 불가능한 id가 하나라도 주어지면")
         class Context_with_invalid_id {
             private final int idSize = 3;
-            private final List<Long> ids = new ArrayList<>(idSize);
+            private final Set<Long> ids = new HashSet<>(idSize);
 
             @BeforeEach
             void setUp() {
@@ -200,7 +200,7 @@ class ProductCommandServiceTest {
                     ids.add(product.getId());
                 }
 
-                productCommandService.deleteById(ids.get(0));
+                productCommandService.deleteById(ids.iterator().next());
             }
 
             @Test
