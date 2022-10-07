@@ -176,11 +176,11 @@ class CommandProductServiceTest {
         @Nested
         @DisplayName("저장되어있는 product 의 id가 주어진다면 ")
         class Context_with_existing_product_id {
-            private Product savedProduct;
+            private Long deleteId;
 
             @BeforeEach
             void setUp() {
-                savedProduct = commandProductService.createProduct(
+                Product savedProduct = commandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1after")
@@ -189,14 +189,12 @@ class CommandProductServiceTest {
                                 .imageUrl("http://image10.com")
                                 .build()
                 );
+                deleteId = savedProduct.getId();
             }
 
             @Test
             @DisplayName("product 를 삭제한다")
             void it_delete_product() {
-                Long deleteId = savedProduct.getId();
-                assertThat(queryProductService.getProduct(deleteId)).isNotNull();
-
                 commandProductService.deleteProduct(deleteId);
 
                 assertThatThrownBy(
