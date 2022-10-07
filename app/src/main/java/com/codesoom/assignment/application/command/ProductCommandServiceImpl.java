@@ -8,16 +8,15 @@ import com.codesoom.assignment.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductCommandServiceImpl implements ProductCommandService {
 
     private final ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductCommandServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -63,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Transactional
     @Override
-    public ProductInfo updateProduct(ProductCommand.Register command) {
+    public ProductInfo updateProduct(ProductCommand.UpdateReq command) {
         Product product = command.toEntity();
         Product findProduct = productRepository.findById(product.getId())
                 .orElseThrow(() -> new ProductNotFoundException(product.getId()));

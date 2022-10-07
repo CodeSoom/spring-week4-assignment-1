@@ -6,7 +6,7 @@ import com.codesoom.assignment.domain.ProductCommand.Register.RegisterBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductDtoMapperImpl {
+public class ProductDtoMapper {
     public Register of(RequestParam request) {
         if (request == null) {
             return null;

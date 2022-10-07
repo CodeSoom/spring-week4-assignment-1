@@ -5,7 +5,7 @@ import com.codesoom.assignment.domain.ProductInfo;
 
 import java.util.List;
 
-public interface ProductService {
+public interface ProductCommandService {
 
     List<ProductInfo> getProducts();
 
@@ -13,7 +13,7 @@ public interface ProductService {
 
     ProductInfo createProduct(ProductCommand.Register command);
 
-    ProductInfo updateProduct(ProductCommand.Register command);
+    ProductInfo updateProduct(ProductCommand.UpdateReq command);
 
     void deleteProduct(Long id);
 }

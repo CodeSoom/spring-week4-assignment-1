@@ -1,12 +1,12 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.command.ProductCommandService;
 import com.codesoom.assignment.common.ProductFactory;
 import com.codesoom.assignment.common.exception.InvalidParamException;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.controller.ProductDto.RequestParam;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductCommand.Register;
+import com.codesoom.assignment.domain.ProductCommand.UpdateReq;
 import com.codesoom.assignment.domain.ProductInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("ProductController 클래스")
-class ProductControllerTest {
+class ProductCommandControllerTest {
     @Autowired
     private WebApplicationContext ctx;
 
@@ -56,7 +56,7 @@ class ProductControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private ProductService productService;
+    private ProductCommandService productService;
 
     @BeforeEach
     void setup() {
@@ -183,7 +183,7 @@ class ProductControllerTest {
         @Nested
         @DisplayName("새로운 상품을 등록하면")
         class Context_with_new_product {
-            private final ProductDtoMapper mapper = new ProductDtoMapper();
+            private final ProductDtoMapperImpl mapper = new ProductDtoMapperImpl();
             private final RequestParam givenRequest = ProductFactory.createRequestParam();
             private final ProductInfo givenProduct = new ProductInfo(mapper.of(1L, givenRequest).toEntity());
 
@@ -248,13 +248,13 @@ class ProductControllerTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private final ProductDtoMapper mapper = new ProductDtoMapper();
+            private final ProductDtoMapperImpl mapper = new ProductDtoMapperImpl();
             private final RequestParam givenRequest = ProductFactory.createRequestParam();
             private final ProductInfo modifiedProduct = new ProductInfo(mapper.of(PRODUCT_ID, givenRequest).toEntity());
 
             @BeforeEach
             void prepare() {
-                given(productService.updateProduct(any(Register.class))).willReturn(modifiedProduct);
+                given(productService.updateProduct(any(UpdateReq.class))).willReturn(modifiedProduct);
             }
 
             @Test
@@ -277,7 +277,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void prepare() {
-                given(productService.updateProduct(any(Register.class))).willThrow(new ProductNotFoundException(PRODUCT_ID));
+                given(productService.updateProduct(any(UpdateReq.class))).willThrow(new ProductNotFoundException(PRODUCT_ID));
             }
 
             @Test

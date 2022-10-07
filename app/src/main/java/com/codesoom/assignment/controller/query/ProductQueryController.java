@@ -1,7 +1,9 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.command.ProductCommandService;
+import com.codesoom.assignment.application.query.ProductQueryService;
 import com.codesoom.assignment.domain.ProductCommand.Register;
+import com.codesoom.assignment.domain.ProductCommand.UpdateReq;
 import com.codesoom.assignment.domain.ProductInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,14 +24,12 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("/products")
-public class ProductController {
+public class ProductQueryController {
 
-    private final ProductService productService;
-    private final ProductDtoMapper productDtoMapper;
+private final ProductQueryService productService;
 
-    public ProductController(ProductService productService, ProductDtoMapper productDtoMapper) {
+    public ProductQueryController(ProductQueryService productService) {
         this.productService = productService;
-        this.productDtoMapper = productDtoMapper;
     }
 
     @GetMapping
@@ -44,23 +44,4 @@ public class ProductController {
         return productService.getProduct(id);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ProductInfo registerProduct(@RequestBody ProductDto.RequestParam request) {
-        final Register command = productDtoMapper.of(request);
-        return productService.createProduct(command);
-    }
-
-    @PatchMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ProductInfo updateProduct(@PathVariable Long id, @RequestBody ProductDto.RequestParam request) {
-        final Register command = productDtoMapper.of(id, request);
-        return productService.updateProduct(command);
-    }
-
-    @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-    }
 }

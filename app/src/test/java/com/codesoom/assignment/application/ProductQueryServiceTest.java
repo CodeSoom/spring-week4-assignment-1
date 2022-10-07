@@ -1,5 +1,7 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.application.command.ProductCommandService;
+import com.codesoom.assignment.application.command.ProductCommandServiceImpl;
 import com.codesoom.assignment.common.ProductFactory;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
@@ -22,16 +24,16 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("ProductService 클래스")
-class ProductServiceTest {
+class ProductCommandServiceTest {
 
-    private ProductService productService;
+    private ProductCommandService productService;
 
     private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
-        productService = new ProductServiceImpl(productRepository);
+        productService = new ProductCommandServiceImpl(productRepository);
     }
 
     @Nested
@@ -167,10 +169,10 @@ class ProductServiceTest {
             @DisplayName("상품을 수정하고 수정된 상품을 리턴한다")
             void it_returns_modified_product() {
 
-                final ProductCommand.Register.RegisterBuilder registerBuilder = ProductCommand.Register.builder();
-                System.out.println(registerBuilder.toString()); // jacoco테스트에서 RegisterBuilder toString가 계속 0%로 나와서 추가...
+                final ProductCommand.UpdateReq.UpdateReqBuilder updateReqBuilder = ProductCommand.UpdateReq.builder();
+                System.out.println(updateReqBuilder.toString()); // jacoco테스트에서 UpdateReqBuilder toString가 계속 0%로 나와서 추가...
 
-                final ProductCommand.Register command = registerBuilder
+                final ProductCommand.UpdateReq command = updateReqBuilder
                         .id(PRODUCT_ID)
                         .name("수정_" + givenProduct.getName())
                         .maker("수정_" + givenProduct.getMaker())
@@ -198,7 +200,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                final ProductCommand.Register command = ProductFactory.of(givenProduct);
+                final ProductCommand.UpdateReq command = ProductFactory.of(PRODUCT_ID, givenProduct);
 
                 assertThatThrownBy(() -> productService.updateProduct(command)).isInstanceOf(ProductNotFoundException.class);
             }
