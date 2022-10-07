@@ -126,7 +126,7 @@ class ProductRepositoryTest {
             private final Product givenProduct = ProductFactory.createProduct(100L);
 
             @Test
-            @DisplayName("아무것도 하지않는다")
+            @DisplayName("삭제할 대상이 없기때문에 아무것도 삭제하지않는다")
             void it_returns_nothing() {
                 final Optional<Product> beforeProduct = getProductRepository().findById(givenProduct.getId());
 
