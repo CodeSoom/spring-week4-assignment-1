@@ -1,7 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.CommandProductService;
 import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,13 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +35,7 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ProductService productService;
+    private CommandProductService commandProductService;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -69,12 +65,12 @@ class ProductControllerTest {
                                 .imageUrl("http://images/2")
                                 .build()
                 );
-                givenProducts.forEach(product -> productService.createProduct(product));
+                givenProducts.forEach(product -> commandProductService.createProduct(product));
             }
 
             @AfterEach
             void after() {
-                productService.deleteAll();
+                commandProductService.deleteAll();
             }
 
             @Test
@@ -119,7 +115,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                givenProduct = productService.createProduct(
+                givenProduct = commandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1")
@@ -132,7 +128,7 @@ class ProductControllerTest {
 
             @AfterEach
             void after() {
-                productService.deleteAll();
+                commandProductService.deleteAll();
             }
 
             @Test
@@ -184,7 +180,7 @@ class ProductControllerTest {
 
             @AfterEach
             void after() {
-                productService.deleteAll();
+                commandProductService.deleteAll();
             }
 
             @Test
@@ -223,7 +219,7 @@ class ProductControllerTest {
                         .imageUrl(null)
                         .build();
 
-                savedProduct = productService.createProduct(
+                savedProduct = commandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1")
@@ -268,7 +264,7 @@ class ProductControllerTest {
                         .imageUrl("http://image10.com")
                         .build();
 
-                savedProduct = productService.createProduct(
+                savedProduct = commandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1")
@@ -335,7 +331,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUp() {
-                savedProduct = productService.createProduct(
+                savedProduct = commandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1after")

@@ -3,31 +3,18 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional
-public class ProductService {
+public class CommandProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public CommandProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-    }
-
-    public List<Product> getProducts() {
-        return productRepository.findAll();
-    }
-
-    public void deleteAll() {
-        productRepository.deleteAll();
-    }
-
-    public Product getProduct(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(Product requestProduct) {
@@ -35,7 +22,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product requestProduct) {
-        Product product = getProduct(id);
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
 
         String name = requestProduct.getName();
         Integer price = requestProduct.getPrice();
@@ -59,7 +46,11 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        getProduct(id);
+        productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+
         productRepository.deleteById(id);
+    }
+    public void deleteAll() {
+        productRepository.deleteAll();
     }
 }

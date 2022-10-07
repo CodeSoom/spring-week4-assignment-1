@@ -1,8 +1,10 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.CommandProductService;
+import com.codesoom.assignment.application.QueryProductService;
 import com.codesoom.assignment.domain.Product;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,38 +18,41 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
+    private final CommandProductService commandProductService;
+    private final QueryProductService queryProductService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(CommandProductService commandProductService, QueryProductService queryProductService) {
+        this.commandProductService = commandProductService;
+        this.queryProductService = queryProductService;
     }
 
     @GetMapping
     public List<Product> getProducts() {
-        return productService.getProducts();
+        return queryProductService.getProducts();
     }
 
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {
-        return productService.getProduct(id);
+        return queryProductService.getProduct(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+        return commandProductService.createProduct(product);
     }
 
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
+        return commandProductService.updateProduct(id, product);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+        commandProductService.deleteProduct(id);
     }
 }
