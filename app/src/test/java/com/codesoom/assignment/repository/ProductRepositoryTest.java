@@ -36,8 +36,8 @@ public class ProductRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                Product toy = new Product(1L, "테스트1", 2000, "");
-                productRepository.save(toy);
+                final Product product = new Product(1L, "테스트1", 2000, "");
+                productRepository.save(product);
             }
 
             @Test
@@ -109,7 +109,7 @@ public class ProductRepositoryTest {
         @DisplayName("Product객체가 주어질 때")
         class Context_existent_product {
 
-            Product product = new Product(1L, "테스트1", 2000, "");
+            final Product product = new Product(1L, "테스트1", 2000, "");
 
             @Test
             @DisplayName("Product객체를 저장 후 리턴한다")
@@ -130,13 +130,14 @@ public class ProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("id가 존재한다면")
+        @DisplayName("삭제할 수 있는 Product의 id가 주어지면")
         class Context_existent_id {
 
             @BeforeEach
             void givenProduct() {
-                Product product = new Product(1L, "테스트1", 2000, "");
+                final Product product = new Product(1L, "테스트1", 2000, "");
                 productRepository.save(product);
+                assertThat(productRepository.findAll()).hasSize(1);
             }
 
             @Test
@@ -146,5 +147,6 @@ public class ProductRepositoryTest {
                 assertThat(productRepository.findAll()).hasSize(0);
             }
         }
+
     }
 }

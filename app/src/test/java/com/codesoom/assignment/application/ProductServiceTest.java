@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.codesoom.assignment.ProductDeleteService;
 import com.codesoom.assignment.entity.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
@@ -21,13 +22,15 @@ public class ProductServiceTest {
   @Autowired
   private ProductRepository productRepository;
   private ProductService productService;
+  private ProductDeleteService productDeleteService;
 
   private Product source;
-  private Product saved;
+  private Product createdProduct;
 
   @BeforeEach
   void setUp() {
     productService = new ProductService(productRepository);
+    productDeleteService = new ProductDeleteService(productRepository);
   }
 
   @Nested
@@ -57,7 +60,7 @@ public class ProductServiceTest {
 
       @BeforeEach
       void removeAll() {
-        productRepository.deleteAll();
+        productDeleteService.deleteAll();
       }
 
       @Test
@@ -81,13 +84,14 @@ public class ProductServiceTest {
         @BeforeEach
         void prepare() {
           source = new Product(1L, "테스트", 2000, "");
-          saved = productService.create(source);
+          createdProduct = productService.create(source);
         }
 
         @Test
         @DisplayName("해당 id를 가진 Product객체를 리턴한다")
         void it_returns_product() {
-          assertThat(productService.findById(saved.getId())).isEqualTo(saved);
+          Product foundProduct = productService.findById(createdProduct.getId());
+          assertThat(foundProduct).isEqualTo(createdProduct);
         }
       }
 
@@ -95,10 +99,16 @@ public class ProductServiceTest {
       @DisplayName("id가 존재하지 않는다면")
       class Context_non_existent_id {
 
+        @BeforeEach
+        void prepare() {
+          productDeleteService.deleteAll();
+          assertThat(productService.getList()).hasSize(0);
+        }
+
         @Test
         @DisplayName("ProductNotFoundException을 발생시킨다")
         void it_returns_ProductNotFoundException() {
-          assertThatThrownBy(() -> productService.findById(-1L)).isInstanceOf(
+          assertThatThrownBy(() -> productService.findById(1L)).isInstanceOf(
               ProductNotFoundException.class);
         }
       }
@@ -109,29 +119,37 @@ public class ProductServiceTest {
     class Describe_remove {
 
       @Nested
-      @DisplayName("id가 존재한다면")
+      @DisplayName("삭제할 수 있는 product의 id가 존재한다면")
       class Context_existent_id {
 
         @BeforeEach
         void prepare() {
-          saved = productService.create(new Product(1L, "테스트", 2000, ""));
+          productDeleteService.deleteAll();
+          createdProduct = productService.create(new Product(1L, "테스트", 2000, ""));
+          assertThat(productService.getList()).hasSize(1);
         }
 
         @Test
         @DisplayName("해당 id를 가진 객체를 DB에서 삭제후 리턴한다")
         void it_returns_remove_product() {
-          assertThat(productService.remove(1L)).isEqualTo(saved);
+          assertThat(productService.remove(createdProduct.getId())).isEqualTo(createdProduct);
         }
       }
 
       @Nested
-      @DisplayName("id가 존재하지 않는다면")
+      @DisplayName("삭제할 수 있는 product의 id가 존재하지 않는다면")
       class Context_non_existent_id {
 
+        @BeforeEach
+        void prepare() {
+          productDeleteService.deleteAll();
+          assertThat(productService.getList()).hasSize(0);
+        }
+
         @Test
-        @DisplayName("ProductNotFoundException을 발생시킨다")
+        @DisplayName("ProductNotFoundException을 던진다")
         void it_returns_ProductNotFoundException() {
-          assertThatThrownBy(() -> productService.findById(-1L)).isInstanceOf(
+          assertThatThrownBy(() -> productService.remove(1L)).isInstanceOf(
               ProductNotFoundException.class);
         }
       }
@@ -142,7 +160,7 @@ public class ProductServiceTest {
     class Describe_update {
 
       @Nested
-      @DisplayName("id와 변경할 정보가 담겨있는 product객체가 존재한다면")
+      @DisplayName("업데이트 할 product의 id와 변경할 정보가 담겨있는 product객체가 존재한다면")
       class Context_existent_id {
 
         Product update = new Product(null, "업데이트", 1000, "");
@@ -150,17 +168,35 @@ public class ProductServiceTest {
         @BeforeEach
         void prepare() {
           source = new Product(1L, "테스트", 2000, "");
-          saved = productService.create(source);
+          createdProduct = productService.create(source);
         }
 
         @Test
         @DisplayName("해당 id를 가진 Product객체의 정보를 update한후 리턴한다")
         void it_returns_updated_product() {
-
-          Product updated = productService.update(saved.getId(), update);
+          Product updated = productService.update(createdProduct.getId(), update);
           assertThat(updated.getBrand()).isEqualTo(update.getBrand());
         }
       }
+
+      @Nested
+      @DisplayName("업데이트 할 product의 id가 존재하지 않는다면")
+      class Context_non_existent_id {
+
+        @BeforeEach
+        void prepare() {
+          productDeleteService.deleteAll();
+          assertThat(productService.getList()).hasSize(0);
+        }
+
+        @Test
+        @DisplayName("ProductNotFoundException을 던진다")
+        void it_returns_ProductNotFoundException() {
+          assertThatThrownBy(() -> productService.remove(-1L)).isInstanceOf(
+              ProductNotFoundException.class);
+        }
+      }
+
     }
   }
 
