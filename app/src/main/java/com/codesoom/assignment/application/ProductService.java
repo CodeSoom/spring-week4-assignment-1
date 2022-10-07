@@ -43,16 +43,16 @@ public class ProductService {
         String imageUrl = requestProduct.getImageUrl();
 
         if (name != null) {
-            product.setName(name);
+            product.changeNameTo(name);
         }
         if (price != null) {
-            product.setPrice(price);
+            product.changePriceTo(price);
         }
         if (maker != null) {
-            product.setMaker(maker);
+            product.changeMakerTo(maker);
         }
         if (imageUrl != null) {
-            product.setImageUrl(imageUrl);
+            product.changeImageUrlTo(imageUrl);
         }
 
         return productRepository.save(product);

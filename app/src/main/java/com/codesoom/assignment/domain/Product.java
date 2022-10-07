@@ -53,19 +53,19 @@ public class Product {
         return imageUrl;
     }
 
-    public void setName(String name) {
+    public void changeNameTo(String name) {
         this.name = name;
     }
 
-    public void setMaker(String maker) {
+    public void changeMakerTo(String maker) {
         this.maker = maker;
     }
 
-    public void setPrice(Integer price) {
+    public void changePriceTo(Integer price) {
         this.price = price;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void changeImageUrlTo(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 }
