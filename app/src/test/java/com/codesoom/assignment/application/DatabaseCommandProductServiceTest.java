@@ -62,18 +62,45 @@ class DatabaseCommandProductServiceTest {
     @DisplayName("updateProduct 메서드는")
     class Describe_updateProduct {
         @Nested
-        @DisplayName("요청하는 product의 일부 필드가 null 인 경우")
+        @DisplayName("요청하는 product 의 일부 필드가 null 인 경우")
         class Context_with_partial_value {
-            private Product requestProduct;
+            private Product requestWithNullName;
+            private Product requestWithNullMaker;
+            private Product requestWithNullPrice;
+            private Product requestWithNullImageUrl;
             private Product savedProduct;
 
 
             @BeforeEach
             void setUp() {
-                requestProduct = Product.builder()
+                requestWithNullName = Product.builder()
+                        .id(null)
+                        .name(null)
+                        .maker("A")
+                        .price(1000)
+                        .imageUrl("http://example.com/imageUrl.jpg")
+                        .build();
+
+                requestWithNullMaker = Product.builder()
                         .id(null)
                         .name("장난감1")
                         .maker(null)
+                        .price(1000)
+                        .imageUrl("http://example.com/imageUrl.jpg")
+                        .build();
+
+                requestWithNullPrice = Product.builder()
+                        .id(null)
+                        .name("장난감1")
+                        .maker("A")
+                        .price(null)
+                        .imageUrl("http://example.com/imageUrl.jpg")
+                        .build();
+
+                requestWithNullImageUrl = Product.builder()
+                        .id(null)
+                        .name("장난감1")
+                        .maker("A")
                         .price(1000)
                         .imageUrl(null)
                         .build();
@@ -90,13 +117,47 @@ class DatabaseCommandProductServiceTest {
             }
 
             @Test
-            @DisplayName("필드가 null 인 경우 수정하지 않고, 값이 있는 경우 수정 후 리턴한다")
-            void it_returns_partial_updated_product() {
-                Product updatedProduct = databaseCommandProductService.updateProduct(savedProduct.getId(), requestProduct);
+            @DisplayName("name 필드가 null 인 경우 수정하지 않고, 값이 있는 필드만 수정 후 리턴한다")
+            void it_returns_partial_updated_product_without_name() {
+                Product updatedProduct = databaseCommandProductService.updateProduct(savedProduct.getId(), requestWithNullName);
 
-                assertThat(updatedProduct.getName()).isEqualTo(requestProduct.getName());
+                assertThat(updatedProduct.getMaker()).isEqualTo(requestWithNullName.getMaker());
+                assertThat(updatedProduct.getPrice()).isEqualTo(requestWithNullName.getPrice());
+                assertThat(updatedProduct.getImageUrl()).isEqualTo(requestWithNullName.getImageUrl());
+
+                assertThat(updatedProduct.getName()).isEqualTo(savedProduct.getName());
+            }
+            @Test
+            @DisplayName("maker 필드가 null 인 경우 수정하지 않고, 값이 있는 필드만 수정 후 리턴한다")
+            void it_returns_partial_updated_product_without_maker() {
+                Product updatedProduct = databaseCommandProductService.updateProduct(savedProduct.getId(), requestWithNullMaker);
+
+                assertThat(updatedProduct.getName()).isEqualTo(requestWithNullMaker.getName());
+                assertThat(updatedProduct.getPrice()).isEqualTo(requestWithNullMaker.getPrice());
+                assertThat(updatedProduct.getImageUrl()).isEqualTo(requestWithNullMaker.getImageUrl());
+
                 assertThat(updatedProduct.getMaker()).isEqualTo(savedProduct.getMaker());
-                assertThat(updatedProduct.getPrice()).isEqualTo(requestProduct.getPrice());
+            }
+            @Test
+            @DisplayName("price 필드가 null 인 경우 수정하지 않고, 값이 있는 필드만 수정 후 리턴한다")
+            void it_returns_partial_updated_product_without_price() {
+                Product updatedProduct = databaseCommandProductService.updateProduct(savedProduct.getId(), requestWithNullPrice);
+
+                assertThat(updatedProduct.getName()).isEqualTo(requestWithNullPrice.getName());
+                assertThat(updatedProduct.getMaker()).isEqualTo(requestWithNullPrice.getMaker());
+                assertThat(updatedProduct.getImageUrl()).isEqualTo(requestWithNullPrice.getImageUrl());
+
+                assertThat(updatedProduct.getPrice()).isEqualTo(savedProduct.getPrice());
+            }
+            @Test
+            @DisplayName("imageUrl 필드가 null 인 경우 수정하지 않고, 값이 있는 필드만 수정 후 리턴한다")
+            void it_returns_partial_updated_product_without_imageUrl() {
+                Product updatedProduct = databaseCommandProductService.updateProduct(savedProduct.getId(), requestWithNullImageUrl);
+
+                assertThat(updatedProduct.getName()).isEqualTo(requestWithNullImageUrl.getName());
+                assertThat(updatedProduct.getMaker()).isEqualTo(requestWithNullImageUrl.getMaker());
+                assertThat(updatedProduct.getPrice()).isEqualTo(requestWithNullImageUrl.getPrice());
+
                 assertThat(updatedProduct.getImageUrl()).isEqualTo(savedProduct.getImageUrl());
             }
         }

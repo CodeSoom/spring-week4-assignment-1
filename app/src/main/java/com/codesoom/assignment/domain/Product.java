@@ -25,7 +25,7 @@ public class Product {
     }
 
     @Builder
-    private Product(Long id, String name, String maker, int price, String imageUrl) {
+    private Product(Long id, String name, String maker, Integer price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
