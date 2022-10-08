@@ -1,8 +1,8 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
+import com.codesoom.assignment.controller.dto.ProductResponseDto;
 import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +51,7 @@ public class ProductDeleteRollbackTest {
                 int idSize = 5;
 
                 for (int i = 0; i < idSize; i++) {
-                    Product product = productCommandService.create(getProductRequest());
+                    ProductResponseDto product = productCommandService.create(getProductRequest());
                     ids.add(product.getId());
                 }
 
@@ -62,12 +62,12 @@ public class ProductDeleteRollbackTest {
             @Test
             @DisplayName("예외를 던지고 수행했던 삭제 작업을 모두 롤백한다")
             void it_does_rollback() {
-                List<Product> beforeDelete = productQueryService.getAll();
+                List<ProductResponseDto> beforeDelete = productQueryService.getAll();
 
                 assertThatThrownBy(() -> productCommandService.deleteByIds(ids))
                         .isInstanceOf(ProductNotFoundException.class);
 
-                List<Product> afterDelete = productQueryService.getAll();
+                List<ProductResponseDto> afterDelete = productQueryService.getAll();
 
                 assertThat(beforeDelete.size()).isEqualTo(afterDelete.size());
             }

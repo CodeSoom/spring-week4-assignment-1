@@ -3,7 +3,7 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
-import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.controller.dto.ProductResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,23 +33,23 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll() {
+    public List<ProductResponseDto> getAll() {
         return productQueryService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
+    public ProductResponseDto getProduct(@PathVariable Long id) {
         return productQueryService.get(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@Valid @RequestBody ProductRequestDto requestDto) {
+    public ProductResponseDto createProduct(@Valid @RequestBody ProductRequestDto requestDto) {
         return productCommandService.create(requestDto);
     }
 
     @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
-    public Product update(@PathVariable Long id, @Valid @RequestBody ProductRequestDto requestDto) {
+    public ProductResponseDto update(@PathVariable Long id, @Valid @RequestBody ProductRequestDto requestDto) {
         return productCommandService.update(id, requestDto);
     }
 

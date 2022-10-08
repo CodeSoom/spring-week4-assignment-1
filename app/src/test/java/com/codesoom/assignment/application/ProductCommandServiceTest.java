@@ -1,8 +1,8 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
+import com.codesoom.assignment.controller.dto.ProductResponseDto;
 import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -54,7 +54,7 @@ class ProductCommandServiceTest {
         @Test
         @DisplayName("상품을 생성해 반환한다")
         void it_returns_new_product() {
-            Product createdProduct = productCommandService.create(getProductRequest());
+            ProductResponseDto createdProduct = productCommandService.create(getProductRequest());
 
             assertThat(createdProduct).isNotNull();
             assertThat(createdProduct.getId()).isNotNull();
@@ -73,7 +73,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProductRequest());
+                ProductResponseDto product = productCommandService.create(getProductRequest());
                 id = product.getId();
 
                 final String updatePrefix = "updated_";
@@ -88,11 +88,14 @@ class ProductCommandServiceTest {
             @Test
             @DisplayName("수정된 상품을 반환한다")
             void it_returns_updated_product() {
-                Product updatedProduct = productCommandService.update(id, source);
+                ProductResponseDto updatedProduct = productCommandService.update(id, source);
 
                 assertThat(updatedProduct).isNotNull();
                 assertThat(updatedProduct.getId()).isEqualTo(id);
                 assertThat(updatedProduct.getName()).isEqualTo(source.getName());
+                assertThat(updatedProduct.getMaker()).isEqualTo(source.getMaker());
+                assertThat(updatedProduct.getPrice()).isEqualTo(source.getPrice());
+                assertThat(updatedProduct.getImageUrl()).isEqualTo(source.getImageUrl());
             }
         }
 
@@ -103,7 +106,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProductRequest());
+                ProductResponseDto product = productCommandService.create(getProductRequest());
                 invalidId = product.getId();
 
                 productCommandService.deleteById(invalidId);
@@ -129,7 +132,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProductRequest());
+                ProductResponseDto product = productCommandService.create(getProductRequest());
                 id = product.getId();
             }
 
@@ -147,7 +150,7 @@ class ProductCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProductRequest());
+                ProductResponseDto product = productCommandService.create(getProductRequest());
                 invalidId = product.getId();
 
                 productCommandService.deleteById(invalidId);
@@ -175,7 +178,7 @@ class ProductCommandServiceTest {
             @BeforeEach
             void setUp() {
                 for (int i = 0; i < idSize; i++) {
-                    Product product = productCommandService.create(getProductRequest());
+                    ProductResponseDto product = productCommandService.create(getProductRequest());
                     ids.add(product.getId());
                 }
             }
@@ -196,7 +199,7 @@ class ProductCommandServiceTest {
             @BeforeEach
             void setUp() {
                 for (int i = 0; i < idSize; i++) {
-                    Product product = productCommandService.create(getProductRequest());
+                    ProductResponseDto product = productCommandService.create(getProductRequest());
                     ids.add(product.getId());
                 }
 

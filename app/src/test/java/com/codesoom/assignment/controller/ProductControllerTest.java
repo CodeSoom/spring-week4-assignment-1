@@ -3,8 +3,8 @@ package com.codesoom.assignment.controller;
 import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
+import com.codesoom.assignment.controller.dto.ProductResponseDto;
 import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,7 +58,7 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        Product product = getProduct();
+        ProductResponseDto product = getProduct();
 
         given(productQueryService.get(TEST_PRODUCT_ID)).willReturn(product);
 
@@ -73,8 +73,8 @@ class ProductControllerTest {
         given(productCommandService.update(eq(TEST_PRODUCT_ID), any(ProductUpdateRequest.class))).willReturn(product);
     }
 
-    private Product getProduct() {
-        return new Product(name, maker, price, imageUrl);
+    private ProductResponseDto getProduct() {
+        return new ProductResponseDto(TEST_PRODUCT_ID, name, maker, price, imageUrl);
     }
 
     private String toJsonString(Object obj) throws JsonProcessingException {

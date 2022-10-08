@@ -1,13 +1,11 @@
 package com.codesoom.assignment.controller.dto;
 
-import com.codesoom.assignment.domain.Product;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.beans.ConstructorProperties;
 
 /**
- * 장난감 수정/생성 요청시 사용합니다
+ * 상품 생성/수정 요청시 사용합니다.
  */
 public class ProductRequestDto implements ProductUpdateRequest {
 

@@ -1,8 +1,8 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
+import com.codesoom.assignment.controller.dto.ProductResponseDto;
 import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -59,14 +59,14 @@ class ProductQueryServiceTest {
 
             @BeforeEach
             void setUp() {
-                Product product = productCommandService.create(getProductRequest());
+                ProductResponseDto product = productCommandService.create(getProductRequest());
                 id = product.getId();
             }
 
             @Test
             @DisplayName("상품을 반환한다")
             void it_returns_product() {
-                Product product = productQueryService.get(id);
+                ProductResponseDto product = productQueryService.get(id);
 
                 assertThat(product).isNotNull();
                 assertThat(product.getId()).isEqualTo(id);
@@ -98,7 +98,7 @@ class ProductQueryServiceTest {
             @Test
             @DisplayName("빈 목록을 반환한다")
             void it_returns_empty_list() {
-                List<Product> products = productQueryService.getAll();
+                List<ProductResponseDto> products = productQueryService.getAll();
 
                 assertThat(products).isEmpty();
             }
@@ -119,7 +119,7 @@ class ProductQueryServiceTest {
             @Test
             @DisplayName("모든 상품을 반환한다")
             void it_returns_all_products() {
-                List<Product> products = productQueryService.getAll();
+                List<ProductResponseDto> products = productQueryService.getAll();
 
                 assertThat(products).hasSize(productSize).element(0).isNotNull();
             }
