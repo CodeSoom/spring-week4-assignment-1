@@ -42,16 +42,16 @@ public class Product {
         return imageUrl;
     }
 
+    public void updateBrand(String brand) {
+        this.brand = brand;
+    }
 
-    /**
-     * @param product
-     * @return the updated product
-     */
-    public Product updateProduct(Product product) {
-        this.brand = product.getBrand();
-        this.price = product.getPrice();
-        this.imageUrl = product.getImageUrl();
-        return this;
+    public void updatePrice(Integer price) {
+        this.price = price;
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
