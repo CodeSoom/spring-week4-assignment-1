@@ -14,11 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-class CommandProductServiceTest {
+class DatabaseCommandProductServiceTest {
     private Long INVALID_PRODUCT_ID = 0L;
 
     @Autowired
-    private CommandProductService commandProductService;
+    private DatabaseCommandProductService databaseCommandProductService;
 
     @Nested
     @DisplayName("createProduct 메서드는")
@@ -41,13 +41,13 @@ class CommandProductServiceTest {
 
             @AfterEach
             void after() {
-                commandProductService.deleteAll();
+                databaseCommandProductService.deleteAll();
             }
 
             @Test
             @DisplayName("product 를 저장하고 리턴한다")
             void it_returns_product() {
-                Product savedProduct = commandProductService.createProduct(requestProduct);
+                Product savedProduct = databaseCommandProductService.createProduct(requestProduct);
 
                 assertThat(savedProduct.getId()).isEqualTo(requestProduct.getId());
                 assertThat(savedProduct.getName()).isEqualTo(requestProduct.getName());
@@ -78,7 +78,7 @@ class CommandProductServiceTest {
                         .imageUrl(null)
                         .build();
 
-                savedProduct = commandProductService.createProduct(
+                savedProduct = databaseCommandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1")
@@ -92,7 +92,7 @@ class CommandProductServiceTest {
             @Test
             @DisplayName("필드가 null 인 경우 수정하지 않고, 값이 있는 경우 수정 후 리턴한다")
             void it_returns_partial_updated_product() {
-                Product updatedProduct = commandProductService.updateProduct(savedProduct.getId(), requestProduct);
+                Product updatedProduct = databaseCommandProductService.updateProduct(savedProduct.getId(), requestProduct);
 
                 assertThat(updatedProduct.getName()).isEqualTo(requestProduct.getName());
                 assertThat(updatedProduct.getMaker()).isEqualTo(savedProduct.getMaker());
@@ -117,7 +117,7 @@ class CommandProductServiceTest {
                         .imageUrl("http://image10.com")
                         .build();
 
-                savedProduct = commandProductService.createProduct(
+                savedProduct = databaseCommandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1")
@@ -131,7 +131,7 @@ class CommandProductServiceTest {
             @Test
             @DisplayName("모든 필드를 수정 후 리턴한다")
             void it_returns_partial_updated_product() {
-                Product updatedProduct = commandProductService.updateProduct(savedProduct.getId(), requestProduct);
+                Product updatedProduct = databaseCommandProductService.updateProduct(savedProduct.getId(), requestProduct);
 
                 assertThat(updatedProduct.getName()).isEqualTo(requestProduct.getName());
                 assertThat(updatedProduct.getMaker()).isEqualTo(requestProduct.getMaker());
@@ -160,7 +160,7 @@ class CommandProductServiceTest {
             @DisplayName("제품을 찾을 수 없는 예외를 던진다")
             void it_throws_exception() {
                 assertThatThrownBy(
-                        () -> commandProductService.updateProduct(INVALID_PRODUCT_ID, requestProduct)
+                        () -> databaseCommandProductService.updateProduct(INVALID_PRODUCT_ID, requestProduct)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -170,17 +170,19 @@ class CommandProductServiceTest {
     @DisplayName("deleteProduct 메서드는")
     class Describe_deleteProduct {
 
-        @Autowired
-        private QueryProductService queryProductService;
-
         @Nested
         @DisplayName("저장되어있는 product 의 id가 주어진다면 ")
+        @SpringBootTest
         class Context_with_existing_product_id {
+
+            @Autowired
+            private DatabaseQueryProductService databaseQueryProductService;
+
             private Long deleteId;
 
             @BeforeEach
             void setUp() {
-                Product savedProduct = commandProductService.createProduct(
+                Product savedProduct = databaseCommandProductService.createProduct(
                         Product.builder()
                                 .id(null)
                                 .name("장난감1after")
@@ -195,10 +197,10 @@ class CommandProductServiceTest {
             @Test
             @DisplayName("product 를 삭제한다")
             void it_delete_product() {
-                commandProductService.deleteProduct(deleteId);
+                databaseCommandProductService.deleteProduct(deleteId);
 
                 assertThatThrownBy(
-                        () -> queryProductService.getProduct(deleteId)
+                        () -> databaseQueryProductService.getProduct(deleteId)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -211,7 +213,7 @@ class CommandProductServiceTest {
             @DisplayName("제품을 찾을 수 없는 예외를 던진다")
             void it_delete_product() {
                 assertThatThrownBy(
-                        () -> commandProductService.deleteProduct(INVALID_PRODUCT_ID)
+                        () -> databaseCommandProductService.deleteProduct(INVALID_PRODUCT_ID)
                 ).isExactlyInstanceOf(ProductNotFoundException.class);
             }
         }
