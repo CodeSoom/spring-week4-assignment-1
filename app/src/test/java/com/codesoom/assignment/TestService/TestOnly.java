@@ -1,2 +1,5 @@
-package com.codesoom.assignment.TestService;public interface TestOnly {
+package com.codesoom.assignment.TestService;
+
+public interface TestOnly {
+
 }
