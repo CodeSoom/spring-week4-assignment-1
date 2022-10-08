@@ -7,14 +7,10 @@ import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductInfo;
 import com.codesoom.assignment.domain.ProductRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,25 +22,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@DataJpaTest
 @DisplayName("ProductQueryService 클래스")
-class ProductQueryServiceTest {
-    @DataJpaTest
-    class JpaTest {
-        @Autowired
-        ProductRepository repository;
-        ProductQueryService service;
+class ProductQueryServiceMockTest {
 
-        public ProductRepository getProductRepository() {
-            return repository;
-        }
+    private ProductQueryService productService;
 
-        public ProductQueryService getProductService() {
-            if (service == null) {
-                service = new ProductQueryServiceImpl(repository);
-            }
-            return service;
-        }
+    private ProductRepository productRepository;
+
+    @BeforeEach
+    void setUp() {
+        productRepository = mock(ProductRepository.class);
+        productService = new ProductQueryServiceImpl(productRepository);
     }
 
     @Nested
@@ -52,20 +40,22 @@ class ProductQueryServiceTest {
     class Describe_getProducts {
         @Nested
         @DisplayName("데이터가 존재한다면")
-        class Context_with_non_empty_data extends JpaTest {
-
+        class Context_with_non_empty_data {
             private final List<Product> givenProducts = new ArrayList<>();
 
             @BeforeEach
             void prepare() {
-                givenProducts.add(getProductRepository().save(ProductFactory.createProduct()));
-                givenProducts.add(getProductRepository().save(ProductFactory.createProduct()));
+
+                givenProducts.add(ProductFactory.createProduct(1L));
+                givenProducts.add(ProductFactory.createProduct(2L));
+
+                given(productRepository.findAll()).willReturn(givenProducts);
             }
 
             @Test
             @DisplayName("모든 상품을 리턴한다")
             void it_returns_all_products() {
-                final List<ProductInfo> actualProducts = getProductService().getProducts();
+                final List<ProductInfo> actualProducts = productService.getProducts();
 
                 assertThat(actualProducts).hasSize(givenProducts.size());
             }
@@ -73,11 +63,16 @@ class ProductQueryServiceTest {
 
         @Nested
         @DisplayName("데이터가 존재하지 않는다면")
-        class Context_with_empty_data extends JpaTest {
+        class Context_with_empty_data {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findAll()).willReturn(new ArrayList<>());
+            }
+
             @Test
             @DisplayName("빈 컬렉션을 리턴한다")
             void it_returns_empty_data() {
-                final List<ProductInfo> actualProducts = getProductService().getProducts();
+                final List<ProductInfo> actualProducts = productService.getProducts();
 
                 assertThat(actualProducts).hasSize(0);
             }
@@ -90,18 +85,19 @@ class ProductQueryServiceTest {
     class Describe_getProduct {
         @Nested
         @DisplayName("유효한 ID가 주어지면")
-        class Context_with_valid_id extends JpaTest {
-            private Product givenProduct;
+        class Context_with_valid_id {
+            private final Long PRODUCT_ID = 1L;
+            private final Product givenProduct = ProductFactory.createProduct(PRODUCT_ID);
 
             @BeforeEach
             void prepare() {
-                givenProduct = getProductRepository().save(ProductFactory.createProduct());
+                given(productRepository.findById(PRODUCT_ID)).willReturn(Optional.of(givenProduct));
             }
 
             @Test
             @DisplayName("상품을 찾아 리턴한다")
             void it_returns_searched_product() {
-                final ProductInfo actualProduct = getProductService().getProduct(givenProduct.getId());
+                final ProductInfo actualProduct = productService.getProduct(PRODUCT_ID);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getMaker()).isEqualTo(givenProduct.getMaker());
@@ -111,17 +107,20 @@ class ProductQueryServiceTest {
 
         @Nested
         @DisplayName("유효하지않은 ID가 주어지면")
-        class Context_with_invalid_id extends JpaTest {
+        class Context_with_invalid_id {
             private final Long PRODUCT_ID = 100L;
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(any(Long.class))).willReturn(Optional.empty());
+            }
 
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                assertThatThrownBy(() -> getProductService().getProduct(PRODUCT_ID)).isInstanceOf(ProductNotFoundException.class);
+                assertThatThrownBy(() -> productService.getProduct(PRODUCT_ID)).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
-
-
 }
 

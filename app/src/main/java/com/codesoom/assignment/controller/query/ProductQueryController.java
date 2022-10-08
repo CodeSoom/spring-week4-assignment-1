@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductQueryController {
 
-private final ProductQueryService productService;
+    private final ProductQueryService productService;
 
     public ProductQueryController(ProductQueryService productService) {
         this.productService = productService;
