@@ -25,7 +25,7 @@ public class ProductController {
     }
 
     /**
-     * ProductList를 리턴한다
+     * 상품리스트를 리턴한다.
      * @return productList
      */
     @GetMapping
@@ -34,10 +34,10 @@ public class ProductController {
     }
 
     /**
-     * id로 product 객체를 찾는다
+     * 상품을 찾아 리턴한다.
      *
      * @param id
-     * @return id로 찾은 product 객체
+     * @return id로 찾은 상품
      */
     @GetMapping("/{id}")
     public Product getById(@PathVariable Long id) {
@@ -45,10 +45,11 @@ public class ProductController {
     }
 
     /**
-     * product 객체를 생성,db에 저장한다
+     *
+     * 저장된 상품을 리턴한다.
      *
      * @param source
-     * @return 저장된 product 객체를 리턴한다
+     * @return 저장된 상품
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -57,11 +58,11 @@ public class ProductController {
     }
 
     /**
-     * id로 찾은 product 객체의 정보를 업데이트 한다
+     * 상품의 정보를 업데이트 한다.
      *
      * @param id
      * @param updateSource
-     * @return 업데이트한 product 를 리턴한다
+     * @return 업데이트한 상품
      */
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product updateSource) {
@@ -69,10 +70,10 @@ public class ProductController {
     }
 
     /**
-     * 해당 id를 가진 product 를 삭제한다
+     * 상품을 삭제 후 리턴한다.
      *
      * @param id
-     * @return 삭제한 Product 를 리턴한다
+     * @return 삭제한 상품
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
