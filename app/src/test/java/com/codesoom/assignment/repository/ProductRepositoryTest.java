@@ -137,12 +137,12 @@ public class ProductRepositoryTest {
             void givenProduct() {
                 final Product product = new Product(1L, "테스트1", 2000, "");
                 productRepository.save(product);
-                assertThat(productRepository.findAll()).hasSize(1);
             }
 
             @Test
             @DisplayName("해당 id를 가진 Product객체를 삭제한다")
             void it_returns_product() {
+                assertThat(productRepository.findAll()).hasSize(1);
                 productRepository.deleteById(1L);
                 assertThat(productRepository.findAll()).hasSize(0);
             }
