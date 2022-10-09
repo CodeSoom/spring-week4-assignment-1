@@ -28,17 +28,18 @@ public class ProductService {
     }
 
     /**
-     * id로 product 객체를 찾아 리턴한다
+     * 상품을 찾아 리턴한다.
      *
      * @param id the id
      * @return 찾은 상품
      */
     public Product findById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("해당 id를 가진 상품이 존재하지 않습니다 id:" + id));
+        return productRepository.findById(id)
+            .orElseThrow(() -> new ProductNotFoundException("해당 id를 가진 상품이 존재하지 않습니다 id:" + id));
     }
 
     /**
-     * 모든 상품의 목록을 리턴합니다.
+     * 모든 상품의 목록을 리턴한다.
      *
      * @return 모든 상품
      */
@@ -47,7 +48,7 @@ public class ProductService {
     }
 
     /**
-     * 상품을 삭제하고, 삭제한 정보를 리턴합니다
+     * 상품을 삭제하고, 삭제한 정보를 리턴한다.
      *
      * @param id 삭제할 상품의 식별자
      * @return 삭제한 상품 정보
@@ -60,30 +61,31 @@ public class ProductService {
     }
 
     /**
-     * id로 product를 찾아
-     * 매개변수로 받은 product객체의 정보로 업데이트 한 후 리턴한다.
+     * id로 상품을 찾아
+     * 매개변수로 받은 새로운 상품의 정보로 업데이트 한 후 리턴한다.
      *
      * @param id
-     * @param product
-     * @return 업데이트 된 product 를 리턴한다
+     * @param update
+     * @return 업데이트 된 상품을 리턴한다.
      */
-    public Product update(Long id, Product product){
-        return productRepository.findById(id)
-            .map(this::detailUpdate)
+    public Product update(Long id, Product update){
+        Product foundProduct = productRepository.findById(id)
             .orElseThrow(() -> new ProductNotFoundException("해당 id를 가진 상품이 존재하지 않습니다 id:" + id));
+        return detailUpdate(foundProduct, update);
     }
 
-    public Product detailUpdate(Product product) {
-        if(product.getBrand() != null){
-            product.updateBrand(product.getBrand());
+    public Product detailUpdate(Product source,Product update) {
+
+        if(update.getBrand() != null){
+            source.updateBrand(update.getBrand());
         }
-        if(product.getPrice() != null) {
-            product.updatePrice(product.getPrice());
+        if(update.getPrice() != null) {
+            source.updatePrice(update.getPrice());
         }
-        if(product.getImageUrl() != null) {
-            product.updateImageUrl(product.getImageUrl());
+        if(update.getImageUrl() != null) {
+            source.updateImageUrl(update.getImageUrl());
         }
-        return product;
+        return source;
     }
 
 }
