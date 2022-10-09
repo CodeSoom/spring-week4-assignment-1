@@ -4,6 +4,7 @@ import com.codesoom.assignment.controller.dto.ProductRequestDto;
 import com.codesoom.assignment.controller.dto.ProductResponseDto;
 import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
 import com.codesoom.assignment.exception.ProductNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -69,7 +70,13 @@ public class ProductDeleteRollbackTest {
 
                 List<ProductResponseDto> afterDelete = productQueryService.getAll();
 
-                assertThat(beforeDelete.size()).isEqualTo(afterDelete.size());
+                // assertj
+                assertThat(beforeDelete.size()).as("삭제 수행 전 후 데이터 개수는 같아야 한다")
+                        .isEqualTo(afterDelete.size());
+
+                // junit
+                Assertions.assertEquals(beforeDelete.size(), afterDelete.size(),
+                        "삭제 수행 전 후 데이터 개수는 같아야 한다");
             }
         }
     }
