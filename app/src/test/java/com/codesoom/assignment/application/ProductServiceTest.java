@@ -3,7 +3,7 @@ package com.codesoom.assignment.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.codesoom.assignment.ProductDeleteService;
+import com.codesoom.assignment.testService.ProductDeleteService;
 import com.codesoom.assignment.entity.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.repository.ProductRepository;
