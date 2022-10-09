@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.TestService.ProductDeleteService;
+import com.codesoom.assignment.testService.ProductDeleteService;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.entity.Product;
 import com.codesoom.assignment.repository.ProductRepository;
@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,9 +39,6 @@ public class ProductControllerTest {
 
   @Autowired
   private ProductRepository repository;
-
-  private Product createProduct1;
-  private Product createProduct2;
 
   private final Long testId = 1L;
   private final String testBrand = "테스트";
@@ -63,6 +61,9 @@ public class ProductControllerTest {
     @Nested
     @DisplayName("저장된 product들이 있을 때")
     class Context_with_products {
+
+      Product createProduct1;
+      Product createProduct2;
 
       @BeforeEach
       void prepare() {
@@ -112,9 +113,11 @@ public class ProductControllerTest {
       @DisplayName("가져올 product의 id가 존재한다면")
       class Context_with_id {
 
+        Product getProduct;
+
         @BeforeEach
         void prepare() {
-          createProduct1 = controller.createProduct(new Product(testId, testBrand, testPrice, ""));
+          getProduct = controller.createProduct(new Product(testId, testBrand, testPrice, ""));
         }
 
         @AfterEach
@@ -125,9 +128,26 @@ public class ProductControllerTest {
         @Test
         @DisplayName("해당 id를 가진 product를 리턴한다")
         void it_returns_product() throws Exception {
-          mockMvc.perform(get("/products/" + createProduct1.getId()))
+          mockMvc.perform(get("/products/" + getProduct.getId()))
               .andExpect(status().isOk())
-              .andExpect(jsonPath("$.brand").value(createProduct1.getBrand()));
+              .andExpect(jsonPath("$.brand").value(getProduct.getBrand()));
+        }
+      }
+
+      @Nested
+      @DisplayName("가져올 product의 id가 존재하지 않는다면")
+      class Context_without_id {
+
+        @BeforeEach
+        void prepare () {
+          productDeleteService.deleteAll();
+        }
+
+        @Test
+        @DisplayName("productNotFoundException을 던진다")
+        void it_returns_ProductNotFoundException() throws Exception {
+          mockMvc.perform(get("/products/"+testId))
+              .andExpect(status().isNotFound());
         }
       }
     }
@@ -140,10 +160,12 @@ public class ProductControllerTest {
       @DisplayName("저장할 product가 있다면")
       class Context_with_product {
 
+        Product postProduct;
+
         @BeforeEach
         void prepare() throws JsonProcessingException {
-          createProduct1 = new Product(testId, testBrand, testPrice, "");
-          content = new ObjectMapper().writeValueAsString(createProduct1);
+          postProduct = new Product(testId, testBrand, testPrice, "");
+          content = new ObjectMapper().writeValueAsString(postProduct);
         }
 
         @AfterEach
@@ -158,36 +180,59 @@ public class ProductControllerTest {
               .content(content)
               .contentType(MediaType.APPLICATION_JSON))
               .andExpect(status().isCreated())
-              .andExpect(jsonPath("$.brand").value(createProduct1.getBrand()));
+              .andExpect(jsonPath("$.brand").value(postProduct.getBrand()));
         }
       }
     }
 
-//  @Nested
-//  @DisplayName("UPDATE /product/{id} 메소드는")
-//  class Describe_update {
-//    @Nested
-//    @DisplayName("update 할 product의 id가 존재한다면")
-//    class Context_with_id {
-//
-//      @BeforeEach
-//      void prepare() throws JsonProcessingException {
-//        createProduct1 = controller.createProduct(new Product(productId, productBrand, 1000, ""));
-//        createProduct2 = new Product(productId, "업데이트", 1000, "");
-//        content = new ObjectMapper().writeValueAsString(createProduct2);
-//      }
-//
-//      @Test
-//      @DisplayName("해당 id를 가진 product객체의 정보를 업데이트 한다")
-//      void it_returns_updateProduct() throws Exception {
-//        mockMvc.perform(put("/products/"+createProduct1.getId())
-//            .content(content)
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-//            .andExpect(jsonPath("$.brand").value(createProduct2.getBrand()));
-//      }
-//    }
-//  }
+  @Nested
+  @DisplayName("UPDATE /product/{id} 메소드는")
+  class Describe_update {
+    @Nested
+    @DisplayName("update 할 product의 id가 존재한다면")
+    class Context_with_id {
+
+      Product beforeUpdate;
+      Product updated;
+
+      @BeforeEach
+      void prepare() throws JsonProcessingException {
+        beforeUpdate = controller.createProduct(new Product(testId, testBrand, 1000, ""));
+        updated = new Product(testId, "업데이트", 1000, "");
+        content = new ObjectMapper().writeValueAsString(updated);
+      }
+
+      @Test
+      @DisplayName("해당 id를 가진 product객체의 정보를 업데이트 한다")
+      void it_returns_updateProduct() throws Exception {
+        mockMvc.perform(patch("/products/"+beforeUpdate.getId())
+            .content(content)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.brand").value(updated.getBrand()));
+      }
+    }
+
+    @Nested
+    @DisplayName("update할 상품의 id가 존재하지 않는다면")
+    class Context_without_id {
+
+      @BeforeEach
+      void prepare() throws JsonProcessingException {
+        productDeleteService.deleteAll();
+        content = new ObjectMapper().writeValueAsString(new Product(testId, testBrand, 2000,""));
+      }
+
+      @Test
+      @DisplayName("productNotFoundException을 던진다")
+      void it_returns_ProductNotFoundException() throws Exception {
+        mockMvc.perform(patch("/products/"+testId)
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+      }
+    }
+  }
 
   @Nested
   @DisplayName("DELTE /product/{id} 메소드는")
@@ -197,17 +242,19 @@ public class ProductControllerTest {
     @DisplayName("delete할 product의 id가 존재한다면")
     class Context_with_id {
 
+      Product beforeDelete;
+
       @BeforeEach
       void prepare() throws Exception {
-        createProduct1 = controller.createProduct(new Product(testId, testBrand, testPrice, ""));
+        beforeDelete = controller.createProduct(new Product(testId, testBrand, testPrice, ""));
       }
 
       @Test
       @DisplayName("해당 id를 가진 Product객체를 삭제 후 리턴한다")
       void it_returns_deleteProduct() throws Exception{
-        mockMvc.perform(delete("/products/"+createProduct1.getId()))
+        mockMvc.perform(delete("/products/"+beforeDelete.getId()))
             .andExpect(status().isNoContent())
-            .andExpect(jsonPath("$.brand").value(createProduct1.getBrand()));
+            .andExpect(jsonPath("$.brand").value(beforeDelete.getBrand()));
       }
     }
 
