@@ -5,6 +5,7 @@ import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.controller.dto.ProductRequestDto;
 import com.codesoom.assignment.controller.dto.ProductResponseDto;
 import com.codesoom.assignment.controller.dto.ProductUpdateRequest;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,7 +59,7 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        ProductResponseDto product = getProduct();
+        ProductResponseDto product = getResponseDto();
 
         given(productQueryService.get(TEST_PRODUCT_ID)).willReturn(product);
 
@@ -73,8 +74,12 @@ class ProductControllerTest {
         given(productCommandService.update(eq(TEST_PRODUCT_ID), any(ProductUpdateRequest.class))).willReturn(product);
     }
 
-    private ProductResponseDto getProduct() {
-        return new ProductResponseDto(TEST_PRODUCT_ID, name, maker, price, imageUrl);
+    private ProductResponseDto getResponseDto() {
+        return new ProductResponseDto(new Product(name, maker, price, imageUrl));
+    }
+
+    private ProductRequestDto getRequestDto() {
+        return new ProductRequestDto(name, maker, price, imageUrl);
     }
 
     private String toJsonString(Object obj) throws JsonProcessingException {
@@ -82,7 +87,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("모든 상품 조회 요청이 들어오면 상품 목록과 함께 200 응답을 생성한다")
+    @DisplayName("모든 상품 조회 요청이 들어오면 상품 목록과 함께 200 응답 코드를 생성한다")
     void getAll_test() throws Exception {
         mockMvc.perform(get("/products"))
                 .andExpect(content().string(toJsonString(Collections.emptyList())))
@@ -90,7 +95,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("조회 가능한 id로 상품 조회 요청이 들어오면 상품 정보와 함께 200 응답을 생성한다")
+    @DisplayName("조회 가능한 id로 상품 조회 요청이 들어오면 상품 정보와 함께 200 응답 코드를 생성한다")
     void getProduct_test() throws Exception {
         mockMvc.perform(get("/products/{id}", TEST_PRODUCT_ID))
                 .andExpect(content().string(containsString(name)))
@@ -107,13 +112,13 @@ class ProductControllerTest {
     @Test
     @DisplayName("상품 생성 요청이 들어오면 201 응답 코드를 생성한다")
     void createProduct_test() throws Exception {
-        final String productRequestJsonString = toJsonString(new ProductRequestDto(name, maker, price, imageUrl));
+        final String productRequestJsonString = toJsonString(getRequestDto());
 
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productRequestJsonString))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(toJsonString(getProduct())));
+                .andExpect(content().string(toJsonString(getResponseDto())));
     }
 
     @Test
@@ -128,7 +133,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("수정 가능한 id로 상품 수정 요청이 들어오면 수정된 상품 정보와 함께 200 응답 코드를 생성한다")
     void updateProduct_test() throws Exception {
-        final String productRequestJsonString = toJsonString(new ProductRequestDto(name, maker, price, imageUrl));
+        final String productRequestJsonString = toJsonString(getRequestDto());
 
         mockMvc.perform(put("/products/{id}", TEST_PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,7 +144,7 @@ class ProductControllerTest {
     @Test
     @DisplayName("수정 불가능한 id로 상품 수정 요청이 들어오면 404 응답 코드를 생성한다")
     void updateProduct_fail_test() throws Exception {
-        final String productRequestJsonString = toJsonString(new ProductRequestDto(name, maker, price, imageUrl));
+        final String productRequestJsonString = toJsonString(getRequestDto());
 
         mockMvc.perform(put("/products/{id}", WRONG_PRODUCT_ID)
                         .contentType(MediaType.APPLICATION_JSON)

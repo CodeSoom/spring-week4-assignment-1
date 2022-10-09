@@ -35,7 +35,7 @@ public class ProductCommandService {
                 source.getImageUrl()
         );
 
-        return ProductResponseDto.toDto(productRepository.save(product));
+        return new ProductResponseDto(productRepository.save(product));
     }
 
     /**
@@ -55,7 +55,7 @@ public class ProductCommandService {
                 source.getImageUrl()
         );
 
-        return ProductResponseDto.toDto(product);
+        return new ProductResponseDto(product);
     }
 
     /**

@@ -6,46 +6,29 @@ import com.codesoom.assignment.domain.Product;
  * 상품 응답으로 사용합니다.
  */
 public class ProductResponseDto {
-    private final Long id;
-    private final String name;
-    private final String maker;
-    private final int price;
-    private final String imageUrl;
+    private final Product product;
 
-    public ProductResponseDto(Long id, String name, String maker, int price, String imageUrl) {
-        this.id = id;
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
-
-    public static ProductResponseDto toDto(Product product) {
-        return new ProductResponseDto(product.getId(),
-            product.getName(),
-            product.getMaker(),
-            product.getPrice(),
-            product.getImageUrl()
-        );
+    public ProductResponseDto(Product product) {
+        this.product = product;
     }
 
     public Long getId() {
-        return id;
+        return product.getId();
     }
 
     public String getName() {
-        return name;
+        return product.getName();
     }
 
     public String getMaker() {
-        return maker;
+        return product.getMaker();
     }
 
     public int getPrice() {
-        return price;
+        return product.getPrice();
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return product.getImageUrl();
     }
 }

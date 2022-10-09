@@ -33,7 +33,7 @@ public class ProductQueryService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id + "에 해당하는 상품을 찾지 못했습니다."));
 
-        return ProductResponseDto.toDto(product);
+        return new ProductResponseDto(product);
     }
 
     /**
@@ -43,7 +43,7 @@ public class ProductQueryService {
     public List<ProductResponseDto> getAll() {
         return productRepository.findAll()
                 .stream()
-                .map(ProductResponseDto::toDto)
+                .map(ProductResponseDto::new)
                 .collect(Collectors.toUnmodifiableList());
     }
 }
