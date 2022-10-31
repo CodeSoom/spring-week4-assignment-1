@@ -1,11 +1,13 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.ToyDto;
 
 import java.util.List;
 
 public interface ToyService {
-    List<Toy> getToys();
+    List<ToyDto> getToys();
 
-    Toy getToy(Long id);
+    ToyDto getToy(Long id);
+
+    ToyDto create(ToyDto any);
 }
