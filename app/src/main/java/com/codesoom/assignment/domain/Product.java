@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Toy {
+public class Product {
 
     @Id
     @GeneratedValue
@@ -15,10 +15,10 @@ public class Toy {
     private Integer price;
     private String imageUrl;
 
-    public Toy() {
+    public Product() {
     }
 
-    public Toy(String name, String maker, Integer price, String imageUrl) {
+    public Product(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
@@ -45,7 +45,7 @@ public class Toy {
         return imageUrl;
     }
 
-    public void update(Toy src) {
+    public void update(Product src) {
         if (src.name != null) {
             this.name = src.name;
         }
