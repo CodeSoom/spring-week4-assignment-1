@@ -17,13 +17,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
-@DisplayName("ProductService의")
+@DisplayName("ProductService 클래스의")
 class ProductServiceTest {
 
     private static final String NAME = "name";
     private static final String MAKER = "maker";
     private static final Integer PRICE = 100;
     private static final String IMAGE_URL = "http://localhost:8080/original";
+
     private static final String UPDATED_NAME = "updated name";
     private static final String UPDATED_MAKER = "updated maker";
     private static final Integer UPDATED_PRICE = 500;
