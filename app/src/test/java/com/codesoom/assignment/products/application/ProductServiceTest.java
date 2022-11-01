@@ -29,12 +29,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ProductServiceTest {
 
     @Autowired
-    private ProductRepository productRepository;
-    @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @AfterEach
-    void setUpDeleteFixture() {
+    void setUpDeleteFixture() { // @Nested에서의 테스트 인스턴스 생명주기... 도대체 어떻게 관리해야될까요....
         productRepository.deleteAllInBatch();
     }
 
@@ -62,7 +63,7 @@ class ProductServiceTest {
             @ValueSource(ints = {1, 3, 7})
             void it_returns_list(int createCount) {
                 for (int i = 0; i < createCount; i++) {
-                    productRepository.save(TOY_1.생성());
+                    productService.createProduct(TOY_1.요청_데이터_생성());
                 }
 
                 List<Product> products = productService.getProducts();
@@ -95,7 +96,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Product productSource = productRepository.save(TOY_1.생성());
+                Product productSource = productService.createProduct(TOY_1.요청_데이터_생성());
 
                 Product product = productService.getProduct(productSource.getId());
 
