@@ -1,5 +1,6 @@
 package com.codesoom.assignment.support;
 
+import com.codesoom.assignment.products.controllers.dto.request.ProductCreateRequest;
 import com.codesoom.assignment.products.domain.Product;
 
 public enum ProductFixture {
@@ -27,6 +28,15 @@ public enum ProductFixture {
     public Product 생성(final Long id) {
         return Product.builder()
                 .id(id)
+                .name(name)
+                .maker(maker)
+                .price(price)
+                .imgUrl(imgUrl)
+                .build();
+    }
+
+    public ProductCreateRequest 요청_데이터_생성() {
+        return ProductCreateRequest.builder()
                 .name(name)
                 .maker(maker)
                 .price(price)

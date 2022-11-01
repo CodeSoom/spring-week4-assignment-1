@@ -1,6 +1,7 @@
 package com.codesoom.assignment.products.application;
 
 import com.codesoom.assignment.exception.products.ProductNotFoundException;
+import com.codesoom.assignment.products.controllers.dto.request.ProductCreateRequest;
 import com.codesoom.assignment.products.domain.Product;
 import com.codesoom.assignment.products.domain.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,11 @@ public class ProductService {
     public Product getProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
+    }
+
+    public Product createProduct(ProductCreateRequest productCreateRequest) {
+        Product product = productCreateRequest.toEntity();
+
+        return productRepository.save(product);
     }
 }

@@ -114,7 +114,8 @@ class ProductServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-
+                assertThatThrownBy(() -> productService.createProduct(null))
+                        .isInstanceOf(NullPointerException.class);
             }
         }
 
@@ -124,7 +125,13 @@ class ProductServiceTest {
             @Test
             @DisplayName("상품을 저장하고 리턴한다")
             void it_returns_product() {
+                Product product = productService.createProduct(TOY_1.요청_데이터_생성());
 
+                assertThat(product).isNotNull();
+                assertThat(product.getName()).isEqualTo(TOY_1.NAME());
+                assertThat(product.getMaker()).isEqualTo(TOY_1.MAKER());
+                assertThat(product.getPrice()).isEqualTo(TOY_1.PRICE());
+                assertThat(product.getImgUrl()).isEqualTo(TOY_1.IMAGE());
             }
         }
     }
