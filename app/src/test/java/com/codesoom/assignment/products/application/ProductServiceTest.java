@@ -15,11 +15,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
-import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 
 @DisplayName("Product Service 유닛 테스트")
 class ProductServiceTest {
@@ -74,6 +74,31 @@ class ProductServiceTest {
                 }
 
                 given(productRepository.findAll()).willReturn(products);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 장난감_상세조회_메서드는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            @Test
+            @DisplayName("해당 id의 장난감 정보를 리턴한다")
+            void it_returns_product() {
+
             }
         }
     }
