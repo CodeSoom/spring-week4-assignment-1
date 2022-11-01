@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("Product Service 유닛 테스트")
 class ProductServiceTest {
+    private static final Long TEST_ID = 1L;
     private ProductService productService;
     private ProductRepository productRepository;
 
@@ -34,7 +36,7 @@ class ProductServiceTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class getTasks_메서드는 {
+    class getProducts_메서드는 {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -42,7 +44,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                List<Product> products = productService.getTasks();
+                List<Product> products = productService.getProducts();
 
                 assertThat(products).isEmpty();
             }
@@ -57,7 +59,7 @@ class ProductServiceTest {
             void it_returns_list(int createCount) {
                 createProductsUntilCount(createCount);
 
-                List<Product> products = productService.getTasks();
+                List<Product> products = productService.getProducts();
 
                 verify(productRepository).findAll();
 
@@ -98,7 +100,13 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
+                given(productRepository.findById(TEST_ID))
+                        .willReturn(Optional.ofNullable(TOY_1.생성(TEST_ID)));
 
+                Product product = productService.getProduct(TEST_ID);
+
+                assertThat(product).isNotNull();
+                assertThat(product.getId()).isEqualTo(TEST_ID);
             }
         }
     }
