@@ -32,7 +32,7 @@ class ProductControllerTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 장난감_목록_조회_메서드는 {
+    class list_메서드는 {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -57,6 +57,31 @@ class ProductControllerTest {
                 given(productService.getProducts()).willReturn(products);
 
                 assertThat(productController.list()).isNotEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 장난감_상세_조회_메서드는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            @Test
+            @DisplayName("해당 id의 장난감 정보를 리턴한다")
+            void it_returns_product() {
+
             }
         }
     }
