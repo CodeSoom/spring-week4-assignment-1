@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codesoom.assignment.support.ProductFieldFixture.TEST_EXIST;
+import static com.codesoom.assignment.support.ProductFieldFixture.TEST_NOT_EXIST;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,8 +28,6 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductService 유닛 테스트")
 class ProductServiceTest {
-    private static final Long TEST_EXIST_ID = 1L;
-    private static final Long TEST_NOT_EXIST_ID = 100L;
     private ProductService productService;
     private ProductRepository productRepository;
 
@@ -93,7 +93,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-                assertThatThrownBy(() -> productService.getProduct(TEST_NOT_EXIST_ID))
+                assertThatThrownBy(() -> productService.getProduct(TEST_NOT_EXIST.ID()))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -104,13 +104,13 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                given(productRepository.findById(TEST_EXIST_ID))
-                        .willReturn(Optional.ofNullable(TOY_1.생성(TEST_EXIST_ID)));
+                given(productRepository.findById(TEST_EXIST.ID()))
+                        .willReturn(Optional.ofNullable(TOY_1.생성(TEST_EXIST.ID())));
 
-                Product product = productService.getProduct(TEST_EXIST_ID);
+                Product product = productService.getProduct(TEST_EXIST.ID());
 
                 assertThat(product).isNotNull();
-                assertThat(product.getId()).isEqualTo(TEST_EXIST_ID);
+                assertThat(product.getId()).isEqualTo(TEST_EXIST.ID());
             }
         }
     }

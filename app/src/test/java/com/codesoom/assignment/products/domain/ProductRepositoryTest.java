@@ -13,13 +13,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codesoom.assignment.support.ProductFieldFixture.TEST_EXIST;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@DisplayName("Product Repository 유닛 테스트")
+@DisplayName("ProductRepository 유닛 테스트")
 class ProductRepositoryTest {
-    private static final Long TEST_ID = 1L;
     @Autowired
     private ProductRepository productRepository;
 
@@ -76,7 +76,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("빈 값을 리턴한다")
             void it_returns_empty_product() {
-                assertThat(productRepository.findById(TEST_ID))
+                assertThat(productRepository.findById(TEST_EXIST.ID()))
                         .isEmpty();
             }
         }
@@ -86,16 +86,16 @@ class ProductRepositoryTest {
         class 찾을_수_있는_id가_주어지면 {
             @BeforeEach
             void setUpCreateFixture() {
-                productRepository.save(TOY_1.생성(TEST_ID));
+                productRepository.save(TOY_1.생성(TEST_EXIST.ID()));
             }
 
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Optional<Product> product = productRepository.findById(TEST_ID);
+                Optional<Product> product = productRepository.findById(TEST_EXIST.ID());
 
                 assertThat(product).isNotEmpty();
-                assertThat(product.get().getId()).isEqualTo(TEST_ID);
+                assertThat(product.get().getId()).isEqualTo(TEST_EXIST.ID());
             }
         }
     }
