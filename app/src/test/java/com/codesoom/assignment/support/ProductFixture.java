@@ -33,4 +33,20 @@ public enum ProductFixture {
                 .imgUrl(imgUrl)
                 .build();
     }
+
+    public String NAME() {
+        return name;
+    }
+
+    public String MAKER() {
+        return maker;
+    }
+
+    public int PRICE() {
+        return price;
+    }
+
+    public String IMAGE() {
+        return imgUrl;
+    }
 }

@@ -13,12 +13,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codesoom.assignment.support.ProductFieldFixture.TEST_EXIST;
+import static com.codesoom.assignment.support.ProductFieldFixture.TEST_NOT_EXIST;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("ProductRepository 유닛 테스트")
+// @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
@@ -26,10 +28,13 @@ class ProductRepositoryTest {
     /**
      * 계층 구조 테스트 특성상 테스트 인스턴스의 생명주기가 공유됩니다.
      * 따라서 매 테스트마다 모든 fixture 데이터 삭제를 진행합니다.
+     *
+     * `@DirtiesContext`은 Spring Boot 2.4부터 지원하는 것으로 보임
+     * (https://stackoverflow.com/questions/62142428/dirtiescontext-does-not-work-with-nested-tests)
      */
     @AfterEach
     void setUpDeleteFixture() {
-        productRepository.deleteAll();
+        productRepository.deleteAllInBatch();
     }
 
     @Nested
@@ -76,7 +81,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("빈 값을 리턴한다")
             void it_returns_empty_product() {
-                assertThat(productRepository.findById(TEST_EXIST.ID()))
+                assertThat(productRepository.findById(TEST_NOT_EXIST.ID()))
                         .isEmpty();
             }
         }
@@ -84,18 +89,14 @@ class ProductRepositoryTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 찾을_수_있는_id가_주어지면 {
-            @BeforeEach
-            void setUpCreateFixture() {
-                productRepository.save(TOY_1.생성(TEST_EXIST.ID()));
-            }
-
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Optional<Product> product = productRepository.findById(TEST_EXIST.ID());
+                Product productSource = productRepository.save(TOY_1.생성());
 
-                assertThat(product).isNotEmpty();
-                assertThat(product.get().getId()).isEqualTo(TEST_EXIST.ID());
+                Optional<Product> product = productRepository.findById(productSource.getId());
+
+                assertThat(product).isPresent();
             }
         }
     }
@@ -110,7 +111,8 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-
+                assertThatThrownBy(() -> productRepository.save(null))
+                        .hasCauseInstanceOf(IllegalArgumentException.class);
             }
         }
 
@@ -120,7 +122,25 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("상품을 저장하고 리턴한다")
             void it_returns_product() {
+                Product product = productRepository.save(TOY_1.생성());
 
+                assertThat(product).isNotNull();
+                assertThat(product.getName()).isEqualTo(TOY_1.NAME());
+                assertThat(product.getMaker()).isEqualTo(TOY_1.MAKER());
+                assertThat(product.getPrice()).isEqualTo(TOY_1.PRICE());
+                assertThat(product.getImgUrl()).isEqualTo(TOY_1.IMAGE());
+            }
+
+            @Test
+            @DisplayName("상품이 하나 늘어난다")
+            void it_returns_count() {
+                int oldSize = productRepository.findAll().size();
+
+                productRepository.save(TOY_1.생성());
+
+                int newSize = productRepository.findAll().size();
+
+                assertThat(newSize - oldSize).isEqualTo(1);
             }
         }
     }
