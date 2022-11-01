@@ -38,7 +38,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("getProducts()는 등록된 제품이 없을 때 빈 리스트를 리턴한다. ")
+    @DisplayName("getProducts()는 등록된 제품이 없을 때 빈 리스트를 리턴한다.")
     void given_none_products_registered_when_getProducts_invoked_then_empty_list_returned() {
         List<Product> list = service.getProducts();
 
@@ -60,17 +60,18 @@ class ProductServiceTest {
     void when_getProduct_invoked_with_registered_id_then_corresponding_product_returned() {
         service.create(new Product());
 
-        Product product = service.getProduct(1L);
+        Long id = getExistingId();
+        Product product = service.getProduct(id);
 
-        assertThat(product.getId()).isEqualTo(1L);
+        assertThat(product.getId()).isEqualTo(id);
     }
 
     @Test
-    @DisplayName("getProduct()는 등록되지 않은 제품의 id를 인자로 호출하면 예외를 발생시킨다.")
+    @DisplayName("getProduct()는 등록되지 않은 제품의 id를 인자로 호출하면 예외를 던진다.")
     void when_getProduct_invoked_with_not_registered_id_then_exception_thrown() {
         service.create(new Product());
 
-        assertThatThrownBy(() -> service.getProduct(100L))
+        assertThatThrownBy(() -> service.getProduct(Long.MAX_VALUE))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
@@ -113,7 +114,7 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("update()는 존재하지 않는 id를 인자로 호출하면 예외를 발생시킨다.")
+    @DisplayName("update()는 존재하지 않는 id를 인자로 호출하면 예외를 던진다.")
     void when_update_invoked_with_not_existing_id_then_exception_thrown() {
         service.create(new Product(NAME, MAKER, PRICE, IMAGE_URL));
 
@@ -133,5 +134,14 @@ class ProductServiceTest {
 
         List<Product> products = service.getProducts();
         assertThat(products).isEmpty();
+    }
+
+    @Test
+    @DisplayName("delete()는 존재하지 않는 id를 인자로 호출하면 예외를 던진다.")
+    void when_update_invoked_with_not_existing_id_then_corresponding_product_is_deleted() {
+        service.create(new Product());
+
+        assertThatThrownBy(() -> service.delete(Long.MAX_VALUE))
+                .isInstanceOf(ProductNotFoundException.class);
     }
 }

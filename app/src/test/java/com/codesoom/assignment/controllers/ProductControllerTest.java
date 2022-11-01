@@ -1,4 +1,4 @@
-package com.codesoom.assignment;
+package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -133,7 +133,7 @@ class ProductControllerTest {
     @DisplayName("POST /products API는 등록된 제품을 json 형식으로 응답한다.")
     void when_requested_to_post_products_api_it_responses_with_json_of_registered_product() throws Exception {
         performPost(new Product(NAME, MAKER, PRICE, IMAGE_URL))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.name").value(NAME))
                 .andExpect(jsonPath("$.maker").value(MAKER))
