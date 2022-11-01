@@ -1,6 +1,7 @@
 package com.codesoom.assignment.products.application;
 
 
+import com.codesoom.assignment.exception.products.ProductNotFoundException;
 import com.codesoom.assignment.products.domain.Product;
 import com.codesoom.assignment.products.domain.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +19,15 @@ import java.util.Optional;
 
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("Product Service 유닛 테스트")
+@DisplayName("ProductService 유닛 테스트")
 class ProductServiceTest {
-    private static final Long TEST_ID = 1L;
+    private static final Long TEST_EXIST_ID = 1L;
+    private static final Long TEST_NOT_EXIST_ID = 100L;
     private ProductService productService;
     private ProductRepository productRepository;
 
@@ -82,7 +85,7 @@ class ProductServiceTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 장난감_상세조회_메서드는 {
+    class getProduct_메서드는 {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -90,7 +93,8 @@ class ProductServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-
+                assertThatThrownBy(() -> productService.getProduct(TEST_NOT_EXIST_ID))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
 
@@ -100,13 +104,13 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                given(productRepository.findById(TEST_ID))
-                        .willReturn(Optional.ofNullable(TOY_1.생성(TEST_ID)));
+                given(productRepository.findById(TEST_EXIST_ID))
+                        .willReturn(Optional.ofNullable(TOY_1.생성(TEST_EXIST_ID)));
 
-                Product product = productService.getProduct(TEST_ID);
+                Product product = productService.getProduct(TEST_EXIST_ID);
 
                 assertThat(product).isNotNull();
-                assertThat(product.getId()).isEqualTo(TEST_ID);
+                assertThat(product.getId()).isEqualTo(TEST_EXIST_ID);
             }
         }
     }
