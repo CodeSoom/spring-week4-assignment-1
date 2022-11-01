@@ -36,6 +36,7 @@ public class ProductController {
         return service.getProduct(id);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Product create(@RequestBody Product product) {
         ProductValidator.validate(product);
