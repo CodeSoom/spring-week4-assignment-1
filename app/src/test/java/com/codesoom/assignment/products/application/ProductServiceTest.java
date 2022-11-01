@@ -103,4 +103,29 @@ class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 장난감_생성_메서드는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class null이_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 새로운_상품이_주어지면 {
+            @Test
+            @DisplayName("상품을 저장하고 리턴한다")
+            void it_returns_product() {
+
+            }
+        }
+    }
 }
