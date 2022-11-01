@@ -15,6 +15,6 @@ public class ProductController {
     }
 
     public List<Product> list() {
-        return productService.getTasks();
+        return productService.getProducts();
     }
 }

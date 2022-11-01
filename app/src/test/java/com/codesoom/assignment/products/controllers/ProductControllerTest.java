@@ -54,7 +54,7 @@ class ProductControllerTest {
             void it_returns_list() {
                 List<Product> products = new ArrayList<>();
                 products.add(TOY_1.생성());
-                given(productService.getTasks()).willReturn(products);
+                given(productService.getProducts()).willReturn(products);
 
                 assertThat(productController.list()).isNotEmpty();
             }
