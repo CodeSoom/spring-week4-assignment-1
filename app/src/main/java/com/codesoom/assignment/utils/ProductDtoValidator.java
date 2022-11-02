@@ -1,21 +1,14 @@
 package com.codesoom.assignment.utils;
 
-import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exceptions.InvalidInputException;
 
-public class ProductValidator {
+public class ProductDtoValidator {
 
-    public static void validate(Product product) {
-        validateName(product.getName());
-        validateMaker(product.getMaker());
-        validatePrice(product.getPrice());
-        validateImageUrl(product.getImageUrl());
-    }
-
-    private static void validateImageUrl(String imageUrl) {
-        if (imageUrl == null || imageUrl.isBlank()) {
-            throw new InvalidInputException("공백 문자를 제외한 image url을 입력해주세요.");
-        }
+    public static void validate(ProductDto dto) {
+        validateName(dto.getName());
+        validateMaker(dto.getMaker());
+        validatePrice(dto.getPrice());
     }
 
     private static void validatePrice(Integer price) {
@@ -36,11 +29,11 @@ public class ProductValidator {
         }
     }
 
-    public static void checksAllFieldNull(Product product) {
-        if (product.getName() == null
-                && product.getMaker() == null
-                && product.getPrice() == null
-                && product.getImageUrl() == null) {
+    public static void checksAllFieldsNull(ProductDto dto) {
+        if (dto.getName() == null
+                && dto.getMaker() == null
+                && dto.getPrice() == null
+                && dto.getImageUrl() == null) {
 
             throw new InvalidInputException("변경할 정보를 최소 한 개는 입력하셔야 합니다.");
         }
