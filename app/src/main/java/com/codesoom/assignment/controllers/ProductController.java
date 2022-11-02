@@ -2,7 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.utils.ProductValidator;
+import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.utils.ProductDtoValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -29,28 +31,33 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getProducts() {
-        return service.getProducts();
+    public List<ProductDto> getProducts() {
+        return service.getProducts().stream()
+                .map(ProductDto::from)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
-        return service.getProduct(id);
+    public ProductDto getProduct(@PathVariable Long id) {
+        final Product product = service.getProduct(id);
+        return ProductDto.from(product);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        ProductValidator.validate(product);
+    public ProductDto create(@RequestBody ProductDto dto) {
+        ProductDtoValidator.validate(dto);
 
-        return service.create(product);
+        final Product product = service.create(dto.toProduct());
+        return ProductDto.from(product);
     }
 
     @PatchMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product source) {
-        ProductValidator.checksAllFieldsNull(source);
+    public ProductDto update(@PathVariable Long id, @RequestBody ProductDto dto) {
+        ProductDtoValidator.checksAllFieldsNull(dto);
 
-        return service.update(id, source);
+        final Product product = service.update(id, dto.toProduct());
+        return ProductDto.from(product);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

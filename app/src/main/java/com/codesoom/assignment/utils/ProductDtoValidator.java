@@ -1,14 +1,14 @@
 package com.codesoom.assignment.utils;
 
-import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exceptions.InvalidInputException;
 
-public class ProductValidator {
+public class ProductDtoValidator {
 
-    public static void validate(Product product) {
-        validateName(product.getName());
-        validateMaker(product.getMaker());
-        validatePrice(product.getPrice());
+    public static void validate(ProductDto dto) {
+        validateName(dto.getName());
+        validateMaker(dto.getMaker());
+        validatePrice(dto.getPrice());
     }
 
     private static void validatePrice(Integer price) {
@@ -29,11 +29,11 @@ public class ProductValidator {
         }
     }
 
-    public static void checksAllFieldsNull(Product product) {
-        if (product.getName() == null
-                && product.getMaker() == null
-                && product.getPrice() == null
-                && product.getImageUrl() == null) {
+    public static void checksAllFieldsNull(ProductDto dto) {
+        if (dto.getName() == null
+                && dto.getMaker() == null
+                && dto.getPrice() == null
+                && dto.getImageUrl() == null) {
 
             throw new InvalidInputException("변경할 정보를 최소 한 개는 입력하셔야 합니다.");
         }
