@@ -9,13 +9,6 @@ public class ProductValidator {
         validateName(product.getName());
         validateMaker(product.getMaker());
         validatePrice(product.getPrice());
-        validateImageUrl(product.getImageUrl());
-    }
-
-    private static void validateImageUrl(String imageUrl) {
-        if (imageUrl == null || imageUrl.isBlank()) {
-            throw new InvalidInputException("공백 문자를 제외한 image url을 입력해주세요.");
-        }
     }
 
     private static void validatePrice(Integer price) {
@@ -36,7 +29,7 @@ public class ProductValidator {
         }
     }
 
-    public static void checksAllFieldNull(Product product) {
+    public static void checksAllFieldsNull(Product product) {
         if (product.getName() == null
                 && product.getMaker() == null
                 && product.getPrice() == null

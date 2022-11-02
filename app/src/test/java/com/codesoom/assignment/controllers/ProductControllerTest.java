@@ -46,7 +46,7 @@ class ProductControllerTest {
     private static final String UPDATED_NAME = "updated name";
     private static final String UPDATED_MAKER = "updated maker";
     private static final Integer UPDATED_PRICE = 500;
-    private static final String UPDATED_IMAGE_URL = "http://www.localhost:8080/updated";
+    private static final String UPDATED_IMAGE_URL = "http://localhost:8080/updated";
 
     @Autowired
     private MockMvc mockMvc;
@@ -159,13 +159,6 @@ class ProductControllerTest {
     @NullSource
     void when_requested_to_post_products_api_with_none_or_blank_price_then_responses_with_400_code(Integer price) throws Exception {
         performPost(new Product(NAME, MAKER, price, IMAGE_URL))
-                .andExpect(status().isBadRequest());
-    }
-
-    @ParameterizedTest(name = "POST /products API는 imageUrl을 입력하지 않거나 공백 문자열을 입력하면 400 코드로 응답한다.")
-    @MethodSource("nullAndBlankString")
-    void when_requested_to_post_products_api_with_none_or_blank_imageUrl_then_responses_with_400_code(String imageUrl) throws Exception {
-        performPost(new Product(NAME, MAKER, PRICE, imageUrl))
                 .andExpect(status().isBadRequest());
     }
 

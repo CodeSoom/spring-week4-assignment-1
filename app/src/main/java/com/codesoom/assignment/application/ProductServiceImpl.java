@@ -5,9 +5,11 @@ import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
