@@ -1,11 +1,16 @@
 package com.codesoom.assignment.products.domain;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class FakeProductRepository {
+@Repository
+@Primary
+public class FakeProductRepository implements ProductRepository {
     private List<Product> products = new ArrayList<>();
     private static final AtomicLong productId = new AtomicLong(1L);
 
@@ -31,12 +36,18 @@ public class FakeProductRepository {
         return products;
     }
 
+    @Override
     public Optional<Product> findById(Long id) {
         return products.stream()
                 .filter(product -> product.getId().equals(id))
                 .findFirst();
     }
 
+    @Override
+    public void delete(Product product) {
+    }
+
+    @Override
     public void deleteAllInBatch() {
         products = new ArrayList<>();
     }

@@ -2,14 +2,18 @@ package com.codesoom.assignment.products.controllers.dto.request;
 
 import com.codesoom.assignment.products.domain.Product;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
+@EqualsAndHashCode
 public class ProductCreateRequest {
-    private final String name;
-    private final String maker;
-    private final int price;
-    private final String imgUrl;
+    private String name;
+    private String maker;
+    private int price;
+    private String imgUrl;
+
+    private ProductCreateRequest() {}
 
     @Builder
     public ProductCreateRequest(String name, String maker, int price, String imgUrl) {
