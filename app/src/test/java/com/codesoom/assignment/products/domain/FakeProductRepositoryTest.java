@@ -57,8 +57,8 @@ class FakeProductRepositoryTest {
             void it_returns_empty_list() {
                 List<Product> products = fakeProductRepository.findAll();
 
-                assertThat(products).isNotEmpty();
-                assertThat(products).hasSize(1);
+                assertThat(products).isNotEmpty()
+                        .hasSizeGreaterThan(0);
             }
         }
     }
@@ -89,6 +89,10 @@ class FakeProductRepositoryTest {
                 Optional<Product> product = fakeProductRepository.findById(productSource.getId());
 
                 assertThat(product).isPresent();
+                assertThat(product.get().getName()).isEqualTo(TOY_1.NAME());
+                assertThat(product.get().getMaker()).isEqualTo(TOY_1.MAKER());
+                assertThat(product.get().getPrice()).isEqualTo(TOY_1.PRICE());
+                assertThat(product.get().getImgUrl()).isEqualTo(TOY_1.IMAGE());
             }
         }
     }
@@ -124,7 +128,7 @@ class FakeProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("상품이 하나 늘어난다")
+            @DisplayName("상품 목록의 개수가 하나 늘어난다")
             void it_returns_count() {
                 int oldSize = fakeProductRepository.findAll().size();
 
