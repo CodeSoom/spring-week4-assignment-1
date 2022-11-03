@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,14 +42,14 @@ public class ProductController {
         return ProductDto.from(product);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public ProductDto create(@RequestBody ProductDto dto) {
-        ProductDtoValidator.validate(dto);
-
-        final Product product = service.create(dto.toProduct());
-        return ProductDto.from(product);
-    }
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PostMapping
+//    public ProductDto create(@RequestBody ProductDto dto) {
+//        ProductDtoValidator.validate(dto);
+//
+//        final Product product = service.create(dto.toProduct());
+//        return ProductDto.from(product);
+//    }
 
     @PatchMapping("/{id}")
     public ProductDto update(@PathVariable Long id, @RequestBody ProductDto dto) {

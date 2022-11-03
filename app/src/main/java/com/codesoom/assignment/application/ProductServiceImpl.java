@@ -1,7 +1,12 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.domain.Category;
+import com.codesoom.assignment.domain.CategoryRepository;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductCategory;
+import com.codesoom.assignment.domain.ProductCategoryRepository;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.exceptions.CategoryNotFoundException;
 import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -12,43 +17,64 @@ import java.util.List;
 @Transactional
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository repository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
-    public ProductServiceImpl(ProductRepository repository) {
-        this.repository = repository;
+    public ProductServiceImpl(ProductRepository productRepository,
+                              CategoryRepository categoryRepository,
+                              ProductCategoryRepository productCategoryRepository
+    ) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.productCategoryRepository = productCategoryRepository;
     }
 
     @Override
     public List<Product> getProducts() {
-        return repository.findAll();
+        return productRepository.findAll();
     }
 
     @Override
     public Product getProduct(Long id) {
-        return repository.findById(id)
+        return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @Override
-    public Product create(Product product) {
-        return repository.save(product);
+    public Product create(Product product, String categoryName) {
+        final Category category = categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryName));
+
+        mapProductToCategory(product, category);
+
+        return productRepository.save(product);
+    }
+
+    private void mapProductToCategory(Product product, Category category) {
+        final ProductCategory productCategory = new ProductCategory(product, category);
+
+        productCategoryRepository.save(productCategory);
+
+        product.addProductCategory(productCategory);
+        category.addProductCategory(productCategory);
     }
 
     @Override
     public Product update(Long id, Product src) {
-        final Product product = repository.findById(id)
+        final Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         product.update(src);
 
-        return repository.save(product);
+        return productRepository.save(product);
     }
 
     @Override
     public void delete(Long id) {
-        final Product product = repository.findById(id)
+        final Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        repository.delete(product);
+        productRepository.delete(product);
     }
 }

@@ -9,7 +9,7 @@ public interface ProductService {
 
     Product getProduct(Long id);
 
-    Product create(Product product);
+    Product create(Product product, String categoryName);
 
     Product update(Long id, Product src);
 

@@ -1,8 +1,12 @@
 package com.codesoom.assignment.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -14,6 +18,9 @@ public class Product {
     private String maker;
     private Integer price;
     private String imageUrl;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private final List<ProductCategory> productCategoryList = new ArrayList<>();
 
     public Product() {
     }
@@ -43,6 +50,10 @@ public class Product {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void addProductCategory(ProductCategory productCategory) {
+        productCategoryList.add(productCategory);
     }
 
     public void update(Product src) {
