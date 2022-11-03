@@ -1,17 +1,17 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getProducts();
+    List<ProductDto> getProducts();
 
-    Product getProduct(Long id);
+    ProductDto getProduct(Long id);
 
-    Product create(Product product);
+    ProductDto create(ProductDto dto);
 
-    Product update(Long id, Product src);
+    ProductDto update(Long id, ProductDto src);
 
     void delete(Long id);
 }
