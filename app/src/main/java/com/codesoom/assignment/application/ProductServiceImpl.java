@@ -3,15 +3,16 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Category;
 import com.codesoom.assignment.domain.CategoryRepository;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.ProductCategory;
-import com.codesoom.assignment.domain.ProductCategoryRepository;
+import com.codesoom.assignment.domain.Categorization;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exceptions.CategoryNotFoundException;
 import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,55 +20,63 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ProductCategoryRepository productCategoryRepository;
 
     public ProductServiceImpl(ProductRepository productRepository,
-                              CategoryRepository categoryRepository,
-                              ProductCategoryRepository productCategoryRepository
+                              CategoryRepository categoryRepository
     ) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.productCategoryRepository = productCategoryRepository;
     }
 
     @Override
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<ProductDto> getProducts() {
+        return productRepository.findAll()
+                .stream().map(ProductDto::from)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
-    public Product getProduct(Long id) {
-        return productRepository.findById(id)
+    public ProductDto getProduct(Long id) {
+        final Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
+
+        return ProductDto.from(product);
     }
 
     @Override
-    public Product create(Product product, String categoryName) {
-        final Category category = categoryRepository.findByName(categoryName)
-                .orElseThrow(() -> new CategoryNotFoundException(categoryName));
+    public ProductDto create(ProductDto dto) {
 
-        mapProductToCategory(product, category);
+        final List<Category> categoryList = dto.getCategoryNameList().stream()
+                .map(categoryName ->
+                        categoryRepository.findByName(categoryName)
+                                .orElseThrow(() -> new CategoryNotFoundException(categoryName))
+                ).collect(Collectors.toList());
 
-        return productRepository.save(product);
+        final Product product = dto.toProduct();
+        mapProductWithCategory(product, categoryList);
+
+        final Product savedProduct = productRepository.save(product);
+
+        return ProductDto.from(savedProduct);
     }
 
-    private void mapProductToCategory(Product product, Category category) {
-        final ProductCategory productCategory = new ProductCategory(product, category);
+    private void mapProductWithCategory(Product product, List<Category> categoryList) {
+        for (Category category : categoryList) {
+            final Categorization categorization = new Categorization(product, category);
 
-        productCategoryRepository.save(productCategory);
-
-        product.addProductCategory(productCategory);
-        category.addProductCategory(productCategory);
+            product.addProductCategory(categorization);
+            category.addProductCategory(categorization);
+        }
     }
 
     @Override
-    public Product update(Long id, Product src) {
+    public ProductDto update(Long id, ProductDto src) {
         final Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         product.update(src);
 
-        return productRepository.save(product);
+        return ProductDto.from(product);
     }
 
     @Override

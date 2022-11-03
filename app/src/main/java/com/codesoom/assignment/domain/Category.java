@@ -23,7 +23,7 @@ public class Category {
     private Boolean hidden;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private final List<ProductCategory> productCategoryList = new ArrayList<>();
+    private final List<Categorization> categorizationList = new ArrayList<>();
 
     public Category() {
     }
@@ -45,12 +45,12 @@ public class Category {
         return hidden;
     }
 
-    public List<ProductCategory> getProductCategoryList() {
-        return Collections.unmodifiableList(productCategoryList);
+    public List<Categorization> getProductCategoryList() {
+        return Collections.unmodifiableList(categorizationList);
     }
 
-    public void addProductCategory(ProductCategory productCategory) {
-        productCategoryList.add(productCategory);
+    public void addProductCategory(Categorization categorization) {
+        categorizationList.add(categorization);
     }
 
     public void update(Category src) {

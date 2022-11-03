@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ProductDto;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Product {
@@ -20,7 +23,7 @@ public class Product {
     private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private final List<ProductCategory> productCategoryList = new ArrayList<>();
+    private List<Categorization> categorizationList = new ArrayList<>();
 
     public Product() {
     }
@@ -52,25 +55,36 @@ public class Product {
         return imageUrl;
     }
 
-    public void addProductCategory(ProductCategory productCategory) {
-        productCategoryList.add(productCategory);
+    public List<String> getCategoryNameList() {
+        return categorizationList.stream()
+                .map(categorization -> categorization.getCategory().getName())
+                .collect(Collectors.toUnmodifiableList());
     }
 
-    public void update(Product src) {
-        if (src.name != null) {
-            this.name = src.name;
+    public void addProductCategory(Categorization categorization) {
+        categorizationList.add(categorization);
+    }
+
+    public void update(ProductDto src) {
+        if (src.getName() != null) {
+            this.name = src.getName();
         }
 
-        if (src.maker != null) {
-            this.maker = src.maker;
+        if (src.getMaker() != null) {
+            this.maker = src.getMaker();
         }
 
-        if (src.price != null) {
-            this.price = src.price;
+        if (src.getPrice() != null) {
+            this.price = src.getPrice();
         }
 
-        if (src.imageUrl != null) {
-            this.imageUrl = src.imageUrl;
+        if (src.getImageUrl() != null) {
+            this.imageUrl = src.getImageUrl();
+        }
+
+        final List<String> categoryNameList = src.getCategoryNameList();
+        if (categoryNameList != null && !categoryNameList.isEmpty()) {
+            this.
         }
     }
 

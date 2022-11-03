@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ProductCategory {
+public class Categorization {
 
     @Id @GeneratedValue
     private Long id;
@@ -21,11 +21,15 @@ public class ProductCategory {
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
-    public ProductCategory() {
+    public Categorization() {
     }
 
-    public ProductCategory(Product product, Category category) {
+    public Categorization(Product product, Category category) {
         this.product = product;
         this.category = category;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }
