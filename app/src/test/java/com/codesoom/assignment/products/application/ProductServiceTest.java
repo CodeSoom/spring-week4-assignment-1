@@ -2,9 +2,9 @@ package com.codesoom.assignment.products.application;
 
 
 import com.codesoom.assignment.exception.products.ProductNotFoundException;
+import com.codesoom.assignment.products.domain.FakeProductRepository;
 import com.codesoom.assignment.products.domain.Product;
-import com.codesoom.assignment.products.domain.ProductRepository;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -14,7 +14,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,20 +22,26 @@ import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+
 @SpringBootTest
-@Transactional
 @DisplayName("ProductService 유닛 테스트")
 class ProductServiceTest {
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
+    private final FakeProductRepository fakeProductRepository;
 
+    /*
+    * Test의 DI는 Junit Engine의 ParameterResolver에 의하여 의존성이 주입되므로 @Autowired를 생략하지 않아야 합니다.
+    */
     @Autowired
-    private ProductRepository productRepository;
+    ProductServiceTest(ProductService productService, FakeProductRepository fakeProductRepository) {
+        this.productService = productService;
+        this.fakeProductRepository = fakeProductRepository;
+    }
 
-    @AfterEach
-    void setUpDeleteFixture() { // @Nested에서의 테스트 인스턴스 생명주기... 도대체 어떻게 관리해야될까요....
-        productRepository.deleteAllInBatch();
+    @BeforeEach
+    void setUpDeleteFixture() {
+        fakeProductRepository.deleteAllInBatch();
     }
 
     @Nested
