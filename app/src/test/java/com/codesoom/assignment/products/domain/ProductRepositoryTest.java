@@ -1,6 +1,5 @@
 package com.codesoom.assignment.products.domain;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -19,21 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
-@DisplayName("ProductRepository 유닛 테스트")
-// @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DisplayName("ProductRepository JPA 테스트")
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    /**
-     * 계층 구조 테스트 특성상 테스트 인스턴스의 생명주기가 공유됩니다.
-     * 따라서 매 테스트마다 모든 fixture 데이터 삭제를 진행합니다.
-     *
-     * `@DirtiesContext`은 Spring Boot 2.4부터 지원하는 것으로 보임
-     * (https://stackoverflow.com/questions/62142428/dirtiescontext-does-not-work-with-nested-tests)
-     */
-    @AfterEach
-    void setUpDeleteFixture() {
+    @BeforeEach
+    void setUpDeleteAllFixture() {
         productRepository.deleteAllInBatch();
     }
 
