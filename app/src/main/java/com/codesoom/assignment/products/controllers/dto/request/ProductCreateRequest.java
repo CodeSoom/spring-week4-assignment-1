@@ -6,10 +6,12 @@ import lombok.Getter;
 
 @Getter
 public class ProductCreateRequest {
-    private final String name;
-    private final String maker;
-    private final int price;
-    private final String imgUrl;
+    private String name;
+    private String maker;
+    private int price;
+    private String imgUrl;
+
+    private ProductCreateRequest() {}
 
     @Builder
     public ProductCreateRequest(String name, String maker, int price, String imgUrl) {
