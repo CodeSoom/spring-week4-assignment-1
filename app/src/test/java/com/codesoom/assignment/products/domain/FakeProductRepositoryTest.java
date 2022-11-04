@@ -52,8 +52,7 @@ class FakeProductRepositoryTest {
             void it_returns_empty_list() {
                 List<Product> products = fakeProductRepository.findAll();
 
-                assertThat(products).isNotEmpty()
-                        .hasSizeGreaterThan(0);
+                assertThat(products).isNotEmpty();
             }
         }
     }
@@ -123,7 +122,7 @@ class FakeProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("상품 목록의 개수가 하나 늘어난다")
+            @DisplayName("findAll 메서드 리턴값이 1 증가한다")
             void it_returns_count() {
                 int oldSize = fakeProductRepository.findAll().size();
 
