@@ -1,6 +1,5 @@
 package com.codesoom.assignment.products.domain;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -18,15 +17,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("FakeProductRepository 유닛 테스트")
 class FakeProductRepositoryTest {
-    private final FakeProductRepository fakeProductRepository;
+    private FakeProductRepository fakeProductRepository;
 
-    public FakeProductRepositoryTest() {
+    @BeforeEach
+    void setUpVariable() {
         fakeProductRepository = new FakeProductRepository();
-    }
-
-    @AfterEach
-    void setUpDeleteFixture() {
-        fakeProductRepository.deleteAllInBatch();
     }
 
     @Nested

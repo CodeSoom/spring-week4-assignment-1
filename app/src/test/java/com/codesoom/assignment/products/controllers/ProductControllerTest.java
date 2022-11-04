@@ -11,8 +11,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -21,24 +19,16 @@ import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
 @DisplayName("ProductController 유닛 테스트")
 class ProductControllerTest {
-    private final ProductController productController;
-    private final ProductService productService;
-    private final FakeProductRepository fakeProductRepository;
+    private ProductController productController;
+    private ProductService productService; // Controller의 create 기능이 개발되기 전까지 대체합니다.
 
-    @Autowired
-    ProductControllerTest(ProductController productController, ProductService productService, FakeProductRepository fakeProductRepository) {
-        this.productController = productController;
-        this.productService = productService;
-        this.fakeProductRepository = fakeProductRepository;
-    }
-
-    // Service의 delete 기능이 개발되기 전까지 대체합니다.
     @BeforeEach
-    void setUpDeleteFixture() {
-        fakeProductRepository.deleteAllInBatch();
+    void setUpVariable() {
+        FakeProductRepository fakeProductRepository = new FakeProductRepository();
+        productService = new ProductService(fakeProductRepository);
+        productController = new ProductController(productService);
     }
 
     @Nested

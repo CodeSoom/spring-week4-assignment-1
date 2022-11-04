@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -23,25 +21,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
-@SpringBootTest
 @DisplayName("ProductService 유닛 테스트")
 class ProductServiceTest {
-
-    private final ProductService productService;
-    private final FakeProductRepository fakeProductRepository;
-
-    /*
-    * Test의 DI는 Junit Engine의 ParameterResolver에 의하여 의존성이 주입되므로 @Autowired를 생략하지 않아야 합니다.
-    */
-    @Autowired
-    ProductServiceTest(ProductService productService, FakeProductRepository fakeProductRepository) {
-        this.productService = productService;
-        this.fakeProductRepository = fakeProductRepository;
-    }
+    private ProductService productService;
 
     @BeforeEach
-    void setUpDeleteFixture() {
-        fakeProductRepository.deleteAllInBatch();
+    void setUpVariable() {
+        FakeProductRepository fakeProductRepository = new FakeProductRepository();
+        this.productService = new ProductService(fakeProductRepository);
     }
 
     @Nested
@@ -106,6 +93,11 @@ class ProductServiceTest {
                 Product product = productService.getProduct(productSource.getId());
 
                 assertThat(product).isNotNull();
+                assertThat(product.getId()).isEqualTo(productSource.getId());
+                assertThat(product.getName()).isEqualTo(TOY_1.NAME());
+                assertThat(product.getMaker()).isEqualTo(TOY_1.MAKER());
+                assertThat(product.getPrice()).isEqualTo(TOY_1.PRICE());
+                assertThat(product.getImgUrl()).isEqualTo(TOY_1.IMAGE());
             }
         }
     }
