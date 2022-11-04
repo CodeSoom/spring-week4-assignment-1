@@ -5,6 +5,7 @@ import com.codesoom.assignment.products.controllers.dto.request.ProductCreateReq
 import com.codesoom.assignment.products.controllers.dto.request.ProductUpdateRequest;
 import com.codesoom.assignment.products.domain.Product;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +48,9 @@ public class ProductController {
         return productService.updateProduct(id, productUpdateRequest);
     }
 
-    public void delete(Long id) {
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         productService.deleteProduct(id);
     }
 }
