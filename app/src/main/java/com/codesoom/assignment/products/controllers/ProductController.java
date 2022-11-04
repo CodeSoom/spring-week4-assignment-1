@@ -2,6 +2,7 @@ package com.codesoom.assignment.products.controllers;
 
 import com.codesoom.assignment.products.application.ProductService;
 import com.codesoom.assignment.products.controllers.dto.request.ProductCreateRequest;
+import com.codesoom.assignment.products.controllers.dto.request.ProductUpdateRequest;
 import com.codesoom.assignment.products.domain.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,5 +38,9 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody ProductCreateRequest request) {
         return productService.createProduct(request);
+    }
+
+    public Product update(Long id, ProductUpdateRequest productUpdateRequest) {
+        return null;
     }
 }

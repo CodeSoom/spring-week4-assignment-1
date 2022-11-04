@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.codesoom.assignment.support.ProductFieldFixture.TEST_NOT_EXIST;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
+import static com.codesoom.assignment.support.ProductFixture.TOY_2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -141,10 +142,25 @@ class ProductControllerTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 찾을_수_있는_id가_주어지면 {
+            private Long fixtureId;
+
+            @BeforeEach
+            void setUpCreateFixture() {
+                Product productSource = productController.create(TOY_1.등록_요청_데이터_생성());
+                fixtureId = productSource.getId();
+            }
+
             @Test
             @DisplayName("상품을 수정하고 리턴한다")
             void it_returns_product() {
+                Product product = productController.update(fixtureId, TOY_2.수정_요청_데이터_생성());
 
+                assertThat(product).isNotNull();
+                assertThat(product.getId()).isEqualTo(fixtureId);
+                assertThat(product.getName()).isEqualTo(TOY_2.NAME());
+                assertThat(product.getMaker()).isEqualTo(TOY_2.MAKER());
+                assertThat(product.getPrice()).isEqualTo(TOY_2.PRICE());
+                assertThat(product.getImgUrl()).isEqualTo(TOY_2.IMAGE());
             }
         }
     }
