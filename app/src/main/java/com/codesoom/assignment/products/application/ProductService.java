@@ -33,6 +33,10 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
-        return null;
+        Product product = productRepository.findById(id).get();
+
+        product.update(productUpdateRequest.toEntity());
+
+        return product;
     }
 }

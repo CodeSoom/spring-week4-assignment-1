@@ -30,4 +30,35 @@ public class Product {
         this.price = price;
         this.imgUrl = imgUrl;
     }
+
+    public void update(Product updateProduct) {
+        updateName(updateProduct);
+        updateMarker(updateProduct);
+        updatePrice(updateProduct);
+        updateImgUrl(updateProduct);
+    }
+
+    private void updateImgUrl(Product updateProduct) {
+        if (updateProduct.getImgUrl() != null) {
+            this.imgUrl = updateProduct.getImgUrl();
+        }
+    }
+
+    private void updatePrice(Product updateProduct) {
+        if (updateProduct.getPrice() != 0) {
+            this.price = updateProduct.getPrice();
+        }
+    }
+
+    private void updateMarker(Product updateProduct) {
+        if (updateProduct.getMaker() != null) {
+            this.maker = updateProduct.getMaker();
+        }
+    }
+
+    private void updateName(Product updateProduct) {
+        if (updateProduct.getName() != null) {
+            this.name = updateProduct.getName();
+        }
+    }
 }
