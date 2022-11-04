@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DisplayName("ProductController 통합 웹 테스트")
 public class ProductControllerWebTest {
     @Autowired
     private MockMvc mockMvc;

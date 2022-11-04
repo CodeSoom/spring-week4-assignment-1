@@ -104,7 +104,7 @@ class ProductServiceTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 장난감_생성_메서드는 {
+    class createProduct_메서드는 {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
