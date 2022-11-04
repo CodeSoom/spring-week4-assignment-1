@@ -1,21 +1,21 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.ProductDto;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
 public class Product {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
+    @Column(name = "PRODUCT_ID")
     private Long id;
     private String name;
     private String maker;
@@ -23,7 +23,7 @@ public class Product {
     private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Categorization> categorizationList = new ArrayList<>();
+    private final List<Categorization> categorizations = new ArrayList<>();
 
     public Product() {
     }
@@ -55,36 +55,57 @@ public class Product {
         return imageUrl;
     }
 
-    public List<String> getCategoryNameList() {
-        return categorizationList.stream()
+    public List<String> getCategoryNames() {
+        return categorizations.stream()
                 .map(categorization -> categorization.getCategory().getName())
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    public void addProductCategory(Categorization categorization) {
-        categorizationList.add(categorization);
+    public void addCategories(List<Category> categories) {
+        for (Category category : categories) {
+            addCategorization(new Categorization(this, category));
+        }
     }
 
-    public void update(ProductDto src) {
-        if (src.getName() != null) {
-            this.name = src.getName();
+    public void addCategorization(Categorization categorization) {
+        categorizations.add(categorization);
+        categorization.getCategory().addCategorization(categorization);
+    }
+
+    private void removeAllCategories() {
+        for (Categorization categorization : categorizations) {
+            categorization.getCategory()
+                    .getCategorizations()
+                    .remove(categorization);
         }
 
-        if (src.getMaker() != null) {
-            this.maker = src.getMaker();
+        categorizations.clear();
+    }
+
+    public void updateCategories(List<Category> categories) {
+        removeAllCategories();
+        addCategories(categories);
+    }
+
+    public void updateInfo(String name, String maker, Integer price, String imageUrl, List<Category> categories) {
+        if (name != null) {
+            this.name = name;
         }
 
-        if (src.getPrice() != null) {
-            this.price = src.getPrice();
+        if (maker != null) {
+            this.maker = maker;
         }
 
-        if (src.getImageUrl() != null) {
-            this.imageUrl = src.getImageUrl();
+        if (price != null) {
+            this.price = price;
         }
 
-        final List<String> categoryNameList = src.getCategoryNameList();
-        if (categoryNameList != null && !categoryNameList.isEmpty()) {
-            this.
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
+
+        if (categories != null) {
+            updateCategories(categories);
         }
     }
 

@@ -16,33 +16,40 @@ public class ProductDto {
     private final String imageUrl;
 
     @JsonProperty("category")
-    private final List<String> categoryNameList;
+    private final List<String> categoryNames;
 
     @JsonCreator
     public ProductDto(@JsonProperty("name") String name,
                       @JsonProperty("maker") String maker,
                       @JsonProperty("price") Integer price,
                       @JsonProperty("imageUrl") String imageUrl,
-                      @JsonProperty("category") List<String> categoryNameList
+                      @JsonProperty("category") List<String> categoryNames
     ) {
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
-        this.categoryNameList = categoryNameList;
+        this.categoryNames = categoryNames;
+    }
+
+    public ProductDto(Long id, String name, String maker, Integer price, String imageUrl, List<String> categoryNames) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.categoryNames = categoryNames;
     }
 
     public static ProductDto from(Product product) {
-        final ProductDto dto = new ProductDto(
+        return new ProductDto(
+                product.getId(),
                 product.getName(),
                 product.getMaker(),
                 product.getPrice(),
                 product.getImageUrl(),
-                product.getCategoryNameList()
+                product.getCategoryNames()
         );
-        dto.id = product.getId();
-
-        return dto;
     }
 
     public Product toProduct() {
@@ -69,7 +76,7 @@ public class ProductDto {
         return imageUrl;
     }
 
-    public List<String> getCategoryNameList() {
-        return categoryNameList;
+    public List<String> getCategoryNames() {
+        return categoryNames;
     }
 }

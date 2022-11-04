@@ -3,7 +3,6 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Category;
 import com.codesoom.assignment.domain.CategoryRepository;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.Categorization;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exceptions.CategoryNotFoundException;
@@ -21,9 +20,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository,
-                              CategoryRepository categoryRepository
-    ) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
     }
@@ -31,7 +28,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getProducts() {
         return productRepository.findAll()
-                .stream().map(ProductDto::from)
+                .stream()
+                .map(ProductDto::from)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -45,28 +43,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto create(ProductDto dto) {
-
-        final List<Category> categoryList = dto.getCategoryNameList().stream()
-                .map(categoryName ->
-                        categoryRepository.findByName(categoryName)
-                                .orElseThrow(() -> new CategoryNotFoundException(categoryName))
-                ).collect(Collectors.toList());
-
+        final List<Category> categoriesToBeAdded = categoryNamesToCategories(dto.getCategoryNames());
         final Product product = dto.toProduct();
-        mapProductWithCategory(product, categoryList);
+
+        product.addCategories(categoriesToBeAdded);
 
         final Product savedProduct = productRepository.save(product);
-
         return ProductDto.from(savedProduct);
-    }
-
-    private void mapProductWithCategory(Product product, List<Category> categoryList) {
-        for (Category category : categoryList) {
-            final Categorization categorization = new Categorization(product, category);
-
-            product.addProductCategory(categorization);
-            category.addProductCategory(categorization);
-        }
     }
 
     @Override
@@ -74,7 +57,8 @@ public class ProductServiceImpl implements ProductService {
         final Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        product.update(src);
+        final List<Category> categories = categoryNamesToCategories(src.getCategoryNames());
+        product.updateInfo(src.getName(), src.getMaker(), src.getPrice(), src.getImageUrl(), categories);
 
         return ProductDto.from(product);
     }
@@ -85,5 +69,17 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.delete(product);
+    }
+
+    private List<Category> categoryNamesToCategories(List<String> categoryNameList) {
+        if (categoryNameList == null) {
+            return null;
+        }
+
+        return categoryNameList
+                .stream()
+                .map(name -> categoryRepository.findByName(name)
+                        .orElseThrow(() -> new CategoryNotFoundException(name)))
+                .collect(Collectors.toList());
     }
 }
