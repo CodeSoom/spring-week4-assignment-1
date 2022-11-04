@@ -40,4 +40,11 @@ public class ProductService {
 
         return product;
     }
+
+    public void deleteProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(ProductNotFoundException::new);
+
+        productRepository.delete(product);
+    }
 }

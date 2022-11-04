@@ -175,4 +175,44 @@ class ProductServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class deleteProduct_메서드는 {
+        private Long fixtureId;
+
+        @BeforeEach
+        void setUpCreateFixture() {
+            Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성());
+            fixtureId = productSource.getId();
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+                assertThatThrownBy(() -> productService.deleteProduct(TEST_NOT_EXIST.ID()))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            @Test
+            @DisplayName("상품을 삭제한다")
+            void it_returns_product() {
+                Product product = productService.getProduct(fixtureId);
+
+                assertThat(product).isNotNull();
+
+                productService.deleteProduct(fixtureId);
+
+                assertThatThrownBy(() -> productService.getProduct(fixtureId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+    }
 }
