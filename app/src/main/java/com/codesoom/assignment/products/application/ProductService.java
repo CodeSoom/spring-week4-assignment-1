@@ -33,7 +33,8 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
-        Product product = productRepository.findById(id).get();
+        Product product = productRepository.findById(id)
+                .orElseThrow(ProductNotFoundException::new);
 
         product.update(productUpdateRequest.toEntity());
 

@@ -137,7 +137,7 @@ class ProductServiceTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 수정하기_메서드는 {
+    class updateProduct_메서드는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 찾을_수_없는_id가_주어지면 {
