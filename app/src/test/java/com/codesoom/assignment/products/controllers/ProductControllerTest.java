@@ -151,17 +151,32 @@ class ProductControllerTest {
                 fixtureId = productSource.getId();
             }
 
-            @Test
-            @DisplayName("상품을 수정하고 리턴한다")
-            void it_returns_product() {
-                Product product = productController.update(fixtureId, TOY_2.수정_요청_데이터_생성());
+            @Nested
+            @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+            class 변경_할_상품_정보가_null인_경우 {
+                @Test
+                @DisplayName("예외를 던진다")
+                void it_returns_exception() {
+                    assertThatThrownBy(() -> productController.update(fixtureId, null))
+                            .isInstanceOf(NullPointerException.class);
+                }
+            }
 
-                assertThat(product).isNotNull();
-                assertThat(product.getId()).isEqualTo(fixtureId);
-                assertThat(product.getName()).isEqualTo(TOY_2.NAME());
-                assertThat(product.getMaker()).isEqualTo(TOY_2.MAKER());
-                assertThat(product.getPrice()).isEqualTo(TOY_2.PRICE());
-                assertThat(product.getImgUrl()).isEqualTo(TOY_2.IMAGE());
+            @Nested
+            @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+            class 변경_할_상품_정보가_null이_아닌_경우 {
+                @Test
+                @DisplayName("상품을 수정하고 리턴한다")
+                void it_returns_product() {
+                    Product product = productController.update(fixtureId, TOY_2.수정_요청_데이터_생성());
+
+                    assertThat(product).isNotNull();
+                    assertThat(product.getId()).isEqualTo(fixtureId);
+                    assertThat(product.getName()).isEqualTo(TOY_2.NAME());
+                    assertThat(product.getMaker()).isEqualTo(TOY_2.MAKER());
+                    assertThat(product.getPrice()).isEqualTo(TOY_2.PRICE());
+                    assertThat(product.getImgUrl()).isEqualTo(TOY_2.IMAGE());
+                }
             }
         }
     }
