@@ -125,8 +125,13 @@ public class ProductControllerWebTest {
         class 찾을_수_없는_id가_주어지면 {
             @Test
             @DisplayName("404 코드를 반환한다")
-            void it_responses_404() {
-
+            void it_responses_404() throws Exception {
+                mockMvc.perform(
+                                put("/products/" + TEST_NOT_EXIST.ID())
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(JsonUtil.writeValue(TOY_2.수정_요청_데이터_생성()))
+                        )
+                        .andExpect(status().isNotFound());
             }
         }
     }
