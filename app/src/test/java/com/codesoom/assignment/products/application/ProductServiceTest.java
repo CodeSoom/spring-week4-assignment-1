@@ -133,4 +133,36 @@ class ProductServiceTest {
             }
         }
     }
+
+/*
+    수정하기 메서드는
+        - 찾을 수 없는 id가 주어지면
+            - notFoundException을 던진다
+        - 찾을 수 있는 id가 주어지면
+            - 상품을 수정하고 리턴한다.
+            -
+*/
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 수정하기_메서드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            @Test
+            @DisplayName("상품을 수정하고 리턴한다")
+            void it_returns_product() {
+
+            }
+        }
+    }
 }
