@@ -127,7 +127,7 @@ class ProductControllerTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class 수정하기_메서드는 {
+    class update_메서드는 {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -135,7 +135,8 @@ class ProductControllerTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-
+                assertThatThrownBy(() -> productController.update(TEST_NOT_EXIST.ID(), TOY_2.수정_요청_데이터_생성()))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
 
