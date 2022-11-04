@@ -40,6 +40,7 @@ public class FakeProductRepository implements ProductRepository {
 
     @Override
     public void delete(Product product) {
+        products.remove(product);
     }
 
     @Override

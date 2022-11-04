@@ -134,4 +134,25 @@ class FakeProductRepositoryTest {
             }
         }
     }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class delete_메서드는 {
+        private Product productSource;
+
+        @BeforeEach
+        void setUpCreateFixture() {
+            productSource = fakeProductRepository.save(TOY_1.생성());
+        }
+
+        @Test
+        @DisplayName("상품을 삭제한다")
+        void it_deleted() {
+            Long id = productSource.getId();
+
+            fakeProductRepository.delete(productSource);
+
+            assertThat(fakeProductRepository.findById(id)).isEmpty();
+        }
+    }
 }

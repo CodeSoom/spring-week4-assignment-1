@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ProductCreateRequest {
+public class ProductUpdateRequest {
     private String name;
     private String maker;
     private int price;
     private String imgUrl;
 
-    private ProductCreateRequest() {}
+    private ProductUpdateRequest() {}
 
     @Builder
-    public ProductCreateRequest(String name, String maker, int price, String imgUrl) {
+    public ProductUpdateRequest(String name, String maker, int price, String imgUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;

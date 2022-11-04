@@ -1,6 +1,6 @@
 package com.codesoom.assignment.util;
 
-import com.codesoom.assignment.products.controllers.dto.request.ProductCreateRequest;
+import com.codesoom.assignment.products.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +14,11 @@ class JsonUtilTest {
     @Test
     @DisplayName("데이터를 직렬화한 후 역 직렬화하면 기존 데이터를 리턴한다")
     void write_read() throws IOException {
-        ProductCreateRequest originData = TOY_1.요청_데이터_생성();
+        Product originData = TOY_1.생성();
 
         String requestStr = JsonUtil.writeValue(originData);
 
-        ProductCreateRequest resultData = JsonUtil.readValue(requestStr, ProductCreateRequest.class);
+        Product resultData = JsonUtil.readValue(requestStr, Product.class);
 
         assertThat(originData).isEqualTo(resultData);
     }

@@ -1,7 +1,6 @@
 package com.codesoom.assignment.support;
 
 public enum ProductFieldFixture {
-    TEST_EXIST(1L),
     TEST_NOT_EXIST(Long.MAX_VALUE),
     ;
 
