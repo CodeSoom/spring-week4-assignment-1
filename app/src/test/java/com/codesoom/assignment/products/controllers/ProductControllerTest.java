@@ -11,8 +11,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
@@ -21,24 +19,15 @@ import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest
 @DisplayName("ProductController 유닛 테스트")
 class ProductControllerTest {
-    private final ProductController productController;
-    private final ProductService productService;
-    private final FakeProductRepository fakeProductRepository;
+    private ProductController productController;
 
-    @Autowired
-    ProductControllerTest(ProductController productController, ProductService productService, FakeProductRepository fakeProductRepository) {
-        this.productController = productController;
-        this.productService = productService;
-        this.fakeProductRepository = fakeProductRepository;
-    }
-
-    // Service의 delete 기능이 개발되기 전까지 대체합니다.
     @BeforeEach
-    void setUpDeleteFixture() {
-        fakeProductRepository.deleteAllInBatch();
+    void setUpVariable() {
+        FakeProductRepository fakeProductRepository = new FakeProductRepository();
+        ProductService productService = new ProductService(fakeProductRepository);
+        productController = new ProductController(productService);
     }
 
     @Nested
@@ -63,7 +52,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("비어있지 않은 리스트를 리턴한다")
             void it_returns_list() {
-                productService.createProduct(TOY_1.요청_데이터_생성());
+                productController.create(TOY_1.요청_데이터_생성());
 
                 assertThat(productController.list()).isNotEmpty();
             }
@@ -91,9 +80,40 @@ class ProductControllerTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Product productSource = productService.createProduct(TOY_1.요청_데이터_생성());
+                Product productSource = productController.create(TOY_1.요청_데이터_생성());
 
                 Product product = productController.detail(productSource.getId());
+
+                assertThat(product).isNotNull();
+                assertThat(product.getName()).isEqualTo(TOY_1.NAME());
+                assertThat(product.getMaker()).isEqualTo(TOY_1.MAKER());
+                assertThat(product.getPrice()).isEqualTo(TOY_1.PRICE());
+                assertThat(product.getImgUrl()).isEqualTo(TOY_1.IMAGE());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class create_메서드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class null이_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+                assertThatThrownBy(() -> productController.create(null))
+                        .isInstanceOf(NullPointerException.class);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 새로운_상품이_주어지면 {
+            @Test
+            @DisplayName("상품을 저장하고 리턴한다")
+            void it_returns_product() {
+                Product product = productController.create(TOY_1.요청_데이터_생성());
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(TOY_1.NAME());

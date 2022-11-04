@@ -123,7 +123,7 @@ class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("상품이 하나 늘어난다")
+            @DisplayName("findAll 메서드 리턴값이 1 증가한다")
             void it_returns_count() {
                 int oldSize = productRepository.findAll().size();
 
