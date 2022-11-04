@@ -145,7 +145,8 @@ class ProductServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-
+                assertThatThrownBy(() -> productService.updateProduct(TEST_NOT_EXIST.ID(), TOY_1.수정_요청_데이터_생성()))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
 
