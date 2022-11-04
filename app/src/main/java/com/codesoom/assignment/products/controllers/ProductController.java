@@ -41,6 +41,6 @@ public class ProductController {
     }
 
     public Product update(Long id, ProductUpdateRequest productUpdateRequest) {
-        return null;
+        return productService.updateProduct(id, productUpdateRequest);
     }
 }
