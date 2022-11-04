@@ -1,5 +1,8 @@
 package com.codesoom.assignment.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +17,7 @@ import java.util.List;
 public class Category {
 
     @Id @GeneratedValue
+    @Column(name = "CATEGORY_ID")
     private Long id;
 
     @Column(nullable = false)
@@ -23,12 +27,13 @@ public class Category {
     private Boolean hidden;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private final List<Categorization> categorizationList = new ArrayList<>();
+    private final List<Categorization> categorizations = new ArrayList<>();
 
     public Category() {
     }
 
-    public Category(String name, Boolean hidden) {
+    @JsonCreator
+    public Category(@JsonProperty("name") String name, @JsonProperty("hidden") Boolean hidden) {
         this.name = name;
         this.hidden = hidden;
     }
@@ -45,12 +50,12 @@ public class Category {
         return hidden;
     }
 
-    public List<Categorization> getProductCategoryList() {
-        return Collections.unmodifiableList(categorizationList);
+    public List<Categorization> getCategorizations() {
+        return Collections.unmodifiableList(categorizations);
     }
 
-    public void addProductCategory(Categorization categorization) {
-        categorizationList.add(categorization);
+    public void addCategorization(Categorization categorization) {
+        categorizations.add(categorization);
     }
 
     public void update(Category src) {

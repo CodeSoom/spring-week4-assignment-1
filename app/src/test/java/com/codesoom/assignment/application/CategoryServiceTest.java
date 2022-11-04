@@ -1,7 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Category;
-import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exceptions.CategoryNotFoundException;
 import com.codesoom.assignment.exceptions.DuplicateCategoryException;
 import com.codesoom.assignment.exceptions.InvalidDeleteRequestException;
@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 
 import javax.transaction.Transactional;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("getCategories()는 등록한 카테고리가 있으면 빈 리스트를 리턴한다.")
+    @DisplayName("getCategories()는 등록한 카테고리가 있으면 비어 있지 않은 리스트를 리턴한다.")
     void given_categories_registered_exists_when_getCategories_invoked_then_returns_not_empty_list() {
         categoryService.create(new Category(CATEGORY_NAME, HIDDEN));
 
@@ -82,7 +83,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("create()는 인자로 주어진 category 객체를 repository에 저장한다.")
+    @DisplayName("create()는 인자로 주어진 category 객체를 저장한다.")
     void when_create_invoked_then_that_category_is_saved_in_repository() {
         int oldSize = categoryService.getCategories().size();
 
@@ -164,7 +165,9 @@ public class CategoryServiceTest {
 
         Category category = new Category(CATEGORY_NAME, HIDDEN);
         categoryService.create(category);
-        productService.create(new Product("prod name", "prod maker", 100, "http://www.na.com/img"), category.getName());
+        productService.create(new ProductDto("prod name", "prod maker", 100, "http://www.na.com/img",
+                Collections.singletonList(category.getName())
+        ));
 
         assertThatThrownBy(() -> categoryService.delete(category.getId()))
                 .isInstanceOf(InvalidDeleteRequestException.class);

@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
         final Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
 
-        if (!category.getProductCategoryList().isEmpty()) {
+        if (!category.getCategorizations().isEmpty()) {
             throw new InvalidDeleteRequestException();
         }
 
