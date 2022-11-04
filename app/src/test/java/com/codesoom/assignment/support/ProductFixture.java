@@ -1,12 +1,13 @@
 package com.codesoom.assignment.support;
 
 import com.codesoom.assignment.products.controllers.dto.request.ProductCreateRequest;
+import com.codesoom.assignment.products.controllers.dto.request.ProductUpdateRequest;
 import com.codesoom.assignment.products.domain.Product;
 
 public enum ProductFixture {
     TOY_1("범냐옹1", "메이드인 코리아", 2000000, "https://avatars.githubusercontent.com/u/59248326"),
-    TOY_2("범냐옹2", "메이드인 코리아", 2000000, "https://avatars.githubusercontent.com/u/59248326"),
-    TOY_3("범냐옹3", "메이드인 코리아", 2000000, "https://avatars.githubusercontent.com/u/59248326"),
+    TOY_2("범냐옹2", "메이드인 안양", 3000000, "https://avatars.githubusercontent.com/u/59248326"),
+    TOY_3("범냐옹3", "메이드인 사을", 5000000, "https://avatars.githubusercontent.com/u/59248326"),
     ;
 
     private final String name;
@@ -35,8 +36,17 @@ public enum ProductFixture {
                 .build();
     }
 
-    public ProductCreateRequest 요청_데이터_생성() {
+    public ProductCreateRequest 등록_요청_데이터_생성() {
         return ProductCreateRequest.builder()
+                .name(name)
+                .maker(maker)
+                .price(price)
+                .imgUrl(imgUrl)
+                .build();
+    }
+
+    public ProductUpdateRequest 수정_요청_데이터_생성() {
+        return ProductUpdateRequest.builder()
                 .name(name)
                 .maker(maker)
                 .price(price)

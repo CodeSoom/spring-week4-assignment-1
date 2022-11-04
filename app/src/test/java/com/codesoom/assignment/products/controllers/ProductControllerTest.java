@@ -52,7 +52,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("비어있지 않은 리스트를 리턴한다")
             void it_returns_list() {
-                productController.create(TOY_1.요청_데이터_생성());
+                productController.create(TOY_1.등록_요청_데이터_생성());
 
                 assertThat(productController.list()).isNotEmpty();
             }
@@ -80,7 +80,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Product productSource = productController.create(TOY_1.요청_데이터_생성());
+                Product productSource = productController.create(TOY_1.등록_요청_데이터_생성());
 
                 Product product = productController.detail(productSource.getId());
 
@@ -113,7 +113,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("상품을 저장하고 리턴한다")
             void it_returns_product() {
-                Product product = productController.create(TOY_1.요청_데이터_생성());
+                Product product = productController.create(TOY_1.등록_요청_데이터_생성());
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(TOY_1.NAME());

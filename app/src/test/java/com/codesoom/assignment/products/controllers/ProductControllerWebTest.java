@@ -53,7 +53,7 @@ public class ProductControllerWebTest {
             @Test
             @DisplayName("200 코드를 반환한다")
             void it_responses_200() throws Exception {
-                Product productSource = productService.createProduct(TOY_1.요청_데이터_생성());
+                Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성());
 
                 mockMvc.perform(
                                 get("/products/" + productSource.getId())
@@ -85,7 +85,7 @@ public class ProductControllerWebTest {
             mockMvc.perform(
                             post("/products")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(JsonUtil.writeValue(TOY_1.요청_데이터_생성()))
+                                    .content(JsonUtil.writeValue(TOY_1.등록_요청_데이터_생성()))
                     )
                     .andExpect(status().isCreated());
         }
