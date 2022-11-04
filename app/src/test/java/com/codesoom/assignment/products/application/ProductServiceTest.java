@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.codesoom.assignment.support.ProductFieldFixture.TEST_NOT_EXIST;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
+import static com.codesoom.assignment.support.ProductFixture.TOY_2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -55,7 +56,7 @@ class ProductServiceTest {
             @ValueSource(ints = {1, 3, 7})
             void it_returns_list(int createCount) {
                 for (int i = 0; i < createCount; i++) {
-                    productService.createProduct(TOY_1.요청_데이터_생성());
+                    productService.createProduct(TOY_1.등록_요청_데이터_생성());
                 }
 
                 List<Product> products = productService.getProducts();
@@ -88,7 +89,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Product productSource = productService.createProduct(TOY_1.요청_데이터_생성());
+                Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성());
 
                 Product product = productService.getProduct(productSource.getId());
 
@@ -123,7 +124,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("상품을 저장하고 리턴한다")
             void it_returns_product() {
-                Product product = productService.createProduct(TOY_1.요청_데이터_생성());
+                Product product = productService.createProduct(TOY_1.등록_요청_데이터_생성());
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(TOY_1.NAME());
@@ -134,20 +135,13 @@ class ProductServiceTest {
         }
     }
 
-/*
-    수정하기 메서드는
-        - 찾을 수 없는 id가 주어지면
-            - notFoundException을 던진다
-        - 찾을 수 있는 id가 주어지면
-            - 상품을 수정하고 리턴한다.
-            -
-*/
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class 수정하기_메서드는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 찾을_수_없는_id가_주어지면 {
+
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
@@ -158,10 +152,25 @@ class ProductServiceTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 찾을_수_있는_id가_주어지면 {
+            private Long fixtureId;
+
+            @BeforeEach
+            void setUpCreateFixture() {
+                Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성());
+                fixtureId = productSource.getId();
+            }
+
             @Test
             @DisplayName("상품을 수정하고 리턴한다")
             void it_returns_product() {
+                Product product = productService.updateProduct(fixtureId, TOY_2.수정_요청_데이터_생성());
 
+                assertThat(product).isNotNull();
+                assertThat(product.getId()).isEqualTo(fixtureId);
+                assertThat(product.getName()).isEqualTo(TOY_2.NAME());
+                assertThat(product.getMaker()).isEqualTo(TOY_2.MAKER());
+                assertThat(product.getPrice()).isEqualTo(TOY_2.PRICE());
+                assertThat(product.getImgUrl()).isEqualTo(TOY_2.IMAGE());
             }
         }
     }
