@@ -2,11 +2,9 @@ package com.codesoom.assignment.products.controllers.dto.request;
 
 import com.codesoom.assignment.products.domain.Product;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
-@EqualsAndHashCode
 public class ProductCreateRequest {
     private String name;
     private String maker;

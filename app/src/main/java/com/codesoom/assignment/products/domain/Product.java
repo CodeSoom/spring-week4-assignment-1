@@ -1,6 +1,7 @@
 package com.codesoom.assignment.products.domain;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
+@EqualsAndHashCode
 public class Product {
     @Id
     @GeneratedValue
