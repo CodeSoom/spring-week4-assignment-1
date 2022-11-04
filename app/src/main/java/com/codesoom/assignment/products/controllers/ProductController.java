@@ -46,4 +46,8 @@ public class ProductController {
                           @RequestBody ProductUpdateRequest productUpdateRequest) {
         return productService.updateProduct(id, productUpdateRequest);
     }
+
+    public void delete(Long id) {
+        productService.deleteProduct(id);
+    }
 }
