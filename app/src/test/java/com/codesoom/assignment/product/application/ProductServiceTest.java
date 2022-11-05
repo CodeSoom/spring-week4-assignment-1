@@ -1,9 +1,11 @@
-package com.codesoom.assignment.products.application;
+package com.codesoom.assignment.product.application;
 
 
 import com.codesoom.assignment.exception.products.ProductNotFoundException;
-import com.codesoom.assignment.products.domain.FakeProductRepository;
-import com.codesoom.assignment.products.domain.Product;
+import com.codesoom.assignment.product.application.port.out.FakeCommandProductPort;
+import com.codesoom.assignment.product.application.port.out.FakeQueryProductPort;
+import com.codesoom.assignment.product.application.port.out.InMemoryProductsGenerator;
+import com.codesoom.assignment.product.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,8 +30,10 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUpVariable() {
-        FakeProductRepository fakeProductRepository = new FakeProductRepository();
-        this.productService = new ProductService(fakeProductRepository);
+        InMemoryProductsGenerator productsGenerator = new InMemoryProductsGenerator();
+        FakeQueryProductPort fakeQueryProductPort = new FakeQueryProductPort(productsGenerator.getProducts());
+        FakeCommandProductPort fakeCommandProductPort = new FakeCommandProductPort(productsGenerator.getProducts());
+        this.productService = new ProductService(fakeQueryProductPort, fakeCommandProductPort);
     }
 
     @Nested

@@ -1,6 +1,6 @@
-package com.codesoom.assignment.products.controllers;
+package com.codesoom.assignment.product.adapter.in.web;
 
-import com.codesoom.assignment.products.domain.Product;
+import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.util.JsonUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

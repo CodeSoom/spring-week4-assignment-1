@@ -1,9 +1,9 @@
-package com.codesoom.assignment.products.controllers;
+package com.codesoom.assignment.product.adapter.in.web;
 
-import com.codesoom.assignment.products.application.ProductService;
-import com.codesoom.assignment.products.controllers.dto.request.ProductCreateRequest;
-import com.codesoom.assignment.products.controllers.dto.request.ProductUpdateRequest;
-import com.codesoom.assignment.products.domain.Product;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequest;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequest;
+import com.codesoom.assignment.product.application.port.in.ProductUseCase;
+import com.codesoom.assignment.product.domain.Product;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +20,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private final ProductService productService;
+    private final ProductUseCase productUseCase;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(ProductUseCase productUseCase) {
+        this.productUseCase = productUseCase;
     }
 
     /**
@@ -33,7 +33,7 @@ public class ProductController {
      */
     @GetMapping
     public List<Product> list() {
-        return productService.getProducts();
+        return productUseCase.getProducts();
     }
 
     /**
@@ -44,7 +44,7 @@ public class ProductController {
      */
     @GetMapping("/{id}")
     public Product detail(@PathVariable final Long id) {
-        return productService.getProduct(id);
+        return productUseCase.getProduct(id);
     }
 
     /**
@@ -56,7 +56,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody final ProductCreateRequest productCreateRequest) {
-        return productService.createProduct(productCreateRequest);
+        return productUseCase.createProduct(productCreateRequest);
     }
 
     /**
@@ -69,7 +69,7 @@ public class ProductController {
     @RequestMapping(path = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
     public Product update(@PathVariable final Long id,
                           @RequestBody final ProductUpdateRequest productUpdateRequest) {
-        return productService.updateProduct(id, productUpdateRequest);
+        return productUseCase.updateProduct(id, productUpdateRequest);
     }
 
     /**
@@ -80,6 +80,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable final Long id) {
-        productService.deleteProduct(id);
+        productUseCase.deleteProduct(id);
     }
 }

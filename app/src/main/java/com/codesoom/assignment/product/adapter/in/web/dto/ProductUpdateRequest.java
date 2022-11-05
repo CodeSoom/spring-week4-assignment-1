@@ -1,6 +1,6 @@
-package com.codesoom.assignment.products.controllers.dto.request;
+package com.codesoom.assignment.product.adapter.in.web.dto;
 
-import com.codesoom.assignment.products.domain.Product;
+import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,6 +23,7 @@ public class ProductUpdateRequest {
 
     /**
      * 수정할 상품 정보를 Entity 객체로 복사하여 리턴합니다.
+     *
      * @return 상품 수정 정보가 담긴 Entity 리턴
      */
     public Product toEntity() {
