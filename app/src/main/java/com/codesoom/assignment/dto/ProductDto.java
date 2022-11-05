@@ -41,7 +41,7 @@ public class ProductDto {
         this.categoryNames = categoryNames;
     }
 
-    public static ProductDto from(Product product) {
+    public static ProductDto of(Product product) {
         return new ProductDto(
                 product.getId(),
                 product.getName(),
@@ -50,10 +50,6 @@ public class ProductDto {
                 product.getImageUrl(),
                 product.getCategoryNames()
         );
-    }
-
-    public Product toProduct() {
-        return new Product(this.name, this.maker, this.price, this.imageUrl);
     }
 
     public Long getId() {

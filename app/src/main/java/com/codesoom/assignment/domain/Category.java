@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.CategoryDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class Category {
 
     @Id @GeneratedValue
-    @Column(name = "CATEGORY_ID")
+    @Column
     private Long id;
 
     @Column(nullable = false)
@@ -32,10 +33,13 @@ public class Category {
     public Category() {
     }
 
-    @JsonCreator
-    public Category(@JsonProperty("name") String name, @JsonProperty("hidden") Boolean hidden) {
+    public Category(String name, Boolean hidden) {
         this.name = name;
         this.hidden = hidden;
+    }
+
+    public static Category of(CategoryDto dto) {
+        return new Category(dto.getName(), dto.getHidden());
     }
 
     public Long getId() {
@@ -58,7 +62,11 @@ public class Category {
         categorizations.add(categorization);
     }
 
-    public void update(Category src) {
+    public void deleteCategorization(Categorization categorization) {
+        categorizations.remove(categorization);
+    }
+
+    public void update(CategoryDto src) {
         if (src.getName() != null) {
             this.name = src.getName();
         }

@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.Category;
+import com.codesoom.assignment.dto.CategoryDto;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,11 +35,11 @@ class ProductServiceTest {
     private static final String UPDATED_IMAGE_URL = "http://www.localhost:8080/updated";
     private static final List<String> UPDATED_CATEGORY_NAME_LIST = Arrays.asList("cloth", "electronics");
 
-    private static final Category FOOD = new Category("food", false);
-    private static final Category SHOES = new Category("shoes", false);
-    private static final Category TOY = new Category("toy", false);
-    private static final Category CLOTH = new Category("cloth", false);
-    private static final Category ELECTRONICS = new Category("electronics", false);
+    private static final CategoryDto FOOD = new CategoryDto("food", false);
+    private static final CategoryDto SHOES = new CategoryDto("shoes", false);
+    private static final CategoryDto TOY = new CategoryDto("toy", false);
+    private static final CategoryDto CLOTH = new CategoryDto("cloth", false);
+    private static final CategoryDto ELECTRONICS = new CategoryDto("electronics", false);
 
     @Autowired
     private ProductService productService;
@@ -152,12 +152,11 @@ class ProductServiceTest {
     @Test
     @DisplayName("delete()는 존재하는 id를 인자로 호출하면 해당 product는 삭제된다.")
     void when_update_invoked_with_existing_id_then_corresponding_product_is_deleted() {
-        productService.create(new ProductDto(NAME, MAKER, PRICE, IMAGE_URL, CATEGORY_NAME_LIST));
+        ProductDto dto = productService.create(new ProductDto(NAME, MAKER, PRICE, IMAGE_URL, CATEGORY_NAME_LIST));
 
-        productService.delete(getExistingId());
-        List<ProductDto> products = productService.getProducts();
-
-        assertThat(products).isEmpty();
+        productService.delete(dto.getId());
+        assertThatThrownBy(() -> productService.getProduct(dto.getId()))
+                .isInstanceOf(ProductNotFoundException.class);
     }
 
     @Test
