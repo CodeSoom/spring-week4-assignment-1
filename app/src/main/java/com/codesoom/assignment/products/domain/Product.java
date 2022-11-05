@@ -31,6 +31,10 @@ public class Product {
         this.imgUrl = imgUrl;
     }
 
+    /**
+     * 상품의 상세 정보를 수정합니다.
+     * @param updateProduct 수정할 상품 정보
+     */
     public void update(Product updateProduct) {
         updateName(updateProduct);
         updateMarker(updateProduct);

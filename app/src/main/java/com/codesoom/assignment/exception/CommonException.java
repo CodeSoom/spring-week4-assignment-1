@@ -21,6 +21,11 @@ public class CommonException extends RuntimeException {
         this.status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
+    /**
+     * 논리적인 예외를 던져야 할 때 CommonException을 상속받아 예외를 던집니다.
+     * @param message 반환할 예외 응답 메시지
+     * @param status 반환할 예외 응답 코드
+     */
     public CommonException(final String message, final HttpStatus status) {
         super(message);
         this.status = status;

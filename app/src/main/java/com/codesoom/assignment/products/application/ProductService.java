@@ -17,21 +17,39 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * 상품의 목록을 리턴합니다.
+     * @return 상품 목록 리턴
+     */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
+    /**
+     * 상품의 상세 정보를 리턴합니다.
+     * @param id 상품 고유 id
+     * @return 상품 상세 정보 리턴
+     */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
     }
 
+    /**
+     * 상품을 등록하고 리턴합니다.
+     * @param productCreateRequest 등록할 상품 정보
+     * @return 등록한 상품 상세 정보 리턴
+     */
     public Product createProduct(ProductCreateRequest productCreateRequest) {
-        Product product = productCreateRequest.toEntity();
-
-        return productRepository.save(product);
+        return productRepository.save(productCreateRequest.toEntity());
     }
 
+    /**
+     * 상품을 수정하고 리턴합니다.
+     * @param id 상품 고유 id
+     * @param productUpdateRequest 수정할 상품 정보
+     * @return 수정한 상품 상세 정보 리턴
+     */
     public Product updateProduct(Long id, ProductUpdateRequest productUpdateRequest) {
         Product product = productRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
@@ -41,6 +59,10 @@ public class ProductService {
         return product;
     }
 
+    /**
+     * 상품을 삭제합니다.
+     * @param id 상품 고유 id
+     */
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
