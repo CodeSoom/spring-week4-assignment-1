@@ -19,7 +19,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = {Exception.class})
-    protected ResponseEntity<ErrorResponse> handleException(HttpServletRequest request, Exception exception) {
+    protected ResponseEntity<ErrorResponse> handleException(final HttpServletRequest request,
+                                                            final Exception exception) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.from(request, exception));

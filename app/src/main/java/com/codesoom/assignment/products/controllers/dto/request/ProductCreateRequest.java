@@ -21,6 +21,10 @@ public class ProductCreateRequest {
         this.imgUrl = imgUrl;
     }
 
+    /**
+     * 생성할 상품 정보를 Entity 객체로 복사하여 리턴합니다.
+     * @return 상품 생성 정보가 담긴 Entity 리턴
+     */
     public Product toEntity() {
         return Product.builder()
                 .name(name)
