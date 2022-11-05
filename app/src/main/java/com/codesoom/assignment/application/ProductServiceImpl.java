@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getProducts() {
         return productRepository.findAll()
                 .stream()
-                .map(ProductDto::from)
+                .map(ProductDto::of)
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -38,40 +38,35 @@ public class ProductServiceImpl implements ProductService {
         final Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        return ProductDto.from(product);
+        return ProductDto.of(product);
     }
 
     @Override
     public ProductDto create(ProductDto dto) {
-        final List<Category> categoriesToBeAdded = categoryNamesToCategories(dto.getCategoryNames());
-        final Product product = dto.toProduct();
+        final Product saved = productRepository.save(Product.of(dto, toCategories(dto.getCategoryNames())));
 
-        product.addCategories(categoriesToBeAdded);
-
-        final Product savedProduct = productRepository.save(product);
-        return ProductDto.from(savedProduct);
+        return ProductDto.of(saved);
     }
 
     @Override
     public ProductDto update(Long id, ProductDto src) {
-        final Product product = productRepository.findById(id)
+        final Product found = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        final List<Category> categories = categoryNamesToCategories(src.getCategoryNames());
-        product.updateInfo(src.getName(), src.getMaker(), src.getPrice(), src.getImageUrl(), categories);
+        found.updateInfo(src, toCategories(src.getCategoryNames()));
 
-        return ProductDto.from(product);
+        return ProductDto.of(found);
     }
 
     @Override
     public void delete(Long id) {
-        final Product product = productRepository.findById(id)
+        final Product found = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        productRepository.delete(product);
+        productRepository.delete(found);
     }
 
-    private List<Category> categoryNamesToCategories(List<String> categoryNameList) {
+    private List<Category> toCategories(List<String> categoryNameList) {
         if (categoryNameList == null) {
             return null;
         }

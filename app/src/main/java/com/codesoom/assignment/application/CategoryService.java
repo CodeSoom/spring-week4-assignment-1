@@ -1,18 +1,18 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.Category;
+import com.codesoom.assignment.dto.CategoryDto;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    List<Category> getCategories();
+    List<CategoryDto> getCategories();
 
-    Category create(Category category);
+    CategoryDto create(CategoryDto category);
 
-    Category getCategory(Long id);
+    CategoryDto getCategory(Long id);
 
-    Category update(Long id, Category src);
+    CategoryDto update(Long id, CategoryDto src);
 
     void delete(Long id);
 }

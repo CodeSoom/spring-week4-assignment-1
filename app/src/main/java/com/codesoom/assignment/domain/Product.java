@@ -1,5 +1,7 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ProductDto;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 public class Product {
 
     @Id @GeneratedValue
-    @Column(name = "PRODUCT_ID")
+    @Column
     private Long id;
     private String name;
     private String maker;
@@ -28,11 +29,12 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String maker, Integer price, String imageUrl) {
+    public Product(String name, String maker, Integer price, String imageUrl, List<Category> categories) {
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+        this.addCategories(categories);
     }
 
     public Long getId() {
@@ -55,6 +57,15 @@ public class Product {
         return imageUrl;
     }
 
+    public static Product of(ProductDto dto, List<Category> categories) {
+        return new Product(
+                dto.getName(),
+                dto.getMaker(),
+                dto.getPrice(),
+                dto.getImageUrl(),
+                categories);
+    }
+
     public List<String> getCategoryNames() {
         return categorizations.stream()
                 .map(categorization -> categorization.getCategory().getName())
@@ -72,36 +83,35 @@ public class Product {
         categorization.getCategory().addCategorization(categorization);
     }
 
-    private void removeAllCategories() {
+    private void deleteAllCategories() {
         for (Categorization categorization : categorizations) {
             categorization.getCategory()
-                    .getCategorizations()
-                    .remove(categorization);
+                    .deleteCategorization(categorization);
         }
 
         categorizations.clear();
     }
 
     public void updateCategories(List<Category> categories) {
-        removeAllCategories();
+        deleteAllCategories();
         addCategories(categories);
     }
 
-    public void updateInfo(String name, String maker, Integer price, String imageUrl, List<Category> categories) {
-        if (name != null) {
-            this.name = name;
+    public void updateInfo(ProductDto src, List<Category> categories) {
+        if (src.getName() != null) {
+            this.name = src.getName();
         }
 
-        if (maker != null) {
-            this.maker = maker;
+        if (src.getMaker() != null) {
+            this.maker = src.getMaker();
         }
 
-        if (price != null) {
-            this.price = price;
+        if (src.getPrice() != null) {
+            this.price = src.getPrice();
         }
 
-        if (imageUrl != null) {
-            this.imageUrl = imageUrl;
+        if (src.getImageUrl() != null) {
+            this.imageUrl = src.getImageUrl();
         }
 
         if (categories != null) {

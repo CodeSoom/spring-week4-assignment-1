@@ -10,7 +10,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findByName(String name);
 
-    default Boolean existsCategory(String categoryName) {
+    default Boolean isCategoryExisting(String categoryName) {
         return findByName(categoryName).isPresent();
     }
 }
