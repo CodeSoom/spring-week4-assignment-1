@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 public class CommonException extends RuntimeException {
-    private static final String DEFAULT_MESSAGE = "일시적으로 접속이 원활하지 않습니다. 잠시 후 다시 요청해주시길 바랍니다.";
+    private static final String DEFAULT_MESSAGE = "논리적인 예외가 발생하였습니다. 다시 요청해주시길 바랍니다.";
 
     private final HttpStatus status;
     private final LocalDateTime occuredTime = LocalDateTime.now();
