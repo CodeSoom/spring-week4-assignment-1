@@ -60,7 +60,7 @@ class ProductServiceTest {
             @ValueSource(ints = {1, 3, 7})
             void it_returns_list(int createCount) {
                 for (int i = 0; i < createCount; i++) {
-                    productService.createProduct(TOY_1.등록_요청_데이터_생성());
+                    productService.createProduct(TOY_1.등록_요청_데이터_생성().toCommand());
                 }
 
                 List<Product> products = productService.getProducts();
@@ -93,7 +93,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성());
+                Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성().toCommand());
 
                 Product product = productService.getProduct(productSource.getId());
 
@@ -128,7 +128,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("상품을 저장하고 리턴한다")
             void it_returns_product() {
-                Product product = productService.createProduct(TOY_1.등록_요청_데이터_생성());
+                Product product = productService.createProduct(TOY_1.등록_요청_데이터_생성().toCommand());
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(TOY_1.NAME());
@@ -149,7 +149,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-                assertThatThrownBy(() -> productService.updateProduct(TEST_NOT_EXIST.ID(), TOY_1.수정_요청_데이터_생성()))
+                assertThatThrownBy(() -> productService.updateProduct(TEST_NOT_EXIST.ID(), TOY_1.수정_요청_데이터_생성().toCommand()))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -161,14 +161,14 @@ class ProductServiceTest {
 
             @BeforeEach
             void setUpCreateFixture() {
-                Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성());
+                Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성().toCommand());
                 fixtureId = productSource.getId();
             }
 
             @Test
             @DisplayName("상품을 수정하고 리턴한다")
             void it_returns_product() {
-                Product product = productService.updateProduct(fixtureId, TOY_2.수정_요청_데이터_생성());
+                Product product = productService.updateProduct(fixtureId, TOY_2.수정_요청_데이터_생성().toCommand());
 
                 assertThat(product).isNotNull();
                 assertThat(product.getId()).isEqualTo(fixtureId);
@@ -187,7 +187,7 @@ class ProductServiceTest {
 
         @BeforeEach
         void setUpCreateFixture() {
-            Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성());
+            Product productSource = productService.createProduct(TOY_1.등록_요청_데이터_생성().toCommand());
             fixtureId = productSource.getId();
         }
 

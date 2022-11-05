@@ -56,7 +56,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody final ProductCreateRequest productCreateRequest) {
-        return productUseCase.createProduct(productCreateRequest);
+        return productUseCase.createProduct(productCreateRequest.toCommand());
     }
 
     /**
@@ -69,7 +69,7 @@ public class ProductController {
     @RequestMapping(path = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
     public Product update(@PathVariable final Long id,
                           @RequestBody final ProductUpdateRequest productUpdateRequest) {
-        return productUseCase.updateProduct(id, productUpdateRequest);
+        return productUseCase.updateProduct(id, productUpdateRequest.toCommand());
     }
 
     /**

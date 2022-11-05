@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.adapter.in.web.dto;
 
-import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.application.port.in.ProductCreateCommand;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,8 +10,6 @@ public class ProductCreateRequest {
     private String maker;
     private int price;
     private String imgUrl;
-
-    private ProductCreateRequest() {}
 
     @Builder
     public ProductCreateRequest(String name, String maker, int price, String imgUrl) {
@@ -26,8 +24,8 @@ public class ProductCreateRequest {
      *
      * @return 상품 생성 정보가 담긴 Entity 리턴
      */
-    public Product toEntity() {
-        return Product.builder()
+    public ProductCreateCommand toCommand() {
+        return ProductCreateCommand.builder()
                 .name(name)
                 .maker(maker)
                 .price(price)

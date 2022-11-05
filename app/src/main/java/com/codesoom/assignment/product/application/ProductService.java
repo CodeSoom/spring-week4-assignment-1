@@ -1,13 +1,14 @@
 package com.codesoom.assignment.product.application;
 
 import com.codesoom.assignment.exception.products.ProductNotFoundException;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequest;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequest;
+import com.codesoom.assignment.product.application.port.in.ProductCreateCommand;
+import com.codesoom.assignment.product.application.port.in.ProductUpdateCommand;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
 import com.codesoom.assignment.product.application.port.out.CommandProductPort;
 import com.codesoom.assignment.product.application.port.out.QueryProductPort;
 import com.codesoom.assignment.product.domain.Product;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,17 +34,18 @@ public class ProductService implements ProductUseCase {
     }
 
     @Override
-    public Product createProduct(final ProductCreateRequest productCreateRequest) {
-        return commandProductPort.save(productCreateRequest.toEntity());
+    public Product createProduct(final ProductCreateCommand productCreateCommand) {
+        return commandProductPort.save(productCreateCommand.toEntity());
     }
 
     @Override
+    @Transactional
     public Product updateProduct(final Long id,
-                                 final ProductUpdateRequest productUpdateRequest) {
+                                 final ProductUpdateCommand productUpdateCommand) {
         Product product = queryProductPort.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
 
-        product.update(productUpdateRequest.toEntity());
+        product.update(productUpdateCommand.toEntity());
 
         return product;
     }

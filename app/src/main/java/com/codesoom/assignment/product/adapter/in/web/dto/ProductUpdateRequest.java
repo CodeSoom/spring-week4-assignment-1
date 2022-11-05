@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.adapter.in.web.dto;
 
-import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.application.port.in.ProductUpdateCommand;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,8 +10,6 @@ public class ProductUpdateRequest {
     private String maker;
     private int price;
     private String imgUrl;
-
-    private ProductUpdateRequest() {}
 
     @Builder
     public ProductUpdateRequest(String name, String maker, int price, String imgUrl) {
@@ -26,8 +24,8 @@ public class ProductUpdateRequest {
      *
      * @return 상품 수정 정보가 담긴 Entity 리턴
      */
-    public Product toEntity() {
-        return Product.builder()
+    public ProductUpdateCommand toCommand() {
+        return ProductUpdateCommand.builder()
                 .name(name)
                 .maker(maker)
                 .price(price)
