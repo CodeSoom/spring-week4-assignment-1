@@ -1,4 +1,4 @@
-package com.codesoom.assignment.products.domain;
+package com.codesoom.assignment.product.domain;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

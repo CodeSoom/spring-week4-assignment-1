@@ -1,30 +1,24 @@
-package com.codesoom.assignment.products.controllers.dto.request;
+package com.codesoom.assignment.product.application.port.in;
 
-import com.codesoom.assignment.products.domain.Product;
+import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ProductCreateRequest {
+public class ProductUpdateCommand {
     private String name;
     private String maker;
     private int price;
     private String imgUrl;
 
-    private ProductCreateRequest() {}
-
     @Builder
-    public ProductCreateRequest(String name, String maker, int price, String imgUrl) {
+    public ProductUpdateCommand(String name, String maker, int price, String imgUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;
         this.imgUrl = imgUrl;
     }
 
-    /**
-     * 생성할 상품 정보를 Entity 객체로 복사하여 리턴합니다.
-     * @return 상품 생성 정보가 담긴 Entity 리턴
-     */
     public Product toEntity() {
         return Product.builder()
                 .name(name)

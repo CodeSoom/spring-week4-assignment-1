@@ -1,13 +1,15 @@
-package com.codesoom.assignment.products.domain;
+package com.codesoom.assignment.product.adapter.out.persistence;
 
+import com.codesoom.assignment.product.application.port.out.FakeCommandProductPort;
+import com.codesoom.assignment.product.application.port.out.FakeQueryProductPort;
+import com.codesoom.assignment.product.application.port.out.InMemoryProductsGenerator;
+import com.codesoom.assignment.product.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,15 +19,21 @@ import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DataJpaTest
-@DisplayName("ProductRepository JPA 테스트")
-class ProductRepositoryTest {
-    @Autowired
-    private ProductRepository productRepository;
+@DisplayName("FakeProductPersistenceAdapter 유닛 테스트")
+class FakeProductPersistenceAdapterTest {
+    private FakeQueryProductPort fakeQueryProductPort;
+    private FakeCommandProductPort fakeCommandProductPort;
+
+    @BeforeEach
+    void setUpVariable() {
+        InMemoryProductsGenerator productsGenerator = new InMemoryProductsGenerator();
+        fakeQueryProductPort = new FakeQueryProductPort(productsGenerator.getProducts());
+        fakeCommandProductPort = new FakeCommandProductPort(productsGenerator.getProducts());
+    }
 
     @BeforeEach
     void setUpDeleteAllFixture() {
-        productRepository.deleteAllInBatch();
+        fakeCommandProductPort.deleteAllInBatch();
     }
 
     @Nested
@@ -38,7 +46,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                assertThat(productRepository.findAll())
+                assertThat(fakeQueryProductPort.findAll())
                         .isEmpty();
             }
         }
@@ -48,16 +56,15 @@ class ProductRepositoryTest {
         class 등록된_장난감이_있을_때 {
             @BeforeEach
             void setUpCreate() {
-                productRepository.save(TOY_1.생성());
+                fakeCommandProductPort.save(TOY_1.생성());
             }
 
             @Test
             @DisplayName("비어있지 않은 리스트를 리턴한다")
             void it_returns_empty_list() {
-                List<Product> products = productRepository.findAll();
+                List<Product> products = fakeQueryProductPort.findAll();
 
                 assertThat(products).isNotEmpty();
-                assertThat(products).hasSize(1);
             }
         }
     }
@@ -72,7 +79,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("빈 값을 리턴한다")
             void it_returns_empty_product() {
-                assertThat(productRepository.findById(TEST_NOT_EXIST.ID()))
+                assertThat(fakeQueryProductPort.findById(TEST_NOT_EXIST.ID()))
                         .isEmpty();
             }
         }
@@ -83,11 +90,15 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("해당 id의 장난감 정보를 리턴한다")
             void it_returns_product() {
-                Product productSource = productRepository.save(TOY_1.생성());
+                Product productSource = fakeCommandProductPort.save(TOY_1.생성());
 
-                Optional<Product> product = productRepository.findById(productSource.getId());
+                Optional<Product> product = fakeQueryProductPort.findById(productSource.getId());
 
                 assertThat(product).isPresent();
+                assertThat(product.get().getName()).isEqualTo(TOY_1.NAME());
+                assertThat(product.get().getMaker()).isEqualTo(TOY_1.MAKER());
+                assertThat(product.get().getPrice()).isEqualTo(TOY_1.PRICE());
+                assertThat(product.get().getImgUrl()).isEqualTo(TOY_1.IMAGE());
             }
         }
     }
@@ -102,8 +113,8 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-                assertThatThrownBy(() -> productRepository.save(null))
-                        .hasCauseInstanceOf(IllegalArgumentException.class);
+                assertThatThrownBy(() -> fakeCommandProductPort.save(null))
+                        .isInstanceOf(IllegalArgumentException.class);
             }
         }
 
@@ -113,7 +124,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("상품을 저장하고 리턴한다")
             void it_returns_product() {
-                Product product = productRepository.save(TOY_1.생성());
+                Product product = fakeCommandProductPort.save(TOY_1.생성());
 
                 assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo(TOY_1.NAME());
@@ -125,11 +136,11 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("findAll 메서드 리턴값이 1 증가한다")
             void it_returns_count() {
-                int oldSize = productRepository.findAll().size();
+                int oldSize = fakeQueryProductPort.findAll().size();
 
-                productRepository.save(TOY_1.생성());
+                fakeCommandProductPort.save(TOY_1.생성());
 
-                int newSize = productRepository.findAll().size();
+                int newSize = fakeQueryProductPort.findAll().size();
 
                 assertThat(newSize - oldSize).isEqualTo(1);
             }
@@ -143,7 +154,7 @@ class ProductRepositoryTest {
 
         @BeforeEach
         void setUpCreateFixture() {
-            productSource = productRepository.save(TOY_1.생성());
+            productSource = fakeCommandProductPort.save(TOY_1.생성());
         }
 
         @Test
@@ -151,11 +162,9 @@ class ProductRepositoryTest {
         void it_deleted() {
             Long id = productSource.getId();
 
-            assertThat(productRepository.findById(id)).isNotEmpty();
+            fakeCommandProductPort.delete(productSource);
 
-            productRepository.delete(productSource);
-
-            assertThat(productRepository.findById(id)).isEmpty();
+            assertThat(fakeQueryProductPort.findById(id)).isEmpty();
         }
     }
 }

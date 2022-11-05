@@ -1,13 +1,17 @@
-package com.codesoom.assignment.products.domain;
+package com.codesoom.assignment.product.application.port.out;
 
-import java.util.ArrayList;
+import com.codesoom.assignment.product.domain.Product;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class FakeProductRepository implements ProductRepository {
-    private List<Product> products = new ArrayList<>();
+public class FakeCommandProductPort implements CommandProductPort {
     private static final AtomicLong productId = new AtomicLong(1L);
+    private final List<Product> products;
+
+    public FakeCommandProductPort(List<Product> products) {
+        this.products = products;
+    }
 
     public Product save(Product entity) {
         if (entity == null) {
@@ -27,17 +31,6 @@ public class FakeProductRepository implements ProductRepository {
         return product;
     }
 
-    public List<Product> findAll() {
-        return products;
-    }
-
-    @Override
-    public Optional<Product> findById(Long id) {
-        return products.stream()
-                .filter(product -> product.getId().equals(id))
-                .findFirst();
-    }
-
     @Override
     public void delete(Product product) {
         products.remove(product);
@@ -45,6 +38,6 @@ public class FakeProductRepository implements ProductRepository {
 
     @Override
     public void deleteAllInBatch() {
-        products = new ArrayList<>();
+        products.clear();
     }
 }

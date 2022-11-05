@@ -1,8 +1,8 @@
 package com.codesoom.assignment.support;
 
-import com.codesoom.assignment.products.controllers.dto.request.ProductCreateRequest;
-import com.codesoom.assignment.products.controllers.dto.request.ProductUpdateRequest;
-import com.codesoom.assignment.products.domain.Product;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequest;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequest;
+import com.codesoom.assignment.product.domain.Product;
 
 public enum ProductFixture {
     TOY_1("범냐옹1", "메이드인 코리아", 2000000, "https://avatars.githubusercontent.com/u/59248326"),
