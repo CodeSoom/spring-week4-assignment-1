@@ -16,6 +16,7 @@ public class ErrorResponse {
 
     /**
      * 에러의 응답 body를 공통 포맷에 맞게 변경하여 리턴합니다.
+     *
      * @param exception CommonException을 상속받는 예외
      * @return 에러 응답 body 리턴
      */
@@ -28,11 +29,13 @@ public class ErrorResponse {
 
     /**
      * 에러의 응답 body를 공통 포맷에 맞게 변경하여 리턴합니다.
-     * @param request 요청 정보
+     *
+     * @param request   요청 정보
      * @param exception 모든 예외
      * @return 에러 응답 body 리턴
      */
-    public static ErrorResponse from(HttpServletRequest request, final Exception exception) {
+    public static ErrorResponse from(final HttpServletRequest request,
+                                     final Exception exception) {
         log.error("[ERROR-]\t{}\t{}\t{}", request.getMethod(), request.getRequestURI(), exception.getMessage());
         log.error("{}", (Object) exception.getStackTrace());
 
