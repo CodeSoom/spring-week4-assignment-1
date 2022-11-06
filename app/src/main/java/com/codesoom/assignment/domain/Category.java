@@ -1,8 +1,6 @@
 package com.codesoom.assignment.domain;
 
 import com.codesoom.assignment.dto.CategoryDto;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Entity
-public class Category {
+public class Category implements Comparable<Category> {
 
     @Id @GeneratedValue
     @Column
@@ -74,5 +72,10 @@ public class Category {
         if (src.getHidden() != null) {
             this.hidden = src.getHidden();
         }
+    }
+
+    @Override
+    public int compareTo(Category c) {
+        return this.name.compareTo(c.getName());
     }
 }

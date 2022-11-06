@@ -25,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryDto> getCategories() {
         return categoryRepository.findAll()
                 .stream()
+                .sorted()
                 .map(CategoryDto::of)
                 .collect(Collectors.toUnmodifiableList());
     }

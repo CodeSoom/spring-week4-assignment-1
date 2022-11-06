@@ -10,9 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -53,6 +56,23 @@ public class CategoryServiceTest {
         List<CategoryDto> list = categoryService.getCategories();
 
         assertThat(list).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("getCategories()는 등록한 카테고리가 있으면 카테고리 이름이 사전 순으로 정렬된 리스트를 리턴한다.")
+    void given_categories_registered_exists_when_getCategories_invoked_then_returns_list_sorted_by_category_name() {
+        List<String> categoryNameList = Arrays.asList("food", "shoes", "toy", "cloth", "electronics");
+        for (String categoryName : categoryNameList) {
+            categoryService.create(new CategoryDto(categoryName, HIDDEN));
+        }
+        Collections.sort(categoryNameList);
+
+        List<String> list = categoryService.getCategories()
+                .stream()
+                .map(CategoryDto::getName)
+                .collect(Collectors.toList());
+
+        assertThat(list).isEqualTo(categoryNameList);
     }
 
     @Test
