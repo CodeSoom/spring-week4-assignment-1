@@ -1,19 +1,15 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.dto.CategoryDto;
-import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exceptions.CategoryNotFoundException;
 import com.codesoom.assignment.exceptions.DuplicateCategoryException;
-import com.codesoom.assignment.exceptions.InvalidDeleteRequestException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 
 import javax.transaction.Transactional;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,9 +30,6 @@ public class CategoryServiceTest {
 
     @Autowired
     private CategoryService categoryService;
-
-    @Autowired
-    private ApplicationContext applicationContext;
 
     private Long getExistingId() {
         return categoryService.getCategories()
@@ -146,39 +139,4 @@ public class CategoryServiceTest {
                 .isInstanceOf(DuplicateCategoryException.class);
     }
 
-    @Test
-    @DisplayName("delete()는 존재하는 id를 인자로 호출할 때, 해당 category의 product이 없으면 해당 category는 삭제된다.")
-    void when_delete_invoked_with_existing_id_and_none_products_categorized_as_given_category_then_corresponding_category_is_deleted() {
-        categoryService.create(new CategoryDto(CATEGORY_NAME, HIDDEN));
-
-        Long id = getExistingId();
-        categoryService.delete(id);
-
-        List<CategoryDto> categories = categoryService.getCategories();
-        assertThat(categories).isEmpty();
-    }
-
-    @Test
-    @DisplayName("delete()는 존재하는 id를 인자로 호출할 때, 해당 category의 product이 있으면 예외를 던진다.")
-    void when_delete_invoked_with_existing_id_and_products_categorized_as_given_category_exists_then_exception_thrown() {
-        ProductService productService = applicationContext.getBean(ProductService.class);
-
-        CategoryDto dto = new CategoryDto(CATEGORY_NAME, HIDDEN);
-        Long id = categoryService.create(dto).getId();
-
-        List<String> categoryNames = Collections.singletonList(dto.getName());
-        productService.create(new ProductDto("prod name", "prod maker", 100, "http://www.na.com/img", categoryNames));
-
-        assertThatThrownBy(() -> categoryService.delete(id))
-                .isInstanceOf(InvalidDeleteRequestException.class);
-    }
-
-    @Test
-    @DisplayName("delete()는 존재하지 않는 id를 인자로 호출하면 예외를 던진다.")
-    void when_delete_invoked_with_not_existing_id_then_exception_thrown() {
-        categoryService.create(new CategoryDto(CATEGORY_NAME, HIDDEN));
-
-        assertThatThrownBy(() -> categoryService.delete(Long.MAX_VALUE))
-                .isInstanceOf(CategoryNotFoundException.class);
-    }
 }
