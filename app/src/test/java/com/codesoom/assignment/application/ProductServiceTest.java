@@ -35,12 +35,6 @@ class ProductServiceTest {
     private static final String UPDATED_IMAGE_URL = "http://www.localhost:8080/updated";
     private static final List<String> UPDATED_CATEGORY_NAME_LIST = Arrays.asList("cloth", "electronics");
 
-    private static final CategoryDto FOOD = new CategoryDto("food", false);
-    private static final CategoryDto SHOES = new CategoryDto("shoes", false);
-    private static final CategoryDto TOY = new CategoryDto("toy", false);
-    private static final CategoryDto CLOTH = new CategoryDto("cloth", false);
-    private static final CategoryDto ELECTRONICS = new CategoryDto("electronics", false);
-
     @Autowired
     private ProductService productService;
 
@@ -49,11 +43,11 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        categoryService.create(FOOD);
-        categoryService.create(SHOES);
-        categoryService.create(TOY);
-        categoryService.create(CLOTH);
-        categoryService.create(ELECTRONICS);
+        categoryService.create(new CategoryDto("food", false));
+        categoryService.create(new CategoryDto("shoes", false));
+        categoryService.create(new CategoryDto("toy", false));
+        categoryService.create(new CategoryDto("cloth", false));
+        categoryService.create(new CategoryDto("electronics", false));
     }
 
     private Long getExistingId() {

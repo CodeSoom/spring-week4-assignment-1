@@ -1,21 +1,22 @@
 package com.codesoom.assignment.domain;
 
 import com.codesoom.assignment.dto.CategoryDto;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @Entity
-public class Category {
+public class Category implements Comparable<Category> {
 
     @Id @GeneratedValue
     @Column
@@ -26,6 +27,13 @@ public class Category {
 
     @Column(nullable = false)
     private Boolean hidden;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private final List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private final List<Categorization> categorizations = new ArrayList<>();
@@ -74,5 +82,10 @@ public class Category {
         if (src.getHidden() != null) {
             this.hidden = src.getHidden();
         }
+    }
+
+    @Override
+    public int compareTo(Category c) {
+        return this.name.compareTo(c.getName());
     }
 }

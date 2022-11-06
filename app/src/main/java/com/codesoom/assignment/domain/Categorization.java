@@ -29,6 +29,10 @@ public class Categorization {
         this.category = category;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
     public Category getCategory() {
         return category;
     }
