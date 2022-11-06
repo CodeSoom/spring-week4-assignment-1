@@ -7,6 +7,8 @@ import java.util.List;
 public interface ProductService {
     List<ProductDto> getProducts();
 
+    List<ProductDto> getProducts(String categoryName);
+
     ProductDto getProduct(Long id);
 
     ProductDto create(ProductDto dto);

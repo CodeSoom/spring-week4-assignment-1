@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.domain.Categorization;
 import com.codesoom.assignment.domain.Category;
 import com.codesoom.assignment.domain.CategoryRepository;
 import com.codesoom.assignment.domain.Product;
@@ -29,6 +30,18 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getProducts() {
         return productRepository.findAll()
                 .stream()
+                .map(ProductDto::of)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<ProductDto> getProducts(String categoryName) {
+        final Category category = categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new CategoryNotFoundException(categoryName));
+
+        return category.getCategorizations()
+                .stream()
+                .map(Categorization::getProduct)
                 .map(ProductDto::of)
                 .collect(Collectors.toUnmodifiableList());
     }

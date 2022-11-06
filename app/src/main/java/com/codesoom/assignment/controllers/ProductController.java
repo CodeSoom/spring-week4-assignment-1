@@ -33,6 +33,11 @@ public class ProductController {
         return productService.getProducts();
     }
 
+    @GetMapping("/category/{category}")
+    public List<ProductDto> getProductsWithCategory(@PathVariable String category) {
+        return productService.getProducts(category);
+    }
+
     @GetMapping("/{id}")
     public ProductDto getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
@@ -47,7 +52,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public com.codesoom.assignment.dto.ProductDto update(@PathVariable Long id, @RequestBody ProductDto dto) {
+    public ProductDto update(@PathVariable Long id, @RequestBody ProductDto dto) {
         ProductDtoValidator.checksAllFieldsNull(dto);
         return productService.update(id, dto);
     }
