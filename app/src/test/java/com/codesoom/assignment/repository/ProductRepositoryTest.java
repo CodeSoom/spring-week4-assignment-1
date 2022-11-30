@@ -1,6 +1,5 @@
 package com.codesoom.assignment.repository;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,6 +57,7 @@ class ProductRepositoryTest {
                 repository.save(product);
 
                 assertThat(product.getProductName()).isEqualTo(PRODUCT_NAME);
+                assertThat(product.getPrice()).isEqualTo(PRICE);
 
                 //when
                 product.setProductName("춘식이 감자 장난감");
@@ -67,6 +67,7 @@ class ProductRepositoryTest {
 
                 //then
                 assertThat(product.getProductName()).isEqualTo("춘식이 감자 장난감");
+                assertThat(product.getPrice()).isEqualTo(29000L);
             }
         }
     }
@@ -103,10 +104,11 @@ class ProductRepositoryTest {
             //given
             Product product  = new Product(PRODUCT_NAME, MAKER, PRICE, IMAGE_URL);
 
-            repository.save(product);
+            Product savedProduct = repository.save(product);
+            Long savedId = savedProduct.getId();
 
             //when
-            Optional<Product> findProduct = repository.findById(1L)
+            Optional<Product> findProduct = repository.findById(savedId)
                                                         .stream()
                                                         .findFirst();
 
