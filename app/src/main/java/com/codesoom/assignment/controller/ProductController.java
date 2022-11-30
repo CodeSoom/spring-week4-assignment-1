@@ -21,10 +21,13 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 @RequestMapping("/products")
-@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductServiceImpl service;
+
+    public ProductController(ProductServiceImpl service) {
+        this.service = service;
+    }
 
     @GetMapping
     public List<Product> findAll() {
