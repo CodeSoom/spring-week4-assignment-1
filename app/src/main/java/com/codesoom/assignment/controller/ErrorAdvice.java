@@ -23,13 +23,13 @@ public class ErrorAdvice {
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(NullPointerException.class)
     public ErrorHandler NPEHandler(NullPointerException ne) {
-        return new ErrorHandler(ne.getLocalizedMessage());
+        return new ErrorHandler("입력 값이 존재하지 않습니다. 다시 한 번 확인해주세요.");
     }
 
     @ResponseStatus(NOT_FOUND)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ErrorHandler notReadableExHandler(HttpMessageNotReadableException he) {
-        return new ErrorHandler("RequestBody가 존재하지 않습니다. 다시 한 번 확인해주세요.");
+        return new ErrorHandler("상품의 [이름, 메이커, 가격, 이미지 주소]가 필요합니다. 다시 한 번 확인해주세요.");
     }
 
     @ResponseStatus(METHOD_NOT_ALLOWED)
