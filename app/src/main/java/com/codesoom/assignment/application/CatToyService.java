@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class ProductServiceImpl implements ProductService {
+public class CatToyService implements ProductService {
 
     private final ProductRepository repository;
 
-    public ProductServiceImpl(ProductRepository repository) {
+    public CatToyService(ProductRepository repository) {
         this.repository = repository;
     }
 
