@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.verify;
 @DisplayName("ProductService 클래스 테스트")
 class ProductServiceTest {
 
-    private ProductServiceImpl service;
+    private CatToyService service;
     private ProductRepository repository;
 
     private static final String PRODUCT_NAME = "춘식이 고구마 장난감";
@@ -28,14 +27,15 @@ class ProductServiceTest {
     private static final Long PRICE          = 39000L;
     private static final String IMAGE_URL    = "http://localhost:8080/snake";
 
+    private Product product = new Product(PRODUCT_NAME, MAKER, PRICE, IMAGE_URL);
+
     @BeforeEach
     void setUp() {
         //TODO 왜 mock로 감싸야하는지 강의 다시보기!
         repository = mock(ProductRepository.class);
-        service = new ProductServiceImpl(repository);
+        service = new CatToyService(repository);
 
         List<Product> products = new ArrayList<>();
-        Product product = new Product(PRODUCT_NAME, MAKER, PRICE, IMAGE_URL);
         products.add(product);
 
         given(service.findAll()).willReturn(products);
@@ -52,8 +52,6 @@ class ProductServiceTest {
             @Test
             @DisplayName("product를 리포지토리에 저장한다")
             void it_save_product() {
-                Product product = new Product(PRODUCT_NAME, MAKER, PRICE, IMAGE_URL);
-
                 service.save(product);
 
                 verify(repository).save(product);
@@ -75,7 +73,7 @@ class ProductServiceTest {
                 Product product = service.findById(1L)
                                             .stream()
                                             .findFirst()
-                                            .orElseThrow(ProductNotFoundException::new);
+                                            .get();
 
                 product.setProductName("춘식이 감자 장난감");
                 product.setPrice(10000L);
@@ -97,8 +95,6 @@ class ProductServiceTest {
     class Describe_findAll {
         @BeforeEach
         void setUp() {
-            Product product = new Product(PRODUCT_NAME, MAKER, PRICE, IMAGE_URL);
-
             service.save(product);
         }
 
@@ -123,7 +119,7 @@ class ProductServiceTest {
                 Product product = service.findById(1L)
                                             .stream()
                                             .findFirst()
-                                            .orElseThrow(ProductNotFoundException::new);
+                                            .get();
 
                 assertThat(product.getProductName()).isEqualTo(PRODUCT_NAME);
                 assertThat(product.getMaker()).isEqualTo(MAKER);
