@@ -2,6 +2,7 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.CatToyService;
+import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +37,7 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CatToyService service;
+    private ProductService service;
 
     private static final String PRODUCT_NAME = "춘식이 고구마 장난감";
     private static final String MAKER        = "카카오";
@@ -90,7 +91,7 @@ class ProductControllerTest {
     @DisplayName("POST 요청은")
     class Describe_post {
         @Test
-        @DisplayName("상품을 새로 만들어 리턴한다")
+        @DisplayName("상품을 새로 만들어 응답한다")
         void it_return_new_product() throws Exception {
             Product product = new Product(PRODUCT_NAME, MAKER, PRICE, IMAGE_URL);
             String content = new ObjectMapper().writeValueAsString(product);
