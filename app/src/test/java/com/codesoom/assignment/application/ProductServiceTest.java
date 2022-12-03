@@ -47,10 +47,10 @@ class ProductServiceTest {
     @DisplayName("save 메소드는")
     class Describe_save {
         @Nested
-        @DisplayName("id가 존재하지 않으면")
-        class Context_without_id {
+        @DisplayName("id에 해당하는 product가 존재하지 않으면")
+        class Context_without_ExistedProduct {
             @Test
-            @DisplayName("product를 리포지토리에 저장한다")
+            @DisplayName("새로운 product를 만들어 리포지토리에 저장한다")
             void it_save_product() {
                 service.save(product);
 
@@ -60,13 +60,13 @@ class ProductServiceTest {
                 assertThat(service.findById(1L)
                                     .get()
                                     .getProductName())
-                                    .isEqualTo(PRODUCT_NAME);
+                                    .isEqualTo(product.getProductName());
             }
         }
 
         @Nested
-        @DisplayName("id가 존재하면")
-        class Context_with_id {
+        @DisplayName("id에 해당하는 product가 이미 기존재한다면")
+        class Context_with_ExistedProduct {
             @Test
             @DisplayName("id에 해당하는 product를 업데이트한다")
             void it_update_product() {
@@ -82,10 +82,19 @@ class ProductServiceTest {
 
                 verify(repository).save(product);
 
-                assertThat(service.findAll().get(0).getProductName())
+                assertThat(
+                        service.findById(1L)
+                        .get()
+                        .getProductName()
+                )
                         .isEqualTo("춘식이 감자 장난감");
-                assertThat(service.findAll().get(0).getPrice())
-                        .isEqualTo(10000L);
+
+                assertThat(
+                        service.findById(1L)
+                                .get()
+                                .getPrice()
+                )
+                        .isEqualTo( 10000L);
             }
         }
     }
