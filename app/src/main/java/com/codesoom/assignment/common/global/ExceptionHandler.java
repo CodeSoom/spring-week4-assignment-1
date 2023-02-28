@@ -1,6 +1,6 @@
 package com.codesoom.assignment.common.global;
 
-import com.codesoom.assignment.common.exception.NotFoundMakerException;
+import com.codesoom.assignment.common.exception.NotFoundIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanInstantiationException;
@@ -61,10 +61,10 @@ public class ExceptionHandler {
     }
 
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(NotFoundMakerException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(NotFoundIdException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public void handleAuthorizationServiceException(NotFoundMakerException e) {
-        logger.warn("NotFoundMakerException : " , e);
+    public void handleAuthorizationServiceException(NotFoundIdException e) {
+        logger.warn("NotFoundIdException : " , e);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(RuntimeException.class)

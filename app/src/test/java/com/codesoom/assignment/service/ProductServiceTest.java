@@ -1,7 +1,8 @@
 package com.codesoom.assignment.service;
 
-import com.codesoom.assignment.common.exception.NotFoundMakerException;
+import com.codesoom.assignment.common.exception.NotFoundIdException;
 import com.codesoom.assignment.domain.repository.ProductRepository;
+import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.dto.ProductSaveRequestDto;
 import com.codesoom.assignment.dto.RequstIdDto;
 import org.junit.jupiter.api.AfterEach;
@@ -33,17 +34,18 @@ class ProductServiceTest {
     private static final Long FAIL_ID = 100L;
     private static final int DUMMY_PRICE = 1000;
 
+    private static final String UPDATE_NAME = "UPDATE_NAME";
+    private static final String UPDATE_MAKER = "UPDATE_MAKER";
+    private static final int UPDATE_PRICE = 99999;
+    private static final String UPDATE_IMG = "UPDATE_IMG";
+
     @BeforeEach
     public void registerProduct() {
-        //given
-        //when
         Long result = this.productService.registerProduct(ProductSaveRequestDto.builder()
                 .maker(MAKER)
                 .price(DUMMY_PRICE)
                 .img("img")
                 .build());
-        //Then
-        assertThat(result).isNotNull();
     }
 
     @DisplayName("ddl-auto를 create로 안하고 테스트 사용 , default -> 주석으로 사용")
@@ -77,7 +79,7 @@ class ProductServiceTest {
     public void getProductByMakerInValid() {
         RequstIdDto dto = getRequstIdDto(FAIL_ID);
 
-        assertThatExceptionOfType(NotFoundMakerException.class)
+        assertThatExceptionOfType(NotFoundIdException.class)
                 .isThrownBy(() -> {
                     productService.getProductById(dto);
                 }).withMessageNotContainingAny("Product Id not found:" + FAIL_ID);
@@ -85,9 +87,37 @@ class ProductServiceTest {
 
     @Transactional
     @Test
+    public void test() throws Exception {
+        //given
+        RequstIdDto dto = RequstIdDto.builder()
+                .id(1L).build();
+        productService.getProductById(dto).forEach(i -> System.out.println("i = " + i.getId()));
+
+        //when
+        ProductDto productDto = ProductDto.builder()
+                .id(1L)
+                .name(UPDATE_NAME)
+                .maker(UPDATE_MAKER)
+                .price(UPDATE_PRICE)
+                .img(UPDATE_IMG)
+                .build();
+
+        productService.modifyProduct(productDto);
+        productService.getProducts().forEach(i -> System.out.println("=============== = " + i));
+
+        //Then
+        assertThat(productService.getProductById(dto).get(0).getId()).isEqualTo(1L);
+        assertThat(productService.getProductById(dto).get(0).getName()).isEqualTo(UPDATE_NAME);
+        assertThat(productService.getProductById(dto).get(0).getMaker()).isEqualTo(UPDATE_MAKER);
+        assertThat(productService.getProductById(dto).get(0).getPrice()).isEqualTo(UPDATE_PRICE);
+        assertThat(productService.getProductById(dto).get(0).getImg()).isEqualTo(UPDATE_IMG);
+    }
+
+    @Transactional
+    @Test
     public void deleteProductByMakerValid() {
         this.productService.deleteProduct(getRequstIdDto(SUCCESS_ID));
-        assertThatExceptionOfType(NotFoundMakerException.class)
+        assertThatExceptionOfType(NotFoundIdException.class)
                 .isThrownBy(() -> {
                     productService.getProductById(getRequstIdDto(FAIL_ID));
                 }).withMessageNotContainingAny("Product Id not found:" + FAIL_ID);
