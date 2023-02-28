@@ -61,11 +61,13 @@ public class CatToyStoreService {
     }
 
 
-    public void delete(@PathVariable Long id){
+    public CatToy delete(@PathVariable Long id){
 
-        catToyStoreRepository.findById(id)
+        CatToy catToy = catToyStoreRepository.findById(id)
                 .orElseThrow(() -> new NoDataException(id));
 
         catToyStoreRepository.deleteById(id);
+
+        return catToy;
     }
 }

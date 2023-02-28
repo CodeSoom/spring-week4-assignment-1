@@ -33,6 +33,7 @@ class CatToyStoreControllerTest {
         catToyStoreController = new CatToyStoreController(catToyStoreService);
 
         setupCreateCatToy();
+        setUpFixtures();
     }
 
     void setupCreateCatToy(){
@@ -46,14 +47,32 @@ class CatToyStoreControllerTest {
         List<CatToy> list = new ArrayList<>();
         list.add(catToy);
 
-        given(catToyStoreController.list()).willReturn(list);
-        given(catToyStoreController.detail(DEFAULT_ID)).willReturn(catToy);
+        given(catToyStoreService.list()).willReturn(list);
+        given(catToyStoreService.detail(DEFAULT_ID)).willReturn(catToy);
+    }
+
+    void setUpFixtures(){
+        given(catToyStoreService.detail(INVALID_ID))
+                .willThrow(new NoDataException(INVALID_ID));
+
+        given(catToyStoreService.create(any(CatToy.class)))
+                .will(invocation -> invocation.getArgument(0));
+
+        given(catToyStoreService.update(eq(DEFAULT_ID),any(CatToy.class)))
+                .will(invocation -> invocation.getArgument(1));
+
+        given(catToyStoreService.update(eq(INVALID_ID),any(CatToy.class)))
+                .willThrow(new NoDataException(INVALID_ID));
+
+        given(catToyStoreService.delete(DEFAULT_ID)).willReturn(null);
+
+        given(catToyStoreService.delete(INVALID_ID))
+                .willThrow(new NoDataException(INVALID_ID));
     }
     @Test
     void getList() {
 
         assertThat(catToyStoreController.list()).hasSize(1);
-
         verify(catToyStoreService).list();
     }
 
@@ -62,14 +81,11 @@ class CatToyStoreControllerTest {
     void getDetailWithValidId() {
 
         assertThat(catToyStoreController.detail(DEFAULT_ID).getName()).isEqualTo(DEFAULT_NAME);
-
         verify(catToyStoreService).detail(DEFAULT_ID);
     }
 
     @Test
     void getDetailWithInvalidId() {
-        given(catToyStoreController.detail(INVALID_ID))
-                .willThrow(new NoDataException(INVALID_ID));
 
         assertThatThrownBy(() -> catToyStoreController.detail(INVALID_ID))
                 .isInstanceOf(NoDataException.class);
@@ -79,8 +95,6 @@ class CatToyStoreControllerTest {
 
     @Test
     void create() {
-        given(catToyStoreController.create(any(CatToy.class)))
-                .will(invocation -> invocation.getArgument(0));
 
         CatToy catToy = new CatToy();
         catToy.setName(CREATE_NAME);
@@ -92,9 +106,6 @@ class CatToyStoreControllerTest {
 
     @Test
     void updateWithValidId() {
-
-        given(catToyStoreController.update(eq(DEFAULT_ID),any(CatToy.class)))
-                .will(invocation -> invocation.getArgument(1));
 
         CatToy catToy = new CatToy();
         catToy.setName(UPDATE_NAME);
@@ -108,10 +119,6 @@ class CatToyStoreControllerTest {
     @Test
     void updateWithInvalidId() {
 
-        given(catToyStoreController.update(eq(INVALID_ID),any(CatToy.class)))
-                .willThrow(new NoDataException(INVALID_ID));
-
-
         CatToy catToy = new CatToy();
         catToy.setName(UPDATE_NAME);
 
@@ -124,7 +131,7 @@ class CatToyStoreControllerTest {
 
     @Test
     void deleteWithValidId() {
-        // 리턴값이 없는 controller의 경우 given을 줄 방법이 있을까요?
+
         catToyStoreController.delete(DEFAULT_ID);
         verify(catToyStoreService).delete(DEFAULT_ID);
     }
@@ -132,7 +139,9 @@ class CatToyStoreControllerTest {
     @Test
     void deleteWithInvalidId() {
 
-        // 리턴값이 없는 controller의 경우 given을 줄 방법이 있을까요?
+        assertThatThrownBy(()->catToyStoreController.delete(INVALID_ID))
+                .isInstanceOf(NoDataException.class);
 
+        verify(catToyStoreService).delete(INVALID_ID);
     }
 }
