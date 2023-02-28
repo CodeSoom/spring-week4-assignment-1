@@ -1,24 +1,23 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Product;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Data
-public class RequstMakerDto {
-    private String maker;
+public class RequstIdDto {
+    private Long id;
 
     @Builder
-    public RequstMakerDto(String maker){
-        this.maker = maker;
+    public RequstIdDto(Long id){
+        this.id = id;
     }
 
     public Product toEntity(){
         return Product.builder()
-                .maker(maker)
+                .id(id)
                 .build();
     }
 }
