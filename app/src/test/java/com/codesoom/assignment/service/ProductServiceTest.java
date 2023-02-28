@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 @SpringBootTest
@@ -28,16 +29,16 @@ class ProductServiceTest {
     private ProductRepository productRepository;
 
 
-    private static final String MAKER = "MAKER";
-    private static final String FAIL_MAKER = "Fail_Maker";
-    private static final Long SUCCESS_ID = 1L;
-    private static final Long FAIL_ID = 100L;
-    private static final int DUMMY_PRICE = 1000;
+    static final String MAKER = "MAKER";
+     static final String FAIL_MAKER = "Fail_Maker";
+     static final Long SUCCESS_ID = 1L;
+     static final Long FAIL_ID = 100L;
+     static final int DUMMY_PRICE = 1000;
 
-    private static final String UPDATE_NAME = "UPDATE_NAME";
-    private static final String UPDATE_MAKER = "UPDATE_MAKER";
-    private static final int UPDATE_PRICE = 99999;
-    private static final String UPDATE_IMG = "UPDATE_IMG";
+     static final String UPDATE_NAME = "UPDATE_NAME";
+     static final String UPDATE_MAKER = "UPDATE_MAKER";
+     static final int UPDATE_PRICE = 99999;
+     static final String UPDATE_IMG = "UPDATE_IMG";
 
     @BeforeEach
     public void registerProduct() {
@@ -68,9 +69,15 @@ class ProductServiceTest {
     @Test
     public void getProductByIdValid() throws Exception {
         RequstIdDto dto = getRequstIdDto(SUCCESS_ID);
-        assertThat(this.productService.getProductById(dto).get(0).getId()).isEqualTo(SUCCESS_ID);
-        assertThat(this.productService.getProductById(dto).get(0).getMaker()).isEqualTo(MAKER);
-        assertThat(this.productService.getProductById(dto).get(0).getPrice()).isEqualTo(DUMMY_PRICE);
+//        assertThat(this.productService.getProductById(dto).get(0).getId()).isEqualTo(SUCCESS_ID);
+//        assertThat(this.productService.getProductById(dto).get(0).getMaker()).isEqualTo(MAKER);
+//        assertThat(this.productService.getProductById(dto).get(0).getPrice()).isEqualTo(DUMMY_PRICE);
+
+        assertAll(
+                ()-> assertThat(this.productService.getProductById(dto).get(0).getId()).isEqualTo(SUCCESS_ID),
+                ()->assertThat(this.productService.getProductById(dto).get(0).getMaker()).isEqualTo(MAKER),
+                ()->assertThat(this.productService.getProductById(dto).get(0).getPrice()).isEqualTo(DUMMY_PRICE)
+        );
 
     }
 

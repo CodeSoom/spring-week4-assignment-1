@@ -31,4 +31,13 @@ public class ProductDto {
         this.price = entity.getPrice();
         this.img = entity.getImg();
     }
+
+    public Product toEntity(){
+        return Product.builder()
+                .name(name)
+                .maker(maker)
+                .price(price)
+                .img(img)
+                .build();
+    }
 }
