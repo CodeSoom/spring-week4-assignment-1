@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,9 @@ public class MockUnitTest {
     @Test
     public void getProductsValid() throws Exception{
         //given
-        given(productRepository.findAll()).willReturn(List.of(new Product(anyLong(),"name","maker",1000,"img")));
+        given(productRepository.findAll()).willReturn(List.of(
+                new Product(1L, "name", "maker", 1000, "img1")
+        ));
         //when
         List<ProductDto> products = productService.getProducts();
         //Then
