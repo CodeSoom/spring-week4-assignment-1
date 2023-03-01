@@ -14,8 +14,6 @@ public interface CatToyStoreRepository extends CrudRepository<CatToy, Long> {
 
     CatToy save(CatToy catToy);
 
-    boolean existsById(Long id);
-
     void deleteById(Long id);
 
 }

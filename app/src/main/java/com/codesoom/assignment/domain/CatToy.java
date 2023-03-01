@@ -12,7 +12,6 @@ import javax.persistence.Id;
 @Getter
 public class CatToy {
 
-
     @Id
     @GeneratedValue
     private Long id;

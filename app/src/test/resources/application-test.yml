@@ -1,6 +1,9 @@
 spring:
-  datasource:
-    url: jdbc:h2:~/data/junit-test
   jpa:
-    hibernate:
-      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        hbm2ddl:
+          auto: create
