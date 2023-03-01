@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.CatToyStoreService;
 import com.codesoom.assignment.domain.CatToy;
 import com.codesoom.assignment.exception.NoDataException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ class CatToyStoreControllerTest {
                 .willThrow(new NoDataException(INVALID_ID));
     }
     @Test
+    @DisplayName("리스트 조회")
     void getList() {
 
         assertThat(catToyStoreController.list()).hasSize(1);
@@ -78,6 +80,7 @@ class CatToyStoreControllerTest {
 
 
     @Test
+    @DisplayName("유효 ID에 대한 상세조회")
     void getDetailWithValidId() {
 
         assertThat(catToyStoreController.detail(DEFAULT_ID).getName()).isEqualTo(DEFAULT_NAME);
@@ -85,6 +88,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
+    @DisplayName("유효하지 않는 ID에 대한 상세조회")
     void getDetailWithInvalidId() {
 
         assertThatThrownBy(() -> catToyStoreController.detail(INVALID_ID))
@@ -94,6 +98,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
+    @DisplayName("생성")
     void create() {
 
         CatToy catToy = new CatToy();
@@ -105,6 +110,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
+    @DisplayName("유효 ID에 대한 수정")
     void updateWithValidId() {
 
         CatToy catToy = new CatToy();
@@ -117,6 +123,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
+    @DisplayName("유효하지 않는 ID에 대한 수정")
     void updateWithInvalidId() {
 
         CatToy catToy = new CatToy();
@@ -130,6 +137,7 @@ class CatToyStoreControllerTest {
 
 
     @Test
+    @DisplayName("유효 ID에 대한 삭제")
     void deleteWithValidId() {
 
         catToyStoreController.delete(DEFAULT_ID);
@@ -137,6 +145,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
+    @DisplayName("유효하지 않는 ID에 대한 삭제")
     void deleteWithInvalidId() {
 
         assertThatThrownBy(()->catToyStoreController.delete(INVALID_ID))
