@@ -61,6 +61,7 @@ class CatToyStoreServiceTest {
 
         given(catToyStoreRepository.findAll())
                 .willReturn(list);
+
     }
 
     void setUpFixtures(){

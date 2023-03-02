@@ -71,7 +71,7 @@ class CatToyStoreControllerTest {
                 .willThrow(new NoDataException(INVALID_ID));
     }
     @Test
-    @DisplayName("리스트 조회")
+    @DisplayName("리스트 조회 > 1개 리스트 조회")
     void getList() {
 
         assertThat(catToyStoreController.list()).hasSize(1);
@@ -80,7 +80,7 @@ class CatToyStoreControllerTest {
 
 
     @Test
-    @DisplayName("유효 ID에 대한 상세조회")
+    @DisplayName("유효 ID에 대한 상세조회 > ID에 매핑된 상품 이름 일치")
     void getDetailWithValidId() {
 
         assertThat(catToyStoreController.detail(DEFAULT_ID).getName()).isEqualTo(DEFAULT_NAME);
@@ -88,7 +88,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
-    @DisplayName("유효하지 않는 ID에 대한 상세조회")
+    @DisplayName("유효하지 않는 ID에 대한 상세조회 > NoDataException 발생")
     void getDetailWithInvalidId() {
 
         assertThatThrownBy(() -> catToyStoreController.detail(INVALID_ID))
@@ -97,7 +97,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
-    @DisplayName("생성")
+    @DisplayName("생성 > 생성된 상품에 대한 이름 일치")
     void create() {
 
         CatToy catToy = new CatToy();
@@ -108,7 +108,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
-    @DisplayName("유효 ID에 대한 수정")
+    @DisplayName("유효 ID에 대한 수정 > 수정된 상품에 대한 이름 일치")
     void updateWithValidId() {
 
         CatToy catToy = new CatToy();
@@ -120,7 +120,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
-    @DisplayName("유효하지 않는 ID에 대한 수정")
+    @DisplayName("유효하지 않는 ID에 대한 수정 > NoDataException 발생")
     void updateWithInvalidId() {
 
         CatToy catToy = new CatToy();
@@ -133,7 +133,7 @@ class CatToyStoreControllerTest {
 
 
     @Test
-    @DisplayName("유효 ID에 대한 삭제")
+    @DisplayName("유효 ID에 대한 삭제 > catToyStoreService.delete() 호출")
     void deleteWithValidId() {
 
         catToyStoreController.delete(DEFAULT_ID);
@@ -141,7 +141,7 @@ class CatToyStoreControllerTest {
     }
 
     @Test
-    @DisplayName("유효하지 않는 ID에 대한 삭제")
+    @DisplayName("유효하지 않는 ID에 대한 삭제 > NoDataException 발생")
     void deleteWithInvalidId() {
 
         assertThatThrownBy(()->catToyStoreController.delete(INVALID_ID))

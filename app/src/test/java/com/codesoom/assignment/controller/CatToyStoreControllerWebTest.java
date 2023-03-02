@@ -99,7 +99,7 @@ public class CatToyStoreControllerWebTest {
                 .build();
     }
     @Test
-    @DisplayName("리스트 조회")
+    @DisplayName("리스트 조회 > 리스트 정보 일치")
     void getList() throws Exception {
 
         mockMvc.perform(get("/products")
@@ -111,7 +111,7 @@ public class CatToyStoreControllerWebTest {
 
 
     @Test
-    @DisplayName("유효 ID에 대한 상세조회")
+    @DisplayName("유효 ID에 대한 상세조회 > 상품에 대한 id, name 일치")
     void getDetailWithValidId() throws Exception {
 
         mockMvc.perform(get("/products/"+DEFAULT_ID))
@@ -122,7 +122,7 @@ public class CatToyStoreControllerWebTest {
     }
 
     @Test
-    @DisplayName("유효하지 않는 ID에 대한 상세조회")
+    @DisplayName("유효하지 않는 ID에 대한 상세조회 > Status 404")
     void getDetailWithInvalidId() throws Exception {
 
         mockMvc.perform(get("/products/"+INVALID_ID))
@@ -132,7 +132,7 @@ public class CatToyStoreControllerWebTest {
     }
 
     @Test
-    @DisplayName("생성")
+    @DisplayName("생성 > 등록한 상품에 대한 name 일치")
     void create() throws Exception {
 
         CatToy catToy = new CatToy();
@@ -147,7 +147,7 @@ public class CatToyStoreControllerWebTest {
     }
 
     @Test
-    @DisplayName("유효 ID에 대한 수정")
+    @DisplayName("유효 ID에 대한 수정 > 수정한 상품에 대한 name 일치")
     void updateWithValidId() throws Exception {
 
         CatToy catToy = new CatToy();
@@ -162,7 +162,7 @@ public class CatToyStoreControllerWebTest {
     }
 
     @Test
-    @DisplayName("유효하지 않는 ID에 대한 수정")
+    @DisplayName("유효하지 않는 ID에 대한 수정 > Status 404")
     void updateWithInvalidId() throws Exception {
 
         CatToy catToy = new CatToy();
@@ -177,7 +177,7 @@ public class CatToyStoreControllerWebTest {
 
 
     @Test
-    @DisplayName("유효 ID에 대한 삭제")
+    @DisplayName("유효 ID에 대한 삭제 > ")
     void deleteWithValidId() throws Exception {
 
         mockMvc.perform(delete("/products/"+DEFAULT_ID))
@@ -187,7 +187,7 @@ public class CatToyStoreControllerWebTest {
     }
 
     @Test
-    @DisplayName("유효하지 않는 ID에 대한 삭제")
+    @DisplayName("유효하지 않는 ID에 대한 삭제 > Status 404")
     void deleteWithInvalidId() throws Exception {
 
         mockMvc.perform(delete("/products/"+INVALID_ID))

@@ -43,7 +43,7 @@ class CatToyStoreRepositoryTest {
 
 
     @Test
-    @DisplayName("리스트 조회")
+    @DisplayName("리스트 조회 > 1개 리스트 조회 및 상품에 대한 id, name 일치")
     void findAll() {
         List<CatToy> list = catToyStoreRepository.findAll();
         assertThat(list).hasSize(1);
@@ -53,7 +53,7 @@ class CatToyStoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("유효 ID에 대한 상세조회")
+    @DisplayName("유효 ID에 대한 상세조회 > 조회 상품에 대한 id, name 일치")
     void findByIdWithValidId() {
         CatToy catToy = catToyStoreRepository.findById(DEFAULT_ID).get();
 
@@ -62,14 +62,14 @@ class CatToyStoreRepositoryTest {
     }
 
     @Test
-    @DisplayName("유효하지 않는 ID에 대한 상세조회")
+    @DisplayName("유효하지 않는 ID에 대한 상세조회 > 비어있는 Optional 리턴")
     void findByIdWithInvalidId() {
         assertThat(catToyStoreRepository.findById(INVALID_ID)).isEmpty();
 
     }
 
     @Test
-    @DisplayName("저장")
+    @DisplayName("저장 > 1 증가된 리스트 개수 확인 (예상 : 2)")
     void save() {
         CatToy catToy = new CatToy();
         catToy.setId(CREATE_ID);
@@ -84,7 +84,7 @@ class CatToyStoreRepositoryTest {
 
 
     @Test
-    @DisplayName("삭제")
+    @DisplayName("삭제 > 삭제한 ID에 대한 상세 조회 결과가 빈 Optional 인지 확인")
     void deleteById() {
         catToyStoreRepository.deleteById(DEFAULT_ID);
         assertThat(catToyStoreRepository.findById(DEFAULT_ID)).isEmpty();
