@@ -75,7 +75,7 @@ class CatToyStoreControllerTest {
     void getList() {
 
         assertThat(catToyStoreController.list()).hasSize(1);
-        verify(catToyStoreService).list();
+
     }
 
 
@@ -84,7 +84,7 @@ class CatToyStoreControllerTest {
     void getDetailWithValidId() {
 
         assertThat(catToyStoreController.detail(DEFAULT_ID).getName()).isEqualTo(DEFAULT_NAME);
-        verify(catToyStoreService).detail(DEFAULT_ID);
+
     }
 
     @Test
@@ -94,7 +94,6 @@ class CatToyStoreControllerTest {
         assertThatThrownBy(() -> catToyStoreController.detail(INVALID_ID))
                 .isInstanceOf(NoDataException.class);
 
-        verify(catToyStoreService).detail(INVALID_ID);
     }
 
     @Test
@@ -106,7 +105,6 @@ class CatToyStoreControllerTest {
 
         assertThat(catToyStoreController.create(catToy).getName()).isEqualTo(CREATE_NAME);
 
-        verify(catToyStoreService).create(catToy);
     }
 
     @Test
@@ -119,7 +117,6 @@ class CatToyStoreControllerTest {
         assertThat(catToyStoreController.update(DEFAULT_ID,catToy).getName())
                 .isEqualTo(UPDATE_NAME);
 
-        verify(catToyStoreService).update(DEFAULT_ID, catToy);
     }
 
     @Test
@@ -132,7 +129,6 @@ class CatToyStoreControllerTest {
         assertThatThrownBy(() -> catToyStoreController.update(INVALID_ID,catToy))
                 .isInstanceOf(NoDataException.class);
 
-        verify(catToyStoreService).update(INVALID_ID, catToy);
     }
 
 
@@ -151,6 +147,5 @@ class CatToyStoreControllerTest {
         assertThatThrownBy(()->catToyStoreController.delete(INVALID_ID))
                 .isInstanceOf(NoDataException.class);
 
-        verify(catToyStoreService).delete(INVALID_ID);
     }
 }

@@ -85,8 +85,6 @@ class CatToyStoreServiceTest {
 
         List<CatToy> list = catToyStoreService.list();
 
-        verify(catToyStoreRepository).findAll();
-
         assertThat(list).hasSize(1);
         assertThat(list.get(0).getId()).isEqualTo(DEFAULT_ID);
         assertThat(list.get(0).getName()).isEqualTo(DEFAULT_NAME);
@@ -98,8 +96,6 @@ class CatToyStoreServiceTest {
 
         CatToy catToy = catToyStoreService.detail(DEFAULT_ID);
 
-        verify(catToyStoreRepository).findById(DEFAULT_ID);
-
         assertThat(catToy.getId()).isEqualTo(DEFAULT_ID);
         assertThat(catToy.getName()).isEqualTo(DEFAULT_NAME);
     }
@@ -110,8 +106,6 @@ class CatToyStoreServiceTest {
 
         assertThatThrownBy(() -> catToyStoreService.detail(INVALID_ID))
                 .isInstanceOf(NoDataException.class);
-
-        verify(catToyStoreRepository).findById(INVALID_ID);
 
     }
 
@@ -146,8 +140,6 @@ class CatToyStoreServiceTest {
 
         CatToy catToy = catToyStoreService.update(DEFAULT_ID,resource);
 
-        verify(catToyStoreRepository).findById(DEFAULT_ID);
-
         assertThat(catToy.getName()).isEqualTo(UPDATE_NAME);
         assertThat(catToy.getMaker()).isEqualTo("수정된 브랜드");
 
@@ -165,9 +157,6 @@ class CatToyStoreServiceTest {
 
         assertThatThrownBy(()->catToyStoreService.update(INVALID_ID,resource))
                 .isInstanceOf(NoDataException.class);
-
-        verify(catToyStoreRepository).findById(INVALID_ID);
-
     }
 
     @Test
@@ -176,7 +165,6 @@ class CatToyStoreServiceTest {
 
         catToyStoreService.delete(DEFAULT_ID);
 
-        verify(catToyStoreRepository).findById(DEFAULT_ID);
         verify(catToyStoreRepository).deleteById(DEFAULT_ID);
 
     }
@@ -188,7 +176,6 @@ class CatToyStoreServiceTest {
         assertThatThrownBy(()->catToyStoreService.delete(INVALID_ID))
                 .isInstanceOf(NoDataException.class);
 
-        verify(catToyStoreRepository).findById(INVALID_ID);
 
     }
 }

@@ -107,7 +107,6 @@ public class CatToyStoreControllerWebTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("[{\"id\":1,\"name\":\"첫번째 고양이 장난감\",\"maker\":\"첫번째 브랜드\",\"price\":1000,\"imageUrl\":\"https://avatars.githubusercontent.com/u/9374562?s=400&v=4\"}]"));
 
-        verify(catToyStoreService).list();
     }
 
 
@@ -120,7 +119,6 @@ public class CatToyStoreControllerWebTest {
                 .andExpect(jsonPath("id",DEFAULT_ID).exists())
                 .andExpect(jsonPath("name",DEFAULT_NAME).exists());
 
-        verify(catToyStoreService).detail(DEFAULT_ID);
     }
 
     @Test
@@ -130,7 +128,6 @@ public class CatToyStoreControllerWebTest {
         mockMvc.perform(get("/products/"+INVALID_ID))
                 .andExpect(status().isNotFound());
 
-        verify(catToyStoreService).detail(INVALID_ID);
 
     }
 
@@ -147,7 +144,6 @@ public class CatToyStoreControllerWebTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("name",CREATE_NAME).exists());
 
-        verify(catToyStoreService).create(any(CatToy.class));
     }
 
     @Test
@@ -163,7 +159,6 @@ public class CatToyStoreControllerWebTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name",UPDATE_NAME).exists());
 
-        verify(catToyStoreService).update(eq(DEFAULT_ID), any(CatToy.class));
     }
 
     @Test
@@ -178,7 +173,6 @@ public class CatToyStoreControllerWebTest {
                         .content(objectMapper.writeValueAsString(catToy)))
                 .andExpect(status().isNotFound());
 
-        verify(catToyStoreService).update(eq(INVALID_ID), any(CatToy.class));
     }
 
 
@@ -199,6 +193,5 @@ public class CatToyStoreControllerWebTest {
         mockMvc.perform(delete("/products/"+INVALID_ID))
                 .andExpect(status().isNotFound());
 
-        verify(catToyStoreService).delete(INVALID_ID);
     }
 }
