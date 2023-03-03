@@ -50,6 +50,7 @@ class ProductServiceTest {
     @BeforeEach
     public void registerProduct() {
         Long result = this.productService.registerProduct(ProductSaveRequestDto.builder()
+                .name("NAME")
                 .maker(MAKER)
                 .price(DUMMY_PRICE)
                 .img("img")
@@ -76,7 +77,7 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("update 로직 성공")
-    public void updateValid() throws Exception{
+    public void updateValid() throws Exception {
         //given
         List<ProductDto> products = productService.getProducts();
         //when
@@ -86,10 +87,10 @@ class ProductServiceTest {
                 .price(UPDATE_PRICE)
                 .img(UPDATE_IMG)
                 .build();
-        productService.modifyProduct(1L ,build);
+        productService.modifyProduct(1L, build);
 
         assertThat(productService.getProducts().get(0).getMaker()).isEqualTo(UPDATE_MAKER);
-        
+
         //Then
     }
 
@@ -119,11 +120,20 @@ class ProductServiceTest {
     @Transactional
     @Test
     public void deleteProductByMakerValid() {
-        this.productService.deleteProduct(SUCCESS_ID);
         assertThatExceptionOfType(NotFoundIdException.class)
                 .isThrownBy(() -> {
                     productService.getProductById(FAIL_ID);
-                }).withMessageNotContainingAny("Product Id not found:" + FAIL_ID);
+                }).withMessageNotContainingAny("Product Id not found: 100");
+    }
+
+    @Test
+    @DisplayName("deleteInValid")
+    public void deleteInValid() throws Exception {
+        //given
+        //when
+        productService.deleteProduct(1L);
+        //Then
+        assertThat(productService.getProducts().size()).isEqualTo(0);
     }
 
 

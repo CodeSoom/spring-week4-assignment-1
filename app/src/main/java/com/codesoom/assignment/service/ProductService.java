@@ -45,10 +45,10 @@ public class ProductService {
      * @param id
      */
     public ProductDto getProductById(Long id) {
-        NullMaker(id);
-         return this.productRepository.findById(id).stream().map(ProductDto::new)
-                 .findAny()
-                 .orElseThrow(() -> new NotFoundIdException(id));
+        validationByMaker(id);
+        return this.productRepository.findById(id).stream().map(ProductDto::new)
+                .findAny()
+                .orElseThrow(() -> new NotFoundIdException(id));
     }
 
     @Transactional
@@ -68,13 +68,6 @@ public class ProductService {
     public void deleteProduct(Long id) {
         validationByMaker(id);
         productRepository.deleteById(id);
-    }
-
-    private void NullMaker(Long id) {
-        Optional<Product> byMaker = productRepository.findById(id);
-        if (byMaker.isEmpty()) {
-            throw new NotFoundIdException(id);
-        }
     }
 
 
