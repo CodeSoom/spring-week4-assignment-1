@@ -7,7 +7,7 @@ daemon
 native
 notifications
 
-
+generated
 
 # Ignore Gradle build output directory
 build
