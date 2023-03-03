@@ -2,13 +2,13 @@ package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.dto.ProductSaveRequestDto;
-import com.codesoom.assignment.dto.RequstIdDto;
 import com.codesoom.assignment.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 /*
  * 고양이 장난감 목록 얻기 - `GET /products` - 완료
  * 고양이 장난감 상세 조회하기 - `GET /products/{id}` - 완료
@@ -31,15 +31,27 @@ public class ProductController {
         return productService.getProducts();
     }
 
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductDto productDtoList(@PathVariable Long id){
+        return productService.getProductById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Long createCatToy(@RequestBody ProductSaveRequestDto request) {
         return productService.registerProduct(request);
     }
 
-//    @DeleteMapping("{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void delete(@PathVariable Long id) {
-//        productService.deleteProduct(id);
-//    }
+    @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable Long id , @RequestBody ProductDto productDto){
+       productService.modifyProduct(id , productDto);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        productService.deleteProduct(id);
+    }
 }

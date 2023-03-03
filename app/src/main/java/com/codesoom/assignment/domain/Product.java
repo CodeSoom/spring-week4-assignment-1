@@ -20,6 +20,9 @@ public class Product {
     private int price;
     private String img;
 
+    public Product(Product product) {
+    }
+
     public void modifyProduct(String name, String maker, int price, String img) {
         this.name = name;
         this.maker = maker;

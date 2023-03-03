@@ -5,7 +5,6 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.repository.ProductRepository;
 import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.dto.ProductSaveRequestDto;
-import com.codesoom.assignment.dto.RequstIdDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,32 +42,32 @@ public class ProductService {
     /**
      * getProductById -> id로 조회
      *
-     * @param RequstIdDto
+     * @param id
      */
-    public List<ProductDto> getProductById(RequstIdDto RequstIdDto) {
-        NullMaker(RequstIdDto.toEntity().getId());
-        return this.productRepository.findById(RequstIdDto.toEntity().getId()).stream()
-                .map(ProductDto::new)
-                .collect(Collectors.toList());
+    public ProductDto getProductById(Long id) {
+        NullMaker(id);
+         return this.productRepository.findById(id).stream().map(ProductDto::new)
+                 .findAny()
+                 .orElseThrow(() -> new NotFoundIdException(id));
     }
 
     @Transactional
-    public void modifyProduct(ProductDto productDto) {
-        Product toy = productRepository.findById(productDto.getId()).orElseThrow(() -> new NotFoundIdException(productDto.getId()));
-        toy.modifyProduct(productDto.getName(), productDto.getMaker(), productDto.getPrice(), productDto.getImg());
-        productRepository.save(toy);
+    public void modifyProduct(Long id, ProductDto productDto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new NotFoundIdException(id));
+        product.modifyProduct(productDto.getName(), productDto.getMaker(), productDto.getPrice(), productDto.getImg());
     }
 
 
     /**
      * deleteById -> 삭제
      *
-     * @param requstIdDto
+     * @param id
      */
     @Transactional
-    public void deleteProduct(RequstIdDto requstIdDto) {
-        validationByMaker(requstIdDto.toEntity().getId());
-        productRepository.deleteById(requstIdDto.toEntity().getId());
+    public void deleteProduct(Long id) {
+        validationByMaker(id);
+        productRepository.deleteById(id);
     }
 
     private void NullMaker(Long id) {

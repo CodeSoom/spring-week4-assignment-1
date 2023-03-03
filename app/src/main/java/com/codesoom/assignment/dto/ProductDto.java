@@ -32,6 +32,10 @@ public class ProductDto {
         this.img = entity.getImg();
     }
 
+    public ProductDto(Long id, String name, int price) {
+    }
+
+
     public Product toEntity(){
         return Product.builder()
                 .name(name)
@@ -40,4 +44,7 @@ public class ProductDto {
                 .img(img)
                 .build();
     }
+
+
+
 }

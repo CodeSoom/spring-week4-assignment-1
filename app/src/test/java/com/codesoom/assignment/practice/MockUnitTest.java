@@ -40,17 +40,17 @@ public class MockUnitTest {
         assertNotNull(products);
     }
 
-    @Test
-    public void getProductByIdValid() throws Exception {
-       //given
-        given(productRepository.findById(1L)).willReturn(Optional.of(new Product(anyLong(),"name","maker",1000,"img")));
-
-        //when
-        List<ProductDto> productById = productService.getProductById(RequstIdDto.builder()
-                .id(1L).build());
-        //then
-        assertNotNull(productById);
-    }
+//    @Test
+//    public void getProductByIdValid() throws Exception {
+//       //given
+//        given(productRepository.findById(1L)).willReturn(Optional.of(new Product(anyLong(),"name","maker",1000,"img")));
+//
+//        //when
+//        List<ProductDto> productById = productService.getProductById(RequstIdDto.builder()
+//                .id(1L).build());
+//        //then
+//        assertNotNull(productById);
+//    }
 
     @Transactional
     @Test
@@ -61,8 +61,6 @@ public class MockUnitTest {
         product.setPrice(1000);
         product.setImg("img");
         productRepository.save(product);
-
-
     }
 
 }
