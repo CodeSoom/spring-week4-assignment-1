@@ -12,4 +12,9 @@ class AppTest {
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
         assertEquals(classUnderTest.getGreeting(), "Hello, world!");
     }
+
+    @Test
+    public void main() {
+        App.main(new String[] {});
+    }
 }
