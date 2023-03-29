@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,11 +34,11 @@ class CatTest {
             @Test
             @DisplayName("모든 데이터가 들어있는 고양이를 생성한다.")
             public void create_all_parameter() {
-                Cat cat = Cat.create(name, maker, price, imgUrl);
-                assertAll(() -> assertThat(cat.getName()).isEqualTo(name));
-                assertAll(() -> assertThat(cat.getMaker()).isEqualTo(maker));
-                assertAll(() -> assertThat(cat.getPrice()).isEqualTo(price));
-                assertAll(() -> assertThat(cat.getImgUrl()).isEqualTo(imgUrl));
+                Cat createdCat = Cat.create(name, maker, price, imgUrl);
+                assertAll(() -> assertThat(createdCat.getName()).isEqualTo(name));
+                assertAll(() -> assertThat(createdCat.getMaker()).isEqualTo(maker));
+                assertAll(() -> assertThat(createdCat.getPrice()).isEqualTo(price));
+                assertAll(() -> assertThat(createdCat.getImgUrl()).isEqualTo(imgUrl));
             }
         }
 
@@ -49,9 +48,36 @@ class CatTest {
             @Test
             @DisplayName("해당 값은 null 값 이 들어간다.")
             public void specific_parameter_is_null() {
-                Cat cat = Cat.create(name, maker, price, null);
-                assertAll(() -> assertThat(cat.getImgUrl()).isEqualTo(null));
+                Cat createdCat = Cat.create(name, maker, price, null);
+                assertAll(() -> assertThat(createdCat.getImgUrl()).isEqualTo(null));
             }
         }
+    }
+
+    @Nested
+    @DisplayName("update 는")
+    class update {
+        String updateName = "UPDATE";
+        String updateMaker = "changeMaker";
+        Long updatePrice = 10000L;
+        String updateUrl = "UpdateUrl";
+
+
+        @Nested
+        @DisplayName("모든 파라미터에 데이터가 존재할 경우")
+        class exist_all_parameter {
+
+            @Test
+            @DisplayName("모든 내용을 수정한다.")
+            public void update_all_parameter() {
+                Cat cat = Cat.create(name, maker, price, imgUrl);
+                Cat updatedCat = cat.update(updateName, updateMaker, updatePrice, updateUrl);
+                assertAll(() -> assertThat(cat.getName()).isEqualTo(updateName),
+                        () -> assertThat(cat.getMaker()).isEqualTo(updateMaker),
+                        () -> assertThat(cat.getPrice()).isEqualTo(updatePrice),
+                        () -> assertThat(cat.getImgUrl()).isEqualTo(updateUrl));
+            }
+        }
+
     }
 }
