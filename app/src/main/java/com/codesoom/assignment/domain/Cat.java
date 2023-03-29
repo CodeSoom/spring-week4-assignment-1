@@ -40,4 +40,12 @@ public class Cat {
     public String getImgUrl() {
         return imgUrl;
     }
+
+    public Cat update(String updateName, String updateMaker, Long updatePrice, String updateUrl) {
+        this.name = updateName;
+        this.maker = updateMaker;
+        this.price = updatePrice;
+        this.imgUrl = updateUrl;
+        return this;
+    }
 }

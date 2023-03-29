@@ -72,10 +72,27 @@ class CatTest {
             public void update_all_parameter() {
                 Cat cat = Cat.create(name, maker, price, imgUrl);
                 Cat updatedCat = cat.update(updateName, updateMaker, updatePrice, updateUrl);
-                assertAll(() -> assertThat(cat.getName()).isEqualTo(updateName),
-                        () -> assertThat(cat.getMaker()).isEqualTo(updateMaker),
-                        () -> assertThat(cat.getPrice()).isEqualTo(updatePrice),
-                        () -> assertThat(cat.getImgUrl()).isEqualTo(updateUrl));
+                assertAll(() -> assertThat(updatedCat.getName()).isEqualTo(updateName),
+                        () -> assertThat(updatedCat.getMaker()).isEqualTo(updateMaker),
+                        () -> assertThat(updatedCat.getPrice()).isEqualTo(updatePrice),
+                        () -> assertThat(updatedCat.getImgUrl()).isEqualTo(updateUrl));
+            }
+        }
+
+
+        @Nested
+        @DisplayName("특정 컬럼이 널일 경우 null 로 표기한다.")
+        class exist_specific_empty_parameter {
+
+            @Test
+            @DisplayName("모든 내용을 수정한다.")
+            public void update_specific_empty_parameter_to_null() {
+                Cat cat = Cat.create(name, maker, price, imgUrl);
+                Cat updatedCat = cat.update(null, null, null, null);
+                assertAll(() -> assertThat(updatedCat.getName()).isEqualTo(null),
+                        () -> assertThat(updatedCat.getMaker()).isEqualTo(null),
+                        () -> assertThat(updatedCat.getPrice()).isEqualTo(null),
+                        () -> assertThat(updatedCat.getImgUrl()).isEqualTo(null));
             }
         }
 
