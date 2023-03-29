@@ -31,10 +31,8 @@ class CatTest {
                 assertAll(() -> assertThat(cat.getName()).isEqualTo(name));
                 assertAll(() -> assertThat(cat.getMaker()).isEqualTo(maker));
                 assertAll(() -> assertThat(cat.getPrice()).isEqualTo(price));
-                assertAll(() -> assertThat(cat.getImgUrl).isEqualTo(imgUrl));
+                assertAll(() -> assertThat(cat.getImgUrl()).isEqualTo(imgUrl));
             }
         }
     }
-
-
 }
