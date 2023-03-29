@@ -34,5 +34,22 @@ class CatTest {
                 assertAll(() -> assertThat(cat.getImgUrl()).isEqualTo(imgUrl));
             }
         }
+
+        @Nested
+        @DisplayName("특정 파라미터가 null일  경우")
+        class exist_specific_empty_parameter {
+            @Test
+            @DisplayName("해당 값은 null값이 들어간다.")
+            public void specific_parameter_is_null(){
+
+                String name = "고양이이름";
+                String maker = "아디다스";
+                Long price = 5000L;
+                String imgUrl = null;
+
+                Cat cat = Cat.create(name, maker, price, imgUrl);
+                assertAll(() -> assertThat(cat.getImgUrl()).isEqualTo(null));
+            }
+        }
     }
 }
