@@ -25,11 +25,11 @@ class CatTest {
 
     @Nested
     @DisplayName("createMethod는")
-    class create {
+    class Create {
 
         @Nested
         @DisplayName("모든 파라미터가 있을 경우")
-        class parameter_all {
+        class Parameter_all {
 
             @Test
             @DisplayName("모든 데이터가 들어있는 고양이를 생성한다.")
@@ -44,7 +44,7 @@ class CatTest {
 
         @Nested
         @DisplayName("특정 파라미터가 null 일  경우")
-        class exist_specific_empty_parameter {
+        class Exist_specific_empty_parameter {
             @Test
             @DisplayName("해당 값은 null 값 이 들어간다.")
             public void specific_parameter_is_null() {
@@ -56,7 +56,7 @@ class CatTest {
 
     @Nested
     @DisplayName("update 는")
-    class update {
+    class Update {
         String updateName = "UPDATE";
         String updateMaker = "changeMaker";
         Long updatePrice = 10000L;
@@ -65,7 +65,7 @@ class CatTest {
 
         @Nested
         @DisplayName("모든 파라미터에 데이터가 존재할 경우")
-        class exist_all_parameter {
+        class Exist_all_parameter {
 
             @Test
             @DisplayName("모든 내용을 수정한다.")
@@ -82,7 +82,7 @@ class CatTest {
 
         @Nested
         @DisplayName("특정 컬럼이 널일 경우 null 로 표기한다.")
-        class exist_specific_empty_parameter {
+        class Exist_specific_empty_parameter {
 
             @Test
             @DisplayName("모든 내용을 수정한다.")
