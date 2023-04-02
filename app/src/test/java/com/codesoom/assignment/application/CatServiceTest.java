@@ -37,7 +37,6 @@ class CatServiceTest {
             @Test
             @DisplayName("Cat을 만들어 Repository 에 저장한다.")
             public void save_cat() {
-                catService.create(name,maker,price,imgUrl);
                 Mockito.verify(catRepository).save(any());
             }
 
