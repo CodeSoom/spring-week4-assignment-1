@@ -11,30 +11,36 @@ import java.util.List;
 @RequestMapping(path = "/products")
 public class ProductController {
 
+	private final ProductService productService;
+
+	public ProductController(ProductService productService) {
+		this.productService = productService;
+	}
+
 	@GetMapping("")
 	public List<Product> getAll() {
-		return null;
+		return productService.getAll();
 	}
 
 	@GetMapping("/{productId}")
-	public Product getById(@PathVariable long productId) {
-		return new Product();
+	public Product getProduct(@PathVariable long productId) {
+		return productService.getProduct(productId);
 	}
 
 	@PostMapping()
 	public Product create(@RequestBody Product product) {
-		return product;
+		return productService.createProduct(product);
 	}
 
 	@PatchMapping("/{productId}")
 	public Product update(@PathVariable long productId, @RequestBody Product product) {
-		return product;
+		return productService.updateProduct(productId, product);
 	}
 
 
 	@DeleteMapping("/{productId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable long productId) {
-
+		productService.deleteProduct(productId);
 	}
 }

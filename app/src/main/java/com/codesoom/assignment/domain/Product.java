@@ -13,4 +13,12 @@ public class Product {
 	private long price;
 	private String imageUrl;
 
+	public Product updateDetail(Product product) {
+		this.name = product.getName();
+		this.maker = product.getName();
+		this.price = product.getPrice();
+		this.imageUrl = product.getImageUrl();
+
+		return this;
+	}
 }
