@@ -17,7 +17,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-
 class ProductServiceTest {
 
     ProductService productService;
@@ -29,7 +28,7 @@ class ProductServiceTest {
     private static final String PRODUCT_IMAGE_URL = "test image url";
 
     @BeforeEach
-    void setup(){
+    void setup() {
         productRepository = mock(ProductRepository.class);
         productService = new ProductService(productRepository);
 
@@ -85,7 +84,7 @@ class ProductServiceTest {
         Product source = new Product();
         source.setName("updated name");
 
-        Product product = productService.updateProduct(1L,source);
+        Product product = productService.updateProduct(1L, source);
 
         verify(productRepository).findById(1L);
 
