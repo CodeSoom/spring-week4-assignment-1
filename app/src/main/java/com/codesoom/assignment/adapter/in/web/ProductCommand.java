@@ -1,20 +1,16 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.adapter.in.web;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product {
-
+public class ProductCommand {
     private Long id;
 
     private String name;
@@ -24,7 +20,4 @@ public class Product {
     private Integer price;
 
     private String imageUrl;
-
 }
-
-
