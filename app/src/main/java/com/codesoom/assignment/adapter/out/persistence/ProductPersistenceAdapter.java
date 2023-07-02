@@ -15,28 +15,27 @@ import java.util.stream.Collectors;
 public class ProductPersistenceAdapter implements ProductPort {
 
     private final ProductSpringDataRepository productSpringDataRepository;
-    private final ProductMapper productMapper;
 
     public List<Product> findAll() {
-        return productSpringDataRepository.findAll().stream().map(p -> productMapper.toDomain(p)).collect(Collectors.toList());
+        return productSpringDataRepository.findAll().stream().map(p -> ProductMapper.toDomain(p)).collect(Collectors.toList());
     }
 
     public Product findById(Long id) {
         ProductEntity productEntity = productSpringDataRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
 
-        return productMapper.toDomain(productEntity);
+        return ProductMapper.toDomain(productEntity);
     }
 
     @Override
     public Product save(Product product) {
-        ProductEntity productEntity = productSpringDataRepository.save(productMapper.toEntity(product));
-        return productMapper.toDomain(productEntity);
+        ProductEntity productEntity = productSpringDataRepository.save(ProductMapper.toEntity(product));
+        return ProductMapper.toDomain(productEntity);
     }
 
     @Override
     public void delete(Product product) {
-        productSpringDataRepository.delete(productMapper.toEntity(product));
+        productSpringDataRepository.delete(ProductMapper.toEntity(product));
     }
 
 }

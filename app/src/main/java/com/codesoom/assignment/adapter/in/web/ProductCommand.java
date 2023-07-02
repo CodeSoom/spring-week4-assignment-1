@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ProductCommand {
-    private Long id;
 
     private String name;
 
@@ -20,4 +18,5 @@ public class ProductCommand {
     private Integer price;
 
     private String imageUrl;
+    
 }

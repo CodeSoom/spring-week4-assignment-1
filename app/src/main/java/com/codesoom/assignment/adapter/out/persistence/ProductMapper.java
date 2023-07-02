@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
-    public Product toDomain(ProductEntity productEntity) {
+    public static Product toDomain(ProductEntity productEntity) {
         return Product.builder()
                 .id(productEntity.getId())
                 .name(productEntity.getName())
@@ -17,7 +17,7 @@ public class ProductMapper {
                 .build();
     }
 
-    public ProductEntity toEntity(Product product) {
+    public static ProductEntity toEntity(Product product) {
         return ProductEntity.builder()
                 .id(product.getId())
                 .name(product.getName())
@@ -27,8 +27,7 @@ public class ProductMapper {
                 .build();
     }
 
-
-    public Product commandToDomain(ProductCommand productCommand) {
+    public static Product commandToDomain(ProductCommand productCommand) {
         return Product.builder()
                 .name(productCommand.getName())
                 .maker(productCommand.getMaker())

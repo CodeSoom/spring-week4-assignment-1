@@ -1,7 +1,6 @@
 package com.codesoom.assignment.adapter.in.web;
 
 import com.codesoom.assignment.adapter.out.persistence.ProductMapper;
-import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.application.in.ProductUseCase;
 import com.codesoom.assignment.domain.Product;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.List;
 public class ProductController {
 
     private final ProductUseCase productUseCase;
-    private final ProductMapper productMapper;
 
     @GetMapping
     public List<Product> list() {
@@ -32,12 +30,12 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody ProductCommand productCommand) {
-        return productUseCase.createProduct(productMapper.commandToDomain(productCommand));
+        return productUseCase.createProduct(ProductMapper.commandToDomain(productCommand));
     }
 
     @PatchMapping("{id}")
     public Product patch(@PathVariable Long id, @RequestBody ProductCommand sourceCommand) {
-        return productUseCase.updateProduct(id, productMapper.commandToDomain(sourceCommand));
+        return productUseCase.updateProduct(id, ProductMapper.commandToDomain(sourceCommand));
     }
 
     @DeleteMapping("{id}")
