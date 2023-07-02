@@ -1,8 +1,11 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.adapter.in.web.ProductCommand;
+import com.codesoom.assignment.adapter.out.persistence.ProductMapper;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.adapter.in.web.ProductController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +43,8 @@ class ProductControllerWebTest {
 
     private List<Product> products;
     private Product product;
+    private ProductCommand productCommand;
+
     private static final Long EXISTING_PRODUCT_ID = 1L;
     private static final Long NOT_EXISTING_PRODUCT_ID = 100L;
     private static final String PRODUCT_NAME = "test name";
@@ -52,12 +57,8 @@ class ProductControllerWebTest {
     void setup() {
         products = new ArrayList<>();
 
-        product = new Product();
-        product.setName(PRODUCT_NAME);
-        product.setMaker(PRODUCT_MAKER);
-        product.setPrice(PRODUCT_PRICE);
-        product.setImageUrl(PRODUCT_IMAGE_URL);
-        product.setId(EXISTING_PRODUCT_ID);
+        productCommand = new ProductCommand(PRODUCT_NAME, PRODUCT_MAKER, PRODUCT_PRICE, PRODUCT_IMAGE_URL);
+        product = new Product(EXISTING_PRODUCT_ID, PRODUCT_NAME, PRODUCT_MAKER, PRODUCT_PRICE, PRODUCT_IMAGE_URL);
     }
 
     @Nested
@@ -146,7 +147,7 @@ class ProductControllerWebTest {
             void It_returns_200_and_created_product() throws Exception {
                 mockMvc.perform(post("/products/")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(product)))
+                                .content(objectMapper.writeValueAsString(productCommand)))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("name").value(PRODUCT_NAME))
                         .andExpect(jsonPath("maker").value(PRODUCT_MAKER))
@@ -160,7 +161,7 @@ class ProductControllerWebTest {
     @Nested
     @DisplayName("PATCH /products/{id}")
     class Describe_patch_request {
-        private Product source;
+        private ProductCommand source;
 
         @Nested
         @DisplayName("장난감을 찾을 수 있으면")
@@ -168,7 +169,7 @@ class ProductControllerWebTest {
 
             @BeforeEach
             void setup() {
-                source = new Product();
+                source = new ProductCommand();
                 source.setName(NEW_PRODUCT_NAME);
                 product.setName(source.getName());
                 given(productService.updateProduct(eq(EXISTING_PRODUCT_ID), any(Product.class))).willReturn(product);
@@ -192,7 +193,7 @@ class ProductControllerWebTest {
 
             @BeforeEach
             void setup() {
-                source = new Product();
+                source = new ProductCommand();
                 source.setName(NEW_PRODUCT_NAME);
                 given(productService.updateProduct(eq(NOT_EXISTING_PRODUCT_ID), any(Product.class)))
                         .willThrow(new ProductNotFoundException(NOT_EXISTING_PRODUCT_ID));
