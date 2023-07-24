@@ -32,4 +32,10 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
         return new ProductResponse(product);
     }
+
+    public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
+        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        product.update(productRequest.toProductEntity());
+        return new ProductResponse(product);
+    }
 }

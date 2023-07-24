@@ -32,4 +32,10 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    public void update(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
+        this.imageUrl = source.imageUrl;
+    }
 }

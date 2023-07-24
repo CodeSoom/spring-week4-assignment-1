@@ -139,6 +139,5 @@ class ProductControllerTest {
                 .andExpect(jsonPath("price").value(3000))
                 .andExpect(jsonPath("imageUrl").value("test/update.jpg"))
                 .andDo(print());
-
     }
 }
