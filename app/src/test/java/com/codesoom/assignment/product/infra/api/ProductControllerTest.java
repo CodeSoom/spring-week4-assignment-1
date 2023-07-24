@@ -110,6 +110,7 @@ class ProductControllerTest {
         mockMvc.perform(get("/products/" + 1L))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException))
+                .andExpect(jsonPath("message").value(ProductNotFoundException.MESSAGE))
                 .andDo(print());
     }
 }
