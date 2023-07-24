@@ -1,5 +1,6 @@
 package com.codesoom.assignment.product.infra.api;
 
+import com.codesoom.assignment.product.application.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.dto.ProductRequest;
 import com.codesoom.assignment.product.infra.persistence.ProductRepository;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -102,4 +104,12 @@ class ProductControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("단일 상품 조회 시 없는 경우 ProductNotFound 예외 발생")
+    void getProductNotFound() throws Exception {
+        mockMvc.perform(get("/products/" + 1L))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException))
+                .andDo(print());
+    }
 }
