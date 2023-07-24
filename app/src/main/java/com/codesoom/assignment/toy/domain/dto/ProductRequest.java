@@ -22,22 +22,6 @@ public class ProductRequest {
         this.imageUrl = imageUrl;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getMaker() {
-        return maker;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
     public Product toProductEntity(){
         return Product.builder()
                 .name(this.name)

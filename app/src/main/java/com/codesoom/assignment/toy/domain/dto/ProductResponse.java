@@ -1,7 +1,9 @@
 package com.codesoom.assignment.toy.domain.dto;
 
 import com.codesoom.assignment.toy.domain.Product;
+import lombok.Getter;
 
+@Getter
 public class ProductResponse {
     private Long id;
     private String name;
@@ -20,23 +22,4 @@ public class ProductResponse {
         this.imageUrl = product.getImageUrl();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getMaker() {
-        return maker;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
 }
