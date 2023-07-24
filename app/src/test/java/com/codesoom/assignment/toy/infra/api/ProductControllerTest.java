@@ -78,4 +78,28 @@ class ProductControllerTest {
                 .andExpect(jsonPath("[0].imageUrl").value("test/img1.jpg"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("단일 상품 조회 시 해당 상품정보를 반환한다.")
+    void getProduct() throws Exception {
+        // given
+        Product product = Product.builder()
+                .name("catToy1")
+                .price(2000)
+                .maker("maker1")
+                .imageUrl("test/img1.jpg")
+                .build();
+
+        Product savedProduct = productRepository.save(product);
+
+        // expected
+        mockMvc.perform(get("/products/" + savedProduct.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value("catToy1"))
+                .andExpect(jsonPath("maker").value("maker1"))
+                .andExpect(jsonPath("price").value(2000))
+                .andExpect(jsonPath("imageUrl").value("test/img1.jpg"))
+                .andDo(print());
+    }
+
 }
