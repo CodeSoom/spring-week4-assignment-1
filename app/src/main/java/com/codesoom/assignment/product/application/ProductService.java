@@ -20,7 +20,6 @@ public class ProductService {
 
     public ProductResponse createProduct(ProductRequest product) {
         Product savedProduct = productRepository.save(product.toProductEntity());
-        log.info("Product created: {}", savedProduct);
         return new ProductResponse(savedProduct);
     }
 
@@ -37,5 +36,10 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
         product.update(productRequest.toProductEntity());
         return new ProductResponse(product);
+    }
+
+    public void deleteProduct(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        productRepository.delete(product);
     }
 }
