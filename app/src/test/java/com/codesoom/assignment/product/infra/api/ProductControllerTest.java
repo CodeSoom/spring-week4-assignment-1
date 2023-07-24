@@ -140,4 +140,40 @@ class ProductControllerTest {
                 .andExpect(jsonPath("imageUrl").value("test/update.jpg"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("상품 수정 요청시 없는 경우 ProductNotFound 예외 발생")
+    void updateProductNotFound() throws Exception {
+        // given
+        ProductRequest productRequest = new ProductRequest("update", "update", 3000, "test/update.jpg");
+
+        // expected
+        mockMvc.perform(patch("/products/" + 100L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest))
+                )
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException))
+                .andExpect(jsonPath("message").value(ProductNotFoundException.MESSAGE))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("상품 삭제 요청 시 해당 상품을 삭제한다.")
+    void deleteProducts() throws Exception {
+        // given
+        Product product = Product.builder()
+                .name("deleteTarget")
+                .price(2000)
+                .maker("deleteMaker")
+                .imageUrl("test/delete.jpg")
+                .build();
+        productRepository.save(product);
+
+        // expected
+        mockMvc.perform(delete("/products/" + product.getId()))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+        
+    }
 }
