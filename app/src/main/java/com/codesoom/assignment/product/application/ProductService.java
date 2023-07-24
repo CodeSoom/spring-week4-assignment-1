@@ -7,6 +7,7 @@ import com.codesoom.assignment.product.infra.persistence.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Slf4j
@@ -32,6 +33,7 @@ public class ProductService {
         return new ProductResponse(product);
     }
 
+    @Transactional
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
         product.update(productRequest.toProductEntity());
