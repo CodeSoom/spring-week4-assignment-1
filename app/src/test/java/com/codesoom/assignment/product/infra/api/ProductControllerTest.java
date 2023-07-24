@@ -15,8 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -107,10 +106,39 @@ class ProductControllerTest {
     @Test
     @DisplayName("단일 상품 조회 시 없는 경우 ProductNotFound 예외 발생")
     void getProductNotFound() throws Exception {
+
+        // expected
         mockMvc.perform(get("/products/" + 1L))
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException))
                 .andExpect(jsonPath("message").value(ProductNotFoundException.MESSAGE))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("상품 수정 요청시 해당 상품정보를 수정한다.")
+    void updateProduct() throws Exception {
+        // given
+        Product product = Product.builder()
+                .name("catToy1")
+                .price(2000)
+                .maker("maker1")
+                .imageUrl("test/img1.jpg")
+                .build();
+        Product savedProduct = productRepository.save(product);
+        ProductRequest productRequest = new ProductRequest("update", "update", 3000, "test/update.jpg");
+
+        // expected
+        mockMvc.perform(patch("/products/" + savedProduct.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value("update"))
+                .andExpect(jsonPath("maker").value("update"))
+                .andExpect(jsonPath("price").value(3000))
+                .andExpect(jsonPath("imageUrl").value("test/update.jpg"))
+                .andDo(print());
+
     }
 }
