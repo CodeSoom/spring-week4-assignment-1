@@ -1,12 +1,14 @@
 package com.codesoom.assignment.toy.infra.api;
 
 import com.codesoom.assignment.toy.application.ProductService;
-import com.codesoom.assignment.toy.domain.Product;
 import com.codesoom.assignment.toy.domain.dto.ProductRequest;
 import com.codesoom.assignment.toy.domain.dto.ProductResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
