@@ -5,14 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class ProductResponse {
-    private Long id;
-    private String name;
-    private String maker;
-    private Integer price;
-    private String imageUrl;
-
-    public ProductResponse() {
-    }
+    private final Long id;
+    private final String name;
+    private final String maker;
+    private final Integer price;
+    private final String imageUrl;
 
     public ProductResponse(Product product) {
         this.id = product.getId();
