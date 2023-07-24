@@ -5,10 +5,9 @@ import com.codesoom.assignment.toy.domain.dto.ProductRequest;
 import com.codesoom.assignment.toy.domain.dto.ProductResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -25,6 +24,11 @@ public class ProductController {
     public ProductResponse createProduct(@RequestBody ProductRequest productRequest) {
         log.info("Product request: {}", productRequest);
         return productService.createProduct(productRequest);
+    }
+
+    @GetMapping("/products")
+    public List<ProductResponse> getProductList() {
+        return productService.getProductList();
     }
 
 }

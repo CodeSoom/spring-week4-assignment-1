@@ -57,7 +57,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("상품을 리스트를 조회한다")
+    @DisplayName("상품 리스트 요청 시 상품리스트 반환한다.")
     void getProducts() throws Exception {
         // given
         Product product = Product.builder()
