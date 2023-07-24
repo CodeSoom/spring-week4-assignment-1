@@ -1,6 +1,6 @@
-package com.codesoom.assignment.toy.domain.dto;
+package com.codesoom.assignment.product.domain.dto;
 
-import com.codesoom.assignment.toy.domain.Product;
+import com.codesoom.assignment.product.domain.Product;
 import lombok.Getter;
 
 import java.util.ArrayList;

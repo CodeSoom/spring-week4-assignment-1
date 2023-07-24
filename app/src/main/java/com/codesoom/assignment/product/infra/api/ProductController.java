@@ -1,8 +1,8 @@
-package com.codesoom.assignment.toy.infra.api;
+package com.codesoom.assignment.product.infra.api;
 
-import com.codesoom.assignment.toy.application.ProductService;
-import com.codesoom.assignment.toy.domain.dto.ProductRequest;
-import com.codesoom.assignment.toy.domain.dto.ProductResponse;
+import com.codesoom.assignment.product.application.ProductService;
+import com.codesoom.assignment.product.domain.dto.ProductRequest;
+import com.codesoom.assignment.product.domain.dto.ProductResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +29,11 @@ public class ProductController {
     @GetMapping("/products")
     public List<ProductResponse> getProductList() {
         return productService.getProductList();
+    }
+
+    @GetMapping("/products/{id}")
+    public ProductResponse getProduct(@PathVariable Long id) {
+        return productService.getProduct(id);
     }
 
 }

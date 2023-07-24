@@ -1,9 +1,9 @@
-package com.codesoom.assignment.toy.application;
+package com.codesoom.assignment.product.application;
 
-import com.codesoom.assignment.toy.domain.Product;
-import com.codesoom.assignment.toy.domain.dto.ProductRequest;
-import com.codesoom.assignment.toy.domain.dto.ProductResponse;
-import com.codesoom.assignment.toy.infra.persistence.ProductRepository;
+import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.domain.dto.ProductRequest;
+import com.codesoom.assignment.product.domain.dto.ProductResponse;
+import com.codesoom.assignment.product.infra.persistence.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +26,10 @@ public class ProductService {
 
     public List<ProductResponse> getProductList() {
         return ProductResponse.listOf(productRepository.findAll());
+    }
+
+    public ProductResponse getProduct(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        return new ProductResponse(product);
     }
 }

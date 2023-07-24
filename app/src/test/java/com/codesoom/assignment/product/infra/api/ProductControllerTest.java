@@ -1,8 +1,8 @@
-package com.codesoom.assignment.toy.infra.api;
+package com.codesoom.assignment.product.infra.api;
 
-import com.codesoom.assignment.toy.domain.Product;
-import com.codesoom.assignment.toy.domain.dto.ProductRequest;
-import com.codesoom.assignment.toy.infra.persistence.ProductRepository;
+import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.domain.dto.ProductRequest;
+import com.codesoom.assignment.product.infra.persistence.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
