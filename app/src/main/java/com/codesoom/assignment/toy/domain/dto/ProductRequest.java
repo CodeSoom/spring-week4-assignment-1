@@ -7,13 +7,10 @@ import lombok.ToString;
 @ToString
 @Getter
 public class ProductRequest {
-    private String name;
-    private String maker;
-    private Integer price;
-    private String imageUrl;
-
-    public ProductRequest() {
-    }
+    private final String name;
+    private final String maker;
+    private final Integer price;
+    private final String imageUrl;
 
     public ProductRequest(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
@@ -22,7 +19,7 @@ public class ProductRequest {
         this.imageUrl = imageUrl;
     }
 
-    public Product toProductEntity(){
+    public Product toProductEntity() {
         return Product.builder()
                 .name(this.name)
                 .maker(this.maker)
