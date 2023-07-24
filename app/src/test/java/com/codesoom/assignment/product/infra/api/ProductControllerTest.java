@@ -174,6 +174,17 @@ class ProductControllerTest {
         mockMvc.perform(delete("/products/" + product.getId()))
                 .andExpect(status().isNoContent())
                 .andDo(print());
-        
+
+    }
+
+    @Test
+    @DisplayName("상품 삭제 요청 시 없는 경우 ProductNotFound 예외 발생")
+    void deleteProductsNotFound() throws Exception {
+        // expected
+        mockMvc.perform(delete("/products/" + 100L))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException))
+                .andExpect(jsonPath("message").value(ProductNotFoundException.MESSAGE))
+                .andDo(print());
     }
 }
