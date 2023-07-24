@@ -1,10 +1,16 @@
 package com.codesoom.assignment.toy.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@ToString
 public class Product {
     @Id
     @GeneratedValue
@@ -17,6 +23,7 @@ public class Product {
     public Product() {
     }
 
+    @Builder
     public Product(Long id, String name, String maker, Integer price, String imageUrl) {
         this.id = id;
         this.name = name;

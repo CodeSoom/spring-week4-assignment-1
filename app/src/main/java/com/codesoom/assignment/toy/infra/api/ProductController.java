@@ -3,11 +3,13 @@ package com.codesoom.assignment.toy.infra.api;
 import com.codesoom.assignment.toy.application.ProductService;
 import com.codesoom.assignment.toy.domain.Product;
 import com.codesoom.assignment.toy.domain.dto.ProductRequest;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.codesoom.assignment.toy.domain.dto.ProductResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
@@ -17,8 +19,10 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public Product createProduct(ProductRequest productRequest) {
-        return null;
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductResponse createProduct(@RequestBody ProductRequest productRequest) {
+        log.info("Product request: {}", productRequest);
+        return productService.createProduct(productRequest);
     }
 
 }

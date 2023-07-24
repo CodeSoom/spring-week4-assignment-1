@@ -1,5 +1,11 @@
 package com.codesoom.assignment.toy.domain.dto;
 
+import com.codesoom.assignment.toy.domain.Product;
+import lombok.Getter;
+import lombok.ToString;
+
+@ToString
+@Getter
 public class ProductRequest {
     private String name;
     private String maker;
@@ -30,5 +36,13 @@ public class ProductRequest {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Product toProductEntity(){
+        return Product.builder()
+                .name(this.name)
+                .maker(this.maker)
+                .price(this.price)
+                .imageUrl(this.imageUrl).build();
     }
 }

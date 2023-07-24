@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,10 +40,11 @@ class ProductControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(jsonString))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value("catToy"))
-                .andExpect(jsonPath("$.maker").value("CatMaker"))
-                .andExpect(jsonPath("$.price").value(1200))
-                .andExpect(jsonPath("$.imageUrl").value("test/img.jpg"));
+                .andExpect(jsonPath("name").value("catToy"))
+                .andExpect(jsonPath("maker").value("CatMaker"))
+                .andExpect(jsonPath("price").value(1200))
+                .andExpect(jsonPath("imageUrl").value("test/img.jpg"))
+                .andDo(print());
     }
 
 }
