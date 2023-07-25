@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ProductAdvice {
 
     @ExceptionHandler(ProductNotFoundException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorResponse ProductNotFoundExceptionHandler(ProductNotFoundException e) {
         return e.toErrorResponse();
