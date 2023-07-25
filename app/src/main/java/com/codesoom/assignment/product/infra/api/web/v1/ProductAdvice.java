@@ -1,4 +1,4 @@
-package com.codesoom.assignment.product.infra.api;
+package com.codesoom.assignment.product.infra.api.web.v1;
 
 import com.codesoom.assignment.common.dto.ErrorResponse;
 import com.codesoom.assignment.product.application.ProductNotFoundException;
