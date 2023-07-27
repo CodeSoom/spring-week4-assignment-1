@@ -2,6 +2,7 @@ package com.codesoom.assignment.product.application;
 
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.dto.ProductRequest;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
@@ -26,10 +27,10 @@ public class ProductCreatorTest extends JpaTest{
             void  해당상품정보를_저장후_해당상품정보를_리턴한다() {
                 ProductCreator productCreator = new ProductCreator(productRepository);
                 Product product = productCreator.createProduct(PRODUCT_REQUEST);
-                Assertions.assertEquals(PRODUCT_REQUEST.getName(), product.getName());
-                Assertions.assertEquals(PRODUCT_REQUEST.getMaker(), product.getMaker());
-                Assertions.assertEquals(PRODUCT_REQUEST.getPrice(), product.getPrice());
-                Assertions.assertEquals(PRODUCT_REQUEST.getImageUrl(), product.getImageUrl());
+                Assertions.assertThat(product.getName()).isEqualTo(PRODUCT_REQUEST.getName());
+                Assertions.assertThat(product.getMaker()).isEqualTo(PRODUCT_REQUEST.getMaker());
+                Assertions.assertThat(product.getPrice()).isEqualTo(PRODUCT_REQUEST.getPrice());
+                Assertions.assertThat(product.getImageUrl()).isEqualTo(PRODUCT_REQUEST.getImageUrl());
             }
 
         }
