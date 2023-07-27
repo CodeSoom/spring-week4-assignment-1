@@ -14,7 +14,7 @@ public class ProductAdvice {
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorResponse ProductNotFoundExceptionHandler(ProductNotFoundException e) {
+    public ErrorResponse productNotFoundExceptionHandler(ProductNotFoundException e) {
         return e.toErrorResponse();
     }
 
