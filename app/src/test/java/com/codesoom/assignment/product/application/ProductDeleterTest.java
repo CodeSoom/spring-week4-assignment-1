@@ -48,7 +48,9 @@ public class ProductDeleterTest extends JpaTest {
             void 해당하는_상품을_삭제한다() {
                 Product product = createProduct();
                 productRepository.save(product);
+
                 productDeleter.deleteProduct(product.getId());
+
                 Assertions.assertThat(productRepository.findById(product.getId())).isEmpty();
             }
         }
