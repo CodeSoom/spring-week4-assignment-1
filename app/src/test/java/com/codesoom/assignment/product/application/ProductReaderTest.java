@@ -105,7 +105,7 @@ public class ProductReaderTest extends JpaTest {
                 productRepository.save(testProduct);
 
                 Assertions.assertThat(productReader.getProductList()).isNotEmpty();
-                Product product = productReader.getProductList().iterator().next();
+                Product product = productReader.getProductList().get(0);
                 Assertions.assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
                 Assertions.assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGE_URL);
                 Assertions.assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
