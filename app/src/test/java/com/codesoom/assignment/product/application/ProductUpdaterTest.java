@@ -47,16 +47,18 @@ public class ProductUpdaterTest extends JpaTest{
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 수정할_상품이_있다면 {
+            private Product product;
             @BeforeEach
             void setUp() {
                 productRepository.deleteAll();
+                product = createProduct();
+                productRepository.save(product);
+
             }
 
             @Test
             @DisplayName("해당_상품정보를_수정한_후_해당_상품을_반환한다")
             void 해당_상품정보를_수정한_후_해당_상품을_반환한다() {
-                Product product = createProduct();
-                productRepository.save(product);
                 ProductRequest productRequest = new ProductRequest("updateProduct", "updateMaker", 2000, "updateImage");
                 Product updatedProduct = productUpdater.updateProduct(product.getId(), productRequest);
 
