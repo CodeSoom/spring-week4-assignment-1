@@ -27,7 +27,7 @@ public class ProductDeleterTest extends JpaTest {
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class deleteProduct_메서드는 {
-        ProductDeleter productDeleter = new ProductDeleter(productRepository);
+        ProductDeleter productDeleter = new ProductDeleter(productRepository, new ProductReader(productRepository));
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
