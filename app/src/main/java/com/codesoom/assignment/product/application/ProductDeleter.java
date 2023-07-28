@@ -8,13 +8,15 @@ import org.springframework.stereotype.Service;
 public class ProductDeleter {
 
     private final ProductRepository productRepository;
+    private final ProductReader productReader;
 
-    public ProductDeleter(ProductRepository productRepository) {
+    public ProductDeleter(ProductRepository productRepository, ProductReader productReader) {
         this.productRepository = productRepository;
+        this.productReader = productReader;
     }
 
     public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        Product product = productReader.getProduct(id);
         productRepository.delete(product);
     }
 }
