@@ -18,9 +18,7 @@ public class ProductReader {
     }
 
     public List<Product> getProductList() {
-        Iterable<Product> products = productRepository.findAll();
-        return StreamSupport.stream(products.spliterator(), false)
-                .collect(Collectors.toList());
+        return productRepository.findAll();
     }
 
     public Product getProduct(Long id) {
