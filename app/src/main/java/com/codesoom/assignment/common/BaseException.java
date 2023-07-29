@@ -5,13 +5,13 @@ import com.codesoom.assignment.common.dto.ErrorResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class baseException extends RuntimeException {
+public abstract class BaseException extends RuntimeException {
     public final Map<String, String> validation = new HashMap<>();
 
-    public baseException() {
+    public BaseException() {
     }
 
-    public baseException(String message) {
+    public BaseException(String message) {
         super(message);
     }
 
