@@ -2,11 +2,11 @@ package com.codesoom.assignment.common;
 
 import com.codesoom.assignment.common.dto.ErrorResponse;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseException extends RuntimeException {
-    public final Map<String, String> validation = new HashMap<>();
+    public final List<ErrorValidation> errors = new ArrayList<>();
 
     public BaseException() {
     }
@@ -17,15 +17,15 @@ public abstract class BaseException extends RuntimeException {
 
     public abstract int getStatusCode();
 
-    public void addValidation(String fieldName, String message) {
-        validation.put(fieldName, message);
+    public void addValidation(String source, String type, String message) {
+        errors.add(new ErrorValidation(source, type, message));
     }
 
     public ErrorResponse toErrorResponse() {
         return new ErrorResponse(
                 String.valueOf(getStatusCode()),
                 getMessage(),
-                validation
+                errors
         );
     }
 }
