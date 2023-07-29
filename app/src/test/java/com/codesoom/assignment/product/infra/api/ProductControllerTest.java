@@ -1,5 +1,6 @@
 package com.codesoom.assignment.product.infra.api;
 
+import com.codesoom.assignment.product.application.InvalidProductRequest;
 import com.codesoom.assignment.product.application.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.dto.ProductRequest;
@@ -185,6 +186,22 @@ class ProductControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof ProductNotFoundException))
                 .andExpect(jsonPath("message").value(ProductNotFoundException.MESSAGE))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("상품 생성시 올바르지 않은 요청인 경우 InvalidProductRequest 발생 .")
+    void createProductInvalidRequest() throws Exception {
+        // given
+        ProductRequest productRequest = new ProductRequest("", "", 0, "");
+
+        // expected
+        mockMvc.perform(post("/products")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidProductRequest))
+                .andExpect(jsonPath("message").value(InvalidProductRequest.MESSAGE))
                 .andDo(print());
     }
 }
