@@ -9,10 +9,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -190,7 +195,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("상품 생성시 올바르지 않은 요청인 경우 InvalidProductRequest 발생 .")
+    @DisplayName("상품 생성시 모든 항목의 값이 없는 요청인 경우 에러를 반환한다.")
     void createProductInvalidRequest() throws Exception {
         // given
         ProductRequest productRequest = new ProductRequest("", "", 0, "");
@@ -202,6 +207,31 @@ class ProductControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidProductRequest))
                 .andExpect(jsonPath("message").value(InvalidProductRequest.MESSAGE))
+                .andExpect(jsonPath("errors[0].source").value("name"))
+                .andExpect(jsonPath("errors[0].type").value("name is empty"))
+                .andExpect(jsonPath("errors[1].source").value("maker"))
+                .andExpect(jsonPath("errors[1].type").value("maker is empty"))
                 .andDo(print());
+    }
+
+    @ParameterizedTest
+    @DisplayName("상품 생성시 올바르지 않은 요청 케이스별 테스트 요청인 경우 에러응답을 반환한다.")
+    @MethodSource("provideInvalidProductRequests")
+    void createProductInvalidRequestCase(ProductRequest productRequest) throws Exception {
+        mockMvc.perform(post("/products")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(productRequest)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidProductRequest))
+                .andExpect(jsonPath("message").value(InvalidProductRequest.MESSAGE))
+                .andDo(print());
+    }
+
+    private static Stream<Arguments> provideInvalidProductRequests() {
+        return Stream.of(
+                Arguments.of(new ProductRequest("", "testMaker", 1000, "testUrl")),
+                Arguments.of(new ProductRequest("testName", "", 1000, "testUrl")),
+                Arguments.of(new ProductRequest("testName", "testMaker", -10, "testUrl"))
+        );
     }
 }
